@@ -25,13 +25,11 @@ describe('correctVideoSource', () => {
             }]
         }, [])).toEqual([]);
 
-        //@ts-expect-error missing type
         expect(correctVideoSource([{
             url: 'abcde',
             mime_type: 'video/abc'
         }], [])).toEqual([]);
 
-        //@ts-expect-error missing url
         expect(correctVideoSource([{
             type: 'video_source'
         }], [])).toEqual([]);

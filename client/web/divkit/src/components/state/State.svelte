@@ -9,9 +9,9 @@
     import type { ChangeBoundsTransition } from '../../types/base';
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
-    import { STATE_CTX, StateCtxValue, StateInterface } from '../../context/state';
+    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../../context/state';
     import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';

@@ -1,4 +1,4 @@
-import { evalExpression, EvalResult } from '../../src/expressions/eval';
+import { evalExpression, type EvalResult } from '../../src/expressions/eval';
 import { valToString } from '../../src/expressions/utils';
 import { parse } from '../../src/expressions/expressions';
 import { createVariable } from '../../src/expressions/variable';
@@ -9,28 +9,6 @@ const fs = require('fs');
 const dir = path.resolve(__filename, '../../../../../../test_data/expression_test_data');
 
 const tests = fs.readdirSync(dir);
-
-function convertVals(val: EvalResult) {
-    if (val.type === 'boolean') {
-        return {
-            type: 'boolean',
-            value: val.value ? 1 : 0
-        };
-    } else if (val.type === 'integer') {
-        return {
-            type: 'integer',
-            // values in json is out of range already
-            value: Number(val.value)
-        };
-    } else if (val.type === 'datetime' && val.value instanceof Date) {
-        return {
-            type: 'datetime',
-            value: valToString(val)
-        };
-    }
-
-    return val;
-}
 
 function runCase(item: any) {
     const vars = new Map();

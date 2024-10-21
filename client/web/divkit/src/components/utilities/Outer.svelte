@@ -46,11 +46,11 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { visibilityAction } from '../../use/visibilityAction';
     import { genClassName } from '../../utils/genClassName';
-    import { devtool, DevtoolResult } from '../../use/devtool';
-    import { STATE_CTX, StateCtxValue } from '../../context/state';
+    import { devtool, type DevtoolResult } from '../../use/devtool';
+    import { STATE_CTX, type StateCtxValue } from '../../context/state';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctAlpha } from '../../utils/correctAlpha';

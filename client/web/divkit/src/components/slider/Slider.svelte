@@ -22,12 +22,12 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivSliderData } from '../../types/slider';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import { ACTION_CTX, ActionCtxValue } from '../../context/action';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
     import { genClassName } from '../../utils/genClassName';
-    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { correctDrawableStyle, type DrawableStyle } from '../../utils/correctDrawableStyles';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
-    import { correctSliderTextStyle, TransformedSliderTextStyle } from '../../utils/correctSliderTextStyle';
+    import { correctSliderTextStyle, type TransformedSliderTextStyle } from '../../utils/correctSliderTextStyle';
     import { wrapError } from '../../utils/wrapError';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { clamp } from '../../utils/clamp';

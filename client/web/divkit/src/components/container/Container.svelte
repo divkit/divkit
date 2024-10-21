@@ -28,7 +28,7 @@
 
 <script lang="ts">
     import { getContext } from 'svelte';
-    import { Readable, derived } from 'svelte/store';
+    import { type Readable, derived } from 'svelte/store';
 
     import css from './Container.module.css';
 
@@ -40,21 +40,21 @@
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import { prepareMargins } from '../../utils/container';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
-    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { correctDrawableStyle, type DrawableStyle } from '../../utils/correctDrawableStyles';
     import { calcAdditionalPaddings, calcItemsGap, isHeightMatchParent, isWidthMatchParent } from '../../utils/container';
     import { hasGapSupport } from '../../utils/hasGapSupport';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
-    import ContainerSeparators from './ContainerSeparators.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
-    import Outer from '../utilities/Outer.svelte';
-    import { ContentAlignmentVerticalMapped, correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
-    import { ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
+    import { type ContentAlignmentVerticalMapped, correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
+    import { type ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { constStore } from '../../utils/constStore';
+    import ContainerSeparators from './ContainerSeparators.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import Outer from '../utilities/Outer.svelte';
 
     export let componentContext: ComponentContext<DivContainerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -126,6 +126,7 @@
             Array.isArray(componentContext.json.item_builder.prototypes)
         ) {
             const builder = componentContext.json.item_builder;
+            const prototypes = componentContext.json.item_builder.prototypes;
             newItems = [];
 
             $jsonItemBuilderData.forEach((it, index) => {
@@ -136,8 +137,8 @@
 
                 let div: MaybeMissing<DivBaseData> | undefined;
                 let id: string | undefined;
-                for (let i = 0; i < builder.prototypes.length; ++i) {
-                    const prototype = builder.prototypes[i];
+                for (let i = 0; i < prototypes.length; ++i) {
+                    const prototype = prototypes[i];
                     if (!prototype.div) {
                         continue;
                     }

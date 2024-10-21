@@ -2,7 +2,7 @@ import type { Action, DivTimer } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
 import type { ComponentContext } from '../types/componentContext';
 import type { VariableType } from '../expressions/variable';
-import { LogError, wrapError } from './wrapError';
+import { type LogError, wrapError } from './wrapError';
 
 interface TimerState {
     state: 'stopped' | 'running' | 'paused';

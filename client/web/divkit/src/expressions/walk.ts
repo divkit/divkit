@@ -1,4 +1,4 @@
-import { Node } from './ast';
+import type { Node } from './ast';
 
 export function walk(ast: Node, visitors: {
     [Type in Node['type']]?: (node: Extract<Node, { type: Type }>) => void;

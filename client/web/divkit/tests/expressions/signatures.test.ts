@@ -1,4 +1,4 @@
-import { Func, funcs } from '../../src/expressions/funcs/funcs';
+import { type Func, funcs } from '../../src/expressions/funcs/funcs';
 import { register } from '../../src/expressions/funcs';
 
 const path = require('path');

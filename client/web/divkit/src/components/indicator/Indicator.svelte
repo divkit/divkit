@@ -19,13 +19,13 @@
     import type { ComponentContext } from '../../types/componentContext';
 
     import Outer from '../utilities/Outer.svelte';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { pxToEm } from '../../utils/pxToEm';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../../utils/keyboard/codes';
-    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { correctDrawableStyle, type DrawableStyle } from '../../utils/correctDrawableStyles';
     import { correctColor } from '../../utils/correctColor';
 
     export let componentContext: ComponentContext<DivIndicatorData>;

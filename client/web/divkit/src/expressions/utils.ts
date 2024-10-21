@@ -1,9 +1,8 @@
 import type { EvalContext, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
 import type { Node, Variable } from './ast';
-import type { EvalTypes } from './eval';
 import type { VariablesMap } from './eval';
 import { walk } from './walk';
-import { parseColor, ParsedColor } from '../utils/correctColor';
+import { parseColor, type ParsedColor } from '../utils/correctColor';
 import { padLeft } from '../utils/padLeft';
 import { hasBigInt, MAX_INT, MIN_INT, toBigInt } from './bigint';
 import { NUMBER } from './const';

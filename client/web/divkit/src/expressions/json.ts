@@ -4,9 +4,9 @@ import type { VariableValue } from './variable';
 import type { Store } from '../../typings/store';
 import { uniq } from '../utils/uniq';
 import { parse } from './expressions';
-import { evalExpression, VariablesMap } from './eval';
+import { evalExpression, type VariablesMap } from './eval';
 import { dateToString, gatherVarsFromAst, stringifyColor } from './utils';
-import { LogError, wrapError } from '../utils/wrapError';
+import { type LogError, wrapError } from '../utils/wrapError';
 import { parseColor } from '../utils/correctColor';
 import { MAX_INT32, MIN_INT32 } from './const';
 import { simpleUnescapeString } from './simpleUnescapeString';
@@ -120,7 +120,7 @@ export type MaybeMissing<T> = T | (
         (
             T extends object ?
                 {
-                    [P in keyof T]: MaybeMissing<T[P]>;
+                    [P in keyof T]?: MaybeMissing<T[P]>;
                 } :
                 T | undefined
         )

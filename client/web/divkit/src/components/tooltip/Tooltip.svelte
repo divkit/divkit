@@ -21,7 +21,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import Unknown from '../utilities/Unknown.svelte';
     import { genClassName } from '../../utils/genClassName';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { inOutAnimation } from '../../utils/inOutAnimation';
 
     export let ownerNode: HTMLElement;
@@ -43,7 +43,7 @@
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
 
-    $: componentContext = parentComponentContext.produceChildContext(data.div);
+    $: componentContext = parentComponentContext.produceChildContext(data.div || {});
 
     $: position = parentComponentContext.getDerivedFromVars(data.position);
     $: offsetX = parentComponentContext.getDerivedFromVars(data.offset?.x?.value);

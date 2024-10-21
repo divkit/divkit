@@ -12,7 +12,7 @@ import type {
     UnaryExpression, Variable
 } from './ast';
 import type { WrappedError } from '../utils/wrapError';
-import { convertArgs, findBestMatchedFunc, Func, funcByArgs, funcs, methodByArgs } from './funcs/funcs';
+import { convertArgs, findBestMatchedFunc, type Func, funcByArgs, funcs, methodByArgs } from './funcs/funcs';
 import {
     checkIntegerOverflow,
     evalError,

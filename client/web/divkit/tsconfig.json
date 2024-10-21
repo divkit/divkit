@@ -5,7 +5,8 @@
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": false,
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "verbatimModuleSyntax": true
     },
     "exclude": [
         "src/dev.ts"

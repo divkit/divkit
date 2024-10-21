@@ -95,8 +95,8 @@ export function calcItemsGap(
 }
 
 export interface ContainerChildInfo {
-    width: MaybeMissing<Size> | undefined;
-    height: MaybeMissing<Size> | undefined;
+    width?: MaybeMissing<Size>;
+    height?: MaybeMissing<Size>;
 }
 
 export function isWidthMatchParent(item: ContainerChildInfo) {

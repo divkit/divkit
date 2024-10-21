@@ -5,10 +5,10 @@
     import type { DivCustomData } from '../../types/custom';
     import type { CustomComponentDescription } from '../../../typings/custom';
     import type { ComponentContext } from '../../types/componentContext';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { wrapError } from '../../utils/wrapError';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import { wrapError } from '../../utils/wrapError';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivCustomData>;

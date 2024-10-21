@@ -7,10 +7,10 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivVideoData, VideoElements } from '../../types/video';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { createVariable } from '../../expressions/variable';
-    import { PreparedVideoSource, correctVideoSource } from '../../utils/correctVideoSource';
+    import { type PreparedVideoSource, correctVideoSource } from '../../utils/correctVideoSource';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Outer from '../utilities/Outer.svelte';
     import { prepareBase64 } from '../../utils/prepareBase64';

@@ -55,15 +55,15 @@
     import type { Store, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
-    import { FocusableMethods, ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
+    import { ROOT_CTX, type FocusableMethods, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
-    import { type LogError, wrapError, WrappedError } from '../utils/wrapError';
+    import { type LogError, wrapError, type WrappedError } from '../utils/wrapError';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
-    import { ACTION_CTX, ActionCtxValue } from '../context/action';
-    import { STATE_CTX, StateCtxValue, StateInterface } from '../context/state';
+    import { ACTION_CTX, type ActionCtxValue } from '../context/action';
+    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../context/state';
     import { constStore } from '../utils/constStore';
     import {
-        MaybeMissing,
+        type MaybeMissing,
         prepareVars
     } from '../expressions/json';
     import { storesMap } from '../stores';
@@ -71,7 +71,7 @@
     import { parse } from '../expressions/expressions';
     import { gatherVarsFromAst } from '../expressions/utils';
     import { Truthy } from '../utils/truthy';
-    import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, VariableType } from '../expressions/variable';
+    import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, type VariableType } from '../expressions/variable';
     import {
         cleanControllerStore,
         getControllerStore,
@@ -1136,7 +1136,7 @@
                         (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                     ) {
                         prevConditionResult = Boolean(conditionResult.value);
-                        const actions = trigger.actions.map(action =>
+                        const actions = (trigger.actions as Action[]).map(action =>
                             componentContext ?
                                 componentContext.getJsonWithVars(action) :
                                 getJsonWithVars(logError, action)

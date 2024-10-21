@@ -10,7 +10,6 @@ describe('correctSliderTextStyle', () => {
 
         expect(correctSliderTextStyle(undefined, defaultVal)).toEqual(defaultVal);
 
-        // @ts-expect-error Incorrect data
         expect(correctSliderTextStyle({}, defaultVal)).toEqual(defaultVal);
 
         expect(correctSliderTextStyle({

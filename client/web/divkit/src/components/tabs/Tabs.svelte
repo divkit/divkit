@@ -15,7 +15,8 @@
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivBaseData } from '../../types/base';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { correctTabDelimiterStyle, type TabsDelimiter } from '../../utils/correctTabDelimiterStyle';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { makeStyle } from '../../utils/makeStyle';
@@ -29,7 +30,7 @@
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
-    import { Coords, getTouchCoords } from '../../utils/getTouchCoords';
+    import { type Coords, getTouchCoords } from '../../utils/getTouchCoords';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
@@ -95,6 +96,7 @@
     let isSwipeCanceled = false;
     let startTransform: number;
     let currentTransform: number;
+    let delimitierStyle: TabsDelimiter | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -114,6 +116,7 @@
         separatorBackground = '';
         separatorMargins = '';
         titlePadding = null;
+        delimitierStyle = undefined;
     }
 
     $: if (origJson) {
@@ -140,6 +143,7 @@
     );
     $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
     $: jsonTitlePaddings = componentContext.getDerivedFromVars(componentContext.json.title_paddings);
+    $: jsonDelimiterStyle = componentContext.getDerivedFromVars(componentContext.json.tab_title_delimiter);
 
     $: selected = jsonSelectedTab && Number(jsonSelectedTab) || 0;
 
@@ -360,6 +364,10 @@
         titlePadding = correctEdgeInsertsObject($jsonTitlePaddings ? $jsonTitlePaddings : undefined, titlePadding);
     }
 
+    $: {
+        delimitierStyle = correctTabDelimiterStyle($jsonDelimiterStyle, delimitierStyle);
+    }
+
     function updateItems(items: MaybeMissing<TabItem>[]): void {
         if (hasError) {
             return;
@@ -448,8 +456,9 @@
             if (context) {
                 return context;
             }
-            if (index >= start && index <= end && items[index]?.div) {
-                return componentContext.produceChildContext(items[index].div, {
+            const div = items[index]?.div;
+            if (index >= start && index <= end && div) {
+                return componentContext.produceChildContext(div, {
                     path: index
                 });
             }
@@ -706,6 +715,18 @@
             {#each $childStore as item}
                 {@const index = item.index}
                 {@const isSelected = index === selected}
+
+                {#if delimitierStyle && index > 0}
+                    <img
+                        class={css.tabs__delimitier}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        src={delimitierStyle.url}
+                        style:width={delimitierStyle.width ? pxToEm(delimitierStyle.width) : undefined}
+                        style:height={delimitierStyle.height ? pxToEm(delimitierStyle.height) : undefined}
+                    />
+                {/if}
 
                 <Actionable
                     {componentContext}

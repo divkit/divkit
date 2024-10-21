@@ -1,5 +1,5 @@
-import { MaybeMissing } from '../expressions/json';
-import { EdgeInsets } from '../types/edgeInserts';
+import type { MaybeMissing } from '../expressions/json';
+import type { EdgeInsets } from '../types/edgeInserts';
 
 export function edgeInsertsMultiply(
     edgeInsets: MaybeMissing<EdgeInsets>,

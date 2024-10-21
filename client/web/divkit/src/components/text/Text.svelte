@@ -12,7 +12,7 @@
     import type { TintMode } from '../../types/image';
     import type { MaybeMissing } from '../../expressions/json';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import TextRangeView from './TextRange.svelte';
     import { makeStyle } from '../../utils/makeStyle';
@@ -22,7 +22,7 @@
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
-    import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { correctColor } from '../../utils/correctColor';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { propToString } from '../../utils/propToString';

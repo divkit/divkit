@@ -16,7 +16,7 @@
     import { correctColor, correctColorWithAlpha, parseColor } from '../../utils/correctColor';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { getBackground } from '../../utils/background';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { shadowToCssFilter } from '../../utils/shadow';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';

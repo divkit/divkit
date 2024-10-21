@@ -18,10 +18,9 @@
     import type { DivImageData, TintMode } from '../../types/image';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
     import type { ComponentContext } from '../../types/componentContext';
-    import Outer from '../utilities/Outer.svelte';
     import { makeStyle } from '../../utils/makeStyle';
     import { genClassName } from '../../utils/genClassName';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { imageSize } from '../../utils/background';
     import { correctImagePosition } from '../../utils/correctImagePosition';
@@ -32,6 +31,7 @@
     import { correctTintMode } from '../../utils/correctTintMode';
     import { getCssFilter } from '../../utils/filters';
     import { prepareBase64 } from '../../utils/prepareBase64';
+    import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivImageData>;

@@ -1,4 +1,4 @@
-import { evalExpression, EvalResult } from '../../src/expressions/eval';
+import { evalExpression, type EvalResult } from '../../src/expressions/eval';
 import { valToString } from '../../src/expressions/utils';
 import { parse } from '../../src/expressions/expressions';
 import { createVariable } from '../../src/expressions/variable';

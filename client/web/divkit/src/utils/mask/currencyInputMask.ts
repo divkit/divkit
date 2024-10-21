@@ -1,6 +1,6 @@
 import type { LogError, WrappedError } from '../wrapError';
 import { BaseInputMask } from './baseInputMask';
-import { TextDiff, textDiff } from '../textDiff';
+import { type TextDiff, textDiff } from '../textDiff';
 import { wrapError } from '../wrapError';
 
 export class CurrencyInputMask extends BaseInputMask {

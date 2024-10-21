@@ -44,7 +44,7 @@
     import type { InputMask } from '../../types/input';
     import type { AlignmentHorizontal } from '../../types/alignment';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { wrapError } from '../../utils/wrapError';
@@ -53,7 +53,6 @@
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { isNumber } from '../../utils/isNumber';
-    import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
@@ -64,9 +63,10 @@
     import { updateCurrencyMask } from '../../utils/updateCurrencyMask';
     import { CurrencyInputMask } from '../../utils/mask/currencyInputMask';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
-    import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
+    import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivInputData>;

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import { derived, Readable } from 'svelte/store';
+    import { derived, type Readable } from 'svelte/store';
 
     import css from './Grid.module.css';
 
@@ -11,15 +11,15 @@
     import type { AlignmentHorizontal } from '../../types/alignment';
     import type { MaybeMissing } from '../../expressions/json';
     import type { ComponentContext } from '../../types/componentContext';
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
     import { genClassName } from '../../utils/genClassName';
     import { gridCalcTemplates } from '../../utils/gridCalcTemplates';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
 
     export let componentContext: ComponentContext<DivGridData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -81,10 +81,10 @@
     }
 
     interface ChildInfo {
-        rowSpan: number | undefined;
-        columnSpan: number | undefined;
-        width: MaybeMissing<Size> | undefined;
-        height: MaybeMissing<Size> | undefined;
+        rowSpan?: number;
+        columnSpan?: number;
+        width?: MaybeMissing<Size>;
+        height?: MaybeMissing<Size>;
     }
     $: {
         let children: Readable<ChildInfo>[] = [];

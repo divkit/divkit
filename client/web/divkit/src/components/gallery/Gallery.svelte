@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
-    import { derived, Readable } from 'svelte/store';
+    import { derived, type Readable } from 'svelte/store';
 
     import css from './Gallery.module.css';
     import rootCss from '../Root.module.css';
@@ -15,9 +15,7 @@
     import type { Size } from '../../types/sizes';
     import type { Style } from '../../types/general';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
@@ -31,6 +29,8 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
 
     export let componentContext: ComponentContext<DivGalleryData>;
     export let layoutParams: LayoutParams | undefined = undefined;

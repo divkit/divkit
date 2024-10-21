@@ -4,6 +4,7 @@ import type { FontWeight } from './text';
 import type { Action, BooleanInt } from '../../typings/common';
 import type { EdgeInsets } from './edgeInserts';
 import type { CornersRadius } from './border';
+import type { FixedSize } from './sizes';
 
 export interface TabsTitleStyle {
     font_size?: number;
@@ -30,6 +31,12 @@ export interface TabItem {
     div: DivBaseData;
 }
 
+export interface TabDelimiterStyle {
+    image_url: string;
+    width: FixedSize;
+    height: FixedSize;
+}
+
 export interface DivTabsData extends DivBaseData, DivActionableData {
     type: 'tabs';
     title_paddings?: EdgeInsets;
@@ -43,4 +50,5 @@ export interface DivTabsData extends DivBaseData, DivActionableData {
     // tabs_position
     // dynamic_height
     restrict_parent_scroll?: BooleanInt;
+    tab_title_delimiter?: TabDelimiterStyle;
 }

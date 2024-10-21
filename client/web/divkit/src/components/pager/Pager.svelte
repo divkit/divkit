@@ -16,7 +16,7 @@
 
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';

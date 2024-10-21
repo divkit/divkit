@@ -95,7 +95,7 @@ export function visibilityAction(node: HTMLElement, {
                 (it.action as DisappearAction).disappear_duration,
             log_limit: it.action.log_limit,
             is_enabled: it.action.is_enabled,
-        });
+        }) as Readable<CalcedAction>;
     });
 
     let observer: IntersectionObserver | undefined;

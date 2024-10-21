@@ -1,6 +1,6 @@
 import type { MaybeMissing } from '../expressions/json';
+import type { CurrencyInputMask as CurrencyInputMaskType } from '../types/input';
 import { CurrencyInputMask } from './mask/currencyInputMask';
-import { CurrencyInputMask as CurrencyInputMaskType } from '../types/input';
 import type { LogError } from './wrapError';
 
 export function updateCurrencyMask(
