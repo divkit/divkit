@@ -34,6 +34,10 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   init() {
     super.init(frame: .zero)
+
+    preview.whenLoaded { [weak self] value in
+      self?.videoView.map { $0.addSubview(value) }
+    }
   }
 
   @available(*, unavailable)
@@ -78,7 +82,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
             forPath: self.model.path
           )
           self.model.resumeActions.perform(sendingFrom: self)
-          self.preview.isHidden = true
+          self.preview.currentValue?.isHidden = true
         case let .durationUpdate(duration):
           self.model.duration?.value = duration
         }
@@ -90,13 +94,12 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     return player
   }()
 
-  private lazy var preview: UIImageView = {
+  private let preview = Lazy(getter: {
     let view = UIImageView(image: nil)
     view.contentMode = .scaleAspectFit
     view.backgroundColor = .black
-    videoView.map { $0.addSubview(view) }
     return view
-  }()
+  })
 
   private lazy var videoView: PlayerView? = {
     let view = playerFactory?.makePlayerView()
@@ -110,7 +113,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       switch state.state {
       case .playing:
         player?.play()
-        preview.isHidden = true
+        preview.currentValue?.isHidden = true
       case .paused:
         player?.pause()
       }
@@ -137,7 +140,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.set(isMuted: model.playbackConfig.isMuted)
     }
 
-    preview.image = model.preview
+    if let previewImage = model.preview {
+      preview.value.image = previewImage
+    }
 
     if let elapsedTime = model.elapsedTime?.value,
        elapsedTime != previousTime {
@@ -149,7 +154,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
   override func layoutSubviews() {
     super.layoutSubviews()
     videoView?.frame = bounds
-    preview.frame = adjustPreviewFrame()
+    if preview.currentValue != nil {
+      preview.value.frame = adjustPreviewFrame()
+    }
   }
 
   private func adjustPreviewFrame() -> CGRect {
