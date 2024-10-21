@@ -2,6 +2,7 @@
 
 # Android Client:
 * `variable_triggers` defined locally are now attached only when they are within an active `state`.
+* Fixed memory leak in timers.
 
 # iOS Client:
 * Added DivSubmitAction which allows to submit data from container. Can be used while creating forms with DivKit.
