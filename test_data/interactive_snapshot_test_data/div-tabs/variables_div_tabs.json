@@ -1,0 +1,3923 @@
+{
+  "description": "Variables in tabs",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "presets_holder": {
+        "type": "gallery",
+        "orientation": "vertical",
+        "column_count": 3,
+        "item_spacing": 4,
+        "height": {
+          "type": "fixed",
+          "value": 28
+        },
+        "background": [{
+          "type": "solid",
+          "color": "#f5f5f5"
+        }],
+        "paddings": {
+          "top": 3,
+          "bottom": 3
+        }
+      },
+      "presets_header": {
+        "type": "text",
+        "height": {
+          "type": "match_parent"
+        },
+        "width": {
+          "type": "match_parent"
+        },
+        "font_size": 14,
+        "text_color": "#888888",
+        "text_alignment_vertical": "center",
+        "paddings": {
+          "left": 4,
+          "right": 4
+        }
+      },
+      "presets_button": {
+        "type": "text",
+        "height": {
+          "type": "match_parent"
+        },
+        "width": {
+          "type": "match_parent"
+        },
+        "font_size": 14,
+        "text_color": "#000",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0e000000"
+          }
+        ],
+        "paddings": {
+          "left": 4,
+          "right": 4
+        },
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "border": {
+          "corner_radius": 6
+        }
+      }
+    },
+    "card": {
+      "variables": [
+        {
+          "name": "active_text_color",
+          "type": "color",
+          "value": "#000"
+        },
+        {
+          "name": "active_background_color",
+          "type": "color",
+          "value": "#FFCC00"
+        },
+        {
+          "name": "inactive_text_color",
+          "type": "color",
+          "value": "#000000"
+        },
+        {
+          "name": "inactive_background_color",
+          "type": "color",
+          "value": "#00FFCC00"
+        },
+        {
+          "name": "separator.color",
+          "type": "color",
+          "value": "#888"
+        },
+        {
+          "name": "selected_tab",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "tab.line_height",
+          "type": "integer",
+          "value": 20
+        },
+        {
+          "name": "dynamic_height",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "has_separator",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "separator_paddings.top",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "separator_paddings.bottom",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "separator_paddings.left",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "separator_paddings.right",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "title_paddings.top",
+          "type": "integer",
+          "value": 4
+        },
+        {
+          "name": "title_paddings.bottom",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "title_paddings.left",
+          "type": "integer",
+          "value": 4
+        },
+        {
+          "name": "title_paddings.right",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "log_id": "gallery",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "items": [
+              {
+                "id": "my_tabs",
+                "type": "tabs",
+                "log_id": "sut_container",
+                "title_paddings": {
+                  "left": "@{title_paddings.left}",
+                  "right": "@{title_paddings.right}",
+                  "top": "@{title_paddings.top}",
+                  "bottom": "@{title_paddings.bottom}"
+                },
+                "separator_paddings": {
+                  "left": "@{separator_paddings.left}",
+                  "right": "@{separator_paddings.right}",
+                  "top": "@{separator_paddings.top}",
+                  "bottom": "@{separator_paddings.bottom}"
+                },
+                "has_separator": "@{has_separator}",
+                "separator_color": "@{separator.color}",
+                "tab_title_style": {
+                  "font_weight": "medium",
+                  "line_height": "@{tab.line_height}",
+                  "active_text_color": "@{active_text_color}",
+                  "active_background_color": "@{active_background_color}",
+                  "inactive_text_color": "@{inactive_text_color}",
+                  "inactive_background_color": "@{inactive_background_color}"
+                },
+                "selected_tab": "@{selected_tab}",
+                "dynamic_height": "@{dynamic_height}",
+                "items": [
+                  {
+                    "title": "Tab 1",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Tab 1"
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "Tab 1. Footer",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 2",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "container",
+                              "paddings": {
+                                "top": 8
+                              },
+                              "orientation": "horizontal",
+                              "action": {
+                                "log_id": "news/topic",
+                                "url": "action://none/"
+                              },
+                              "items": [
+                                {
+                                  "type": "image",
+                                  "width": {
+                                    "type": "fixed",
+                                    "value": 18
+                                  },
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 18
+                                  },
+                                  "margins": {
+                                    "right": 16
+                                  },
+                                  "placeholder_color": "#00000000",
+                                  "image_url": "file:///android_asset/images/district/comment.png"
+                                },
+                                {
+                                  "type": "container",
+                                  "orientation": "vertical",
+                                  "items": [
+                                    {
+                                      "type": "text",
+                                      "margins": {
+                                        "bottom": 8
+                                      },
+                                      "font_size": 14,
+                                      "line_height": 20,
+                                      "max_lines": 3,
+                                      "text": "Tab 2"
+                                    },
+                                    {
+                                      "type": "separator",
+                                      "height": {
+                                        "type": "fixed",
+                                        "value": 1
+                                      },
+                                      "background": [
+                                        {
+                                          "type": "solid",
+                                          "color": "#33919CB5"
+                                        }
+                                      ],
+                                      "delimiter_style": {
+                                        "color": "#00000000"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "Tab 2. Footer",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 3",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Tab#3"
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "Tab 3. Footer",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 4",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "all news",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 5",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 6",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 7",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 8",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 9",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 10",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 11",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "title": "Tab 12",
+                    "div": {
+                      "type": "container",
+                      "paddings": {
+                        "left": 16,
+                        "right": 16
+                      },
+                      "orientation": "vertical",
+                      "items": [
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "container",
+                          "paddings": {
+                            "top": 8
+                          },
+                          "orientation": "horizontal",
+                          "action": {
+                            "log_id": "news/topic",
+                            "url": "action://none/"
+                          },
+                          "items": [
+                            {
+                              "type": "image",
+                              "width": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "height": {
+                                "type": "fixed",
+                                "value": 18
+                              },
+                              "margins": {
+                                "right": 16
+                              },
+                              "placeholder_color": "#00000000",
+                              "image_url": "file:///android_asset/images/district/comment.png"
+                            },
+                            {
+                              "type": "container",
+                              "orientation": "vertical",
+                              "items": [
+                                {
+                                  "type": "text",
+                                  "margins": {
+                                    "bottom": 8
+                                  },
+                                  "font_size": 14,
+                                  "line_height": 20,
+                                  "max_lines": 3,
+                                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                                },
+                                {
+                                  "type": "separator",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 1
+                                  },
+                                  "background": [
+                                    {
+                                      "type": "solid",
+                                      "color": "#33919CB5"
+                                    }
+                                  ],
+                                  "delimiter_style": {
+                                    "color": "#00000000"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "font_size": 12,
+                          "font_weight": "medium",
+                          "max_lines": 1,
+                          "text_alignment_vertical": "center",
+                          "text_color": "#999999",
+                          "text": "expand",
+                          "action": {
+                            "log_id": "news/more",
+                            "url": "action://none/"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=selected_tab&value=1",
+          "log_id": "active_tab=1"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=dynamic_height&value=1",
+          "log_id": "dynamic_height=DYNAMIC"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=tab.line_height&value=30",
+          "log_id": "tab.line_height=30"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=active_text_color&value=%23FFF",
+          "log_id": "active_text_color=#FFF"
+        },
+        {
+          "url": "div-action://set_variable?name=active_background_color&value=%23b37fb3",
+          "log_id": "active_background_color=#fc89ac"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_text_color&value=%2388000000",
+          "log_id": "inactive_text_color=#88000000"
+        },
+        {
+          "url": "div-action://set_variable?name=inactive_background_color&value=%23d8bfd8",
+          "log_id": "inactive_background_color=#d8bfd8"
+        }
+      ],
+      "delay": 100,
+      "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=selected_tab&value=6",
+          "log_id": "selected_tab=6"
+        }
+      ],
+      "expected_screenshot": "step5.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=has_separator&value=true",
+          "log_id": "has_separator=1"
+        }
+      ],
+      "expected_screenshot": "step6.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator.color&value=%23b37fb3",
+          "log_id": "separator.color=purple"
+        }
+      ],
+      "expected_screenshot": "step7.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_paddings.top&value=20",
+          "log_id": "separator_paddings.top=20"
+        }
+      ],
+      "expected_screenshot": "step8.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_paddings.bottom&value=20",
+          "log_id": "separator_paddings.bottom=20"
+        }
+      ],
+      "expected_screenshot": "step9.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_paddings.left&value=50",
+          "log_id": "separator_paddings.left=50"
+        }
+      ],
+      "expected_screenshot": "step10.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_paddings.right&value=50",
+          "log_id": "separator_paddings.right=50"
+        }
+      ],
+      "expected_screenshot": "step11.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=title_paddings.top&value=20",
+          "log_id": "title_paddings.top=20"
+        }
+      ],
+      "expected_screenshot": "step12.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=title_paddings.bottom&value=20",
+          "log_id": "title_paddings.bottom=20"
+        }
+      ],
+      "expected_screenshot": "step13.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=selected_tab&value=0",
+          "log_id": "active_tab=0"
+        }
+      ],
+      "expected_screenshot": "step14.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=title_paddings.left&value=50",
+          "log_id": "title_paddings.left=50"
+        }
+      ],
+      "expected_screenshot": "step15.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=selected_tab&value=12",
+          "log_id": "active_tab=last"
+        }
+      ],
+      "expected_screenshot": "step16.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=title_paddings.right&value=50",
+          "log_id": "title_paddings.right=50"
+        }
+      ],
+      "expected_screenshot": "step17.png"
+    }
+  ]
+}

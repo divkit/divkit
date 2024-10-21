@@ -1,0 +1,202 @@
+{
+  "description": "Tabs item actions",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "text_block": {
+        "type": "text",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0e000000"
+          }
+        ],
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "fixed",
+          "value": 100,
+          "unit": "sp"
+        },
+        "border": {
+          "corner_radius": 16,
+          "stroke": "#ffffff",
+          "width": 2
+        },
+        "font_size": 20,
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000"
+      }
+    },
+    "card": {
+      "log_id": "card",
+      "states": [
+        {
+          "div": {
+            "items": [
+              {
+                "id": "my_tabs",
+                "items": [
+                  {
+                    "div": {
+                      "type": "text_block",
+                      "text": "Item 0",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 0"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 1",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 1"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 2",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 2"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 3",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 3"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 4",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 4"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 5",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 5"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 6",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 6"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 7",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 7"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 8",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 8"
+                  },
+                  {
+                    "div": {
+                      "text": "Item 9",
+                      "type": "text_block",
+                      "width": {
+                        "type": "match_parent"
+                      }
+                    },
+                    "title": "Tab 9"
+                  }
+                ],
+                "type": "tabs"
+              }
+            ],
+            "orientation": "vertical",
+            "type": "container",
+            "margins": {
+              "top": 4,
+              "left": 8,
+              "right": 8
+            }
+          },
+          "state_id": 0
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "next",
+          "url": "div-action://set_next_item?id=my_tabs"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "prev",
+          "url": "div-action://set_previous_item?id=my_tabs"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_item_2",
+          "url": "div-action://scroll_to_end?id=my_tabs"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_item_2",
+          "url": "div-action://scroll_to_start?id=my_tabs"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}
