@@ -45,6 +45,7 @@ public struct DivBlockModelingContext {
   let layoutProviderHandler: DivLayoutProviderHandler?
   let idToPath: IdToPath
   let animatorController: DivAnimatorController?
+  private(set) var accessibilityElementsStorage = DivAccessibilityElementsStorage()
 
   public init(
     cardId: DivCardID,

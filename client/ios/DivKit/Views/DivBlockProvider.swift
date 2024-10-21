@@ -55,6 +55,8 @@ final class DivBlockProvider {
   }
 
   var lastVisibleBounds: CGRect = .zero
+  
+  var accessibilityElementsStorage: DivAccessibilityElementsStorage?
 
   init(
     divKitComponents: DivKitComponents,
@@ -220,6 +222,7 @@ final class DivBlockProvider {
           context: context
         )
       }
+      accessibilityElementsStorage = context.accessibilityElementsStorage
       debugParams.processMeasurements((cardId: cardId, measurements: measurements))
       for error in context.errorsStorage.errors {
         divKitComponents.reporter.reportError(cardId: cardId, error: error)

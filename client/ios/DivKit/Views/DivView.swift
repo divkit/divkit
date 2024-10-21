@@ -257,6 +257,18 @@ extension DivView {
     }
     oldBounds = bounds
   }
+  
+  public override var accessibilityElements: [Any]? {
+    get {
+      guard let elements = self.blockProvider?.accessibilityElementsStorage?.getAccessibilityElements(from: self),
+            !elements.isEmpty else {
+        return super.accessibilityElements
+      }
+      
+      return elements
+    }
+    set { }
+  }
 }
 
 extension UIResponder {

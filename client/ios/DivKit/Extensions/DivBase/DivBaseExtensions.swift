@@ -43,10 +43,14 @@ extension DivBase {
     for extensionHandler in extensionHandlers {
       extensionHandler.accept(div: self, context: context)
     }
-
-    let statePath = context.parentDivStatePath ?? DivData.rootPath
-
+    
     let expressionResolver = context.expressionResolver
+    if let forwardId = focus?.nextFocusIds?.resolveForward(expressionResolver),
+       let currentId = self.id {
+      context.accessibilityElementsStorage.put(id: currentId, nextId: forwardId)
+    }
+    
+    let statePath = context.parentDivStatePath ?? DivData.rootPath
     let visibility = resolveVisibility(expressionResolver)
     if visibility == .gone {
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)

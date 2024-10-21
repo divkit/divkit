@@ -89,6 +89,7 @@ func divImage(
 func divText(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  focus: DivFocus? = nil,
   fontSize: Int? = nil,
   fontWeight: DivFontWeight? = nil,
   id: String? = nil,
@@ -98,6 +99,7 @@ func divText(
   textExpression: String? = nil,
   width: DivSize? = nil,
   variables: [DivVariable]? = nil,
+  visibility: Expression<DivVisibility>? = nil,
   visibilityActions: [DivVisibilityAction]? = nil
 ) -> Div {
   let textValue: Expression<String> = if let textExpression {
@@ -108,6 +110,7 @@ func divText(
   return .divText(DivText(
     accessibility: accessibility,
     actions: actions,
+    focus: focus,
     fontSize: fontSize.map { .value($0) },
     fontWeight: fontWeight.map { .value($0) },
     id: id,
@@ -115,6 +118,7 @@ func divText(
     paddings: paddings,
     text: textValue,
     variables: variables,
+    visibility: visibility,
     visibilityActions: visibilityActions,
     width: width
   ))
