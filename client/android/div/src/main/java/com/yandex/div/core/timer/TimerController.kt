@@ -41,8 +41,8 @@ internal class TimerController(
 
     private fun updateTimer() {
         ticker.update(
-            divTimer.duration.evaluate(expressionResolver).toLong(),
-            divTimer.tickInterval?.evaluate(expressionResolver)?.toLong()
+            divTimer.duration.evaluate(expressionResolver),
+            divTimer.tickInterval?.evaluate(expressionResolver)
         )
     }
 
@@ -61,7 +61,12 @@ internal class TimerController(
         }
     }
 
-    fun onDetach() {
+    fun onDetach(view: Div2View?) {
+        if (view != div2View) return
+        reset()
+    }
+
+    fun reset() {
         div2View = null
 
         ticker.saveState()
@@ -69,6 +74,8 @@ internal class TimerController(
 
         savedForBackground = true
     }
+
+    fun isAttachedToView(view: Div2View) = view == div2View
 
     fun applyCommand(command: String) {
         when (command) {
