@@ -240,6 +240,43 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "expression": "@{array_var.isEmpty()}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            "one"
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{array_var.isEmpty()}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": []
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

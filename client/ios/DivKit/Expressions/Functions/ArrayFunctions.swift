@@ -40,6 +40,7 @@ extension [String: Function] {
     addFunction("getNumber", _getNumber)
     addFunction("getString", _getString)
     addFunction("getUrl", _getUrl)
+    addFunction("isEmpty", _isEmpty)
   }
 
   private mutating func addFunctions(
@@ -81,6 +82,10 @@ private let _getString = FunctionBinary<[AnyHashable], Int, String> {
 
 private let _getUrl = FunctionBinary<[AnyHashable], Int, URL> {
   try $0.getUrl(index: $1)
+}
+
+private let _isEmpty = FunctionUnary<[AnyHashable], Bool> {
+  $0.isEmpty
 }
 
 private let _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
