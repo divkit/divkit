@@ -30,6 +30,7 @@ public final class DivActionHandler {
   private let timerActionHandler: TimerActionHandler
   private let videoActionHandler = VideoActionHandler()
   private let animatorHandler: AnimatorActionHandler
+  private let showTooltipActionHandler: ShowTooltipActionHandler
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   public convenience init(
@@ -117,6 +118,10 @@ public final class DivActionHandler {
     self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
     self.idToPath = idToPath
     self.animatorHandler = AnimatorActionHandler(animatorController: animatorController)
+    self.showTooltipActionHandler = ShowTooltipActionHandler(
+      performer: tooltipActionPerformer,
+      showTooltip: showTooltip
+    )
   }
 
   public func handle(
@@ -209,13 +214,15 @@ public final class DivActionHandler {
       timerActionHandler.handle(action, context: context)
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
+    case let .divActionShowTooltip(action):
+      showTooltipActionHandler.handle(action, context: context)
     case let .divActionSubmit(action):
       submitActionHandler.handle(action, context: context)
     case let .divActionAnimatorStart(action):
       animatorHandler.handle(action, context: context)
     case let .divActionAnimatorStop(action):
       animatorHandler.handle(action, context: context)
-    case .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
+    case .divActionHideTooltip, .divActionDownload,
          .divActionSetState, .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
       break
     case .none:
