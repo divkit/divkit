@@ -14,13 +14,9 @@ internal class DivVideoViewMapper @Inject constructor() {
         currentViews[view] = div
     }
 
-    fun getPlayerView(div: DivVideo): DivPlayerView? {
-        val videoView = currentViews.entries.find { it.value == div }?.key
-        val playerView = videoView?.getPlayerView()
-
-        if (playerView == null && videoView != null) {
-            currentViews.remove(videoView)
-        }
-        return playerView
+    fun getPlayer(div: DivVideo): DivPlayer? {
+        return currentViews.entries.filter { it.value == div }
+            .mapNotNull { it.key.getPlayerView()?.getAttachedPlayer() }
+            .firstOrNull()
     }
 }

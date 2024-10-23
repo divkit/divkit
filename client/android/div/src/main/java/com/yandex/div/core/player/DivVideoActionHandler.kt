@@ -30,7 +30,7 @@ internal class DivVideoActionHandler @Inject constructor(
     ): Boolean {
         val divData = div2View.divData ?: return false
         val video = searchDivDataForVideo(divData, divId, expressionResolver) ?: return false
-        val player = videoViewMapper.getPlayerView(video)?.getAttachedPlayer() ?: return false
+        val player = videoViewMapper.getPlayer(video) ?: return false
 
         when (action) {
             START_COMMAND -> player.play()
