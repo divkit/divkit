@@ -1,3 +1,22 @@
+## 30.24.0
+
+# Android Client:
+* Added API to force specific `Div2View` to use canvas clipping.
+
+# iOS Client:
+* Add `isEmpty()` method to dict and array.
+* Added `div-focus.next_focus_ids.forward` support.
+* Added new typed action `div-action-show-tooltip` that can be used instead of `div-action://show_tooltip`.
+* Fixed unnecessary focus clearing in inputs.
+
+# Web Client:
+* Added support for a `cloud` background for `range` in `text`.
+* Added support for the `tab_title_delimiter` property in the `tabs` component.
+* Fixed incorrect size of `corner_radius` and `width` of `stroke` in `range` for `text`.
+* Fixed margins of child elements with `visibility` `gone` inside `gallery`.
+* `variable_triggers` defined locally are now attached only when they are within an active `tabs` item.
+
+
 ## 30.23.0
 
 # Android Client:
