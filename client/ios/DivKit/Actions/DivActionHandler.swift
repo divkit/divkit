@@ -31,6 +31,7 @@ public final class DivActionHandler {
   private let videoActionHandler = VideoActionHandler()
   private let animatorHandler: AnimatorActionHandler
   private let showTooltipActionHandler: ShowTooltipActionHandler
+  private let hideTooltipActionHandler: HideTooltipActionHandler
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   public convenience init(
@@ -119,6 +120,10 @@ public final class DivActionHandler {
     self.idToPath = idToPath
     self.animatorHandler = AnimatorActionHandler(animatorController: animatorController)
     self.showTooltipActionHandler = ShowTooltipActionHandler(
+      performer: tooltipActionPerformer,
+      showTooltip: showTooltip
+    )
+    self.hideTooltipActionHandler = HideTooltipActionHandler(
       performer: tooltipActionPerformer,
       showTooltip: showTooltip
     )
@@ -222,8 +227,10 @@ public final class DivActionHandler {
       animatorHandler.handle(action, context: context)
     case let .divActionAnimatorStop(action):
       animatorHandler.handle(action, context: context)
-    case .divActionHideTooltip, .divActionDownload,
-         .divActionSetState, .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
+    case let .divActionHideTooltip(action):
+      hideTooltipActionHandler.handle(action, context: context)
+    case .divActionDownload, .divActionSetState, 
+         .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
       break
     case .none:
       isHandled = false
