@@ -696,7 +696,7 @@ data class Text internal constructor(
              */
             val border: Property<TextRangeBorder>?,
             /**
-             * Ordinal number of the last character to be included in the range.
+             * Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
              */
             val end: Property<Int>?,
             /**
@@ -2777,7 +2777,7 @@ fun Text.Image.asList() = listOf(this)
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2844,7 +2844,7 @@ fun DivScope.textRange(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2909,7 +2909,7 @@ fun DivScope.textRangeProps(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2974,7 +2974,7 @@ fun TemplateScope.textRangeRefs(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3041,7 +3041,7 @@ fun Text.Range.override(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3105,7 +3105,7 @@ fun Text.Range.defer(
 
 /**
  * @param alignmentVertical Vertical text alignment within the row.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.

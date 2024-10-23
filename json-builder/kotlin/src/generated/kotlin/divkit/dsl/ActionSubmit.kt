@@ -102,7 +102,7 @@ data class ActionSubmit internal constructor(
             val headers: Property<List<Header>>?,
             /**
              * The HTTP request method.
-             * Default value: `POST`.
+             * Default value: `post`.
              */
             val method: Property<Method>?,
             /**
@@ -123,7 +123,7 @@ data class ActionSubmit internal constructor(
         /**
          * The HTTP request method.
          * 
-         * Possible values: [GET], [POST], [PUT], [PATCH], [DELETE], [HEAD], [OPTIONS].
+         * Possible values: [get], [post], [put], [patch], [delete], [head], [options].
          */
         @Generated
         sealed interface Method
