@@ -99,6 +99,7 @@ public class DivConfiguration {
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
     private boolean mComplexRebindEnabled;
+    private boolean mPagerPageClipEnabled;
     private boolean mPermanentDebugPanelEnabled;
 
     private float mRecyclerScrollInterceptionAngle;
@@ -140,6 +141,7 @@ public class DivConfiguration {
             boolean multipleStateChangeEnabled,
             boolean bindOnAttachEnabled,
             boolean complexRebindEnabled,
+            boolean pagerChildrenClipEnabled,
             boolean permanentDebugPanelEnabled,
             float recyclerScrollInterceptionAngle
     ) {
@@ -181,6 +183,7 @@ public class DivConfiguration {
         mGlobalVariableController = globalVariableController;
         mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
+        mPagerPageClipEnabled = pagerChildrenClipEnabled;
     }
 
     @Provides
@@ -320,6 +323,12 @@ public class DivConfiguration {
     @ExperimentFlag(experiment = Experiment.VIEW_POOL_ENABLED)
     public boolean isViewPoolEnabled() {
         return mViewPoolEnabled;
+    }
+
+    @Provides
+    @ExperimentFlag(experiment = Experiment.PAGER_PAGE_CLIP_ENABLED)
+    public boolean isPagerPageClipEnabled() {
+        return mPagerPageClipEnabled;
     }
 
     @Provides
@@ -483,6 +492,7 @@ public class DivConfiguration {
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
         private boolean mComplexRebindEnabled = Experiment.COMPLEX_REBIND_ENABLED.getDefaultValue();
+        private boolean mPagerPageClipEnabled = Experiment.PAGER_PAGE_CLIP_ENABLED.getDefaultValue();
         private boolean mPermanentDebugPanelEnabled = Experiment.PERMANENT_DEBUG_PANEL_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
 
@@ -726,6 +736,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enablePagerPageClipping(boolean enable) {
+            mPagerPageClipEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         public Builder enablePermanentDebugPanel(boolean enable) {
             mPermanentDebugPanelEnabled = enable;
             return this;
@@ -791,6 +807,7 @@ public class DivConfiguration {
                     mMultipleStateChangeEnabled,
                     mBindOnAttachEnabled,
                     mComplexRebindEnabled,
+                    mPagerPageClipEnabled,
                     mPermanentDebugPanelEnabled,
                     mRecyclerScrollInterceptionAngle);
         }

@@ -89,6 +89,7 @@ internal class DivPagerBinder @Inject constructor(
         view.viewPager.adapter = adapter
         view.bindInfiniteScroll(div, resolver)
         view.pagerOnItemsCountChange?.onItemsUpdated()
+        view.clipToPage = divView.div2Component.isPagerPageClipEnabled
 
         val reusableObserver = { _: Any ->
             val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL

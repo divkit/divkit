@@ -193,6 +193,10 @@ public interface Div2Component {
     boolean isComplexRebindEnabled();
 
     @NonNull
+    @ExperimentFlag(experiment = Experiment.PAGER_PAGE_CLIP_ENABLED)
+    boolean isPagerPageClipEnabled();
+
+    @NonNull
     DivActionTypedHandlerCombiner getActionTypedHandlerCombiner();
 
     @NonNull

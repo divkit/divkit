@@ -54,6 +54,12 @@ internal class DivPagerView @JvmOverloads constructor(
 
     internal var pagerOnItemsCountChange: OnItemsUpdatedCallback? = null
 
+    internal var clipToPage: Boolean
+        get() = getRecyclerView()?.clipChildren ?: false
+        set(value) {
+            getRecyclerView()?.clipChildren = value
+        }
+
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 
     internal var currentItem: Int

@@ -50,6 +50,10 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     COMPLEX_REBIND_ENABLED(
         "complex_rebind_enabled"
     ),
+    PAGER_PAGE_CLIP_ENABLED(
+        "pager_page_children_enabled",
+        defaultValue = true
+    ),
     PERMANENT_DEBUG_PANEL_ENABLED(
         "permanent_debug_panel_enabled",
         defaultValue = false

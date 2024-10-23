@@ -1,0 +1,108 @@
+{
+  "description": "Shadow on items in pager are cropped by page by default.",
+  "platforms": [
+    "android"
+  ],
+  "card": {
+    "log_id": "coupons_card",
+    "states": [
+      {
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "type": "percentage",
+              "value": 91.4
+            }
+          },
+          "items": [
+            {
+              "type": "coupon_item",
+              "title": "test"
+            },
+            {
+              "type": "coupon_item",
+              "title": "test2"
+            }
+          ],
+          "item_spacing": {
+            "type": "fixed",
+            "value": 8
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "log_id": "coupon_items",
+          "margins": {
+            "top": 8
+          },
+          "paddings": {
+            "left": 16,
+            "right": 16
+          },
+          "orientation": "horizontal"
+        },
+        "state_id": 0
+      }
+    ]
+  },
+  "templates": {
+    "coupon_item": {
+      "log_id": "coupon_template",
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "$text": "title",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 36
+          },
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center"
+        }
+      ],
+      "border": {
+        "shadow": {
+          "blur": 5,
+          "alpha": 0.9,
+          "offset": {
+            "x": {
+              "unit": "dp",
+              "value": 0
+            },
+            "y": {
+              "unit": "dp",
+              "value": 0
+            }
+          }
+        },
+        "has_shadow": true,
+        "corners_radius": {
+          "top-left": 12,
+          "top-right": 12,
+          "bottom-left": 12,
+          "bottom-right": 12
+        }
+      },
+      "margins": {
+        "top": 4,
+        "bottom": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffffff"
+        }
+      ],
+      "orientation": "horizontal"
+    }
+  }
+}

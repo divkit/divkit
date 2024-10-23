@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.util.SparseArray
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.state.DivStatePath
@@ -58,8 +57,6 @@ internal class DivPagerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
         val view = DivPagerPageLayout(bindingContext.divView.context) { orientation }
-        view.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-
         return DivPagerViewHolder(bindingContext, view, divBinder, viewCreator, path, accessibilityEnabled)
     }
 
