@@ -1,3 +1,12 @@
+## 30.24.0 (October 28, 2024)
+
+* Added support for a `cloud` background for `range` in `text`.
+* Added support for the `tab_title_delimiter` property in the `tabs` component.
+* Fixed incorrect size of `corner_radius` and `width` of `stroke` in `range` for `text`.
+* Fixed margins of child elements with `visibility` `gone` inside `gallery`.
+* `variable_triggers` defined locally are now attached only when they are within an active `tabs` item.
+
+
 ## 30.22.0 (October 14, 2024)
 
 * Added local `variable_triggers` property support.
