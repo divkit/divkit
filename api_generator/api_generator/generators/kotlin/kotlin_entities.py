@@ -528,7 +528,8 @@ class KotlinEntity(Entity):
                 property_name=property.name + '_item',
                 with_template_validators=False
             ))
-
+        if property.supports_expressions and property.default_value_definition is not None:
+            arg_list.append(property.default_value_var_name)
         args = ', '.join(filter(lambda arg: arg, arg_list))
         default_value = property.default_value_coalescing(GenerationMode.NORMAL_WITH_TEMPLATES)
         return Text(f'{property.declaration_name} = JsonFieldResolver.resolve{optionality_prefix}{expression_prefix}{collection_prefix}({args}){default_value},')

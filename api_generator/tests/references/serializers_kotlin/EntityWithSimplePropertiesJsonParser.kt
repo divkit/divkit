@@ -106,7 +106,7 @@ internal class EntityWithSimplePropertiesJsonParser(
                 color = JsonFieldResolver.resolveOptionalExpression(context, logger, template.color, data, "color", TYPE_HELPER_COLOR, STRING_TO_COLOR_INT),
                 double = JsonFieldResolver.resolveOptionalExpression(context, logger, template.double, data, "double", TYPE_HELPER_DOUBLE, NUMBER_TO_DOUBLE),
                 id = JsonFieldResolver.resolveOptional(context, logger, template.id, data, "id", NUMBER_TO_INT) ?: ID_DEFAULT_VALUE,
-                integer = JsonFieldResolver.resolveOptionalExpression(context, logger, template.integer, data, "integer", TYPE_HELPER_INT, NUMBER_TO_INT) ?: INTEGER_DEFAULT_VALUE,
+                integer = JsonFieldResolver.resolveOptionalExpression(context, logger, template.integer, data, "integer", TYPE_HELPER_INT, NUMBER_TO_INT, INTEGER_DEFAULT_VALUE) ?: INTEGER_DEFAULT_VALUE,
                 positiveInteger = JsonFieldResolver.resolveOptionalExpression(context, logger, template.positiveInteger, data, "positive_integer", TYPE_HELPER_INT, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR),
                 string = JsonFieldResolver.resolveOptionalExpression(context, logger, template.string, data, "string", TYPE_HELPER_STRING),
                 url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI),

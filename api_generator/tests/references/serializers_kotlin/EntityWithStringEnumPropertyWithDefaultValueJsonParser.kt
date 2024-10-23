@@ -69,7 +69,7 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
         override fun resolve(context: ParsingContext, template: EntityWithStringEnumPropertyWithDefaultValueTemplate, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
             val logger = context.logger
             return EntityWithStringEnumPropertyWithDefaultValue(
-                value = JsonFieldResolver.resolveOptionalExpression(context, logger, template.value, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING) ?: VALUE_DEFAULT_VALUE,
+                value = JsonFieldResolver.resolveOptionalExpression(context, logger, template.value, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
             )
         }
     }

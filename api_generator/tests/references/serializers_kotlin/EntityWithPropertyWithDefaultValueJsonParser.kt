@@ -77,9 +77,9 @@ internal class EntityWithPropertyWithDefaultValueJsonParser(
         override fun resolve(context: ParsingContext, template: EntityWithPropertyWithDefaultValueTemplate, data: JSONObject): EntityWithPropertyWithDefaultValue {
             val logger = context.logger
             return EntityWithPropertyWithDefaultValue(
-                int = JsonFieldResolver.resolveOptionalExpression(context, logger, template.int, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR) ?: INT_DEFAULT_VALUE,
+                int = JsonFieldResolver.resolveOptionalExpression(context, logger, template.int, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR, INT_DEFAULT_VALUE) ?: INT_DEFAULT_VALUE,
                 nested = JsonFieldResolver.resolveOptional(context, logger, template.nested, data, "nested", component.entityWithPropertyWithDefaultValueNestedJsonTemplateResolver, component.entityWithPropertyWithDefaultValueNestedJsonEntityParser),
-                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR) ?: URL_DEFAULT_VALUE,
+                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
             )
         }
     }
@@ -156,9 +156,9 @@ internal class EntityWithPropertyWithDefaultValueNestedJsonParser(
         override fun resolve(context: ParsingContext, template: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate, data: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
             val logger = context.logger
             return EntityWithPropertyWithDefaultValue.Nested(
-                int = JsonFieldResolver.resolveOptionalExpression(context, logger, template.int, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR) ?: INT_DEFAULT_VALUE,
+                int = JsonFieldResolver.resolveOptionalExpression(context, logger, template.int, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR, INT_DEFAULT_VALUE) ?: INT_DEFAULT_VALUE,
                 nonOptional = JsonFieldResolver.resolveExpression(context, logger, template.nonOptional, data, "non_optional", TYPE_HELPER_STRING),
-                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR) ?: URL_DEFAULT_VALUE,
+                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
             )
         }
     }

@@ -301,6 +301,30 @@ public class JsonFieldResolver {
     }
 
     @Nullable
+    public static <V> Expression<V> resolveOptionalExpression(
+            @NonNull final ParsingContext context,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final Field<Expression<V>> field,
+            @NonNull final JSONObject data,
+            @NonNull final String key,
+            @NonNull final TypeHelper<V> typeHelper,
+            @Nullable final Expression<V> defaultValue
+    ) {
+        if (field.overridable && data.has(key)) {
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, key, typeHelper, doNotConvert(), defaultValue);
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, reference, typeHelper, doNotConvert(), defaultValue);
+        }
+
+        return null;
+    }
+
+    @Nullable
     public static <R, V> Expression<V> resolveOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
@@ -317,6 +341,31 @@ public class JsonFieldResolver {
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readOptionalExpression(context, logger, data, reference, typeHelper, converter);
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public static <R, V> Expression<V> resolveOptionalExpression(
+            @NonNull final ParsingContext context,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final Field<Expression<V>> field,
+            @NonNull final JSONObject data,
+            @NonNull final String key,
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @Nullable final Expression<V> defaultValue
+    ) {
+        if (field.overridable && data.has(key)) {
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, key, typeHelper, converter, defaultValue);
+        } else if (field.type == Field.TYPE_VALUE){
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, reference, typeHelper, converter, defaultValue);
         }
 
         return null;
@@ -345,6 +394,31 @@ public class JsonFieldResolver {
     }
 
     @Nullable
+    public static <V> Expression<V> resolveOptionalExpression(
+            @NonNull final ParsingContext context,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final Field<Expression<V>> field,
+            @NonNull final JSONObject data,
+            @NonNull final String key,
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ValueValidator<V> validator,
+            @Nullable final Expression<V> defaultValue
+    ) {
+        if (field.overridable && data.has(key)) {
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, key, typeHelper, validator, defaultValue);
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, reference, typeHelper, validator, defaultValue);
+        }
+
+        return null;
+    }
+
+    @Nullable
     public static <R, V> Expression<V> resolveOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
@@ -357,13 +431,39 @@ public class JsonFieldResolver {
     ) {
         if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readOptionalExpression(
-                    context, logger, data, key, typeHelper, converter, validator);
+                    context, logger, data, key, typeHelper, converter, validator, null);
         } else if (field.type == Field.TYPE_VALUE) {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readOptionalExpression(
-                    context, logger, data, reference, typeHelper, converter, validator);
+                    context, logger, data, reference, typeHelper, converter, validator, null);
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public static <R, V> Expression<V> resolveOptionalExpression(
+            @NonNull final ParsingContext context,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final Field<Expression<V>> field,
+            @NonNull final JSONObject data,
+            @NonNull final String key,
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator,
+            @Nullable final Expression<V> defaultValue
+    ) {
+        if (field.overridable && data.has(key)) {
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, key, typeHelper, converter, validator, defaultValue);
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
+            return JsonExpressionParser.readOptionalExpression(
+                    context, logger, data, reference, typeHelper, converter, validator, defaultValue);
         }
 
         return null;
