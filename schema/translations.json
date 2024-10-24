@@ -1323,6 +1323,14 @@
     "en": "Text auto-capitalization type.",
     "ru": "Тип автоматической капитализации текста."
   },
+  "div_input_enter_key_type": {
+    "en": "The type of the `Enter` keyboard button.",
+    "ru": "Тип кнопки клавиатуры `Enter`."
+  },
+  "div_input_enter_key_actions": {
+    "en": "Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden",
+    "ru": "Действия при нажатии на кнопку клавиатуры `Enter`. При наличии действий, поведение по умолчанию будет переопределено"
+  },
   "div_input_filters": {
     "en": "Filter that prevents users from entering text that doesn't satisfy the specified conditions.",
     "ru": "Фильтр, который не допускает ввод текста, не соответствующего заданным условиям."

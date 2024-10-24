@@ -153,6 +153,31 @@
             "web"
           ]
         },
+        "enter_key_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_input_enter_key_actions",
+          "platforms": [
+
+          ]
+        },
+        "enter_key_type": {
+          "type": "string",
+          "enum": [
+            "default",
+            "go",
+            "search",
+            "send",
+            "done"
+          ],
+          "default_value": "default",
+          "$description": "translations.json#/div_input_enter_key_type",
+          "platforms": [
+
+          ]
+        },
         "keyboard_type": {
           "type": "string",
           "enum": [
