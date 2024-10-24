@@ -68,6 +68,7 @@ public final class DefaultTooltipManager: TooltipManager {
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
   private var tooltipWindow: UIWindow?
+  private var previousOrientation = UIDevice.current.orientation
 
   public init(
     shownTooltips: Property<Set<String>>,
@@ -144,7 +145,12 @@ public final class DefaultTooltipManager: TooltipManager {
   }
 
   @objc func orientationDidChange(_ notification: Notification) {
-    reset()
+    let orientation = UIDevice.current.orientation
+    guard orientation != previousOrientation, !orientation.isFlat else { return }
+    if !(orientation.isPortrait && previousOrientation.isPortrait) {
+      reset()
+    }
+    previousOrientation = orientation
   }
 
   private func setupTooltipWindow() {
