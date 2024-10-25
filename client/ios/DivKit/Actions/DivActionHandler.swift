@@ -156,7 +156,7 @@ public final class DivActionHandler {
 
   /// Deprecated. This method is intended for backward compatibility only. Do not use it.
   public func handleDivActionUrl(_ url: URL, cardId: DivCardID) -> Bool {
-    divActionURLHandler.handleURL(url, path: cardId.path)
+    divActionURLHandler.handleURL(url, cardId: cardId)
   }
 
   func handle(
@@ -281,7 +281,7 @@ public final class DivActionHandler {
 
     let isDivActionURLHandled = divActionURLHandler.handleURL(
       url,
-      path: info.path,
+      info: info,
       completion: { [weak self] result in
         guard let self else {
           return

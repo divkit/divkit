@@ -64,19 +64,28 @@ public final class DivActionURLHandler {
     cardId: DivCardID,
     completion: @escaping (Result<Void, Error>) -> Void = { _ in }
   ) -> Bool {
-    handleURL(url, path: cardId.path, completion: completion)
+    let info = DivActionInfo(
+      path: cardId.path,
+      logId: cardId.rawValue,
+      url: url,
+      logUrl: nil,
+      referer: nil,
+      source: .tap,
+      payload: nil
+    )
+    return handleURL(url, info: info, completion: completion)
   }
 
   func handleURL(
     _ url: URL,
-    path: UIElementPath,
+    info: DivActionInfo,
     completion: @escaping (Result<Void, Error>) -> Void = { _ in }
   ) -> Bool {
     guard let intent = DivActionIntent(url: url) else {
       return false
     }
 
-    let cardId = path.cardId
+    let cardId = info.path.cardId
     switch intent {
     case let .showTooltip(id, multiple):
       let tooltipInfo = TooltipInfo(id: id, showsOnStart: false, multiple: multiple)
@@ -93,6 +102,7 @@ public final class DivActionURLHandler {
     case let .download(patchUrl):
       patchProvider.getPatch(
         url: patchUrl,
+        info: info,
         completion: { [unowned self] in
           self.applyPatch(cardId: cardId, result: $0, completion: completion)
         }
@@ -106,7 +116,7 @@ public final class DivActionURLHandler {
       updateCard(.state(cardId))
     case let .setVariable(name, value):
       variableUpdater.update(
-        path: path,
+        path: info.path,
         name: DivVariableName(rawValue: name),
         value: value
       )
