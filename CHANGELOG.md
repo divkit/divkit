@@ -3,6 +3,7 @@
 # Android Client:
 * Added API to force specific `Div2View` to use canvas clipping.
 * Fixed optional expression resolving when default value is defined.
+* Fixed running transition behavior when scene root is detached.
 
 # iOS Client:
 * Add `isEmpty()` method to dict and array.

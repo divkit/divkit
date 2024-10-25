@@ -45,6 +45,7 @@ import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
+import com.yandex.div.core.view2.animations.SceneRootWatcher
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.DivLayoutProviderVariablesHolder
@@ -877,8 +878,9 @@ class Div2View private constructor(
         }
 
         if (transition != null) {
-            val newStateScene = Scene(this, newStateView)
             TransitionManager.endTransitions(this)
+            val newStateScene = Scene(this, newStateView)
+            SceneRootWatcher.watchFor(newStateScene, transition)
             TransitionManager.go(newStateScene, transition)
         } else {
             addView(newStateView)
