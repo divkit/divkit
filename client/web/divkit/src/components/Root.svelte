@@ -1336,6 +1336,7 @@
             getComponentProperty<T>(property: string): T {
                 return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
             },
+            direction
         };
     }
 

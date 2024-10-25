@@ -295,6 +295,7 @@ export interface Customization {
 
 export interface DivExtensionContext {
     variables: Map<string, Variable>;
+    direction: Direction;
     processExpressions<T>(t: T): T;
     execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;

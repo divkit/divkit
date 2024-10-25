@@ -1064,6 +1064,20 @@
       "file": "animations/lottie/spinner.json"
     },
     {
+      "title": "Lottie params",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "expected_results": [
+        "Animation should be rendered correctly with the different combination of properties"
+      ],
+      "file": "animations/lottie/params.json"
+    },
+    {
       "title": "For the reverse animation of the action, a direct interpolator is used",
       "platforms": [
         "android",
