@@ -81,6 +81,7 @@ extension Div {
          .divSelect,
          .divSeparator,
          .divSlider,
+         .divSwitch,
          .divVideo,
          .divText:
       // no children

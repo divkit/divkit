@@ -172,6 +172,7 @@ private fun Div.getItems(resolver: ExpressionResolver): List<DivItemBuilderResul
         is Div.Custom -> emptyList()
         is Div.Select -> emptyList()
         is Div.Video -> emptyList()
+        is Div.Switch -> emptyList()
         is Div.Container -> value.buildItems(resolver)
         is Div.Grid -> value.itemsToDivItemBuilderResult(resolver)
         is Div.Gallery -> value.buildItems(resolver)

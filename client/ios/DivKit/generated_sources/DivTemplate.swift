@@ -19,6 +19,7 @@ public enum DivTemplate: TemplateValue {
   case divCustomTemplate(DivCustomTemplate)
   case divIndicatorTemplate(DivIndicatorTemplate)
   case divSliderTemplate(DivSliderTemplate)
+  case divSwitchTemplate(DivSwitchTemplate)
   case divInputTemplate(DivInputTemplate)
   case divSelectTemplate(DivSelectTemplate)
   case divVideoTemplate(DivVideoTemplate)
@@ -50,6 +51,8 @@ public enum DivTemplate: TemplateValue {
     case let .divIndicatorTemplate(value):
       return value
     case let .divSliderTemplate(value):
+      return value
+    case let .divSwitchTemplate(value):
       return value
     case let .divInputTemplate(value):
       return value
@@ -88,6 +91,8 @@ public enum DivTemplate: TemplateValue {
       return .divIndicatorTemplate(try value.resolveParent(templates: templates))
     case let .divSliderTemplate(value):
       return .divSliderTemplate(try value.resolveParent(templates: templates))
+    case let .divSwitchTemplate(value):
+      return .divSwitchTemplate(try value.resolveParent(templates: templates))
     case let .divInputTemplate(value):
       return .divInputTemplate(try value.resolveParent(templates: templates))
     case let .divSelectTemplate(value):
@@ -246,6 +251,17 @@ public enum DivTemplate: TemplateValue {
           switch result {
             case let .success(value): return .success(.divSlider(value))
             case let .partialSuccess(value, warnings): return .partialSuccess(.divSlider(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divSwitchTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divSwitch(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divSwitch(value), warnings: warnings)
             case let .failure(errors): return .failure(errors)
             case .noValue: return .noValue
           }
@@ -412,6 +428,15 @@ public enum DivTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == DivSwitch.type {
+      let result = { DivSwitchTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.divSwitch(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSwitch(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     result = result ?? { if type == DivInput.type {
       let result = { DivInputTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
@@ -475,6 +500,8 @@ extension DivTemplate {
       self = .divIndicatorTemplate(try DivIndicatorTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivSliderTemplate.type:
       self = .divSliderTemplate(try DivSliderTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivSwitchTemplate.type:
+      self = .divSwitchTemplate(try DivSwitchTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivInputTemplate.type:
       self = .divInputTemplate(try DivInputTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivSelectTemplate.type:

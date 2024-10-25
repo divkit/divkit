@@ -28,7 +28,7 @@ extension SwitchBlock {
 
 private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
   struct Model {
-    let on: Bool
+    let on: Binding<Bool>
     let enabled: Bool
     let action: UserInterfaceAction?
     let onTintColor: Color?
@@ -37,7 +37,7 @@ private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   var model: Model! {
     didSet {
-      aSwitch.isOn = model.on
+      aSwitch.isOn = model.on.value
       aSwitch.isEnabled = model.enabled
       aSwitch.onTintColor = model.onTintColor?.systemColor
       applyAccessibility(model.accessibility)
@@ -73,5 +73,6 @@ private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
     if let action = model.action {
       action.perform(sendingFrom: self)
     }
+    model.on.value = aSwitch.isOn
   }
 }

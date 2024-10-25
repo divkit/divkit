@@ -2071,6 +2071,26 @@
     "en": "Stroke width.",
     "ru": "Толщина рамки."
   },
+  "div_switch": {
+    "en": "A two-state switch that allows user to toggle a boolean variable. The element has a different appearance depending on the platform. On iOS, the switch size is fixed.",
+    "ru": "Переключатель с двумя состояниями, который позволяет пользователю переключать булевую переменную. Элемент имеет разный вид в зависимости от платформы. На iOS размер переключателя фиксированный."
+  },
+  "div_switch_short": {
+    "en": "Switch.",
+    "ru": "Переключатель."
+  },
+  "div_switch_is_on_variable": {
+    "en": "The name of the boolean variable for the switch.",
+    "ru": "Название булевой переменной для переключателя."
+  },
+  "div_switch_is_enabled": {
+    "en": "Enables or disables the ability to switch an element.",
+    "ru": "Включает или отключает возможность переключения элемента."
+  },
+  "div_switch_on_color": {
+    "en": "The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.",
+    "ru": "Цвет переключателя во включенном состоянии. Если цвет не указан, то на iOS используется стандартный системный цвет, на Android используется цвет, указанный в `Div2Context`."
+  },
   "div_tabs": {
     "en": "Tabs. Height of the first tab is determined by its contents, and height of the remaining [depends on the platform](../../location#tabs).",
     "ru": "Табы. Высота первого таба определяется его содержимым, а высота остальных [зависит от платформы](../../location#tabs)."

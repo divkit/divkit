@@ -152,6 +152,7 @@ internal class DivViewCreator @Inject constructor(
         const val TAG_SLIDER = "DIV2.SLIDER"
         const val TAG_INPUT = "DIV2.INPUT"
         const val TAG_SELECT = "DIV2.SELECT"
+        const val TAG_SWITCH = "DIV2.SWITCH"
         const val TAG_VIDEO = "DIV2.VIDEO"
 
         val TAGS = arrayOf(
@@ -191,6 +192,7 @@ internal class DivViewCreator @Inject constructor(
                 is Div.Pager -> TAG_PAGER
                 is Div.Select -> TAG_SELECT
                 is Div.Slider -> TAG_SLIDER
+                is Div.Switch -> TAG_SWITCH
                 is Div.State -> TAG_STATE
                 is Div.Tabs -> TAG_TABS
                 is Div.Text -> TAG_TEXT

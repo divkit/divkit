@@ -124,6 +124,7 @@ internal class DivBinder @Inject constructor(
             is Div.Input -> bindInput(context, view, div.value, path)
             is Div.Select -> bindSelect(context, view, div.value, path)
             is Div.Video -> bindVideo(context, view, div.value, path)
+            is Div.Switch -> Unit
         }.also {
             // extensionController bound new CustomView in DivCustomBinder after replacing in parent
             if (div !is Div.Custom) {
@@ -222,6 +223,7 @@ internal class DivBinder @Inject constructor(
         is Div.Input -> (view as DivInputView).setDataWithoutBinding(context, div.value)
         is Div.Select -> (view as DivSelectView).setDataWithoutBinding(context, div.value)
         is Div.Video -> (view as DivVideoView).setDataWithoutBinding(context, div.value)
+        is Div.Switch -> Unit
     }
 
     private fun <T: DivBase> DivHolderView<T>.setDataWithoutBinding(context: BindingContext, newDiv: T) {

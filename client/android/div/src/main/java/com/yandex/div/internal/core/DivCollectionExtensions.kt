@@ -109,6 +109,7 @@ private fun Div.copy(id: String? = value().id): Div {
         is Div.Input -> Div.Input(value.copy(id = id))
         is Div.Select -> Div.Select(value.copy(id = id))
         is Div.Video -> Div.Video(value.copy(id = id))
+        is Div.Switch -> Div.Switch(value.copy(id = id))
     }
 }
 

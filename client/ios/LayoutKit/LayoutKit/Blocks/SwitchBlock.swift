@@ -4,7 +4,7 @@ import Foundation
 import VGSL
 
 public final class SwitchBlock: Block {
-  public let on: Bool
+  public let on: Binding<Bool>
   public let enabled: Bool
   public let action: UserInterfaceAction?
   public let onTintColor: Color?
@@ -12,6 +12,20 @@ public final class SwitchBlock: Block {
 
   public init(
     on: Bool,
+    enabled: Bool,
+    action: UserInterfaceAction?,
+    onTintColor: Color? = nil,
+    accessibilityElement: AccessibilityElement? = nil
+  ) {
+    self.on = Binding(name: "", value: Property(booleanLiteral: on))
+    self.enabled = enabled
+    self.action = action
+    self.onTintColor = onTintColor
+    self.accessibilityElement = accessibilityElement
+  }
+
+  public init(
+    on: Binding<Bool>,
     enabled: Bool,
     action: UserInterfaceAction?,
     onTintColor: Color? = nil,
@@ -65,7 +79,7 @@ public final class SwitchBlock: Block {
 }
 
 public func ==(lhs: SwitchBlock, rhs: SwitchBlock) -> Bool {
-  lhs.on == rhs.on &&
+  lhs.on.value == rhs.on.value &&
     lhs.enabled == rhs.enabled &&
     lhs.action == rhs.action &&
     lhs.onTintColor == rhs.onTintColor &&

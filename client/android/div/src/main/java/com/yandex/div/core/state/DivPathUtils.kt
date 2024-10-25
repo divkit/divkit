@@ -121,6 +121,7 @@ internal object DivPathUtils {
             is Div.Separator -> null
             is Div.Select -> null
             is Div.Video -> null
+            is Div.Switch -> null
         }
     }
 

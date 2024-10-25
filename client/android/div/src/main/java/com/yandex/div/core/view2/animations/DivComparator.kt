@@ -123,6 +123,7 @@ internal object DivComparator {
             is Div.Indicator -> emptyList()
             is Div.Slider -> emptyList()
             is Div.Video -> emptyList()
+            is Div.Switch -> emptyList()
         }
     }
 

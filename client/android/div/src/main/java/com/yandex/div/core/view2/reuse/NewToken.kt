@@ -27,6 +27,7 @@ internal class NewToken(
             is Div.Input -> listOf()
             is Div.Select -> listOf()
             is Div.Video -> listOf()
+            is Div.Switch -> listOf()
             is Div.Container -> div.value.buildItems(resolver).itemsToNewTokenList()
             is Div.Custom -> div.value.nonNullItems.toDivItemBuilderResult(resolver).itemsToNewTokenList()
             is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver).itemsToNewTokenList()

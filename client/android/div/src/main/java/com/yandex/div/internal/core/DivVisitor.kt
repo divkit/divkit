@@ -22,6 +22,7 @@ abstract class DivVisitor<T> {
             is Div.Input -> visit(div, resolver)
             is Div.Select -> visit(div, resolver)
             is Div.Video -> visit(div, resolver)
+            is Div.Switch -> visit(div, resolver)
         }
     }
 

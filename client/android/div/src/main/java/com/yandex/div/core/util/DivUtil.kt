@@ -35,6 +35,7 @@ import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
+import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVariable
@@ -60,6 +61,7 @@ internal val Div.type: String
             is Div.Tabs -> DivTabs.TYPE
             is Div.Custom -> DivCustom.TYPE
             is Div.Select -> DivSelect.TYPE
+            is Div.Switch -> DivSwitch.TYPE
         }
     }
 
@@ -176,6 +178,7 @@ internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Bo
         is Div.Slider -> false
         is Div.Video -> false
         is Div.Input -> false
+        is Div.Switch -> false
     }
 }
 
@@ -197,6 +200,7 @@ internal val Div.isBranch: Boolean
         is Div.Custom -> false
         is Div.Select -> false
         is Div.Video -> false
+        is Div.Switch -> false
         is Div.Container -> true
         is Div.Grid -> true
         is Div.Gallery -> true

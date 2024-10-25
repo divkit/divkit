@@ -1,0 +1,38 @@
+{
+  "$description": "translations.json#/div_switch",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "switch"
+          ]
+        },
+        "is_on_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_switch_is_on_variable"
+        },
+        "is_enabled": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "$description": "translations.json#/div_switch_is_enabled"
+        },
+        "on_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_switch_on_color"
+        }
+      }
+    }
+  ],
+  "platforms": [
+    "ios"
+  ],
+  "required": [
+    "type",
+    "is_on_variable"
+  ]
+}

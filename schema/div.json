@@ -55,6 +55,10 @@
       "$description": "translations.json#/div_slider_short"
     },
     {
+      "$ref": "div-switch.json",
+      "$description": "translations.json#/div_switch_short"
+    },
+    {
       "$ref": "div-input.json",
       "$description": "translations.json#/div_input_short"
     },
