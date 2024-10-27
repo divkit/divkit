@@ -74,6 +74,7 @@
     import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
     import { layoutProvider } from '../../use/layoutProvider';
     import { ENABLED_CTX, type EnabledCtxValue } from '../../context/enabled';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -307,7 +308,7 @@
         let newBackgroundRadius = '';
 
         if (border) {
-            if (border.has_shadow) {
+            if (correctBooleanInt(border.has_shadow, false)) {
                 const shadow = border.shadow;
                 if (shadow) {
                     newBorderStyle['box-shadow'] = shadowToCssBoxShadow(shadow);
