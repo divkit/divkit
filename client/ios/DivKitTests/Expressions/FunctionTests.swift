@@ -1,5 +1,4 @@
 @testable import DivKit
-
 import XCTest
 
 final class FunctionTests: XCTestCase {
@@ -142,7 +141,7 @@ final class FunctionTests: XCTestCase {
   }
 }
 
-extension ExpressionError: Equatable {
+extension ExpressionError: Swift.Equatable {
   public static func ==(lhs: ExpressionError, rhs: ExpressionError) -> Bool {
     lhs.description == rhs.description
   }

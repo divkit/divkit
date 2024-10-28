@@ -5,7 +5,7 @@ public enum AnimationChanges: Equatable {
   case opacity([Float])
 }
 
-extension CATransform3D: Equatable {}
+extension CATransform3D: Swift.Equatable {}
 
 public func ==(lhs: CATransform3D, rhs: CATransform3D) -> Bool {
   CATransform3DEqualToTransform(lhs, rhs)

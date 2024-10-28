@@ -298,13 +298,14 @@ final class DivBlockProvider {
     cardId: DivCardID
   ) async throws -> DeserializationResult<DivData> {
     let rawDivData = try RawDivData(dictionary: jsonDict)
+    let measurements = measurements
     let templates = try measurements.templateParsingTime.updateMeasure {
       DivTemplates(dictionary: rawDivData.templates)
     }
     let result = try await withCheckedThrowingContinuation { continuation in
-      DispatchQueue.global().async {
+      DispatchQueue.global().async { [measurements] in
         do {
-          let result = try self.measurements.divDataParsingTime.updateMeasure {
+          let result = try measurements.divDataParsingTime.updateMeasure {
             templates
               .parseValue(type: DivDataTemplate.self, from: rawDivData.card)
               .asCardResult(cardId: cardId)

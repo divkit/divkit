@@ -1,12 +1,11 @@
-import Testing
-import UIKit
-import XCTest
-
 @testable import DivKit
 import DivKitExtensions
 import DivKitMarkdownExtension
 @testable import LayoutKit
+import Testing
+import UIKit
 import VGSL
+import XCTest
 
 final class AllTests: XCTestCase {
   func testAll() async {

@@ -1,8 +1,8 @@
 @testable import DivKit
-
+import VGSL
 import XCTest
 
-import VGSL
+import enum DivKit.Expression
 
 final class ExpressionTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
@@ -242,7 +242,7 @@ private enum ExpectedValue: Decodable {
   }
 }
 
-extension DivVariable: Decodable {
+extension DivVariable: Swift.Decodable {
   public init(from decoder: Decoder) throws {
     self = try DivTemplates(dictionary: [:]).parseValue(
       type: DivVariableTemplate.self,

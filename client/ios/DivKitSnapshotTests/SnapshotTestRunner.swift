@@ -1,8 +1,7 @@
-import Testing
-import UIKit
-
 @testable import DivKit
 import LayoutKit
+import Testing
+import UIKit
 import VGSL
 
 let testCardId = DivCardID(rawValue: "test_card_id")
@@ -87,7 +86,7 @@ final class SnapshotTestRunner {
     caseName: String,
     stepName: String? = nil
   ) throws {
-    let screen = try Screen.makeForScale(UIScreen.main.scale)
+    let screen = Screen.makeForScale(UIScreen.main.scale)
     let cardSize = view.cardSize?.sizeFor(parentViewSize: screen.size) ?? .zero
     view.frame = CGRect(origin: .zero, size: cardSize)
 
@@ -152,8 +151,7 @@ private final class TestImageHolderFactory: DivImageHolderFactory {
     let urlString = url.absoluteString
     if !reportedUrls.contains(urlString) {
       Issue.record(
-        "Loading images from network is prohibited in tests. You need to load image from "
-          + urlString + " and add it to Images.xcassets in testing bundle"
+        "Loading images from network is prohibited in tests. You need to load image from \(urlString) and add it to Images.xcassets in testing bundle"
       )
       reportedUrls.insert(urlString)
     }

@@ -517,7 +517,7 @@ private func makeBlock(fromFile filename: String) throws -> Block {
   )
 }
 
-extension DivBlockModelingError: Equatable {
+extension DivBlockModelingError: Swift.Equatable {
   public static func ==(lhs: DivBlockModelingError, rhs: DivBlockModelingError) -> Bool {
     lhs.message == rhs.message
       && lhs.path == rhs.path

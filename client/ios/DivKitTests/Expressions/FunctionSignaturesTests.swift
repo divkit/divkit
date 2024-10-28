@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class FunctionSignaturesTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
@@ -96,13 +94,13 @@ extension Function {
   }
 }
 
-extension FunctionSignature: Equatable {
+extension FunctionSignature: Swift.Equatable {
   public static func ==(lhs: FunctionSignature, rhs: FunctionSignature) -> Bool {
     lhs.arguments == rhs.arguments && lhs.resultType == rhs.resultType
   }
 }
 
-extension ArgumentSignature: Decodable {
+extension ArgumentSignature: Swift.Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.init(
@@ -117,7 +115,7 @@ extension ArgumentSignature: Decodable {
   }
 }
 
-extension ArgumentSignature: Equatable {
+extension ArgumentSignature: Swift.Equatable {
   public static func ==(lhs: ArgumentSignature, rhs: ArgumentSignature) -> Bool {
     lhs.type == rhs.type && lhs.vararg == rhs.vararg
   }

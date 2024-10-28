@@ -1,9 +1,8 @@
 import CoreGraphics
+import CoreText
 import Foundation
 
 import VGSL
-
-@_implementationOnly import CoreText
 
 public final class TextBlock: BlockWithTraits {
   public struct InlineImage: Equatable {

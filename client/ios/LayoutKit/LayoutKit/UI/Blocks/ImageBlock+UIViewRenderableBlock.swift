@@ -62,9 +62,11 @@ extension ImageBlock {
   }
 }
 
-extension RemoteImageViewContainer: BlockViewProtocol, VisibleBoundsTrackingLeaf {
+extension RemoteImageViewContainer: LayoutKit.BlockViewProtocol {
   public var effectiveBackgroundColor: UIColor? { nil }
 }
+
+extension RemoteImageViewContainer: VGSLUI.VisibleBoundsTrackingLeaf {}
 
 extension TransitioningAnimation {
   fileprivate func cast() -> ImageViewAnimation {

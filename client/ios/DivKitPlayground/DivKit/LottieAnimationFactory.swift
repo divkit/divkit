@@ -18,7 +18,7 @@ final class LottieAnimationFactory: AnimatableViewFactory {
   }
 }
 
-extension LottieAnimationView: AnimatableView {
+extension LottieAnimationView: DivKitExtensions.AnimatableView {
   public func play() {
     self.play(completion: nil)
     self.forceDisplayUpdate()

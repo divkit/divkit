@@ -137,6 +137,6 @@ func url(_ string: String) -> URL {
   URL(string: string)!
 }
 
-func expression<T>(_ expression: String) -> Expression<T> {
+func expression<T>(_ expression: String) -> DivKit.Expression<T> {
   .link(ExpressionLink<T>(rawValue: expression)!)
 }

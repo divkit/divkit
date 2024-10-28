@@ -1,10 +1,11 @@
 // Generated code. Do not modify.
 
 @testable import DivKit
-
 import Foundation
 import Serialization
 import VGSL
+
+import enum DivKit.Expression
 
 public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateValue {
   public final class PropertyTemplate: TemplateValue {

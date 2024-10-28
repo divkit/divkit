@@ -2,6 +2,8 @@
 import Foundation
 import VGSL
 
+import enum DivKit.Expression
+
 func divAction(
   isEnabled: Bool = true,
   logId: String,

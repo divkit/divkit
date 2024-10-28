@@ -1,14 +1,12 @@
 @testable import DivKit
-
-import XCTest
-
 import LayoutKit
 import VGSL
+import XCTest
 
 final class DivStateManagerTests: XCTestCase {
   private let stateManager = DivStateManager()
   private let transition = DivAppearanceTransition.divFadeTransition(DivFadeTransition())
-  private let visibilityExpression: Expression<DivVisibility> = expression("@{visibility}")
+  private let visibilityExpression: DivKit.Expression<DivVisibility> = expression("@{visibility}")
 
   func test_shouldBlockAppearWithTransition_isFalseForNewBlock() {
     XCTAssertFalse(
