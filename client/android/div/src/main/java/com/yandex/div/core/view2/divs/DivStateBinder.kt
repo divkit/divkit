@@ -32,6 +32,7 @@ import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.Fade
 import com.yandex.div.core.view2.animations.Scale
+import com.yandex.div.core.view2.animations.SceneRootWatcher
 import com.yandex.div.core.view2.animations.VerticalTranslation
 import com.yandex.div.core.view2.animations.allowsTransitionsOnStateChange
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
@@ -132,6 +133,7 @@ internal class DivStateBinder @Inject constructor(
 
             if (transition != null) {
                 TransitionManager.endTransitions(layout)
+                SceneRootWatcher.watchFor(layout, transition)
                 TransitionManager.beginDelayedTransition(layout, transition)
             }
             layout.releaseAndRemoveChildren(divView)
