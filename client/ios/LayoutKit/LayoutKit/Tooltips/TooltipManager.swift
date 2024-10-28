@@ -87,14 +87,15 @@ public final class DefaultTooltipManager: TooltipManager {
 
   public func showTooltip(info: TooltipInfo) {
     setupTooltipWindow()
+
     guard let tooltipWindow else { return }
+
+    let windowBounds = tooltipWindow.bounds.inset(by: tooltipWindow.safeAreaInsets)
     guard !showingTooltips.keys.contains(info.id),
           let tooltip = existingAnchorViews.compactMap({ 
-            $0?.makeTooltip(id: info.id, in: tooltipWindow.bounds)
+            $0?.makeTooltip(id: info.id, in: windowBounds)
           }).first
     else { return }
-
-    setupTooltipWindow()
 
     let view = TooltipContainerView(
       tooltipView: tooltip.view,
@@ -138,7 +139,7 @@ public final class DefaultTooltipManager: TooltipManager {
     showingTooltips = [:]
     tooltipWindow = nil
   }
-  
+
   deinit {
     NotificationCenter.default.removeObserver(
       self,
