@@ -100,5 +100,16 @@
                 "version_added": "30.22.0"
             }
         }
+    }, {
+        "id": "text_range_background_cloud",
+        "name": "<code>cloud</code> background type for the range of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.22.0"
+            },
+            "web": {
+                "version_added": "30.24.0"
+            }
+        }
     }]
 }

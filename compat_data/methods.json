@@ -93,6 +93,17 @@
             },
             "web": {
                 "version_added": "30.20.0"
+            },
+            "ios": {
+                "version_added": "30.24.0"
+            }
+        }
+    }, {
+        "id": "methods_array_is_empty",
+        "name": "Method-<code>isEmpty</code> for the <code>array</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.24.0"
             }
         }
     }]

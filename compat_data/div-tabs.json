@@ -27,6 +27,9 @@
         "compat": {
             "android": {
                 "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.24.0"
             }
         }
     }]
