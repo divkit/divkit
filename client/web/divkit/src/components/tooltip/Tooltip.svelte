@@ -42,8 +42,14 @@
     let tooltipWidth = '';
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
+    let componentContext: ComponentContext;
 
-    $: componentContext = parentComponentContext.produceChildContext(data.div || {});
+    $: {
+        if (componentContext) {
+            componentContext.destroy();
+        }
+        componentContext = parentComponentContext.produceChildContext(data.div || {});
+    }
 
     $: position = parentComponentContext.getDerivedFromVars(data.position);
     $: offsetX = parentComponentContext.getDerivedFromVars(data.offset?.x?.value);
@@ -178,6 +184,10 @@
     });
 
     onDestroy(() => {
+        if (componentContext) {
+            componentContext.destroy();
+        }
+
         resizeObserver?.disconnect();
     });
 </script>

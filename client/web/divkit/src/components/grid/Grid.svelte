@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
     import { derived, type Readable } from 'svelte/store';
 
     import css from './Grid.module.css';
@@ -41,6 +41,7 @@
     let rowCount = 0;
     let contentVAlign: AlignmentVerticalMapped = 'start';
     let contentHAlign: AlignmentHorizontal = 'start';
+    let items: ComponentContext[] = [];
 
     $: origJson = componentContext.origJson;
 
@@ -64,11 +65,17 @@
         columnCount = correctPositiveNumber($jsonColumnCount, columnCount);
     }
 
-    $: items = jsonItems.map((item, index) => {
-        return componentContext.produceChildContext(item, {
-            path: index
+    $: {
+        items.forEach(context => {
+            context.destroy();
         });
-    });
+
+        items = jsonItems.map((item, index) => {
+            return componentContext.produceChildContext(item, {
+                path: index
+            });
+        });
+    }
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
         componentContext = {
@@ -216,6 +223,12 @@
         'grid-template-columns': gridCalcTemplates(columnsWeight, columnsMinWidth, columnCount),
         'grid-template-rows': gridCalcTemplates(rowsWeight, rowsMinHeight, rowCount)
     };
+
+    onDestroy(() => {
+        items.forEach(context => {
+            context.destroy();
+        });
+    });
 </script>
 
 <Outer

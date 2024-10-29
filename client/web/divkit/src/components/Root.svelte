@@ -779,14 +779,32 @@
         action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
         componentContext?: ComponentContext
     ): Promise<void> {
+        const scopeId = action.scope_id;
+        const log = (componentContext?.logError || logError);
+
+        if (scopeId) {
+            const set = componentContextMap.get(scopeId);
+            if (set && set?.size > 1) {
+                log(wrapError(new Error(`Ambiguous scope id. There are ${set.size} divs with id '${scopeId}'`), {
+                    additional: {
+                        count: set.size,
+                        scopeId
+                    }
+                }));
+            } else if (set?.size === 1) {
+                const first = set.values().next().value;
+                if (first) {
+                    componentContext = first;
+                }
+            }
+        }
+
         const actionUrl = action.url ? String(action.url) : '';
         const actionTyped = action.typed;
 
         if (!filterEnabledActions(action)) {
             return;
         }
-
-        const log = (componentContext?.logError || logError);
 
         if (actionUrl) {
             try {
@@ -1188,6 +1206,7 @@
         onwerNode: HTMLElement;
         tooltip: MaybeMissing<Tooltip>;
     }> = new Map();
+    const componentContextMap: Map<string, Set<ComponentContext>> = new Map();
     function registerInstance<T>(id: string, block: T) {
         if (instancesMap.has(id)) {
             logError(wrapError(new Error('Duplicate instance id'), {
@@ -1406,6 +1425,16 @@
                 componentContext.origJson = div;
                 componentContext.id = opts.id || childProcessedJson.id || '';
 
+                if (componentContext.id) {
+                    let set = componentContextMap.get(componentContext.id);
+                    if (!set) {
+                        set = new Set();
+                        componentContextMap.set(componentContext.id, set);
+                    }
+
+                    set.add(componentContext);
+                }
+
                 if (opts.path !== undefined/*  && !res.isRootState */) {
                     componentContext.path.push(String(opts.path));
                 }
@@ -1457,6 +1486,15 @@
                 }
 
                 return variable;
+            },
+            destroy() {
+                const set = componentContextMap.get(res.id);
+                if (set) {
+                    set.delete(res);
+                    if (!set.size) {
+                        componentContextMap.delete(res.id);
+                    }
+                }
             },
         };
 

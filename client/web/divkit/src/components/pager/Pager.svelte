@@ -98,6 +98,8 @@
     let padding = '';
     let sizeVal = '';
 
+    let items: ComponentContext[] = [];
+
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
@@ -124,11 +126,17 @@
         };
     }
 
-    $: items = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map((item, index) => {
-        return componentContext.produceChildContext(item, {
-            path: index
+    $: {
+        items.forEach(context => {
+            context.destroy();
         });
-    });
+
+        items = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map((item, index) => {
+            return componentContext.produceChildContext(item, {
+                path: index
+            });
+        });
+    }
 
     $: {
         let children: Readable<ChildInfo>[] = [];
@@ -362,6 +370,10 @@
 
     onDestroy(() => {
         mounted = false;
+
+        items.forEach(context => {
+            context.destroy();
+        });
 
         if (prevId) {
             rootCtx.unregisterInstance(prevId);

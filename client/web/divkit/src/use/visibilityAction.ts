@@ -3,7 +3,6 @@ import type { BooleanInt, DisappearAction, VisibilityAction } from '../../typing
 import type { RootCtxValue } from '../context/root';
 import type { MaybeMissing } from '../expressions/json';
 import type { ComponentContext } from '../types/componentContext';
-import { getUrlSchema, isBuiltinSchema } from '../utils/url';
 import { correctNonNegativeNumber } from '../utils/correctNonNegativeNumber';
 
 interface CalcedAction {
@@ -117,24 +116,12 @@ export function visibilityAction(node: HTMLElement, {
     const callAction = (status: VisibilityStatus) => {
         const isVisibility = status.type === 'visibility';
         const calcedAction = componentContext.getJsonWithVars(status.action);
-        const actionUrl = calcedAction.url;
-        const actionTyped = calcedAction.typed;
-        if (actionUrl) {
-            const schema = getUrlSchema(actionUrl);
-            if (schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols())) {
-                if (schema === 'div-action') {
-                    rootCtx.execAction(calcedAction);
-                } else if (calcedAction.log_id) {
-                    rootCtx.execCustomAction(
-                        calcedAction as VisibilityAction & { url: string }
-                    );
-                }
-            }
-        } else if (actionTyped) {
-            rootCtx.execAction(calcedAction);
-        }
 
-        rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);
+        componentContext.execAnyActions([calcedAction], {
+            logType: isVisibility ? 'visible' : 'disappear',
+            node,
+            processUrls: false
+        });
     };
 
     const unsubscribe = totalStore.subscribe(values => {

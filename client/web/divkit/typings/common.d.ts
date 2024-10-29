@@ -205,6 +205,7 @@ export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArr
 
 export interface ActionBase {
     log_id: string;
+    scope_id?: string;
     url?: string;
     // referer
     payload?: Record<string, unknown>;

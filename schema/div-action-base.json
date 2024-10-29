@@ -7,7 +7,11 @@
     "scope_id": {
       "$ref": "common.json#/id",
       "$description": "translations.json#/div_action_base_scope_id",
-      "platforms": []
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "url": {
       "$ref": "common.json#/url",

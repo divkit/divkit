@@ -57,4 +57,5 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         }[];
     }): ComponentContext;
     getVariable(varName: string, type?: VariableType): Variable | undefined;
+    destroy(): void;
 }

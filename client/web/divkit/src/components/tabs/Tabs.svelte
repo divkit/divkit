@@ -373,6 +373,10 @@
             return;
         }
 
+        showedPanels.forEach(componentContext => {
+            componentContext?.destroy();
+        });
+
         showedPanels = items.map((item, i) => {
             if (i === selected && item?.div) {
                 return componentContext.produceChildContext(item.div, {
@@ -451,6 +455,10 @@
         const end = around ?
             Math.min(items.length - 1, selected + 1) :
             Math.max(selected, previousSelected ?? selected);
+
+        showedPanels.forEach(componentContext => {
+            componentContext?.destroy();
+        });
 
         showedPanels = showedPanels.map((context, index) => {
             if (context) {
@@ -673,6 +681,10 @@
     };
 
     onDestroy(() => {
+        showedPanels.forEach(componentContext => {
+            componentContext?.destroy();
+        });
+
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;

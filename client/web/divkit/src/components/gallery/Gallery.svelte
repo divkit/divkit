@@ -110,12 +110,19 @@
     }
 
     const isDesktop = rootCtx.isDesktop;
+    let items: ComponentContext[] = [];
 
-    $: items = jsonItems.map((item, index) => {
-        return componentContext.produceChildContext(item, {
-            path: index
+    $: {
+        items.forEach(context => {
+            context.destroy();
         });
-    });
+
+        items = jsonItems.map((item, index) => {
+            return componentContext.produceChildContext(item, {
+                path: index
+            });
+        });
+    }
 
     $: shouldCheckArrows = $isDesktop && mounted;
     $: if (shouldCheckArrows) {
@@ -501,6 +508,10 @@
 
     onDestroy(() => {
         mounted = false;
+
+        items.forEach(context => {
+            context.destroy();
+        });
 
         if (prevId && !componentContext.fakeElement) {
             rootCtx.unregisterInstance(prevId);

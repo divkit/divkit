@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onMount } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
 
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivCustomData } from '../../types/custom';
@@ -21,6 +21,8 @@
     let templateContent = '';
     // shadowrootmode is an unknown attribute in TS :(
     let templateAttrs: any = {};
+    let items: ComponentContext[] = [];
+
     $: if (
         typeof componentContext.json.custom_type === 'string' &&
         componentContext.json.custom_type &&
@@ -63,17 +65,29 @@
         }
     }
 
-    $: items = (!hasItemsError && jsonItems || []).map((item, index) => {
-        return componentContext.produceChildContext(item, {
-            path: index
+    $: {
+        items.forEach(context => {
+            context.destroy();
         });
-    });
+
+        items = (!hasItemsError && jsonItems || []).map((item, index) => {
+            return componentContext.produceChildContext(item, {
+                path: index
+            });
+        });
+    }
 
     onMount(() => {
         if (customElem && 'divKitApiCallback' in customElem && typeof customElem.divKitApiCallback === 'function') {
             const ctx = rootCtx.getExtensionContext(componentContext);
             customElem.divKitApiCallback(ctx);
         }
+    });
+
+    onDestroy(() => {
+        items.forEach(context => {
+            context.destroy();
+        });
     });
 </script>
 

@@ -87,6 +87,9 @@
     }
 
     function selectState(selectedState: MaybeMissing<State> | null): void {
+        if (selectedComponentContext) {
+            selectedComponentContext.destroy();
+        }
         selectedComponentContext = selectedState?.div ? componentContext.produceChildContext(selectedState.div, {
             path: selectedState.state_id || '<unknown>'
         }) : undefined;
@@ -546,6 +549,10 @@
     }
 
     onDestroy(() => {
+        if (selectedComponentContext) {
+            selectedComponentContext.destroy();
+        }
+
         if (prevStateId) {
             stateCtx.unregisterInstance(prevStateId);
         }

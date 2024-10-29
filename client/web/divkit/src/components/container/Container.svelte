@@ -27,7 +27,7 @@
 </script>
 
 <script lang="ts">
-    import { getContext } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
     import { type Readable, derived } from 'svelte/store';
 
     import css from './Container.module.css';
@@ -171,6 +171,10 @@
                 };
             });
         }
+
+        items.forEach(context => {
+            context.destroy();
+        });
 
         items = newItems.map((item, index) => {
             return componentContext.produceChildContext(item.div, {
@@ -335,6 +339,12 @@
             undefined,
         'aspect-ratio': aspect
     };
+
+    onDestroy(() => {
+        items.forEach(context => {
+            context.destroy();
+        });
+    });
 </script>
 
 <Outer
