@@ -44,6 +44,7 @@
 * Fixed placement of items when `pager` scrolled using a11y.
 * Minor enhancements of error handling during JSON parsing.
 * Properties `start` and `end` of `div-text.range` are optional now.
+* Supported cloud text range background.
 
 # iOS Client:
 * Added `TooltipManager.reset()`.
