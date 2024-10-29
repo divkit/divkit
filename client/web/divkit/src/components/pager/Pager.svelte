@@ -1,5 +1,40 @@
+<script lang="ts" context="module">
+    import type { Mods } from '../../types/general';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
+
+    interface ChildInfo {
+        width?: MaybeMissing<Size>;
+        height?: MaybeMissing<Size>;
+    }
+
+    const SIZE_MAP: Record<Size['type'], string> = {
+        wrap_content: 'content',
+        fixed: 'fixed',
+        match_parent: 'parent'
+    };
+
+    function getItemMods(orientation: Orientation, childInfo: ChildInfo): Mods {
+        if (orientation === 'horizontal') {
+            const heightType = childInfo.height?.type || '';
+
+            return {
+                height: heightType in SIZE_MAP ? SIZE_MAP[heightType as Size['type']] : 'content',
+                'height-constrained': childInfo.height?.type === 'wrap_content' ? correctBooleanInt(childInfo.height.constrained, false) : false
+            };
+        }
+
+        const widthType = childInfo.width?.type || '';
+
+        return {
+            width: widthType in SIZE_MAP ? SIZE_MAP[widthType as Size['type']] : 'parent',
+            'width-constrained': childInfo.width?.type === 'wrap_content' ? correctBooleanInt(childInfo.width.constrained, false) : false
+        };
+    }
+</script>
+
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
+    import { derived, type Readable } from 'svelte/store';
 
     import css from './Pager.module.css';
     import rootCss from '../Root.module.css';
@@ -13,6 +48,7 @@
     import type { Overflow, SwitchElements } from '../../types/switch-elements';
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { Size } from '../../types/sizes';
 
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -49,6 +85,8 @@
 
     let pagerItemsWrapper: HTMLElement;
     let mounted = false;
+
+    let childStore: Readable<ChildInfo[]>;
 
     let currentItem = 0;
     let prevSelectedItem = 0;
@@ -91,6 +129,23 @@
             path: index
         });
     });
+
+    $: {
+        let children: Readable<ChildInfo>[] = [];
+
+        items.forEach(item => {
+            children.push(
+                componentContext.getDerivedFromVars({
+                    width: item.json.width,
+                    height: item.json.height
+                })
+            );
+        });
+
+        // Create a new array every time so that it is not equal to the previous one
+        childStore = derived(children, val => [...val]);
+    }
+
     $: {
         if (!$jsonLayoutMode) {
             hasLayoutModeError = true;
@@ -330,8 +385,8 @@
             bind:this={pagerItemsWrapper}
             on:scroll={onScrollDebounced}
         >
-            {#each items as item}
-                <div class={css.pager__item}>
+            {#each items as item, index}
+                <div class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}>
                     <Unknown
                         componentContext={item}
                     />

@@ -8,8 +8,6 @@
 
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    scroll-snap-type: mandatory;
-    scroll-snap-type: both mandatory;
 }
 
 .pager__items::-webkit-scrollbar {
@@ -18,8 +16,8 @@
 
 .pager__item {
     display: grid;
-    max-height: 100%;
     max-width: 100%;
+    max-height: 100%;
     overflow: hidden;
     scroll-snap-align: center;
 }
@@ -37,6 +35,8 @@
     height: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
+    scroll-snap-type: mandatory;
+    scroll-snap-type: x mandatory;
 }
 
 .pager_orientation_vertical .pager__items {
@@ -46,6 +46,29 @@
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    scroll-snap-type: mandatory;
+    scroll-snap-type: y mandatory;
+}
+
+
+.pager_orientation_horizontal .pager__item_height_content,
+.pager_orientation_horizontal .pager__item_height_fixed {
+    height: max-content;
+}
+
+.pager_orientation_horizontal .pager__item_height_content:not(.pager__item_height-constrained),
+.pager_orientation_horizontal .pager__item_height_fixed {
+    max-height: none;
+}
+
+.pager_orientation_vertical .pager__item_width_content,
+.pager_orientation_vertical .pager__item_width_fixed {
+    width: max-content;
+}
+
+.pager_orientation_vertical .pager__item_width_content:not(.pager__item_width-constrained),
+.pager_orientation_vertical .pager__item_width_fixed {
+    max-width: none;
 }
 
 

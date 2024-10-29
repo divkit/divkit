@@ -1,7 +1,8 @@
 {
   "description": "Shadow on items in pager are cropped by page by default.",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "card": {
     "log_id": "coupons_card",
