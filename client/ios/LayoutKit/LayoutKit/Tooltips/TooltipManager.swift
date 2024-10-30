@@ -106,9 +106,12 @@ public final class DefaultTooltipManager: TooltipManager {
         self?.tooltipWindow?.isHidden = true
       }
     )
-    // Window won't rotate if `rootViewController` is not set
-    let vc = UIViewController()
+    // Passing the statusBarStyle control to `rootViewController` of the main window
+    let vc = ProxyViewController(
+      viewController: UIApplication.shared.delegate?.window??.rootViewController ?? UIViewController()
+    )
     vc.view = view
+    // Window won't rotate if `rootViewController` is not set
     tooltipWindow.rootViewController = vc
     tooltipWindow.isHidden = false
     tooltipWindow.makeKeyAndVisible()
@@ -201,4 +204,21 @@ public final class DefaultTooltipManager: TooltipManager {
 extension TooltipManager {
   public func mapView(_: BlockView, to _: BlockViewID) {}
   public func reset() {}
+}
+
+private final class ProxyViewController: UIViewController {
+  private let viewController: UIViewController
+
+  init(viewController: UIViewController) {
+    self.viewController = viewController
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    viewController.preferredStatusBarStyle
+  }
 }
