@@ -34,7 +34,7 @@ class DivTooltipTest {
                 tooltipShown()
             }
 
-            swipeOnDiv()
+            swipeOnTooltipWrapper()
 
             assert {
                 noTooltipsDisplayed()
@@ -64,7 +64,7 @@ class DivTooltipTest {
                 tooltipShown()
             }
 
-            clickShowing()
+            clickOnTooltipWrapper()
 
             assert {
                 noTooltipsDisplayed()

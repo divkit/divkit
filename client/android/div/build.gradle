@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"
     }
+    implementation libs.androidx.activity
     implementation libs.androidx.coreKtx
     implementation libs.androidx.core
     implementation libs.androidx.recyclerview

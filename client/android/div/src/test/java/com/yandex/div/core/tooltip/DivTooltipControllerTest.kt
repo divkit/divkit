@@ -1,5 +1,6 @@
 package com.yandex.div.core.tooltip
 
+import android.app.Activity
 import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.Rect
@@ -14,7 +15,6 @@ import com.yandex.div.core.asExpression
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.errors.ErrorCollector
@@ -33,6 +33,7 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
@@ -40,6 +41,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
 
@@ -54,8 +56,10 @@ class DivTooltipControllerTest {
     }
     private val resources = mock<Resources> {
         on { displayMetrics } doReturn displayMetrics
+        on { getIdentifier(any(), any(), any()) } doReturn 0
     }
 
+    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val action = DivVisibilityAction(logId = "visibility_action".asExpression())
     private val divBase = DivText(text = "test1".asExpression(), visibilityActions = listOf(action))
     private val div = Div.Text(divBase)
@@ -86,6 +90,7 @@ class DivTooltipControllerTest {
         }
         on { getChildAt(0) } doReturn anchor
         on { childCount } doReturn 1
+        on { getContext() } doReturn activity
     }
     private val bindingContext = BindingContext.createEmpty(div2View).getFor(expressionResolver)
 
@@ -93,10 +98,18 @@ class DivTooltipControllerTest {
         on { width } doReturn 100
         on { height } doReturn 50
         on { context } doReturn mock()
+        on { resources } doReturn resources
     }
 
-    private val div2Builder = mock<Div2Builder> {
-        on { buildView(any(), any(), any()) } doReturn tooltipView
+    private val tooltipWrapper = mock<DivTooltipContainer> {
+        on { tooltipView } doReturn tooltipView
+        on { isLayoutRequested } doReturn false
+        on { width } doReturn 500
+        on { height } doReturn 500
+    }
+
+    private val divTooltipViewBuilder = mock<DivTooltipViewBuilder> {
+        on { buildTooltipView(any(), any(), any(), any()) } doReturn tooltipWrapper
     }
 
     private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
@@ -133,7 +146,7 @@ class DivTooltipControllerTest {
     }
 
     private val underTest = DivTooltipController(
-        { div2Builder }, tooltipRestrictor, visibilityActionTracker, divPreloader, errorCollectors, accessibilityStateProvider
+        tooltipRestrictor, visibilityActionTracker, divPreloader, errorCollectors, divTooltipViewBuilder, accessibilityStateProvider
     ) { _, _, _ ->
         popupWindow
     }
@@ -145,17 +158,14 @@ class DivTooltipControllerTest {
         underTest.showTooltip("tooltip_id", bindingContext)
 
         verify(popupWindow).showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
-        verify(popupWindow).update(400, 225, 100, 50)
         verify(tooltipShownCallback).onDivTooltipShown(div2View, anchor, tooltips[0])
     }
 
     @Test
     fun `visibility tracking is started on show`() {
         prepareDiv()
-
         underTest.showTooltip("tooltip_id", bindingContext)
-
-        verify(visibilityActionTracker).trackVisibilityActionsOf(div2View, expressionResolver, tooltipView, div)
+        verify(visibilityActionTracker).trackVisibilityActionsOf(eq(div2View), eq(expressionResolver), any(), eq(div), any())
     }
 
     @Test
@@ -260,6 +270,7 @@ class DivTooltipControllerTest {
                 offset = null,
                 position = position.asExpression()
             ),
+            Rect(),
             ExpressionResolver.EMPTY,
         )
 

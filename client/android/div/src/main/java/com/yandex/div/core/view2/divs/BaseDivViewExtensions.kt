@@ -27,6 +27,7 @@ import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
@@ -965,4 +966,18 @@ internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: Expres
 internal fun View.gainAccessibilityFocus() {
     performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
     sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED)
+}
+
+internal fun sendAccessibilityEventUnchecked(
+    event: Int,
+    view: View?,
+    accessibilityStateProvider: AccessibilityStateProvider
+) {
+    view ?: return
+    if (accessibilityStateProvider.isAccessibilityEnabled(view.context)) {
+        view.sendAccessibilityEventUnchecked(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) AccessibilityEvent(event)
+            else AccessibilityEvent.obtain(event)
+        )
+    }
 }
