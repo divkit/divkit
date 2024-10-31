@@ -46,6 +46,8 @@ data class Input internal constructor(
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
+            enterKeyActions = additive.enterKeyActions ?: properties.enterKeyActions,
+            enterKeyType = additive.enterKeyType ?: properties.enterKeyType,
             extensions = additive.extensions ?: properties.extensions,
             filters = additive.filters ?: properties.filters,
             focus = additive.focus ?: properties.focus,
@@ -138,6 +140,15 @@ data class Input internal constructor(
          * Actions when an element disappears from the screen.
          */
         val disappearActions: Property<List<DisappearAction>>?,
+        /**
+         * Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+         */
+        val enterKeyActions: Property<List<Action>>?,
+        /**
+         * The type of the `Enter` keyboard button.
+         * Default value: `default`.
+         */
+        val enterKeyType: Property<EnterKeyType>?,
         /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
          */
@@ -350,6 +361,8 @@ data class Input internal constructor(
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("disappear_actions", disappearActions)
+            result.tryPutProperty("enter_key_actions", enterKeyActions)
+            result.tryPutProperty("enter_key_type", enterKeyType)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("filters", filters)
             result.tryPutProperty("focus", focus)
@@ -409,6 +422,14 @@ data class Input internal constructor(
     sealed interface Autocapitalization
 
     /**
+     * The type of the `Enter` keyboard button.
+     * 
+     * Possible values: [default], [go], [search], [send], [done].
+     */
+    @Generated
+    sealed interface EnterKeyType
+
+    /**
      * Keyboard type.
      * 
      * Possible values: [single_line_text], [multi_line_text], [phone], [number], [email], [uri], [password].
@@ -465,6 +486,8 @@ data class Input internal constructor(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -525,6 +548,8 @@ fun DivScope.input(
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
     filters: List<InputFilter>? = null,
     focus: Focus? = null,
@@ -583,6 +608,8 @@ fun DivScope.input(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
+        enterKeyActions = valueOrNull(enterKeyActions),
+        enterKeyType = valueOrNull(enterKeyType),
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
         focus = valueOrNull(focus),
@@ -643,6 +670,8 @@ fun DivScope.input(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -703,6 +732,8 @@ fun DivScope.inputProps(
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
     filters: List<InputFilter>? = null,
     focus: Focus? = null,
@@ -760,6 +791,8 @@ fun DivScope.inputProps(
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
     disappearActions = valueOrNull(disappearActions),
+    enterKeyActions = valueOrNull(enterKeyActions),
+    enterKeyType = valueOrNull(enterKeyType),
     extensions = valueOrNull(extensions),
     filters = valueOrNull(filters),
     focus = valueOrNull(focus),
@@ -819,6 +852,8 @@ fun DivScope.inputProps(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -879,6 +914,8 @@ fun TemplateScope.inputRefs(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    enterKeyActions: ReferenceProperty<List<Action>>? = null,
+    enterKeyType: ReferenceProperty<Input.EnterKeyType>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -936,6 +973,8 @@ fun TemplateScope.inputRefs(
     border = border,
     columnSpan = columnSpan,
     disappearActions = disappearActions,
+    enterKeyActions = enterKeyActions,
+    enterKeyType = enterKeyType,
     extensions = extensions,
     filters = filters,
     focus = focus,
@@ -995,6 +1034,8 @@ fun TemplateScope.inputRefs(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1055,6 +1096,8 @@ fun Input.override(
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
     filters: List<InputFilter>? = null,
     focus: Focus? = null,
@@ -1113,6 +1156,8 @@ fun Input.override(
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
+        enterKeyActions = valueOrNull(enterKeyActions) ?: properties.enterKeyActions,
+        enterKeyType = valueOrNull(enterKeyType) ?: properties.enterKeyType,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         filters = valueOrNull(filters) ?: properties.filters,
         focus = valueOrNull(focus) ?: properties.focus,
@@ -1173,6 +1218,8 @@ fun Input.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1233,6 +1280,8 @@ fun Input.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    enterKeyActions: ReferenceProperty<List<Action>>? = null,
+    enterKeyType: ReferenceProperty<Input.EnterKeyType>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1291,6 +1340,8 @@ fun Input.defer(
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = disappearActions ?: properties.disappearActions,
+        enterKeyActions = enterKeyActions ?: properties.enterKeyActions,
+        enterKeyType = enterKeyType ?: properties.enterKeyType,
         extensions = extensions ?: properties.extensions,
         filters = filters ?: properties.filters,
         focus = focus ?: properties.focus,
@@ -1346,6 +1397,7 @@ fun Input.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
@@ -1376,6 +1428,7 @@ fun Input.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     autocapitalization: ExpressionProperty<Input.Autocapitalization>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    enterKeyType: ExpressionProperty<Input.EnterKeyType>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
@@ -1409,6 +1462,8 @@ fun Input.evaluate(
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = properties.disappearActions,
+        enterKeyActions = properties.enterKeyActions,
+        enterKeyType = enterKeyType ?: properties.enterKeyType,
         extensions = properties.extensions,
         filters = properties.filters,
         focus = properties.focus,
@@ -1469,6 +1524,8 @@ fun Input.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1529,6 +1586,8 @@ fun Component<Input>.override(
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
     filters: List<InputFilter>? = null,
     focus: Focus? = null,
@@ -1588,6 +1647,8 @@ fun Component<Input>.override(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
+        enterKeyActions = valueOrNull(enterKeyActions),
+        enterKeyType = valueOrNull(enterKeyType),
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
         focus = valueOrNull(focus),
@@ -1648,6 +1709,8 @@ fun Component<Input>.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1708,6 +1771,8 @@ fun Component<Input>.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    enterKeyActions: ReferenceProperty<List<Action>>? = null,
+    enterKeyType: ReferenceProperty<Input.EnterKeyType>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1767,6 +1832,8 @@ fun Component<Input>.defer(
         border = border,
         columnSpan = columnSpan,
         disappearActions = disappearActions,
+        enterKeyActions = enterKeyActions,
+        enterKeyType = enterKeyType,
         extensions = extensions,
         filters = filters,
         focus = focus,
@@ -1822,6 +1889,7 @@ fun Component<Input>.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param enterKeyType The type of the `Enter` keyboard button.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
@@ -1852,6 +1920,7 @@ fun Component<Input>.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     autocapitalization: ExpressionProperty<Input.Autocapitalization>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    enterKeyType: ExpressionProperty<Input.EnterKeyType>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
@@ -1886,6 +1955,8 @@ fun Component<Input>.evaluate(
         border = null,
         columnSpan = columnSpan,
         disappearActions = null,
+        enterKeyActions = null,
+        enterKeyType = enterKeyType,
         extensions = null,
         filters = null,
         focus = null,
@@ -1946,6 +2017,9 @@ fun Input.asList() = listOf(this)
 
 @Generated
 fun Input.Autocapitalization.asList() = listOf(this)
+
+@Generated
+fun Input.EnterKeyType.asList() = listOf(this)
 
 @Generated
 fun Input.KeyboardType.asList() = listOf(this)

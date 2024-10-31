@@ -26,7 +26,8 @@ sealed class EnumValue(
 @Generated
 object DefaultEnumValue : EnumValue("default"),
     Accessibility.Mode,
-    Gallery.ScrollMode
+    Gallery.ScrollMode,
+    Input.EnterKeyType
 
 @Generated
 object MergeEnumValue : EnumValue("merge"),
@@ -442,6 +443,22 @@ object SentencesEnumValue : EnumValue("sentences"),
 @Generated
 object AllCharactersEnumValue : EnumValue("all_characters"),
     Input.Autocapitalization
+
+@Generated
+object GoEnumValue : EnumValue("go"),
+    Input.EnterKeyType
+
+@Generated
+object SearchEnumValue : EnumValue("search"),
+    Input.EnterKeyType
+
+@Generated
+object SendEnumValue : EnumValue("send"),
+    Input.EnterKeyType
+
+@Generated
+object DoneEnumValue : EnumValue("done"),
+    Input.EnterKeyType
 
 @Generated
 object SingleLineTextEnumValue : EnumValue("single_line_text"),
@@ -928,6 +945,22 @@ val DivScope.sentences: SentencesEnumValue
 @Generated
 val DivScope.all_characters: AllCharactersEnumValue
     get() = AllCharactersEnumValue
+
+@Generated
+val DivScope.go: GoEnumValue
+    get() = GoEnumValue
+
+@Generated
+val DivScope.search: SearchEnumValue
+    get() = SearchEnumValue
+
+@Generated
+val DivScope.send: SendEnumValue
+    get() = SendEnumValue
+
+@Generated
+val DivScope.done: DoneEnumValue
+    get() = DoneEnumValue
 
 @Generated
 val DivScope.single_line_text: SingleLineTextEnumValue
