@@ -8,6 +8,7 @@
 * Added `div-focus.next_focus_ids.forward` support.
 * Added new typed action `div-action-show-tooltip` that can be used instead of `div-action://show_tooltip`.
 * Consider the safe area when calculating the tooltip position.
+* Fix statusbar blinking.
 * Fixed unnecessary focus clearing in inputs.
 
 # Web Client:
