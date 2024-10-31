@@ -16,6 +16,7 @@ extension TextInputBlock {
     inputView.setInputType(inputType)
     inputView.setInputAccessoryView(accessoryView)
     inputView.setAutocapitalizationType(autocapitalizationType)
+    inputView.setEnterKeyType(enterKeyType)
     inputView.setValidators(validators)
     inputView.setFilters(filters)
     inputView.setTextAlignmentHorizontal(textAlignmentHorizontal)
@@ -35,6 +36,7 @@ extension TextInputBlock {
     inputView.setIsFocused(isFocused, shouldClear: shouldClearFocus.value)
     inputView.setOnFocusActions(onFocusActions)
     inputView.setOnBlurActions(onBlurActions)
+    inputView.setEnterKeyActions(enterKeyActions)
     inputView.setPath(path)
     inputView.setObserver(observer)
     inputView.setIsEnabled(isEnabled)
@@ -61,6 +63,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var maskedViewModel: MaskedInputViewModel?
   private var onFocusActions: [UserInterfaceAction] = []
   private var onBlurActions: [UserInterfaceAction] = []
+  private var enterKeyActions: [UserInterfaceAction] = []
   private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
   private var typo: Typo?
@@ -92,6 +95,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.backgroundColor = .clear
     multiLineInput.delegate = self
     multiLineInput.textContainer.lineFragmentPadding = 0
+    multiLineInput.returnKeyType = .default
 
     singleLineInput.isHidden = true
     singleLineInput.autocorrectionType = .no
@@ -99,6 +103,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     singleLineInput.delegate = self
     singleLineInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     singleLineInput.contentVerticalAlignment = .top
+    singleLineInput.returnKeyType = .default
 
     hintView.backgroundColor = .clear
     hintView.numberOfLines = 0
@@ -200,6 +205,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.autocapitalizationType = type.uiType
   }
 
+  func setEnterKeyType(_ type: TextInputBlock.EnterKeyType) {
+    singleLineInput.returnKeyType = type.uiType
+    multiLineInput.returnKeyType = type.uiType
+  }
+
   func setTextAlignmentHorizontal(_ alignment: TextInputBlock.TextAlignmentHorizontal) {
     textAlignmentHorizontal = alignment
   }
@@ -255,6 +265,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setOnBlurActions(_ onBlurActions: [UserInterfaceAction]) {
     self.onBlurActions = onBlurActions
+  }
+
+  func setEnterKeyActions(_ actions: [UserInterfaceAction]) {
+    self.enterKeyActions = actions
   }
 
   func setPath(_ path: UIElementPath) {
@@ -648,6 +662,15 @@ extension TextInputBlockView: UITextFieldDelegate {
 
     return inputViewReplaceTextIn(view: textField, range: range, text: string)
   }
+
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    guard !enterKeyActions.isEmpty else {
+      return true
+    }
+
+    enterKeyActions.perform(sendingFrom: self)
+    return false
+  }
 }
 
 extension TextInputBlockView {
@@ -809,6 +832,18 @@ extension TextInputBlock.AutocapitalizationType {
     case .allCharacters: .allCharacters
     }
   }
+}
+
+extension TextInputBlock.EnterKeyType {
+  fileprivate var uiType: UIReturnKeyType {
+        switch self {
+        case .default: .default
+        case .search: .search
+        case .send: .send
+        case .done: .done
+        case .go: .go
+        }
+    }
 }
 
 private class PatchedUITextField: UITextField {

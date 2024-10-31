@@ -160,7 +160,7 @@
           },
           "$description": "translations.json#/div_input_enter_key_actions",
           "platforms": [
-
+            "ios"
           ]
         },
         "enter_key_type": {
@@ -175,7 +175,7 @@
           "default_value": "default",
           "$description": "translations.json#/div_input_enter_key_type",
           "platforms": [
-
+            "ios"
           ]
         },
         "keyboard_type": {

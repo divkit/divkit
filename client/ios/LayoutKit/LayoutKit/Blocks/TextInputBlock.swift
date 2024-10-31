@@ -59,6 +59,14 @@ public final class TextInputBlock: BlockWithTraits {
     case bottom
   }
 
+    public enum EnterKeyType: Equatable {
+        case `default`
+        case go
+        case search
+        case send
+        case done
+    }
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
@@ -69,6 +77,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let inputType: InputType
   public var accessoryView: ViewType?
   public let autocapitalizationType: AutocapitalizationType
+  public let enterKeyType: EnterKeyType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
@@ -77,6 +86,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let isFocused: Bool
   public let onFocusActions: [UserInterfaceAction]
   public let onBlurActions: [UserInterfaceAction]
+  public let enterKeyActions: [UserInterfaceAction]
   public let textAlignmentHorizontal: TextAlignmentHorizontal
   public let textAlignmentVertical: TextAlignmentVertical
   public weak var parentScrollView: ScrollView?
@@ -100,6 +110,7 @@ public final class TextInputBlock: BlockWithTraits {
     inputType: InputType = .default,
     accessoryView: ViewType? = nil,
     autocapitalizationType: AutocapitalizationType = .sentences,
+    enterKeyType: EnterKeyType = .default,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
@@ -108,6 +119,7 @@ public final class TextInputBlock: BlockWithTraits {
     isFocused: Bool = false,
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
+    enterKeyActions: [UserInterfaceAction] = [],
     parentScrollView: ScrollView? = nil,
     filters: [TextInputFilter]? = nil,
     validators: [TextInputValidator]? = nil,
@@ -129,6 +141,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.inputType = inputType
     self.accessoryView = accessoryView
     self.autocapitalizationType = autocapitalizationType
+    self.enterKeyType = enterKeyType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
@@ -137,6 +150,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.isFocused = isFocused
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions
+    self.enterKeyActions = enterKeyActions
     self.parentScrollView = parentScrollView
     self.filters = filters
     self.validators = validators
@@ -246,6 +260,7 @@ extension TextInputBlock: ElementFocusUpdating {
       inputType: inputType,
       accessoryView: accessoryView,
       autocapitalizationType: autocapitalizationType,
+      enterKeyType: enterKeyType,
       highlightColor: highlightColor,
       maxVisibleLines: maxVisibleLines,
       selectAllOnFocus: selectAllOnFocus,
@@ -254,6 +269,7 @@ extension TextInputBlock: ElementFocusUpdating {
       isFocused: isFocused,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
+      enterKeyActions: enterKeyActions,
       parentScrollView: parentScrollView,
       filters: filters,
       validators: validators,

@@ -48,6 +48,9 @@ extension DivInput: DivBlockModeling {
     let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
+    let enterKeyActions = enterKeyActions?.uiActions(context: context) ?? []
+    let enterKeyType = resolveEnterKeyType(expressionResolver)
+
     let inputPath = context.parentPath + (id ?? DivInput.type)
 
     let blockStateStorage = context.blockStateStorage
@@ -68,6 +71,7 @@ extension DivInput: DivBlockModeling {
       multiLineMode: keyboardType == .multiLineText,
       inputType: keyboardType.system,
       autocapitalizationType: autocapitalizationType.system,
+      enterKeyType: enterKeyType.system,
       highlightColor: resolveHighlightColor(expressionResolver),
       maxVisibleLines: resolveMaxVisibleLines(expressionResolver),
       selectAllOnFocus: resolveSelectAllOnFocus(expressionResolver),
@@ -76,6 +80,7 @@ extension DivInput: DivBlockModeling {
       isFocused: isFocused,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
+      enterKeyActions: enterKeyActions,
       parentScrollView: context.parentScrollView,
       filters: makeFilters(context),
       validators: makeValidators(context),
@@ -228,6 +233,18 @@ extension DivInput.Autocapitalization {
     case .words: .words
     case .auto, .sentences: .sentences
     case .allCharacters: .allCharacters
+    }
+  }
+}
+
+extension DivInput.EnterKeyType {
+  fileprivate var system: TextInputBlock.EnterKeyType {
+    switch self {
+    case .default: .default
+    case .go: .go
+    case .search: .search
+    case .send: .send
+    case .done: .done
     }
   }
 }

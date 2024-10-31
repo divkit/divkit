@@ -89,6 +89,8 @@ public final class DivInputTemplate: TemplateValue {
 
   public typealias Autocapitalization = DivInput.Autocapitalization
 
+  public typealias EnterKeyType = DivInput.EnterKeyType
+
   public typealias KeyboardType = DivInput.KeyboardType
 
   public static let type: String = "input"
@@ -103,6 +105,8 @@ public final class DivInputTemplate: TemplateValue {
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
+  public let enterKeyActions: Field<[DivActionTemplate]>?
+  public let enterKeyType: Field<Expression<EnterKeyType>>? // default value: default
   public let extensions: Field<[DivExtensionTemplate]>?
   public let filters: Field<[DivInputFilterTemplate]>?
   public let focus: Field<DivFocusTemplate>?
@@ -163,6 +167,8 @@ public final class DivInputTemplate: TemplateValue {
       border: dictionary.getOptionalField("border", templateToType: templateToType),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
+      enterKeyActions: dictionary.getOptionalArray("enter_key_actions", templateToType: templateToType),
+      enterKeyType: dictionary.getOptionalExpressionField("enter_key_type"),
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
       filters: dictionary.getOptionalArray("filters", templateToType: templateToType),
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
@@ -224,6 +230,8 @@ public final class DivInputTemplate: TemplateValue {
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
+    enterKeyActions: Field<[DivActionTemplate]>? = nil,
+    enterKeyType: Field<Expression<EnterKeyType>>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     filters: Field<[DivInputFilterTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
@@ -282,6 +290,8 @@ public final class DivInputTemplate: TemplateValue {
     self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
+    self.enterKeyActions = enterKeyActions
+    self.enterKeyType = enterKeyType
     self.extensions = extensions
     self.filters = filters
     self.focus = focus
@@ -341,6 +351,8 @@ public final class DivInputTemplate: TemplateValue {
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let enterKeyActionsValue = { parent?.enterKeyActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let enterKeyTypeValue = { parent?.enterKeyType?.resolveOptionalValue(context: context) ?? .noValue }()
     let extensionsValue = { parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let filtersValue = { parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let focusValue = { parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -398,6 +410,8 @@ public final class DivInputTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
+      enterKeyActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "enter_key_actions", error: $0) },
+      enterKeyTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "enter_key_type", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -464,6 +478,8 @@ public final class DivInputTemplate: TemplateValue {
       border: { borderValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
+      enterKeyActions: { enterKeyActionsValue.value }(),
+      enterKeyType: { enterKeyTypeValue.value }(),
       extensions: { extensionsValue.value }(),
       filters: { filtersValue.value }(),
       focus: { focusValue.value }(),
@@ -528,6 +544,8 @@ public final class DivInputTemplate: TemplateValue {
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
+    var enterKeyActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var enterKeyTypeValue: DeserializationResult<Expression<DivInput.EnterKeyType>> = { parent?.enterKeyType?.value() ?? .noValue }()
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var filtersValue: DeserializationResult<[DivInputFilter]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
@@ -627,6 +645,16 @@ public final class DivInputTemplate: TemplateValue {
         _ = {
           if key == "disappear_actions" {
            disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
+          }
+        }()
+        _ = {
+          if key == "enter_key_actions" {
+           enterKeyActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: enterKeyActionsValue)
+          }
+        }()
+        _ = {
+          if key == "enter_key_type" {
+           enterKeyTypeValue = deserialize(__dictValue).merged(with: enterKeyTypeValue)
           }
         }()
         _ = {
@@ -910,6 +938,16 @@ public final class DivInputTemplate: TemplateValue {
           }
         }()
         _ = {
+         if key == parent?.enterKeyActions?.link {
+           enterKeyActionsValue = enterKeyActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.enterKeyType?.link {
+           enterKeyTypeValue = enterKeyTypeValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.extensions?.link {
            extensionsValue = extensionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self) })
           }
@@ -1147,6 +1185,7 @@ public final class DivInputTemplate: TemplateValue {
       _ = { backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { enterKeyActionsValue = enterKeyActionsValue.merged(with: { parent.enterKeyActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -1181,6 +1220,8 @@ public final class DivInputTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
+      enterKeyActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "enter_key_actions", error: $0) },
+      enterKeyTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "enter_key_type", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -1247,6 +1288,8 @@ public final class DivInputTemplate: TemplateValue {
       border: { borderValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
+      enterKeyActions: { enterKeyActionsValue.value }(),
+      enterKeyType: { enterKeyTypeValue.value }(),
       extensions: { extensionsValue.value }(),
       filters: { filtersValue.value }(),
       focus: { focusValue.value }(),
@@ -1316,6 +1359,8 @@ public final class DivInputTemplate: TemplateValue {
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
+      enterKeyActions: enterKeyActions ?? mergedParent.enterKeyActions,
+      enterKeyType: enterKeyType ?? mergedParent.enterKeyType,
       extensions: extensions ?? mergedParent.extensions,
       filters: filters ?? mergedParent.filters,
       focus: focus ?? mergedParent.focus,
@@ -1380,6 +1425,8 @@ public final class DivInputTemplate: TemplateValue {
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
+      enterKeyActions: merged.enterKeyActions?.tryResolveParent(templates: templates),
+      enterKeyType: merged.enterKeyType,
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       filters: merged.filters?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),

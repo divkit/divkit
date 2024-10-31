@@ -1729,6 +1729,26 @@
       "file": "input_max_length.json"
     },
     {
+      "title": "Text input (enter key)",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Change text",
+        "Tap on enter key"
+      ],
+      "expected_results": [
+        "Enter key on keyboard has \"search\" type",
+        "Keyboard is hidden",
+        "Text is changed to \"Search key tapped!\""
+      ],
+      "file": "enter_key_input.json"
+    },
+    {
       "title": "Select",
       "tags": [
         "DivSelect"
