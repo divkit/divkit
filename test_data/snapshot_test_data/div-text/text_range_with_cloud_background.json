@@ -2,6 +2,7 @@
     "description": "Text range with cloud background",
     "platforms": [
       "android",
+      "ios",
       "web"
     ],
     "templates": {

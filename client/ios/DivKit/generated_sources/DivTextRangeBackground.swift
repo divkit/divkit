@@ -7,10 +7,13 @@ import VGSL
 @frozen
 public enum DivTextRangeBackground {
   case divSolidBackground(DivSolidBackground)
+  case divCloudBackground(DivCloudBackground)
 
   public var value: Serializable {
     switch self {
     case let .divSolidBackground(value):
+      return value
+    case let .divCloudBackground(value):
       return value
     }
   }
@@ -22,6 +25,10 @@ extension DivTextRangeBackground: Equatable {
     switch (lhs, rhs) {
     case let (.divSolidBackground(l), .divSolidBackground(r)):
       return l == r
+    case let (.divCloudBackground(l), .divCloudBackground(r)):
+      return l == r
+    default:
+      return false
     }
   }
 }

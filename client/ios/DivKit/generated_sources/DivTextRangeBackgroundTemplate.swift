@@ -7,10 +7,13 @@ import VGSL
 @frozen
 public enum DivTextRangeBackgroundTemplate: TemplateValue {
   case divSolidBackgroundTemplate(DivSolidBackgroundTemplate)
+  case divCloudBackgroundTemplate(DivCloudBackgroundTemplate)
 
   public var value: Any {
     switch self {
     case let .divSolidBackgroundTemplate(value):
+      return value
+    case let .divCloudBackgroundTemplate(value):
       return value
     }
   }
@@ -19,6 +22,8 @@ public enum DivTextRangeBackgroundTemplate: TemplateValue {
     switch self {
     case let .divSolidBackgroundTemplate(value):
       return .divSolidBackgroundTemplate(try value.resolveParent(templates: templates))
+    case let .divCloudBackgroundTemplate(value):
+      return .divCloudBackgroundTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -44,6 +49,17 @@ public enum DivTextRangeBackgroundTemplate: TemplateValue {
           }
         } else { return nil }
       }()
+      result = result ?? {
+        if case let .divCloudBackgroundTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divCloudBackground(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divCloudBackground(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
       return result
     }()
   }
@@ -64,6 +80,15 @@ public enum DivTextRangeBackgroundTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == DivCloudBackground.type {
+      let result = { DivCloudBackgroundTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.divCloudBackground(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCloudBackground(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }()
   }
@@ -76,6 +101,8 @@ extension DivTextRangeBackgroundTemplate {
     switch blockType {
     case DivSolidBackgroundTemplate.type:
       self = .divSolidBackgroundTemplate(try DivSolidBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivCloudBackgroundTemplate.type:
+      self = .divCloudBackgroundTemplate(try DivCloudBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-text-range-background_template", representation: dictionary)
     }

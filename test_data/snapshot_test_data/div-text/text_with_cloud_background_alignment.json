@@ -2,6 +2,7 @@
     "description": "Text with cloud background (alignment test)",
     "platforms": [
       "android",
+      "ios",
       "web"
     ],
     "templates": {

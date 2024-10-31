@@ -22,7 +22,8 @@ extension TextBlock {
       source: Variable { [weak self] in self },
       accessibility: accessibilityElement,
       truncationToken: truncationToken,
-      canSelect: canSelect
+      canSelect: canSelect,
+      additionalTextInsets: additionalTextInsets
     )
   }
 
@@ -108,6 +109,7 @@ private final class TextBlockView: UIView {
     let accessibility: AccessibilityElement?
     let truncationToken: NSAttributedString?
     let canSelect: Bool
+    let additionalTextInsets: EdgeInsets
   }
 
   private var selectedRange: Range<Int>? {
@@ -259,6 +261,7 @@ private final class TextBlockView: UIView {
       inContext: UIGraphicsGetCurrentContext()!,
       verticalPosition: model.verticalPosition,
       rect: rect,
+      textInsets: model.additionalTextInsets,
       truncationToken: model.truncationToken,
       actionKey: ActionsAttribute.Key,
       backgroundKey: BackgroundAttribute.Key,

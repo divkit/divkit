@@ -30,6 +30,7 @@ public final class TextBlock: BlockWithTraits {
   public let accessibilityElement: AccessibilityElement?
   public let canSelect: Bool
   public let tightenWidth: Bool
+  public let additionalTextInsets: EdgeInsets
 
   let attachments: [TextAttachment]
   let truncationToken: NSAttributedString?
@@ -51,6 +52,7 @@ public final class TextBlock: BlockWithTraits {
     accessibilityElement: AccessibilityElement?,
     truncationToken: NSAttributedString? = nil,
     truncationImages: [TextBlock.InlineImage] = [],
+    additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
     tightenWidth: Bool = false
   ) {
@@ -74,6 +76,7 @@ public final class TextBlock: BlockWithTraits {
       self.truncationToken = nil
       self.truncationAttachments = []
     }
+    self.additionalTextInsets = additionalTextInsets ?? .zero
   }
 
   public convenience init(
@@ -87,6 +90,7 @@ public final class TextBlock: BlockWithTraits {
     images: [InlineImage] = [],
     truncationToken: NSAttributedString? = nil,
     truncationImages: [TextBlock.InlineImage] = [],
+    additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
     tightenWidth: Bool = false
   ) {
@@ -102,6 +106,7 @@ public final class TextBlock: BlockWithTraits {
       accessibilityElement: .staticText(label: text.string),
       truncationToken: truncationToken,
       truncationImages: truncationImages,
+      additionalTextInsets: additionalTextInsets,
       canSelect: canSelect,
       tightenWidth: tightenWidth
     )
@@ -114,7 +119,10 @@ public final class TextBlock: BlockWithTraits {
         return cached
       }
 
-      let width = ceil(text.sizeForWidth(tightenWidth ? maxSize : .infinity).width)
+      let width = ceil(
+        text.sizeForWidth(tightenWidth ? maxSize : .infinity)
+          .width + additionalTextInsets.horizontal.sum
+      )
       let result = clamp(width, min: minSize, max: maxSize)
       cachedIntrinsicWidth = result
       return result
@@ -138,7 +146,7 @@ public final class TextBlock: BlockWithTraits {
           width,
           maxNumberOfLines: maxIntrinsicNumberOfLines,
           minNumberOfHiddenLines: minNumberOfHiddenLines
-        )
+        ) + additionalTextInsets.vertical.sum
       )
       let result = clamp(height, min: minSize, max: maxSize)
       cachedIntrinsicHeight = (width: width, height: result)
