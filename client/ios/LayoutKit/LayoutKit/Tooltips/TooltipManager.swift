@@ -190,21 +190,6 @@ extension TooltipAnchorView {
       }
   }
 }
-#else
-public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {}
-
-public final class DefaultTooltipManager: TooltipManager {
-  public init() {}
-
-  public func showTooltip(info _: TooltipInfo) {}
-  public func hideTooltip(id _: String) {}
-}
-#endif
-
-extension TooltipManager {
-  public func mapView(_: BlockView, to _: BlockViewID) {}
-  public func reset() {}
-}
 
 private final class ProxyViewController: UIViewController {
   private let viewController: UIViewController
@@ -221,4 +206,19 @@ private final class ProxyViewController: UIViewController {
   override var preferredStatusBarStyle: UIStatusBarStyle {
     viewController.preferredStatusBarStyle
   }
+}
+#else
+public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {}
+
+public final class DefaultTooltipManager: TooltipManager {
+  public init() {}
+
+  public func showTooltip(info _: TooltipInfo) {}
+  public func hideTooltip(id _: String) {}
+}
+#endif
+
+extension TooltipManager {
+  public func mapView(_: BlockView, to _: BlockViewID) {}
+  public func reset() {}
 }
