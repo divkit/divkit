@@ -501,9 +501,7 @@ function evalMethodExpression(ctx: EvalContext, expr: MethodExpression): EvalVal
 
     let func: Func | undefined;
 
-    expr.arguments.unshift(expr.object);
-
-    let args = expr.arguments.map(arg => evalAny(ctx, arg));
+    let args = [expr.object, ...expr.arguments].map(arg => evalAny(ctx, arg));
     const methodKey = methodName + ':' + args.map(arg => arg.type).join('#');
 
     if (!methodByArgs.has(methodKey)) {
