@@ -1,3 +1,14 @@
+## 30.25.0 (November 4, 2024)
+
+* Added `direction` property into extension context.
+* Added `isEmpty` method for the arrays.
+* Added `scope_id` action property support.
+* Fixed a bug with handling incorrect values of `border` -> `has_shadow`.
+* Fixed a bug with incorrect handling of visibility actions that were targeted at local variables.
+* Fixed several `pager` layout issues.
+* The `lottie` extension now uses the `scale`, `aspect`, `content_alignment_horizontal` and `content_alignment_vertical` properties from the original component.
+
+
 ## 30.24.0 (October 28, 2024)
 
 * Added support for a `cloud` background for `range` in `text`.
