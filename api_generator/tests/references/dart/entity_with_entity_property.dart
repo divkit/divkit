@@ -7,7 +7,7 @@ import 'entity_with_string_enum_property.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithEntityProperty extends Preloadable with EquatableMixin  {
+class EntityWithEntityProperty extends Resolvable with EquatableMixin  {
   const EntityWithEntityProperty({
     this.entity = const Entity.entityWithStringEnumProperty(const EntityWithStringEnumProperty(property: ValueExpression(EntityWithStringEnumPropertyProperty.second,),),),
   });
@@ -40,24 +40,8 @@ class EntityWithEntityProperty extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithEntityProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithEntityProperty(
-        entity: (await safeParseObjAsync(Entity.fromJson(json['entity']), fallback: const Entity.entityWithStringEnumProperty(const EntityWithStringEnumProperty(property: ValueExpression(EntityWithStringEnumPropertyProperty.second,),),),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await entity?.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithEntityProperty resolve(DivVariableContext context) {
+    entity?.resolve(context);
+    return this;
   }
 }

@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// A trigger that causes an action when activated.
-class DivTrigger extends Preloadable with EquatableMixin {
+class DivTrigger extends Resolvable with EquatableMixin {
   const DivTrigger({
     required this.actions,
     required this.condition,
@@ -73,51 +73,16 @@ class DivTrigger extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTrigger?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTrigger(
-        actions: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ))!,
-        condition: (await safeParseBoolExprAsync(
-          json['condition'],
-        ))!,
-        mode: (await safeParseStrEnumExprAsync(
-          json['mode'],
-          parse: DivTriggerMode.fromJson,
-          fallback: DivTriggerMode.onCondition,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(actions, (v) => v.preload(context));
-      await condition.preload(context);
-      await mode.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTrigger resolve(DivVariableContext context) {
+    safeListResolve(actions, (v) => v.resolve(context));
+    condition.resolve(context);
+    mode.resolve(context);
+    return this;
   }
 }
 
-enum DivTriggerMode implements Preloadable {
+enum DivTriggerMode implements Resolvable {
   onCondition('on_condition'),
   onVariable('on_variable');
 
@@ -153,9 +118,6 @@ enum DivTriggerMode implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivTriggerMode? fromJson(
     String? json,
   ) {
@@ -175,22 +137,6 @@ enum DivTriggerMode implements Preloadable {
     }
   }
 
-  static Future<DivTriggerMode?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'on_condition':
-          return DivTriggerMode.onCondition;
-        case 'on_variable':
-          return DivTriggerMode.onVariable;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivTriggerMode resolve(DivVariableContext context) => this;
 }

@@ -4,7 +4,7 @@ import 'package:divkit/src/schema/div_action_typed.dart';
 import 'package:divkit/src/schema/div_download_callbacks.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-abstract class DivSightAction extends Preloadable {
+abstract class DivSightAction extends Resolvable {
   DivDownloadCallbacks? get downloadCallbacks;
 
   // default value: true
@@ -25,5 +25,5 @@ abstract class DivSightAction extends Preloadable {
 
   Expression<Uri>? get url;
   @override
-  Future<void> preload(Map<String, dynamic> context);
+  DivSightAction resolve(DivVariableContext context);
 }

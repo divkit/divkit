@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Regex validator.
-class DivInputValidatorRegex extends Preloadable with EquatableMixin {
+class DivInputValidatorRegex extends Resolvable with EquatableMixin {
   const DivInputValidatorRegex({
     this.allowEmpty = const ValueExpression(false),
     required this.labelId,
@@ -75,43 +75,11 @@ class DivInputValidatorRegex extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputValidatorRegex?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivInputValidatorRegex(
-        allowEmpty: (await safeParseBoolExprAsync(
-          json['allow_empty'],
-          fallback: false,
-        ))!,
-        labelId: (await safeParseStrExprAsync(
-          json['label_id']?.toString(),
-        ))!,
-        pattern: (await safeParseStrExprAsync(
-          json['pattern']?.toString(),
-        ))!,
-        variable: (await safeParseStrAsync(
-          json['variable']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await allowEmpty.preload(context);
-      await labelId.preload(context);
-      await pattern.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivInputValidatorRegex resolve(DivVariableContext context) {
+    allowEmpty.resolve(context);
+    labelId.resolve(context);
+    pattern.resolve(context);
+    return this;
   }
 }

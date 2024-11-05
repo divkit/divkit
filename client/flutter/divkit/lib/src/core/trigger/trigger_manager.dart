@@ -19,7 +19,7 @@ class DefaultDivTriggerManager extends DivTriggerManager {
         if (condition is ResolvableExpression &&
             (condition as ResolvableExpression).variables == null) {
           // So if we have no [variables], then  initially resolve expression.
-          await condition.resolveValue(context: context);
+          condition.resolve(context);
         }
 
         final hasCorrectCondition = condition is ResolvableExpression &&
@@ -34,25 +34,21 @@ class DefaultDivTriggerManager extends DivTriggerManager {
                   false;
 
           if (hasUpdate) {
-            final mode = await trigger.mode.resolveValue(context: context);
-            final condition = await trigger.condition.resolveValue(
-              context: context,
-            );
+            final mode = trigger.mode.resolve(context);
+            final condition = trigger.condition.resolve(context);
 
             mode.map(
               onCondition: () async {
                 if (!trigger.prevConditionResult && condition) {
                   for (final action in trigger.actions) {
-                    (await action.resolve(context: context))
-                        .execute(divContext);
+                    action.resolve(context).convert().execute(divContext);
                   }
                 }
               },
               onVariable: () async {
                 if (condition) {
                   for (final action in trigger.actions) {
-                    (await action.resolve(context: context))
-                        .execute(divContext);
+                    action.resolve(context).convert().execute(divContext);
                   }
                 }
               },

@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_input_filter_regex.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivInputFilter extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivInputFilter extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivInputFilter extends Preloadable with EquatableMixin {
 
   bool get isDivInputFilterRegex => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivInputFilter? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivInputFilter extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputFilter?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivInputFilterExpression.type:
-          return DivInputFilter.divInputFilterExpression(
-            (await DivInputFilterExpression.parse(json))!,
-          );
-        case DivInputFilterRegex.type:
-          return DivInputFilter.divInputFilterRegex(
-            (await DivInputFilterRegex.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivInputFilter resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

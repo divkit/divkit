@@ -12,7 +12,7 @@ class DivWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => traceFunc(
-        'buildDiv',
+        'Div.build',
         () =>
             data?.maybeMap(
               divState: (data) => DivStateWidget(data),

@@ -80,7 +80,7 @@ class DartGenerator(Generator):
         # Class header declaration
         full_name = get_full_name(entity)
         result += f'/// {entity.doc}' if len(entity.doc) != 0 else ''
-        result += f'class {full_name} extends Preloadable with EquatableMixin {conformance} {{'
+        result += f'class {full_name} extends Resolvable with EquatableMixin {conformance} {{'
 
         # Constructor declaration
         props_decl = Text()
@@ -169,48 +169,19 @@ class DartGenerator(Generator):
             result += f'    return const {full_name}();'
             result += '  }'
 
-        # Async Serializable declaration
+        # Resolve declaration
         if len(entity.instance_properties) != 0:
             result += EMPTY
-            result += f'  static Future<{full_name}?> parse(Map<String, dynamic>? json,) async {{'
-            result += '    if (json == null) {'
-            result += '      return null;'
-            result += '    }'
-            result += '    try {'
-            result += f'      return {full_name}('
+            result += f'  {full_name} resolve(DivVariableContext context) {{'
             for prop in entity.instance_properties:
-                decode_strategy = prop.get_parse_strategy(is_future=True)
-                result += f"        {utils.lower_camel_case(prop.name)}: {decode_strategy},"
-            result += '      );'
-            result += '    } catch (e, st) {'
-            result += '      return null;'
-            result += '    }'
-            result += '  }'
-        else:
-            result += EMPTY
-            result += f'  static Future<{full_name}?> parse(Map<String, dynamic>? json,) async {{'
-            result += '    if (json == null) {'
-            result += '      return null;'
-            result += '    }'
-            result += f'    return const {full_name}();'
-            result += '  }'
-
-        # Preload declaration
-        if len(entity.instance_properties) != 0:
-            result += EMPTY
-            result += '  Future<void> preload(Map<String, dynamic> context,) async {'
-            result += '    try {'
-            for prop in entity.instance_properties:
-                preload_strategy = prop.get_preload_strategy()
+                preload_strategy = prop.get_resolve_strategy()
                 if preload_strategy is not None:
                     result += f"    {preload_strategy}"
-            result += '    } catch (e, st) {'
-            result += '      return;'
-            result += '    }'
+            result += '    return this;'
             result += '  }'
         else:
             result += EMPTY
-            result += '  Future<void> preload(Map<String, dynamic> context,) async {}'
+            result += f'  {full_name} resolve(DivVariableContext context) => this;'
 
         result += '}'
 
@@ -234,7 +205,7 @@ class DartGenerator(Generator):
         common_interface = entity_enumeration.common_interface(GeneratedLanguage.DART)
         has_interface = common_interface is not None
 
-        interface_name = common_interface.__str__() if has_interface else 'Preloadable'
+        interface_name = common_interface.__str__() if has_interface else 'Resolvable'
         interface_import = []
         if has_interface:
             interface_import.append(interface_name)
@@ -243,7 +214,7 @@ class DartGenerator(Generator):
             result += f'import \'{utils.snake_case(n)}.dart\';'
         result += EMPTY
 
-        result += f'class {full_name} extends Preloadable with EquatableMixin {{'
+        result += f'class {full_name} extends Resolvable with EquatableMixin {{'
 
         result += f'  final {interface_name} value;'
         result += '  final int _index;'
@@ -299,9 +270,6 @@ class DartGenerator(Generator):
             result += f'  bool get is{utils.capitalize_camel_case(n)} => _index == {i};'
             result += EMPTY
 
-        # Preload declaration
-        result += '  Future<void> preload(Map<String, dynamic> context) => value.preload(context);'
-
         # Serializable declaration
         result += EMPTY
         result += f'  static {full_name}? fromJson(Map<String, dynamic>? json,) {{'
@@ -320,23 +288,8 @@ class DartGenerator(Generator):
         result += '    }'
         result += '  }'
 
-        # Async Serializable declaration
-        result += EMPTY
-        result += f'  static Future<{full_name}?> parse(Map<String, dynamic>? json,) async {{'
-        result += '    if (json == null) {'
-        result += '      return null;'
-        result += '    }'
-        result += '    try {'
-        result += '      switch (json[\'type\']) {'
-        for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
-            result += f'      case {utils.capitalize_camel_case(n)}.type :\n' \
-                      f'        return {full_name}.{utils.lower_camel_case(n)}((await {utils.capitalize_camel_case(n)}.parse(json))!,);'
-        result += '    }'
-        result += '      return null;'
-        result += '    } catch (e, st) {'
-        result += '      return null;'
-        result += '    }'
-        result += '  }'
+        # Resolve declaration
+        result += f'  {full_name} resolve(DivVariableContext context) {{ value.resolve(context); return this; }}'
 
         result += '}'
 
@@ -352,7 +305,7 @@ class DartGenerator(Generator):
 
         full_name = get_full_name(string_enumeration)
 
-        result += f'enum {full_name} implements Preloadable {{'
+        result += f'enum {full_name} implements Resolvable {{'
         cases_len = len(string_enumeration.cases)
         for i in range(cases_len):
             result += f'  {allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))}' \
@@ -395,9 +348,6 @@ class DartGenerator(Generator):
         result += '  }'
         result += EMPTY
 
-        # Preload declaration
-        result += '  Future<void> preload(Map<String, dynamic> context) async {}'
-
         # Serializable declaration
         result += EMPTY
         result += f'  static {full_name}? fromJson(String? json,) {{'
@@ -416,23 +366,8 @@ class DartGenerator(Generator):
         result += '    }'
         result += '  }'
 
-        # Async Serializable declaration
-        result += EMPTY
-        result += f'  static Future<{full_name}?> parse(String? json,) async {{'
-        result += '    if (json == null) {'
-        result += '      return null;'
-        result += '    }'
-        result += '    try {'
-        result += '      switch (json) {'
-        for i in range(cases_len):
-            result += f'        case \'{string_enumeration.cases[i][0]}\':\n        return ' \
-                      f'{full_name}.{allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))};'
-        result += '      }'
-        result += '      return null;'
-        result += '    } catch (e, st) {'
-        result += '      return null;'
-        result += '    }'
-        result += '  }'
+        # Resolvable declaration
+        result += f'  {full_name} resolve(DivVariableContext context) => this;'
 
         result += '}'
 
@@ -440,7 +375,7 @@ class DartGenerator(Generator):
 
     @staticmethod
     def __declaration_as_interface(entity: DartEntity) -> Text:
-        result = Text(f'abstract class {get_full_name(entity)} extends Preloadable {{')
+        result = Text(f'abstract class {get_full_name(entity)} extends Resolvable {{')
         props = entity.instance_properties
         for i, prop in enumerate(props):
             name = prop.declaration_name
@@ -450,8 +385,8 @@ class DartGenerator(Generator):
             if i != len(props) - 1:
                 result += '\n'
 
-        # Preload declaration
-        result += '  Future<void> preload(Map<String, dynamic> context);'
+        # Resolvable declaration
+        result += f'  {get_full_name(entity)} resolve(DivVariableContext context);'
 
         result += '}'
         return result

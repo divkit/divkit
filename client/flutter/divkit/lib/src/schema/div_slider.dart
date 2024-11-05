@@ -34,7 +34,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Slider for selecting a value in the range.
-class DivSlider extends Preloadable with EquatableMixin implements DivBase {
+class DivSlider extends Resolvable with EquatableMixin implements DivBase {
   const DivSlider({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -685,293 +685,56 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
     }
   }
 
-  static Future<DivSlider?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivSlider(
-        accessibility: (await safeParseObjAsync(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        ))!,
-        alignmentHorizontal: await safeParseStrEnumExprAsync(
-          json['alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-        ),
-        alignmentVertical: await safeParseStrEnumExprAsync(
-          json['alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-        ),
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 1.0,
-        ))!,
-        animators: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
-          ),
-        ),
-        background: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
-          ),
-        ),
-        border: (await safeParseObjAsync(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        ))!,
-        columnSpan: await safeParseIntExprAsync(
-          json['column_span'],
-        ),
-        disappearActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
-          ),
-        ),
-        extensions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
-          ),
-        ),
-        focus: await safeParseObjAsync(
-          DivFocus.fromJson(json['focus']),
-        ),
-        functions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
-          ),
-        ),
-        height: (await safeParseObjAsync(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
-          ),
-        ))!,
-        id: await safeParseStrAsync(
-          json['id']?.toString(),
-        ),
-        layoutProvider: await safeParseObjAsync(
-          DivLayoutProvider.fromJson(json['layout_provider']),
-        ),
-        margins: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        maxValue: (await safeParseIntExprAsync(
-          json['max_value'],
-          fallback: 100,
-        ))!,
-        minValue: (await safeParseIntExprAsync(
-          json['min_value'],
-          fallback: 0,
-        ))!,
-        paddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        ranges: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['ranges'],
-            (v) => safeParseObj(
-              DivSliderRange.fromJson(v),
-            )!,
-          ),
-        ),
-        reuseId: await safeParseStrExprAsync(
-          json['reuse_id']?.toString(),
-        ),
-        rowSpan: await safeParseIntExprAsync(
-          json['row_span'],
-        ),
-        secondaryValueAccessibility: (await safeParseObjAsync(
-          DivAccessibility.fromJson(json['secondary_value_accessibility']),
-          fallback: const DivAccessibility(),
-        ))!,
-        selectedActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        thumbSecondaryStyle: await safeParseObjAsync(
-          DivDrawable.fromJson(json['thumb_secondary_style']),
-        ),
-        thumbSecondaryTextStyle: await safeParseObjAsync(
-          DivSliderTextStyle.fromJson(json['thumb_secondary_text_style']),
-        ),
-        thumbSecondaryValueVariable: await safeParseStrAsync(
-          json['thumb_secondary_value_variable']?.toString(),
-        ),
-        thumbStyle: (await safeParseObjAsync(
-          DivDrawable.fromJson(json['thumb_style']),
-        ))!,
-        thumbTextStyle: await safeParseObjAsync(
-          DivSliderTextStyle.fromJson(json['thumb_text_style']),
-        ),
-        thumbValueVariable: await safeParseStrAsync(
-          json['thumb_value_variable']?.toString(),
-        ),
-        tickMarkActiveStyle: await safeParseObjAsync(
-          DivDrawable.fromJson(json['tick_mark_active_style']),
-        ),
-        tickMarkInactiveStyle: await safeParseObjAsync(
-          DivDrawable.fromJson(json['tick_mark_inactive_style']),
-        ),
-        tooltips: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
-          ),
-        ),
-        trackActiveStyle: (await safeParseObjAsync(
-          DivDrawable.fromJson(json['track_active_style']),
-        ))!,
-        trackInactiveStyle: (await safeParseObjAsync(
-          DivDrawable.fromJson(json['track_inactive_style']),
-        ))!,
-        transform: (await safeParseObjAsync(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        ))!,
-        transitionChange: await safeParseObjAsync(
-          DivChangeTransition.fromJson(json['transition_change']),
-        ),
-        transitionIn: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_in']),
-        ),
-        transitionOut: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_out']),
-        ),
-        transitionTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
-              v,
-              parse: DivTransitionTrigger.fromJson,
-            )!,
-          ),
-        ),
-        variableTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
-          ),
-        ),
-        variables: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
-          ),
-        ),
-        visibility: (await safeParseStrEnumExprAsync(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        ))!,
-        visibilityAction: await safeParseObjAsync(
-          DivVisibilityAction.fromJson(json['visibility_action']),
-        ),
-        visibilityActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
-          ),
-        ),
-        width: (await safeParseObjAsync(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await accessibility.preload(context);
-      await alignmentHorizontal?.preload(context);
-      await alignmentVertical?.preload(context);
-      await alpha.preload(context);
-      await safeFuturesWait(animators, (v) => v.preload(context));
-      await safeFuturesWait(background, (v) => v.preload(context));
-      await border.preload(context);
-      await columnSpan?.preload(context);
-      await safeFuturesWait(disappearActions, (v) => v.preload(context));
-      await safeFuturesWait(extensions, (v) => v.preload(context));
-      await focus?.preload(context);
-      await safeFuturesWait(functions, (v) => v.preload(context));
-      await height.preload(context);
-      await layoutProvider?.preload(context);
-      await margins.preload(context);
-      await maxValue.preload(context);
-      await minValue.preload(context);
-      await paddings.preload(context);
-      await safeFuturesWait(ranges, (v) => v.preload(context));
-      await reuseId?.preload(context);
-      await rowSpan?.preload(context);
-      await secondaryValueAccessibility.preload(context);
-      await safeFuturesWait(selectedActions, (v) => v.preload(context));
-      await thumbSecondaryStyle?.preload(context);
-      await thumbSecondaryTextStyle?.preload(context);
-      await thumbStyle.preload(context);
-      await thumbTextStyle?.preload(context);
-      await tickMarkActiveStyle?.preload(context);
-      await tickMarkInactiveStyle?.preload(context);
-      await safeFuturesWait(tooltips, (v) => v.preload(context));
-      await trackActiveStyle.preload(context);
-      await trackInactiveStyle.preload(context);
-      await transform.preload(context);
-      await transitionChange?.preload(context);
-      await transitionIn?.preload(context);
-      await transitionOut?.preload(context);
-      await safeFuturesWait(transitionTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variableTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variables, (v) => v.preload(context));
-      await visibility.preload(context);
-      await visibilityAction?.preload(context);
-      await safeFuturesWait(visibilityActions, (v) => v.preload(context));
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivSlider resolve(DivVariableContext context) {
+    accessibility.resolve(context);
+    alignmentHorizontal?.resolve(context);
+    alignmentVertical?.resolve(context);
+    alpha.resolve(context);
+    safeListResolve(animators, (v) => v.resolve(context));
+    safeListResolve(background, (v) => v.resolve(context));
+    border.resolve(context);
+    columnSpan?.resolve(context);
+    safeListResolve(disappearActions, (v) => v.resolve(context));
+    safeListResolve(extensions, (v) => v.resolve(context));
+    focus?.resolve(context);
+    safeListResolve(functions, (v) => v.resolve(context));
+    height.resolve(context);
+    layoutProvider?.resolve(context);
+    margins.resolve(context);
+    maxValue.resolve(context);
+    minValue.resolve(context);
+    paddings.resolve(context);
+    safeListResolve(ranges, (v) => v.resolve(context));
+    reuseId?.resolve(context);
+    rowSpan?.resolve(context);
+    secondaryValueAccessibility.resolve(context);
+    safeListResolve(selectedActions, (v) => v.resolve(context));
+    thumbSecondaryStyle?.resolve(context);
+    thumbSecondaryTextStyle?.resolve(context);
+    thumbStyle.resolve(context);
+    thumbTextStyle?.resolve(context);
+    tickMarkActiveStyle?.resolve(context);
+    tickMarkInactiveStyle?.resolve(context);
+    safeListResolve(tooltips, (v) => v.resolve(context));
+    trackActiveStyle.resolve(context);
+    trackInactiveStyle.resolve(context);
+    transform.resolve(context);
+    transitionChange?.resolve(context);
+    transitionIn?.resolve(context);
+    transitionOut?.resolve(context);
+    safeListResolve(transitionTriggers, (v) => v.resolve(context));
+    safeListResolve(variableTriggers, (v) => v.resolve(context));
+    safeListResolve(variables, (v) => v.resolve(context));
+    visibility.resolve(context);
+    visibilityAction?.resolve(context);
+    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    width.resolve(context);
+    return this;
   }
 }
 
-class DivSliderTextStyle extends Preloadable with EquatableMixin {
+class DivSliderTextStyle extends Resolvable with EquatableMixin {
   const DivSliderTextStyle({
     required this.fontSize,
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
@@ -1068,61 +831,19 @@ class DivSliderTextStyle extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivSliderTextStyle?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivSliderTextStyle(
-        fontSize: (await safeParseIntExprAsync(
-          json['font_size'],
-        ))!,
-        fontSizeUnit: (await safeParseStrEnumExprAsync(
-          json['font_size_unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.sp,
-        ))!,
-        fontWeight: (await safeParseStrEnumExprAsync(
-          json['font_weight'],
-          parse: DivFontWeight.fromJson,
-          fallback: DivFontWeight.regular,
-        ))!,
-        fontWeightValue: await safeParseIntExprAsync(
-          json['font_weight_value'],
-        ),
-        offset: await safeParseObjAsync(
-          DivPoint.fromJson(json['offset']),
-        ),
-        textColor: (await safeParseColorExprAsync(
-          json['text_color'],
-          fallback: const Color(0xFF000000),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await fontSize.preload(context);
-      await fontSizeUnit.preload(context);
-      await fontWeight.preload(context);
-      await fontWeightValue?.preload(context);
-      await offset?.preload(context);
-      await textColor.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivSliderTextStyle resolve(DivVariableContext context) {
+    fontSize.resolve(context);
+    fontSizeUnit.resolve(context);
+    fontWeight.resolve(context);
+    fontWeightValue?.resolve(context);
+    offset?.resolve(context);
+    textColor.resolve(context);
+    return this;
   }
 }
 
-class DivSliderRange extends Preloadable with EquatableMixin {
+class DivSliderRange extends Resolvable with EquatableMixin {
   const DivSliderRange({
     this.end,
     this.margins = const DivEdgeInsets(),
@@ -1204,48 +925,13 @@ class DivSliderRange extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivSliderRange?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivSliderRange(
-        end: await safeParseIntExprAsync(
-          json['end'],
-        ),
-        margins: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        start: await safeParseIntExprAsync(
-          json['start'],
-        ),
-        trackActiveStyle: await safeParseObjAsync(
-          DivDrawable.fromJson(json['track_active_style']),
-        ),
-        trackInactiveStyle: await safeParseObjAsync(
-          DivDrawable.fromJson(json['track_inactive_style']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await end?.preload(context);
-      await margins.preload(context);
-      await start?.preload(context);
-      await trackActiveStyle?.preload(context);
-      await trackInactiveStyle?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivSliderRange resolve(DivVariableContext context) {
+    end?.resolve(context);
+    margins.resolve(context);
+    start?.resolve(context);
+    trackActiveStyle?.resolve(context);
+    trackInactiveStyle?.resolve(context);
+    return this;
   }
 }

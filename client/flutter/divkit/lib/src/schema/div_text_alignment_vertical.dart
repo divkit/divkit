@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivTextAlignmentVertical implements Preloadable {
+enum DivTextAlignmentVertical implements Resolvable {
   top('top'),
   center('center'),
   bottom('bottom'),
@@ -56,9 +56,6 @@ enum DivTextAlignmentVertical implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivTextAlignmentVertical? fromJson(
     String? json,
   ) {
@@ -82,26 +79,6 @@ enum DivTextAlignmentVertical implements Preloadable {
     }
   }
 
-  static Future<DivTextAlignmentVertical?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'top':
-          return DivTextAlignmentVertical.top;
-        case 'center':
-          return DivTextAlignmentVertical.center;
-        case 'bottom':
-          return DivTextAlignmentVertical.bottom;
-        case 'baseline':
-          return DivTextAlignmentVertical.baseline;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivTextAlignmentVertical resolve(DivVariableContext context) => this;
 }

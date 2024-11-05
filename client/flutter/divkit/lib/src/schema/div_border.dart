@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stroke around the element.
-class DivBorder extends Preloadable with EquatableMixin {
+class DivBorder extends Resolvable with EquatableMixin {
   const DivBorder({
     this.cornerRadius,
     this.cornersRadius,
@@ -89,48 +89,13 @@ class DivBorder extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivBorder?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivBorder(
-        cornerRadius: await safeParseIntExprAsync(
-          json['corner_radius'],
-        ),
-        cornersRadius: await safeParseObjAsync(
-          DivCornersRadius.fromJson(json['corners_radius']),
-        ),
-        hasShadow: (await safeParseBoolExprAsync(
-          json['has_shadow'],
-          fallback: false,
-        ))!,
-        shadow: await safeParseObjAsync(
-          DivShadow.fromJson(json['shadow']),
-        ),
-        stroke: await safeParseObjAsync(
-          DivStroke.fromJson(json['stroke']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await cornerRadius?.preload(context);
-      await cornersRadius?.preload(context);
-      await hasShadow.preload(context);
-      await shadow?.preload(context);
-      await stroke?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivBorder resolve(DivVariableContext context) {
+    cornerRadius?.resolve(context);
+    cornersRadius?.resolve(context);
+    hasShadow.resolve(context);
+    shadow?.resolve(context);
+    stroke?.resolve(context);
+    return this;
   }
 }

@@ -11,8 +11,8 @@ import 'package:divkit/src/schema/url_value.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivTypedValue extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivTypedValue extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -195,9 +195,6 @@ class DivTypedValue extends Preloadable with EquatableMixin {
 
   bool get isUrlValue => _index == 7;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivTypedValue? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -245,50 +242,9 @@ class DivTypedValue extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTypedValue?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case ArrayValue.type:
-          return DivTypedValue.arrayValue(
-            (await ArrayValue.parse(json))!,
-          );
-        case BooleanValue.type:
-          return DivTypedValue.booleanValue(
-            (await BooleanValue.parse(json))!,
-          );
-        case ColorValue.type:
-          return DivTypedValue.colorValue(
-            (await ColorValue.parse(json))!,
-          );
-        case DictValue.type:
-          return DivTypedValue.dictValue(
-            (await DictValue.parse(json))!,
-          );
-        case IntegerValue.type:
-          return DivTypedValue.integerValue(
-            (await IntegerValue.parse(json))!,
-          );
-        case NumberValue.type:
-          return DivTypedValue.numberValue(
-            (await NumberValue.parse(json))!,
-          );
-        case StringValue.type:
-          return DivTypedValue.stringValue(
-            (await StringValue.parse(json))!,
-          );
-        case UrlValue.type:
-          return DivTypedValue.urlValue(
-            (await UrlValue.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivTypedValue resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

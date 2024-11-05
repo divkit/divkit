@@ -19,6 +19,7 @@ const formatFunctions = <String, RuntimeFunction>{
   'padEnd': padEnd,
   'len': len,
   'testRegex': testRegex,
+  'encodeRegex': encodeRegex,
 };
 
 String _calcPad(String val, int len, String pad) {
@@ -148,4 +149,11 @@ int len(List args) {
 
 bool testRegex(List args) {
   return _testRegex(cast<String>(args[0]), cast<String>(args[1]));
+}
+
+final _regex = RegExp("[.*+?^\${}()|\\[\\]\\\\]");
+
+String encodeRegex(List args) {
+  return cast<String>(args[0])
+      .replaceAllMapped(_regex, (match) => "\\${match.group(0)}");
 }

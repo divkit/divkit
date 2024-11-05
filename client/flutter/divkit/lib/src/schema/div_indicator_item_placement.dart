@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_stretch_indicator_item_placement.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivIndicatorItemPlacement extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivIndicatorItemPlacement extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -73,9 +73,6 @@ class DivIndicatorItemPlacement extends Preloadable with EquatableMixin {
 
   bool get isDivStretchIndicatorItemPlacement => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivIndicatorItemPlacement? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -99,26 +96,9 @@ class DivIndicatorItemPlacement extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivIndicatorItemPlacement?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivDefaultIndicatorItemPlacement.type:
-          return DivIndicatorItemPlacement.divDefaultIndicatorItemPlacement(
-            (await DivDefaultIndicatorItemPlacement.parse(json))!,
-          );
-        case DivStretchIndicatorItemPlacement.type:
-          return DivIndicatorItemPlacement.divStretchIndicatorItemPlacement(
-            (await DivStretchIndicatorItemPlacement.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivIndicatorItemPlacement resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

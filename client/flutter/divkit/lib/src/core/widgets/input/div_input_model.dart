@@ -1,6 +1,8 @@
 import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/converters/alignment.dart';
+import 'package:divkit/src/core/converters/converters.dart';
+import 'package:divkit/src/core/converters/text_specific.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -32,213 +34,6 @@ class DivInputModel with EquatableMixin {
     this.onForwardFocus,
   });
 
-  static DivInputModel? value(
-    BuildContext buildContext,
-    DivInput data,
-    TextEditingController controller,
-  ) {
-    try {
-      final divScalingModel = read<DivScalingModel>(buildContext);
-      final viewScale = divScalingModel?.viewScale ?? 1;
-      final textScale = divScalingModel?.textScale ?? 1;
-
-      final variables = read<DivContext>(buildContext)!.variableManager;
-
-      controller.addListener(() {
-        if (variables.context.current[data.textVariable] != controller.text) {
-          variables.updateVariable(data.textVariable, controller.text);
-        }
-      });
-
-      final styleUnit = data.fontSizeUnit.requireValue.asPx;
-      final lineHeight = data.lineHeight?.requireValue;
-      final fontFamily = data.fontFamily?.requireValue;
-      final fontSize = data.fontSize.value!.toDouble() * textScale;
-
-      final fontProvider = read<DivFontProvider>(buildContext)!;
-      final fontAsset = fontProvider.resolve(fontFamily);
-
-      final style = TextStyle(
-        package: fontAsset.package,
-        fontFamily: fontAsset.fontFamily,
-        fontFamilyFallback: fontAsset.fontFamilyFallback,
-        fontSize: fontSize * styleUnit,
-        color: data.textColor.value!,
-        height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
-        fontWeight: data.fontWeight.passValue(),
-      );
-
-      final hintStyle = style.copyWith(
-        color: data.hintColor.requireValue,
-      );
-
-      final keyboardType = data.keyboardType.requireValue;
-      if (variables.context.current[data.textVariable] != controller.text) {
-        controller.text = variables.context.current[data.textVariable] ?? '';
-      }
-
-      final newFocusNodeId = data.focus?.nextFocusIds?.forward?.requireValue;
-
-      final alignment = PassDivTextAlignment(
-        data.textAlignmentVertical,
-        data.textAlignmentHorizontal,
-      );
-
-      final obscureText = keyboardType == DivInputKeyboardType.password;
-
-      return DivInputModel(
-        textStyle: style,
-        hintStyle: hintStyle,
-        hintText: data.hintText?.requireValue,
-        maxLines: obscureText ? 1 : data.maxVisibleLines?.requireValue,
-        obscureText: obscureText,
-        keyboardType: keyboardType.map(
-          singleLineText: () => TextInputType.text,
-          multiLineText: () => TextInputType.multiline,
-          phone: () => TextInputType.phone,
-          number: () => TextInputType.number,
-          email: () => TextInputType.emailAddress,
-          uri: () => TextInputType.url,
-          password: () => null,
-        ),
-        onForwardFocus: newFocusNodeId != null
-            ? () => _onForwardFocus(buildContext, newFocusNodeId)
-            : null,
-        onBlurActions: data.focus?.valueOnBlurActions() ?? [],
-        onFocusActions: data.focus?.valueOnFocusActions() ?? [],
-        textAlign: alignment.valueTextAlign(),
-        textAlignVertical: alignment.valueTextAlignVertical(),
-      );
-    } catch (e, st) {
-      logger.warning(
-        'Expression cache is corrupted! Instant rendering is not available for div',
-        error: e,
-        stackTrace: st,
-      );
-      return null;
-    }
-  }
-
-  static Stream<DivInputModel> from(
-    BuildContext buildContext,
-    DivInput data,
-    TextEditingController controller,
-  ) {
-    final variables = watch<DivContext>(buildContext)!.variableManager;
-
-    final divScalingModel = watch<DivScalingModel>(buildContext);
-    final viewScale = divScalingModel?.viewScale ?? 1;
-    final textScale = divScalingModel?.textScale ?? 1;
-
-    final fontProvider = watch<DivFontProvider>(buildContext)!;
-
-    return variables.watch<DivInputModel>((context) async {
-      final fontFamily = await data.fontFamily?.resolveValue(context: context);
-      final styleUnit = (await data.fontSizeUnit.resolveValue(
-        context: context,
-      ))
-          .asPx;
-      final lineHeight = await data.lineHeight?.resolveValue(
-        context: context,
-      );
-      final fontSize = (await data.fontSize.resolveValue(
-            context: context,
-          ))
-              .toDouble() *
-          textScale;
-
-      final fontAsset = fontProvider.resolve(fontFamily);
-
-      final style = TextStyle(
-        package: fontAsset.package,
-        fontFamily: fontAsset.fontFamily,
-        fontFamilyFallback: fontAsset.fontFamilyFallback,
-        fontSize: fontSize * styleUnit,
-        color: await data.textColor.resolveValue(
-          context: context,
-        ),
-        height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
-        fontWeight: await data.fontWeight.resolve(
-          context: context,
-        ),
-      );
-
-      final hintStyle = style.copyWith(
-        color: await data.hintColor.resolveValue(
-          context: context,
-        ),
-      );
-
-      final keyboardType = await data.keyboardType.resolveValue(
-        context: context,
-      );
-      if (variables.context.current[data.textVariable] != controller.text) {
-        controller.text = variables.context.current[data.textVariable] ?? '';
-      }
-
-      final newFocusNodeId =
-          await data.focus?.nextFocusIds?.forward?.resolveValue(
-        context: context,
-      );
-
-      final alignment = PassDivTextAlignment(
-        data.textAlignmentVertical,
-        data.textAlignmentHorizontal,
-      );
-
-      final obscureText = keyboardType == DivInputKeyboardType.password;
-
-      return DivInputModel(
-        textStyle: style,
-        hintStyle: hintStyle,
-        hintText: await data.hintText?.resolveValue(
-          context: context,
-        ),
-        maxLines: obscureText
-            ? 1
-            : await data.maxVisibleLines?.resolveValue(
-                context: context,
-              ),
-        obscureText: obscureText,
-        keyboardType: keyboardType.map(
-          singleLineText: () => TextInputType.text,
-          multiLineText: () => TextInputType.multiline,
-          phone: () => TextInputType.phone,
-          number: () => TextInputType.number,
-          email: () => TextInputType.emailAddress,
-          uri: () => TextInputType.url,
-          password: () => null,
-        ),
-        onForwardFocus: newFocusNodeId != null
-            ? () => _onForwardFocus(buildContext, newFocusNodeId)
-            : null,
-        onBlurActions: await data.focus?.resolveOnBlurActions(
-              context: context,
-            ) ??
-            [],
-        onFocusActions: await data.focus?.resolveOnFocusActions(
-              context: context,
-            ) ??
-            [],
-        textAlign: await alignment.resolveTextAlign(
-          context: context,
-        ),
-        textAlignVertical: await alignment.resolveTextAlignVertical(
-          context: context,
-        ),
-      );
-    }).distinct();
-  }
-
-  static void _onForwardFocus(BuildContext context, String newFocusNodeId) {
-    if (context.mounted) {
-      final focusNode = FocusScope.of(context).getById(newFocusNodeId);
-      if (focusNode != null) {
-        focusNode.requestFocus();
-      }
-    }
-  }
-
   @override
   List<Object?> get props => [
         textStyle,
@@ -253,4 +48,85 @@ class DivInputModel with EquatableMixin {
         textAlignVertical,
         obscureText,
       ];
+}
+
+extension DivInputBinder on DivInput {
+  DivInputModel bind(
+    BuildContext context,
+    TextEditingController controller,
+  ) {
+    final divContext = read<DivContext>(context)!;
+
+    final viewScale = divContext.scale.view;
+    final textScale = divContext.scale.text;
+    final variables = divContext.variableManager;
+
+    final styleUnit = fontSizeUnit.value.asPx;
+    final lineHeight = this.lineHeight?.value;
+    final fontFamily = this.fontFamily?.value;
+    final fontSize = this.fontSize.value.toDouble() * textScale;
+
+    final fontAsset = divContext.fontProvider.resolve(fontFamily);
+
+    final style = TextStyle(
+      package: fontAsset.package,
+      fontFamily: fontAsset.fontFamily,
+      fontFamilyFallback: fontAsset.fontFamilyFallback,
+      fontSize: fontSize * styleUnit,
+      color: textColor.value,
+      height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
+      fontWeight: fontWeight.value.convert(),
+    );
+
+    final hintStyle = style.copyWith(
+      color: hintColor.value,
+    );
+
+    final keyboardType = this.keyboardType.value;
+    if (variables.context.current[textVariable] != controller.text) {
+      controller.text = variables.context.current[textVariable] ?? '';
+    }
+
+    final newFocusNodeId = focus?.nextFocusIds?.forward?.value;
+
+    final alignment = DivTextAlignmentConverter(
+      textAlignmentVertical,
+      textAlignmentHorizontal,
+    );
+
+    final obscureText = keyboardType == DivInputKeyboardType.password;
+
+    return DivInputModel(
+      textStyle: style,
+      hintStyle: hintStyle,
+      hintText: hintText?.value,
+      maxLines: obscureText ? 1 : maxVisibleLines?.value,
+      obscureText: obscureText,
+      keyboardType: keyboardType.map(
+        singleLineText: () => TextInputType.text,
+        multiLineText: () => TextInputType.multiline,
+        phone: () => TextInputType.phone,
+        number: () => TextInputType.number,
+        email: () => TextInputType.emailAddress,
+        uri: () => TextInputType.url,
+        password: () => null,
+      ),
+      onForwardFocus: newFocusNodeId != null
+          ? () => _onForwardFocus(divContext.buildContext, newFocusNodeId)
+          : null,
+      onBlurActions: focus?.onBlur?.map((e) => e.convert()).toList() ?? [],
+      onFocusActions: focus?.onFocus?.map((e) => e.convert()).toList() ?? [],
+      textAlign: alignment.convertHorizontal(),
+      textAlignVertical: alignment.convertVertical(),
+    );
+  }
+
+  static void _onForwardFocus(BuildContext context, String newFocusNodeId) {
+    if (context.mounted) {
+      final focusNode = FocusScope.of(context).getById(newFocusNodeId);
+      if (focusNode != null) {
+        focusNode.requestFocus();
+      }
+    }
+  }
 }

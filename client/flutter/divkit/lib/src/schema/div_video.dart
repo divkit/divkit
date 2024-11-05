@@ -33,7 +33,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Video.
-class DivVideo extends Preloadable with EquatableMixin implements DivBase {
+class DivVideo extends Resolvable with EquatableMixin implements DivBase {
   const DivVideo({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -720,320 +720,52 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
     }
   }
 
-  static Future<DivVideo?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivVideo(
-        accessibility: (await safeParseObjAsync(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        ))!,
-        alignmentHorizontal: await safeParseStrEnumExprAsync(
-          json['alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-        ),
-        alignmentVertical: await safeParseStrEnumExprAsync(
-          json['alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-        ),
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 1.0,
-        ))!,
-        animators: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
-          ),
-        ),
-        aspect: await safeParseObjAsync(
-          DivAspect.fromJson(json['aspect']),
-        ),
-        autostart: (await safeParseBoolExprAsync(
-          json['autostart'],
-          fallback: false,
-        ))!,
-        background: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
-          ),
-        ),
-        border: (await safeParseObjAsync(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        ))!,
-        bufferingActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['buffering_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        columnSpan: await safeParseIntExprAsync(
-          json['column_span'],
-        ),
-        disappearActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
-          ),
-        ),
-        elapsedTimeVariable: await safeParseStrAsync(
-          json['elapsed_time_variable']?.toString(),
-        ),
-        endActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['end_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        extensions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
-          ),
-        ),
-        fatalActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['fatal_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        focus: await safeParseObjAsync(
-          DivFocus.fromJson(json['focus']),
-        ),
-        functions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
-          ),
-        ),
-        height: (await safeParseObjAsync(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
-          ),
-        ))!,
-        id: await safeParseStrAsync(
-          json['id']?.toString(),
-        ),
-        layoutProvider: await safeParseObjAsync(
-          DivLayoutProvider.fromJson(json['layout_provider']),
-        ),
-        margins: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        muted: (await safeParseBoolExprAsync(
-          json['muted'],
-          fallback: false,
-        ))!,
-        paddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        pauseActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['pause_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        playerSettingsPayload: await safeParseMapAsync(
-          json['player_settings_payload'],
-        ),
-        preloadRequired: (await safeParseBoolExprAsync(
-          json['preload_required'],
-          fallback: false,
-        ))!,
-        preview: await safeParseStrExprAsync(
-          json['preview']?.toString(),
-        ),
-        repeatable: (await safeParseBoolExprAsync(
-          json['repeatable'],
-          fallback: false,
-        ))!,
-        resumeActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['resume_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        reuseId: await safeParseStrExprAsync(
-          json['reuse_id']?.toString(),
-        ),
-        rowSpan: await safeParseIntExprAsync(
-          json['row_span'],
-        ),
-        scale: (await safeParseStrEnumExprAsync(
-          json['scale'],
-          parse: DivVideoScale.fromJson,
-          fallback: DivVideoScale.fit,
-        ))!,
-        selectedActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        tooltips: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
-          ),
-        ),
-        transform: (await safeParseObjAsync(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        ))!,
-        transitionChange: await safeParseObjAsync(
-          DivChangeTransition.fromJson(json['transition_change']),
-        ),
-        transitionIn: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_in']),
-        ),
-        transitionOut: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_out']),
-        ),
-        transitionTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
-              v,
-              parse: DivTransitionTrigger.fromJson,
-            )!,
-          ),
-        ),
-        variableTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
-          ),
-        ),
-        variables: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
-          ),
-        ),
-        videoSources: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['video_sources'],
-            (v) => safeParseObj(
-              DivVideoSource.fromJson(v),
-            )!,
-          ),
-        ))!,
-        visibility: (await safeParseStrEnumExprAsync(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        ))!,
-        visibilityAction: await safeParseObjAsync(
-          DivVisibilityAction.fromJson(json['visibility_action']),
-        ),
-        visibilityActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
-          ),
-        ),
-        width: (await safeParseObjAsync(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await accessibility.preload(context);
-      await alignmentHorizontal?.preload(context);
-      await alignmentVertical?.preload(context);
-      await alpha.preload(context);
-      await safeFuturesWait(animators, (v) => v.preload(context));
-      await aspect?.preload(context);
-      await autostart.preload(context);
-      await safeFuturesWait(background, (v) => v.preload(context));
-      await border.preload(context);
-      await safeFuturesWait(bufferingActions, (v) => v.preload(context));
-      await columnSpan?.preload(context);
-      await safeFuturesWait(disappearActions, (v) => v.preload(context));
-      await safeFuturesWait(endActions, (v) => v.preload(context));
-      await safeFuturesWait(extensions, (v) => v.preload(context));
-      await safeFuturesWait(fatalActions, (v) => v.preload(context));
-      await focus?.preload(context);
-      await safeFuturesWait(functions, (v) => v.preload(context));
-      await height.preload(context);
-      await layoutProvider?.preload(context);
-      await margins.preload(context);
-      await muted.preload(context);
-      await paddings.preload(context);
-      await safeFuturesWait(pauseActions, (v) => v.preload(context));
-      await preloadRequired.preload(context);
-      await preview?.preload(context);
-      await repeatable.preload(context);
-      await safeFuturesWait(resumeActions, (v) => v.preload(context));
-      await reuseId?.preload(context);
-      await rowSpan?.preload(context);
-      await scale.preload(context);
-      await safeFuturesWait(selectedActions, (v) => v.preload(context));
-      await safeFuturesWait(tooltips, (v) => v.preload(context));
-      await transform.preload(context);
-      await transitionChange?.preload(context);
-      await transitionIn?.preload(context);
-      await transitionOut?.preload(context);
-      await safeFuturesWait(transitionTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variableTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variables, (v) => v.preload(context));
-      await safeFuturesWait(videoSources, (v) => v.preload(context));
-      await visibility.preload(context);
-      await visibilityAction?.preload(context);
-      await safeFuturesWait(visibilityActions, (v) => v.preload(context));
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivVideo resolve(DivVariableContext context) {
+    accessibility.resolve(context);
+    alignmentHorizontal?.resolve(context);
+    alignmentVertical?.resolve(context);
+    alpha.resolve(context);
+    safeListResolve(animators, (v) => v.resolve(context));
+    aspect?.resolve(context);
+    autostart.resolve(context);
+    safeListResolve(background, (v) => v.resolve(context));
+    border.resolve(context);
+    safeListResolve(bufferingActions, (v) => v.resolve(context));
+    columnSpan?.resolve(context);
+    safeListResolve(disappearActions, (v) => v.resolve(context));
+    safeListResolve(endActions, (v) => v.resolve(context));
+    safeListResolve(extensions, (v) => v.resolve(context));
+    safeListResolve(fatalActions, (v) => v.resolve(context));
+    focus?.resolve(context);
+    safeListResolve(functions, (v) => v.resolve(context));
+    height.resolve(context);
+    layoutProvider?.resolve(context);
+    margins.resolve(context);
+    muted.resolve(context);
+    paddings.resolve(context);
+    safeListResolve(pauseActions, (v) => v.resolve(context));
+    preloadRequired.resolve(context);
+    preview?.resolve(context);
+    repeatable.resolve(context);
+    safeListResolve(resumeActions, (v) => v.resolve(context));
+    reuseId?.resolve(context);
+    rowSpan?.resolve(context);
+    scale.resolve(context);
+    safeListResolve(selectedActions, (v) => v.resolve(context));
+    safeListResolve(tooltips, (v) => v.resolve(context));
+    transform.resolve(context);
+    transitionChange?.resolve(context);
+    transitionIn?.resolve(context);
+    transitionOut?.resolve(context);
+    safeListResolve(transitionTriggers, (v) => v.resolve(context));
+    safeListResolve(variableTriggers, (v) => v.resolve(context));
+    safeListResolve(variables, (v) => v.resolve(context));
+    safeListResolve(videoSources, (v) => v.resolve(context));
+    visibility.resolve(context);
+    visibilityAction?.resolve(context);
+    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    width.resolve(context);
+    return this;
   }
 }

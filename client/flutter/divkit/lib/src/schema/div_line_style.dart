@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivLineStyle implements Preloadable {
+enum DivLineStyle implements Resolvable {
   none('none'),
   single('single');
 
@@ -38,9 +38,6 @@ enum DivLineStyle implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivLineStyle? fromJson(
     String? json,
   ) {
@@ -60,22 +57,6 @@ enum DivLineStyle implements Preloadable {
     }
   }
 
-  static Future<DivLineStyle?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'none':
-          return DivLineStyle.none;
-        case 'single':
-          return DivLineStyle.single;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivLineStyle resolve(DivVariableContext context) => this;
 }

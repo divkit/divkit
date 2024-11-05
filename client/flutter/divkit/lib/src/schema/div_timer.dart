@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Timer.
-class DivTimer extends Preloadable with EquatableMixin {
+class DivTimer extends Resolvable with EquatableMixin {
   const DivTimer({
     this.duration = const ValueExpression(0),
     this.endActions,
@@ -108,60 +108,12 @@ class DivTimer extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTimer?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTimer(
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-          fallback: 0,
-        ))!,
-        endActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['end_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        id: (await safeParseStrAsync(
-          json['id']?.toString(),
-        ))!,
-        tickActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['tick_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        tickInterval: await safeParseIntExprAsync(
-          json['tick_interval'],
-        ),
-        valueVariable: await safeParseStrAsync(
-          json['value_variable']?.toString(),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await duration.preload(context);
-      await safeFuturesWait(endActions, (v) => v.preload(context));
-      await safeFuturesWait(tickActions, (v) => v.preload(context));
-      await tickInterval?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTimer resolve(DivVariableContext context) {
+    duration.resolve(context);
+    safeListResolve(endActions, (v) => v.resolve(context));
+    safeListResolve(tickActions, (v) => v.resolve(context));
+    tickInterval?.resolve(context);
+    return this;
   }
 }

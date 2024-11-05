@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element animation parameters.
-class DivAnimation extends Preloadable with EquatableMixin {
+class DivAnimation extends Resolvable with EquatableMixin {
   const DivAnimation({
     this.duration = const ValueExpression(300),
     this.endValue,
@@ -138,77 +138,20 @@ class DivAnimation extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivAnimation?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivAnimation(
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-          fallback: 300,
-        ))!,
-        endValue: await safeParseDoubleExprAsync(
-          json['end_value'],
-        ),
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.spring,
-        ))!,
-        items: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['items'],
-            (v) => safeParseObj(
-              DivAnimation.fromJson(v),
-            )!,
-          ),
-        ),
-        name: (await safeParseStrEnumExprAsync(
-          json['name'],
-          parse: DivAnimationName.fromJson,
-        ))!,
-        repeat: (await safeParseObjAsync(
-          DivCount.fromJson(json['repeat']),
-          fallback: const DivCount.divInfinityCount(
-            DivInfinityCount(),
-          ),
-        ))!,
-        startDelay: (await safeParseIntExprAsync(
-          json['start_delay'],
-          fallback: 0,
-        ))!,
-        startValue: await safeParseDoubleExprAsync(
-          json['start_value'],
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await duration.preload(context);
-      await endValue?.preload(context);
-      await interpolator.preload(context);
-      await safeFuturesWait(items, (v) => v.preload(context));
-      await name.preload(context);
-      await repeat.preload(context);
-      await startDelay.preload(context);
-      await startValue?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivAnimation resolve(DivVariableContext context) {
+    duration.resolve(context);
+    endValue?.resolve(context);
+    interpolator.resolve(context);
+    name.resolve(context);
+    repeat.resolve(context);
+    startDelay.resolve(context);
+    startValue?.resolve(context);
+    return this;
   }
 }
 
-enum DivAnimationName implements Preloadable {
+enum DivAnimationName implements Resolvable {
   fade('fade'),
   translate('translate'),
   scale('scale'),
@@ -280,9 +223,6 @@ enum DivAnimationName implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivAnimationName? fromJson(
     String? json,
   ) {
@@ -310,30 +250,6 @@ enum DivAnimationName implements Preloadable {
     }
   }
 
-  static Future<DivAnimationName?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'fade':
-          return DivAnimationName.fade;
-        case 'translate':
-          return DivAnimationName.translate;
-        case 'scale':
-          return DivAnimationName.scale;
-        case 'native':
-          return DivAnimationName.native;
-        case 'set':
-          return DivAnimationName.set;
-        case 'no_animation':
-          return DivAnimationName.noAnimation;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivAnimationName resolve(DivVariableContext context) => this;
 }

@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Accessibility settings.
-class DivAccessibility extends Preloadable with EquatableMixin {
+class DivAccessibility extends Resolvable with EquatableMixin {
   const DivAccessibility({
     this.description,
     this.hint,
@@ -102,61 +102,19 @@ class DivAccessibility extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivAccessibility?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivAccessibility(
-        description: await safeParseStrExprAsync(
-          json['description']?.toString(),
-        ),
-        hint: await safeParseStrExprAsync(
-          json['hint']?.toString(),
-        ),
-        mode: (await safeParseStrEnumExprAsync(
-          json['mode'],
-          parse: DivAccessibilityMode.fromJson,
-          fallback: DivAccessibilityMode.default_,
-        ))!,
-        muteAfterAction: (await safeParseBoolExprAsync(
-          json['mute_after_action'],
-          fallback: false,
-        ))!,
-        stateDescription: await safeParseStrExprAsync(
-          json['state_description']?.toString(),
-        ),
-        type: (await safeParseStrEnumAsync(
-          json['type'],
-          parse: DivAccessibilityType.fromJson,
-          fallback: DivAccessibilityType.auto,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await description?.preload(context);
-      await hint?.preload(context);
-      await mode.preload(context);
-      await muteAfterAction.preload(context);
-      await stateDescription?.preload(context);
-      await type.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivAccessibility resolve(DivVariableContext context) {
+    description?.resolve(context);
+    hint?.resolve(context);
+    mode.resolve(context);
+    muteAfterAction.resolve(context);
+    stateDescription?.resolve(context);
+    type.resolve(context);
+    return this;
   }
 }
 
-enum DivAccessibilityType implements Preloadable {
+enum DivAccessibilityType implements Resolvable {
   none('none'),
   button('button'),
   image('image'),
@@ -264,9 +222,6 @@ enum DivAccessibilityType implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivAccessibilityType? fromJson(
     String? json,
   ) {
@@ -302,43 +257,11 @@ enum DivAccessibilityType implements Preloadable {
     }
   }
 
-  static Future<DivAccessibilityType?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'none':
-          return DivAccessibilityType.none;
-        case 'button':
-          return DivAccessibilityType.button;
-        case 'image':
-          return DivAccessibilityType.image;
-        case 'text':
-          return DivAccessibilityType.text;
-        case 'edit_text':
-          return DivAccessibilityType.editText;
-        case 'header':
-          return DivAccessibilityType.header;
-        case 'tab_bar':
-          return DivAccessibilityType.tabBar;
-        case 'list':
-          return DivAccessibilityType.list;
-        case 'select':
-          return DivAccessibilityType.select;
-        case 'auto':
-          return DivAccessibilityType.auto;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivAccessibilityType resolve(DivVariableContext context) => this;
 }
 
-enum DivAccessibilityMode implements Preloadable {
+enum DivAccessibilityMode implements Resolvable {
   default_('default'),
   merge('merge'),
   exclude('exclude');
@@ -383,9 +306,6 @@ enum DivAccessibilityMode implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivAccessibilityMode? fromJson(
     String? json,
   ) {
@@ -407,24 +327,6 @@ enum DivAccessibilityMode implements Preloadable {
     }
   }
 
-  static Future<DivAccessibilityMode?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'default':
-          return DivAccessibilityMode.default_;
-        case 'merge':
-          return DivAccessibilityMode.merge;
-        case 'exclude':
-          return DivAccessibilityMode.exclude;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivAccessibilityMode resolve(DivVariableContext context) => this;
 }

@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets corner rounding.
-class DivCornersRadius extends Preloadable with EquatableMixin {
+class DivCornersRadius extends Resolvable with EquatableMixin {
   const DivCornersRadius({
     this.bottomLeft,
     this.bottomRight,
@@ -76,43 +76,12 @@ class DivCornersRadius extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivCornersRadius?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivCornersRadius(
-        bottomLeft: await safeParseIntExprAsync(
-          json['bottom-left'],
-        ),
-        bottomRight: await safeParseIntExprAsync(
-          json['bottom-right'],
-        ),
-        topLeft: await safeParseIntExprAsync(
-          json['top-left'],
-        ),
-        topRight: await safeParseIntExprAsync(
-          json['top-right'],
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await bottomLeft?.preload(context);
-      await bottomRight?.preload(context);
-      await topLeft?.preload(context);
-      await topRight?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivCornersRadius resolve(DivVariableContext context) {
+    bottomLeft?.resolve(context);
+    bottomRight?.resolve(context);
+    topLeft?.resolve(context);
+    topRight?.resolve(context);
+    return this;
   }
 }

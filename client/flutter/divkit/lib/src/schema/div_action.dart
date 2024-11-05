@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// It defines an action when clicking on an element.
-class DivAction extends Preloadable with EquatableMixin {
+class DivAction extends Resolvable with EquatableMixin {
   const DivAction({
     this.downloadCallbacks,
     this.isEnabled = const ValueExpression(true),
@@ -145,75 +145,22 @@ class DivAction extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivAction?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivAction(
-        downloadCallbacks: await safeParseObjAsync(
-          DivDownloadCallbacks.fromJson(json['download_callbacks']),
-        ),
-        isEnabled: (await safeParseBoolExprAsync(
-          json['is_enabled'],
-          fallback: true,
-        ))!,
-        logId: (await safeParseStrExprAsync(
-          json['log_id']?.toString(),
-        ))!,
-        logUrl: await safeParseUriExprAsync(json['log_url']),
-        menuItems: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['menu_items'],
-            (v) => safeParseObj(
-              DivActionMenuItem.fromJson(v),
-            )!,
-          ),
-        ),
-        payload: await safeParseMapAsync(
-          json['payload'],
-        ),
-        referer: await safeParseUriExprAsync(json['referer']),
-        scopeId: await safeParseStrAsync(
-          json['scope_id']?.toString(),
-        ),
-        target: await safeParseStrEnumExprAsync(
-          json['target'],
-          parse: DivActionTarget.fromJson,
-        ),
-        typed: await safeParseObjAsync(
-          DivActionTyped.fromJson(json['typed']),
-        ),
-        url: await safeParseUriExprAsync(json['url']),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await downloadCallbacks?.preload(context);
-      await isEnabled.preload(context);
-      await logId.preload(context);
-      await logUrl?.preload(context);
-      await safeFuturesWait(menuItems, (v) => v.preload(context));
-      await referer?.preload(context);
-      await target?.preload(context);
-      await typed?.preload(context);
-      await url?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivAction resolve(DivVariableContext context) {
+    downloadCallbacks?.resolve(context);
+    isEnabled.resolve(context);
+    logId.resolve(context);
+    logUrl?.resolve(context);
+    safeListResolve(menuItems, (v) => v.resolve(context));
+    referer?.resolve(context);
+    target?.resolve(context);
+    typed?.resolve(context);
+    url?.resolve(context);
+    return this;
   }
 }
 
-class DivActionMenuItem extends Preloadable with EquatableMixin {
+class DivActionMenuItem extends Resolvable with EquatableMixin {
   const DivActionMenuItem({
     this.action,
     this.actions,
@@ -275,49 +222,16 @@ class DivActionMenuItem extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionMenuItem?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionMenuItem(
-        action: await safeParseObjAsync(
-          DivAction.fromJson(json['action']),
-        ),
-        actions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        text: (await safeParseStrExprAsync(
-          json['text']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await action?.preload(context);
-      await safeFuturesWait(actions, (v) => v.preload(context));
-      await text.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionMenuItem resolve(DivVariableContext context) {
+    action?.resolve(context);
+    safeListResolve(actions, (v) => v.resolve(context));
+    text.resolve(context);
+    return this;
   }
 }
 
-enum DivActionTarget implements Preloadable {
+enum DivActionTarget implements Resolvable {
   self('_self'),
   blank('_blank');
 
@@ -353,9 +267,6 @@ enum DivActionTarget implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivActionTarget? fromJson(
     String? json,
   ) {
@@ -375,22 +286,6 @@ enum DivActionTarget implements Preloadable {
     }
   }
 
-  static Future<DivActionTarget?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case '_self':
-          return DivActionTarget.self;
-        case '_blank':
-          return DivActionTarget.blank;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivActionTarget resolve(DivVariableContext context) => this;
 }

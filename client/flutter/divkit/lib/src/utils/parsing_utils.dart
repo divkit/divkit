@@ -5,6 +5,7 @@ import 'package:divkit/divkit.dart';
 export 'dart:ui' show Color;
 
 export 'package:divkit/src/core/expression/expression.dart';
+export 'package:divkit/src/core/variable/variable_context.dart';
 
 dynamic Function(dynamic source) safeParseNamed(String? name) {
   switch (name) {
@@ -68,6 +69,25 @@ Future<void> safeFuturesWait(
         await waiter(l);
       } catch (e, st) {
         logger.warning("Not wait on $l", error: e, stackTrace: st);
+      }
+    }
+  }
+}
+
+void safeListResolve(
+  dynamic list,
+  Function(dynamic) resolve,
+) async {
+  if (list == null) {
+    return;
+  }
+
+  if (list is List<dynamic>) {
+    for (final l in list) {
+      try {
+        resolve(l);
+      } catch (e, st) {
+        logger.warning("Not resolve $l", error: e, stackTrace: st);
       }
     }
   }

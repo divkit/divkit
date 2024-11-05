@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Image in 9-patch format (https://developer.android.com/studio/write/draw9patch).
-class DivNinePatchBackground extends Preloadable with EquatableMixin {
+class DivNinePatchBackground extends Resolvable with EquatableMixin {
   const DivNinePatchBackground({
     required this.imageUrl,
     this.insets = const DivAbsoluteEdgeInsets(),
@@ -53,34 +53,10 @@ class DivNinePatchBackground extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivNinePatchBackground?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivNinePatchBackground(
-        imageUrl: (await safeParseUriExprAsync(json['image_url']))!,
-        insets: (await safeParseObjAsync(
-          DivAbsoluteEdgeInsets.fromJson(json['insets']),
-          fallback: const DivAbsoluteEdgeInsets(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await imageUrl.preload(context);
-      await insets.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivNinePatchBackground resolve(DivVariableContext context) {
+    imageUrl.resolve(context);
+    insets.resolve(context);
+    return this;
   }
 }

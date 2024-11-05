@@ -36,13 +36,13 @@ abstract class DivFontProvider {
 
   /// Returns the `DivFontAsset` corresponding to the text style.
   DivFontAsset resolve(String? fontFamily);
-
-  /// Direct mapping fontFamily to DivFontAsset(fontFamily),
-  /// suitable for cases where resources are in the main application.
-  factory DivFontProvider.direct() => _DefaultDivFontProvider();
 }
 
-class _DefaultDivFontProvider implements DivFontProvider {
+/// Direct mapping fontFamily to DivFontAsset(fontFamily),
+/// suitable for cases where resources are in the main application.
+class DefaultDivFontProvider implements DivFontProvider {
+  const DefaultDivFontProvider();
+
   @override
   DivFontAsset resolve(String? fontFamily) =>
       DivFontAsset(fontFamily: fontFamily);

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithoutProperties extends Preloadable with EquatableMixin  {
+class EntityWithoutProperties extends Resolvable with EquatableMixin  {
   const EntityWithoutProperties();
 
   static const type = "entity_without_properties";
@@ -22,12 +22,5 @@ class EntityWithoutProperties extends Preloadable with EquatableMixin  {
     return const EntityWithoutProperties();
   }
 
-  static Future<EntityWithoutProperties?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    return const EntityWithoutProperties();
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {}
+  EntityWithoutProperties resolve(DivVariableContext context) => this;
 }

@@ -2,7 +2,7 @@ import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/state/state_id.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 
 class DivStateModel with EquatableMixin {
   final List<DivStateState> states;
@@ -16,84 +16,6 @@ class DivStateModel with EquatableMixin {
     this.stateId,
     this.defaultStateId,
   });
-
-  static DivStateModel? value(
-    BuildContext context,
-    DivState data,
-  ) {
-    try {
-      final inheritedDivId = read<DivStateId>(context)?.id;
-
-      String divId;
-      if (inheritedDivId != null) {
-        if (data.divId != null) {
-          divId = '$inheritedDivId/${data.divId}';
-        } else if (data.id != null) {
-          divId = '$inheritedDivId/${data.id}';
-        } else {
-          divId = inheritedDivId;
-        }
-      } else {
-        divId = data.divId ?? data.id ?? '';
-      }
-
-      final state = read<DivContext>(context)!.stateManager
-        ..registerState(divId);
-
-      return DivStateModel(
-        divId: divId,
-        stateId: state.states[divId],
-        defaultStateId: data.defaultStateId?.value!,
-        states: data.states,
-      );
-    } catch (e, st) {
-      logger.warning(
-        'Expression cache is corrupted! Instant rendering is not available for div',
-        error: e,
-        stackTrace: st,
-      );
-      return null;
-    }
-  }
-
-  static Stream<DivStateModel> from(
-    BuildContext context,
-    DivState data,
-  ) {
-    final variables = watch<DivContext>(context)!.variableManager;
-    final inheritedDivId = watch<DivStateId>(context)?.id;
-
-    String divId;
-    if (inheritedDivId != null) {
-      if (data.divId != null) {
-        divId = '$inheritedDivId/${data.divId}';
-      } else if (data.id != null) {
-        divId = '$inheritedDivId/${data.id}';
-      } else {
-        divId = inheritedDivId;
-      }
-    } else {
-      divId = data.divId ?? data.id ?? '';
-    }
-
-    final state = watch<DivContext>(context)!.stateManager;
-    return state.watch<DivStateModel>((states) async {
-      final model = DivStateModel(
-        divId: divId,
-        stateId: states[divId],
-        defaultStateId: await data.defaultStateId?.resolveValue(
-          context: variables.context,
-        ),
-        states: data.states,
-      );
-
-      // To avoid errors in the first frame due to outdated variable
-      // context data, needs to preload all the variables used in state.
-      await model.state?.preload(variables.context.current);
-
-      return model;
-    }).distinct();
-  }
 
   DivStateState? get state {
     if (states.isEmpty) {
@@ -126,4 +48,35 @@ class DivStateModel with EquatableMixin {
         defaultStateId,
         states,
       ];
+}
+
+extension DivStateBinder on DivState {
+  String resolveDivId(BuildContext context) {
+    final inheritedDivId = read<DivStateId>(context)?.id;
+
+    String divId;
+    if (inheritedDivId != null) {
+      if (this.divId != null) {
+        divId = '$inheritedDivId/${this.divId}';
+      } else if (id != null) {
+        divId = '$inheritedDivId/$id';
+      } else {
+        divId = inheritedDivId;
+      }
+    } else {
+      divId = this.divId ?? id ?? '';
+    }
+    return divId;
+  }
+
+  DivStateModel bind(BuildContext context) {
+    final resolvedId = resolveDivId(context);
+    final state = read<DivContext>(context)!.stateManager;
+    return DivStateModel(
+      divId: resolvedId,
+      stateId: state.states[resolvedId],
+      defaultStateId: defaultStateId?.value,
+      states: states,
+    );
+  }
 }

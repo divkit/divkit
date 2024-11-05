@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Function argument.
-class DivFunctionArgument extends Preloadable with EquatableMixin {
+class DivFunctionArgument extends Resolvable with EquatableMixin {
   const DivFunctionArgument({
     required this.name,
     required this.type,
@@ -53,35 +53,9 @@ class DivFunctionArgument extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivFunctionArgument?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFunctionArgument(
-        name: (await safeParseStrAsync(
-          json['name']?.toString(),
-        ))!,
-        type: (await safeParseStrEnumAsync(
-          json['type'],
-          parse: DivEvaluableType.fromJson,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await type.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivFunctionArgument resolve(DivVariableContext context) {
+    type.resolve(context);
+    return this;
   }
 }

@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// A floating-point variable.
-class NumberVariable extends Preloadable with EquatableMixin {
+class NumberVariable extends Resolvable with EquatableMixin {
   const NumberVariable({
     required this.name,
     required this.value,
@@ -53,32 +53,8 @@ class NumberVariable extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<NumberVariable?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return NumberVariable(
-        name: (await safeParseStrAsync(
-          json['name']?.toString(),
-        ))!,
-        value: (await safeParseDoubleAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {} catch (e) {
-      return;
-    }
+  NumberVariable resolve(DivVariableContext context) {
+    return this;
   }
 }

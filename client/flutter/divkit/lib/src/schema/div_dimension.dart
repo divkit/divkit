@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element dimension value.
-class DivDimension extends Preloadable with EquatableMixin {
+class DivDimension extends Resolvable with EquatableMixin {
   const DivDimension({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -54,37 +54,10 @@ class DivDimension extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivDimension?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivDimension(
-        unit: (await safeParseStrEnumExprAsync(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        ))!,
-        value: (await safeParseDoubleExprAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await unit.preload(context);
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivDimension resolve(DivVariableContext context) {
+    unit.resolve(context);
+    value.resolve(context);
+    return this;
   }
 }

@@ -3,7 +3,7 @@
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-abstract class DivTransitionBase extends Preloadable {
+abstract class DivTransitionBase extends Resolvable {
   // constraint: number >= 0; default value: 200
   Expression<int> get duration;
 
@@ -13,5 +13,5 @@ abstract class DivTransitionBase extends Preloadable {
   // constraint: number >= 0; default value: 0
   Expression<int> get startDelay;
   @override
-  Future<void> preload(Map<String, dynamic> context);
+  DivTransitionBase resolve(DivVariableContext context);
 }

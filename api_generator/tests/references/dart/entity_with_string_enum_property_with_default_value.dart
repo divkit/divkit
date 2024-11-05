@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithStringEnumPropertyWithDefaultValue extends Preloadable with EquatableMixin  {
+class EntityWithStringEnumPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
   const EntityWithStringEnumPropertyWithDefaultValue({
     this.value = const ValueExpression(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
@@ -38,29 +38,13 @@ class EntityWithStringEnumPropertyWithDefaultValue extends Preloadable with Equa
     }
   }
 
-  static Future<EntityWithStringEnumPropertyWithDefaultValue?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithStringEnumPropertyWithDefaultValue(
-        value: (await safeParseStrEnumExprAsync(json['value'], parse: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson, fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second,))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await value?.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithStringEnumPropertyWithDefaultValue resolve(DivVariableContext context) {
+    value?.resolve(context);
+    return this;
   }
 }
 
-enum EntityWithStringEnumPropertyWithDefaultValueValue implements Preloadable {
+enum EntityWithStringEnumPropertyWithDefaultValueValue implements Resolvable {
   first('first'),
   second('second'),
   third('third');
@@ -106,7 +90,6 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue implements Preloadable {
      }
   }
 
-  Future<void> preload(Map<String, dynamic> context) async {}
 
   static EntityWithStringEnumPropertyWithDefaultValueValue? fromJson(String? json,) {
     if (json == null) {
@@ -126,23 +109,5 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue implements Preloadable {
       return null;
     }
   }
-
-  static Future<EntityWithStringEnumPropertyWithDefaultValueValue?> parse(String? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'first':
-        return EntityWithStringEnumPropertyWithDefaultValueValue.first;
-        case 'second':
-        return EntityWithStringEnumPropertyWithDefaultValueValue.second;
-        case 'third':
-        return EntityWithStringEnumPropertyWithDefaultValueValue.third;
-      }
-      return null;
-    } catch (e, st) {
-      return null;
-    }
-  }
+  EntityWithStringEnumPropertyWithDefaultValueValue resolve(DivVariableContext context) => this;
 }

@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivInputValidatorBase extends Preloadable with EquatableMixin {
+class DivInputValidatorBase extends Resolvable with EquatableMixin {
   const DivInputValidatorBase({
     this.allowEmpty = const ValueExpression(false),
     this.labelId,
@@ -62,39 +62,10 @@ class DivInputValidatorBase extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputValidatorBase?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivInputValidatorBase(
-        allowEmpty: (await safeParseBoolExprAsync(
-          json['allow_empty'],
-          fallback: false,
-        ))!,
-        labelId: await safeParseStrExprAsync(
-          json['label_id']?.toString(),
-        ),
-        variable: await safeParseStrAsync(
-          json['variable']?.toString(),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await allowEmpty.preload(context);
-      await labelId?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivInputValidatorBase resolve(DivVariableContext context) {
+    allowEmpty.resolve(context);
+    labelId?.resolve(context);
+    return this;
   }
 }

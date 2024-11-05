@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivAnimationInterpolator implements Preloadable {
+enum DivAnimationInterpolator implements Resolvable {
   linear('linear'),
   ease('ease'),
   easeIn('ease_in'),
@@ -74,9 +74,6 @@ enum DivAnimationInterpolator implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivAnimationInterpolator? fromJson(
     String? json,
   ) {
@@ -104,30 +101,6 @@ enum DivAnimationInterpolator implements Preloadable {
     }
   }
 
-  static Future<DivAnimationInterpolator?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'linear':
-          return DivAnimationInterpolator.linear;
-        case 'ease':
-          return DivAnimationInterpolator.ease;
-        case 'ease_in':
-          return DivAnimationInterpolator.easeIn;
-        case 'ease_out':
-          return DivAnimationInterpolator.easeOut;
-        case 'ease_in_out':
-          return DivAnimationInterpolator.easeInOut;
-        case 'spring':
-          return DivAnimationInterpolator.spring;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivAnimationInterpolator resolve(DivVariableContext context) => this;
 }

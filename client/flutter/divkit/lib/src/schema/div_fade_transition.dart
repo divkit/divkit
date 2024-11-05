@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Transparency animation.
-class DivFadeTransition extends Preloadable
+class DivFadeTransition extends Resolvable
     with EquatableMixin
     implements DivTransitionBase {
   const DivFadeTransition({
@@ -90,48 +90,12 @@ class DivFadeTransition extends Preloadable
     }
   }
 
-  static Future<DivFadeTransition?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFadeTransition(
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 0.0,
-        ))!,
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-          fallback: 200,
-        ))!,
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        ))!,
-        startDelay: (await safeParseIntExprAsync(
-          json['start_delay'],
-          fallback: 0,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await alpha.preload(context);
-      await duration.preload(context);
-      await interpolator.preload(context);
-      await startDelay.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivFadeTransition resolve(DivVariableContext context) {
+    alpha.resolve(context);
+    duration.resolve(context);
+    interpolator.resolve(context);
+    startDelay.resolve(context);
+    return this;
   }
 }

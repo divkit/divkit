@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size (%).
-class DivPercentageSize extends Preloadable with EquatableMixin {
+class DivPercentageSize extends Resolvable with EquatableMixin {
   const DivPercentageSize({
     required this.value,
   });
@@ -44,31 +44,9 @@ class DivPercentageSize extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPercentageSize?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivPercentageSize(
-        value: (await safeParseDoubleExprAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivPercentageSize resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

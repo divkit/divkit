@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets the value in the dictionary by the specified key. Deletes the key if the value is not set.
-class DivActionDictSetValue extends Preloadable with EquatableMixin {
+class DivActionDictSetValue extends Resolvable with EquatableMixin {
   const DivActionDictSetValue({
     required this.key,
     this.value,
@@ -58,39 +58,11 @@ class DivActionDictSetValue extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionDictSetValue?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionDictSetValue(
-        key: (await safeParseStrExprAsync(
-          json['key']?.toString(),
-        ))!,
-        value: await safeParseObjAsync(
-          DivTypedValue.fromJson(json['value']),
-        ),
-        variableName: (await safeParseStrExprAsync(
-          json['variable_name']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await key.preload(context);
-      await value?.preload(context);
-      await variableName.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionDictSetValue resolve(DivVariableContext context) {
+    key.resolve(context);
+    value?.resolve(context);
+    variableName.resolve(context);
+    return this;
   }
 }

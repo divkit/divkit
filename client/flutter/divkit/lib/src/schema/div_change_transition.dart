@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_change_set_transition.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivChangeTransition extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivChangeTransition extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivChangeTransition extends Preloadable with EquatableMixin {
 
   bool get isDivChangeSetTransition => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivChangeTransition? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivChangeTransition extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivChangeTransition?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivChangeBoundsTransition.type:
-          return DivChangeTransition.divChangeBoundsTransition(
-            (await DivChangeBoundsTransition.parse(json))!,
-          );
-        case DivChangeSetTransition.type:
-          return DivChangeTransition.divChangeSetTransition(
-            (await DivChangeSetTransition.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivChangeTransition resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

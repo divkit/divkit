@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// The size of an element adjusts to its contents.
-class DivWrapContentSize extends Preloadable with EquatableMixin {
+class DivWrapContentSize extends Resolvable with EquatableMixin {
   const DivWrapContentSize({
     this.constrained,
     this.maxSize,
@@ -65,44 +65,16 @@ class DivWrapContentSize extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivWrapContentSize?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivWrapContentSize(
-        constrained: await safeParseBoolExprAsync(
-          json['constrained'],
-        ),
-        maxSize: await safeParseObjAsync(
-          DivWrapContentSizeConstraintSize.fromJson(json['max_size']),
-        ),
-        minSize: await safeParseObjAsync(
-          DivWrapContentSizeConstraintSize.fromJson(json['min_size']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await constrained?.preload(context);
-      await maxSize?.preload(context);
-      await minSize?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivWrapContentSize resolve(DivVariableContext context) {
+    constrained?.resolve(context);
+    maxSize?.resolve(context);
+    minSize?.resolve(context);
+    return this;
   }
 }
 
-class DivWrapContentSizeConstraintSize extends Preloadable with EquatableMixin {
+class DivWrapContentSizeConstraintSize extends Resolvable with EquatableMixin {
   const DivWrapContentSizeConstraintSize({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -154,37 +126,10 @@ class DivWrapContentSizeConstraintSize extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivWrapContentSizeConstraintSize?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivWrapContentSizeConstraintSize(
-        unit: (await safeParseStrEnumExprAsync(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        ))!,
-        value: (await safeParseIntExprAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await unit.preload(context);
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivWrapContentSizeConstraintSize resolve(DivVariableContext context) {
+    unit.resolve(context);
+    value.resolve(context);
+    return this;
   }
 }

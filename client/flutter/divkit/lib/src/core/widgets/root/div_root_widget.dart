@@ -23,14 +23,12 @@ class _DivRootWidgetState extends State<DivRootWidget> {
   @override
   void initState() {
     super.initState();
-
     provider = widget.divRootContext.dataProvider!;
   }
 
   @override
   void didUpdateWidget(covariant DivRootWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     if (widget.divRootContext != oldWidget.divRootContext) {
       provider = widget.divRootContext.dataProvider!;
     }
@@ -60,15 +58,24 @@ class _DivRendererState extends State<DivRenderer> {
   @override
   void initState() {
     super.initState();
-
-    value = DivRootModel.value(context, widget.data);
+    final divContext = read<DivContext>(context)!;
+    final initialState = widget.data.states.first.stateId.toString();
+    // Register first state
+    divContext.stateManager.registerState('root', initialState);
+    widget.data.resolve(divContext.variables);
+    value = widget.data.bind(initialState);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    stream ??= DivRootModel.from(context, widget.data);
+    if (stream == null) {
+      final divContext = watch<DivContext>(context)!;
+      stream = divContext.stateManager.watch((state) {
+        return widget.data.bind(state['root']!);
+      });
+    }
   }
 
   @override
@@ -76,8 +83,14 @@ class _DivRendererState extends State<DivRenderer> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
-      value = DivRootModel.value(context, widget.data);
-      stream = DivRootModel.from(context, widget.data);
+      final divContext = watch<DivContext>(context)!;
+      final initialState = widget.data.states.first.stateId.toString();
+      widget.data.resolve(divContext.variables);
+      divContext.stateManager.updateState('root', initialState);
+      value = widget.data.bind(initialState);
+      stream = divContext.stateManager.watch((state) {
+        return widget.data.bind(state['root']!);
+      });
     }
   }
 
@@ -97,4 +110,11 @@ class _DivRendererState extends State<DivRenderer> {
           );
         },
       );
+
+  @override
+  void dispose() {
+    value = null;
+    stream = null;
+    super.dispose();
+  }
 }

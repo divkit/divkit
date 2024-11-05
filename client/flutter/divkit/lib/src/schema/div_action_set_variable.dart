@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Assigns a value to the variable
-class DivActionSetVariable extends Preloadable with EquatableMixin {
+class DivActionSetVariable extends Resolvable with EquatableMixin {
   const DivActionSetVariable({
     required this.value,
     required this.variableName,
@@ -50,35 +50,10 @@ class DivActionSetVariable extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionSetVariable?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionSetVariable(
-        value: (await safeParseObjAsync(
-          DivTypedValue.fromJson(json['value']),
-        ))!,
-        variableName: (await safeParseStrExprAsync(
-          json['variable_name']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await value.preload(context);
-      await variableName.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionSetVariable resolve(DivVariableContext context) {
+    value.resolve(context);
+    variableName.resolve(context);
+    return this;
   }
 }

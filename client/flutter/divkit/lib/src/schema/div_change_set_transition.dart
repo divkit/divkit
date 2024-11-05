@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Animations.
-class DivChangeSetTransition extends Preloadable with EquatableMixin {
+class DivChangeSetTransition extends Resolvable with EquatableMixin {
   const DivChangeSetTransition({
     required this.items,
   });
@@ -50,36 +50,8 @@ class DivChangeSetTransition extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivChangeSetTransition?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivChangeSetTransition(
-        items: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['items'],
-            (v) => safeParseObj(
-              DivChangeTransition.fromJson(v),
-            )!,
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(items, (v) => v.preload(context));
-    } catch (e) {
-      return;
-    }
+  DivChangeSetTransition resolve(DivVariableContext context) {
+    return this;
   }
 }

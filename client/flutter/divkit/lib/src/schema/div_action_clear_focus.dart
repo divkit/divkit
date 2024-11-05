@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Removes focus from an element.
-class DivActionClearFocus extends Preloadable with EquatableMixin {
+class DivActionClearFocus extends Resolvable with EquatableMixin {
   const DivActionClearFocus();
 
   static const type = "clear_focus";
@@ -23,17 +23,6 @@ class DivActionClearFocus extends Preloadable with EquatableMixin {
     return const DivActionClearFocus();
   }
 
-  static Future<DivActionClearFocus?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    return const DivActionClearFocus();
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {}
+  DivActionClearFocus resolve(DivVariableContext context) => this;
 }

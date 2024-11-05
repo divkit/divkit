@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Extension that affects an element.
-class DivExtension extends Preloadable with EquatableMixin {
+class DivExtension extends Resolvable with EquatableMixin {
   const DivExtension({
     required this.id,
     this.params,
@@ -51,32 +51,8 @@ class DivExtension extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivExtension?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivExtension(
-        id: (await safeParseStrAsync(
-          json['id']?.toString(),
-        ))!,
-        params: await safeParseMapAsync(
-          json['params'],
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {} catch (e) {
-      return;
-    }
+  DivExtension resolve(DivVariableContext context) {
+    return this;
   }
 }

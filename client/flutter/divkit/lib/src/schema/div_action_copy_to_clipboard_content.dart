@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/content_url.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivActionCopyToClipboardContent extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivActionCopyToClipboardContent extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivActionCopyToClipboardContent extends Preloadable with EquatableMixin {
 
   bool get isContentUrl => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivActionCopyToClipboardContent? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivActionCopyToClipboardContent extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionCopyToClipboardContent?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case ContentText.type:
-          return DivActionCopyToClipboardContent.contentText(
-            (await ContentText.parse(json))!,
-          );
-        case ContentUrl.type:
-          return DivActionCopyToClipboardContent.contentUrl(
-            (await ContentUrl.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivActionCopyToClipboardContent resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

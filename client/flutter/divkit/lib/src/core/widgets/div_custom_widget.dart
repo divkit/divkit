@@ -13,6 +13,8 @@ class DivCustomWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final divContext = watch<DivContext>(context)!;
+    data.resolve(divContext.variables);
+
     final customResolver = divContext.customHandler;
     final type = data.customType;
 
@@ -21,14 +23,14 @@ class DivCustomWidget extends StatelessWidget {
         data: data,
         child: provide(
           DivParentData.none,
-          child: customResolver.createCustom(
-            data,
-            divContext,
-          ),
+          child: customResolver.createCustom(data, divContext),
         ),
       );
     }
 
-    return const SizedBox();
+    return DivErrorWidget(
+      data: data,
+      error: "Custom $type not supported",
+    );
   }
 }

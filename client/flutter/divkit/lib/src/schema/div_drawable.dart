@@ -4,8 +4,8 @@ import 'package:divkit/src/schema/div_shape_drawable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivDrawable extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivDrawable extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -48,9 +48,6 @@ class DivDrawable extends Preloadable with EquatableMixin {
 
   bool get isDivShapeDrawable => _index == 0;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivDrawable? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -70,22 +67,9 @@ class DivDrawable extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivDrawable?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivShapeDrawable.type:
-          return DivDrawable.divShapeDrawable(
-            (await DivShapeDrawable.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivDrawable resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

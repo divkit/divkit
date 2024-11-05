@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/root/div_root_widget.dart';
 import 'package:divkit/src/utils/configuration.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:divkit/src/utils/trace.dart';
 import 'package:flutter/widgets.dart';
@@ -15,11 +14,6 @@ class DivKitView extends StatelessWidget {
   /// The process of building a DTO is quite expensive, so it is better
   /// to create it outside the widget in order to avoid frame loss.
   final DivKitData data;
-
-  /// Since initialization occurs asynchronously,
-  /// you need to draw something during loading.
-  @experimental
-  final WidgetBuilder? loadingBuilder;
 
   /// External storage. Used to transfer the context from the host environment.
   /// The variables will merge with those obtained at the parsing stage.
@@ -38,6 +32,9 @@ class DivKitView extends StatelessWidget {
   /// LTR or RTL mode. If null used auto.
   final TextDirection? textDirection;
 
+  /// Options for text and UI scaling
+  final DivScale? scale;
+
   /// [NOT_SUPPORTED_YET] Light or dark mode. If null used auto.
   @experimental
   final Brightness? brightness;
@@ -45,14 +42,6 @@ class DivKitView extends StatelessWidget {
   /// This flag allows you to highlight unsupported divs.
   @experimental
   final bool showUnsupportedDivs;
-
-  /// Can be used for scaling ui.
-  @experimental
-  final double viewScale;
-
-  /// Can be used for scaling text.
-  @experimental
-  final double textScale;
 
   /// Use DivKitView inside your widget tree with layout passed by param "data":
   /// ```dart
@@ -77,16 +66,14 @@ class DivKitView extends StatelessWidget {
   /// actionHandler don't forget to inherit [DefaultDivActionHandler].
   const DivKitView({
     required this.data,
-    this.loadingBuilder,
     this.variableStorage,
     this.actionHandler,
     this.customHandler,
     this.fontProvider,
     this.brightness,
     this.textDirection,
+    this.scale,
     this.showUnsupportedDivs = false,
-    this.viewScale = 1,
-    this.textScale = 1,
     super.key,
   });
 
@@ -94,25 +81,17 @@ class DivKitView extends StatelessWidget {
   Widget build(BuildContext context) => Directionality(
         textDirection: textDirection ?? Directionality.of(context),
         child: provide(
-          DivScalingModel(
-            textScale: textScale,
-            viewScale: viewScale,
+          DivConfiguration(
+            showUnsupportedDivs: showUnsupportedDivs,
           ),
-          child: provide(
-            DivConfiguration(
-              showUnsupportedDivs: showUnsupportedDivs,
-            ),
-            child: provide(
-              fontProvider ?? DivFontProvider.direct(),
-              child: FocusScope(
-                child: _DivKitView(
-                  data: data,
-                  loadingBuilder: loadingBuilder,
-                  variableStorage: variableStorage,
-                  actionHandler: actionHandler,
-                  customHandler: customHandler,
-                ),
-              ),
+          child: FocusScope(
+            child: _DivKitView(
+              data: data,
+              scale: scale,
+              fontProvider: fontProvider,
+              variableStorage: variableStorage,
+              actionHandler: actionHandler,
+              customHandler: customHandler,
             ),
           ),
         ),
@@ -121,14 +100,16 @@ class DivKitView extends StatelessWidget {
 
 class _DivKitView extends StatefulWidget {
   final DivKitData data;
-  final WidgetBuilder? loadingBuilder;
+  final DivScale? scale;
+  final DivFontProvider? fontProvider;
   final DivVariableStorage? variableStorage;
   final DivActionHandler? actionHandler;
   final DivCustomHandler? customHandler;
 
   const _DivKitView({
     required this.data,
-    required this.loadingBuilder,
+    required this.scale,
+    required this.fontProvider,
     required this.variableStorage,
     required this.actionHandler,
     required this.customHandler,
@@ -141,35 +122,24 @@ class _DivKitView extends StatefulWidget {
 class _DivKitViewState extends State<_DivKitView> {
   DivRootContext? divRootContext;
 
-  DivContext get divContext => divRootContext!;
-
-  void updateContext() {
-    if (widget.data.preloaded) {
-      divRootContext = DivRootContext.initSync(
-        context: context,
-        data: widget.data,
-        variableStorage: widget.variableStorage,
-        actionHandler: widget.actionHandler,
-        customHandler: widget.customHandler,
-      );
-    } else {
-      DivRootContext.init(
-        context: context,
-        data: widget.data,
-        variableStorage: widget.variableStorage,
-        actionHandler: widget.actionHandler,
-        customHandler: widget.customHandler,
-      ).then(
-        (value) => setState(() => divRootContext = value),
-      );
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    traceEvent('Init DivKitView');
-    updateContext();
+    traceEvent('Initialize DivKitView');
+    initialize();
+  }
+
+  /// Updates the root context using widget data
+  void initialize() {
+    divRootContext = DivRootContext.initialize(
+      context: context,
+      data: widget.data,
+      scale: widget.scale,
+      fontProvider: widget.fontProvider,
+      variableStorage: widget.variableStorage,
+      actionHandler: widget.actionHandler,
+      customHandler: widget.customHandler,
+    );
   }
 
   @override
@@ -179,14 +149,16 @@ class _DivKitViewState extends State<_DivKitView> {
     final dataUpdated = widget.data != oldWidget.data;
     final storageUpdated = widget.variableStorage != oldWidget.variableStorage;
 
+    // Needs full recreation
     if (dataUpdated || storageUpdated) {
-      updateContext();
+      traceEvent('Updated DivKitView');
+      initialize();
     } else {
+      // Allow reuse
       if (widget.actionHandler != oldWidget.actionHandler) {
         divRootContext?.actionHandler =
             widget.actionHandler ?? DefaultDivActionHandler();
       }
-
       if (widget.customHandler != oldWidget.customHandler) {
         divRootContext?.customHandler =
             widget.customHandler ?? DivCustomHandler.none();
@@ -194,16 +166,15 @@ class _DivKitViewState extends State<_DivKitView> {
     }
   }
 
-  Widget get loader =>
-      widget.loadingBuilder?.call(context) ?? const SizedBox.shrink();
-
   @override
   Widget build(BuildContext context) => divRootContext != null
       ? DivKitProvider(
-          value: divContext,
+          value: divRootContext as DivContext,
           child: DivRootWidget(divRootContext!),
         )
-      : loader;
+
+      /// Don't show anything if an error has occurred
+      : const SizedBox.shrink();
 
   @override
   void dispose() {

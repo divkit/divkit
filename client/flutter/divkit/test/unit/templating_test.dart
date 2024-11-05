@@ -28,7 +28,7 @@ void main() {
       // Act
       final card = TemplatesResolver(
         layout: json['card']!,
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(card, json['card']);
@@ -81,7 +81,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -149,7 +149,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -218,7 +218,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -280,7 +280,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -363,7 +363,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -433,7 +433,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -546,7 +546,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -643,7 +643,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -651,7 +651,7 @@ void main() {
 
     /// Template can consist of multiple blocks with same params and different name parameters
     /// sometimes one named param is used twice, for example in "state"
-    test('TemplatesResolver can mergeSync named parameters for same param', () {
+    test('TemplatesResolver can merge named parameters for same param', () {
       // Arrange
       const json = {
         "templates": {
@@ -789,7 +789,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -885,7 +885,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -1176,7 +1176,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);
@@ -1251,7 +1251,7 @@ void main() {
       final layout = TemplatesResolver(
         layout: json['card']!,
         templates: json['templates'],
-      ).mergeSync();
+      ).merge();
 
       // Assert
       expect(layout, result);

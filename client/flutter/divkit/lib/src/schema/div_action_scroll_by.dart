@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Scrolls scrollable container from current position by `item_count` or by `offset`, if both provided scroll action will be combined, negative numbers associated with backward scroll.
-class DivActionScrollBy extends Preloadable with EquatableMixin {
+class DivActionScrollBy extends Resolvable with EquatableMixin {
   const DivActionScrollBy({
     this.animated = const ValueExpression(true),
     required this.id,
@@ -94,57 +94,18 @@ class DivActionScrollBy extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionScrollBy?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionScrollBy(
-        animated: (await safeParseBoolExprAsync(
-          json['animated'],
-          fallback: true,
-        ))!,
-        id: (await safeParseStrExprAsync(
-          json['id']?.toString(),
-        ))!,
-        itemCount: (await safeParseIntExprAsync(
-          json['item_count'],
-          fallback: 0,
-        ))!,
-        offset: (await safeParseIntExprAsync(
-          json['offset'],
-          fallback: 0,
-        ))!,
-        overflow: (await safeParseStrEnumExprAsync(
-          json['overflow'],
-          parse: DivActionScrollByOverflow.fromJson,
-          fallback: DivActionScrollByOverflow.clamp,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await animated.preload(context);
-      await id.preload(context);
-      await itemCount.preload(context);
-      await offset.preload(context);
-      await overflow.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionScrollBy resolve(DivVariableContext context) {
+    animated.resolve(context);
+    id.resolve(context);
+    itemCount.resolve(context);
+    offset.resolve(context);
+    overflow.resolve(context);
+    return this;
   }
 }
 
-enum DivActionScrollByOverflow implements Preloadable {
+enum DivActionScrollByOverflow implements Resolvable {
   clamp('clamp'),
   ring('ring');
 
@@ -180,9 +141,6 @@ enum DivActionScrollByOverflow implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivActionScrollByOverflow? fromJson(
     String? json,
   ) {
@@ -202,22 +160,6 @@ enum DivActionScrollByOverflow implements Preloadable {
     }
   }
 
-  static Future<DivActionScrollByOverflow?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'clamp':
-          return DivActionScrollByOverflow.clamp;
-        case 'ring':
-          return DivActionScrollByOverflow.ring;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivActionScrollByOverflow resolve(DivVariableContext context) => this;
 }

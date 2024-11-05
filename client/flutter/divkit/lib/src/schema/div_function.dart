@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// User-defined function.
-class DivFunction extends Preloadable with EquatableMixin {
+class DivFunction extends Resolvable with EquatableMixin {
   const DivFunction({
     required this.arguments,
     required this.body,
@@ -80,47 +80,10 @@ class DivFunction extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivFunction?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFunction(
-        arguments: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['arguments'],
-            (v) => safeParseObj(
-              DivFunctionArgument.fromJson(v),
-            )!,
-          ),
-        ))!,
-        body: (await safeParseStrAsync(
-          json['body']?.toString(),
-        ))!,
-        name: (await safeParseStrAsync(
-          json['name']?.toString(),
-        ))!,
-        returnType: (await safeParseStrEnumAsync(
-          json['return_type'],
-          parse: DivEvaluableType.fromJson,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(arguments, (v) => v.preload(context));
-      await returnType.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivFunction resolve(DivVariableContext context) {
+    safeListResolve(arguments, (v) => v.resolve(context));
+    returnType.resolve(context);
+    return this;
   }
 }

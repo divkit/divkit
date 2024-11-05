@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Manages video playback.
-class DivActionVideo extends Preloadable with EquatableMixin {
+class DivActionVideo extends Resolvable with EquatableMixin {
   const DivActionVideo({
     required this.action,
     required this.id,
@@ -56,41 +56,15 @@ class DivActionVideo extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionVideo?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionVideo(
-        action: (await safeParseStrEnumExprAsync(
-          json['action'],
-          parse: DivActionVideoAction.fromJson,
-        ))!,
-        id: (await safeParseStrExprAsync(
-          json['id']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await action.preload(context);
-      await id.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionVideo resolve(DivVariableContext context) {
+    action.resolve(context);
+    id.resolve(context);
+    return this;
   }
 }
 
-enum DivActionVideoAction implements Preloadable {
+enum DivActionVideoAction implements Resolvable {
   start('start'),
   pause('pause');
 
@@ -126,9 +100,6 @@ enum DivActionVideoAction implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivActionVideoAction? fromJson(
     String? json,
   ) {
@@ -148,22 +119,6 @@ enum DivActionVideoAction implements Preloadable {
     }
   }
 
-  static Future<DivActionVideoAction?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'start':
-          return DivActionVideoAction.start;
-        case 'pause':
-          return DivActionVideoAction.pause;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivActionVideoAction resolve(DivVariableContext context) => this;
 }

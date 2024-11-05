@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stroke.
-class DivStroke extends Preloadable with EquatableMixin {
+class DivStroke extends Resolvable with EquatableMixin {
   const DivStroke({
     required this.color,
     this.unit = const ValueExpression(DivSizeUnit.dp),
@@ -65,42 +65,11 @@ class DivStroke extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivStroke?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivStroke(
-        color: (await safeParseColorExprAsync(
-          json['color'],
-        ))!,
-        unit: (await safeParseStrEnumExprAsync(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        ))!,
-        width: (await safeParseDoubleExprAsync(
-          json['width'],
-          fallback: 1,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await color.preload(context);
-      await unit.preload(context);
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivStroke resolve(DivVariableContext context) {
+    color.resolve(context);
+    unit.resolve(context);
+    width.resolve(context);
+    return this;
   }
 }

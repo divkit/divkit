@@ -7,8 +7,8 @@ import 'package:divkit/src/schema/start_destination.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivActionScrollDestination extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivActionScrollDestination extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -111,9 +111,6 @@ class DivActionScrollDestination extends Preloadable with EquatableMixin {
 
   bool get isStartDestination => _index == 3;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivActionScrollDestination? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -145,34 +142,9 @@ class DivActionScrollDestination extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionScrollDestination?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case EndDestination.type:
-          return DivActionScrollDestination.endDestination(
-            (await EndDestination.parse(json))!,
-          );
-        case IndexDestination.type:
-          return DivActionScrollDestination.indexDestination(
-            (await IndexDestination.parse(json))!,
-          );
-        case OffsetDestination.type:
-          return DivActionScrollDestination.offsetDestination(
-            (await OffsetDestination.parse(json))!,
-          );
-        case StartDestination.type:
-          return DivActionScrollDestination.startDestination(
-            (await StartDestination.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivActionScrollDestination resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

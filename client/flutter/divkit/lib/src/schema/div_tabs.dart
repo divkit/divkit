@@ -35,7 +35,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Tabs. Height of the first tab is determined by its contents, and height of the remaining [depends on the platform](https://divkit.tech/docs/en/concepts/location#tabs).
-class DivTabs extends Preloadable with EquatableMixin implements DivBase {
+class DivTabs extends Resolvable with EquatableMixin implements DivBase {
   const DivTabs({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -714,316 +714,55 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
     }
   }
 
-  static Future<DivTabs?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTabs(
-        accessibility: (await safeParseObjAsync(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        ))!,
-        alignmentHorizontal: await safeParseStrEnumExprAsync(
-          json['alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-        ),
-        alignmentVertical: await safeParseStrEnumExprAsync(
-          json['alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-        ),
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 1.0,
-        ))!,
-        animators: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
-          ),
-        ),
-        background: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
-          ),
-        ),
-        border: (await safeParseObjAsync(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        ))!,
-        columnSpan: await safeParseIntExprAsync(
-          json['column_span'],
-        ),
-        disappearActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
-          ),
-        ),
-        dynamicHeight: (await safeParseBoolExprAsync(
-          json['dynamic_height'],
-          fallback: false,
-        ))!,
-        extensions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
-          ),
-        ),
-        focus: await safeParseObjAsync(
-          DivFocus.fromJson(json['focus']),
-        ),
-        functions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
-          ),
-        ),
-        hasSeparator: (await safeParseBoolExprAsync(
-          json['has_separator'],
-          fallback: false,
-        ))!,
-        height: (await safeParseObjAsync(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
-          ),
-        ))!,
-        id: await safeParseStrAsync(
-          json['id']?.toString(),
-        ),
-        items: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['items'],
-            (v) => safeParseObj(
-              DivTabsItem.fromJson(v),
-            )!,
-          ),
-        ))!,
-        layoutProvider: await safeParseObjAsync(
-          DivLayoutProvider.fromJson(json['layout_provider']),
-        ),
-        margins: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        paddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        restrictParentScroll: (await safeParseBoolExprAsync(
-          json['restrict_parent_scroll'],
-          fallback: false,
-        ))!,
-        reuseId: await safeParseStrExprAsync(
-          json['reuse_id']?.toString(),
-        ),
-        rowSpan: await safeParseIntExprAsync(
-          json['row_span'],
-        ),
-        selectedActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        selectedTab: (await safeParseIntExprAsync(
-          json['selected_tab'],
-          fallback: 0,
-        ))!,
-        separatorColor: (await safeParseColorExprAsync(
-          json['separator_color'],
-          fallback: const Color(0x14000000),
-        ))!,
-        separatorPaddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['separator_paddings']),
-          fallback: const DivEdgeInsets(
-            bottom: ValueExpression(
-              0,
-            ),
-            left: ValueExpression(
-              12,
-            ),
-            right: ValueExpression(
-              12,
-            ),
-            top: ValueExpression(
-              0,
-            ),
-          ),
-        ))!,
-        switchTabsByContentSwipeEnabled: (await safeParseBoolExprAsync(
-          json['switch_tabs_by_content_swipe_enabled'],
-          fallback: true,
-        ))!,
-        tabTitleDelimiter: await safeParseObjAsync(
-          DivTabsTabTitleDelimiter.fromJson(json['tab_title_delimiter']),
-        ),
-        tabTitleStyle: (await safeParseObjAsync(
-          DivTabsTabTitleStyle.fromJson(json['tab_title_style']),
-          fallback: const DivTabsTabTitleStyle(),
-        ))!,
-        titlePaddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['title_paddings']),
-          fallback: const DivEdgeInsets(
-            bottom: ValueExpression(
-              8,
-            ),
-            left: ValueExpression(
-              12,
-            ),
-            right: ValueExpression(
-              12,
-            ),
-            top: ValueExpression(
-              0,
-            ),
-          ),
-        ))!,
-        tooltips: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
-          ),
-        ),
-        transform: (await safeParseObjAsync(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        ))!,
-        transitionChange: await safeParseObjAsync(
-          DivChangeTransition.fromJson(json['transition_change']),
-        ),
-        transitionIn: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_in']),
-        ),
-        transitionOut: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_out']),
-        ),
-        transitionTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
-              v,
-              parse: DivTransitionTrigger.fromJson,
-            )!,
-          ),
-        ),
-        variableTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
-          ),
-        ),
-        variables: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
-          ),
-        ),
-        visibility: (await safeParseStrEnumExprAsync(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        ))!,
-        visibilityAction: await safeParseObjAsync(
-          DivVisibilityAction.fromJson(json['visibility_action']),
-        ),
-        visibilityActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
-          ),
-        ),
-        width: (await safeParseObjAsync(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await accessibility.preload(context);
-      await alignmentHorizontal?.preload(context);
-      await alignmentVertical?.preload(context);
-      await alpha.preload(context);
-      await safeFuturesWait(animators, (v) => v.preload(context));
-      await safeFuturesWait(background, (v) => v.preload(context));
-      await border.preload(context);
-      await columnSpan?.preload(context);
-      await safeFuturesWait(disappearActions, (v) => v.preload(context));
-      await dynamicHeight.preload(context);
-      await safeFuturesWait(extensions, (v) => v.preload(context));
-      await focus?.preload(context);
-      await safeFuturesWait(functions, (v) => v.preload(context));
-      await hasSeparator.preload(context);
-      await height.preload(context);
-      await safeFuturesWait(items, (v) => v.preload(context));
-      await layoutProvider?.preload(context);
-      await margins.preload(context);
-      await paddings.preload(context);
-      await restrictParentScroll.preload(context);
-      await reuseId?.preload(context);
-      await rowSpan?.preload(context);
-      await safeFuturesWait(selectedActions, (v) => v.preload(context));
-      await selectedTab.preload(context);
-      await separatorColor.preload(context);
-      await separatorPaddings.preload(context);
-      await switchTabsByContentSwipeEnabled.preload(context);
-      await tabTitleDelimiter?.preload(context);
-      await tabTitleStyle.preload(context);
-      await titlePaddings.preload(context);
-      await safeFuturesWait(tooltips, (v) => v.preload(context));
-      await transform.preload(context);
-      await transitionChange?.preload(context);
-      await transitionIn?.preload(context);
-      await transitionOut?.preload(context);
-      await safeFuturesWait(transitionTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variableTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variables, (v) => v.preload(context));
-      await visibility.preload(context);
-      await visibilityAction?.preload(context);
-      await safeFuturesWait(visibilityActions, (v) => v.preload(context));
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTabs resolve(DivVariableContext context) {
+    accessibility.resolve(context);
+    alignmentHorizontal?.resolve(context);
+    alignmentVertical?.resolve(context);
+    alpha.resolve(context);
+    safeListResolve(animators, (v) => v.resolve(context));
+    safeListResolve(background, (v) => v.resolve(context));
+    border.resolve(context);
+    columnSpan?.resolve(context);
+    safeListResolve(disappearActions, (v) => v.resolve(context));
+    dynamicHeight.resolve(context);
+    safeListResolve(extensions, (v) => v.resolve(context));
+    focus?.resolve(context);
+    safeListResolve(functions, (v) => v.resolve(context));
+    hasSeparator.resolve(context);
+    height.resolve(context);
+    layoutProvider?.resolve(context);
+    margins.resolve(context);
+    paddings.resolve(context);
+    restrictParentScroll.resolve(context);
+    reuseId?.resolve(context);
+    rowSpan?.resolve(context);
+    safeListResolve(selectedActions, (v) => v.resolve(context));
+    selectedTab.resolve(context);
+    separatorColor.resolve(context);
+    separatorPaddings.resolve(context);
+    switchTabsByContentSwipeEnabled.resolve(context);
+    tabTitleDelimiter?.resolve(context);
+    tabTitleStyle.resolve(context);
+    titlePaddings.resolve(context);
+    safeListResolve(tooltips, (v) => v.resolve(context));
+    transform.resolve(context);
+    transitionChange?.resolve(context);
+    transitionIn?.resolve(context);
+    transitionOut?.resolve(context);
+    safeListResolve(transitionTriggers, (v) => v.resolve(context));
+    safeListResolve(variableTriggers, (v) => v.resolve(context));
+    safeListResolve(variables, (v) => v.resolve(context));
+    visibility.resolve(context);
+    visibilityAction?.resolve(context);
+    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    width.resolve(context);
+    return this;
   }
 }
 
 /// Design style of tab titles.
-class DivTabsTabTitleStyle extends Preloadable with EquatableMixin {
+class DivTabsTabTitleStyle extends Resolvable with EquatableMixin {
   const DivTabsTabTitleStyle({
     this.activeBackgroundColor = const ValueExpression(Color(0xFFFFDC60)),
     this.activeFontWeight,
@@ -1297,133 +1036,31 @@ class DivTabsTabTitleStyle extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTabsTabTitleStyle?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTabsTabTitleStyle(
-        activeBackgroundColor: (await safeParseColorExprAsync(
-          json['active_background_color'],
-          fallback: const Color(0xFFFFDC60),
-        ))!,
-        activeFontWeight: await safeParseStrEnumExprAsync(
-          json['active_font_weight'],
-          parse: DivFontWeight.fromJson,
-        ),
-        activeTextColor: (await safeParseColorExprAsync(
-          json['active_text_color'],
-          fallback: const Color(0xCC000000),
-        ))!,
-        animationDuration: (await safeParseIntExprAsync(
-          json['animation_duration'],
-          fallback: 300,
-        ))!,
-        animationType: (await safeParseStrEnumExprAsync(
-          json['animation_type'],
-          parse: DivTabsTabTitleStyleAnimationType.fromJson,
-          fallback: DivTabsTabTitleStyleAnimationType.slide,
-        ))!,
-        cornerRadius: await safeParseIntExprAsync(
-          json['corner_radius'],
-        ),
-        cornersRadius: await safeParseObjAsync(
-          DivCornersRadius.fromJson(json['corners_radius']),
-        ),
-        fontFamily: await safeParseStrExprAsync(
-          json['font_family']?.toString(),
-        ),
-        fontSize: (await safeParseIntExprAsync(
-          json['font_size'],
-          fallback: 12,
-        ))!,
-        fontSizeUnit: (await safeParseStrEnumExprAsync(
-          json['font_size_unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.sp,
-        ))!,
-        fontWeight: (await safeParseStrEnumExprAsync(
-          json['font_weight'],
-          parse: DivFontWeight.fromJson,
-          fallback: DivFontWeight.regular,
-        ))!,
-        inactiveBackgroundColor: await safeParseColorExprAsync(
-          json['inactive_background_color'],
-        ),
-        inactiveFontWeight: await safeParseStrEnumExprAsync(
-          json['inactive_font_weight'],
-          parse: DivFontWeight.fromJson,
-        ),
-        inactiveTextColor: (await safeParseColorExprAsync(
-          json['inactive_text_color'],
-          fallback: const Color(0x80000000),
-        ))!,
-        itemSpacing: (await safeParseIntExprAsync(
-          json['item_spacing'],
-          fallback: 0,
-        ))!,
-        letterSpacing: (await safeParseDoubleExprAsync(
-          json['letter_spacing'],
-          fallback: 0,
-        ))!,
-        lineHeight: await safeParseIntExprAsync(
-          json['line_height'],
-        ),
-        paddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(
-            bottom: ValueExpression(
-              6,
-            ),
-            left: ValueExpression(
-              8,
-            ),
-            right: ValueExpression(
-              8,
-            ),
-            top: ValueExpression(
-              6,
-            ),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await activeBackgroundColor.preload(context);
-      await activeFontWeight?.preload(context);
-      await activeTextColor.preload(context);
-      await animationDuration.preload(context);
-      await animationType.preload(context);
-      await cornerRadius?.preload(context);
-      await cornersRadius?.preload(context);
-      await fontFamily?.preload(context);
-      await fontSize.preload(context);
-      await fontSizeUnit.preload(context);
-      await fontWeight.preload(context);
-      await inactiveBackgroundColor?.preload(context);
-      await inactiveFontWeight?.preload(context);
-      await inactiveTextColor.preload(context);
-      await itemSpacing.preload(context);
-      await letterSpacing.preload(context);
-      await lineHeight?.preload(context);
-      await paddings.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTabsTabTitleStyle resolve(DivVariableContext context) {
+    activeBackgroundColor.resolve(context);
+    activeFontWeight?.resolve(context);
+    activeTextColor.resolve(context);
+    animationDuration.resolve(context);
+    animationType.resolve(context);
+    cornerRadius?.resolve(context);
+    cornersRadius?.resolve(context);
+    fontFamily?.resolve(context);
+    fontSize.resolve(context);
+    fontSizeUnit.resolve(context);
+    fontWeight.resolve(context);
+    inactiveBackgroundColor?.resolve(context);
+    inactiveFontWeight?.resolve(context);
+    inactiveTextColor.resolve(context);
+    itemSpacing.resolve(context);
+    letterSpacing.resolve(context);
+    lineHeight?.resolve(context);
+    paddings.resolve(context);
+    return this;
   }
 }
 
-enum DivTabsTabTitleStyleAnimationType implements Preloadable {
+enum DivTabsTabTitleStyleAnimationType implements Resolvable {
   slide('slide'),
   fade('fade'),
   none('none');
@@ -1468,9 +1105,6 @@ enum DivTabsTabTitleStyleAnimationType implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivTabsTabTitleStyleAnimationType? fromJson(
     String? json,
   ) {
@@ -1492,30 +1126,12 @@ enum DivTabsTabTitleStyleAnimationType implements Preloadable {
     }
   }
 
-  static Future<DivTabsTabTitleStyleAnimationType?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'slide':
-          return DivTabsTabTitleStyleAnimationType.slide;
-        case 'fade':
-          return DivTabsTabTitleStyleAnimationType.fade;
-        case 'none':
-          return DivTabsTabTitleStyleAnimationType.none;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivTabsTabTitleStyleAnimationType resolve(DivVariableContext context) => this;
 }
 
 /// Design style of separators between tab titles.
-class DivTabsTabTitleDelimiter extends Preloadable with EquatableMixin {
+class DivTabsTabTitleDelimiter extends Resolvable with EquatableMixin {
   const DivTabsTabTitleDelimiter({
     this.height = const DivFixedSize(
       value: ValueExpression(
@@ -1590,53 +1206,17 @@ class DivTabsTabTitleDelimiter extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTabsTabTitleDelimiter?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTabsTabTitleDelimiter(
-        height: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['height']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              12,
-            ),
-          ),
-        ))!,
-        imageUrl: (await safeParseUriExprAsync(json['image_url']))!,
-        width: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['width']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              12,
-            ),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await height.preload(context);
-      await imageUrl.preload(context);
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTabsTabTitleDelimiter resolve(DivVariableContext context) {
+    height.resolve(context);
+    imageUrl.resolve(context);
+    width.resolve(context);
+    return this;
   }
 }
 
 /// Tab.
-class DivTabsItem extends Preloadable with EquatableMixin {
+class DivTabsItem extends Resolvable with EquatableMixin {
   const DivTabsItem({
     required this.div,
     required this.title,
@@ -1695,39 +1275,10 @@ class DivTabsItem extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTabsItem?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTabsItem(
-        div: (await safeParseObjAsync(
-          Div.fromJson(json['div']),
-        ))!,
-        title: (await safeParseStrExprAsync(
-          json['title']?.toString(),
-        ))!,
-        titleClickAction: await safeParseObjAsync(
-          DivAction.fromJson(json['title_click_action']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await div.preload(context);
-      await title.preload(context);
-      await titleClickAction?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTabsItem resolve(DivVariableContext context) {
+    title.resolve(context);
+    titleClickAction?.resolve(context);
+    return this;
   }
 }

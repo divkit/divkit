@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_page_transformation_slide.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivPageTransformation extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivPageTransformation extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -70,9 +70,6 @@ class DivPageTransformation extends Preloadable with EquatableMixin {
 
   bool get isDivPageTransformationSlide => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivPageTransformation? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -96,26 +93,9 @@ class DivPageTransformation extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPageTransformation?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivPageTransformationOverlap.type:
-          return DivPageTransformation.divPageTransformationOverlap(
-            (await DivPageTransformationOverlap.parse(json))!,
-          );
-        case DivPageTransformationSlide.type:
-          return DivPageTransformation.divPageTransformationSlide(
-            (await DivPageTransformationSlide.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivPageTransformation resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

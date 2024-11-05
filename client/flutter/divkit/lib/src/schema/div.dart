@@ -14,13 +14,14 @@ import 'package:divkit/src/schema/div_select.dart';
 import 'package:divkit/src/schema/div_separator.dart';
 import 'package:divkit/src/schema/div_slider.dart';
 import 'package:divkit/src/schema/div_state.dart';
+import 'package:divkit/src/schema/div_switch.dart';
 import 'package:divkit/src/schema/div_tabs.dart';
 import 'package:divkit/src/schema/div_text.dart';
 import 'package:divkit/src/schema/div_video.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class Div extends Preloadable with EquatableMixin {
+class Div extends Resolvable with EquatableMixin {
   final DivBase value;
   final int _index;
 
@@ -41,6 +42,7 @@ class Div extends Preloadable with EquatableMixin {
     required T Function(DivSeparator) divSeparator,
     required T Function(DivSlider) divSlider,
     required T Function(DivState) divState,
+    required T Function(DivSwitch) divSwitch,
     required T Function(DivTabs) divTabs,
     required T Function(DivText) divText,
     required T Function(DivVideo) divVideo,
@@ -99,14 +101,18 @@ class Div extends Preloadable with EquatableMixin {
           value as DivState,
         );
       case 13:
+        return divSwitch(
+          value as DivSwitch,
+        );
+      case 14:
         return divTabs(
           value as DivTabs,
         );
-      case 14:
+      case 15:
         return divText(
           value as DivText,
         );
-      case 15:
+      case 16:
         return divVideo(
           value as DivVideo,
         );
@@ -130,6 +136,7 @@ class Div extends Preloadable with EquatableMixin {
     T Function(DivSeparator)? divSeparator,
     T Function(DivSlider)? divSlider,
     T Function(DivState)? divState,
+    T Function(DivSwitch)? divSwitch,
     T Function(DivTabs)? divTabs,
     T Function(DivText)? divText,
     T Function(DivVideo)? divVideo,
@@ -228,20 +235,27 @@ class Div extends Preloadable with EquatableMixin {
         }
         break;
       case 13:
+        if (divSwitch != null) {
+          return divSwitch(
+            value as DivSwitch,
+          );
+        }
+        break;
+      case 14:
         if (divTabs != null) {
           return divTabs(
             value as DivTabs,
           );
         }
         break;
-      case 14:
+      case 15:
         if (divText != null) {
           return divText(
             value as DivText,
           );
         }
         break;
-      case 15:
+      case 16:
         if (divVideo != null) {
           return divVideo(
             value as DivVideo,
@@ -317,20 +331,25 @@ class Div extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 12;
 
+  const Div.divSwitch(
+    DivSwitch obj,
+  )   : value = obj,
+        _index = 13;
+
   const Div.divTabs(
     DivTabs obj,
   )   : value = obj,
-        _index = 13;
+        _index = 14;
 
   const Div.divText(
     DivText obj,
   )   : value = obj,
-        _index = 14;
+        _index = 15;
 
   const Div.divVideo(
     DivVideo obj,
   )   : value = obj,
-        _index = 15;
+        _index = 16;
 
   bool get isDivContainer => _index == 0;
 
@@ -358,14 +377,13 @@ class Div extends Preloadable with EquatableMixin {
 
   bool get isDivState => _index == 12;
 
-  bool get isDivTabs => _index == 13;
+  bool get isDivSwitch => _index == 13;
 
-  bool get isDivText => _index == 14;
+  bool get isDivTabs => _index == 14;
 
-  bool get isDivVideo => _index == 15;
+  bool get isDivText => _index == 15;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
+  bool get isDivVideo => _index == 16;
 
   static Div? fromJson(
     Map<String, dynamic>? json,
@@ -427,6 +445,10 @@ class Div extends Preloadable with EquatableMixin {
           return Div.divState(
             DivState.fromJson(json)!,
           );
+        case DivSwitch.type:
+          return Div.divSwitch(
+            DivSwitch.fromJson(json)!,
+          );
         case DivTabs.type:
           return Div.divTabs(
             DivTabs.fromJson(json)!,
@@ -446,82 +468,9 @@ class Div extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<Div?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivContainer.type:
-          return Div.divContainer(
-            (await DivContainer.parse(json))!,
-          );
-        case DivCustom.type:
-          return Div.divCustom(
-            (await DivCustom.parse(json))!,
-          );
-        case DivGallery.type:
-          return Div.divGallery(
-            (await DivGallery.parse(json))!,
-          );
-        case DivGifImage.type:
-          return Div.divGifImage(
-            (await DivGifImage.parse(json))!,
-          );
-        case DivGrid.type:
-          return Div.divGrid(
-            (await DivGrid.parse(json))!,
-          );
-        case DivImage.type:
-          return Div.divImage(
-            (await DivImage.parse(json))!,
-          );
-        case DivIndicator.type:
-          return Div.divIndicator(
-            (await DivIndicator.parse(json))!,
-          );
-        case DivInput.type:
-          return Div.divInput(
-            (await DivInput.parse(json))!,
-          );
-        case DivPager.type:
-          return Div.divPager(
-            (await DivPager.parse(json))!,
-          );
-        case DivSelect.type:
-          return Div.divSelect(
-            (await DivSelect.parse(json))!,
-          );
-        case DivSeparator.type:
-          return Div.divSeparator(
-            (await DivSeparator.parse(json))!,
-          );
-        case DivSlider.type:
-          return Div.divSlider(
-            (await DivSlider.parse(json))!,
-          );
-        case DivState.type:
-          return Div.divState(
-            (await DivState.parse(json))!,
-          );
-        case DivTabs.type:
-          return Div.divTabs(
-            (await DivTabs.parse(json))!,
-          );
-        case DivText.type:
-          return Div.divText(
-            (await DivText.parse(json))!,
-          );
-        case DivVideo.type:
-          return Div.divVideo(
-            (await DivVideo.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  Div resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

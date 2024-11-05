@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 /// Entity with simple properties.
-class EntityWithSimpleProperties extends Preloadable with EquatableMixin  {
+class EntityWithSimpleProperties extends Resolvable with EquatableMixin  {
   const EntityWithSimpleProperties({
     this.boolean,
     this.booleanInt,
@@ -96,39 +96,15 @@ class EntityWithSimpleProperties extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithSimpleProperties?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithSimpleProperties(
-        boolean: await safeParseBoolExprAsync(json['boolean'],),
-        booleanInt: await safeParseBoolExprAsync(json['boolean_int'],),
-        color: await safeParseColorExprAsync(json['color'],),
-        dNum: await safeParseDoubleExprAsync(json['dNum'],),
-        id: (await safeParseIntAsync(json['id'], fallback: 0,))!,
-        integer: (await safeParseIntExprAsync(json['integer'], fallback: 0,))!,
-        positiveInteger: await safeParseIntExprAsync(json['positive_integer'],),
-        string: await safeParseStrExprAsync(json['string']?.toString(),),
-        url: await safeParseUriExprAsync(json['url']),
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await boolean?.preload(context);
-    await booleanInt?.preload(context);
-    await color?.preload(context);
-    await dNum?.preload(context);
-    await integer?.preload(context);
-    await positiveInteger?.preload(context);
-    await string?.preload(context);
-    await url?.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithSimpleProperties resolve(DivVariableContext context) {
+    boolean?.resolve(context);
+    booleanInt?.resolve(context);
+    color?.resolve(context);
+    dNum?.resolve(context);
+    integer?.resolve(context);
+    positiveInteger?.resolve(context);
+    string?.resolve(context);
+    url?.resolve(context);
+    return this;
   }
 }

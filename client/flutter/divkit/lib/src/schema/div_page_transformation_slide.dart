@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Pages move without overlapping during pager scrolling.
-class DivPageTransformationSlide extends Preloadable with EquatableMixin {
+class DivPageTransformationSlide extends Resolvable with EquatableMixin {
   const DivPageTransformationSlide({
     this.interpolator =
         const ValueExpression(DivAnimationInterpolator.easeInOut),
@@ -101,53 +101,13 @@ class DivPageTransformationSlide extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPageTransformationSlide?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivPageTransformationSlide(
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        ))!,
-        nextPageAlpha: (await safeParseDoubleExprAsync(
-          json['next_page_alpha'],
-          fallback: 1.0,
-        ))!,
-        nextPageScale: (await safeParseDoubleExprAsync(
-          json['next_page_scale'],
-          fallback: 1.0,
-        ))!,
-        previousPageAlpha: (await safeParseDoubleExprAsync(
-          json['previous_page_alpha'],
-          fallback: 1.0,
-        ))!,
-        previousPageScale: (await safeParseDoubleExprAsync(
-          json['previous_page_scale'],
-          fallback: 1.0,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await interpolator.preload(context);
-      await nextPageAlpha.preload(context);
-      await nextPageScale.preload(context);
-      await previousPageAlpha.preload(context);
-      await previousPageScale.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivPageTransformationSlide resolve(DivVariableContext context) {
+    interpolator.resolve(context);
+    nextPageAlpha.resolve(context);
+    nextPageScale.resolve(context);
+    previousPageAlpha.resolve(context);
+    previousPageScale.resolve(context);
+    return this;
   }
 }

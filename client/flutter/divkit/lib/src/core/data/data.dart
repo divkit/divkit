@@ -29,12 +29,12 @@ class DefaultDivKitData extends DivKitData with EquatableMixin {
   bool get hasSource => _source != null;
 
   @override
-  Future<DivKitData> build() async {
-    _source ??= await traceAsyncFunc(
-      'buildData [A]',
-      () async => DivData.parse(
-        await traceAsyncFunc(
-          'mergeTemplate [A]',
+  DivKitData build() {
+    _source ??= traceFunc(
+      'DivData.fromJson',
+      () => DivData.fromJson(
+        traceFunc(
+          'TemplatesResolver.merge',
           () => TemplatesResolver(
             layout: _card,
             templates: _templates,
@@ -42,47 +42,6 @@ class DefaultDivKitData extends DivKitData with EquatableMixin {
         ),
       ),
     );
-    return this;
-  }
-
-  @override
-  DivKitData buildSync() {
-    _source ??= traceFunc(
-      'buildData [S]',
-      () => DivData.fromJson(
-        traceFunc(
-          'mergeTemplate [S]',
-          () => TemplatesResolver(
-            layout: _card,
-            templates: _templates,
-          ).mergeSync(),
-        ),
-      ),
-    );
-    return this;
-  }
-
-  bool _preloaded = false;
-
-  @override
-  bool get preloaded => _preloaded;
-
-  @override
-  Future<DivKitData> preload({
-    DivVariableStorage? variableStorage,
-  }) async {
-    if (source != null) {
-      await traceAsyncFunc(
-        'precacheExpressions',
-        () => source!.preload(
-          Map.fromEntries([
-            ...?variableStorage?.value.values.map((v) => v.raw),
-            ...source!.variables?.map((v) => v.pass.raw) ?? [],
-          ]),
-        ),
-      );
-      _preloaded = true;
-    }
     return this;
   }
 

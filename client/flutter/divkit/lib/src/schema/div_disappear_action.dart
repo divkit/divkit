@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Actions performed when an element is no longer visible.
-class DivDisappearAction extends Preloadable
+class DivDisappearAction extends Resolvable
     with EquatableMixin
     implements DivSightAction {
   const DivDisappearAction({
@@ -159,69 +159,17 @@ class DivDisappearAction extends Preloadable
     }
   }
 
-  static Future<DivDisappearAction?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivDisappearAction(
-        disappearDuration: (await safeParseIntExprAsync(
-          json['disappear_duration'],
-          fallback: 800,
-        ))!,
-        downloadCallbacks: await safeParseObjAsync(
-          DivDownloadCallbacks.fromJson(json['download_callbacks']),
-        ),
-        isEnabled: (await safeParseBoolExprAsync(
-          json['is_enabled'],
-          fallback: true,
-        ))!,
-        logId: (await safeParseStrExprAsync(
-          json['log_id']?.toString(),
-        ))!,
-        logLimit: (await safeParseIntExprAsync(
-          json['log_limit'],
-          fallback: 1,
-        ))!,
-        payload: await safeParseMapAsync(
-          json['payload'],
-        ),
-        referer: await safeParseUriExprAsync(json['referer']),
-        scopeId: await safeParseStrAsync(
-          json['scope_id']?.toString(),
-        ),
-        typed: await safeParseObjAsync(
-          DivActionTyped.fromJson(json['typed']),
-        ),
-        url: await safeParseUriExprAsync(json['url']),
-        visibilityPercentage: (await safeParseIntExprAsync(
-          json['visibility_percentage'],
-          fallback: 0,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await disappearDuration.preload(context);
-      await downloadCallbacks?.preload(context);
-      await isEnabled.preload(context);
-      await logId.preload(context);
-      await logLimit.preload(context);
-      await referer?.preload(context);
-      await typed?.preload(context);
-      await url?.preload(context);
-      await visibilityPercentage.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivDisappearAction resolve(DivVariableContext context) {
+    disappearDuration.resolve(context);
+    downloadCallbacks?.resolve(context);
+    isEnabled.resolve(context);
+    logId.resolve(context);
+    logLimit.resolve(context);
+    referer?.resolve(context);
+    typed?.resolve(context);
+    url?.resolve(context);
+    visibilityPercentage.resolve(context);
+    return this;
   }
 }

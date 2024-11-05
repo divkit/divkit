@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_radial_gradient.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivTextGradient extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivTextGradient extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivTextGradient extends Preloadable with EquatableMixin {
 
   bool get isDivRadialGradient => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivTextGradient? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivTextGradient extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTextGradient?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivLinearGradient.type:
-          return DivTextGradient.divLinearGradient(
-            (await DivLinearGradient.parse(json))!,
-          );
-        case DivRadialGradient.type:
-          return DivTextGradient.divRadialGradient(
-            (await DivRadialGradient.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivTextGradient resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

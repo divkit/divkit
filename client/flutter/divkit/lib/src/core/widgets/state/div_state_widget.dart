@@ -1,79 +1,53 @@
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/state/state_id.dart';
 import 'package:divkit/src/core/widgets/state/div_state_model.dart';
+import 'package:divkit/src/utils/mapping_widget.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rxdart/rxdart.dart';
 
-class DivStateWidget extends StatefulWidget {
-  final DivState data;
-
+class DivStateWidget extends DivMappingWidget<DivState, DivStateModel> {
   const DivStateWidget(
-    this.data, {
+    super.data, {
     super.key,
   });
 
   @override
-  State<DivStateWidget> createState() => _DivStateWidgetState();
-}
-
-class _DivStateWidgetState extends State<DivStateWidget> {
-  DivStateModel? value;
-
-  Stream<DivStateModel>? stream;
-
-  @override
-  void initState() {
-    super.initState();
-    value = DivStateModel.value(context, widget.data);
+  DivStateModel value(BuildContext context) {
+    final divContext = read<DivContext>(context)!;
+    divContext.stateManager.registerState(data.resolveDivId(context));
+    data.resolve(divContext.variables);
+    return data.bind(context);
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    stream ??= DivStateModel.from(context, widget.data);
+  Stream<DivStateModel> stream(BuildContext context) {
+    final divContext = watch<DivContext>(context)!;
+    return CombineLatestStream.combine2<DivVariableContext,
+        Map<String, String?>, DivStateModel>(
+      divContext.variableManager.contextStream,
+      divContext.stateManager.statesStream,
+      (values, states) {
+        data.resolve(values);
+        return data.bind(context);
+      },
+    );
   }
 
   @override
-  void didUpdateWidget(covariant DivStateWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.data != oldWidget.data) {
-      value = DivStateModel.value(context, widget.data);
-      stream = DivStateModel.from(context, widget.data);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) => DivBaseWidget(
-        data: widget.data,
-        child: StreamBuilder<DivStateModel>(
-          initialData: value,
-          stream: stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final model = snapshot.requireData;
-              return provide(
-                DivParentData.none,
-                child: provide(
-                  DivStateId(model.divId),
-                  child: DivWidget(
-                    // The unique identifier of the state subtree
-                    key: ValueKey(model.path), model.state?.div,
-                  ),
-                ),
-              );
-            }
-
-            return const SizedBox.shrink();
-          },
+  Widget build(BuildContext context, DivStateModel model) {
+    return DivBaseWidget(
+      data: data,
+      child: provide(
+        DivParentData.none,
+        child: provide(
+          DivStateId(model.divId),
+          child: DivWidget(
+            // The unique identifier of the subtree state
+            key: ValueKey(model.path), model.state?.div,
+          ),
         ),
-      );
-
-  @override
-  void dispose() {
-    value = null;
-    stream = null;
-    super.dispose();
+      ),
+    );
   }
 }

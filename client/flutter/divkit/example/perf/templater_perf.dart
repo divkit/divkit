@@ -40,7 +40,7 @@ Future<List<TestStatistics>> test() async {
 
     for (int i = 0; i < laps; ++i) {
       final stopwatch = Stopwatch()..start();
-      final json = await TemplatesResolver(
+      final json = TemplatesResolver(
         layout: raw['card']!,
         templates: raw['templates'],
       ).merge();

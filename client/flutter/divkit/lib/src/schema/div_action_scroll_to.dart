@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Scrolls or switches container to given destination provided by `destination`.
-class DivActionScrollTo extends Preloadable with EquatableMixin {
+class DivActionScrollTo extends Resolvable with EquatableMixin {
   const DivActionScrollTo({
     this.animated = const ValueExpression(true),
     required this.destination,
@@ -70,40 +70,11 @@ class DivActionScrollTo extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionScrollTo?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionScrollTo(
-        animated: (await safeParseBoolExprAsync(
-          json['animated'],
-          fallback: true,
-        ))!,
-        destination: (await safeParseObjAsync(
-          DivActionScrollDestination.fromJson(json['destination']),
-        ))!,
-        id: (await safeParseStrExprAsync(
-          json['id']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await animated.preload(context);
-      await destination.preload(context);
-      await id.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionScrollTo resolve(DivVariableContext context) {
+    animated.resolve(context);
+    destination.resolve(context);
+    id.resolve(context);
+    return this;
   }
 }

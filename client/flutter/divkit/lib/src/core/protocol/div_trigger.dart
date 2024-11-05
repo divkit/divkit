@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:divkit/divkit.dart';
 
 abstract class DivTriggerManager {
   final DivContext divContext;
@@ -13,7 +11,7 @@ abstract class DivTriggerManager {
   }) {
     // Triggers listen for storage changes and make additional actions.
     _sub = divContext.variableManager.contextStream
-        .delay(const Duration(milliseconds: 100))
+        .distinct()
         .listen(handleUpdate);
   }
 

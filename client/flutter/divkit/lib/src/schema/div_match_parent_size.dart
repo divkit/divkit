@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
-class DivMatchParentSize extends Preloadable with EquatableMixin {
+class DivMatchParentSize extends Resolvable with EquatableMixin {
   const DivMatchParentSize({
     this.weight,
   });
@@ -44,31 +44,9 @@ class DivMatchParentSize extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivMatchParentSize?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivMatchParentSize(
-        weight: await safeParseDoubleExprAsync(
-          json['weight'],
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await weight?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivMatchParentSize resolve(DivVariableContext context) {
+    weight?.resolve(context);
+    return this;
   }
 }

@@ -92,9 +92,7 @@ class _DivVisibilityActionEmitterState
             widget.isVisible;
 
     if (!widget.isVisible) {
-      divContext.visibilityActionManager.stopAllWaitIfNeed(
-        widget.id,
-      );
+      divContext.visibilityActionManager.stopAllWaitIfNeed(widget.id);
     }
     if (!needVisibilityDetector) {
       return widget.child;

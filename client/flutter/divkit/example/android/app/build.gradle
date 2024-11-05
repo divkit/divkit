@@ -67,6 +67,5 @@ flutter {
 }
 
 dependencies {
-    implementation "com.yandex.div:div:30.+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// A point with fixed coordinates.
-class DivPoint extends Preloadable with EquatableMixin {
+class DivPoint extends Resolvable with EquatableMixin {
   const DivPoint({
     required this.x,
     required this.y,
@@ -52,35 +52,10 @@ class DivPoint extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPoint?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivPoint(
-        x: (await safeParseObjAsync(
-          DivDimension.fromJson(json['x']),
-        ))!,
-        y: (await safeParseObjAsync(
-          DivDimension.fromJson(json['y']),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await x.preload(context);
-      await y.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivPoint resolve(DivVariableContext context) {
+    x.resolve(context);
+    y.resolve(context);
+    return this;
   }
 }

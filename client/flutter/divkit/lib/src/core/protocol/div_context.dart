@@ -48,6 +48,12 @@ abstract class DivContext {
   /// Allows to upload partial layout changes over the network.
   DivPatchManager get patchManager;
 
+  ///  Allows to change visual scale.
+  DivScale get scale;
+
+  ///  Allows to get custom text font.
+  DivFontProvider get fontProvider;
+
   /// Adds meta information to the logger.
   DivLoggerContext get loggerContext;
 
@@ -126,22 +132,35 @@ class DivRootContext extends DivContext {
 
   DivTriggerManager? triggerManager;
 
+  DivScale? _scale;
+
+  @override
+  DivScale get scale => _scale!;
+
+  set scale(DivScale value) => _scale = value;
+
+  DivFontProvider? _fontProvider;
+
+  @override
+  DivFontProvider get fontProvider => _fontProvider!;
+
+  set fontProvider(DivFontProvider value) => _fontProvider = value;
+
   DivRootContext([
     BuildContext? buildContext,
   ]) : _buildContext = buildContext;
 
-  static Future<DivRootContext?> init({
+  static DivRootContext? initialize({
     required BuildContext context,
     required DivKitData data,
+    DivScale? scale,
+    DivFontProvider? fontProvider,
     DivVariableStorage? variableStorage,
     DivActionHandler? actionHandler,
     DivCustomHandler? customHandler,
-  }) async {
+  }) {
     if (!data.hasSource) {
-      await data.build();
-    }
-    if (!data.preloaded) {
-      await data.preload(variableStorage: variableStorage);
+      data.build();
     }
 
     final source = data.source;
@@ -149,61 +168,7 @@ class DivRootContext extends DivContext {
       final divContext = DivRootContext(context);
       final loggerContext = DefaultDivLoggerContext(source.logId);
 
-      _log(loggerContext, 'Async init #${divContext.hashCode}');
-
-      // Main initialization
-      divContext
-        ..loggerContext = loggerContext
-        ..dataProvider = DefaultDivDataProvider(source);
-
-      // Features initialization
-      divContext
-        ..visibilityActionManager = DefaultDivVisibilityActionManager()
-        ..patchManager = DefaultDivPatchManager(divContext)
-        ..variableManager = DefaultDivVariableManager(
-          storage: DefaultDivVariableStorage(
-            inheritedStorage: variableStorage,
-            variables: source.variables?.map((v) => v.pass).toList(),
-          ),
-        )
-        ..stateManager = DefaultDivStateManager()
-        ..actionHandler = actionHandler ?? DefaultDivActionHandler()
-        ..customHandler = customHandler ?? DivCustomHandler.none()
-        ..timerManager =
-            await DefaultDivTimerManager(divContext: divContext).init(
-          timers: source.timers?.map((t) => t.pass).toList(growable: false),
-        )
-        ..triggerManager = DefaultDivTriggerManager(
-          divContext: divContext,
-          triggers: source.variableTriggers
-              ?.map((t) => t.pass)
-              .toList(growable: false),
-        );
-
-      _log(loggerContext, 'Prepared #${divContext.hashCode}');
-      return divContext;
-    }
-
-    return null;
-  }
-
-  static DivRootContext? initSync({
-    required BuildContext context,
-    required DivKitData data,
-    DivVariableStorage? variableStorage,
-    DivActionHandler? actionHandler,
-    DivCustomHandler? customHandler,
-  }) {
-    if (!data.hasSource) {
-      data.buildSync();
-    }
-
-    final source = data.source;
-    if (data.preloaded && source != null && context.mounted) {
-      final divContext = DivRootContext(context);
-      final loggerContext = DefaultDivLoggerContext(source.logId);
-
-      _log(loggerContext, 'Sync init #${divContext.hashCode}');
+      _log(loggerContext, 'Init #${divContext.hashCode}');
       _log(
         loggerContext,
         'Instant rendering is enabled! #${divContext.hashCode}',
@@ -227,8 +192,7 @@ class DivRootContext extends DivContext {
         ..stateManager = DefaultDivStateManager()
         ..actionHandler = actionHandler ?? DefaultDivActionHandler()
         ..customHandler = customHandler ?? DivCustomHandler.none()
-        ..timerManager =
-            DefaultDivTimerManager(divContext: divContext).initSync(
+        ..timerManager = DefaultDivTimerManager(divContext: divContext).init(
           timers: source.timers?.map((t) => t.pass).toList(growable: false),
         )
         ..triggerManager = DefaultDivTriggerManager(
@@ -236,12 +200,15 @@ class DivRootContext extends DivContext {
           triggers: source.variableTriggers
               ?.map((t) => t.pass)
               .toList(growable: false),
-        );
+        )
+        ..scale = const DivScale()
+        ..fontProvider = const DefaultDivFontProvider();
 
       _log(loggerContext, 'Prepared #${divContext.hashCode}');
       return divContext;
     }
 
+    logger.error('DivKitView has no valid data to display!');
     return null;
   }
 

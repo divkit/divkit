@@ -16,9 +16,7 @@ Future<List<DivKitData>> process(Box box) async {
   final it = <DivKitData>[];
   for (final str in box.data) {
     final json = jsonDecode(str);
-    final data = DefaultDivKitData.fromJson(json);
-    await data.build();
-    await data.preload();
+    final data = DefaultDivKitData.fromJson(json).build();
     it.add(data);
   }
   return it;

@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class ArrayValue extends Preloadable with EquatableMixin {
+class ArrayValue extends Resolvable with EquatableMixin {
   const ArrayValue({
     required this.value,
   });
@@ -40,31 +40,9 @@ class ArrayValue extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<ArrayValue?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return ArrayValue(
-        value: (await safeParseListExprAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  ArrayValue resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

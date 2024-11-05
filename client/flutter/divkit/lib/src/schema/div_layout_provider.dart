@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivLayoutProvider extends Preloadable with EquatableMixin {
+class DivLayoutProvider extends Resolvable with EquatableMixin {
   const DivLayoutProvider({
     this.heightVariableName,
     this.widthVariableName,
@@ -54,32 +54,8 @@ class DivLayoutProvider extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivLayoutProvider?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivLayoutProvider(
-        heightVariableName: await safeParseStrAsync(
-          json['height_variable_name']?.toString(),
-        ),
-        widthVariableName: await safeParseStrAsync(
-          json['width_variable_name']?.toString(),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {} catch (e) {
-      return;
-    }
+  DivLayoutProvider resolve(DivVariableContext context) {
+    return this;
   }
 }

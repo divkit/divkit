@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Specifies position measured in `dp` from container's start as scroll destination. Applicable only in `gallery`.
-class OffsetDestination extends Preloadable with EquatableMixin {
+class OffsetDestination extends Resolvable with EquatableMixin {
   const OffsetDestination({
     required this.value,
   });
@@ -44,31 +44,9 @@ class OffsetDestination extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<OffsetDestination?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return OffsetDestination(
-        value: (await safeParseIntExprAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  OffsetDestination resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

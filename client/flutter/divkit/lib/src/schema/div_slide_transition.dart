@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Slide animation.
-class DivSlideTransition extends Preloadable
+class DivSlideTransition extends Resolvable
     with EquatableMixin
     implements DivTransitionBase {
   const DivSlideTransition({
@@ -104,58 +104,18 @@ class DivSlideTransition extends Preloadable
     }
   }
 
-  static Future<DivSlideTransition?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivSlideTransition(
-        distance: await safeParseObjAsync(
-          DivDimension.fromJson(json['distance']),
-        ),
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-          fallback: 200,
-        ))!,
-        edge: (await safeParseStrEnumExprAsync(
-          json['edge'],
-          parse: DivSlideTransitionEdge.fromJson,
-          fallback: DivSlideTransitionEdge.bottom,
-        ))!,
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        ))!,
-        startDelay: (await safeParseIntExprAsync(
-          json['start_delay'],
-          fallback: 0,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await distance?.preload(context);
-      await duration.preload(context);
-      await edge.preload(context);
-      await interpolator.preload(context);
-      await startDelay.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivSlideTransition resolve(DivVariableContext context) {
+    distance?.resolve(context);
+    duration.resolve(context);
+    edge.resolve(context);
+    interpolator.resolve(context);
+    startDelay.resolve(context);
+    return this;
   }
 }
 
-enum DivSlideTransitionEdge implements Preloadable {
+enum DivSlideTransitionEdge implements Resolvable {
   left('left'),
   top('top'),
   right('right'),
@@ -209,9 +169,6 @@ enum DivSlideTransitionEdge implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivSlideTransitionEdge? fromJson(
     String? json,
   ) {
@@ -235,26 +192,6 @@ enum DivSlideTransitionEdge implements Preloadable {
     }
   }
 
-  static Future<DivSlideTransitionEdge?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'left':
-          return DivSlideTransitionEdge.left;
-        case 'top':
-          return DivSlideTransitionEdge.top;
-        case 'right':
-          return DivSlideTransitionEdge.right;
-        case 'bottom':
-          return DivSlideTransitionEdge.bottom;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivSlideTransitionEdge resolve(DivVariableContext context) => this;
 }

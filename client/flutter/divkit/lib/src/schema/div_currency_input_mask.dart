@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Mask for entering currency in the specified regional format.
-class DivCurrencyInputMask extends Preloadable
+class DivCurrencyInputMask extends Resolvable
     with EquatableMixin
     implements DivInputMaskBase {
   const DivCurrencyInputMask({
@@ -57,34 +57,9 @@ class DivCurrencyInputMask extends Preloadable
     }
   }
 
-  static Future<DivCurrencyInputMask?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivCurrencyInputMask(
-        locale: await safeParseStrExprAsync(
-          json['locale']?.toString(),
-        ),
-        rawTextVariable: (await safeParseStrAsync(
-          json['raw_text_variable']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await locale?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivCurrencyInputMask resolve(DivVariableContext context) {
+    locale?.resolve(context);
+    return this;
   }
 }

@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Transformation of the element.
-class DivTransform extends Preloadable with EquatableMixin {
+class DivTransform extends Resolvable with EquatableMixin {
   const DivTransform({
     this.pivotX = const DivPivot.divPivotPercentage(
       DivPivotPercentage(
@@ -91,53 +91,11 @@ class DivTransform extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTransform?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTransform(
-        pivotX: (await safeParseObjAsync(
-          DivPivot.fromJson(json['pivot_x']),
-          fallback: const DivPivot.divPivotPercentage(
-            DivPivotPercentage(
-              value: ValueExpression(
-                50,
-              ),
-            ),
-          ),
-        ))!,
-        pivotY: (await safeParseObjAsync(
-          DivPivot.fromJson(json['pivot_y']),
-          fallback: const DivPivot.divPivotPercentage(
-            DivPivotPercentage(
-              value: ValueExpression(
-                50,
-              ),
-            ),
-          ),
-        ))!,
-        rotation: await safeParseDoubleExprAsync(
-          json['rotation'],
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await pivotX.preload(context);
-      await pivotY.preload(context);
-      await rotation?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTransform resolve(DivVariableContext context) {
+    pivotX.resolve(context);
+    pivotY.resolve(context);
+    rotation?.resolve(context);
+    return this;
   }
 }

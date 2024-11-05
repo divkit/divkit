@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Callbacks that are called after [data loading](https://divkit.tech/docs/en/concepts/interaction#loading-data).
-class DivDownloadCallbacks extends Preloadable with EquatableMixin {
+class DivDownloadCallbacks extends Resolvable with EquatableMixin {
   const DivDownloadCallbacks({
     this.onFailActions,
     this.onSuccessActions,
@@ -65,45 +65,10 @@ class DivDownloadCallbacks extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivDownloadCallbacks?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivDownloadCallbacks(
-        onFailActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_fail_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        onSuccessActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_success_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(onFailActions, (v) => v.preload(context));
-      await safeFuturesWait(onSuccessActions, (v) => v.preload(context));
-    } catch (e) {
-      return;
-    }
+  DivDownloadCallbacks resolve(DivVariableContext context) {
+    safeListResolve(onFailActions, (v) => v.resolve(context));
+    safeListResolve(onSuccessActions, (v) => v.resolve(context));
+    return this;
   }
 }

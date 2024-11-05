@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element position and size change animation.
-class DivChangeBoundsTransition extends Preloadable
+class DivChangeBoundsTransition extends Resolvable
     with EquatableMixin
     implements DivTransitionBase {
   const DivChangeBoundsTransition({
@@ -78,43 +78,11 @@ class DivChangeBoundsTransition extends Preloadable
     }
   }
 
-  static Future<DivChangeBoundsTransition?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivChangeBoundsTransition(
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-          fallback: 200,
-        ))!,
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        ))!,
-        startDelay: (await safeParseIntExprAsync(
-          json['start_delay'],
-          fallback: 0,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await duration.preload(context);
-      await interpolator.preload(context);
-      await startDelay.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivChangeBoundsTransition resolve(DivVariableContext context) {
+    duration.resolve(context);
+    interpolator.resolve(context);
+    startDelay.resolve(context);
+    return this;
   }
 }

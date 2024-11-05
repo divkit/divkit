@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_rounded_rectangle_shape.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivShape extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivShape extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivShape extends Preloadable with EquatableMixin {
 
   bool get isDivRoundedRectangleShape => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivShape? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivShape extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivShape?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivCircleShape.type:
-          return DivShape.divCircleShape(
-            (await DivCircleShape.parse(json))!,
-          );
-        case DivRoundedRectangleShape.type:
-          return DivShape.divRoundedRectangleShape(
-            (await DivRoundedRectangleShape.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivShape resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

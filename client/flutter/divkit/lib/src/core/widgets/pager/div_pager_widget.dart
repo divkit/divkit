@@ -26,23 +26,38 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
   @override
   void initState() {
     super.initState();
-    value = DivPagerModel.value(context, widget.data);
-    currentPage = widget.data.defaultItem.value ?? 0;
-    controller = PageController(
-      initialPage: currentPage,
-    );
+    final divContext = read<DivContext>(context)!;
+    widget.data.resolve(divContext.variables);
+    value = widget.data.init(context);
+
+    final length = widget.data.items?.length ?? 0;
+    currentPage = widget.data.defaultItem.value.clamp(0, length);
+
+    final id = widget.data.id;
+    final variables = divContext.variableManager;
+
+    if (id != null && !variables.context.current.containsKey(id)) {
+      variables.putVariable(id, currentPage);
+    }
+
+    controller = PageController(initialPage: currentPage);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    stream ??= DivPagerModel.from(
-      context,
-      widget.data,
-      controller,
-      () => currentPage,
-    );
+    if (stream == null) {
+      final divContext = watch<DivContext>(context)!;
+      stream = divContext.variableManager.watch((values) {
+        widget.data.resolve(values);
+        return widget.data.bind(
+          context,
+          controller,
+          () => currentPage,
+        );
+      });
+    }
   }
 
   @override
@@ -50,27 +65,31 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
-      value = DivPagerModel.value(context, widget.data);
-      stream = DivPagerModel.from(
-        context,
-        widget.data,
-        controller,
-        () => currentPage,
-      );
+      final divContext = watch<DivContext>(context)!;
+      widget.data.resolve(divContext.variables);
+      value = widget.data.init(context);
+      stream = divContext.variableManager.watch((values) {
+        widget.data.resolve(values);
+        return widget.data.bind(
+          context,
+          controller,
+          () => currentPage,
+        );
+      });
     }
   }
 
   @override
-  Widget build(BuildContext context) => DivBaseWidget(
-        data: widget.data,
-        child: StreamBuilder<DivPagerModel>(
-          initialData: value,
-          stream: stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final model = snapshot.requireData;
+  Widget build(BuildContext context) => StreamBuilder<DivPagerModel>(
+        initialData: value,
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final model = snapshot.requireData;
 
-              return provide(
+            return DivBaseWidget(
+              data: widget.data,
+              child: provide(
                 DivParentData.pager,
                 child: PageView(
                   scrollDirection: model.orientation,
@@ -78,16 +97,17 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
                   onPageChanged: (value) => onPageChanged(value),
                   children: model.children,
                 ),
-              );
-            }
+              ),
+            );
+          }
 
-            return const SizedBox.shrink();
-          },
-        ),
+          return const SizedBox.shrink();
+        },
       );
 
   void onPageChanged(int value) {
-    currentPage = value;
+    final length = widget.data.items?.length ?? 0;
+    currentPage = value.clamp(0, length);
     final id = widget.data.id;
     if (id != null) {
       final divContext = watch<DivContext>(context)!;

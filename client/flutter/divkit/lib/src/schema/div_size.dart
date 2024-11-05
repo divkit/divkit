@@ -6,8 +6,8 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivSize extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivSize extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -90,9 +90,6 @@ class DivSize extends Preloadable with EquatableMixin {
 
   bool get isDivWrapContentSize => _index == 2;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivSize? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -120,30 +117,9 @@ class DivSize extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivSize?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivFixedSize.type:
-          return DivSize.divFixedSize(
-            (await DivFixedSize.parse(json))!,
-          );
-        case DivMatchParentSize.type:
-          return DivSize.divMatchParentSize(
-            (await DivMatchParentSize.parse(json))!,
-          );
-        case DivWrapContentSize.type:
-          return DivSize.divWrapContentSize(
-            (await DivWrapContentSize.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivSize resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

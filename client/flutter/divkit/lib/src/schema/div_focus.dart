@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element behavior when focusing or losing focus.
-class DivFocus extends Preloadable with EquatableMixin {
+class DivFocus extends Resolvable with EquatableMixin {
   const DivFocus({
     this.background,
     this.border = const DivBorder(),
@@ -101,69 +101,19 @@ class DivFocus extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivFocus?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFocus(
-        background: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
-          ),
-        ),
-        border: (await safeParseObjAsync(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        ))!,
-        nextFocusIds: await safeParseObjAsync(
-          DivFocusNextFocusIds.fromJson(json['next_focus_ids']),
-        ),
-        onBlur: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_blur'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        onFocus: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_focus'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(background, (v) => v.preload(context));
-      await border.preload(context);
-      await nextFocusIds?.preload(context);
-      await safeFuturesWait(onBlur, (v) => v.preload(context));
-      await safeFuturesWait(onFocus, (v) => v.preload(context));
-    } catch (e) {
-      return;
-    }
+  DivFocus resolve(DivVariableContext context) {
+    safeListResolve(background, (v) => v.resolve(context));
+    border.resolve(context);
+    nextFocusIds?.resolve(context);
+    safeListResolve(onBlur, (v) => v.resolve(context));
+    safeListResolve(onFocus, (v) => v.resolve(context));
+    return this;
   }
 }
 
 /// IDs of elements that will be next to get focus.
-class DivFocusNextFocusIds extends Preloadable with EquatableMixin {
+class DivFocusNextFocusIds extends Resolvable with EquatableMixin {
   const DivFocusNextFocusIds({
     this.down,
     this.forward,
@@ -231,47 +181,13 @@ class DivFocusNextFocusIds extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivFocusNextFocusIds?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFocusNextFocusIds(
-        down: await safeParseStrExprAsync(
-          json['down']?.toString(),
-        ),
-        forward: await safeParseStrExprAsync(
-          json['forward']?.toString(),
-        ),
-        left: await safeParseStrExprAsync(
-          json['left']?.toString(),
-        ),
-        right: await safeParseStrExprAsync(
-          json['right']?.toString(),
-        ),
-        up: await safeParseStrExprAsync(
-          json['up']?.toString(),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await down?.preload(context);
-      await forward?.preload(context);
-      await left?.preload(context);
-      await right?.preload(context);
-      await up?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivFocusNextFocusIds resolve(DivVariableContext context) {
+    down?.resolve(context);
+    forward?.resolve(context);
+    left?.resolve(context);
+    right?.resolve(context);
+    up?.resolve(context);
+    return this;
   }
 }

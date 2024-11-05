@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Solid background color.
-class DivSolidBackground extends Preloadable with EquatableMixin {
+class DivSolidBackground extends Resolvable with EquatableMixin {
   const DivSolidBackground({
     required this.color,
   });
@@ -43,31 +43,9 @@ class DivSolidBackground extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivSolidBackground?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivSolidBackground(
-        color: (await safeParseColorExprAsync(
-          json['color'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await color.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivSolidBackground resolve(DivVariableContext context) {
+    color.resolve(context);
+    return this;
   }
 }

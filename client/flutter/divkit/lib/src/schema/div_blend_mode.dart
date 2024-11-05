@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivBlendMode implements Preloadable {
+enum DivBlendMode implements Resolvable {
   sourceIn('source_in'),
   sourceAtop('source_atop'),
   darken('darken'),
@@ -74,9 +74,6 @@ enum DivBlendMode implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivBlendMode? fromJson(
     String? json,
   ) {
@@ -104,30 +101,6 @@ enum DivBlendMode implements Preloadable {
     }
   }
 
-  static Future<DivBlendMode?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'source_in':
-          return DivBlendMode.sourceIn;
-        case 'source_atop':
-          return DivBlendMode.sourceAtop;
-        case 'darken':
-          return DivBlendMode.darken;
-        case 'lighten':
-          return DivBlendMode.lighten;
-        case 'multiply':
-          return DivBlendMode.multiply;
-        case 'screen':
-          return DivBlendMode.screen;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivBlendMode resolve(DivVariableContext context) => this;
 }

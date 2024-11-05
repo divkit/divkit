@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Gaussian image blur.
-class DivBlur extends Preloadable with EquatableMixin {
+class DivBlur extends Resolvable with EquatableMixin {
   const DivBlur({
     required this.radius,
   });
@@ -44,31 +44,9 @@ class DivBlur extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivBlur?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivBlur(
-        radius: (await safeParseIntExprAsync(
-          json['radius'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await radius.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivBlur resolve(DivVariableContext context) {
+    radius.resolve(context);
+    return this;
   }
 }

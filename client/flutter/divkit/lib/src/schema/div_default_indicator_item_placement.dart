@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
-class DivDefaultIndicatorItemPlacement extends Preloadable with EquatableMixin {
+class DivDefaultIndicatorItemPlacement extends Resolvable with EquatableMixin {
   const DivDefaultIndicatorItemPlacement({
     this.spaceBetweenCenters = const DivFixedSize(
       value: ValueExpression(
@@ -54,36 +54,9 @@ class DivDefaultIndicatorItemPlacement extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivDefaultIndicatorItemPlacement?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivDefaultIndicatorItemPlacement(
-        spaceBetweenCenters: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['space_between_centers']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              15,
-            ),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await spaceBetweenCenters.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivDefaultIndicatorItemPlacement resolve(DivVariableContext context) {
+    spaceBetweenCenters.resolve(context);
+    return this;
   }
 }

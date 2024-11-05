@@ -6,7 +6,7 @@ import 'entity.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithArrayOfNestedItems extends Preloadable with EquatableMixin  {
+class EntityWithArrayOfNestedItems extends Resolvable with EquatableMixin  {
   const EntityWithArrayOfNestedItems({
     required this.items,
   });
@@ -39,30 +39,13 @@ class EntityWithArrayOfNestedItems extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithArrayOfNestedItems?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithArrayOfNestedItems(
-        items: (await safeParseObjAsync(await safeListMapAsync(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!,),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await safeFuturesWait(items, (v) => v.preload(context));
-    } catch (e, st) {
-      return;
-    }
+  EntityWithArrayOfNestedItems resolve(DivVariableContext context) {
+    return this;
   }
 }
 
 
-class EntityWithArrayOfNestedItemsItem extends Preloadable with EquatableMixin  {
+class EntityWithArrayOfNestedItemsItem extends Resolvable with EquatableMixin  {
   const EntityWithArrayOfNestedItemsItem({
     required this.entity,
     required this.property,
@@ -99,26 +82,9 @@ class EntityWithArrayOfNestedItemsItem extends Preloadable with EquatableMixin  
     }
   }
 
-  static Future<EntityWithArrayOfNestedItemsItem?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithArrayOfNestedItemsItem(
-        entity: (await safeParseObjAsync(Entity.fromJson(json['entity']),))!,
-        property: (await safeParseStrExprAsync(json['property']?.toString(),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await entity.preload(context);
-    await property.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithArrayOfNestedItemsItem resolve(DivVariableContext context) {
+    entity.resolve(context);
+    property.resolve(context);
+    return this;
   }
 }

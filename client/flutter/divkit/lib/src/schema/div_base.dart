@@ -25,7 +25,7 @@ import 'package:divkit/src/schema/div_visibility.dart';
 import 'package:divkit/src/schema/div_visibility_action.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-abstract class DivBase extends Preloadable {
+abstract class DivBase extends Resolvable {
   DivAccessibility get accessibility;
 
   Expression<DivAlignmentHorizontal>? get alignmentHorizontal;
@@ -97,5 +97,5 @@ abstract class DivBase extends Preloadable {
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   DivSize get width;
   @override
-  Future<void> preload(Map<String, dynamic> context);
+  DivBase resolve(DivVariableContext context);
 }

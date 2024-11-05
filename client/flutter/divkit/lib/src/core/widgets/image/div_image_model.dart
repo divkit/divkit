@@ -1,5 +1,7 @@
 import 'package:divkit/divkit.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
+import 'package:divkit/src/core/converters/alignment.dart';
+import 'package:divkit/src/core/converters/filters_converter.dart';
+import 'package:divkit/src/core/converters/image_specific.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -23,95 +25,6 @@ class DivImageModel with EquatableMixin {
     this.blurRadius,
   });
 
-  static DivImageModel? value(
-    BuildContext context,
-    DivImage data,
-  ) {
-    try {
-      final divScalingModel = read<DivScalingModel>(context);
-      final viewScale = divScalingModel?.viewScale ?? 1;
-
-      final alignment = PassDivAlignment(
-            data.contentAlignmentVertical,
-            data.contentAlignmentHorizontal,
-          ).valueAlignmentGeometry() ??
-          Alignment.center;
-
-      final filters = DivFilters.value(
-        filters: data.filters ?? [],
-        viewScale: viewScale,
-      );
-
-      return DivImageModel(
-        src: data.imageUrl.value!.toString(),
-        fit: data.scale.value!.asBoxFit,
-        color: data.tintColor?.value!,
-        colorBlendMode: data.tintMode.value!.asBlendMode,
-        contentAlignment: alignment,
-        blurRadius: filters.blurRadius == null
-            ? null
-            : (filters.blurRadius ?? 0) * viewScale,
-        rtlMirror: filters.isRtl,
-      );
-    } catch (e, st) {
-      logger.warning(
-        'Expression cache is corrupted! Instant rendering is not available for div',
-        error: e,
-        stackTrace: st,
-      );
-      return null;
-    }
-  }
-
-  static Stream<DivImageModel> from(
-    BuildContext context,
-    DivImage data,
-  ) {
-    final variables = watch<DivContext>(context)!.variableManager;
-
-    final divScalingModel = watch<DivScalingModel>(context);
-    final viewScale = divScalingModel?.viewScale ?? 1;
-
-    return variables.watch<DivImageModel>((context) async {
-      final alignment = PassDivAlignment(
-        data.contentAlignmentVertical,
-        data.contentAlignmentHorizontal,
-      );
-
-      final filters = await DivFilters.resolve(
-        filters: data.filters ?? [],
-        context: context,
-        viewScale: viewScale,
-      );
-
-      return DivImageModel(
-        src: (await data.imageUrl.resolveValue(
-          context: context,
-        ))
-            .toString(),
-        fit: (await data.scale.resolveValue(
-          context: context,
-        ))
-            .asBoxFit,
-        color: await data.tintColor?.resolveValue(
-          context: context,
-        ),
-        colorBlendMode: (await data.tintMode.resolveValue(
-          context: context,
-        ))
-            .asBlendMode,
-        contentAlignment: await alignment.resolve(
-              context: context,
-            ) ??
-            Alignment.center,
-        blurRadius: filters.blurRadius == null
-            ? null
-            : (filters.blurRadius ?? 0) * viewScale,
-        rtlMirror: filters.isRtl,
-      );
-    }).distinct();
-  }
-
   @override
   List<Object?> get props => [
         src,
@@ -122,4 +35,34 @@ class DivImageModel with EquatableMixin {
         blurRadius,
         rtlMirror,
       ];
+}
+
+extension DivImageBinder on DivImage {
+  DivImageModel bind(BuildContext context) {
+    final divContext = read<DivContext>(context)!;
+
+    final viewScale = divContext.scale.view;
+
+    final alignment = DivAlignmentConverter(
+      contentAlignmentVertical,
+      contentAlignmentHorizontal,
+    ).convert();
+
+    final filter = DivFilters.combine(
+      filters: filters ?? [],
+      viewScale: viewScale,
+    );
+
+    return DivImageModel(
+      src: imageUrl.value.toString(),
+      fit: scale.value.convert(),
+      color: tintColor?.value,
+      colorBlendMode: tintMode.value.convert(),
+      contentAlignment: alignment ?? Alignment.center,
+      blurRadius: filter.blurRadius == null
+          ? null
+          : (filter.blurRadius ?? 0) * viewScale,
+      rtlMirror: filter.isRtl,
+    );
+  }
 }

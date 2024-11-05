@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
-class DivAspect extends Preloadable with EquatableMixin {
+class DivAspect extends Resolvable with EquatableMixin {
   const DivAspect({
     required this.ratio,
   });
@@ -42,31 +42,9 @@ class DivAspect extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivAspect?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivAspect(
-        ratio: (await safeParseDoubleExprAsync(
-          json['ratio'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await ratio.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivAspect resolve(DivVariableContext context) {
+    ratio.resolve(context);
+    return this;
   }
 }

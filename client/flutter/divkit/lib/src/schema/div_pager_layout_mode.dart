@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_page_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivPagerLayoutMode extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivPagerLayoutMode extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivPagerLayoutMode extends Preloadable with EquatableMixin {
 
   bool get isDivPageSize => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivPagerLayoutMode? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivPagerLayoutMode extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPagerLayoutMode?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivNeighbourPageSize.type:
-          return DivPagerLayoutMode.divNeighbourPageSize(
-            (await DivNeighbourPageSize.parse(json))!,
-          );
-        case DivPageSize.type:
-          return DivPagerLayoutMode.divPageSize(
-            (await DivPageSize.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivPagerLayoutMode resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

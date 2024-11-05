@@ -7,8 +7,8 @@ import 'package:divkit/src/schema/div_slide_transition.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivAppearanceTransition extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivAppearanceTransition extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -111,9 +111,6 @@ class DivAppearanceTransition extends Preloadable with EquatableMixin {
 
   bool get isDivSlideTransition => _index == 3;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivAppearanceTransition? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -145,34 +142,9 @@ class DivAppearanceTransition extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivAppearanceTransition?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivAppearanceSetTransition.type:
-          return DivAppearanceTransition.divAppearanceSetTransition(
-            (await DivAppearanceSetTransition.parse(json))!,
-          );
-        case DivFadeTransition.type:
-          return DivAppearanceTransition.divFadeTransition(
-            (await DivFadeTransition.parse(json))!,
-          );
-        case DivScaleTransition.type:
-          return DivAppearanceTransition.divScaleTransition(
-            (await DivScaleTransition.parse(json))!,
-          );
-        case DivSlideTransition.type:
-          return DivAppearanceTransition.divSlideTransition(
-            (await DivSlideTransition.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivAppearanceTransition resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

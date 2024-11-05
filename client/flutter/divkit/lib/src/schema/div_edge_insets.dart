@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// It sets margins.
-class DivEdgeInsets extends Preloadable with EquatableMixin {
+class DivEdgeInsets extends Resolvable with EquatableMixin {
   const DivEdgeInsets({
     this.bottom = const ValueExpression(0),
     this.end,
@@ -113,61 +113,15 @@ class DivEdgeInsets extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivEdgeInsets?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivEdgeInsets(
-        bottom: (await safeParseIntExprAsync(
-          json['bottom'],
-          fallback: 0,
-        ))!,
-        end: await safeParseIntExprAsync(
-          json['end'],
-        ),
-        left: (await safeParseIntExprAsync(
-          json['left'],
-          fallback: 0,
-        ))!,
-        right: (await safeParseIntExprAsync(
-          json['right'],
-          fallback: 0,
-        ))!,
-        start: await safeParseIntExprAsync(
-          json['start'],
-        ),
-        top: (await safeParseIntExprAsync(
-          json['top'],
-          fallback: 0,
-        ))!,
-        unit: (await safeParseStrEnumExprAsync(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await bottom.preload(context);
-      await end?.preload(context);
-      await left.preload(context);
-      await right.preload(context);
-      await start?.preload(context);
-      await top.preload(context);
-      await unit.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivEdgeInsets resolve(DivVariableContext context) {
+    bottom.resolve(context);
+    end?.resolve(context);
+    left.resolve(context);
+    right.resolve(context);
+    start?.resolve(context);
+    top.resolve(context);
+    unit.resolve(context);
+    return this;
   }
 }

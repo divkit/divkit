@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivFontWeight implements Preloadable {
+enum DivFontWeight implements Resolvable {
   light('light'),
   medium('medium'),
   regular('regular'),
@@ -56,9 +56,6 @@ enum DivFontWeight implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivFontWeight? fromJson(
     String? json,
   ) {
@@ -82,26 +79,6 @@ enum DivFontWeight implements Preloadable {
     }
   }
 
-  static Future<DivFontWeight?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'light':
-          return DivFontWeight.light;
-        case 'medium':
-          return DivFontWeight.medium;
-        case 'regular':
-          return DivFontWeight.regular;
-        case 'bold':
-          return DivFontWeight.bold;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivFontWeight resolve(DivVariableContext context) => this;
 }

@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_pivot_percentage.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivPivot extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivPivot extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivPivot extends Preloadable with EquatableMixin {
 
   bool get isDivPivotPercentage => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivPivot? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivPivot extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPivot?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivPivotFixed.type:
-          return DivPivot.divPivotFixed(
-            (await DivPivotFixed.parse(json))!,
-          );
-        case DivPivotPercentage.type:
-          return DivPivot.divPivotPercentage(
-            (await DivPivotPercentage.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivPivot resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

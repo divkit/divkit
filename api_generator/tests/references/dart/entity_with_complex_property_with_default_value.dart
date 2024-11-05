@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithComplexPropertyWithDefaultValue extends Preloadable with EquatableMixin  {
+class EntityWithComplexPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
   const EntityWithComplexPropertyWithDefaultValue({
     this.property = const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),
   });
@@ -38,30 +38,14 @@ class EntityWithComplexPropertyWithDefaultValue extends Preloadable with Equatab
     }
   }
 
-  static Future<EntityWithComplexPropertyWithDefaultValue?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithComplexPropertyWithDefaultValue(
-        property: (await safeParseObjAsync(EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property']), fallback: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await property?.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithComplexPropertyWithDefaultValue resolve(DivVariableContext context) {
+    property?.resolve(context);
+    return this;
   }
 }
 
 
-class EntityWithComplexPropertyWithDefaultValueProperty extends Preloadable with EquatableMixin  {
+class EntityWithComplexPropertyWithDefaultValueProperty extends Resolvable with EquatableMixin  {
   const EntityWithComplexPropertyWithDefaultValueProperty({
     required this.value,
   });
@@ -92,24 +76,8 @@ class EntityWithComplexPropertyWithDefaultValueProperty extends Preloadable with
     }
   }
 
-  static Future<EntityWithComplexPropertyWithDefaultValueProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithComplexPropertyWithDefaultValueProperty(
-        value: (await safeParseStrExprAsync(json['value']?.toString(),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await value.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithComplexPropertyWithDefaultValueProperty resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

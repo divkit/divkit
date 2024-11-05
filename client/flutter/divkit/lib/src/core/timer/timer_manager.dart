@@ -9,25 +9,12 @@ class DefaultDivTimerManager extends DivTimerManager {
     required this.divContext,
   });
 
-  Future<DivTimerManager> init({
-    Iterable<DivTimerModel>? timers,
-  }) async {
-    if (timers != null) {
-      for (final timer in timers) {
-        await timer.init(divContext);
-      }
-    }
-
-    scheduler = DivTimerScheduler(timers: timers);
-    return this;
-  }
-
-  DivTimerManager initSync({
+  DivTimerManager init({
     Iterable<DivTimerModel>? timers,
   }) {
     if (timers != null) {
       for (final timer in timers) {
-        timer.initSync(divContext);
+        timer.init(divContext);
       }
     }
 

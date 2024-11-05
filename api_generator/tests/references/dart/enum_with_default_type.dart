@@ -7,8 +7,8 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'with_default.dart';
 import 'without_default.dart';
 
-class EnumWithDefaultType extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class EnumWithDefaultType extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -59,7 +59,6 @@ class EnumWithDefaultType extends Preloadable with EquatableMixin {
 
   bool get isWithoutDefault => _index == 1;
 
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 
   static EnumWithDefaultType? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
@@ -77,21 +76,5 @@ class EnumWithDefaultType extends Preloadable with EquatableMixin {
       return null;
     }
   }
-
-  static Future<EnumWithDefaultType?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-      case WithDefault.type :
-        return EnumWithDefaultType.withDefault((await WithDefault.parse(json))!,);
-      case WithoutDefault.type :
-        return EnumWithDefaultType.withoutDefault((await WithoutDefault.parse(json))!,);
-    }
-      return null;
-    } catch (e, st) {
-      return null;
-    }
-  }
+  EnumWithDefaultType resolve(DivVariableContext context) { value.resolve(context); return this; }
 }

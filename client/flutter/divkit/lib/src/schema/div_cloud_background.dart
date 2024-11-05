@@ -1,16 +1,15 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_edge_insets.dart';
-import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Cloud text background. Lines draws a rectangular background with the specified color and rounded corners.
-class DivCloudBackground extends Preloadable with EquatableMixin {
+class DivCloudBackground extends Resolvable with EquatableMixin {
   const DivCloudBackground({
     required this.color,
     required this.cornerRadius,
-    this.padding = const DivEdgeInsets(),
+    this.paddings = const DivEdgeInsets(),
   });
 
   static const type = "cloud";
@@ -19,27 +18,28 @@ class DivCloudBackground extends Preloadable with EquatableMixin {
   final Expression<Color> color;
 
   /// Corner rounding radius.
-  final DivFixedSize cornerRadius;
+  // constraint: number >= 0
+  final Expression<int> cornerRadius;
 
   /// Margins between line bounds and background.
-  final DivEdgeInsets padding;
+  final DivEdgeInsets paddings;
 
   @override
   List<Object?> get props => [
         color,
         cornerRadius,
-        padding,
+        paddings,
       ];
 
   DivCloudBackground copyWith({
     Expression<Color>? color,
-    DivFixedSize? cornerRadius,
-    DivEdgeInsets? padding,
+    Expression<int>? cornerRadius,
+    DivEdgeInsets? paddings,
   }) =>
       DivCloudBackground(
         color: color ?? this.color,
         cornerRadius: cornerRadius ?? this.cornerRadius,
-        padding: padding ?? this.padding,
+        paddings: paddings ?? this.paddings,
       );
 
   static DivCloudBackground? fromJson(
@@ -53,37 +53,13 @@ class DivCloudBackground extends Preloadable with EquatableMixin {
         color: safeParseColorExpr(
           json['color'],
         )!,
-        cornerRadius: safeParseObj(
-          DivFixedSize.fromJson(json['corner_radius']),
+        cornerRadius: safeParseIntExpr(
+          json['corner_radius'],
         )!,
-        padding: safeParseObj(
-          DivEdgeInsets.fromJson(json['padding']),
+        paddings: safeParseObj(
+          DivEdgeInsets.fromJson(json['paddings']),
           fallback: const DivEdgeInsets(),
         )!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
-  static Future<DivCloudBackground?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivCloudBackground(
-        color: (await safeParseColorExprAsync(
-          json['color'],
-        ))!,
-        cornerRadius: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['corner_radius']),
-        ))!,
-        padding: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['padding']),
-          fallback: const DivEdgeInsets(),
-        ))!,
       );
     } catch (e) {
       return null;
@@ -91,15 +67,10 @@ class DivCloudBackground extends Preloadable with EquatableMixin {
   }
 
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await color.preload(context);
-      await cornerRadius.preload(context);
-      await padding.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivCloudBackground resolve(DivVariableContext context) {
+    color.resolve(context);
+    cornerRadius.resolve(context);
+    paddings.resolve(context);
+    return this;
   }
 }

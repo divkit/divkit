@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets the value in the array by index.
-class DivActionArraySetValue extends Preloadable with EquatableMixin {
+class DivActionArraySetValue extends Resolvable with EquatableMixin {
   const DivActionArraySetValue({
     required this.index,
     required this.value,
@@ -58,39 +58,11 @@ class DivActionArraySetValue extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionArraySetValue?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionArraySetValue(
-        index: (await safeParseIntExprAsync(
-          json['index'],
-        ))!,
-        value: (await safeParseObjAsync(
-          DivTypedValue.fromJson(json['value']),
-        ))!,
-        variableName: (await safeParseStrExprAsync(
-          json['variable_name']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await index.preload(context);
-      await value.preload(context);
-      await variableName.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionArraySetValue resolve(DivVariableContext context) {
+    index.resolve(context);
+    value.resolve(context);
+    variableName.resolve(context);
+    return this;
   }
 }

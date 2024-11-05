@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithComplexProperty extends Preloadable with EquatableMixin  {
+class EntityWithComplexProperty extends Resolvable with EquatableMixin  {
   const EntityWithComplexProperty({
     required this.property,
   });
@@ -37,30 +37,14 @@ class EntityWithComplexProperty extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithComplexProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithComplexProperty(
-        property: (await safeParseObjAsync(EntityWithComplexPropertyProperty.fromJson(json['property']),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await property.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithComplexProperty resolve(DivVariableContext context) {
+    property.resolve(context);
+    return this;
   }
 }
 
 
-class EntityWithComplexPropertyProperty extends Preloadable with EquatableMixin  {
+class EntityWithComplexPropertyProperty extends Resolvable with EquatableMixin  {
   const EntityWithComplexPropertyProperty({
     required this.value,
   });
@@ -91,24 +75,8 @@ class EntityWithComplexPropertyProperty extends Preloadable with EquatableMixin 
     }
   }
 
-  static Future<EntityWithComplexPropertyProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithComplexPropertyProperty(
-        value: (await safeParseUriExprAsync(json['value']))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await value.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithComplexPropertyProperty resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

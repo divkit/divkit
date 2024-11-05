@@ -6,7 +6,7 @@ import 'package:divkit/src/schema/div_number_animator.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivAnimator extends Preloadable with EquatableMixin {
+class DivAnimator extends Resolvable with EquatableMixin {
   final DivAnimatorBase value;
   final int _index;
 
@@ -70,9 +70,6 @@ class DivAnimator extends Preloadable with EquatableMixin {
 
   bool get isDivNumberAnimator => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivAnimator? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -96,26 +93,9 @@ class DivAnimator extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivAnimator?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivColorAnimator.type:
-          return DivAnimator.divColorAnimator(
-            (await DivColorAnimator.parse(json))!,
-          );
-        case DivNumberAnimator.type:
-          return DivAnimator.divNumberAnimator(
-            (await DivNumberAnimator.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivAnimator resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

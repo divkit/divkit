@@ -39,14 +39,32 @@ class _DivInputWidget extends State<DivInputWidget> {
   @override
   void initState() {
     super.initState();
-    value = DivInputModel.value(context, widget.data, controller);
+
+    final divContext = read<DivContext>(context)!;
+    widget.data.resolve(divContext.variables);
+    controller.addListener(() {
+      if (divContext.variables.current[widget.data.textVariable] !=
+          controller.text) {
+        divContext.variableManager.updateVariable(
+          widget.data.textVariable,
+          controller.text,
+        );
+      }
+    });
+    value = widget.data.bind(context, controller);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    stream ??= DivInputModel.from(context, widget.data, controller);
+    if (stream == null) {
+      final divContext = watch<DivContext>(context)!;
+      stream = divContext.variableManager.watch((values) {
+        widget.data.resolve(values);
+        return widget.data.bind(context, controller);
+      });
+    }
   }
 
   @override
@@ -54,23 +72,40 @@ class _DivInputWidget extends State<DivInputWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
-      value = DivInputModel.value(context, widget.data, controller);
-      stream = DivInputModel.from(context, widget.data, controller);
+      final divContext = watch<DivContext>(context)!;
+      widget.data.resolve(divContext.variables);
+
+      controller.clear();
+      controller.addListener(() {
+        if (divContext.variables.current[widget.data.textVariable] !=
+            controller.text) {
+          divContext.variableManager.updateVariable(
+            widget.data.textVariable,
+            controller.text,
+          );
+        }
+      });
+
+      value = widget.data.bind(context, controller);
+      stream ??= divContext.variableManager.watch((values) {
+        widget.data.resolve(values);
+        return widget.data.bind(context, controller);
+      });
     }
   }
 
   @override
-  Widget build(BuildContext context) => DivBaseWidget(
-        data: widget.data,
-        child: StreamBuilder<DivInputModel>(
-          initialData: value,
-          stream: stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final model = snapshot.requireData;
-              final divContext = watch<DivContext>(context)!;
+  Widget build(BuildContext context) => StreamBuilder<DivInputModel>(
+        initialData: value,
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final model = snapshot.requireData;
+            final divContext = watch<DivContext>(context)!;
 
-              return Material(
+            return DivBaseWidget(
+              data: widget.data,
+              child: Material(
                 type: MaterialType.transparency,
                 child: Focus.withExternalFocusNode(
                   focusNode: focusNode,
@@ -117,12 +152,12 @@ class _DivInputWidget extends State<DivInputWidget> {
                     ),
                   ),
                 ),
-              );
-            }
+              ),
+            );
+          }
 
-            return const SizedBox.shrink();
-          },
-        ),
+          return const SizedBox.shrink();
+        },
       );
 
   @override

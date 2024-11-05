@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithArrayOfEnums extends Preloadable with EquatableMixin  {
+class EntityWithArrayOfEnums extends Resolvable with EquatableMixin  {
   const EntityWithArrayOfEnums({
     required this.items,
   });
@@ -38,29 +38,12 @@ class EntityWithArrayOfEnums extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithArrayOfEnums?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithArrayOfEnums(
-        items: (await safeParseObjAsync(await safeListMapAsync(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!,),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await safeFuturesWait(items, (v) => v.preload(context));
-    } catch (e, st) {
-      return;
-    }
+  EntityWithArrayOfEnums resolve(DivVariableContext context) {
+    return this;
   }
 }
 
-enum EntityWithArrayOfEnumsItem implements Preloadable {
+enum EntityWithArrayOfEnumsItem implements Resolvable {
   first('first'),
   second('second');
 
@@ -97,7 +80,6 @@ enum EntityWithArrayOfEnumsItem implements Preloadable {
      }
   }
 
-  Future<void> preload(Map<String, dynamic> context) async {}
 
   static EntityWithArrayOfEnumsItem? fromJson(String? json,) {
     if (json == null) {
@@ -115,21 +97,5 @@ enum EntityWithArrayOfEnumsItem implements Preloadable {
       return null;
     }
   }
-
-  static Future<EntityWithArrayOfEnumsItem?> parse(String? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'first':
-        return EntityWithArrayOfEnumsItem.first;
-        case 'second':
-        return EntityWithArrayOfEnumsItem.second;
-      }
-      return null;
-    } catch (e, st) {
-      return null;
-    }
-  }
+  EntityWithArrayOfEnumsItem resolve(DivVariableContext context) => this;
 }

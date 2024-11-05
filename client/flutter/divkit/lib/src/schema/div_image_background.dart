@@ -8,7 +8,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Background image.
-class DivImageBackground extends Preloadable with EquatableMixin {
+class DivImageBackground extends Resolvable with EquatableMixin {
   const DivImageBackground({
     this.alpha = const ValueExpression(1.0),
     this.contentAlignmentHorizontal =
@@ -127,66 +127,15 @@ class DivImageBackground extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivImageBackground?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivImageBackground(
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 1.0,
-        ))!,
-        contentAlignmentHorizontal: (await safeParseStrEnumExprAsync(
-          json['content_alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-          fallback: DivAlignmentHorizontal.center,
-        ))!,
-        contentAlignmentVertical: (await safeParseStrEnumExprAsync(
-          json['content_alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-          fallback: DivAlignmentVertical.center,
-        ))!,
-        filters: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['filters'],
-            (v) => safeParseObj(
-              DivFilter.fromJson(v),
-            )!,
-          ),
-        ),
-        imageUrl: (await safeParseUriExprAsync(json['image_url']))!,
-        preloadRequired: (await safeParseBoolExprAsync(
-          json['preload_required'],
-          fallback: false,
-        ))!,
-        scale: (await safeParseStrEnumExprAsync(
-          json['scale'],
-          parse: DivImageScale.fromJson,
-          fallback: DivImageScale.fill,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await alpha.preload(context);
-      await contentAlignmentHorizontal.preload(context);
-      await contentAlignmentVertical.preload(context);
-      await safeFuturesWait(filters, (v) => v.preload(context));
-      await imageUrl.preload(context);
-      await preloadRequired.preload(context);
-      await scale.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivImageBackground resolve(DivVariableContext context) {
+    alpha.resolve(context);
+    contentAlignmentHorizontal.resolve(context);
+    contentAlignmentVertical.resolve(context);
+    safeListResolve(filters, (v) => v.resolve(context));
+    imageUrl.resolve(context);
+    preloadRequired.resolve(context);
+    scale.resolve(context);
+    return this;
   }
 }

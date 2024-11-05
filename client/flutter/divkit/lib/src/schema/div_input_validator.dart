@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_input_validator_regex.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivInputValidator extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivInputValidator extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -70,9 +70,6 @@ class DivInputValidator extends Preloadable with EquatableMixin {
 
   bool get isDivInputValidatorRegex => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivInputValidator? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -96,26 +93,9 @@ class DivInputValidator extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputValidator?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivInputValidatorExpression.type:
-          return DivInputValidator.divInputValidatorExpression(
-            (await DivInputValidatorExpression.parse(json))!,
-          );
-        case DivInputValidatorRegex.type:
-          return DivInputValidator.divInputValidatorRegex(
-            (await DivInputValidatorRegex.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivInputValidator resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

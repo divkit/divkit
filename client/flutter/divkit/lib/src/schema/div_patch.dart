@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Edits the element.
-class DivPatch extends Preloadable with EquatableMixin {
+class DivPatch extends Resolvable with EquatableMixin {
   const DivPatch({
     required this.changes,
     this.mode = const ValueExpression(DivPatchMode.partial),
@@ -98,65 +98,17 @@ class DivPatch extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPatch?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivPatch(
-        changes: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['changes'],
-            (v) => safeParseObj(
-              DivPatchChange.fromJson(v),
-            )!,
-          ),
-        ))!,
-        mode: (await safeParseStrEnumExprAsync(
-          json['mode'],
-          parse: DivPatchMode.fromJson,
-          fallback: DivPatchMode.partial,
-        ))!,
-        onAppliedActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_applied_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        onFailedActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_failed_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(changes, (v) => v.preload(context));
-      await mode.preload(context);
-      await safeFuturesWait(onAppliedActions, (v) => v.preload(context));
-      await safeFuturesWait(onFailedActions, (v) => v.preload(context));
-    } catch (e) {
-      return;
-    }
+  DivPatch resolve(DivVariableContext context) {
+    safeListResolve(changes, (v) => v.resolve(context));
+    mode.resolve(context);
+    safeListResolve(onAppliedActions, (v) => v.resolve(context));
+    safeListResolve(onFailedActions, (v) => v.resolve(context));
+    return this;
   }
 }
 
-enum DivPatchMode implements Preloadable {
+enum DivPatchMode implements Resolvable {
   transactional('transactional'),
   partial('partial');
 
@@ -192,9 +144,6 @@ enum DivPatchMode implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivPatchMode? fromJson(
     String? json,
   ) {
@@ -214,27 +163,11 @@ enum DivPatchMode implements Preloadable {
     }
   }
 
-  static Future<DivPatchMode?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'transactional':
-          return DivPatchMode.transactional;
-        case 'partial':
-          return DivPatchMode.partial;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivPatchMode resolve(DivVariableContext context) => this;
 }
 
-class DivPatchChange extends Preloadable with EquatableMixin {
+class DivPatchChange extends Resolvable with EquatableMixin {
   const DivPatchChange({
     required this.id,
     this.items,
@@ -286,39 +219,8 @@ class DivPatchChange extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPatchChange?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivPatchChange(
-        id: (await safeParseStrAsync(
-          json['id']?.toString(),
-        ))!,
-        items: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['items'],
-            (v) => safeParseObj(
-              Div.fromJson(v),
-            )!,
-          ),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(items, (v) => v.preload(context));
-    } catch (e) {
-      return;
-    }
+  DivPatchChange resolve(DivVariableContext context) {
+    return this;
   }
 }

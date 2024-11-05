@@ -31,7 +31,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// A separating line between elements.
-class DivSeparator extends Preloadable with EquatableMixin implements DivBase {
+class DivSeparator extends Resolvable with EquatableMixin implements DivBase {
   const DivSeparator({
     this.accessibility = const DivAccessibility(),
     this.action,
@@ -625,286 +625,51 @@ class DivSeparator extends Preloadable with EquatableMixin implements DivBase {
     }
   }
 
-  static Future<DivSeparator?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivSeparator(
-        accessibility: (await safeParseObjAsync(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        ))!,
-        action: await safeParseObjAsync(
-          DivAction.fromJson(json['action']),
-        ),
-        actionAnimation: (await safeParseObjAsync(
-          DivAnimation.fromJson(json['action_animation']),
-          fallback: const DivAnimation(
-            duration: ValueExpression(
-              100,
-            ),
-            endValue: ValueExpression(
-              0.6,
-            ),
-            name: ValueExpression(
-              DivAnimationName.fade,
-            ),
-            startValue: ValueExpression(
-              1,
-            ),
-          ),
-        ))!,
-        actions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        alignmentHorizontal: await safeParseStrEnumExprAsync(
-          json['alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-        ),
-        alignmentVertical: await safeParseStrEnumExprAsync(
-          json['alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-        ),
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 1.0,
-        ))!,
-        animators: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
-          ),
-        ),
-        background: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
-          ),
-        ),
-        border: (await safeParseObjAsync(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        ))!,
-        columnSpan: await safeParseIntExprAsync(
-          json['column_span'],
-        ),
-        delimiterStyle: (await safeParseObjAsync(
-          DivSeparatorDelimiterStyle.fromJson(json['delimiter_style']),
-          fallback: const DivSeparatorDelimiterStyle(),
-        ))!,
-        disappearActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
-          ),
-        ),
-        doubletapActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['doubletap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        extensions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
-          ),
-        ),
-        focus: await safeParseObjAsync(
-          DivFocus.fromJson(json['focus']),
-        ),
-        functions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
-          ),
-        ),
-        height: (await safeParseObjAsync(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
-          ),
-        ))!,
-        id: await safeParseStrAsync(
-          json['id']?.toString(),
-        ),
-        layoutProvider: await safeParseObjAsync(
-          DivLayoutProvider.fromJson(json['layout_provider']),
-        ),
-        longtapActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['longtap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        margins: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        paddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        reuseId: await safeParseStrExprAsync(
-          json['reuse_id']?.toString(),
-        ),
-        rowSpan: await safeParseIntExprAsync(
-          json['row_span'],
-        ),
-        selectedActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        tooltips: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
-          ),
-        ),
-        transform: (await safeParseObjAsync(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        ))!,
-        transitionChange: await safeParseObjAsync(
-          DivChangeTransition.fromJson(json['transition_change']),
-        ),
-        transitionIn: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_in']),
-        ),
-        transitionOut: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_out']),
-        ),
-        transitionTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
-              v,
-              parse: DivTransitionTrigger.fromJson,
-            )!,
-          ),
-        ),
-        variableTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
-          ),
-        ),
-        variables: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
-          ),
-        ),
-        visibility: (await safeParseStrEnumExprAsync(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        ))!,
-        visibilityAction: await safeParseObjAsync(
-          DivVisibilityAction.fromJson(json['visibility_action']),
-        ),
-        visibilityActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
-          ),
-        ),
-        width: (await safeParseObjAsync(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await accessibility.preload(context);
-      await action?.preload(context);
-      await actionAnimation.preload(context);
-      await safeFuturesWait(actions, (v) => v.preload(context));
-      await alignmentHorizontal?.preload(context);
-      await alignmentVertical?.preload(context);
-      await alpha.preload(context);
-      await safeFuturesWait(animators, (v) => v.preload(context));
-      await safeFuturesWait(background, (v) => v.preload(context));
-      await border.preload(context);
-      await columnSpan?.preload(context);
-      await delimiterStyle.preload(context);
-      await safeFuturesWait(disappearActions, (v) => v.preload(context));
-      await safeFuturesWait(doubletapActions, (v) => v.preload(context));
-      await safeFuturesWait(extensions, (v) => v.preload(context));
-      await focus?.preload(context);
-      await safeFuturesWait(functions, (v) => v.preload(context));
-      await height.preload(context);
-      await layoutProvider?.preload(context);
-      await safeFuturesWait(longtapActions, (v) => v.preload(context));
-      await margins.preload(context);
-      await paddings.preload(context);
-      await reuseId?.preload(context);
-      await rowSpan?.preload(context);
-      await safeFuturesWait(selectedActions, (v) => v.preload(context));
-      await safeFuturesWait(tooltips, (v) => v.preload(context));
-      await transform.preload(context);
-      await transitionChange?.preload(context);
-      await transitionIn?.preload(context);
-      await transitionOut?.preload(context);
-      await safeFuturesWait(transitionTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variableTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variables, (v) => v.preload(context));
-      await visibility.preload(context);
-      await visibilityAction?.preload(context);
-      await safeFuturesWait(visibilityActions, (v) => v.preload(context));
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivSeparator resolve(DivVariableContext context) {
+    accessibility.resolve(context);
+    action?.resolve(context);
+    actionAnimation.resolve(context);
+    safeListResolve(actions, (v) => v.resolve(context));
+    alignmentHorizontal?.resolve(context);
+    alignmentVertical?.resolve(context);
+    alpha.resolve(context);
+    safeListResolve(animators, (v) => v.resolve(context));
+    safeListResolve(background, (v) => v.resolve(context));
+    border.resolve(context);
+    columnSpan?.resolve(context);
+    delimiterStyle.resolve(context);
+    safeListResolve(disappearActions, (v) => v.resolve(context));
+    safeListResolve(doubletapActions, (v) => v.resolve(context));
+    safeListResolve(extensions, (v) => v.resolve(context));
+    focus?.resolve(context);
+    safeListResolve(functions, (v) => v.resolve(context));
+    height.resolve(context);
+    layoutProvider?.resolve(context);
+    safeListResolve(longtapActions, (v) => v.resolve(context));
+    margins.resolve(context);
+    paddings.resolve(context);
+    reuseId?.resolve(context);
+    rowSpan?.resolve(context);
+    safeListResolve(selectedActions, (v) => v.resolve(context));
+    safeListResolve(tooltips, (v) => v.resolve(context));
+    transform.resolve(context);
+    transitionChange?.resolve(context);
+    transitionIn?.resolve(context);
+    transitionOut?.resolve(context);
+    safeListResolve(transitionTriggers, (v) => v.resolve(context));
+    safeListResolve(variableTriggers, (v) => v.resolve(context));
+    safeListResolve(variables, (v) => v.resolve(context));
+    visibility.resolve(context);
+    visibilityAction?.resolve(context);
+    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    width.resolve(context);
+    return this;
   }
 }
 
 /// Separator display settings.
-class DivSeparatorDelimiterStyle extends Preloadable with EquatableMixin {
+class DivSeparatorDelimiterStyle extends Resolvable with EquatableMixin {
   const DivSeparatorDelimiterStyle({
     this.color = const ValueExpression(Color(0x14000000)),
     this.orientation =
@@ -959,43 +724,15 @@ class DivSeparatorDelimiterStyle extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivSeparatorDelimiterStyle?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivSeparatorDelimiterStyle(
-        color: (await safeParseColorExprAsync(
-          json['color'],
-          fallback: const Color(0x14000000),
-        ))!,
-        orientation: (await safeParseStrEnumExprAsync(
-          json['orientation'],
-          parse: DivSeparatorDelimiterStyleOrientation.fromJson,
-          fallback: DivSeparatorDelimiterStyleOrientation.horizontal,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await color.preload(context);
-      await orientation.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivSeparatorDelimiterStyle resolve(DivVariableContext context) {
+    color.resolve(context);
+    orientation.resolve(context);
+    return this;
   }
 }
 
-enum DivSeparatorDelimiterStyleOrientation implements Preloadable {
+enum DivSeparatorDelimiterStyleOrientation implements Resolvable {
   vertical('vertical'),
   horizontal('horizontal');
 
@@ -1031,9 +768,6 @@ enum DivSeparatorDelimiterStyleOrientation implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivSeparatorDelimiterStyleOrientation? fromJson(
     String? json,
   ) {
@@ -1053,22 +787,7 @@ enum DivSeparatorDelimiterStyleOrientation implements Preloadable {
     }
   }
 
-  static Future<DivSeparatorDelimiterStyleOrientation?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'vertical':
-          return DivSeparatorDelimiterStyleOrientation.vertical;
-        case 'horizontal':
-          return DivSeparatorDelimiterStyleOrientation.horizontal;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivSeparatorDelimiterStyleOrientation resolve(DivVariableContext context) =>
+      this;
 }

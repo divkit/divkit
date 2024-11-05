@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithStringArrayProperty extends Preloadable with EquatableMixin  {
+class EntityWithStringArrayProperty extends Resolvable with EquatableMixin  {
   const EntityWithStringArrayProperty({
     required this.array,
   });
@@ -38,24 +38,8 @@ class EntityWithStringArrayProperty extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithStringArrayProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithStringArrayProperty(
-        array: (await safeParseObjExprAsync(await safeListMapAsync(json['array'], (v) => safeParseStr(v?.toString(),)!,),))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await array.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithStringArrayProperty resolve(DivVariableContext context) {
+    array.resolve(context);
+    return this;
   }
 }

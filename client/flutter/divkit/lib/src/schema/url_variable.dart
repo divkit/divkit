@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Variable — URL as a string.
-class UrlVariable extends Preloadable with EquatableMixin {
+class UrlVariable extends Resolvable with EquatableMixin {
   const UrlVariable({
     required this.name,
     required this.value,
@@ -51,30 +51,8 @@ class UrlVariable extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<UrlVariable?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return UrlVariable(
-        name: (await safeParseStrAsync(
-          json['name']?.toString(),
-        ))!,
-        value: (await safeParseUriAsync(json['value']))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {} catch (e) {
-      return;
-    }
+  UrlVariable resolve(DivVariableContext context) {
+    return this;
   }
 }

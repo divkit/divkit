@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/action/models/action.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
+import 'package:divkit/divkit.dart';
 
 /// Handles any div-action
 abstract class DivActionHandler {

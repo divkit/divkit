@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sends variables from the container via a url. The data sending configuration can be determined by the host application. By default, variables are passed in body in json format, the request method is POST.
-class DivActionSubmit extends Preloadable with EquatableMixin {
+class DivActionSubmit extends Resolvable with EquatableMixin {
   const DivActionSubmit({
     required this.containerId,
     this.onFailActions,
@@ -87,62 +87,21 @@ class DivActionSubmit extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionSubmit?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionSubmit(
-        containerId: (await safeParseStrExprAsync(
-          json['container_id']?.toString(),
-        ))!,
-        onFailActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_fail_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        onSuccessActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_success_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        request: (await safeParseObjAsync(
-          DivActionSubmitRequest.fromJson(json['request']),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await containerId.preload(context);
-      await safeFuturesWait(onFailActions, (v) => v.preload(context));
-      await safeFuturesWait(onSuccessActions, (v) => v.preload(context));
-      await request.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionSubmit resolve(DivVariableContext context) {
+    containerId.resolve(context);
+    safeListResolve(onFailActions, (v) => v.resolve(context));
+    safeListResolve(onSuccessActions, (v) => v.resolve(context));
+    request.resolve(context);
+    return this;
   }
 }
 
 /// The HTTP request parameters that are used to configure how data is sent.
-class DivActionSubmitRequest extends Preloadable with EquatableMixin {
+class DivActionSubmitRequest extends Resolvable with EquatableMixin {
   const DivActionSubmitRequest({
     this.headers,
-    this.method = const ValueExpression(DivActionSubmitRequestMethod.pOST),
+    this.method = const ValueExpression(DivActionSubmitRequestMethod.post),
     required this.url,
   });
 
@@ -150,7 +109,7 @@ class DivActionSubmitRequest extends Preloadable with EquatableMixin {
   final List<DivActionSubmitRequestHeader>? headers;
 
   /// The HTTP request method.
-  // default value: DivActionSubmitRequestMethod.pOST
+  // default value: DivActionSubmitRequestMethod.post
   final Expression<DivActionSubmitRequestMethod> method;
 
   /// The url to which data from the container is sent.
@@ -193,7 +152,7 @@ class DivActionSubmitRequest extends Preloadable with EquatableMixin {
         method: safeParseStrEnumExpr(
           json['method'],
           parse: DivActionSubmitRequestMethod.fromJson,
-          fallback: DivActionSubmitRequestMethod.pOST,
+          fallback: DivActionSubmitRequestMethod.post,
         )!,
         url: safeParseUriExpr(json['url'])!,
       );
@@ -202,49 +161,16 @@ class DivActionSubmitRequest extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionSubmitRequest?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionSubmitRequest(
-        headers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['headers'],
-            (v) => safeParseObj(
-              DivActionSubmitRequestHeader.fromJson(v),
-            )!,
-          ),
-        ),
-        method: (await safeParseStrEnumExprAsync(
-          json['method'],
-          parse: DivActionSubmitRequestMethod.fromJson,
-          fallback: DivActionSubmitRequestMethod.pOST,
-        ))!,
-        url: (await safeParseUriExprAsync(json['url']))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(headers, (v) => v.preload(context));
-      await method.preload(context);
-      await url.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionSubmitRequest resolve(DivVariableContext context) {
+    safeListResolve(headers, (v) => v.resolve(context));
+    method.resolve(context);
+    url.resolve(context);
+    return this;
   }
 }
 
-class DivActionSubmitRequestHeader extends Preloadable with EquatableMixin {
+class DivActionSubmitRequestHeader extends Resolvable with EquatableMixin {
   const DivActionSubmitRequestHeader({
     required this.name,
     required this.value,
@@ -288,122 +214,94 @@ class DivActionSubmitRequestHeader extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionSubmitRequestHeader?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionSubmitRequestHeader(
-        name: (await safeParseStrExprAsync(
-          json['name']?.toString(),
-        ))!,
-        value: (await safeParseStrExprAsync(
-          json['value']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await name.preload(context);
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionSubmitRequestHeader resolve(DivVariableContext context) {
+    name.resolve(context);
+    value.resolve(context);
+    return this;
   }
 }
 
-enum DivActionSubmitRequestMethod implements Preloadable {
-  gET('GET'),
-  pOST('POST'),
-  pUT('PUT'),
-  pATCH('PATCH'),
-  dELETE('DELETE'),
-  hEAD('HEAD'),
-  oPTIONS('OPTIONS');
+enum DivActionSubmitRequestMethod implements Resolvable {
+  get('get'),
+  post('post'),
+  put('put'),
+  patch('patch'),
+  delete('delete'),
+  head('head'),
+  options('options');
 
   final String value;
 
   const DivActionSubmitRequestMethod(this.value);
-  bool get isGET => this == gET;
+  bool get isGet => this == get;
 
-  bool get isPOST => this == pOST;
+  bool get isPost => this == post;
 
-  bool get isPUT => this == pUT;
+  bool get isPut => this == put;
 
-  bool get isPATCH => this == pATCH;
+  bool get isPatch => this == patch;
 
-  bool get isDELETE => this == dELETE;
+  bool get isDelete => this == delete;
 
-  bool get isHEAD => this == hEAD;
+  bool get isHead => this == head;
 
-  bool get isOPTIONS => this == oPTIONS;
+  bool get isOptions => this == options;
 
   T map<T>({
-    required T Function() gET,
-    required T Function() pOST,
-    required T Function() pUT,
-    required T Function() pATCH,
-    required T Function() dELETE,
-    required T Function() hEAD,
-    required T Function() oPTIONS,
+    required T Function() get,
+    required T Function() post,
+    required T Function() put,
+    required T Function() patch,
+    required T Function() delete,
+    required T Function() head,
+    required T Function() options,
   }) {
     switch (this) {
-      case DivActionSubmitRequestMethod.gET:
-        return gET();
-      case DivActionSubmitRequestMethod.pOST:
-        return pOST();
-      case DivActionSubmitRequestMethod.pUT:
-        return pUT();
-      case DivActionSubmitRequestMethod.pATCH:
-        return pATCH();
-      case DivActionSubmitRequestMethod.dELETE:
-        return dELETE();
-      case DivActionSubmitRequestMethod.hEAD:
-        return hEAD();
-      case DivActionSubmitRequestMethod.oPTIONS:
-        return oPTIONS();
+      case DivActionSubmitRequestMethod.get:
+        return get();
+      case DivActionSubmitRequestMethod.post:
+        return post();
+      case DivActionSubmitRequestMethod.put:
+        return put();
+      case DivActionSubmitRequestMethod.patch:
+        return patch();
+      case DivActionSubmitRequestMethod.delete:
+        return delete();
+      case DivActionSubmitRequestMethod.head:
+        return head();
+      case DivActionSubmitRequestMethod.options:
+        return options();
     }
   }
 
   T maybeMap<T>({
-    T Function()? gET,
-    T Function()? pOST,
-    T Function()? pUT,
-    T Function()? pATCH,
-    T Function()? dELETE,
-    T Function()? hEAD,
-    T Function()? oPTIONS,
+    T Function()? get,
+    T Function()? post,
+    T Function()? put,
+    T Function()? patch,
+    T Function()? delete,
+    T Function()? head,
+    T Function()? options,
     required T Function() orElse,
   }) {
     switch (this) {
-      case DivActionSubmitRequestMethod.gET:
-        return gET?.call() ?? orElse();
-      case DivActionSubmitRequestMethod.pOST:
-        return pOST?.call() ?? orElse();
-      case DivActionSubmitRequestMethod.pUT:
-        return pUT?.call() ?? orElse();
-      case DivActionSubmitRequestMethod.pATCH:
-        return pATCH?.call() ?? orElse();
-      case DivActionSubmitRequestMethod.dELETE:
-        return dELETE?.call() ?? orElse();
-      case DivActionSubmitRequestMethod.hEAD:
-        return hEAD?.call() ?? orElse();
-      case DivActionSubmitRequestMethod.oPTIONS:
-        return oPTIONS?.call() ?? orElse();
+      case DivActionSubmitRequestMethod.get:
+        return get?.call() ?? orElse();
+      case DivActionSubmitRequestMethod.post:
+        return post?.call() ?? orElse();
+      case DivActionSubmitRequestMethod.put:
+        return put?.call() ?? orElse();
+      case DivActionSubmitRequestMethod.patch:
+        return patch?.call() ?? orElse();
+      case DivActionSubmitRequestMethod.delete:
+        return delete?.call() ?? orElse();
+      case DivActionSubmitRequestMethod.head:
+        return head?.call() ?? orElse();
+      case DivActionSubmitRequestMethod.options:
+        return options?.call() ?? orElse();
     }
   }
-
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
 
   static DivActionSubmitRequestMethod? fromJson(
     String? json,
@@ -413,20 +311,20 @@ enum DivActionSubmitRequestMethod implements Preloadable {
     }
     try {
       switch (json) {
-        case 'GET':
-          return DivActionSubmitRequestMethod.gET;
-        case 'POST':
-          return DivActionSubmitRequestMethod.pOST;
-        case 'PUT':
-          return DivActionSubmitRequestMethod.pUT;
-        case 'PATCH':
-          return DivActionSubmitRequestMethod.pATCH;
-        case 'DELETE':
-          return DivActionSubmitRequestMethod.dELETE;
-        case 'HEAD':
-          return DivActionSubmitRequestMethod.hEAD;
-        case 'OPTIONS':
-          return DivActionSubmitRequestMethod.oPTIONS;
+        case 'get':
+          return DivActionSubmitRequestMethod.get;
+        case 'post':
+          return DivActionSubmitRequestMethod.post;
+        case 'put':
+          return DivActionSubmitRequestMethod.put;
+        case 'patch':
+          return DivActionSubmitRequestMethod.patch;
+        case 'delete':
+          return DivActionSubmitRequestMethod.delete;
+        case 'head':
+          return DivActionSubmitRequestMethod.head;
+        case 'options':
+          return DivActionSubmitRequestMethod.options;
       }
       return null;
     } catch (e) {
@@ -434,32 +332,6 @@ enum DivActionSubmitRequestMethod implements Preloadable {
     }
   }
 
-  static Future<DivActionSubmitRequestMethod?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'GET':
-          return DivActionSubmitRequestMethod.gET;
-        case 'POST':
-          return DivActionSubmitRequestMethod.pOST;
-        case 'PUT':
-          return DivActionSubmitRequestMethod.pUT;
-        case 'PATCH':
-          return DivActionSubmitRequestMethod.pATCH;
-        case 'DELETE':
-          return DivActionSubmitRequestMethod.dELETE;
-        case 'HEAD':
-          return DivActionSubmitRequestMethod.hEAD;
-        case 'OPTIONS':
-          return DivActionSubmitRequestMethod.oPTIONS;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivActionSubmitRequestMethod resolve(DivVariableContext context) => this;
 }

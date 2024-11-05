@@ -35,7 +35,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Text input element.
-class DivInput extends Preloadable with EquatableMixin implements DivBase {
+class DivInput extends Resolvable with EquatableMixin implements DivBase {
   const DivInput({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -48,6 +48,8 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
     this.border = const DivBorder(),
     this.columnSpan,
     this.disappearActions,
+    this.enterKeyActions,
+    this.enterKeyType = const ValueExpression(DivInputEnterKeyType.default_),
     this.extensions,
     this.filters,
     this.focus,
@@ -146,6 +148,13 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
+
+  /// Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+  final List<DivAction>? enterKeyActions;
+
+  /// The type of the `Enter` keyboard button.
+  // default value: DivInputEnterKeyType.default_
+  final Expression<DivInputEnterKeyType> enterKeyType;
 
   /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
@@ -345,6 +354,8 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
         border,
         columnSpan,
         disappearActions,
+        enterKeyActions,
+        enterKeyType,
         extensions,
         filters,
         focus,
@@ -404,6 +415,8 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
     List<DivDisappearAction>? Function()? disappearActions,
+    List<DivAction>? Function()? enterKeyActions,
+    Expression<DivInputEnterKeyType>? enterKeyType,
     List<DivExtension>? Function()? extensions,
     List<DivInputFilter>? Function()? filters,
     DivFocus? Function()? focus,
@@ -468,6 +481,10 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
         disappearActions: disappearActions != null
             ? disappearActions.call()
             : this.disappearActions,
+        enterKeyActions: enterKeyActions != null
+            ? enterKeyActions.call()
+            : this.enterKeyActions,
+        enterKeyType: enterKeyType ?? this.enterKeyType,
         extensions: extensions != null ? extensions.call() : this.extensions,
         filters: filters != null ? filters.call() : this.filters,
         focus: focus != null ? focus.call() : this.focus,
@@ -602,6 +619,19 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
             )!,
           ),
         ),
+        enterKeyActions: safeParseObj(
+          safeListMap(
+            json['enter_key_actions'],
+            (v) => safeParseObj(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        enterKeyType: safeParseStrEnumExpr(
+          json['enter_key_type'],
+          parse: DivInputEnterKeyType.fromJson,
+          fallback: DivInputEnterKeyType.default_,
+        )!,
         extensions: safeParseObj(
           safeListMap(
             json['extensions'],
@@ -824,355 +854,70 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
     }
   }
 
-  static Future<DivInput?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivInput(
-        accessibility: (await safeParseObjAsync(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        ))!,
-        alignmentHorizontal: await safeParseStrEnumExprAsync(
-          json['alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-        ),
-        alignmentVertical: await safeParseStrEnumExprAsync(
-          json['alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-        ),
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 1.0,
-        ))!,
-        animators: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
-          ),
-        ),
-        autocapitalization: (await safeParseStrEnumExprAsync(
-          json['autocapitalization'],
-          parse: DivInputAutocapitalization.fromJson,
-          fallback: DivInputAutocapitalization.auto,
-        ))!,
-        background: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
-          ),
-        ),
-        border: (await safeParseObjAsync(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        ))!,
-        columnSpan: await safeParseIntExprAsync(
-          json['column_span'],
-        ),
-        disappearActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
-          ),
-        ),
-        extensions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
-          ),
-        ),
-        filters: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['filters'],
-            (v) => safeParseObj(
-              DivInputFilter.fromJson(v),
-            )!,
-          ),
-        ),
-        focus: await safeParseObjAsync(
-          DivFocus.fromJson(json['focus']),
-        ),
-        fontFamily: await safeParseStrExprAsync(
-          json['font_family']?.toString(),
-        ),
-        fontSize: (await safeParseIntExprAsync(
-          json['font_size'],
-          fallback: 12,
-        ))!,
-        fontSizeUnit: (await safeParseStrEnumExprAsync(
-          json['font_size_unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.sp,
-        ))!,
-        fontWeight: (await safeParseStrEnumExprAsync(
-          json['font_weight'],
-          parse: DivFontWeight.fromJson,
-          fallback: DivFontWeight.regular,
-        ))!,
-        fontWeightValue: await safeParseIntExprAsync(
-          json['font_weight_value'],
-        ),
-        functions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
-          ),
-        ),
-        height: (await safeParseObjAsync(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
-          ),
-        ))!,
-        highlightColor: await safeParseColorExprAsync(
-          json['highlight_color'],
-        ),
-        hintColor: (await safeParseColorExprAsync(
-          json['hint_color'],
-          fallback: const Color(0x73000000),
-        ))!,
-        hintText: await safeParseStrExprAsync(
-          json['hint_text']?.toString(),
-        ),
-        id: await safeParseStrAsync(
-          json['id']?.toString(),
-        ),
-        isEnabled: (await safeParseBoolExprAsync(
-          json['is_enabled'],
-          fallback: true,
-        ))!,
-        keyboardType: (await safeParseStrEnumExprAsync(
-          json['keyboard_type'],
-          parse: DivInputKeyboardType.fromJson,
-          fallback: DivInputKeyboardType.multiLineText,
-        ))!,
-        layoutProvider: await safeParseObjAsync(
-          DivLayoutProvider.fromJson(json['layout_provider']),
-        ),
-        letterSpacing: (await safeParseDoubleExprAsync(
-          json['letter_spacing'],
-          fallback: 0,
-        ))!,
-        lineHeight: await safeParseIntExprAsync(
-          json['line_height'],
-        ),
-        margins: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        mask: await safeParseObjAsync(
-          DivInputMask.fromJson(json['mask']),
-        ),
-        maxLength: await safeParseIntExprAsync(
-          json['max_length'],
-        ),
-        maxVisibleLines: await safeParseIntExprAsync(
-          json['max_visible_lines'],
-        ),
-        nativeInterface: await safeParseObjAsync(
-          DivInputNativeInterface.fromJson(json['native_interface']),
-        ),
-        paddings: (await safeParseObjAsync(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        ))!,
-        reuseId: await safeParseStrExprAsync(
-          json['reuse_id']?.toString(),
-        ),
-        rowSpan: await safeParseIntExprAsync(
-          json['row_span'],
-        ),
-        selectAllOnFocus: (await safeParseBoolExprAsync(
-          json['select_all_on_focus'],
-          fallback: false,
-        ))!,
-        selectedActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        textAlignmentHorizontal: (await safeParseStrEnumExprAsync(
-          json['text_alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-          fallback: DivAlignmentHorizontal.start,
-        ))!,
-        textAlignmentVertical: (await safeParseStrEnumExprAsync(
-          json['text_alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-          fallback: DivAlignmentVertical.center,
-        ))!,
-        textColor: (await safeParseColorExprAsync(
-          json['text_color'],
-          fallback: const Color(0xFF000000),
-        ))!,
-        textVariable: (await safeParseStrAsync(
-          json['text_variable']?.toString(),
-        ))!,
-        tooltips: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
-          ),
-        ),
-        transform: (await safeParseObjAsync(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        ))!,
-        transitionChange: await safeParseObjAsync(
-          DivChangeTransition.fromJson(json['transition_change']),
-        ),
-        transitionIn: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_in']),
-        ),
-        transitionOut: await safeParseObjAsync(
-          DivAppearanceTransition.fromJson(json['transition_out']),
-        ),
-        transitionTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
-              v,
-              parse: DivTransitionTrigger.fromJson,
-            )!,
-          ),
-        ),
-        validators: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['validators'],
-            (v) => safeParseObj(
-              DivInputValidator.fromJson(v),
-            )!,
-          ),
-        ),
-        variableTriggers: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
-          ),
-        ),
-        variables: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
-          ),
-        ),
-        visibility: (await safeParseStrEnumExprAsync(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        ))!,
-        visibilityAction: await safeParseObjAsync(
-          DivVisibilityAction.fromJson(json['visibility_action']),
-        ),
-        visibilityActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
-          ),
-        ),
-        width: (await safeParseObjAsync(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await accessibility.preload(context);
-      await alignmentHorizontal?.preload(context);
-      await alignmentVertical?.preload(context);
-      await alpha.preload(context);
-      await safeFuturesWait(animators, (v) => v.preload(context));
-      await autocapitalization.preload(context);
-      await safeFuturesWait(background, (v) => v.preload(context));
-      await border.preload(context);
-      await columnSpan?.preload(context);
-      await safeFuturesWait(disappearActions, (v) => v.preload(context));
-      await safeFuturesWait(extensions, (v) => v.preload(context));
-      await safeFuturesWait(filters, (v) => v.preload(context));
-      await focus?.preload(context);
-      await fontFamily?.preload(context);
-      await fontSize.preload(context);
-      await fontSizeUnit.preload(context);
-      await fontWeight.preload(context);
-      await fontWeightValue?.preload(context);
-      await safeFuturesWait(functions, (v) => v.preload(context));
-      await height.preload(context);
-      await highlightColor?.preload(context);
-      await hintColor.preload(context);
-      await hintText?.preload(context);
-      await isEnabled.preload(context);
-      await keyboardType.preload(context);
-      await layoutProvider?.preload(context);
-      await letterSpacing.preload(context);
-      await lineHeight?.preload(context);
-      await margins.preload(context);
-      await mask?.preload(context);
-      await maxLength?.preload(context);
-      await maxVisibleLines?.preload(context);
-      await nativeInterface?.preload(context);
-      await paddings.preload(context);
-      await reuseId?.preload(context);
-      await rowSpan?.preload(context);
-      await selectAllOnFocus.preload(context);
-      await safeFuturesWait(selectedActions, (v) => v.preload(context));
-      await textAlignmentHorizontal.preload(context);
-      await textAlignmentVertical.preload(context);
-      await textColor.preload(context);
-      await safeFuturesWait(tooltips, (v) => v.preload(context));
-      await transform.preload(context);
-      await transitionChange?.preload(context);
-      await transitionIn?.preload(context);
-      await transitionOut?.preload(context);
-      await safeFuturesWait(transitionTriggers, (v) => v.preload(context));
-      await safeFuturesWait(validators, (v) => v.preload(context));
-      await safeFuturesWait(variableTriggers, (v) => v.preload(context));
-      await safeFuturesWait(variables, (v) => v.preload(context));
-      await visibility.preload(context);
-      await visibilityAction?.preload(context);
-      await safeFuturesWait(visibilityActions, (v) => v.preload(context));
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivInput resolve(DivVariableContext context) {
+    accessibility.resolve(context);
+    alignmentHorizontal?.resolve(context);
+    alignmentVertical?.resolve(context);
+    alpha.resolve(context);
+    safeListResolve(animators, (v) => v.resolve(context));
+    autocapitalization.resolve(context);
+    safeListResolve(background, (v) => v.resolve(context));
+    border.resolve(context);
+    columnSpan?.resolve(context);
+    safeListResolve(disappearActions, (v) => v.resolve(context));
+    safeListResolve(enterKeyActions, (v) => v.resolve(context));
+    enterKeyType.resolve(context);
+    safeListResolve(extensions, (v) => v.resolve(context));
+    safeListResolve(filters, (v) => v.resolve(context));
+    focus?.resolve(context);
+    fontFamily?.resolve(context);
+    fontSize.resolve(context);
+    fontSizeUnit.resolve(context);
+    fontWeight.resolve(context);
+    fontWeightValue?.resolve(context);
+    safeListResolve(functions, (v) => v.resolve(context));
+    height.resolve(context);
+    highlightColor?.resolve(context);
+    hintColor.resolve(context);
+    hintText?.resolve(context);
+    isEnabled.resolve(context);
+    keyboardType.resolve(context);
+    layoutProvider?.resolve(context);
+    letterSpacing.resolve(context);
+    lineHeight?.resolve(context);
+    margins.resolve(context);
+    mask?.resolve(context);
+    maxLength?.resolve(context);
+    maxVisibleLines?.resolve(context);
+    nativeInterface?.resolve(context);
+    paddings.resolve(context);
+    reuseId?.resolve(context);
+    rowSpan?.resolve(context);
+    selectAllOnFocus.resolve(context);
+    safeListResolve(selectedActions, (v) => v.resolve(context));
+    textAlignmentHorizontal.resolve(context);
+    textAlignmentVertical.resolve(context);
+    textColor.resolve(context);
+    safeListResolve(tooltips, (v) => v.resolve(context));
+    transform.resolve(context);
+    transitionChange?.resolve(context);
+    transitionIn?.resolve(context);
+    transitionOut?.resolve(context);
+    safeListResolve(transitionTriggers, (v) => v.resolve(context));
+    safeListResolve(validators, (v) => v.resolve(context));
+    safeListResolve(variableTriggers, (v) => v.resolve(context));
+    safeListResolve(variables, (v) => v.resolve(context));
+    visibility.resolve(context);
+    visibilityAction?.resolve(context);
+    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    width.resolve(context);
+    return this;
   }
 }
 
 /// Text input line used in the native interface.
-class DivInputNativeInterface extends Preloadable with EquatableMixin {
+class DivInputNativeInterface extends Resolvable with EquatableMixin {
   const DivInputNativeInterface({
     required this.color,
   });
@@ -1209,36 +954,14 @@ class DivInputNativeInterface extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputNativeInterface?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivInputNativeInterface(
-        color: (await safeParseColorExprAsync(
-          json['color'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await color.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivInputNativeInterface resolve(DivVariableContext context) {
+    color.resolve(context);
+    return this;
   }
 }
 
-enum DivInputAutocapitalization implements Preloadable {
+enum DivInputAutocapitalization implements Resolvable {
   auto('auto'),
   none('none'),
   words('words'),
@@ -1301,9 +1024,6 @@ enum DivInputAutocapitalization implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivInputAutocapitalization? fromJson(
     String? json,
   ) {
@@ -1329,33 +1049,103 @@ enum DivInputAutocapitalization implements Preloadable {
     }
   }
 
-  static Future<DivInputAutocapitalization?> parse(
+  @override
+  DivInputAutocapitalization resolve(DivVariableContext context) => this;
+}
+
+enum DivInputEnterKeyType implements Resolvable {
+  default_('default'),
+  go('go'),
+  search('search'),
+  send('send'),
+  done('done');
+
+  final String value;
+
+  const DivInputEnterKeyType(this.value);
+  bool get isDefault => this == default_;
+
+  bool get isGo => this == go;
+
+  bool get isSearch => this == search;
+
+  bool get isSend => this == send;
+
+  bool get isDone => this == done;
+
+  T map<T>({
+    required T Function() default_,
+    required T Function() go,
+    required T Function() search,
+    required T Function() send,
+    required T Function() done,
+  }) {
+    switch (this) {
+      case DivInputEnterKeyType.default_:
+        return default_();
+      case DivInputEnterKeyType.go:
+        return go();
+      case DivInputEnterKeyType.search:
+        return search();
+      case DivInputEnterKeyType.send:
+        return send();
+      case DivInputEnterKeyType.done:
+        return done();
+    }
+  }
+
+  T maybeMap<T>({
+    T Function()? default_,
+    T Function()? go,
+    T Function()? search,
+    T Function()? send,
+    T Function()? done,
+    required T Function() orElse,
+  }) {
+    switch (this) {
+      case DivInputEnterKeyType.default_:
+        return default_?.call() ?? orElse();
+      case DivInputEnterKeyType.go:
+        return go?.call() ?? orElse();
+      case DivInputEnterKeyType.search:
+        return search?.call() ?? orElse();
+      case DivInputEnterKeyType.send:
+        return send?.call() ?? orElse();
+      case DivInputEnterKeyType.done:
+        return done?.call() ?? orElse();
+    }
+  }
+
+  static DivInputEnterKeyType? fromJson(
     String? json,
-  ) async {
+  ) {
     if (json == null) {
       return null;
     }
     try {
       switch (json) {
-        case 'auto':
-          return DivInputAutocapitalization.auto;
-        case 'none':
-          return DivInputAutocapitalization.none;
-        case 'words':
-          return DivInputAutocapitalization.words;
-        case 'sentences':
-          return DivInputAutocapitalization.sentences;
-        case 'all_characters':
-          return DivInputAutocapitalization.allCharacters;
+        case 'default':
+          return DivInputEnterKeyType.default_;
+        case 'go':
+          return DivInputEnterKeyType.go;
+        case 'search':
+          return DivInputEnterKeyType.search;
+        case 'send':
+          return DivInputEnterKeyType.send;
+        case 'done':
+          return DivInputEnterKeyType.done;
       }
       return null;
     } catch (e) {
       return null;
     }
   }
+
+  @override
+  DivInputEnterKeyType resolve(DivVariableContext context) => this;
 }
 
-enum DivInputKeyboardType implements Preloadable {
+enum DivInputKeyboardType implements Resolvable {
   singleLineText('single_line_text'),
   multiLineText('multi_line_text'),
   phone('phone'),
@@ -1436,9 +1226,6 @@ enum DivInputKeyboardType implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivInputKeyboardType? fromJson(
     String? json,
   ) {
@@ -1468,32 +1255,6 @@ enum DivInputKeyboardType implements Preloadable {
     }
   }
 
-  static Future<DivInputKeyboardType?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'single_line_text':
-          return DivInputKeyboardType.singleLineText;
-        case 'multi_line_text':
-          return DivInputKeyboardType.multiLineText;
-        case 'phone':
-          return DivInputKeyboardType.phone;
-        case 'number':
-          return DivInputKeyboardType.number;
-        case 'email':
-          return DivInputKeyboardType.email;
-        case 'uri':
-          return DivInputKeyboardType.uri;
-        case 'password':
-          return DivInputKeyboardType.password;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivInputKeyboardType resolve(DivVariableContext context) => this;
 }

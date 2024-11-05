@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Requests focus for an element. May require a user action on the web.
-class DivActionFocusElement extends Preloadable with EquatableMixin {
+class DivActionFocusElement extends Resolvable with EquatableMixin {
   const DivActionFocusElement({
     required this.elementId,
   });
@@ -41,31 +41,9 @@ class DivActionFocusElement extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionFocusElement?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionFocusElement(
-        elementId: (await safeParseStrExprAsync(
-          json['element_id']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await elementId.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionFocusElement resolve(DivVariableContext context) {
+    elementId.resolve(context);
+    return this;
   }
 }

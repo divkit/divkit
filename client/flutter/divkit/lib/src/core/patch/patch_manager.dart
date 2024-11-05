@@ -17,9 +17,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
         try {
           final result = _update(state.div, patch, true);
           if (result != null) {
-            final newState = state.copyWith(div: result);
-            await newState.preload(divContext.variables.current);
-            states.add(newState);
+            states.add(state.copyWith(div: result));
           }
         } catch (e, st) {
           logger.error("[div-patch]", error: e, stackTrace: st);

@@ -144,6 +144,7 @@ export './div_solid_background.dart';
 export './div_state.dart';
 export './div_stretch_indicator_item_placement.dart';
 export './div_stroke.dart';
+export './div_switch.dart';
 export './div_tabs.dart';
 export './div_text.dart';
 export './div_text_alignment_vertical.dart';

@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Shows the tooltip.
-class DivActionShowTooltip extends Preloadable with EquatableMixin {
+class DivActionShowTooltip extends Resolvable with EquatableMixin {
   const DivActionShowTooltip({
     required this.id,
     this.multiple,
@@ -53,35 +53,10 @@ class DivActionShowTooltip extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionShowTooltip?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionShowTooltip(
-        id: (await safeParseStrExprAsync(
-          json['id']?.toString(),
-        ))!,
-        multiple: await safeParseBoolExprAsync(
-          json['multiple'],
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await id.preload(context);
-      await multiple?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionShowTooltip resolve(DivVariableContext context) {
+    id.resolve(context);
+    multiple?.resolve(context);
+    return this;
   }
 }

@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivAnimationDirection implements Preloadable {
+enum DivAnimationDirection implements Resolvable {
   normal('normal'),
   reverse('reverse'),
   alternate('alternate'),
@@ -56,9 +56,6 @@ enum DivAnimationDirection implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivAnimationDirection? fromJson(
     String? json,
   ) {
@@ -82,26 +79,6 @@ enum DivAnimationDirection implements Preloadable {
     }
   }
 
-  static Future<DivAnimationDirection?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'normal':
-          return DivAnimationDirection.normal;
-        case 'reverse':
-          return DivAnimationDirection.reverse;
-        case 'alternate':
-          return DivAnimationDirection.alternate;
-        case 'alternate_reverse':
-          return DivAnimationDirection.alternateReverse;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivAnimationDirection resolve(DivVariableContext context) => this;
 }

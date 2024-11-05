@@ -1,4 +1,5 @@
 import 'package:divkit/divkit.dart';
+import 'package:divkit/src/utils/trace.dart';
 
 /// Print logs with information about expression calculations.
 bool debugPrintDivExpressionResolve = false;
@@ -12,13 +13,8 @@ void _log(String message) {
 final exprResolver = DefaultDivExpressionResolver();
 
 abstract class DivExpressionResolver {
-  /// Parses the source code of the expression from [source]
-  /// and returns a the result of execution.
-  ///
-  /// Parameters:
-  /// - [source] - source code of the expression.
-  /// - [context] - used to specify the variables used and their values.
-  Future<T> resolve<T>(
+  /// Calculates the value of an expression based on data from the context.
+  T resolve<T>(
     Expression<T> expression, {
     required DivVariableContext context,
   });
@@ -26,16 +22,19 @@ abstract class DivExpressionResolver {
 
 class DefaultDivExpressionResolver implements DivExpressionResolver {
   @override
-  Future<T> resolve<T>(
+  T resolve<T>(
     Expression<T> expression, {
     required DivVariableContext context,
-  }) async {
+  }) {
     if (expression is ResolvableExpression) {
       final expr = expression as ResolvableExpression;
       try {
-        var result = await runtime.execute(
-          expr.executionTree,
-          context.current,
+        var result = traceFunc(
+          'Runtime.execute',
+          () => runtime.execute(
+            expr.executionTree,
+            context.current,
+          ),
         );
 
         if (expr.parse != null) {

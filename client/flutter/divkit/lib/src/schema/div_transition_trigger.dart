@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivTransitionTrigger implements Preloadable {
+enum DivTransitionTrigger implements Resolvable {
   dataChange('data_change'),
   stateChange('state_change'),
   visibilityChange('visibility_change');
@@ -47,9 +47,6 @@ enum DivTransitionTrigger implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivTransitionTrigger? fromJson(
     String? json,
   ) {
@@ -71,24 +68,6 @@ enum DivTransitionTrigger implements Preloadable {
     }
   }
 
-  static Future<DivTransitionTrigger?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'data_change':
-          return DivTransitionTrigger.dataChange;
-        case 'state_change':
-          return DivTransitionTrigger.stateChange;
-        case 'visibility_change':
-          return DivTransitionTrigger.visibilityChange;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivTransitionTrigger resolve(DivVariableContext context) => this;
 }

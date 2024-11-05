@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_filter_rtl_mirror.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivFilter extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivFilter extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivFilter extends Preloadable with EquatableMixin {
 
   bool get isDivFilterRtlMirror => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivFilter? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivFilter extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivFilter?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivBlur.type:
-          return DivFilter.divBlur(
-            (await DivBlur.parse(json))!,
-          );
-        case DivFilterRtlMirror.type:
-          return DivFilter.divFilterRtlMirror(
-            (await DivFilterRtlMirror.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivFilter resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

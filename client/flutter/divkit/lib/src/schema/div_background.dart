@@ -8,8 +8,8 @@ import 'package:divkit/src/schema/div_solid_background.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivBackground extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivBackground extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -132,9 +132,6 @@ class DivBackground extends Preloadable with EquatableMixin {
 
   bool get isDivSolidBackground => _index == 4;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivBackground? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -170,38 +167,9 @@ class DivBackground extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivBackground?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivImageBackground.type:
-          return DivBackground.divImageBackground(
-            (await DivImageBackground.parse(json))!,
-          );
-        case DivLinearGradient.type:
-          return DivBackground.divLinearGradient(
-            (await DivLinearGradient.parse(json))!,
-          );
-        case DivNinePatchBackground.type:
-          return DivBackground.divNinePatchBackground(
-            (await DivNinePatchBackground.parse(json))!,
-          );
-        case DivRadialGradient.type:
-          return DivBackground.divRadialGradient(
-            (await DivRadialGradient.parse(json))!,
-          );
-        case DivSolidBackground.type:
-          return DivBackground.divSolidBackground(
-            (await DivSolidBackground.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivBackground resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

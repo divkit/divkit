@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Circle.
-class DivCircleShape extends Preloadable with EquatableMixin {
+class DivCircleShape extends Resolvable with EquatableMixin {
   const DivCircleShape({
     this.backgroundColor,
     this.radius = const DivFixedSize(
@@ -77,44 +77,11 @@ class DivCircleShape extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivCircleShape?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivCircleShape(
-        backgroundColor: await safeParseColorExprAsync(
-          json['background_color'],
-        ),
-        radius: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['radius']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              10,
-            ),
-          ),
-        ))!,
-        stroke: await safeParseObjAsync(
-          DivStroke.fromJson(json['stroke']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await backgroundColor?.preload(context);
-      await radius.preload(context);
-      await stroke?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivCircleShape resolve(DivVariableContext context) {
+    backgroundColor?.resolve(context);
+    radius.resolve(context);
+    stroke?.resolve(context);
+    return this;
   }
 }

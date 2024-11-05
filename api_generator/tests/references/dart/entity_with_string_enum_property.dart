@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithStringEnumProperty extends Preloadable with EquatableMixin  {
+class EntityWithStringEnumProperty extends Resolvable with EquatableMixin  {
   const EntityWithStringEnumProperty({
     required this.property,
   });
@@ -37,29 +37,13 @@ class EntityWithStringEnumProperty extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithStringEnumProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithStringEnumProperty(
-        property: (await safeParseStrEnumExprAsync(json['property'], parse: EntityWithStringEnumPropertyProperty.fromJson,))!,
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await property.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithStringEnumProperty resolve(DivVariableContext context) {
+    property.resolve(context);
+    return this;
   }
 }
 
-enum EntityWithStringEnumPropertyProperty implements Preloadable {
+enum EntityWithStringEnumPropertyProperty implements Resolvable {
   first('first'),
   second('second');
 
@@ -96,7 +80,6 @@ enum EntityWithStringEnumPropertyProperty implements Preloadable {
      }
   }
 
-  Future<void> preload(Map<String, dynamic> context) async {}
 
   static EntityWithStringEnumPropertyProperty? fromJson(String? json,) {
     if (json == null) {
@@ -114,21 +97,5 @@ enum EntityWithStringEnumPropertyProperty implements Preloadable {
       return null;
     }
   }
-
-  static Future<EntityWithStringEnumPropertyProperty?> parse(String? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'first':
-        return EntityWithStringEnumPropertyProperty.first;
-        case 'second':
-        return EntityWithStringEnumPropertyProperty.second;
-      }
-      return null;
-    } catch (e, st) {
-      return null;
-    }
-  }
+  EntityWithStringEnumPropertyProperty resolve(DivVariableContext context) => this;
 }

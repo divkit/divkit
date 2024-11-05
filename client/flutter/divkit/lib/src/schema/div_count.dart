@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_infinity_count.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivCount extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivCount extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivCount extends Preloadable with EquatableMixin {
 
   bool get isDivInfinityCount => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivCount? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivCount extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivCount?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivFixedCount.type:
-          return DivCount.divFixedCount(
-            (await DivFixedCount.parse(json))!,
-          );
-        case DivInfinityCount.type:
-          return DivCount.divInfinityCount(
-            (await DivInfinityCount.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivCount resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

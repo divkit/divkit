@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivVideoSource extends Preloadable with EquatableMixin {
+class DivVideoSource extends Resolvable with EquatableMixin {
   const DivVideoSource({
     this.bitrate,
     required this.mimeType,
@@ -70,47 +70,18 @@ class DivVideoSource extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivVideoSource?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivVideoSource(
-        bitrate: await safeParseIntExprAsync(
-          json['bitrate'],
-        ),
-        mimeType: (await safeParseStrExprAsync(
-          json['mime_type']?.toString(),
-        ))!,
-        resolution: await safeParseObjAsync(
-          DivVideoSourceResolution.fromJson(json['resolution']),
-        ),
-        url: (await safeParseUriExprAsync(json['url']))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await bitrate?.preload(context);
-      await mimeType.preload(context);
-      await resolution?.preload(context);
-      await url.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivVideoSource resolve(DivVariableContext context) {
+    bitrate?.resolve(context);
+    mimeType.resolve(context);
+    resolution?.resolve(context);
+    url.resolve(context);
+    return this;
   }
 }
 
 /// Media file resolution.
-class DivVideoSourceResolution extends Preloadable with EquatableMixin {
+class DivVideoSourceResolution extends Resolvable with EquatableMixin {
   const DivVideoSourceResolution({
     required this.height,
     required this.width,
@@ -161,35 +132,10 @@ class DivVideoSourceResolution extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivVideoSourceResolution?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivVideoSourceResolution(
-        height: (await safeParseIntExprAsync(
-          json['height'],
-        ))!,
-        width: (await safeParseIntExprAsync(
-          json['width'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await height.preload(context);
-      await width.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivVideoSourceResolution resolve(DivVariableContext context) {
+    height.resolve(context);
+    width.resolve(context);
+    return this;
   }
 }

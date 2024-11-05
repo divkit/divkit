@@ -8,7 +8,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Radial gradient.
-class DivRadialGradient extends Preloadable with EquatableMixin {
+class DivRadialGradient extends Resolvable with EquatableMixin {
   const DivRadialGradient({
     this.centerX =
         const DivRadialGradientCenter.divRadialGradientRelativeCenter(
@@ -130,72 +130,12 @@ class DivRadialGradient extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivRadialGradient?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivRadialGradient(
-        centerX: (await safeParseObjAsync(
-          DivRadialGradientCenter.fromJson(json['center_x']),
-          fallback:
-              const DivRadialGradientCenter.divRadialGradientRelativeCenter(
-            DivRadialGradientRelativeCenter(
-              value: ValueExpression(
-                0.5,
-              ),
-            ),
-          ),
-        ))!,
-        centerY: (await safeParseObjAsync(
-          DivRadialGradientCenter.fromJson(json['center_y']),
-          fallback:
-              const DivRadialGradientCenter.divRadialGradientRelativeCenter(
-            DivRadialGradientRelativeCenter(
-              value: ValueExpression(
-                0.5,
-              ),
-            ),
-          ),
-        ))!,
-        colors: (await safeParseObjExprAsync(
-          await safeListMapAsync(
-            json['colors'],
-            (v) => safeParseColor(
-              v,
-            )!,
-          ),
-        ))!,
-        radius: (await safeParseObjAsync(
-          DivRadialGradientRadius.fromJson(json['radius']),
-          fallback:
-              const DivRadialGradientRadius.divRadialGradientRelativeRadius(
-            DivRadialGradientRelativeRadius(
-              value: ValueExpression(
-                DivRadialGradientRelativeRadiusValue.farthestCorner,
-              ),
-            ),
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await centerX.preload(context);
-      await centerY.preload(context);
-      await colors.preload(context);
-      await radius.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivRadialGradient resolve(DivVariableContext context) {
+    centerX.resolve(context);
+    centerY.resolve(context);
+    colors.resolve(context);
+    radius.resolve(context);
+    return this;
   }
 }

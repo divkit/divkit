@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Specifies element with provided index as scroll destination.
-class IndexDestination extends Preloadable with EquatableMixin {
+class IndexDestination extends Resolvable with EquatableMixin {
   const IndexDestination({
     required this.value,
   });
@@ -44,31 +44,9 @@ class IndexDestination extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<IndexDestination?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return IndexDestination(
-        value: (await safeParseIntExprAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  IndexDestination resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

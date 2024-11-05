@@ -6,7 +6,7 @@ import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_count.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-abstract class DivAnimatorBase extends Preloadable {
+abstract class DivAnimatorBase extends Resolvable {
   List<DivAction>? get cancelActions;
 
   // default value: DivAnimationDirection.normal
@@ -30,5 +30,5 @@ abstract class DivAnimatorBase extends Preloadable {
 
   String get variableName;
   @override
-  Future<void> preload(Map<String, dynamic> context);
+  DivAnimatorBase resolve(DivVariableContext context);
 }

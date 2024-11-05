@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Relative radius of the gradient transition.
-class DivRadialGradientRelativeRadius extends Preloadable with EquatableMixin {
+class DivRadialGradientRelativeRadius extends Resolvable with EquatableMixin {
   const DivRadialGradientRelativeRadius({
     required this.value,
   });
@@ -44,37 +44,14 @@ class DivRadialGradientRelativeRadius extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivRadialGradientRelativeRadius?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivRadialGradientRelativeRadius(
-        value: (await safeParseStrEnumExprAsync(
-          json['value'],
-          parse: DivRadialGradientRelativeRadiusValue.fromJson,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivRadialGradientRelativeRadius resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }
 
-enum DivRadialGradientRelativeRadiusValue implements Preloadable {
+enum DivRadialGradientRelativeRadiusValue implements Resolvable {
   nearestCorner('nearest_corner'),
   farthestCorner('farthest_corner'),
   nearestSide('nearest_side'),
@@ -128,9 +105,6 @@ enum DivRadialGradientRelativeRadiusValue implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivRadialGradientRelativeRadiusValue? fromJson(
     String? json,
   ) {
@@ -154,26 +128,7 @@ enum DivRadialGradientRelativeRadiusValue implements Preloadable {
     }
   }
 
-  static Future<DivRadialGradientRelativeRadiusValue?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'nearest_corner':
-          return DivRadialGradientRelativeRadiusValue.nearestCorner;
-        case 'farthest_corner':
-          return DivRadialGradientRelativeRadiusValue.farthestCorner;
-        case 'nearest_side':
-          return DivRadialGradientRelativeRadiusValue.nearestSide;
-        case 'farthest_side':
-          return DivRadialGradientRelativeRadiusValue.farthestSide;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivRadialGradientRelativeRadiusValue resolve(DivVariableContext context) =>
+      this;
 }

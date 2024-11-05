@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_radial_gradient_relative_radius.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivRadialGradientRadius extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivRadialGradientRadius extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -71,9 +71,6 @@ class DivRadialGradientRadius extends Preloadable with EquatableMixin {
 
   bool get isDivRadialGradientRelativeRadius => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivRadialGradientRadius? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -97,26 +94,9 @@ class DivRadialGradientRadius extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivRadialGradientRadius?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivFixedSize.type:
-          return DivRadialGradientRadius.divFixedSize(
-            (await DivFixedSize.parse(json))!,
-          );
-        case DivRadialGradientRelativeRadius.type:
-          return DivRadialGradientRadius.divRadialGradientRelativeRadius(
-            (await DivRadialGradientRelativeRadius.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivRadialGradientRadius resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

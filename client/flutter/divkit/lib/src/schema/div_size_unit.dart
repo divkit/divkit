@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivSizeUnit implements Preloadable {
+enum DivSizeUnit implements Resolvable {
   dp('dp'),
   sp('sp'),
   px('px');
@@ -47,9 +47,6 @@ enum DivSizeUnit implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivSizeUnit? fromJson(
     String? json,
   ) {
@@ -71,24 +68,6 @@ enum DivSizeUnit implements Preloadable {
     }
   }
 
-  static Future<DivSizeUnit?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'dp':
-          return DivSizeUnit.dp;
-        case 'sp':
-          return DivSizeUnit.sp;
-        case 'px':
-          return DivSizeUnit.px;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivSizeUnit resolve(DivVariableContext context) => this;
 }

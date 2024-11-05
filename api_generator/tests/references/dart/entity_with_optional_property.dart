@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithOptionalProperty extends Preloadable with EquatableMixin  {
+class EntityWithOptionalProperty extends Resolvable with EquatableMixin  {
   const EntityWithOptionalProperty({
     this.property,
   });
@@ -37,24 +37,8 @@ class EntityWithOptionalProperty extends Preloadable with EquatableMixin  {
     }
   }
 
-  static Future<EntityWithOptionalProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithOptionalProperty(
-        property: await safeParseStrExprAsync(json['property']?.toString(),),
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await property?.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithOptionalProperty resolve(DivVariableContext context) {
+    property?.resolve(context);
+    return this;
   }
 }

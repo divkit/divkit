@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed width value of the visible part of a neighbouring page.
-class DivNeighbourPageSize extends Preloadable with EquatableMixin {
+class DivNeighbourPageSize extends Resolvable with EquatableMixin {
   const DivNeighbourPageSize({
     required this.neighbourPageWidth,
   });
@@ -44,31 +44,9 @@ class DivNeighbourPageSize extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivNeighbourPageSize?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivNeighbourPageSize(
-        neighbourPageWidth: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['neighbour_page_width']),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await neighbourPageWidth.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivNeighbourPageSize resolve(DivVariableContext context) {
+    neighbourPageWidth.resolve(context);
+    return this;
   }
 }

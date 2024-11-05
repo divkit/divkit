@@ -194,8 +194,8 @@ class DivDownloadHandlerUrl implements DivActionHandler {
         final json = await fetchPatch(urlArg);
 
         if (json != null) {
-          final patch = await DivPatch.parse(
-            await TemplatesResolver(
+          final patch = DivPatch.fromJson(
+            TemplatesResolver(
               layout: json['patch']!,
               templates: json['templates'],
             ).merge(),
@@ -203,9 +203,7 @@ class DivDownloadHandlerUrl implements DivActionHandler {
 
           if (patch != null) {
             final success = await context.patchManager.applyPatch(
-              await patch.resolve(
-                context: context.variables,
-              ),
+              patch.resolve(context.variables).convert(),
             );
 
             if (success) {

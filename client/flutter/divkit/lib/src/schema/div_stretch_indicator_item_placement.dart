@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
-class DivStretchIndicatorItemPlacement extends Preloadable with EquatableMixin {
+class DivStretchIndicatorItemPlacement extends Resolvable with EquatableMixin {
   const DivStretchIndicatorItemPlacement({
     this.itemSpacing = const DivFixedSize(
       value: ValueExpression(
@@ -66,41 +66,10 @@ class DivStretchIndicatorItemPlacement extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivStretchIndicatorItemPlacement?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivStretchIndicatorItemPlacement(
-        itemSpacing: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['item_spacing']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              5,
-            ),
-          ),
-        ))!,
-        maxVisibleItems: (await safeParseIntExprAsync(
-          json['max_visible_items'],
-          fallback: 10,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await itemSpacing.preload(context);
-      await maxVisibleItems.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivStretchIndicatorItemPlacement resolve(DivVariableContext context) {
+    itemSpacing.resolve(context);
+    maxVisibleItems.resolve(context);
+    return this;
   }
 }

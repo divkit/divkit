@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivVisibility implements Preloadable {
+enum DivVisibility implements Resolvable {
   visible('visible'),
   invisible('invisible'),
   gone('gone');
@@ -47,9 +47,6 @@ enum DivVisibility implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivVisibility? fromJson(
     String? json,
   ) {
@@ -71,24 +68,6 @@ enum DivVisibility implements Preloadable {
     }
   }
 
-  static Future<DivVisibility?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'visible':
-          return DivVisibility.visible;
-        case 'invisible':
-          return DivVisibility.invisible;
-        case 'gone':
-          return DivVisibility.gone;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivVisibility resolve(DivVariableContext context) => this;
 }

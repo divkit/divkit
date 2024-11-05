@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Temporarily saves variable to the persistent storage.
-class DivActionSetStoredValue extends Preloadable with EquatableMixin {
+class DivActionSetStoredValue extends Resolvable with EquatableMixin {
   const DivActionSetStoredValue({
     required this.lifetime,
     required this.name,
@@ -64,39 +64,11 @@ class DivActionSetStoredValue extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionSetStoredValue?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionSetStoredValue(
-        lifetime: (await safeParseIntExprAsync(
-          json['lifetime'],
-        ))!,
-        name: (await safeParseStrExprAsync(
-          json['name']?.toString(),
-        ))!,
-        value: (await safeParseObjAsync(
-          DivTypedValue.fromJson(json['value']),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await lifetime.preload(context);
-      await name.preload(context);
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionSetStoredValue resolve(DivVariableContext context) {
+    lifetime.resolve(context);
+    name.resolve(context);
+    value.resolve(context);
+    return this;
   }
 }

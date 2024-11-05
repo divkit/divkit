@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Hides the tooltip.
-class DivActionHideTooltip extends Preloadable with EquatableMixin {
+class DivActionHideTooltip extends Resolvable with EquatableMixin {
   const DivActionHideTooltip({
     required this.id,
   });
@@ -43,31 +43,9 @@ class DivActionHideTooltip extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionHideTooltip?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionHideTooltip(
-        id: (await safeParseStrExprAsync(
-          json['id']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await id.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionHideTooltip resolve(DivVariableContext context) {
+    id.resolve(context);
+    return this;
   }
 }

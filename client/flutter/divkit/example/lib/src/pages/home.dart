@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
         'assets/application/$name',
       ),
     );
-    return (await DefaultDivKitData.fromJson(jsonData).build()).preload();
+    return DefaultDivKitData.fromJson(jsonData).build();
   }
 
   @override

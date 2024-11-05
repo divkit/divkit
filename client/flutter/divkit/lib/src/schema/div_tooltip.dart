@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Tooltip.
-class DivTooltip extends Preloadable with EquatableMixin {
+class DivTooltip extends Resolvable with EquatableMixin {
   const DivTooltip({
     this.animationIn,
     this.animationOut,
@@ -109,61 +109,18 @@ class DivTooltip extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTooltip?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivTooltip(
-        animationIn: await safeParseObjAsync(
-          DivAnimation.fromJson(json['animation_in']),
-        ),
-        animationOut: await safeParseObjAsync(
-          DivAnimation.fromJson(json['animation_out']),
-        ),
-        div: (await safeParseObjAsync(
-          Div.fromJson(json['div']),
-        ))!,
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-          fallback: 5000,
-        ))!,
-        id: (await safeParseStrAsync(
-          json['id']?.toString(),
-        ))!,
-        offset: await safeParseObjAsync(
-          DivPoint.fromJson(json['offset']),
-        ),
-        position: (await safeParseStrEnumExprAsync(
-          json['position'],
-          parse: DivTooltipPosition.fromJson,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await animationIn?.preload(context);
-      await animationOut?.preload(context);
-      await div.preload(context);
-      await duration.preload(context);
-      await offset?.preload(context);
-      await position.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivTooltip resolve(DivVariableContext context) {
+    animationIn?.resolve(context);
+    animationOut?.resolve(context);
+    duration.resolve(context);
+    offset?.resolve(context);
+    position.resolve(context);
+    return this;
   }
 }
 
-enum DivTooltipPosition implements Preloadable {
+enum DivTooltipPosition implements Resolvable {
   left('left'),
   topLeft('top-left'),
   top('top'),
@@ -262,9 +219,6 @@ enum DivTooltipPosition implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivTooltipPosition? fromJson(
     String? json,
   ) {
@@ -298,36 +252,6 @@ enum DivTooltipPosition implements Preloadable {
     }
   }
 
-  static Future<DivTooltipPosition?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'left':
-          return DivTooltipPosition.left;
-        case 'top-left':
-          return DivTooltipPosition.topLeft;
-        case 'top':
-          return DivTooltipPosition.top;
-        case 'top-right':
-          return DivTooltipPosition.topRight;
-        case 'right':
-          return DivTooltipPosition.right;
-        case 'bottom-right':
-          return DivTooltipPosition.bottomRight;
-        case 'bottom':
-          return DivTooltipPosition.bottom;
-        case 'bottom-left':
-          return DivTooltipPosition.bottomLeft;
-        case 'center':
-          return DivTooltipPosition.center;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivTooltipPosition resolve(DivVariableContext context) => this;
 }

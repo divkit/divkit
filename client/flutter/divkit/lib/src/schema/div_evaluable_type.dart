@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivEvaluableType implements Preloadable {
+enum DivEvaluableType implements Resolvable {
   string('string'),
   integer('integer'),
   number('number'),
@@ -101,9 +101,6 @@ enum DivEvaluableType implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivEvaluableType? fromJson(
     String? json,
   ) {
@@ -137,36 +134,6 @@ enum DivEvaluableType implements Preloadable {
     }
   }
 
-  static Future<DivEvaluableType?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'string':
-          return DivEvaluableType.string;
-        case 'integer':
-          return DivEvaluableType.integer;
-        case 'number':
-          return DivEvaluableType.number;
-        case 'boolean':
-          return DivEvaluableType.boolean;
-        case 'datetime':
-          return DivEvaluableType.datetime;
-        case 'color':
-          return DivEvaluableType.color;
-        case 'url':
-          return DivEvaluableType.url;
-        case 'dict':
-          return DivEvaluableType.dict;
-        case 'array':
-          return DivEvaluableType.array;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivEvaluableType resolve(DivVariableContext context) => this;
 }

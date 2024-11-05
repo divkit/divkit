@@ -5,8 +5,8 @@ import 'package:divkit/src/schema/div_solid_background.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivTextRangeBackground extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivTextRangeBackground extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -69,9 +69,6 @@ class DivTextRangeBackground extends Preloadable with EquatableMixin {
 
   bool get isDivSolidBackground => _index == 1;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivTextRangeBackground? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -95,26 +92,9 @@ class DivTextRangeBackground extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivTextRangeBackground?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivCloudBackground.type:
-          return DivTextRangeBackground.divCloudBackground(
-            (await DivCloudBackground.parse(json))!,
-          );
-        case DivSolidBackground.type:
-          return DivTextRangeBackground.divSolidBackground(
-            (await DivSolidBackground.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivTextRangeBackground resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

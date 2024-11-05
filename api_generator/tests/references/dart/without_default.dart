@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class WithoutDefault extends Preloadable with EquatableMixin  {
+class WithoutDefault extends Resolvable with EquatableMixin  {
   const WithoutDefault();
 
   static const type = "non_default";
@@ -22,12 +22,5 @@ class WithoutDefault extends Preloadable with EquatableMixin  {
     return const WithoutDefault();
   }
 
-  static Future<WithoutDefault?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    return const WithoutDefault();
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {}
+  WithoutDefault resolve(DivVariableContext context) => this;
 }

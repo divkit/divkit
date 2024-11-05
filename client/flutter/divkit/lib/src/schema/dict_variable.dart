@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// An arbitrary object in JSON format.
-class DictVariable extends Preloadable with EquatableMixin {
+class DictVariable extends Resolvable with EquatableMixin {
   const DictVariable({
     required this.name,
     required this.value,
@@ -53,32 +53,8 @@ class DictVariable extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DictVariable?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DictVariable(
-        name: (await safeParseStrAsync(
-          json['name']?.toString(),
-        ))!,
-        value: (await safeParseMapAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {} catch (e) {
-      return;
-    }
+  DictVariable resolve(DivVariableContext context) {
+    return this;
   }
 }

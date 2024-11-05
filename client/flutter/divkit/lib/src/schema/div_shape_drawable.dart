@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Drawable of a simple geometric shape.
-class DivShapeDrawable extends Preloadable with EquatableMixin {
+class DivShapeDrawable extends Resolvable with EquatableMixin {
   const DivShapeDrawable({
     required this.color,
     required this.shape,
@@ -65,39 +65,11 @@ class DivShapeDrawable extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivShapeDrawable?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivShapeDrawable(
-        color: (await safeParseColorExprAsync(
-          json['color'],
-        ))!,
-        shape: (await safeParseObjAsync(
-          DivShape.fromJson(json['shape']),
-        ))!,
-        stroke: await safeParseObjAsync(
-          DivStroke.fromJson(json['stroke']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await color.preload(context);
-      await shape.preload(context);
-      await stroke?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivShapeDrawable resolve(DivVariableContext context) {
+    color.resolve(context);
+    shape.resolve(context);
+    stroke?.resolve(context);
+    return this;
   }
 }

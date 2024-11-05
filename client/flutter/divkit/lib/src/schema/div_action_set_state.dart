@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Applies a new appearance to the content in `div-state'.
-class DivActionSetState extends Preloadable with EquatableMixin {
+class DivActionSetState extends Resolvable with EquatableMixin {
   const DivActionSetState({
     required this.stateId,
     this.temporary = const ValueExpression(true),
@@ -60,36 +60,10 @@ class DivActionSetState extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionSetState?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionSetState(
-        stateId: (await safeParseStrExprAsync(
-          json['state_id']?.toString(),
-        ))!,
-        temporary: (await safeParseBoolExprAsync(
-          json['temporary'],
-          fallback: true,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await stateId.preload(context);
-      await temporary.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionSetState resolve(DivVariableContext context) {
+    stateId.resolve(context);
+    temporary.resolve(context);
+    return this;
   }
 }

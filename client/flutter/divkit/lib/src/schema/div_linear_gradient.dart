@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Linear gradient.
-class DivLinearGradient extends Preloadable with EquatableMixin {
+class DivLinearGradient extends Resolvable with EquatableMixin {
   const DivLinearGradient({
     this.angle = const ValueExpression(0),
     required this.colors,
@@ -61,41 +61,10 @@ class DivLinearGradient extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivLinearGradient?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivLinearGradient(
-        angle: (await safeParseIntExprAsync(
-          json['angle'],
-          fallback: 0,
-        ))!,
-        colors: (await safeParseObjExprAsync(
-          await safeListMapAsync(
-            json['colors'],
-            (v) => safeParseColor(
-              v,
-            )!,
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await angle.preload(context);
-      await colors.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivLinearGradient resolve(DivVariableContext context) {
+    angle.resolve(context);
+    colors.resolve(context);
+    return this;
   }
 }

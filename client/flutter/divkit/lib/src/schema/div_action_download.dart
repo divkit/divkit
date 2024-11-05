@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Loads additional data in `div-patch` format and updates the current element.
-class DivActionDownload extends Preloadable with EquatableMixin {
+class DivActionDownload extends Resolvable with EquatableMixin {
   const DivActionDownload({
     this.onFailActions,
     this.onSuccessActions,
@@ -77,49 +77,11 @@ class DivActionDownload extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionDownload?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionDownload(
-        onFailActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_fail_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        onSuccessActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['on_success_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        url: (await safeParseStrExprAsync(
-          json['url']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(onFailActions, (v) => v.preload(context));
-      await safeFuturesWait(onSuccessActions, (v) => v.preload(context));
-      await url.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionDownload resolve(DivVariableContext context) {
+    safeListResolve(onFailActions, (v) => v.resolve(context));
+    safeListResolve(onSuccessActions, (v) => v.resolve(context));
+    url.resolve(context);
+    return this;
   }
 }

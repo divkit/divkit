@@ -20,9 +20,7 @@ Future<List<Item>> process(Box box) async {
       final data = DefaultDivKitData.fromScheme(
         card: json.containsKey('card') ? json['card'] : json,
         templates: json['templates'],
-      );
-      await data.build();
-      await data.preload();
+      ).build();
 
       it.add(Item(
         name,
@@ -138,26 +136,29 @@ class _TestingPage extends State<TestingPage> {
                   itemCount: data.length,
                   itemBuilder: (context, index) {
                     final item = data[index];
-                    return FilledButton.tonal(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ScenarioPage(
-                            scenarios: data,
-                            index: index,
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              item.title,
-                              overflow: TextOverflow.ellipsis,
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: FilledButton.tonal(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ScenarioPage(
+                              scenarios: data,
+                              index: index,
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.chevron_right),
-                        ],
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                item.title,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(Icons.chevron_right),
+                          ],
+                        ),
                       ),
                     );
                   },

@@ -24,8 +24,8 @@ import 'entity_with_string_enum_property.dart';
 import 'entity_with_string_enum_property_with_default_value.dart';
 import 'entity_without_properties.dart';
 
-class Entity extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class Entity extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -331,7 +331,6 @@ class Entity extends Preloadable with EquatableMixin {
 
   bool get isEntityWithoutProperties => _index == 18;
 
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 
   static Entity? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
@@ -383,55 +382,5 @@ class Entity extends Preloadable with EquatableMixin {
       return null;
     }
   }
-
-  static Future<Entity?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-      case EntityWithArray.type :
-        return Entity.entityWithArray((await EntityWithArray.parse(json))!,);
-      case EntityWithArrayOfEnums.type :
-        return Entity.entityWithArrayOfEnums((await EntityWithArrayOfEnums.parse(json))!,);
-      case EntityWithArrayOfExpressions.type :
-        return Entity.entityWithArrayOfExpressions((await EntityWithArrayOfExpressions.parse(json))!,);
-      case EntityWithArrayOfNestedItems.type :
-        return Entity.entityWithArrayOfNestedItems((await EntityWithArrayOfNestedItems.parse(json))!,);
-      case EntityWithArrayWithTransform.type :
-        return Entity.entityWithArrayWithTransform((await EntityWithArrayWithTransform.parse(json))!,);
-      case EntityWithComplexProperty.type :
-        return Entity.entityWithComplexProperty((await EntityWithComplexProperty.parse(json))!,);
-      case EntityWithComplexPropertyWithDefaultValue.type :
-        return Entity.entityWithComplexPropertyWithDefaultValue((await EntityWithComplexPropertyWithDefaultValue.parse(json))!,);
-      case EntityWithEntityProperty.type :
-        return Entity.entityWithEntityProperty((await EntityWithEntityProperty.parse(json))!,);
-      case EntityWithOptionalComplexProperty.type :
-        return Entity.entityWithOptionalComplexProperty((await EntityWithOptionalComplexProperty.parse(json))!,);
-      case EntityWithOptionalProperty.type :
-        return Entity.entityWithOptionalProperty((await EntityWithOptionalProperty.parse(json))!,);
-      case EntityWithOptionalStringEnumProperty.type :
-        return Entity.entityWithOptionalStringEnumProperty((await EntityWithOptionalStringEnumProperty.parse(json))!,);
-      case EntityWithPropertyWithDefaultValue.type :
-        return Entity.entityWithPropertyWithDefaultValue((await EntityWithPropertyWithDefaultValue.parse(json))!,);
-      case EntityWithRawArray.type :
-        return Entity.entityWithRawArray((await EntityWithRawArray.parse(json))!,);
-      case EntityWithRequiredProperty.type :
-        return Entity.entityWithRequiredProperty((await EntityWithRequiredProperty.parse(json))!,);
-      case EntityWithSimpleProperties.type :
-        return Entity.entityWithSimpleProperties((await EntityWithSimpleProperties.parse(json))!,);
-      case EntityWithStringArrayProperty.type :
-        return Entity.entityWithStringArrayProperty((await EntityWithStringArrayProperty.parse(json))!,);
-      case EntityWithStringEnumProperty.type :
-        return Entity.entityWithStringEnumProperty((await EntityWithStringEnumProperty.parse(json))!,);
-      case EntityWithStringEnumPropertyWithDefaultValue.type :
-        return Entity.entityWithStringEnumPropertyWithDefaultValue((await EntityWithStringEnumPropertyWithDefaultValue.parse(json))!,);
-      case EntityWithoutProperties.type :
-        return Entity.entityWithoutProperties((await EntityWithoutProperties.parse(json))!,);
-    }
-      return null;
-    } catch (e, st) {
-      return null;
-    }
-  }
+  Entity resolve(DivVariableContext context) { value.resolve(context); return this; }
 }

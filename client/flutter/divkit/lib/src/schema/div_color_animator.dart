@@ -10,7 +10,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Color animator.
-class DivColorAnimator extends Preloadable
+class DivColorAnimator extends Resolvable
     with EquatableMixin
     implements DivAnimatorBase {
   const DivColorAnimator({
@@ -194,91 +194,17 @@ class DivColorAnimator extends Preloadable
     }
   }
 
-  static Future<DivColorAnimator?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivColorAnimator(
-        cancelActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['cancel_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        direction: (await safeParseStrEnumExprAsync(
-          json['direction'],
-          parse: DivAnimationDirection.fromJson,
-          fallback: DivAnimationDirection.normal,
-        ))!,
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-        ))!,
-        endActions: await safeParseObjAsync(
-          await safeListMapAsync(
-            json['end_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
-          ),
-        ),
-        endValue: (await safeParseColorExprAsync(
-          json['end_value'],
-        ))!,
-        id: (await safeParseStrAsync(
-          json['id']?.toString(),
-        ))!,
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.linear,
-        ))!,
-        repeatCount: (await safeParseObjAsync(
-          DivCount.fromJson(json['repeat_count']),
-          fallback: const DivCount.divFixedCount(
-            DivFixedCount(
-              value: ValueExpression(
-                1,
-              ),
-            ),
-          ),
-        ))!,
-        startDelay: (await safeParseIntExprAsync(
-          json['start_delay'],
-          fallback: 0,
-        ))!,
-        startValue: await safeParseColorExprAsync(
-          json['start_value'],
-        ),
-        variableName: (await safeParseStrAsync(
-          json['variable_name']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await safeFuturesWait(cancelActions, (v) => v.preload(context));
-      await direction.preload(context);
-      await duration.preload(context);
-      await safeFuturesWait(endActions, (v) => v.preload(context));
-      await endValue.preload(context);
-      await interpolator.preload(context);
-      await repeatCount.preload(context);
-      await startDelay.preload(context);
-      await startValue?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivColorAnimator resolve(DivVariableContext context) {
+    safeListResolve(cancelActions, (v) => v.resolve(context));
+    direction.resolve(context);
+    duration.resolve(context);
+    safeListResolve(endActions, (v) => v.resolve(context));
+    endValue.resolve(context);
+    interpolator.resolve(context);
+    repeatCount.resolve(context);
+    startDelay.resolve(context);
+    startValue?.resolve(context);
+    return this;
   }
 }

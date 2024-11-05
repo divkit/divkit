@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Deletes a value from the array
-class DivActionArrayRemoveValue extends Preloadable with EquatableMixin {
+class DivActionArrayRemoveValue extends Resolvable with EquatableMixin {
   const DivActionArrayRemoveValue({
     required this.index,
     required this.variableName,
@@ -49,35 +49,10 @@ class DivActionArrayRemoveValue extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionArrayRemoveValue?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionArrayRemoveValue(
-        index: (await safeParseIntExprAsync(
-          json['index'],
-        ))!,
-        variableName: (await safeParseStrExprAsync(
-          json['variable_name']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await index.preload(context);
-      await variableName.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionArrayRemoveValue resolve(DivVariableContext context) {
+    index.resolve(context);
+    variableName.resolve(context);
+    return this;
   }
 }

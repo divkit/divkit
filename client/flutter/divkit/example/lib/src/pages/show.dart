@@ -22,9 +22,7 @@ class _ShowPageState extends ConsumerState<ShowPage> {
       card: json.containsKey('card') ? json['card'] : json,
       templates: json['templates'],
     );
-    await data.build();
-    await data.preload();
-
+    data.build();
     return data;
   }
 

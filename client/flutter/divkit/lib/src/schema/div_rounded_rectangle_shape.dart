@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// A rectangle with rounded corners.
-class DivRoundedRectangleShape extends Preloadable with EquatableMixin {
+class DivRoundedRectangleShape extends Resolvable with EquatableMixin {
   const DivRoundedRectangleShape({
     this.backgroundColor,
     this.cornerRadius = const DivFixedSize(
@@ -117,62 +117,13 @@ class DivRoundedRectangleShape extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivRoundedRectangleShape?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivRoundedRectangleShape(
-        backgroundColor: await safeParseColorExprAsync(
-          json['background_color'],
-        ),
-        cornerRadius: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['corner_radius']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              5,
-            ),
-          ),
-        ))!,
-        itemHeight: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['item_height']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              10,
-            ),
-          ),
-        ))!,
-        itemWidth: (await safeParseObjAsync(
-          DivFixedSize.fromJson(json['item_width']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              10,
-            ),
-          ),
-        ))!,
-        stroke: await safeParseObjAsync(
-          DivStroke.fromJson(json['stroke']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await backgroundColor?.preload(context);
-      await cornerRadius.preload(context);
-      await itemHeight.preload(context);
-      await itemWidth.preload(context);
-      await stroke?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivRoundedRectangleShape resolve(DivVariableContext context) {
+    backgroundColor?.resolve(context);
+    cornerRadius.resolve(context);
+    itemHeight.resolve(context);
+    itemWidth.resolve(context);
+    stroke?.resolve(context);
+    return this;
   }
 }

@@ -1,37 +1,23 @@
 import 'package:divkit/divkit.dart';
 
-extension PassDivAction on DivAction {
-  Future<DivActionModel> resolve({
-    required DivVariableContext context,
-  }) async =>
-      DivActionModel(
-        url: await url?.resolveValue(context: context),
-        enabled: await isEnabled.resolveValue(context: context),
-        typedAction: typed,
-        payload: payload,
-        logId: await logId.resolveValue(context: context),
-        downloadCallbacks: await downloadCallbacks?.resolve(context: context),
-      );
-
-  DivActionModel value() => DivActionModel(
+extension DivActionConverter on DivAction {
+  DivActionModel convert() => DivActionModel(
         url: url?.value,
-        enabled: isEnabled.value!,
+        enabled: isEnabled.value,
         typedAction: typed,
         payload: payload,
-        logId: logId.value!,
-        downloadCallbacks: downloadCallbacks?.value(),
+        logId: logId.value,
+        downloadCallbacks: downloadCallbacks?.convert(),
       );
 }
 
-extension PassDivDownloadCallbacks on DivDownloadCallbacks {
-  Future<DivDownloadCallbacksModel> resolve({
-    required DivVariableContext context,
-  }) async {
+extension DivDownloadCallbacksConverter on DivDownloadCallbacks {
+  DivDownloadCallbacksModel convert() {
     List<DivActionModel>? success;
     if (onSuccessActions != null) {
       success = [];
       for (final a in onSuccessActions!) {
-        success.add(await a.resolve(context: context));
+        success.add(a.convert());
       }
     }
 
@@ -39,30 +25,7 @@ extension PassDivDownloadCallbacks on DivDownloadCallbacks {
     if (onFailActions != null) {
       fail = [];
       for (final a in onFailActions!) {
-        fail.add(await a.resolve(context: context));
-      }
-    }
-
-    return DivDownloadCallbacksModel(
-      onSuccessActions: success,
-      onFailActions: fail,
-    );
-  }
-
-  DivDownloadCallbacksModel value() {
-    List<DivActionModel>? success;
-    if (onSuccessActions != null) {
-      success = [];
-      for (final a in onSuccessActions!) {
-        success.add(a.value());
-      }
-    }
-
-    List<DivActionModel>? fail;
-    if (onFailActions != null) {
-      fail = [];
-      for (final a in onFailActions!) {
-        fail.add(a.value());
+        fail.add(a.convert());
       }
     }
 

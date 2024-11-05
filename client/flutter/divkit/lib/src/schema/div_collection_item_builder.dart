@@ -4,7 +4,7 @@ import 'package:divkit/src/schema/div.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivCollectionItemBuilder extends Preloadable with EquatableMixin {
+class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
   const DivCollectionItemBuilder({
     required this.data,
     this.dataElementName = "it",
@@ -69,50 +69,15 @@ class DivCollectionItemBuilder extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivCollectionItemBuilder?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivCollectionItemBuilder(
-        data: (await safeParseListExprAsync(
-          json['data'],
-        ))!,
-        dataElementName: (await safeParseStrAsync(
-          json['data_element_name']?.toString(),
-          fallback: "it",
-        ))!,
-        prototypes: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['prototypes'],
-            (v) => safeParseObj(
-              DivCollectionItemBuilderPrototype.fromJson(v),
-            )!,
-          ),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await data.preload(context);
-      await safeFuturesWait(prototypes, (v) => v.preload(context));
-    } catch (e) {
-      return;
-    }
+  DivCollectionItemBuilder resolve(DivVariableContext context) {
+    data.resolve(context);
+    safeListResolve(prototypes, (v) => v.resolve(context));
+    return this;
   }
 }
 
-class DivCollectionItemBuilderPrototype extends Preloadable
-    with EquatableMixin {
+class DivCollectionItemBuilderPrototype extends Resolvable with EquatableMixin {
   const DivCollectionItemBuilderPrototype({
     required this.div,
     this.id,
@@ -171,40 +136,10 @@ class DivCollectionItemBuilderPrototype extends Preloadable
     }
   }
 
-  static Future<DivCollectionItemBuilderPrototype?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivCollectionItemBuilderPrototype(
-        div: (await safeParseObjAsync(
-          Div.fromJson(json['div']),
-        ))!,
-        id: await safeParseStrExprAsync(
-          json['id']?.toString(),
-        ),
-        selector: (await safeParseBoolExprAsync(
-          json['selector'],
-          fallback: true,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await div.preload(context);
-      await id?.preload(context);
-      await selector.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivCollectionItemBuilderPrototype resolve(DivVariableContext context) {
+    id?.resolve(context);
+    selector.resolve(context);
+    return this;
   }
 }

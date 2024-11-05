@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
 
-class EntityWithOptionalStringEnumProperty extends Preloadable with EquatableMixin  {
+class EntityWithOptionalStringEnumProperty extends Resolvable with EquatableMixin  {
   const EntityWithOptionalStringEnumProperty({
     this.property,
   });
@@ -37,29 +37,13 @@ class EntityWithOptionalStringEnumProperty extends Preloadable with EquatableMix
     }
   }
 
-  static Future<EntityWithOptionalStringEnumProperty?> parse(Map<String, dynamic>? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return EntityWithOptionalStringEnumProperty(
-        property: await safeParseStrEnumExprAsync(json['property'], parse: EntityWithOptionalStringEnumPropertyProperty.fromJson,),
-      );
-    } catch (e, st) {
-      return null;
-    }
-  }
-
-  Future<void> preload(Map<String, dynamic> context,) async {
-    try {
-    await property?.preload(context);
-    } catch (e, st) {
-      return;
-    }
+  EntityWithOptionalStringEnumProperty resolve(DivVariableContext context) {
+    property?.resolve(context);
+    return this;
   }
 }
 
-enum EntityWithOptionalStringEnumPropertyProperty implements Preloadable {
+enum EntityWithOptionalStringEnumPropertyProperty implements Resolvable {
   first('first'),
   second('second');
 
@@ -96,7 +80,6 @@ enum EntityWithOptionalStringEnumPropertyProperty implements Preloadable {
      }
   }
 
-  Future<void> preload(Map<String, dynamic> context) async {}
 
   static EntityWithOptionalStringEnumPropertyProperty? fromJson(String? json,) {
     if (json == null) {
@@ -114,21 +97,5 @@ enum EntityWithOptionalStringEnumPropertyProperty implements Preloadable {
       return null;
     }
   }
-
-  static Future<EntityWithOptionalStringEnumPropertyProperty?> parse(String? json,) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'first':
-        return EntityWithOptionalStringEnumPropertyProperty.first;
-        case 'second':
-        return EntityWithOptionalStringEnumPropertyProperty.second;
-      }
-      return null;
-    } catch (e, st) {
-      return null;
-    }
-  }
+  EntityWithOptionalStringEnumPropertyProperty resolve(DivVariableContext context) => this;
 }

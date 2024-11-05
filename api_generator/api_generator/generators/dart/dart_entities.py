@@ -241,18 +241,20 @@ class DartProperty(Property):
             return f"{br0}{_await}safeParseObj{expr}{_async}({_await}safeListMap{_async}(json['{self.name}'], (v) => {strategy},)," \
                    f"{fallback}){br1}{required}"
 
-    def get_preload_strategy(self) -> Optional[str]:
+    def get_resolve_strategy(self) -> Optional[str]:
         prop_type = cast(DartPropertyType, self.property_type)
         option = '?' if self.optional else ''
         name = utils.lower_camel_case(self.name)
 
+        if {"item", "items", "div"}.__contains__(name):
+            return
         if self.supports_expressions:
-            return f'await {name}{option}.preload(context);'
+            return f'{name}{option}.resolve(context);'
         else:
             if prop_type.is_class():
-                return f'await {name}{option}.preload(context);'
+                return f'{name}{option}.resolve(context);'
             elif prop_type.is_list():
-                return f'await safeFuturesWait({name}, (v) => v.preload(context));'
+                return f'safeListResolve({name}, (v) => v.resolve(context));'
 
     @property
     def fallback_declaration(self) -> str:

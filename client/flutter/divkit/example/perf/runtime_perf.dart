@@ -81,7 +81,7 @@ Future<List<TestStatistics>> test() async {
       final stopwatch = Stopwatch()..start();
 
       try {
-        res = expr.resolveValue(context: ctx);
+        res = expr.resolve(ctx);
       } catch (e) {
         res = e;
       }

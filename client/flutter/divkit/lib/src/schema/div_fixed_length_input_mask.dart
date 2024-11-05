@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Mask for entering text with a fixed number of characters.
-class DivFixedLengthInputMask extends Preloadable
+class DivFixedLengthInputMask extends Resolvable
     with EquatableMixin
     implements DivInputMaskBase {
   const DivFixedLengthInputMask({
@@ -85,54 +85,17 @@ class DivFixedLengthInputMask extends Preloadable
     }
   }
 
-  static Future<DivFixedLengthInputMask?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFixedLengthInputMask(
-        alwaysVisible: (await safeParseBoolExprAsync(
-          json['always_visible'],
-          fallback: false,
-        ))!,
-        pattern: (await safeParseStrExprAsync(
-          json['pattern']?.toString(),
-        ))!,
-        patternElements: (await safeParseObjAsync(
-          await safeListMapAsync(
-            json['pattern_elements'],
-            (v) => safeParseObj(
-              DivFixedLengthInputMaskPatternElement.fromJson(v),
-            )!,
-          ),
-        ))!,
-        rawTextVariable: (await safeParseStrAsync(
-          json['raw_text_variable']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await alwaysVisible.preload(context);
-      await pattern.preload(context);
-      await safeFuturesWait(patternElements, (v) => v.preload(context));
-    } catch (e) {
-      return;
-    }
+  DivFixedLengthInputMask resolve(DivVariableContext context) {
+    alwaysVisible.resolve(context);
+    pattern.resolve(context);
+    safeListResolve(patternElements, (v) => v.resolve(context));
+    return this;
   }
 }
 
 /// Template decoding is a description of the characters that will be replaced with user input.
-class DivFixedLengthInputMaskPatternElement extends Preloadable
+class DivFixedLengthInputMaskPatternElement extends Resolvable
     with EquatableMixin {
   const DivFixedLengthInputMaskPatternElement({
     required this.key,
@@ -193,40 +156,11 @@ class DivFixedLengthInputMaskPatternElement extends Preloadable
     }
   }
 
-  static Future<DivFixedLengthInputMaskPatternElement?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFixedLengthInputMaskPatternElement(
-        key: (await safeParseStrExprAsync(
-          json['key']?.toString(),
-        ))!,
-        placeholder: (await safeParseStrExprAsync(
-          json['placeholder']?.toString(),
-          fallback: "_",
-        ))!,
-        regex: await safeParseStrExprAsync(
-          json['regex']?.toString(),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await key.preload(context);
-      await placeholder.preload(context);
-      await regex?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivFixedLengthInputMaskPatternElement resolve(DivVariableContext context) {
+    key.resolve(context);
+    placeholder.resolve(context);
+    regex?.resolve(context);
+    return this;
   }
 }

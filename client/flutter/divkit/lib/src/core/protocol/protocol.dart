@@ -5,6 +5,7 @@ export 'div_data.dart';
 export 'div_font_provider.dart';
 export 'div_logger.dart';
 export 'div_patch.dart';
+export 'div_scale.dart';
 export 'div_state.dart';
 export 'div_timer.dart';
 export 'div_variable.dart';

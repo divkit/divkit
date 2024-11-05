@@ -19,5 +19,4 @@ export 'src/core/variable/variable_storage.dart';
 export 'src/core/visibility/visibility.dart';
 export 'src/core/widgets/widgets.dart';
 export 'src/schema/schema.dart';
-export 'src/utils/converters.dart';
 export 'src/utils/parsing_utils.dart';

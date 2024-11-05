@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Controls the timer.
-class DivActionTimer extends Preloadable with EquatableMixin {
+class DivActionTimer extends Resolvable with EquatableMixin {
   const DivActionTimer({
     required this.action,
     required this.id,
@@ -60,41 +60,15 @@ class DivActionTimer extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionTimer?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionTimer(
-        action: (await safeParseStrEnumExprAsync(
-          json['action'],
-          parse: DivActionTimerAction.fromJson,
-        ))!,
-        id: (await safeParseStrExprAsync(
-          json['id']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await action.preload(context);
-      await id.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionTimer resolve(DivVariableContext context) {
+    action.resolve(context);
+    id.resolve(context);
+    return this;
   }
 }
 
-enum DivActionTimerAction implements Preloadable {
+enum DivActionTimerAction implements Resolvable {
   start('start'),
   stop('stop'),
   pause('pause'),
@@ -166,9 +140,6 @@ enum DivActionTimerAction implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivActionTimerAction? fromJson(
     String? json,
   ) {
@@ -196,30 +167,6 @@ enum DivActionTimerAction implements Preloadable {
     }
   }
 
-  static Future<DivActionTimerAction?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'start':
-          return DivActionTimerAction.start;
-        case 'stop':
-          return DivActionTimerAction.stop;
-        case 'pause':
-          return DivActionTimerAction.pause;
-        case 'resume':
-          return DivActionTimerAction.resume;
-        case 'cancel':
-          return DivActionTimerAction.cancel;
-        case 'reset':
-          return DivActionTimerAction.reset;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivActionTimerAction resolve(DivVariableContext context) => this;
 }

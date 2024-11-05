@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Filter based on [calculated expressions](https://divkit.tech/docs/en/concepts/expressions).
-class DivInputFilterExpression extends Preloadable with EquatableMixin {
+class DivInputFilterExpression extends Resolvable with EquatableMixin {
   const DivInputFilterExpression({
     required this.condition,
   });
@@ -43,31 +43,9 @@ class DivInputFilterExpression extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputFilterExpression?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivInputFilterExpression(
-        condition: (await safeParseBoolExprAsync(
-          json['condition'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await condition.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivInputFilterExpression resolve(DivVariableContext context) {
+    condition.resolve(context);
+    return this;
   }
 }

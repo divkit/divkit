@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element shadow.
-class DivShadow extends Preloadable with EquatableMixin {
+class DivShadow extends Resolvable with EquatableMixin {
   const DivShadow({
     this.alpha = const ValueExpression(0.19),
     this.blur = const ValueExpression(2),
@@ -78,46 +78,12 @@ class DivShadow extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivShadow?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivShadow(
-        alpha: (await safeParseDoubleExprAsync(
-          json['alpha'],
-          fallback: 0.19,
-        ))!,
-        blur: (await safeParseIntExprAsync(
-          json['blur'],
-          fallback: 2,
-        ))!,
-        color: (await safeParseColorExprAsync(
-          json['color'],
-          fallback: const Color(0xFF000000),
-        ))!,
-        offset: (await safeParseObjAsync(
-          DivPoint.fromJson(json['offset']),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await alpha.preload(context);
-      await blur.preload(context);
-      await color.preload(context);
-      await offset.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivShadow resolve(DivVariableContext context) {
+    alpha.resolve(context);
+    blur.resolve(context);
+    color.resolve(context);
+    offset.resolve(context);
+    return this;
   }
 }

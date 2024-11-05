@@ -23,8 +23,8 @@ import 'package:divkit/src/schema/div_action_video.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivActionTyped extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivActionTyped extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -447,9 +447,6 @@ class DivActionTyped extends Preloadable with EquatableMixin {
 
   bool get isDivActionVideo => _index == 19;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivActionTyped? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -545,98 +542,9 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionTyped?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivActionAnimatorStart.type:
-          return DivActionTyped.divActionAnimatorStart(
-            (await DivActionAnimatorStart.parse(json))!,
-          );
-        case DivActionAnimatorStop.type:
-          return DivActionTyped.divActionAnimatorStop(
-            (await DivActionAnimatorStop.parse(json))!,
-          );
-        case DivActionArrayInsertValue.type:
-          return DivActionTyped.divActionArrayInsertValue(
-            (await DivActionArrayInsertValue.parse(json))!,
-          );
-        case DivActionArrayRemoveValue.type:
-          return DivActionTyped.divActionArrayRemoveValue(
-            (await DivActionArrayRemoveValue.parse(json))!,
-          );
-        case DivActionArraySetValue.type:
-          return DivActionTyped.divActionArraySetValue(
-            (await DivActionArraySetValue.parse(json))!,
-          );
-        case DivActionClearFocus.type:
-          return DivActionTyped.divActionClearFocus(
-            (await DivActionClearFocus.parse(json))!,
-          );
-        case DivActionCopyToClipboard.type:
-          return DivActionTyped.divActionCopyToClipboard(
-            (await DivActionCopyToClipboard.parse(json))!,
-          );
-        case DivActionDictSetValue.type:
-          return DivActionTyped.divActionDictSetValue(
-            (await DivActionDictSetValue.parse(json))!,
-          );
-        case DivActionDownload.type:
-          return DivActionTyped.divActionDownload(
-            (await DivActionDownload.parse(json))!,
-          );
-        case DivActionFocusElement.type:
-          return DivActionTyped.divActionFocusElement(
-            (await DivActionFocusElement.parse(json))!,
-          );
-        case DivActionHideTooltip.type:
-          return DivActionTyped.divActionHideTooltip(
-            (await DivActionHideTooltip.parse(json))!,
-          );
-        case DivActionScrollBy.type:
-          return DivActionTyped.divActionScrollBy(
-            (await DivActionScrollBy.parse(json))!,
-          );
-        case DivActionScrollTo.type:
-          return DivActionTyped.divActionScrollTo(
-            (await DivActionScrollTo.parse(json))!,
-          );
-        case DivActionSetState.type:
-          return DivActionTyped.divActionSetState(
-            (await DivActionSetState.parse(json))!,
-          );
-        case DivActionSetStoredValue.type:
-          return DivActionTyped.divActionSetStoredValue(
-            (await DivActionSetStoredValue.parse(json))!,
-          );
-        case DivActionSetVariable.type:
-          return DivActionTyped.divActionSetVariable(
-            (await DivActionSetVariable.parse(json))!,
-          );
-        case DivActionShowTooltip.type:
-          return DivActionTyped.divActionShowTooltip(
-            (await DivActionShowTooltip.parse(json))!,
-          );
-        case DivActionSubmit.type:
-          return DivActionTyped.divActionSubmit(
-            (await DivActionSubmit.parse(json))!,
-          );
-        case DivActionTimer.type:
-          return DivActionTyped.divActionTimer(
-            (await DivActionTimer.parse(json))!,
-          );
-        case DivActionVideo.type:
-          return DivActionTyped.divActionVideo(
-            (await DivActionVideo.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivActionTyped resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Scale animation.
-class DivScaleTransition extends Preloadable
+class DivScaleTransition extends Resolvable
     with EquatableMixin
     implements DivTransitionBase {
   const DivScaleTransition({
@@ -114,58 +114,14 @@ class DivScaleTransition extends Preloadable
     }
   }
 
-  static Future<DivScaleTransition?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivScaleTransition(
-        duration: (await safeParseIntExprAsync(
-          json['duration'],
-          fallback: 200,
-        ))!,
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        ))!,
-        pivotX: (await safeParseDoubleExprAsync(
-          json['pivot_x'],
-          fallback: 0.5,
-        ))!,
-        pivotY: (await safeParseDoubleExprAsync(
-          json['pivot_y'],
-          fallback: 0.5,
-        ))!,
-        scale: (await safeParseDoubleExprAsync(
-          json['scale'],
-          fallback: 0.0,
-        ))!,
-        startDelay: (await safeParseIntExprAsync(
-          json['start_delay'],
-          fallback: 0,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await duration.preload(context);
-      await interpolator.preload(context);
-      await pivotX.preload(context);
-      await pivotY.preload(context);
-      await scale.preload(context);
-      await startDelay.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivScaleTransition resolve(DivVariableContext context) {
+    duration.resolve(context);
+    interpolator.resolve(context);
+    pivotX.resolve(context);
+    pivotY.resolve(context);
+    scale.resolve(context);
+    startDelay.resolve(context);
+    return this;
   }
 }

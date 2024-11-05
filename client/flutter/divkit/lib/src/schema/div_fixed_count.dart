@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed number of repetitions.
-class DivFixedCount extends Preloadable with EquatableMixin {
+class DivFixedCount extends Resolvable with EquatableMixin {
   const DivFixedCount({
     required this.value,
   });
@@ -44,31 +44,9 @@ class DivFixedCount extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivFixedCount?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivFixedCount(
-        value: (await safeParseIntExprAsync(
-          json['value'],
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await value.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivFixedCount resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

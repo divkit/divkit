@@ -8,7 +8,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Launches the specified animator.
-class DivActionAnimatorStart extends Preloadable with EquatableMixin {
+class DivActionAnimatorStart extends Resolvable with EquatableMixin {
   const DivActionAnimatorStart({
     required this.animatorId,
     this.direction,
@@ -123,60 +123,15 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivActionAnimatorStart?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivActionAnimatorStart(
-        animatorId: (await safeParseStrAsync(
-          json['animator_id']?.toString(),
-        ))!,
-        direction: await safeParseStrEnumExprAsync(
-          json['direction'],
-          parse: DivAnimationDirection.fromJson,
-        ),
-        duration: await safeParseIntExprAsync(
-          json['duration'],
-        ),
-        endValue: await safeParseObjAsync(
-          DivTypedValue.fromJson(json['end_value']),
-        ),
-        interpolator: await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-        ),
-        repeatCount: await safeParseObjAsync(
-          DivCount.fromJson(json['repeat_count']),
-        ),
-        startDelay: await safeParseIntExprAsync(
-          json['start_delay'],
-        ),
-        startValue: await safeParseObjAsync(
-          DivTypedValue.fromJson(json['start_value']),
-        ),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await direction?.preload(context);
-      await duration?.preload(context);
-      await endValue?.preload(context);
-      await interpolator?.preload(context);
-      await repeatCount?.preload(context);
-      await startDelay?.preload(context);
-      await startValue?.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivActionAnimatorStart resolve(DivVariableContext context) {
+    direction?.resolve(context);
+    duration?.resolve(context);
+    endValue?.resolve(context);
+    interpolator?.resolve(context);
+    repeatCount?.resolve(context);
+    startDelay?.resolve(context);
+    startValue?.resolve(context);
+    return this;
   }
 }

@@ -5,56 +5,32 @@ import 'package:divkit/src/utils/trace.dart';
 import 'package:equatable/equatable.dart';
 import 'package:petitparser/petitparser.dart';
 
-abstract class Expression<T> with EquatableMixin {
-  T? get value;
+abstract class Resolvable<T> extends Object {
+  const Resolvable();
 
-  T get requireValue => value!;
+  T resolve(DivVariableContext context);
+}
+
+abstract class Expression<T> extends Resolvable<T> with EquatableMixin {
+  T get value;
 
   const Expression();
 
-  Future<T> resolveValue({
-    required DivVariableContext context,
-  });
-
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    if (this is ResolvableExpression) {
-      try {
-        await resolveValue(
-          context: DivVariableContext(current: context),
-        );
-      } catch (e, st) {
-        logger.warning(
-          '${(this as ResolvableExpression).source} not preloaded via error',
-          error: e,
-          stackTrace: st,
-        );
-      }
-    }
-  }
+  @override
+  T resolve(DivVariableContext context);
 }
 
 class ValueExpression<T> extends Expression<T> {
   @override
-  final T? value;
+  final T value;
 
   const ValueExpression(this.value);
 
   @override
-  Future<T> resolveValue({
-    required DivVariableContext context,
-  }) async =>
-      value!;
+  T resolve(DivVariableContext context) => value;
 
   @override
   List<Object?> get props => [value];
-}
-
-abstract class Preloadable extends Object {
-  const Preloadable();
-
-  Future<void> preload(Map<String, dynamic> context);
 }
 
 class ResolvableExpression<T> extends Expression<T> {
@@ -75,8 +51,10 @@ class ResolvableExpression<T> extends Expression<T> {
 
   final T? fallback;
 
+  T? _value;
+
   @override
-  T? value;
+  T get value => _value!;
 
   ResolvableExpression(
     this.source, {
@@ -85,26 +63,21 @@ class ResolvableExpression<T> extends Expression<T> {
   });
 
   @override
-  Future<T> resolveValue({
-    required DivVariableContext context,
-  }) async {
+  T resolve(DivVariableContext context) {
     _executionTree ??= parser.parse(source!);
-    variables ??= await traceAsyncFunc(
+    variables ??= traceFunc(
       'extractVariables',
       () => exprAnalyzer.extractVariables(source!),
     );
 
-    final hasValue = value != null;
+    final hasValue = _value != null;
     final hasUpdate = variables!.intersection(context.update).isNotEmpty;
     if (hasUpdate || !hasValue) {
-      value = await traceAsyncFunc(
-        'resolveExpression',
-        () => exprResolver.resolve(this, context: context),
-      );
+      _value = exprResolver.resolve(this, context: context);
     }
-    return value!;
+    return value;
   }
 
   @override
-  List<Object?> get props => [value, source, fallback];
+  List<Object?> get props => [source, fallback];
 }

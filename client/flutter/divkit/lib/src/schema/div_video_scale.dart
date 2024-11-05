@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivVideoScale implements Preloadable {
+enum DivVideoScale implements Resolvable {
   fill('fill'),
   noScale('no_scale'),
   fit('fit');
@@ -47,9 +47,6 @@ enum DivVideoScale implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivVideoScale? fromJson(
     String? json,
   ) {
@@ -71,24 +68,6 @@ enum DivVideoScale implements Preloadable {
     }
   }
 
-  static Future<DivVideoScale?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'fill':
-          return DivVideoScale.fill;
-        case 'no_scale':
-          return DivVideoScale.noScale;
-        case 'fit':
-          return DivVideoScale.fit;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivVideoScale resolve(DivVariableContext context) => this;
 }

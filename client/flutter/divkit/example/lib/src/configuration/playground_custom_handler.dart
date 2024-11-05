@@ -80,11 +80,13 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
   static Widget _createRefreshIndicator(DivCustom div, DivContext context) {
     final props = div.customProps;
     final actions = props?['actions'] as List;
-    final actionList = <Future<DivActionModel>>[];
+    final actionList = <DivActionModel>[];
     for (var action in actions) {
-      final actionModel = DivAction.fromJson(action)?.resolve(
-        context: context.variables,
-      );
+      final actionModel = DivAction.fromJson(action)
+          ?.resolve(
+            context.variables,
+          )
+          .convert();
       if (actionModel != null) {
         actionList.add(actionModel);
       }
@@ -94,7 +96,7 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
         for (final action in actionList) {
           context.actionHandler.handleAction(
             context,
-            await action,
+            action,
           );
         }
       },

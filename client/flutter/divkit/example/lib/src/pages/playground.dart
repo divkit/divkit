@@ -31,9 +31,7 @@ class _PlaygroundPage extends State<PlaygroundPage> {
         'assets/application/demo.json',
       ),
     );
-    return (await DefaultDivKitData.fromJson(jsonData).build()).preload(
-      variableStorage: variableStorage,
-    );
+    return DefaultDivKitData.fromJson(jsonData).build();
   }
 
   @override

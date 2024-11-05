@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) validator.
-class DivInputValidatorExpression extends Preloadable with EquatableMixin {
+class DivInputValidatorExpression extends Resolvable with EquatableMixin {
   const DivInputValidatorExpression({
     this.allowEmpty = const ValueExpression(false),
     required this.condition,
@@ -75,43 +75,11 @@ class DivInputValidatorExpression extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputValidatorExpression?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivInputValidatorExpression(
-        allowEmpty: (await safeParseBoolExprAsync(
-          json['allow_empty'],
-          fallback: false,
-        ))!,
-        condition: (await safeParseBoolExprAsync(
-          json['condition'],
-        ))!,
-        labelId: (await safeParseStrExprAsync(
-          json['label_id']?.toString(),
-        ))!,
-        variable: (await safeParseStrAsync(
-          json['variable']?.toString(),
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await allowEmpty.preload(context);
-      await condition.preload(context);
-      await labelId.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivInputValidatorExpression resolve(DivVariableContext context) {
+    allowEmpty.resolve(context);
+    condition.resolve(context);
+    labelId.resolve(context);
+    return this;
   }
 }

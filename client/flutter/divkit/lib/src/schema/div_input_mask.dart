@@ -7,7 +7,7 @@ import 'package:divkit/src/schema/div_phone_input_mask.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivInputMask extends Preloadable with EquatableMixin {
+class DivInputMask extends Resolvable with EquatableMixin {
   final DivInputMaskBase value;
   final int _index;
 
@@ -91,9 +91,6 @@ class DivInputMask extends Preloadable with EquatableMixin {
 
   bool get isDivPhoneInputMask => _index == 2;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivInputMask? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -121,30 +118,9 @@ class DivInputMask extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivInputMask?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case DivCurrencyInputMask.type:
-          return DivInputMask.divCurrencyInputMask(
-            (await DivCurrencyInputMask.parse(json))!,
-          );
-        case DivFixedLengthInputMask.type:
-          return DivInputMask.divFixedLengthInputMask(
-            (await DivFixedLengthInputMask.parse(json))!,
-          );
-        case DivPhoneInputMask.type:
-          return DivInputMask.divPhoneInputMask(
-            (await DivPhoneInputMask.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivInputMask resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

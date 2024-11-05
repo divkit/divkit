@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
-enum DivAlignmentHorizontal implements Preloadable {
+enum DivAlignmentHorizontal implements Resolvable {
   left('left'),
   center('center'),
   right('right'),
@@ -65,9 +65,6 @@ enum DivAlignmentHorizontal implements Preloadable {
     }
   }
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) async {}
-
   static DivAlignmentHorizontal? fromJson(
     String? json,
   ) {
@@ -93,28 +90,6 @@ enum DivAlignmentHorizontal implements Preloadable {
     }
   }
 
-  static Future<DivAlignmentHorizontal?> parse(
-    String? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json) {
-        case 'left':
-          return DivAlignmentHorizontal.left;
-        case 'center':
-          return DivAlignmentHorizontal.center;
-        case 'right':
-          return DivAlignmentHorizontal.right;
-        case 'start':
-          return DivAlignmentHorizontal.start;
-        case 'end':
-          return DivAlignmentHorizontal.end;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
+  @override
+  DivAlignmentHorizontal resolve(DivVariableContext context) => this;
 }

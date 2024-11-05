@@ -38,9 +38,9 @@ void main() async {
         test(
           testCase['description'] ?? testCase['path'],
           () {
-            final data = DefaultDivKitData.fromJson(testCase).buildSync();
+            final data = DefaultDivKitData.fromJson(testCase).build();
             final expected =
-                DefaultDivKitData.fromJson(testCase['expected']).buildSync();
+                DefaultDivKitData.fromJson(testCase['expected']).build();
             expect(data, expected);
           },
         );

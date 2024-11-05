@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Pages are stacked during animation overlapping one another.
-class DivPageTransformationOverlap extends Preloadable with EquatableMixin {
+class DivPageTransformationOverlap extends Resolvable with EquatableMixin {
   const DivPageTransformationOverlap({
     this.interpolator =
         const ValueExpression(DivAnimationInterpolator.easeInOut),
@@ -114,58 +114,14 @@ class DivPageTransformationOverlap extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivPageTransformationOverlap?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      return DivPageTransformationOverlap(
-        interpolator: (await safeParseStrEnumExprAsync(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        ))!,
-        nextPageAlpha: (await safeParseDoubleExprAsync(
-          json['next_page_alpha'],
-          fallback: 1.0,
-        ))!,
-        nextPageScale: (await safeParseDoubleExprAsync(
-          json['next_page_scale'],
-          fallback: 1.0,
-        ))!,
-        previousPageAlpha: (await safeParseDoubleExprAsync(
-          json['previous_page_alpha'],
-          fallback: 1.0,
-        ))!,
-        previousPageScale: (await safeParseDoubleExprAsync(
-          json['previous_page_scale'],
-          fallback: 1.0,
-        ))!,
-        reversedStackingOrder: (await safeParseBoolExprAsync(
-          json['reversed_stacking_order'],
-          fallback: false,
-        ))!,
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
-  Future<void> preload(
-    Map<String, dynamic> context,
-  ) async {
-    try {
-      await interpolator.preload(context);
-      await nextPageAlpha.preload(context);
-      await nextPageScale.preload(context);
-      await previousPageAlpha.preload(context);
-      await previousPageScale.preload(context);
-      await reversedStackingOrder.preload(context);
-    } catch (e) {
-      return;
-    }
+  DivPageTransformationOverlap resolve(DivVariableContext context) {
+    interpolator.resolve(context);
+    nextPageAlpha.resolve(context);
+    nextPageScale.resolve(context);
+    previousPageAlpha.resolve(context);
+    previousPageScale.resolve(context);
+    reversedStackingOrder.resolve(context);
+    return this;
   }
 }

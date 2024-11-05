@@ -11,8 +11,8 @@ import 'package:divkit/src/schema/url_variable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivVariable extends Preloadable with EquatableMixin {
-  final Preloadable value;
+class DivVariable extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -195,9 +195,6 @@ class DivVariable extends Preloadable with EquatableMixin {
 
   bool get isUrlVariable => _index == 7;
 
-  @override
-  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
-
   static DivVariable? fromJson(
     Map<String, dynamic>? json,
   ) {
@@ -245,50 +242,9 @@ class DivVariable extends Preloadable with EquatableMixin {
     }
   }
 
-  static Future<DivVariable?> parse(
-    Map<String, dynamic>? json,
-  ) async {
-    if (json == null) {
-      return null;
-    }
-    try {
-      switch (json['type']) {
-        case ArrayVariable.type:
-          return DivVariable.arrayVariable(
-            (await ArrayVariable.parse(json))!,
-          );
-        case BooleanVariable.type:
-          return DivVariable.booleanVariable(
-            (await BooleanVariable.parse(json))!,
-          );
-        case ColorVariable.type:
-          return DivVariable.colorVariable(
-            (await ColorVariable.parse(json))!,
-          );
-        case DictVariable.type:
-          return DivVariable.dictVariable(
-            (await DictVariable.parse(json))!,
-          );
-        case IntegerVariable.type:
-          return DivVariable.integerVariable(
-            (await IntegerVariable.parse(json))!,
-          );
-        case NumberVariable.type:
-          return DivVariable.numberVariable(
-            (await NumberVariable.parse(json))!,
-          );
-        case StringVariable.type:
-          return DivVariable.stringVariable(
-            (await StringVariable.parse(json))!,
-          );
-        case UrlVariable.type:
-          return DivVariable.urlVariable(
-            (await UrlVariable.parse(json))!,
-          );
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
+  @override
+  DivVariable resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }
