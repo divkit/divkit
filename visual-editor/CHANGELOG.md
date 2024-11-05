@@ -1,3 +1,21 @@
+## 0.4.3
+
+* The action list field now supports not only `actions`, but also single `action`
+* The action list field now supports typed `actions`
+* Slight optimization of fields with background, actions and video sources
+* Minor fixes to the behavior of text fields in properties
+* Drop-down lists can now drop down "up"
+* Minor updates to the design of drop-down lists
+* Fixed the "Default" orientation selection
+* Orientation selection now uses the same select control as everywhere else
+* Added basic input support
+* The cross pattern has been redesigned to use a preview instead of an external file
+* Fixed palette conversion if there is no palette (the list of variables is empty)
+* Fixed the height of text fields when opening dialogs
+* Fixed opening the expression dialog on numeric fields
+* Improved display of the select popup in some cases
+* The switch component has been disabled
+
 ## 0.4.2
 
 * Release bugfixes

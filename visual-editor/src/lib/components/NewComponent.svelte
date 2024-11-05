@@ -7,7 +7,7 @@
     import { AddLeafCommand } from '../data/commands/addLeaf';
     import { findLeaf } from '../utils/tree';
     import { APP_CTX, type AppContext } from '../ctx/appContext';
-  import { encodeBackground } from '../utils/encodeBackground';
+    import { encodeBackground } from '../utils/encodeBackground';
 
     const { l10nString, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state, rendererApi } = getContext<AppContext>(APP_CTX);
