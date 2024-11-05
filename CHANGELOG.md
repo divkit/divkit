@@ -1,3 +1,27 @@
+## 30.25.0
+
+# Android Client:
+* Close tooltips on backPress when screen reader is turned on.
+* Fixed drawing shadows on tooltip views.
+* Fixed how `DivPagerView` is shown when it wraps its children along cross axis and children have different dimensions along that axis. Now `DivPagerView` chooses its dimension as maximum of dimensions of initially visible children.
+
+# iOS Client:
+* Added XCode 16.0 / Swift 6 support.
+* Added new typed action `div-action-hide-tooltip` that can be used instead of `div-action://hide_tooltip`.
+* DivPatchProvider.getPatch method extended with DivActionInfo parameter.
+* Supported `div-switch`.
+* Supported `enter_key_type` and `enter_key_actions` properties for `div-input`.
+
+# Web Client:
+* Added `direction` property into extension context.
+* Added `isEmpty` method for the arrays.
+* Added `scope_id` action property support.
+* Fixed a bug with handling incorrect values of `border` -> `has_shadow`.
+* Fixed a bug with incorrect handling of visibility actions that were targeted at local variables.
+* Fixed several `pager` layout issues.
+* The `lottie` extension now uses the `scale`, `aspect`, `content_alignment_horizontal` and `content_alignment_vertical` properties from the original component.
+
+
 ## 30.24.0
 
 # Android Client:
