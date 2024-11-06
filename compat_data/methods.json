@@ -104,6 +104,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.24.0"
+            },
+            "web": {
+                "version_added": "30.25.0"
             }
         }
     }]

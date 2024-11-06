@@ -1,0 +1,11 @@
+{
+    "features": [{
+        "id": "switch",
+        "name": "<code>switch</code> component",
+        "compat": {
+            "ios": {
+                "version_added": "30.25.0"
+            }
+        }
+    }]
+}

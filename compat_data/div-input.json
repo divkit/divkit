@@ -85,5 +85,21 @@
                 "version_added": "27.3.0"
             }
         }
+    }, {
+        "id": "input_enter_key_type",
+        "name": "Input <code>enter_key_type</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.25.0"
+            }
+        }
+    }, {
+        "id": "input_enter_key_actions",
+        "name": "Input <code>enter_key_actions</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.25.0"
+            }
+        }
     }]
 }
