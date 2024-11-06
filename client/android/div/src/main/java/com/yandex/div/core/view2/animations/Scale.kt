@@ -78,11 +78,11 @@ internal class Scale(
 
     override fun onAppear(
         sceneRoot: ViewGroup,
-        view: View?,
+        view: View,
         startValues: TransitionValues?,
-        endValues: TransitionValues
+        endValues: TransitionValues?
     ): Animator? {
-        if (view == null) return null
+        endValues ?: return null
 
         val startScaleX = getCapturedScaleX(startValues, scaleFactor)
         val startScaleY = getCapturedScaleY(startValues, scaleFactor)
@@ -98,11 +98,11 @@ internal class Scale(
 
     override fun onDisappear(
         sceneRoot: ViewGroup,
-        view: View?,
-        startValues: TransitionValues,
+        view: View,
+        startValues: TransitionValues?,
         endValues: TransitionValues?
     ): Animator? {
-        if (view == null) return null
+        startValues ?: return null
 
         val startScaleX = getCapturedScaleX(startValues, NO_SCALE)
         val startScaleY = getCapturedScaleY(startValues, NO_SCALE)

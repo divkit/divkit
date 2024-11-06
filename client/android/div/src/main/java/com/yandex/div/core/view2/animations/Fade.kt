@@ -47,11 +47,11 @@ internal class Fade(
 
     override fun onAppear(
         sceneRoot: ViewGroup,
-        view: View?,
+        view: View,
         startValues: TransitionValues?,
-        endValues: TransitionValues
+        endValues: TransitionValues?
     ): Animator? {
-        if (view == null) return null
+        endValues ?: return null
 
         val startAlpha = getCapturedAlpha(startValues, alpha)
         val endAlpha = getCapturedAlpha(endValues, 1.0f)
@@ -65,11 +65,11 @@ internal class Fade(
 
     override fun onDisappear(
         sceneRoot: ViewGroup,
-        view: View?,
-        startValues: TransitionValues,
+        view: View,
+        startValues: TransitionValues?,
         endValues: TransitionValues?
     ): Animator? {
-        if (view == null) return null
+        startValues ?: return null
 
         val startAlpha = getCapturedAlpha(startValues, 1.0f)
         val endAlpha = getCapturedAlpha(endValues, alpha)
