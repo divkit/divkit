@@ -13,8 +13,8 @@ import com.yandex.divkit.demo.beacon.SendBeaconWorkerSchedulerImpl
 import com.yandex.divkit.demo.utils.VisualAssertionErrorHandler
 import com.yandex.divkit.regression.di.HasRegressionTesting
 import com.yandex.divkit.regression.di.RegressionComponent
-import com.yandex.metrica.YandexMetrica
-import com.yandex.metrica.YandexMetricaConfig
+import io.appmetrica.analytics.AppMetrica
+import io.appmetrica.analytics.AppMetricaConfig
 import okhttp3.OkHttpClient
 import java.util.concurrent.Executors
 
@@ -46,9 +46,9 @@ class DivkitApplication : Application(), HasRegressionTesting {
 
         // Initialize Stetho with the Initializer
         Stetho.initialize(initializer)
-        YandexMetrica.activate(
+        AppMetrica.activate(
             this,
-            YandexMetricaConfig.newConfigBuilder("e48dd638-f5ba-4cb8-b272-53b6d275062f")
+            AppMetricaConfig.newConfigBuilder("e48dd638-f5ba-4cb8-b272-53b6d275062f")
                 .withCrashReporting(!BuildConfig.DEBUG)
                 .withLocationTracking(false)
                 .withNativeCrashReporting(false)

@@ -113,7 +113,7 @@ dependencies {
     implementation libs.markwon
 
     implementation(libs.appmetrica.lib) {
-        exclude group: 'com.yandex.android', module: 'mobmetricalib-identifiers'
+        exclude group: 'io.appmetrica.analytics', module: 'analytics-identifiers'
     }
 
     implementation libs.stetho.core
