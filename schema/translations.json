@@ -41,7 +41,7 @@
   },
   "div_action_animator_start_animator_id": {
     "en": "ID of the animator launched.",
-    "ru": "Идентификатор запускаемого аниматора."
+    "ru": "Идентификатор аниматора, который нужно запустить."
   },
   "div_action_animator_start_end_value": {
     "en": "Overrides the value that will be set after the animation finishes.",
@@ -57,7 +57,7 @@
   },
   "div_action_animator_stop_animator_id": {
     "en": "The identifier of the animator being stopped.",
-    "ru": "Идентификатор аниматора, который нужно остановить"
+    "ru": "Идентификатор аниматора, который нужно остановить."
   },
   "div_action_array_insert_value": {
     "en": "Adds a value to the array",
@@ -149,31 +149,31 @@
   },
   "div_action_scroll_animated": {
     "en": "If `true` (default value) scroll will be animated, else not.",
-    "ru": "Если `true` (значение по умолчанию) то пролистывание будет анимировано, иначе без анимации."
+    "ru": "Включает анимацию пролистывания."
   },
   "div_action_scroll_by": {
     "en": "Scrolls scrollable container from current position by `item_count` or by `offset`, if both provided scroll action will be combined, negative numbers associated with backward scroll.",
-    "ru": "Пролистывает контейнер со скроллом от текущей позиции на `item_count` или `offset`, если оба значения указаны, действие будет скомбинированным, отрицательные значения пролистывают назад."
+    "ru": "Пролистывает контейнер со скроллом от текущей позиции на `item_count` или `offset`. Если заданы оба значения, действие будет скомбинированным. Отрицательные значения пролистывают назад."
   },
   "div_action_scroll_by_item_count": {
     "en": "Count of container items to scroll, negative value is associated with backward scroll.",
-    "ru": "Количество элементов контейнера, которые надо пролистать, отрицательные значения пролистывают назад."
+    "ru": "Количество элементов контейнера, которые надо пролистать. Отрицательные значения пролистывают назад."
   },
   "div_action_scroll_by_offset": {
     "en": "Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.",
-    "ru": "Расстояние для скроллинга измеряемое в `dp` от текущей позиции, отрицательные значения пролистывают назад. Применим только в `gallery`"
+    "ru": "Расстояние для скроллинга, измеряемое в `dp` от текущей позиции. Отрицательные значения пролистывают назад. Применим только в `gallery`."
   },
   "div_action_scroll_destination": {
     "en": "Specifies the destination of scroll in a container.",
-    "ru": "Указывает кончную точку пролистывания в контейнере."
+    "ru": "Указывает конечную точку пролистывания в контейнере."
   },
   "div_action_scroll_destination_end": {
     "en": "Specifies container's end as scroll destination.",
-    "ru": "Указывает конец контейнера как кончную точку пролистывания."
+    "ru": "Указывает конец контейнера как конечную точку пролистывания."
   },
   "div_action_scroll_destination_index": {
     "en": "Specifies element with provided index as scroll destination.",
-    "ru": "Указывает элемент с заданным индексом как кончную точку пролистывания."
+    "ru": "Указывает элемент с заданным индексом как конечную точку пролистывания."
   },
   "div_action_scroll_destination_index_value": {
     "en": "Index of contaner's item.",
@@ -181,7 +181,7 @@
   },
   "div_action_scroll_destination_offset": {
     "en": "Specifies position measured in `dp` from container's start as scroll destination. Applicable only in `gallery`.",
-    "ru": "Указывает позицию измеренную в `dp` от начала контейнера как кончную точку пролистывания. Применм только в `gallery`"
+    "ru": "Указывает позицию, измеренную в `dp` от начала контейнера, как конечную точку пролистывания. Применим только в `gallery`."
   },
   "div_action_scroll_destination_offset_value": {
     "en": "Position in `dp`.",
@@ -189,11 +189,11 @@
   },
   "div_action_scroll_destination_start": {
     "en": "Specifies container's start as scroll destination.",
-    "ru": "Указывает начало контейнера как кончную точку пролистывания."
+    "ru": "Указывает начало контейнера как конечную точку пролистывания."
   },
   "div_action_scroll_id": {
     "en": "Identifier of the view that is going to be manipulated.",
-    "ru": "Идентификатор вью в котором нужно выполнить операцию."
+    "ru": "Идентификатор элемента, в котором нужно выполнить операцию."
   },
   "div_action_scroll_overflow": {
     "en": "Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>",
@@ -201,11 +201,11 @@
   },
   "div_action_scroll_to": {
     "en": "Scrolls or switches container to given destination provided by `destination`.",
-    "ru": "Выполняет скролл к позиции или переключает элемент в контейнере на указанный папаметром`destiantion`."
+    "ru": "Выполняет скролл к позиции или переключает элемент в контейнере на указанный параметром `destiantion`."
   },
   "div_action_scroll_to_destination": {
     "en": "Specifies destination of scroll:<li>`index` - scroll or switch to item with index provided by `value`;</li><li>`offset` - scroll to position measured in `dp` from container's start and provided by `value`. Applicable only in `gallery`;</li><li>`start` - scrolls to start of container;</li><li>`end` - scrolls to end of container.</li>.",
-    "ru": "Указывает конечную точку пролистывания:<li>`index` - пролистывание до элемента с индексом, указанным в `value`;</li><li>`offset` - пролистывание до позиции измеренной в `dp` от начала контейнера, указанной в `value`. Применим только в `gallery`;</li><li>`start` - пролистывание в начало контейнера;</li><li>`end` - пролистывание в конец контейнера.</li>."
+    "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
   },
   "div_action_set_state": {
     "en": "Applies a new appearance to the content in `div-state'.",
@@ -249,11 +249,11 @@
   },
   "div_action_submit": {
     "en": "Sends variables from the container via a url. The data sending configuration can be determined by the host application. By default, variables are passed in body in json format, the request method is POST.",
-    "ru": "Отправляет переменные из контейнера по ссылке. Конфигурация отправки данных может определяться приложением-хостом. По умолчанию, переменные передаются в теле запроса в виде json, метод запроса - POST."
+    "ru": "Отправляет переменные из контейнера по ссылке. Конфигурация отправки данных может определяться приложением-хостом. По умолчанию переменные передаются в теле запроса в виде JSON, метод запроса — POST."
   },
   "div_action_submit_container_id": {
     "en": "The identifier of the container that contains variables to submit.",
-    "ru": "Идентификатор контейнера в котором содержатся переменные для отправки."
+    "ru": "Идентификатор контейнера, в котором содержатся переменные для отправки."
   },
   "div_action_submit_on_fail_actions": {
     "en": "Actions in case of unsuccessful submit.",
@@ -265,7 +265,7 @@
   },
   "div_action_submit_request": {
     "en": "The HTTP request parameters that are used to configure how data is sent.",
-    "ru": "Параметры HTTP запроса, которые используются для конфигурации отправки данных."
+    "ru": "Параметры HTTP-запроса, которые используются для конфигурации отправки данных."
   },
   "div_action_submit_request_headers": {
     "en": "The HTTP request headers.",
@@ -281,7 +281,7 @@
   },
   "div_action_submit_request_url": {
     "en": "The url to which data from the container is sent.",
-    "ru": "Ссылка по которой отправляются данные из контейнера."
+    "ru": "Ссылка, по которой отправляются данные из контейнера."
   },
   "div_action_target": {
     "en": "The tab in which the URL must be opened.",
@@ -661,7 +661,7 @@
   },
   "div_cloud_background": {
     "en": "Cloud text background. Lines draws a rectangular background with the specified color and rounded corners.",
-    "ru": "Фон текста в стиле \"облако\". Строки получают прямоугольный фон с указанным цветом, а все углы скругляются."
+    "ru": "Фон текста в стиле «облако». Строки получают прямоугольный фон с указанным цветом, а все углы скругляются."
   },
   "div_cloud_background_color": {
     "en": "Fill color.",
@@ -1324,8 +1324,8 @@
     "ru": "Тип автоматической капитализации текста."
   },
   "div_input_enter_key_actions": {
-    "en": "Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden",
-    "ru": "Действия при нажатии на кнопку клавиатуры `Enter`. При наличии действий, поведение по умолчанию будет переопределено"
+    "en": "Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.",
+    "ru": "Действия при нажатии кнопки клавиатуры `Enter`. При наличии действий поведение по умолчанию будет переопределено."
   },
   "div_input_enter_key_type": {
     "en": "The type of the `Enter` keyboard button.",
@@ -2073,7 +2073,7 @@
   },
   "div_switch": {
     "en": "A two-state switch that allows user to toggle a boolean variable. The element has a different appearance depending on the platform. On iOS, the switch size is fixed.",
-    "ru": "Переключатель с двумя состояниями, который позволяет пользователю переключать булевую переменную. Элемент имеет разный вид в зависимости от платформы. На iOS размер переключателя фиксированный."
+    "ru": "Переключатель с двумя состояниями, который позволяет пользователю использовать булевую переменную. Элемент имеет разный вид в зависимости от платформы. На iOS размер переключателя фиксированный."
   },
   "div_switch_is_enabled": {
     "en": "Enables or disables the ability to switch an element.",
@@ -2085,7 +2085,7 @@
   },
   "div_switch_on_color": {
     "en": "The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.",
-    "ru": "Цвет переключателя во включенном состоянии. Если цвет не указан, то на iOS используется стандартный системный цвет, на Android используется цвет, указанный в `Div2Context`."
+    "ru": "Цвет переключателя во включенном состоянии. Если цвет не указан:\n- на iOS используется стандартный системный цвет;\n- на Android используется цвет, указанный в `Div2Context`."
   },
   "div_switch_short": {
     "en": "Switch.",
@@ -2420,8 +2420,8 @@
     "ru": "Градиентный цвет текста."
   },
   "div_text_tighten_width": {
-    "en": "Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set",
-    "ru": "Ограничивать ширину текста максимальной шириной строки, работает только с шириной wrap_content, constrained=true и выставленным max_size"
+    "en": "Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.",
+    "ru": "Ограничивать ширину текста максимальной шириной строки. Работает только с шириной `wrap_content`, `constrained=true` и выставленным `max_size`."
   },
   "div_text_truncate": {
     "en": "Text cropping method. Use `ellipsis` instead.",
