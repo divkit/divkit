@@ -11,7 +11,7 @@ final public class DivFunctionsStorage {
   let outerStorage: DivFunctionsStorage?
 
   init(
-    outerStorage: DivFunctionsStorage? = nil,
+    outerStorage: DivFunctionsStorage? = DivFunctionsStorage(outerStorage: nil),
     reporter: DivReporter = DefaultDivReporter()
   ) {
     self.outerStorage = outerStorage
@@ -95,7 +95,7 @@ final public class DivFunctionsStorage {
     }
   }
 
-  func getNearestStorage(_ path: UIElementPath) -> DivFunctionsStorage {
+  func getNearestStorage(_ path: UIElementPath) -> DivFunctionsStorage? {
     var currentPath: UIElementPath? = path
     while let path = currentPath {
       if let storage = storages[path] {
@@ -103,7 +103,7 @@ final public class DivFunctionsStorage {
       }
       currentPath = path.parent
     }
-    return outerStorage ?? self
+    return outerStorage
   }
 }
 
