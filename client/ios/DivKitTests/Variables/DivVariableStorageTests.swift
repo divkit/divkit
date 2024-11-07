@@ -232,6 +232,44 @@ final class DivVariableSorageTest: XCTestCase {
 
     XCTAssertEqual([:], storage.allValues)
   }
+
+  func test_remove_RemovesFromStorage() {
+    storage.put(variables)
+
+    storage.remove(variableNames: Set<DivVariableName>([
+      "string_var",
+      "unknown_var",
+      "number_var"
+    ]))
+
+    XCTAssertEqual(
+      ["string_var", "number_var"],
+      event?.changedVariables
+    )
+    XCTAssertEqual(
+      [
+        "int_var": .integer(100),
+        "bool_var": .bool(true),
+        "url_var": .url(url("https://test.url")),
+      ],
+      storage.allValues
+    )
+  }
+
+  func test_remove_DoesNotSendUpdateEvent() {
+    storage.put(variables)
+    event = nil
+
+    let variableNames = Set<DivVariableName>([
+      "string_var"
+    ])
+    storage.remove(
+      variableNames: variableNames,
+      notifyObservers: false
+    )
+
+    XCTAssertNil(event)
+  }
 }
 
 private let variables: DivVariables = [

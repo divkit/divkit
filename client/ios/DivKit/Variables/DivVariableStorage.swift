@@ -143,6 +143,29 @@ public final class DivVariableStorage {
     }
   }
 
+  /// Removes variables from the storage.
+  /// Does not affect outer storage.
+  public func remove(
+    variableNames: Set<DivVariableName>,
+    notifyObservers: Bool = true
+  ) {
+    let changedVariables = lock.withLock {
+      var changedVariables = Set<DivVariableName>()
+      for variableName in variableNames {
+
+        let removedValue = _values.removeValue(forKey: variableName)
+        if removedValue != nil {
+          changedVariables.insert(variableName)
+        }
+      }
+      return changedVariables
+    }
+
+    if !changedVariables.isEmpty, notifyObservers {
+      notify(ChangeEvent(changedVariables: changedVariables))
+    }
+  }
+
   func update(
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
