@@ -1,3 +1,8 @@
+## 30.26.0 (November 11, 2024)
+
+* Incorrect caching of method calls has been fixed.
+
+
 ## 30.25.0 (November 4, 2024)
 
 * Added `direction` property into extension context.

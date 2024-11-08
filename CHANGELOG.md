@@ -1,3 +1,9 @@
+## 30.26.0
+
+# Web Client:
+* Incorrect caching of method calls has been fixed.
+
+
 ## 30.25.0
 
 # Android Client:
