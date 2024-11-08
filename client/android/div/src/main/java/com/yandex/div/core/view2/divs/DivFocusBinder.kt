@@ -117,15 +117,15 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
 
         override fun onFocusChange(v: View, hasFocus: Boolean) {
             if (hasFocus) {
-                focusedBorder?.applyToView(v)
+                applyBorder(v, focusedBorder)
                 focusActions?.handle(v, DivActionBinder.LogType.LOG_FOCUS)
             } else {
-                focusedBorder?.let { blurredBorder?.applyToView(v) }
+                if (focusedBorder != null) applyBorder(v, blurredBorder)
                 blurActions?.handle(v, DivActionBinder.LogType.LOG_BLUR)
             }
         }
 
-        private fun DivBorder.applyToView(v: View) = v.applyBorder(context, this)
+        private fun applyBorder(view: View, border: DivBorder?) = view.applyBorder(context, border)
 
         private fun List<DivAction>.handle(target: View, actionLogType: String) =
             actionBinder.handleBulkActions(context, target, this, actionLogType)
