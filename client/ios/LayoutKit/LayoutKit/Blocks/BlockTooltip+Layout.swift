@@ -8,7 +8,7 @@ extension BlockTooltip {
     constrainedBy bounds: CGRect
   ) -> CGRect {
     let size = block.intrinsicSize
-    let result = CGRect(
+    var result = CGRect(
       coordinate: targetRect.coordinate(of: position),
       ofPosition: position.opposite,
       size: size
@@ -16,31 +16,80 @@ extension BlockTooltip {
 
     if result.intersection(bounds) == result {
       return result
+    } else {
+      result.move(to: bounds)
+      return result
     }
-
-    var alternativePosition = position
-    if result.maxY > bounds.maxY {
-      alternativePosition = alternativePosition.movingUp
-    }
-    if result.minY < bounds.minY {
-      alternativePosition = alternativePosition.movingDown
-    }
-    if result.minX < bounds.minX {
-      alternativePosition = alternativePosition.movingRight
-    }
-    if result.maxX > bounds.maxX {
-      alternativePosition = alternativePosition.movingLeft
-    }
-
-    let alternativeFrame = CGRect(
-      coordinate: targetRect.coordinate(of: alternativePosition),
-      ofPosition: alternativePosition.opposite,
-      size: size
-    ).offset(by: offset)
-    return alternativeFrame.intersection(bounds) == alternativeFrame
-      ? alternativeFrame
-      : result
   }
+}
+
+extension CGRect {
+  fileprivate mutating func move(to bounds: CGRect) {
+    for direction in MoveDirection.allCases {
+      let (minPos, maxPos) = minAndMaxPos(direction)
+      let (minBound, maxBound) = bounds.minAndMaxPos(direction)
+
+      var newOrigin: CGFloat = origin(direction)
+
+      if self.size(direction) > bounds.size(direction) {
+        switch (minPos, maxPos) {
+        case let (min, _) where min > minBound:
+          newOrigin = minBound
+        case let (_, max) where max < maxBound:
+          newOrigin -= maxBound - max
+        default:
+          break
+        }
+      } else {
+        switch (minPos, maxPos) {
+        case let (min, _) where min < minBound:
+          newOrigin = minBound
+        case let (_, max) where max > maxBound:
+          newOrigin -= max - maxBound
+        default:
+          break
+        }
+      }
+
+      switch direction {
+      case .horizontal:
+        origin.x = newOrigin
+      case .vertical:
+        origin.y = newOrigin
+      }
+    }
+  }
+
+  private func origin(_ direction: MoveDirection) -> CGFloat {
+    switch direction {
+    case .horizontal:
+      origin.x
+    case .vertical:
+      origin.y
+    }
+  }
+
+  private func size(_ direction: MoveDirection) -> CGFloat {
+    switch direction {
+    case .horizontal:
+      width
+    case .vertical:
+      height
+    }
+  }
+
+  private func minAndMaxPos(
+    _ direction: MoveDirection
+  ) -> (min: CGFloat, max: CGFloat) {
+    switch direction {
+    case .horizontal:
+      (minX, maxX)
+    case .vertical:
+      (minY, maxY)
+    }
+  }
+
+  fileprivate typealias MoveDirection = ScrollDirection
 }
 
 extension CGRect {
@@ -71,38 +120,6 @@ extension BlockTooltip.Position {
     case .bottom: .top
     case .bottomLeft: .topRight
     case .center: .center
-    }
-  }
-
-  fileprivate var movingUp: Self {
-    switch self {
-    case .topLeft, .left, .bottomLeft: .topLeft
-    case .top, .center, .bottom: .top
-    case .topRight, .right, .bottomRight: .topRight
-    }
-  }
-
-  fileprivate var movingDown: Self {
-    switch self {
-    case .topLeft, .left, .bottomLeft: .bottomLeft
-    case .top, .center, .bottom: .bottom
-    case .topRight, .right, .bottomRight: .bottomRight
-    }
-  }
-
-  fileprivate var movingLeft: Self {
-    switch self {
-    case .topLeft, .top, .topRight: .topLeft
-    case .left, .center, .right: .left
-    case .bottomLeft, .bottom, .bottomRight: .bottomLeft
-    }
-  }
-
-  fileprivate var movingRight: Self {
-    switch self {
-    case .topLeft, .top, .topRight: .topRight
-    case .left, .center, .right: .right
-    case .bottomLeft, .bottom, .bottomRight: .bottomRight
     }
   }
 }

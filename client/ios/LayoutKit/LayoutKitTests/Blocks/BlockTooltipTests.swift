@@ -15,8 +15,10 @@ final class BlockTooltipTests: XCTestCase {
   private var testCaseOffsets: [CGPoint] {
     [
       CGPoint(x: 0.0, y: 0.0), // fits
-      CGPoint(x: 200.0, y: 0.0), // doesn't fit horisontally
-      CGPoint(x: 0.0, y: 450.0), // doesn't fit vertically
+      CGPoint(x: tooltipSize.width, y: 0.0), // doesn't fit horisontally
+      CGPoint(x: -tooltipSize.width, y: 0.0), // doesn't fit horisontally
+      CGPoint(x: 0.0, y: tooltipSize.height), // doesn't fit vertically
+      CGPoint(x: 0.0, y: -tooltipSize.height), // doesn't fit vertically
     ]
   }
 
