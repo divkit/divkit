@@ -335,6 +335,22 @@
     "en": "Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.",
     "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без сенсорного экрана."
   },
+  "div_actionable_hover_end_actions": {
+    "en": "Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).",
+    "ru": "Действия, выполняемые при завершении наведения на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
+  },
+  "div_actionable_hover_start_actions": {
+    "en": "Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).",
+    "ru": "Действия, выполняемые при наведении на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
+  },
+  "div_actionable_press_end_actions": {
+    "en": "Actions performed when an element is released.",
+    "ru": "Действия, выполняемые при завершении нажатия на элемент."
+  },
+  "div_actionable_press_start_actions": {
+    "en": "Actions performed when an element is pressed.",
+    "ru": "Действия, выполняемые в начале нажатия на элемент."
+  },
   "div_animation": {
     "en": "Element animation parameters.",
     "ru": "Параметры анимации элементов."
