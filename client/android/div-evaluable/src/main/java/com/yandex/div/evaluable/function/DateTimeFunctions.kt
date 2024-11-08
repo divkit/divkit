@@ -9,11 +9,11 @@ import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.types.DateTime
 import java.text.SimpleDateFormat
-import java.util.TimeZone
 import java.util.Calendar
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.Locale
+import java.util.TimeZone
 
 internal object ParseUnixTime : Function() {
 
@@ -638,7 +638,7 @@ internal object FormatDateAsUTCWithLocale : Function() {
     }
 }
 
-private fun DateTime.toCalendar(): Calendar {
+internal fun DateTime.toCalendar(): Calendar {
     val calendar = GregorianCalendar.getInstance()
     calendar.timeZone = timezone
     calendar.timeInMillis = timestampMillis
@@ -646,6 +646,6 @@ private fun DateTime.toCalendar(): Calendar {
     return calendar
 }
 
-private fun DateTime.toDate(): Date {
+internal fun DateTime.toDate(): Date {
     return Date(timestampMillis - timezone.rawOffset)
 }

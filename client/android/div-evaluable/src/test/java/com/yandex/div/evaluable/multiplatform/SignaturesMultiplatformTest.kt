@@ -4,9 +4,12 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
-import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
-import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.parsePlatform
-import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.toListOfJSONObject
+import com.yandex.div.test.expression.MultiplatformTestUtils
+import com.yandex.div.test.expression.MultiplatformTestUtils.isForAndroidPlatform
+import com.yandex.div.test.expression.MultiplatformTestUtils.parsePlatform
+import com.yandex.div.test.expression.MultiplatformTestUtils.toListOfJSONObject
+import com.yandex.div.test.expression.TestCaseOrError
+import com.yandex.div.test.expression.TestCaseParsingError
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Test
@@ -62,7 +65,7 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
                 val newCases = json.optJSONArray(SIGNATURE_FIELD).toListOfJSONObject()
                     .filter { isForAndroidPlatform(parsePlatform(it)) }
                     .map { parseSignature(file, it) }
-                    .filter { it.error != null }
+                    .filter { it.error == null }
                 cases.addAll(newCases)
 
             }
@@ -73,7 +76,7 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
             val name = try {
                 json.getString(SIGNATURE_NAME_FIELD)
             } catch (e: JSONException) {
-                return TestCaseOrError(TestCaseParsingError("???", file, json, e))
+                return TestCaseOrError(TestCaseParsingError("???", file.name, json, e))
             }
 
             try {
@@ -96,7 +99,7 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
                 ))
 
             } catch (e: JSONException) {
-                return TestCaseOrError(TestCaseParsingError(name, file, json, e))
+                return TestCaseOrError(TestCaseParsingError(name, file.name, json, e))
             }
         }
     }

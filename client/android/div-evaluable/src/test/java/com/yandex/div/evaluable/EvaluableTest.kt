@@ -1,7 +1,8 @@
 package com.yandex.div.evaluable
 
-import com.yandex.div.evaluable.function.BuiltinFunctionProvider
-import junit.framework.Assert.assertEquals
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.test.expression.withEvaluator
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
@@ -16,7 +17,7 @@ class EvaluableTest {
     private val evaluationContext = EvaluationContext(
         variableProvider = variableProvider,
         storedValueProvider = mock(),
-        functionProvider = BuiltinFunctionProvider,
+        functionProvider = GeneratedBuiltinFunctionProvider,
         warningSender = { _, _ -> }
     )
 
@@ -704,7 +705,7 @@ class EvaluableTest {
         withEvaluator(evaluationContext) {
             val actual: Any = eval(Evaluable.prepare(template))
             assert(actual is Double)
-            assertEquals(expected, actual as Double)
+            assertEquals(expected, actual as Double, 0.0)
         }
 
     private fun assertStringExpression(expected: String, expr: String) {

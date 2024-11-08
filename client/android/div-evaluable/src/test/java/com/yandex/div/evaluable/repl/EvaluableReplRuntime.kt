@@ -5,12 +5,12 @@ import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
-import com.yandex.div.evaluable.function.BuiltinFunctionProvider
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.evaluable.internal.Parser
 import com.yandex.div.evaluable.internal.Token
 import com.yandex.div.evaluable.internal.Tokenizer
-import com.yandex.div.evaluable.types.DateTime
-import com.yandex.div.evaluable.withEvaluator
+import com.yandex.div.test.expression.parseAsUTC
+import com.yandex.div.test.expression.withEvaluator
 
 internal object EvaluableReplRuntime {
     private val variableProvider = VariableProvider { variableName -> variableList[variableName] }
@@ -18,7 +18,7 @@ internal object EvaluableReplRuntime {
     private val evaluationContext = EvaluationContext(
         variableProvider = variableProvider,
         storedValueProvider = storedValueProvider,
-        functionProvider = BuiltinFunctionProvider,
+        functionProvider = GeneratedBuiltinFunctionProvider,
         warningSender = { _, _ -> }
     )
 
@@ -118,7 +118,7 @@ internal object EvaluableReplRuntime {
                 EvaluableType.BOOLEAN -> value.toBoolean()
                 EvaluableType.STRING -> value
                 EvaluableType.COLOR -> value
-                EvaluableType.DATETIME -> DateTime.parseAsUTC(value)
+                EvaluableType.DATETIME -> parseAsUTC(value)
                 EvaluableType.URL -> value
                 EvaluableType.DICT -> value
                 EvaluableType.ARRAY -> value

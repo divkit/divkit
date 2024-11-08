@@ -275,7 +275,7 @@ internal object ToUpperCase : Function() {
         args: List<Any>
     ): Any {
         val str = args[0] as String
-        return str.toUpperCase()
+        return str.uppercase()
     }
 }
 
@@ -293,7 +293,7 @@ internal object ToLowerCase : Function() {
         args: List<Any>
     ): Any {
         val str = args[0] as String
-        return str.toLowerCase()
+        return str.lowercase()
     }
 }
 
@@ -464,7 +464,7 @@ internal object EncodeRegex : Function() {
     }
 }
 
-private fun buildRepeatableString(
+internal fun buildRepeatableString(
     evaluationContext: EvaluationContext,
     expressionContext: ExpressionContext,
     length: Int,

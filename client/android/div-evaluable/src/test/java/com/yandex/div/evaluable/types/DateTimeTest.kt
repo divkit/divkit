@@ -1,8 +1,9 @@
 package com.yandex.div.evaluable.types
 
+import com.yandex.div.test.expression.parseAsUTC
 import org.junit.Assert
 import org.junit.Test
-import java.util.*
+import java.util.TimeZone
 
 /**
  * Tests for [DateTime].
@@ -25,14 +26,14 @@ class DateTimeTest {
 
     @Test
     fun `parsing initial date from string`() {
-        val dateTime = DateTime.parseAsUTC("1970-01-01 00:00:00")
+        val dateTime = parseAsUTC("1970-01-01 00:00:00")
         Assert.assertEquals(0, dateTime.timezoneMinutes)
         Assert.assertEquals(0, dateTime.timestampMillis)
     }
 
     @Test
     fun `timestamp stored in millis`() {
-        val dateTime = DateTime.parseAsUTC("1970-01-01 00:00:01")
+        val dateTime = parseAsUTC("1970-01-01 00:00:01")
         Assert.assertEquals(1000, dateTime.timestampMillis)
     }
 

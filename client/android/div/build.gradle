@@ -60,6 +60,8 @@ dependencies {
     implementation libs.androidx.datastore
     implementation libs.kotlin.serialization.json
 
+    testImplementation project(path: ':expression-with-variables-test-common')
+
     testImplementation libs.androidx.test.coreKtx
     testImplementation libs.json
 }

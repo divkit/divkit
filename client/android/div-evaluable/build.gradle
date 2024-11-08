@@ -72,6 +72,8 @@ dependencies {
     generatorCompileOnly libs.json
     generatorImplementation libs.kotlinpoet
 
+    testImplementation project(path: ':expression-test-common')
+
     testImplementation libs.json
     testImplementation libs.junit
     testImplementation libs.mockito.core
