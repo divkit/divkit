@@ -1559,6 +1559,14 @@
     "en": "Numeric value animator.",
     "ru": "Аниматор числового значения."
   },
+  "div_page_content_size": {
+    "en": "Page size equals to its content size.",
+    "ru": "Размер страницы равен размеру ее контента."
+  },
+  "div_page_content_size_alignment": {
+    "en": "Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.",
+    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
+  },
   "div_page_size": {
     "en": "Page width (%).",
     "ru": "Ширина страницы в процентах."

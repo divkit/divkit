@@ -231,6 +231,8 @@ internal class DivPagerPageTransformer(
         is DivPagerLayoutMode.PageSize -> {
             parentSize * (1 - mode.value.pageWidth.value.evaluate(resolver).toInt() / 100f) / 2
         }
+
+        is DivPagerLayoutMode.PageContentSize -> throw NotImplementedError()
     }
 
     private fun evaluateStartPadding(): Float {

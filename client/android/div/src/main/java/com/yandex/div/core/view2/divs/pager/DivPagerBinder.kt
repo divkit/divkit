@@ -213,6 +213,7 @@ internal class DivPagerBinder @Inject constructor(
         val neighbourItemIsShown = when (val mode = div.layoutMode) {
             is DivPagerLayoutMode.PageSize -> mode.value.pageWidth.value.evaluate(resolver) < 100
             is DivPagerLayoutMode.NeighbourPageSize -> mode.value.neighbourPageWidth.value.evaluate(resolver) > 0
+            is DivPagerLayoutMode.PageContentSize -> true
         }
         if (neighbourItemIsShown && viewPager.offscreenPageLimit != 1) {
             viewPager.offscreenPageLimit = 1
