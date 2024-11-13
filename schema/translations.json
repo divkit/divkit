@@ -56,7 +56,7 @@
     "ru": "Останавливает указанный аниматор."
   },
   "div_action_animator_stop_animator_id": {
-    "en": "The identifier of the animator being stopped.",
+    "en": "ID of the animator to be stopped.",
     "ru": "Идентификатор аниматора, который нужно остановить."
   },
   "div_action_array_insert_value": {
@@ -148,63 +148,63 @@
     "ru": "Контекстное меню."
   },
   "div_action_scroll_animated": {
-    "en": "If `true` (default value) scroll will be animated, else not.",
+    "en": "Enables scrolling animation.",
     "ru": "Включает анимацию пролистывания."
   },
   "div_action_scroll_by": {
-    "en": "Scrolls scrollable container from current position by `item_count` or by `offset`, if both provided scroll action will be combined, negative numbers associated with backward scroll.",
+    "en": "Scrolls the container by 'item_count' or 'offset' starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.",
     "ru": "Пролистывает контейнер со скроллом от текущей позиции на `item_count` или `offset`. Если заданы оба значения, действие будет скомбинированным. Отрицательные значения пролистывают назад."
   },
   "div_action_scroll_by_item_count": {
-    "en": "Count of container items to scroll, negative value is associated with backward scroll.",
+    "en": "Number of container elements to scroll through. For scrolling back, use negative values.",
     "ru": "Количество элементов контейнера, которые надо пролистать. Отрицательные значения пролистывают назад."
   },
   "div_action_scroll_by_offset": {
-    "en": "Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.",
+    "en": "Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.",
     "ru": "Расстояние для скроллинга, измеряемое в `dp` от текущей позиции. Отрицательные значения пролистывают назад. Применим только в `gallery`."
   },
   "div_action_scroll_destination": {
-    "en": "Specifies the destination of scroll in a container.",
+    "en": "Specifies the scrolling end position within the container.",
     "ru": "Указывает конечную точку пролистывания в контейнере."
   },
   "div_action_scroll_destination_end": {
-    "en": "Specifies container's end as scroll destination.",
+    "en": "Specifies the end of the container as the scrolling end position.",
     "ru": "Указывает конец контейнера как конечную точку пролистывания."
   },
   "div_action_scroll_destination_index": {
-    "en": "Specifies element with provided index as scroll destination.",
+    "en": "Specifies the element with the given index as the scrolling end position.",
     "ru": "Указывает элемент с заданным индексом как конечную точку пролистывания."
   },
   "div_action_scroll_destination_index_value": {
-    "en": "Index of contaner's item.",
+    "en": "Container element index.",
     "ru": "Индекс элемента контейнера."
   },
   "div_action_scroll_destination_offset": {
-    "en": "Specifies position measured in `dp` from container's start as scroll destination. Applicable only in `gallery`.",
+    "en": "Specifies the position measured in 'dp' from the container start as the scrolling end position. Only applies in 'gallery'.",
     "ru": "Указывает позицию, измеренную в `dp` от начала контейнера, как конечную точку пролистывания. Применим только в `gallery`."
   },
   "div_action_scroll_destination_offset_value": {
-    "en": "Position in `dp`.",
+    "en": "Position measured in 'dp'.",
     "ru": "Позиция в `dp`."
   },
   "div_action_scroll_destination_start": {
-    "en": "Specifies container's start as scroll destination.",
+    "en": "Specifies the start of the container as the scrolling end position.",
     "ru": "Указывает начало контейнера как конечную точку пролистывания."
   },
   "div_action_scroll_id": {
-    "en": "Identifier of the view that is going to be manipulated.",
+    "en": "ID of the element where the action should be performed.",
     "ru": "Идентификатор элемента, в котором нужно выполнить операцию."
   },
   "div_action_scroll_overflow": {
-    "en": "Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>",
+    "en": "Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>",
     "ru": "Указывает, как будет происходить навигация при достижении граничных элементов:<li>`clamp` — переход остановится на граничном элементе (значение по умолчанию);</li><li>`ring` — произойдет переход в начало или конец в зависимости от текущего элемента.</li>"
   },
   "div_action_scroll_to": {
-    "en": "Scrolls or switches container to given destination provided by `destination`.",
-    "ru": "Выполняет скролл к позиции или переключает элемент в контейнере на указанный параметром `destiantion`."
+    "en": "Scrolls to a position or switches to the container element specified by the 'destination' parameter.",
+    "ru": "Выполняет скролл к позиции или переключает элемент в контейнере на указанный параметром `destination`."
   },
   "div_action_scroll_to_destination": {
-    "en": "Specifies destination of scroll:<li>`index` - scroll or switch to item with index provided by `value`;</li><li>`offset` - scroll to position measured in `dp` from container's start and provided by `value`. Applicable only in `gallery`;</li><li>`start` - scrolls to start of container;</li><li>`end` - scrolls to end of container.</li>.",
+    "en": "Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>",
     "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
   },
   "div_action_set_state": {
@@ -220,19 +220,19 @@
     "ru": "Указывает на изменение состояния:<li>`true` — изменение временное, и при пересоздании элемента состояние изменится на исходное (значение по умолчанию);</li><li>`false` — изменение постоянное.</li>"
   },
   "div_action_set_stored_value": {
-    "en": "Temporarily saves variable to the persistent storage.",
+    "en": "Temporarily saves the variable in storage.",
     "ru": "Временно cохраняет переменную в хранилище."
   },
   "div_action_set_stored_value_lifetime": {
-    "en": "Storing time in seconds.",
+    "en": "Duration of storage in seconds.",
     "ru": "Время хранения в секундах."
   },
   "div_action_set_stored_value_name": {
-    "en": "Nave of stored variable.",
+    "en": "Name of the saved variable.",
     "ru": "Имя сохраняемой переменной."
   },
   "div_action_set_stored_value_value": {
-    "en": "Value to be stored.",
+    "en": "Saved value.",
     "ru": "Сохраняемое значение."
   },
   "div_action_set_variable": {
@@ -248,39 +248,39 @@
     "ru": "Устанавливает, может ли тултип показываться еще раз после закрытия."
   },
   "div_action_submit": {
-    "en": "Sends variables from the container via a url. The data sending configuration can be determined by the host application. By default, variables are passed in body in json format, the request method is POST.",
+    "en": "Sends variables from the container by link. Data sending configuration can be defined by the host app. By default, variables are sent as JSON in the request body using the POST method.",
     "ru": "Отправляет переменные из контейнера по ссылке. Конфигурация отправки данных может определяться приложением-хостом. По умолчанию переменные передаются в теле запроса в виде JSON, метод запроса — POST."
   },
   "div_action_submit_container_id": {
-    "en": "The identifier of the container that contains variables to submit.",
+    "en": "ID of the container with the variables to be sent.",
     "ru": "Идентификатор контейнера, в котором содержатся переменные для отправки."
   },
   "div_action_submit_on_fail_actions": {
-    "en": "Actions in case of unsuccessful submit.",
+    "en": "Actions when sending data is unsuccessful.",
     "ru": "Действия при неуспешной отправке данных."
   },
   "div_action_submit_on_success_actions": {
-    "en": "Actions in case of successful submit.",
+    "en": "Actions when sending data is successful.",
     "ru": "Действия при успешной отправке данных."
   },
   "div_action_submit_request": {
-    "en": "The HTTP request parameters that are used to configure how data is sent.",
+    "en": "HTTP request parameters for configuring the sending of data.",
     "ru": "Параметры HTTP-запроса, которые используются для конфигурации отправки данных."
   },
   "div_action_submit_request_headers": {
-    "en": "The HTTP request headers.",
+    "en": "HTTP request headers.",
     "ru": "Заголовки HTTP-запроса."
   },
   "div_action_submit_request_method": {
-    "en": "The HTTP request method.",
+    "en": "HTTP request method.",
     "ru": "Метод HTTP-запроса."
   },
   "div_action_submit_request_query_parameters": {
-    "en": "Query parameters.",
+    "en": "Request parameters.",
     "ru": "Параметры запроса."
   },
   "div_action_submit_request_url": {
-    "en": "The url to which data from the container is sent.",
+    "en": "Link for sending data from the container.",
     "ru": "Ссылка, по которой отправляются данные из контейнера."
   },
   "div_action_target": {
@@ -331,10 +331,6 @@
     "en": "Action when double-clicking on an element.",
     "ru": "Действие при двойном нажатии на элемент."
   },
-  "div_actionable_longtap_actions": {
-    "en": "Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.",
-    "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без сенсорного экрана."
-  },
   "div_actionable_hover_end_actions": {
     "en": "Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).",
     "ru": "Действия, выполняемые при завершении наведения на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
@@ -342,6 +338,10 @@
   "div_actionable_hover_start_actions": {
     "en": "Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).",
     "ru": "Действия, выполняемые при наведении на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
+  },
+  "div_actionable_longtap_actions": {
+    "en": "Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.",
+    "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без сенсорного экрана."
   },
   "div_actionable_press_end_actions": {
     "en": "Actions performed when an element is released.",
@@ -392,7 +392,7 @@
     "ru": "Стартовое значение анимации."
   },
   "div_animator_base_cancel_actions": {
-    "en": "Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.",
+    "en": "Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.",
     "ru": "Действия, которые будут выполнены в случае отмены анимации. Например, когда получена команда с типом `animator_stop`."
   },
   "div_animator_base_direction": {
@@ -404,7 +404,7 @@
     "ru": "Продолжительность анимации в миллисекундах."
   },
   "div_animator_base_end_actions": {
-    "en": "Actions to be performed after the animator finishes.",
+    "en": "Actions when the animation is completed.",
     "ru": "Действия, которые будут выполнены после завершения работы анимации."
   },
   "div_animator_base_id": {
@@ -676,7 +676,7 @@
     "ru": "Включает ограничение дочерних элементов границами родителя."
   },
   "div_cloud_background": {
-    "en": "Cloud text background. Lines draws a rectangular background with the specified color and rounded corners.",
+    "en": "Cloud-style text background. Rows have a rectangular background in the specified color with rounded corners.",
     "ru": "Фон текста в стиле «облако». Строки получают прямоугольный фон с указанным цветом, а все углы скругляются."
   },
   "div_cloud_background_color": {
@@ -688,7 +688,7 @@
     "ru": "Радиус скругления углов."
   },
   "div_cloud_background_paddings": {
-    "en": "Margins between line bounds and background.",
+    "en": "Margins between the row border and background border.",
     "ru": "Отступы от границы строки до границы фона."
   },
   "div_collection_item_builder": {
@@ -1340,11 +1340,11 @@
     "ru": "Тип автоматической капитализации текста."
   },
   "div_input_enter_key_actions": {
-    "en": "Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.",
+    "en": "Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.",
     "ru": "Действия при нажатии кнопки клавиатуры `Enter`. При наличии действий поведение по умолчанию будет переопределено."
   },
   "div_input_enter_key_type": {
-    "en": "The type of the `Enter` keyboard button.",
+    "en": "'Enter' key type.",
     "ru": "Тип кнопки клавиатуры `Enter`."
   },
   "div_input_filters": {
@@ -2096,23 +2096,23 @@
     "ru": "Толщина рамки."
   },
   "div_switch": {
-    "en": "A two-state switch that allows user to toggle a boolean variable. The element has a different appearance depending on the platform. On iOS, the switch size is fixed.",
+    "en": "Two-state toggle that allows the user to control a Boolean variable. The element's look-and-feel varies by platform. The toggle has a fixed size in iOS.",
     "ru": "Переключатель с двумя состояниями, который позволяет пользователю использовать булевую переменную. Элемент имеет разный вид в зависимости от платформы. На iOS размер переключателя фиксированный."
   },
   "div_switch_is_enabled": {
-    "en": "Enables or disables the ability to switch an element.",
+    "en": "Enables or disables the element's toggle functionality.",
     "ru": "Включает или отключает возможность переключения элемента."
   },
   "div_switch_is_on_variable": {
-    "en": "The name of the boolean variable for the switch.",
+    "en": "Name of the Boolean variable assigned to the toggle.",
     "ru": "Название булевой переменной для переключателя."
   },
   "div_switch_on_color": {
-    "en": "The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.",
+    "en": "Color of the toggle in the enabled state. If the color is omitted:\n: iOS standard system color is used\n: the color specified in 'Div2Context' on Android is used.",
     "ru": "Цвет переключателя во включенном состоянии. Если цвет не указан:\n- на iOS используется стандартный системный цвет;\n- на Android используется цвет, указанный в `Div2Context`."
   },
   "div_switch_short": {
-    "en": "Switch.",
+    "en": "Toggle.",
     "ru": "Переключатель."
   },
   "div_tabs": {
@@ -2372,7 +2372,7 @@
     "ru": "Рамка для диапазона символов."
   },
   "div_text_range_end": {
-    "en": "Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.",
+    "en": "Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.",
     "ru": "Порядковый номер последнего символа, который будет включен в диапазон. Если свойство не указано, то диапазон будет заканчиваться на последнем символе текста."
   },
   "div_text_range_letter_spacing": {
@@ -2444,7 +2444,7 @@
     "ru": "Градиентный цвет текста."
   },
   "div_text_tighten_width": {
-    "en": "Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.",
+    "en": "Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.",
     "ru": "Ограничивать ширину текста максимальной шириной строки. Работает только с шириной `wrap_content`, `constrained=true` и выставленным `max_size`."
   },
   "div_text_truncate": {
