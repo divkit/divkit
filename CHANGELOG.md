@@ -1,3 +1,13 @@
+## 30.27.0
+
+# Android Client:
+* Fixed `border` after `blur`.
+
+# iOS Client:
+* Added `remove` func for `DivVariableStorage`.
+* Tooltip position always fits within the screen bounds.
+
+
 ## 30.26.0
 
 # Web Client:
