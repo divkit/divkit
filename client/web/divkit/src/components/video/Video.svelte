@@ -208,6 +208,7 @@
         customActions={'video'}
         {componentContext}
         {layoutParams}
+        heightByAspect={aspectPaddingBottom !== '0'}
     >
         {#if mods.aspect}
             <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
