@@ -63,6 +63,8 @@ data class Text internal constructor(
             fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
             functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
+            hoverEndActions = additive.hoverEndActions ?: properties.hoverEndActions,
+            hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
             images = additive.images ?: properties.images,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
@@ -73,6 +75,8 @@ data class Text internal constructor(
             maxLines = additive.maxLines ?: properties.maxLines,
             minHiddenLines = additive.minHiddenLines ?: properties.minHiddenLines,
             paddings = additive.paddings ?: properties.paddings,
+            pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
+            pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             ranges = additive.ranges ?: properties.ranges,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -217,6 +221,14 @@ data class Text internal constructor(
          */
         val height: Property<Size>?,
         /**
+         * Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverStartActions: Property<List<Action>>?,
+        /**
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
@@ -257,6 +269,14 @@ data class Text internal constructor(
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
+        /**
+         * Actions performed when an element is released.
+         */
+        val pressEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when an element is pressed.
+         */
+        val pressStartActions: Property<List<Action>>?,
         /**
          * A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
          */
@@ -307,7 +327,7 @@ data class Text internal constructor(
          */
         val textShadow: Property<Shadow>?,
         /**
-         * Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+         * Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
          * Default value: `false`.
          */
         val tightenWidth: Property<Boolean>?,
@@ -403,6 +423,8 @@ data class Text internal constructor(
             result.tryPutProperty("font_weight_value", fontWeightValue)
             result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
+            result.tryPutProperty("hover_end_actions", hoverEndActions)
+            result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
             result.tryPutProperty("images", images)
             result.tryPutProperty("layout_provider", layoutProvider)
@@ -413,6 +435,8 @@ data class Text internal constructor(
             result.tryPutProperty("max_lines", maxLines)
             result.tryPutProperty("min_hidden_lines", minHiddenLines)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("press_end_actions", pressEndActions)
+            result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("ranges", ranges)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
@@ -814,6 +838,8 @@ data class Text internal constructor(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -824,6 +850,8 @@ data class Text internal constructor(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -835,7 +863,7 @@ data class Text internal constructor(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -881,6 +909,8 @@ fun DivScope.text(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -891,6 +921,8 @@ fun DivScope.text(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -946,6 +978,8 @@ fun DivScope.text(
         fontWeightValue = valueOrNull(fontWeightValue),
         functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         images = valueOrNull(images),
         layoutProvider = valueOrNull(layoutProvider),
@@ -956,6 +990,8 @@ fun DivScope.text(
         maxLines = valueOrNull(maxLines),
         minHiddenLines = valueOrNull(minHiddenLines),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -1012,6 +1048,8 @@ fun DivScope.text(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1022,6 +1060,8 @@ fun DivScope.text(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1033,7 +1073,7 @@ fun DivScope.text(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1079,6 +1119,8 @@ fun DivScope.textProps(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -1089,6 +1131,8 @@ fun DivScope.textProps(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1143,6 +1187,8 @@ fun DivScope.textProps(
     fontWeightValue = valueOrNull(fontWeightValue),
     functions = valueOrNull(functions),
     height = valueOrNull(height),
+    hoverEndActions = valueOrNull(hoverEndActions),
+    hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
     images = valueOrNull(images),
     layoutProvider = valueOrNull(layoutProvider),
@@ -1153,6 +1199,8 @@ fun DivScope.textProps(
     maxLines = valueOrNull(maxLines),
     minHiddenLines = valueOrNull(minHiddenLines),
     paddings = valueOrNull(paddings),
+    pressEndActions = valueOrNull(pressEndActions),
+    pressStartActions = valueOrNull(pressStartActions),
     ranges = valueOrNull(ranges),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
@@ -1208,6 +1256,8 @@ fun DivScope.textProps(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1218,6 +1268,8 @@ fun DivScope.textProps(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1229,7 +1281,7 @@ fun DivScope.textProps(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1275,6 +1327,8 @@ fun TemplateScope.textRefs(
     fontWeightValue: ReferenceProperty<Int>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -1285,6 +1339,8 @@ fun TemplateScope.textRefs(
     maxLines: ReferenceProperty<Int>? = null,
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1339,6 +1395,8 @@ fun TemplateScope.textRefs(
     fontWeightValue = fontWeightValue,
     functions = functions,
     height = height,
+    hoverEndActions = hoverEndActions,
+    hoverStartActions = hoverStartActions,
     id = id,
     images = images,
     layoutProvider = layoutProvider,
@@ -1349,6 +1407,8 @@ fun TemplateScope.textRefs(
     maxLines = maxLines,
     minHiddenLines = minHiddenLines,
     paddings = paddings,
+    pressEndActions = pressEndActions,
+    pressStartActions = pressStartActions,
     ranges = ranges,
     reuseId = reuseId,
     rowSpan = rowSpan,
@@ -1404,6 +1464,8 @@ fun TemplateScope.textRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1414,6 +1476,8 @@ fun TemplateScope.textRefs(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1425,7 +1489,7 @@ fun TemplateScope.textRefs(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1471,6 +1535,8 @@ fun Text.override(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -1481,6 +1547,8 @@ fun Text.override(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1536,6 +1604,8 @@ fun Text.override(
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
+        hoverEndActions = valueOrNull(hoverEndActions) ?: properties.hoverEndActions,
+        hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
         images = valueOrNull(images) ?: properties.images,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
@@ -1546,6 +1616,8 @@ fun Text.override(
         maxLines = valueOrNull(maxLines) ?: properties.maxLines,
         minHiddenLines = valueOrNull(minHiddenLines) ?: properties.minHiddenLines,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
+        pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         ranges = valueOrNull(ranges) ?: properties.ranges,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -1602,6 +1674,8 @@ fun Text.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1612,6 +1686,8 @@ fun Text.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1623,7 +1699,7 @@ fun Text.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1669,6 +1745,8 @@ fun Text.defer(
     fontWeightValue: ReferenceProperty<Int>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -1679,6 +1757,8 @@ fun Text.defer(
     maxLines: ReferenceProperty<Int>? = null,
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1734,6 +1814,8 @@ fun Text.defer(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         images = images ?: properties.images,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
@@ -1744,6 +1826,8 @@ fun Text.defer(
         maxLines = maxLines ?: properties.maxLines,
         minHiddenLines = minHiddenLines ?: properties.minHiddenLines,
         paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         ranges = ranges ?: properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1797,7 +1881,7 @@ fun Text.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -1862,6 +1946,8 @@ fun Text.evaluate(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         functions = properties.functions,
         height = properties.height,
+        hoverEndActions = properties.hoverEndActions,
+        hoverStartActions = properties.hoverStartActions,
         id = properties.id,
         images = properties.images,
         layoutProvider = properties.layoutProvider,
@@ -1872,6 +1958,8 @@ fun Text.evaluate(
         maxLines = maxLines ?: properties.maxLines,
         minHiddenLines = minHiddenLines ?: properties.minHiddenLines,
         paddings = properties.paddings,
+        pressEndActions = properties.pressEndActions,
+        pressStartActions = properties.pressStartActions,
         ranges = properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1928,6 +2016,8 @@ fun Text.evaluate(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1938,6 +2028,8 @@ fun Text.evaluate(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1949,7 +2041,7 @@ fun Text.evaluate(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1995,6 +2087,8 @@ fun Component<Text>.override(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -2005,6 +2099,8 @@ fun Component<Text>.override(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -2061,6 +2157,8 @@ fun Component<Text>.override(
         fontWeightValue = valueOrNull(fontWeightValue),
         functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         images = valueOrNull(images),
         layoutProvider = valueOrNull(layoutProvider),
@@ -2071,6 +2169,8 @@ fun Component<Text>.override(
         maxLines = valueOrNull(maxLines),
         minHiddenLines = valueOrNull(minHiddenLines),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -2127,6 +2227,8 @@ fun Component<Text>.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -2137,6 +2239,8 @@ fun Component<Text>.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -2148,7 +2252,7 @@ fun Component<Text>.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -2194,6 +2298,8 @@ fun Component<Text>.defer(
     fontWeightValue: ReferenceProperty<Int>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -2204,6 +2310,8 @@ fun Component<Text>.defer(
     maxLines: ReferenceProperty<Int>? = null,
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -2260,6 +2368,8 @@ fun Component<Text>.defer(
         fontWeightValue = fontWeightValue,
         functions = functions,
         height = height,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
         id = id,
         images = images,
         layoutProvider = layoutProvider,
@@ -2270,6 +2380,8 @@ fun Component<Text>.defer(
         maxLines = maxLines,
         minHiddenLines = minHiddenLines,
         paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         ranges = ranges,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -2323,7 +2435,7 @@ fun Component<Text>.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
- * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+ * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -2389,6 +2501,8 @@ fun Component<Text>.evaluate(
         fontWeightValue = fontWeightValue,
         functions = null,
         height = null,
+        hoverEndActions = null,
+        hoverStartActions = null,
         id = null,
         images = null,
         layoutProvider = null,
@@ -2399,6 +2513,8 @@ fun Component<Text>.evaluate(
         maxLines = maxLines,
         minHiddenLines = minHiddenLines,
         paddings = null,
+        pressEndActions = null,
+        pressStartActions = null,
         ranges = null,
         reuseId = reuseId,
         rowSpan = rowSpan,

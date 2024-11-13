@@ -60,6 +60,8 @@ data class Image internal constructor(
             functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             highPriorityPreviewShow = additive.highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
+            hoverEndActions = additive.hoverEndActions ?: properties.hoverEndActions,
+            hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
@@ -67,6 +69,8 @@ data class Image internal constructor(
             paddings = additive.paddings ?: properties.paddings,
             placeholderColor = additive.placeholderColor ?: properties.placeholderColor,
             preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
+            pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
+            pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             preview = additive.preview ?: properties.preview,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -193,6 +197,14 @@ data class Image internal constructor(
          */
         val highPriorityPreviewShow: Property<Boolean>?,
         /**
+         * Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverStartActions: Property<List<Action>>?,
+        /**
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
@@ -222,6 +234,14 @@ data class Image internal constructor(
          * Default value: `false`.
          */
         val preloadRequired: Property<Boolean>?,
+        /**
+         * Actions performed when an element is released.
+         */
+        val pressEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when an element is pressed.
+         */
+        val pressStartActions: Property<List<Action>>?,
         /**
          * Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
          */
@@ -330,6 +350,8 @@ data class Image internal constructor(
             result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("high_priority_preview_show", highPriorityPreviewShow)
+            result.tryPutProperty("hover_end_actions", hoverEndActions)
+            result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("longtap_actions", longtapActions)
@@ -337,6 +359,8 @@ data class Image internal constructor(
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("placeholder_color", placeholderColor)
             result.tryPutProperty("preload_required", preloadRequired)
+            result.tryPutProperty("press_end_actions", pressEndActions)
+            result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("preview", preview)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
@@ -386,6 +410,8 @@ data class Image internal constructor(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -393,6 +419,8 @@ data class Image internal constructor(
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -440,6 +468,8 @@ fun DivScope.image(
     functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -447,6 +477,8 @@ fun DivScope.image(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -492,6 +524,8 @@ fun DivScope.image(
         functions = valueOrNull(functions),
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
@@ -499,6 +533,8 @@ fun DivScope.image(
         paddings = valueOrNull(paddings),
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -546,6 +582,8 @@ fun DivScope.image(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -553,6 +591,8 @@ fun DivScope.image(
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -600,6 +640,8 @@ fun DivScope.imageProps(
     functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -607,6 +649,8 @@ fun DivScope.imageProps(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -651,6 +695,8 @@ fun DivScope.imageProps(
     functions = valueOrNull(functions),
     height = valueOrNull(height),
     highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
+    hoverEndActions = valueOrNull(hoverEndActions),
+    hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
     layoutProvider = valueOrNull(layoutProvider),
     longtapActions = valueOrNull(longtapActions),
@@ -658,6 +704,8 @@ fun DivScope.imageProps(
     paddings = valueOrNull(paddings),
     placeholderColor = valueOrNull(placeholderColor),
     preloadRequired = valueOrNull(preloadRequired),
+    pressEndActions = valueOrNull(pressEndActions),
+    pressStartActions = valueOrNull(pressStartActions),
     preview = valueOrNull(preview),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
@@ -704,6 +752,8 @@ fun DivScope.imageProps(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -711,6 +761,8 @@ fun DivScope.imageProps(
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -758,6 +810,8 @@ fun TemplateScope.imageRefs(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -765,6 +819,8 @@ fun TemplateScope.imageRefs(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -809,6 +865,8 @@ fun TemplateScope.imageRefs(
     functions = functions,
     height = height,
     highPriorityPreviewShow = highPriorityPreviewShow,
+    hoverEndActions = hoverEndActions,
+    hoverStartActions = hoverStartActions,
     id = id,
     layoutProvider = layoutProvider,
     longtapActions = longtapActions,
@@ -816,6 +874,8 @@ fun TemplateScope.imageRefs(
     paddings = paddings,
     placeholderColor = placeholderColor,
     preloadRequired = preloadRequired,
+    pressEndActions = pressEndActions,
+    pressStartActions = pressStartActions,
     preview = preview,
     reuseId = reuseId,
     rowSpan = rowSpan,
@@ -862,6 +922,8 @@ fun TemplateScope.imageRefs(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -869,6 +931,8 @@ fun TemplateScope.imageRefs(
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -916,6 +980,8 @@ fun Image.override(
     functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -923,6 +989,8 @@ fun Image.override(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -968,6 +1036,8 @@ fun Image.override(
         functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow) ?: properties.highPriorityPreviewShow,
+        hoverEndActions = valueOrNull(hoverEndActions) ?: properties.hoverEndActions,
+        hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
@@ -975,6 +1045,8 @@ fun Image.override(
         paddings = valueOrNull(paddings) ?: properties.paddings,
         placeholderColor = valueOrNull(placeholderColor) ?: properties.placeholderColor,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
+        pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
+        pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         preview = valueOrNull(preview) ?: properties.preview,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -1022,6 +1094,8 @@ fun Image.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1029,6 +1103,8 @@ fun Image.override(
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1076,6 +1152,8 @@ fun Image.defer(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1083,6 +1161,8 @@ fun Image.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1128,6 +1208,8 @@ fun Image.defer(
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         longtapActions = longtapActions ?: properties.longtapActions,
@@ -1135,6 +1217,8 @@ fun Image.defer(
         paddings = paddings ?: properties.paddings,
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         preview = preview ?: properties.preview,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1222,6 +1306,8 @@ fun Image.evaluate(
         functions = properties.functions,
         height = properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
+        hoverEndActions = properties.hoverEndActions,
+        hoverStartActions = properties.hoverStartActions,
         id = properties.id,
         layoutProvider = properties.layoutProvider,
         longtapActions = properties.longtapActions,
@@ -1229,6 +1315,8 @@ fun Image.evaluate(
         paddings = properties.paddings,
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
+        pressEndActions = properties.pressEndActions,
+        pressStartActions = properties.pressStartActions,
         preview = preview ?: properties.preview,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1276,6 +1364,8 @@ fun Image.evaluate(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1283,6 +1373,8 @@ fun Image.evaluate(
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1330,6 +1422,8 @@ fun Component<Image>.override(
     functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -1337,6 +1431,8 @@ fun Component<Image>.override(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1383,6 +1479,8 @@ fun Component<Image>.override(
         functions = valueOrNull(functions),
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
@@ -1390,6 +1488,8 @@ fun Component<Image>.override(
         paddings = valueOrNull(paddings),
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -1437,6 +1537,8 @@ fun Component<Image>.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1444,6 +1546,8 @@ fun Component<Image>.override(
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1491,6 +1595,8 @@ fun Component<Image>.defer(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1498,6 +1604,8 @@ fun Component<Image>.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1544,6 +1652,8 @@ fun Component<Image>.defer(
         functions = functions,
         height = height,
         highPriorityPreviewShow = highPriorityPreviewShow,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
         id = id,
         layoutProvider = layoutProvider,
         longtapActions = longtapActions,
@@ -1551,6 +1661,8 @@ fun Component<Image>.defer(
         paddings = paddings,
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         preview = preview,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -1639,6 +1751,8 @@ fun Component<Image>.evaluate(
         functions = null,
         height = null,
         highPriorityPreviewShow = highPriorityPreviewShow,
+        hoverEndActions = null,
+        hoverStartActions = null,
         id = null,
         layoutProvider = null,
         longtapActions = null,
@@ -1646,6 +1760,8 @@ fun Component<Image>.evaluate(
         paddings = null,
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
+        pressEndActions = null,
+        pressStartActions = null,
         preview = preview,
         reuseId = reuseId,
         rowSpan = rowSpan,

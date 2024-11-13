@@ -141,7 +141,7 @@ data class Input internal constructor(
          */
         val disappearActions: Property<List<DisappearAction>>?,
         /**
-         * Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+         * Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
          */
         val enterKeyActions: Property<List<Action>>?,
         /**
@@ -486,7 +486,7 @@ data class Input internal constructor(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
  * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -670,7 +670,7 @@ fun DivScope.input(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
  * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -852,7 +852,7 @@ fun DivScope.inputProps(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
  * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1034,7 +1034,7 @@ fun TemplateScope.inputRefs(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
  * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1218,7 +1218,7 @@ fun Input.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
  * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1524,7 +1524,7 @@ fun Input.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
  * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1709,7 +1709,7 @@ fun Component<Input>.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
+ * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
  * @param enterKeyType The type of the `Enter` keyboard button.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.

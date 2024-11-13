@@ -141,6 +141,7 @@ object StartEnumValue : EnumValue("start"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
     Gallery.CrossContentAlignment,
+    PageContentSize.Alignment,
     Text.Truncate
 
 @Generated
@@ -178,6 +179,7 @@ object CenterEnumValue : EnumValue("center"),
     ContentAlignmentHorizontal,
     ContentAlignmentVertical,
     Gallery.CrossContentAlignment,
+    PageContentSize.Alignment,
     TextAlignmentVertical,
     Tooltip.Position
 
@@ -193,6 +195,7 @@ object EndEnumValue : EnumValue("end"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
     Gallery.CrossContentAlignment,
+    PageContentSize.Alignment,
     Text.Truncate
 
 @Generated
