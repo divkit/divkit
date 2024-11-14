@@ -53,9 +53,16 @@ public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDele
 
   /// Removes all tooltips.
   func reset()
+  
+  /// Sets handler for the tooltip view UI events.
+  func setHandler(_ handler: @escaping (UIActionEvent) -> Void)
 }
 
-public final class DefaultTooltipManager: TooltipManager {
+extension TooltipManager {
+  public func setHandler(_: @escaping (UIActionEvent) -> Void) {}
+}
+
+public class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
     public let id: String
     public let duration: Duration
@@ -64,15 +71,15 @@ public final class DefaultTooltipManager: TooltipManager {
 
   public var shownTooltips: Property<Set<String>>
 
-  private let handleAction: (UIActionEvent) -> Void
+  private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
   private var tooltipWindow: UIWindow?
   private var previousOrientation = UIDevice.current.orientation
 
   public init(
-    shownTooltips: Property<Set<String>>,
-    handleAction: @escaping (UIActionEvent) -> Void
+    shownTooltips: Property<Set<String>> = Property(),
+    handleAction: @escaping (UIActionEvent) -> Void = { _ in }
   ) {
     self.handleAction = handleAction
     self.shownTooltips = shownTooltips
@@ -138,6 +145,10 @@ public final class DefaultTooltipManager: TooltipManager {
   public func reset() {
     showingTooltips = [:]
     tooltipWindow = nil
+  }
+
+  public func setHandler(_ handler: @escaping (UIActionEvent) -> Void) {
+    handleAction = handler
   }
 
   deinit {

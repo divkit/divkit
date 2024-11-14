@@ -154,26 +154,11 @@ public final class DivKitComponents {
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
-    weak var weakTimerStorage: DivTimerStorage?
-    weak var weakActionHandler: DivActionHandler?
-
-    #if os(iOS)
-    self.tooltipManager = tooltipManager ?? DefaultTooltipManager(
-      shownTooltips: .init(),
-      handleAction: {
-        switch $0.payload {
-        case let .divAction(params: params):
-          weakActionHandler?.handle(params: params, sender: nil)
-        default: break
-        }
-      }
-    )
-    #else
     self.tooltipManager = tooltipManager ?? DefaultTooltipManager()
-    #endif
 
     functionsStorage = DivFunctionsStorage(reporter: reporter)
 
+    weak var weakTimerStorage: DivTimerStorage?
     actionHandler = DivActionHandler(
       stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
@@ -213,11 +198,21 @@ public final class DivKitComponents {
       reporter: reporter
     )
 
-    weakActionHandler = actionHandler
     weakTimerStorage = timerStorage
     variablesStorage.changeEvents.addObserver { [weak self] event in
       self?.onVariablesChanged(event: event)
     }.dispose(in: disposePool)
+
+    #if os(iOS)
+    self.tooltipManager.setHandler { [weak self] in
+      switch $0.payload {
+      case let .divAction(params):
+        self?.actionHandler.handle(params: params, sender: nil)
+      default:
+        break
+      }
+    }
+    #endif
   }
 
   public func reset() {
