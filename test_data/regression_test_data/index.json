@@ -1092,7 +1092,8 @@
       "title": "Simple variable animator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animators"
@@ -1112,7 +1113,8 @@
       "title": "Repeating variable animator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animators"
@@ -1132,7 +1134,8 @@
       "title": "Infinite variable animator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animators"
@@ -1151,7 +1154,8 @@
       "title": "Infinite alternating variable animator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animators"

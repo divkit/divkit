@@ -1,18 +1,8 @@
-import { linear, cubicIn, cubicOut, cubicInOut } from 'svelte/easing';
-import type { ChangeBoundsTransition, Interpolation } from '../types/base';
-import { ease } from './easings/ease';
-import { spring } from './easings/spring';
+import { cubicInOut } from 'svelte/easing';
+import type { ChangeBoundsTransition } from '../types/base';
 import { lerp } from './lerp';
 import { isPrefersReducedMotion } from './isPrefersReducedMotion';
-
-const EASING: Record<Interpolation, (t: number) => number> = {
-    linear,
-    ease,
-    ease_in: cubicIn,
-    ease_out: cubicOut,
-    ease_in_out: cubicInOut,
-    spring
-};
+import { EASING } from './easing';
 
 const DEFAULT_DURATION = 200;
 const DEFAULT_DELAY = 0;

@@ -1,20 +1,9 @@
-import { linear, cubicIn, cubicOut, cubicInOut } from 'svelte/easing';
-import type { Interpolation } from '../types/base';
+import { cubicInOut } from 'svelte/easing';
 import type { Animation, AnyAnimation } from '../types/animation';
-import { ease } from './easings/ease';
-import { spring } from './easings/spring';
 import { flattenAnimation } from './flattenAnimation';
 import type { MaybeMissing } from '../expressions/json';
 import { isPrefersReducedMotion } from './isPrefersReducedMotion';
-
-const EASING: Record<Interpolation, (t: number) => number> = {
-    linear,
-    ease,
-    ease_in: cubicIn,
-    ease_out: cubicOut,
-    ease_in_out: cubicInOut,
-    spring
-};
+import { getEasing } from './easing';
 
 const DEFAULT_DURATION = 300;
 const DEFAULT_DELAY = 0;
@@ -61,7 +50,7 @@ export function inOutAnimation(node: HTMLElement, {
                 const duration = Number(it.duration) || DEFAULT_DURATION;
                 const relative = Math.max(0, Math.min(1, (tMs - delay) / duration));
 
-                const easing = EASING[it.interpolator || 'ease_in_out'] || cubicInOut;
+                const easing = getEasing(it.interpolator || 'ease_in_out') || cubicInOut;
                 const eased = easing(relative);
 
                 if (it.name === 'fade') {

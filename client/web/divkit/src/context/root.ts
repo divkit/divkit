@@ -21,12 +21,16 @@ export interface FocusableMethods {
     focus: () => void;
 }
 
+export type ExecAnyActionsFunc = (actions: MaybeMissing<Action[]> | undefined, opts?: {
+    componentContext?: ComponentContext;
+    processUrls?: boolean;
+}) => Promise<void>;
+
 export interface RootCtxValue {
     logStat(type: string, action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     hasTemplate(templateName: string): boolean;
     genId(key: string): string;
     genClass(key: string): string;
-    execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     execCustomAction(action: (Action | VisibilityAction | DisappearAction) & { url: string }): void;
     processVariableTriggers(
         componentContext: ComponentContext | undefined,

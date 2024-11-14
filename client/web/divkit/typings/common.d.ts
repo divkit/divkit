@@ -1,3 +1,4 @@
+import type { AnimatorDirection, AnimatorRepeatCount, Interpolation } from '../src/types/base';
 import type { Variable } from './variables';
 
 export type BooleanInt = 0 | 1 | false | true;
@@ -200,8 +201,26 @@ export interface ActionArraySetValue {
     value: TypedValue;
 }
 
+export interface ActionAnimatorStart {
+    type: 'animator_start';
+    animator_id: string;
+    duration?: number;
+    start_delay?: number;
+    interpolator?: Interpolation;
+    direction?: AnimatorDirection;
+    repeat_count?: AnimatorRepeatCount;
+    start_value?: TypedValue;
+    end_value?: TypedValue;
+}
+
+export interface ActionAnimatorStop {
+    type: 'animator_stop';
+    animator_id: string;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
-    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue;
+    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
+    ActionAnimatorStart | ActionAnimatorStop;
 
 export interface ActionBase {
     log_id: string;

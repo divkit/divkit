@@ -65,7 +65,8 @@
       "$description": "translations.json#/div_base_animators",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "row_span": {

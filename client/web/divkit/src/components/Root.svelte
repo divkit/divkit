@@ -46,7 +46,7 @@
         VariableTrigger
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
-    import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
+    import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
@@ -85,6 +85,7 @@
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
     import { ENABLED_CTX, type EnabledCtxValue } from '../context/enabled';
+    import { createAnimator, type AnimatorInstance } from '../utils/animators';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -214,7 +215,10 @@
     const variables = new Map<string, Variable>();
     // Stores for notify unset global variables
     const awaitingGlobalVariables = new Map<string, Writable<any>>();
+
     let timersController: TimersController | null = null;
+
+    const animators: Map<string, AnimatorInstance> = new Map();
 
     let tooltipCounter = 0;
     let tooltips: {
@@ -983,6 +987,86 @@
                     dictSetValue(componentContext, variables, log, actionTyped);
                     break;
                 }
+                case 'animator_start': {
+                    const animatorDef = actionTyped.animator_id &&
+                        componentContext?.getAnimator(actionTyped.animator_id);
+
+                    if (!animatorDef) {
+                        log(wrapError(new Error('Missing animator'), {
+                            additional: {
+                                animator_id: actionTyped.animator_id
+                            }
+                        }));
+
+                        return;
+                    }
+
+                    const {
+                        duration,
+                        start_delay,
+                        interpolator,
+                        direction,
+                        repeat_count,
+                        start_value: start_value_typed,
+                        end_value: end_value_typed
+                    } = actionTyped;
+
+                    const evalledDef = componentContext ?
+                        componentContext.getJsonWithVars(animatorDef) :
+                        getJsonWithVars(logError, animatorDef);
+
+                    const props = {
+                        ...evalledDef,
+                        end_actions: animatorDef.end_actions,
+                        cancel_actions: animatorDef.cancel_actions,
+                        duration: duration !== undefined ? duration : evalledDef.duration,
+                        start_delay: start_delay !== undefined ? start_delay : evalledDef.start_delay,
+                        interpolator: interpolator !== undefined ? interpolator : evalledDef.interpolator,
+                        direction: direction !== undefined ? direction : evalledDef.direction,
+                        repeat_count: repeat_count !== undefined ? repeat_count : evalledDef.repeat_count,
+                        start_value_typed,
+                        end_value_typed
+                    };
+
+                    const instance = animatorDef.variable_name &&
+                        (
+                            componentContext?.getVariable(animatorDef.variable_name) ||
+                            variables.get(animatorDef.variable_name)
+                        );
+                    if (!instance) {
+                        return;
+                    }
+
+                    const prevAnimator = animators.get(animatorDef.id as string);
+                    if (prevAnimator) {
+                        prevAnimator.stop();
+                    }
+
+                    const animator = createAnimator(props, instance, () => {
+                        animators.delete(animatorDef.id as string);
+                    }, (actions, opts) => {
+                        const fn = componentContext?.execAnyActions || execAnyActions;
+                        const evalled = componentContext ?
+                            componentContext.getJsonWithVars(actions) :
+                            getJsonWithVars(logError, actions);
+
+                        return fn(evalled, opts);
+                    });
+                    if (animator) {
+                        animators.set(animatorDef.id as string, animator);
+                    }
+
+                    break;
+                }
+                case 'animator_stop': {
+                    const animator = animators.get(actionTyped.animator_id as string);
+                    if (animator) {
+                        animator.stop();
+                        animators.delete(actionTyped.animator_id as string);
+                    }
+
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {
@@ -1458,6 +1542,17 @@
                     res.variables,
                     mergeVars(localVars, opts.variables)
                 );
+                if (Array.isArray(childProcessedJson.animators)) {
+                    res.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
+                        (acc, item) => {
+                            if (item.id) {
+                                acc[item.id] = item;
+                            }
+                            return acc;
+                        },
+                        {}
+                    );
+                }
 
                 if (opts.fake) {
                     componentContext.fakeElement = true;
@@ -1486,6 +1581,9 @@
                 }
 
                 return variable;
+            },
+            getAnimator(name) {
+                return res.animators?.[name] || res.parent?.getAnimator(name) || undefined;
             },
             destroy() {
                 const set = componentContextMap.get(res.id);
@@ -1528,7 +1626,6 @@
         hasTemplate,
         genId,
         genClass,
-        execAction: execActionInternal,
         execCustomAction,
         processVariableTriggers,
         isRunning,
@@ -1867,6 +1964,10 @@
         if (!rootInstancesCount) {
             window.removeEventListener('keydown', onWindowKeyDown);
             window.removeEventListener('pointerdown', onWindowPointerDown);
+        }
+
+        for (const [_id, instance] of animators) {
+            instance.stop();
         }
 
         if (timersController) {

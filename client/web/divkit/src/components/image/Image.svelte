@@ -238,8 +238,6 @@
     onDestroy(() => {
         rootCtx.removeSvgFilter(tintColor, tintMode);
     });
-
-    // Recreate image on svg filter change for the Safari
 </script>
 
 {#if !hasError}
@@ -249,6 +247,7 @@
         {layoutParams}
         customDescription={true}
     >
+        <!-- Safari does not redraw images when changing the svg filter, a complete reconstruction of the DOM is required -->
         {#key svgFilterId}
             {#if mods.aspect}
                 <span class={css['image__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">

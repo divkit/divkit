@@ -113,6 +113,41 @@ export interface DivLayoutProvider {
     height_variable_name?: string;
 }
 
+export type AnimatorDirection = 'normal' | 'reverse' | 'alternate' | 'alternate_reverse';
+
+export type AnimatorRepeatCount = {
+    type: 'infinity';
+} | {
+    type: 'fixed';
+    value: number;
+};
+
+export interface AnimatorBase {
+    id: string;
+    variable_name: string;
+    duration: number;
+    start_delay?: number;
+    interpolator?: Interpolation;
+    direction?: AnimatorDirection;
+    repeat_count?: AnimatorRepeatCount;
+    end_actions?: Action[];
+    cancel_actions?: Action[];
+}
+
+export interface NumberAnimator extends AnimatorBase {
+    type: 'number_animator';
+    start_value?: number;
+    end_value: number;
+}
+
+export interface ColorAnimator extends AnimatorBase {
+    type: 'color_animator';
+    start_value?: string;
+    end_value: string;
+}
+
+export type Animator = NumberAnimator | ColorAnimator;
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -144,4 +179,5 @@ export interface DivBaseData {
     transform?: Transform;
     variables?: DivVariable[];
     variable_triggers?: VariableTrigger[];
+    animators?: Animator[];
 }

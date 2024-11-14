@@ -3,7 +3,7 @@ import type { Action, TemplateContext } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { WrappedError } from '../utils/wrapError';
-import type { DivBaseData, Tooltip } from './base';
+import type { Animator, DivBaseData, Tooltip } from './base';
 import type { Store } from '../../typings/store';
 import type { evalExpression } from '../expressions/eval';
 import type { Node } from '../expressions/ast';
@@ -20,6 +20,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     fakeElement?: boolean;
     parentContext?: ComponentContext;
     id: string;
+    animators?: Record<string, MaybeMissing<Animator>>;
 
     logError(error: WrappedError): void;
     execAnyActions(
@@ -57,5 +58,6 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         }[];
     }): ComponentContext;
     getVariable(varName: string, type?: VariableType): Variable | undefined;
+    getAnimator(name: string): MaybeMissing<Animator> | undefined;
     destroy(): void;
 }

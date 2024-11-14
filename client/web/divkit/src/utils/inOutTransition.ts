@@ -1,17 +1,7 @@
-import { linear, cubicIn, cubicOut, cubicInOut } from 'svelte/easing';
-import type { AnyTransition, Interpolation } from '../types/base';
-import { ease } from './easings/ease';
-import { spring } from './easings/spring';
+import { cubicInOut } from 'svelte/easing';
+import type { AnyTransition } from '../types/base';
 import { isPrefersReducedMotion } from './isPrefersReducedMotion';
-
-const EASING: Record<Interpolation, (t: number) => number> = {
-    linear,
-    ease,
-    ease_in: cubicIn,
-    ease_out: cubicOut,
-    ease_in_out: cubicInOut,
-    spring
-};
+import { getEasing } from './easing';
 
 const DEFAULT_DURATION = 200;
 const DEFAULT_DELAY = 0;
@@ -61,7 +51,7 @@ export function inOutTransition(node: HTMLElement, {
                 const relative = Math.max(0, Math.min(1, (tMs - delay) / duration));
                 const oriented = direction === 'in' ? 1 - relative : relative;
 
-                const easing = EASING[it.interpolator || 'ease_in_out'] || cubicInOut;
+                const easing = getEasing(it.interpolator || 'ease_in_out') || cubicInOut;
                 const eased = easing(oriented);
 
                 if (it.type === 'fade') {
