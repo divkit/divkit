@@ -64,6 +64,22 @@
                 "type": "patch_card",
                 "alert_text": "2.1 item from patch"
               }
+            },
+            {
+              "state_id": "not_default",
+              "div": {
+                "id": "state2",
+                "type": "text",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "match_parent"
+                },
+                "text_alignment_vertical": "center",
+                "text_alignment_horizontal": "center",
+                "text": "Second state"
+              }
             }
           ]
         }

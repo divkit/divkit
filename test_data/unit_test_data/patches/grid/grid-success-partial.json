@@ -110,6 +110,7 @@
             },
             {
               "type": "alert_card",
+              "id": "item4",
               "alert_text": "4 item"
             }
           ]
