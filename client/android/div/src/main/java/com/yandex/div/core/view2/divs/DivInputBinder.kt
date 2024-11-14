@@ -5,6 +5,7 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
@@ -29,6 +30,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTER
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -54,6 +56,7 @@ internal class DivInputBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayStringVariableBinder,
+    private val actionBinder: DivActionBinder,
     private val accessibilityStateProvider: AccessibilityStateProvider,
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivInput, DivInputView> {
@@ -87,6 +90,7 @@ internal class DivInputBinder @Inject constructor(
             observeHighlightColor(div, expressionResolver)
 
             observeKeyboardTypeAndCapitalization(div, expressionResolver)
+            observeEnterTypeAndActions(div, context, expressionResolver)
             observeSelectAllOnFocus(div, expressionResolver)
             observeIsEnabled(div, expressionResolver)
 
@@ -270,6 +274,41 @@ internal class DivInputBinder @Inject constructor(
             DivInput.KeyboardType.PHONE -> InputType.TYPE_CLASS_PHONE
             DivInput.KeyboardType.PASSWORD -> InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+    }
+
+    private fun DivInputView.observeEnterTypeAndActions(
+        div: DivInput,
+        bindingContext: BindingContext,
+        resolver: ExpressionResolver
+    ) {
+        val callback = { _: Any ->
+            val enterKeyType = div.enterKeyType.evaluate(resolver)
+            this.imeOptions = getImeAction(enterKeyType)
+
+            val actions = div.enterKeyActions
+            if (!actions.isNullOrEmpty()) {
+                this.setOnEditorActionListener { _, actionId, _ ->
+                    if ((actionId and EditorInfo.IME_MASK_ACTION) != 0) {
+                        actionBinder.handleBulkActions(bindingContext, this, actions, LOG_ENTER)
+                    }
+
+                    false
+                }
+            } else {
+                this.setOnEditorActionListener(null)
+            }
+        }
+        addSubscription(div.enterKeyType.observeAndGet(resolver, callback))
+    }
+
+    private fun getImeAction(type: DivInput.EnterKeyType): Int {
+        return when (type) {
+            DivInput.EnterKeyType.DEFAULT -> EditorInfo.IME_NULL
+            DivInput.EnterKeyType.SEND -> EditorInfo.IME_ACTION_SEND
+            DivInput.EnterKeyType.DONE -> EditorInfo.IME_ACTION_DONE
+            DivInput.EnterKeyType.SEARCH -> EditorInfo.IME_ACTION_SEARCH
+            DivInput.EnterKeyType.GO -> EditorInfo.IME_ACTION_GO
         }
     }
 

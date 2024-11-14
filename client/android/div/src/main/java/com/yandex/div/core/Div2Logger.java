@@ -136,6 +136,19 @@ public interface Div2Logger {
     }
 
     /**
+     * Is called when IME enter action called.
+     * @noinspection unused
+     */
+    default void logImeEnter(
+            @NonNull Div2View divView,
+            @NonNull ExpressionResolver resolver,
+            @NonNull View inputView,
+            @NonNull DivAction action
+    ) {
+        // do nothing
+    }
+
+    /**
      * Is called when title bar in tabs div is scrolled.
      */
     default void logTabTitlesScroll(Div2View divView) {

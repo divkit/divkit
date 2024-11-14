@@ -48,6 +48,7 @@ public class DivActionHandler {
         public static final String VIDEO = "video";
         public static final String ANIMATION_END = "animation_end";
         public static final String ANIMATION_CANCEL = "animation_cancel";
+        public static final String ENTER = "enter";
     }
 
     private static final String SCHEME_DIV_ACTION = "div-action";
