@@ -432,6 +432,26 @@
                 "ios",
                 "web"
             ]
+        },
+        {
+            "name": "string template with expression surrounded by apostrophes",
+            "expression": "Set '@{engine_url}' as your homepage?",
+            "expected": {
+                "type": "string",
+                "value": "Set 'https://ya.ru' as your homepage?"
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://ya.ru",
+                    "name": "engine_url"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
         }
     ]
 }

@@ -11,8 +11,6 @@ import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div2.DivData
-import java.io.File
-import java.lang.AssertionError
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Before
@@ -21,6 +19,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class SetVariableForLocalVariablesTest {
@@ -55,7 +54,7 @@ class SetVariableForLocalVariablesTest {
     fun `variable with card variable shows and updates card variable`() {
         globalText.performClick()
 
-        Assert.assertEquals("global string_var = 'new value", globalText.text)
+        Assert.assertEquals("global string_var = 'new value'", globalText.text)
         assertOtherViewsNotChanged(globalText)
     }
 
@@ -63,7 +62,7 @@ class SetVariableForLocalVariablesTest {
     fun `variable with local variable shows and updates local variable`() {
         localText.performClick()
 
-        Assert.assertEquals("local string_var = 'new value", localText.text)
+        Assert.assertEquals("local string_var = 'new value'", localText.text)
         assertOtherViewsNotChanged(localText)
     }
 
@@ -71,19 +70,19 @@ class SetVariableForLocalVariablesTest {
     fun `variable with parent local variable shows and updates parent local variable`() {
         parentLocalText.performClick()
 
-        Assert.assertEquals("parent local string_var = 'new value", parentLocalText.text)
+        Assert.assertEquals("parent local string_var = 'new value'", parentLocalText.text)
         assertOtherViewsNotChanged(parentLocalText)
     }
 
     private fun assertOtherViewsNotChanged(view: View?) {
         if (view != globalText) {
-            Assert.assertEquals("global string_var = 'global value", globalText.text)
+            Assert.assertEquals("global string_var = 'global value'", globalText.text)
         }
         if (view != localText) {
-            Assert.assertEquals("local string_var = 'local value", localText.text)
+            Assert.assertEquals("local string_var = 'local value'", localText.text)
         }
         if (view != parentLocalText) {
-            Assert.assertEquals("parent local string_var = 'local value", parentLocalText.text)
+            Assert.assertEquals("parent local string_var = 'local value'", parentLocalText.text)
         }
     }
 }
