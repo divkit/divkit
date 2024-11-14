@@ -281,11 +281,8 @@ sealed class Variable {
     }
 
     private fun String.parseAsBoolean(): Boolean {
-        try {
-            return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
-        } catch (e: IllegalArgumentException) {
-            throw VariableMutationException(cause = e)
-        }
+        return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
+            ?: throw VariableMutationException("Unable to convert $this to boolean")
     }
 
     private fun String.parseAsDouble(): Double {

@@ -99,11 +99,8 @@ internal object StoredValuesActionHandler {
 
     @Throws(StoredValueDeclarationException::class)
     private fun String.parseAsBoolean(): Boolean {
-        try {
-            return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
-        } catch (e: IllegalArgumentException) {
-            throw StoredValueDeclarationException(cause = e)
-        }
+        return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
+            ?: throw StoredValueDeclarationException("Unable to convert $this to boolean")
     }
 
     @Throws(StoredValueDeclarationException::class)

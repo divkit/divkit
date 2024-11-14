@@ -48,16 +48,20 @@ internal object SettingsActionHandler {
                 AppCompatDelegate.setDefaultNightMode(Container.preferences.nightMode)
                 return true
             }
-            COMPLEX_REBIND -> setPreferencesBooleanFlag(Experiment.COMPLEX_REBIND_ENABLED, valueInt.toBoolean())
-            DIV2_VIEW_POOL -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_ENABLED, valueInt.toBoolean())
-            DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, valueInt.toBoolean())
-            DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, valueInt.toBoolean())
-            DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueInt.toBoolean())
-            PERMANENT_DEBUG_PANEL -> setPreferencesBooleanFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED, valueInt.toBoolean())
+            COMPLEX_REBIND -> setPreferencesBooleanFlag(Experiment.COMPLEX_REBIND_ENABLED, valueInt.toBooleanOrException())
+            DIV2_VIEW_POOL -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_ENABLED, valueInt.toBooleanOrException())
+            DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, valueInt.toBooleanOrException())
+            DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, valueInt.toBooleanOrException())
+            DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueInt.toBooleanOrException())
+            PERMANENT_DEBUG_PANEL -> setPreferencesBooleanFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED, valueInt.toBooleanOrException())
             else -> return false
         }
 
         return true
+    }
+    
+    private fun Int.toBooleanOrException(): Boolean {
+        return toBoolean() ?: throw IllegalArgumentException("Unable to convert $this to boolean")
     }
 
     private fun setPreferencesBooleanFlag(flag: Experiment, value: Boolean) =

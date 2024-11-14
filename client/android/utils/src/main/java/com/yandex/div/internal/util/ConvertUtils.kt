@@ -4,18 +4,25 @@ import com.yandex.div.core.annotations.InternalApi
 
 @InternalApi
 public fun Number.toBoolean(): Boolean? {
-    return when (toInt()) {
+    return when(this) {
+        is Double -> this.toBoolean()
+        else -> toInt().toBoolean()
+    }
+}
+
+@InternalApi
+public fun Int.toBoolean(): Boolean? {
+    return when(this) {
         0 -> false
         1 -> true
         else -> null
     }
 }
 
-@InternalApi
-public fun Int.toBoolean(): Boolean {
-    return when (this) {
-        0 -> false
-        1 -> true
-        else -> throw IllegalArgumentException("Unable to convert $this to boolean")
+private fun Double.toBoolean(): Boolean? {
+    return when(this) {
+        0.0 -> false
+        1.0 -> true
+        else -> null
     }
 }
