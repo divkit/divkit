@@ -1,7 +1,8 @@
 {
   "description": "Switch with base properties",
   "platforms": [
-    "ios"
+    "ios",
+    "android"
   ],
   "div_data": {
     "card": {

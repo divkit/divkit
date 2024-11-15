@@ -20,6 +20,7 @@ import com.yandex.div.core.view2.divs.DivSelectBinder
 import com.yandex.div.core.view2.divs.DivSeparatorBinder
 import com.yandex.div.core.view2.divs.DivSliderBinder
 import com.yandex.div.core.view2.divs.DivStateBinder
+import com.yandex.div.core.view2.divs.DivSwitchBinder
 import com.yandex.div.core.view2.divs.DivTextBinder
 import com.yandex.div.core.view2.divs.DivVideoBinder
 import com.yandex.div.core.view2.divs.applyMargins
@@ -41,6 +42,7 @@ import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -59,6 +61,7 @@ import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
+import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVideo
@@ -85,7 +88,8 @@ internal class DivBinder @Inject constructor(
     private val selectBinder: DivSelectBinder,
     private val videoBinder: DivVideoBinder,
     private val extensionController: DivExtensionController,
-    private val pagerIndicatorConnector: PagerIndicatorConnector
+    private val pagerIndicatorConnector: PagerIndicatorConnector,
+    private val switchBinder: DivSwitchBinder
 ) {
     @MainThread
     fun bind(parentContext: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
@@ -124,7 +128,7 @@ internal class DivBinder @Inject constructor(
             is Div.Input -> bindInput(context, view, div.value, path)
             is Div.Select -> bindSelect(context, view, div.value, path)
             is Div.Video -> bindVideo(context, view, div.value, path)
-            is Div.Switch -> Unit
+            is Div.Switch -> bindSwitch(context, view, div.value, path)
         }.also {
             // extensionController bound new CustomView in DivCustomBinder after replacing in parent
             if (div !is Div.Custom) {
@@ -202,6 +206,10 @@ internal class DivBinder @Inject constructor(
         videoBinder.bindView(context, view as DivVideoView, data, path)
     }
 
+    private fun bindSwitch(context: BindingContext, view: View, data: DivSwitch, path: DivStatePath) {
+        switchBinder.bindView(context, view as DivSwitchView, data, path)
+    }
+
     private fun bindLayoutParams(view: View, data: DivBase, resolver: ExpressionResolver) {
         view.applyMargins(data.margins, resolver)
     }
@@ -223,7 +231,7 @@ internal class DivBinder @Inject constructor(
         is Div.Input -> (view as DivInputView).setDataWithoutBinding(context, div.value)
         is Div.Select -> (view as DivSelectView).setDataWithoutBinding(context, div.value)
         is Div.Video -> (view as DivVideoView).setDataWithoutBinding(context, div.value)
-        is Div.Switch -> Unit
+        is Div.Switch -> (view as DivSwitchView).setDataWithoutBinding(context, div.value)
     }
 
     private fun <T: DivBase> DivHolderView<T>.setDataWithoutBinding(context: BindingContext, newDiv: T) {

@@ -1,7 +1,8 @@
 {
   "description": "Switch properties",
   "platforms": [
-    "ios"
+    "ios",
+    "android"
   ],
   "div_data": {
     "card": {
@@ -61,6 +62,14 @@
         {
           "url": "div-action://set_variable?name=switch_enabled&value=false",
           "log_id": "disable_switch"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=switch_value&value=false",
+          "log_id": "disabled_switch_off"
         }
       ]
     }

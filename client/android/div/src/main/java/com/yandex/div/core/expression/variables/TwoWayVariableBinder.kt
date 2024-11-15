@@ -36,6 +36,18 @@ internal class TwoWayIntegerVariableBinder @Inject constructor(
     override fun Long.toStringValue() = toString()
 }
 
+@DivScope
+@Mockable
+internal class TwoWayBooleanVariableBinder @Inject constructor(
+    errorCollectors: ErrorCollectors,
+    expressionsRuntimeProvider: ExpressionsRuntimeProvider
+) : TwoWayVariableBinder<Boolean>(errorCollectors, expressionsRuntimeProvider) {
+
+    interface Callbacks : TwoWayVariableBinder.Callbacks<Boolean>
+
+    override fun Boolean.toStringValue(): String = toString()
+}
+
 @Mockable
 internal abstract class TwoWayVariableBinder<T>(
     private val errorCollectors: ErrorCollectors,

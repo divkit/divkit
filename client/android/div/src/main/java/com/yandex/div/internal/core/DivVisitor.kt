@@ -59,4 +59,6 @@ abstract class DivVisitor<T> {
     protected open fun visit(data: Div.Select, resolver: ExpressionResolver) = defaultVisit(data, resolver)
 
     protected open fun visit(data: Div.Video, resolver: ExpressionResolver) = defaultVisit(data, resolver)
+
+    protected open fun visit(data: Div.Switch, resolver: ExpressionResolver) = defaultVisit(data, resolver)
 }

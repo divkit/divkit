@@ -23,6 +23,7 @@ import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
@@ -73,6 +74,7 @@ internal class DivViewCreator @Inject constructor(
                     changeCapacity(TAG_INPUT, input.capacity)
                     changeCapacity(TAG_SELECT, select.capacity)
                     changeCapacity(TAG_VIDEO, video.capacity)
+                    changeCapacity(TAG_SWITCH, switch.capacity)
                 }
             }
             field = value
@@ -98,6 +100,7 @@ internal class DivViewCreator @Inject constructor(
                 register(TAG_INPUT, { DivInputView(context) }, input.capacity)
                 register(TAG_SELECT, { DivSelectView(context) }, select.capacity)
                 register(TAG_VIDEO, { DivVideoView(context) }, video.capacity)
+                register(TAG_SWITCH, { DivSwitchView(context) }, switch.capacity)
             }
         }
     }
@@ -172,7 +175,8 @@ internal class DivViewCreator @Inject constructor(
             TAG_SLIDER,
             TAG_INPUT,
             TAG_SELECT,
-            TAG_VIDEO
+            TAG_VIDEO,
+            TAG_SWITCH
         )
 
         private fun Div.getTag(resolver: ExpressionResolver) =
