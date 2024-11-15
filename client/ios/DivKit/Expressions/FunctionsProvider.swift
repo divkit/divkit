@@ -12,6 +12,14 @@ final class FunctionsProvider {
     self.persistentValuesStorage = persistentValuesStorage
   }
 
+  static let methods: [String: Function] = {
+    var methods: [String: Function] = [:]
+    methods.addArrayMethods()
+    methods.addDictMethods()
+    methods.addToStringFunctions()
+    return methods
+  }()
+
   lazy var functions: [String: Function] =
     lock.withLock {
       var functions = staticFunctions
@@ -50,7 +58,7 @@ final class FunctionsProvider {
             )
           )
         case let .method(name):
-          return FunctionEvaluator(symbol, functions: methods)
+          return FunctionEvaluator(symbol, functions: FunctionsProvider.methods)
         case .postfix:
           return nil
         }
@@ -166,14 +174,6 @@ private let operators: [CalcExpression.Symbol: Function] = {
   operators.addBooleanOperators()
   operators.addTryOperator()
   return operators
-}()
-
-private let methods: [String: Function] = {
-  var methods: [String: Function] = [:]
-  methods.addArrayMethods()
-  methods.addDictMethods()
-  methods.addToStringFunctions()
-  return methods
 }()
 
 extension [String: Function] {
