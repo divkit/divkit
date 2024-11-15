@@ -102,6 +102,7 @@
 }
 
 .tabs__delimitier {
+    flex: 0 0 auto;
     align-self: center;
     margin-left: var(--divkit-tabs-items-spacing, 0);
 }
