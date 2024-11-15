@@ -101,7 +101,7 @@ public class DivGestureExtensionHandler (
     ) : View.OnTouchListener {
 
         private val gestureConsumer = object : SwipeGestureConsumer {
-            override fun onTouchStart(info: SwipeGestureInfo): Boolean = false
+            override fun onTouchStart(info: SwipeGestureInfo): Boolean = true
             override fun onSwipe(info: SwipeGestureInfo): Boolean = info.isTouchSlopBreached
             override fun onTouchEnd(info: SwipeGestureInfo): Boolean {
                 return when {
