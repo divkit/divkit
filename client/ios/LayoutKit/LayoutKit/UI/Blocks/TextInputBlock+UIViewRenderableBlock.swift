@@ -359,7 +359,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     guard let typo else { return }
     let attributedText = text.with(typo: typo)
     multiLineInput.attributedText = attributedText
-    singleLineInput.attributedText = attributedText
+    if let selectedRange = singleLineInput.selectedTextRange {
+      singleLineInput.attributedText = attributedText
+      singleLineInput.selectedTextRange = selectedRange
+    }
     multiLineInput.typingAttributes = typo.attributes
     singleLineInput.defaultTextAttributes = typo.attributes
   }
