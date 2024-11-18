@@ -32,6 +32,7 @@
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';
+    import { wrapError } from '../../utils/wrapError';
 
     export let componentContext: ComponentContext<DivTextData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -118,7 +119,12 @@
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
 
     $: {
-        text = propToString($jsonText);
+        if (typeof componentContext.json.text === 'string') {
+            text = propToString($jsonText);
+        } else {
+            text = '';
+            componentContext.logError(wrapError(new Error('Incorrect text value type')));
+        }
     }
 
     $: {
