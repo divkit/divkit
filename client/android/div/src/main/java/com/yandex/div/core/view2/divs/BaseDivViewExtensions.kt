@@ -59,6 +59,7 @@ import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
@@ -979,5 +980,31 @@ internal fun sendAccessibilityEventUnchecked(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) AccessibilityEvent(event)
             else AccessibilityEvent.obtain(event)
         )
+    }
+}
+
+internal fun <T> T.bindClipChildren(
+    newClipToBounds: Expression<Boolean>,
+    oldClipToBounds: Expression<Boolean>?,
+    resolver: ExpressionResolver
+) where T : ViewGroup, T : DivHolderView<*> {
+    if (newClipToBounds.equalsToConstant(oldClipToBounds)) {
+        return
+    }
+
+    applyClipChildren(newClipToBounds.evaluate(resolver))
+
+    if (newClipToBounds.isConstant()) {
+        return
+    }
+
+    addSubscription(newClipToBounds.observe(resolver) { clip -> applyClipChildren(clip) })
+}
+
+internal fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
+    needClipping = clip
+    val parent = parent
+    if (parent is ViewGroup) {
+        parent.clipChildren = clip
     }
 }

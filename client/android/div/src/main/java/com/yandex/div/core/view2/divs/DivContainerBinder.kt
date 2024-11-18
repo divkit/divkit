@@ -328,25 +328,7 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         resolver: ExpressionResolver
     ) where T : ViewGroup, T : DivHolderView<*> {
-        if (newDiv.clipToBounds.equalsToConstant(oldDiv?.clipToBounds)) {
-            return
-        }
-
-        applyClipChildren(newDiv.clipToBounds.evaluate(resolver))
-
-        if (newDiv.clipToBounds.isConstant()) {
-            return
-        }
-
-        addSubscription(newDiv.clipToBounds.observe(resolver) { clip -> applyClipChildren(clip) })
-    }
-
-    private fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
-        needClipping = clip
-        val parent = parent
-        if (!clip && parent is ViewGroup) {
-            parent.clipChildren = false
-        }
+        bindClipChildren(newDiv.clipToBounds, oldDiv?.clipToBounds, resolver)
     }
 
     private fun DivLinearLayout.bindProperties(

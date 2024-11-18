@@ -230,6 +230,8 @@ internal class DivStateBinder @Inject constructor(
         layout.activeStateDiv = newStateDiv
         layout.path = currentPath
 
+        layout.bindClipChildren(div, oldDivState, resolver)
+
         if (outgoing != null) {
             runtimeVisitor.createAndAttachRuntimesToState(
                 divView, div, divStatePath, context.expressionResolver
@@ -287,6 +289,10 @@ internal class DivStateBinder @Inject constructor(
                 path = divStatePath
             )
         addSubscription(subscription)
+    }
+
+    private fun DivStateLayout.bindClipChildren(newDiv: DivState, oldDiv: DivState?, resolver: ExpressionResolver) {
+        bindClipChildren(newDiv.clipToBounds, oldDiv?.clipToBounds, resolver)
     }
 
     private fun untrackRecursively(outgoing: View?, divView: Div2View, resolver: ExpressionResolver) {

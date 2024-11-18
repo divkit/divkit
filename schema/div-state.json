@@ -102,6 +102,7 @@
           "default_value": "true",
           "$description": "translations.json#/div_clip_to_bounds",
           "platforms": [
+            "android"
           ]
         }
       },
