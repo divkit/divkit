@@ -1735,7 +1735,9 @@
     {
       "title": "Text input (enter key)",
       "platforms": [
-        "ios"
+        "ios",
+        "web",
+        "android"
       ],
       "tags": [
         "DivInput"
