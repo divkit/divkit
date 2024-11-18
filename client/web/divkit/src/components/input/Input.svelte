@@ -37,7 +37,7 @@
     import css from './Input.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivInputData, KeyboardType } from '../../types/input';
+    import type { DivInputData, InputEnterKeyType, KeyboardType } from '../../types/input';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { FixedLengthInputMask } from '../../utils/mask/fixedLengthInputMask';
     import type { MaybeMissing } from '../../expressions/json';
@@ -104,6 +104,7 @@
     let isEnabled = true;
     let maxLength = Infinity;
     let autocapitalization = 'off';
+    let enterKeyType: InputEnterKeyType = 'default';
 
     $: origJson = componentContext.origJson;
 
@@ -123,6 +124,7 @@
         isEnabled = true;
         maxLength = Infinity;
         autocapitalization = 'off';
+        enterKeyType = 'default';
     }
 
     $: if (origJson) {
@@ -156,6 +158,7 @@
     $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
     $: jsonMaxLength = componentContext.getDerivedFromVars(componentContext.json.max_length);
     $: jsonAutocapitalization = componentContext.getDerivedFromVars(componentContext.json.autocapitalization);
+    $: jsonEnterKeyType = componentContext.getDerivedFromVars(componentContext.json.enter_key_type);
 
     $: if (variable) {
         hasError = false;
@@ -297,6 +300,13 @@
         componentContext.logError(wrapError(new Error('Missing accessibility "description" for input'), {
             level: 'warn'
         }));
+    }
+
+    $: if (
+        $jsonEnterKeyType === 'default' || $jsonEnterKeyType === 'done' || $jsonEnterKeyType === 'go' ||
+        $jsonEnterKeyType === 'search' || $jsonEnterKeyType === 'send'
+    ) {
+        enterKeyType = $jsonEnterKeyType;
     }
 
     $: mods = {
@@ -525,6 +535,7 @@
                         tabindex="0"
                         aria-label={description}
                         aria-multiline="true"
+                        enterkeyhint={enterKeyType === 'default' ? undefined : enterKeyType}
                         style={makeStyle(paddingStl)}
                         bind:innerText={contentEditableValue}
                         on:input={onInput}
@@ -566,6 +577,7 @@
                 maxlength={maxLength === Infinity ? undefined : maxLength}
                 {placeholder}
                 {value}
+                enterkeyhint={enterKeyType === 'default' ? undefined : enterKeyType}
                 on:input={onInput}
                 on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                 on:click={$jsonSelectAll ? onClick : undefined}

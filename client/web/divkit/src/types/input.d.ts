@@ -31,6 +31,8 @@ export type InputMask = FixedLengthInputMask | CurrencyInputMask;
 
 export type InputAutocapitalization = 'auto' | 'none' | 'words' | 'sentences' | 'all_characters';
 
+export type InputEnterKeyType = 'default' | 'go' | 'search' | 'send' | 'done';
+
 export interface DivInputData extends DivBaseData {
     type: 'input';
 
@@ -53,6 +55,7 @@ export interface DivInputData extends DivBaseData {
     // native_interface
     keyboard_type?: KeyboardType;
     mask?: InputMask;
+    enter_key_type?: InputEnterKeyType;
     select_all_on_focus?: BooleanInt;
     is_enabled?: BooleanInt;
     autocapitalization?: InputAutocapitalization;

@@ -177,7 +177,8 @@
           "$description": "translations.json#/div_input_enter_key_type",
           "platforms": [
             "ios",
-            "android"
+            "android",
+            "web"
           ]
         },
         "keyboard_type": {
