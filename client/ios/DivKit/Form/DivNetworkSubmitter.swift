@@ -21,6 +21,9 @@ final public class DivNetworkSubmitter: DivSubmitter {
       urlRequest.setValue(header.value, forHTTPHeaderField: header.key)
     }
     urlRequest.httpMethod = request.method
+    if let body = try? JSONSerialization.data(withJSONObject: data) {
+      urlRequest.httpBody = body
+    }
 
     var task: NetworkTask?
     task = requestPerformer.performRequest(urlRequest) { [weak self] in
