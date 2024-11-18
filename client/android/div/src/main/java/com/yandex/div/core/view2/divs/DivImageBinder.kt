@@ -186,28 +186,29 @@ internal class DivImageBinder @Inject constructor(
 
     //region Preview
 
-    private fun DivImageView.observePreview(
+    private fun DivImageView.observePlaceholders(
         bindingContext: BindingContext,
         newDiv: DivImage,
         errorCollector: ErrorCollector
     ) {
-        addSubscription(
-            newDiv.preview?.observe(bindingContext.expressionResolver) { newPreview ->
-                if (isImageLoaded || newPreview == preview) {
-                    return@observe
-                }
-                resetImageLoaded()
-                applyPreview(
-                    bindingContext,
-                    newDiv,
-                    isHighPriorityShow(bindingContext.expressionResolver, this, newDiv),
-                    errorCollector
-                )
-            }
-        )
+        val resolver = bindingContext.expressionResolver
+
+        val callback = callback@{ _: Any ->
+            if (isImageLoaded) return@callback
+
+            applyPlaceholders(
+                bindingContext,
+                newDiv,
+                isHighPriorityShow(resolver, this, newDiv),
+                errorCollector
+            )
+        }
+
+        addSubscription(newDiv.preview?.observe(resolver, callback))
+        addSubscription(newDiv.placeholderColor.observe(resolver, callback))
     }
 
-    private fun DivImageView.applyPreview(
+    private fun DivImageView.applyPlaceholders(
         bindingContext: BindingContext,
         div: DivImage,
         synchronous: Boolean,
@@ -253,17 +254,16 @@ internal class DivImageBinder @Inject constructor(
         oldDiv: DivImage?,
         errorCollector: ErrorCollector
     ) {
-        val view = this
         val imageUrlChanged = !newDiv.imageUrl.equalsToConstant(oldDiv?.imageUrl)
-        val previewAndPlaceholderChanged = !(newDiv.preview.equalsToConstant(oldDiv?.preview)
+        val placeholdersChanged = !(newDiv.preview.equalsToConstant(oldDiv?.preview)
                 && newDiv.placeholderColor.equalsToConstant(oldDiv?.placeholderColor))
-        val previewAndPlaceholderAreConstant = newDiv.preview.isConstantOrNull() &&
+        val placeholdersAreConstant = newDiv.preview.isConstantOrNull() &&
                 newDiv.placeholderColor.isConstant()
 
-        val needPreviewUpdate = !isImageLoaded && previewAndPlaceholderChanged
-        val needObservePreview = needPreviewUpdate && !previewAndPlaceholderAreConstant
-        if (needObservePreview) {
-            view.observePreview(context, newDiv, errorCollector)
+        val needPlaceholdersUpdate = !isImageLoaded && placeholdersChanged
+
+        if (needPlaceholdersUpdate && !placeholdersAreConstant) {
+            observePlaceholders(context, newDiv, errorCollector)
         }
 
         val needObserveImageUrl = imageUrlChanged && !newDiv.imageUrl.isConstantOrNull()
@@ -276,11 +276,11 @@ internal class DivImageBinder @Inject constructor(
         }
 
         val applyImageWorkSkipped = !applyImage(context, newDiv, errorCollector)
-        if (applyImageWorkSkipped && needPreviewUpdate) {
-            view.applyPreview(
+        if (applyImageWorkSkipped && needPlaceholdersUpdate) {
+            applyPlaceholders(
                 context,
                 newDiv,
-                isHighPriorityShow(context.expressionResolver, view, newDiv),
+                isHighPriorityShow(context.expressionResolver, this, newDiv),
                 errorCollector,
             )
         }
@@ -304,7 +304,7 @@ internal class DivImageBinder @Inject constructor(
         clearTint()
         loadReference?.cancel()
 
-        applyPreview(bindingContext, div, isHighPriorityShowPreview, errorCollector)
+        applyPlaceholders(bindingContext, div, isHighPriorityShowPreview, errorCollector)
 
         this.imageUrl = imageUrl
         val reference = imageLoader.loadImage(
