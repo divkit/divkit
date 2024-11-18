@@ -96,14 +96,14 @@
         const jsonHeight = parentComponentContext.getJsonWithVars(data.div?.width);
 
         if (!jsonWidth || jsonWidth.type === 'match_parent') {
-            calcedWidth = width = ownerBbox.width;
+            calcedWidth = width = window.innerWidth;
         } else if (jsonWidth.type === 'fixed' && jsonWidth.value) {
             calcedWidth = width = jsonWidth.value;
         } else {
             calcedWidth = tooltipBbox.width;
         }
         if (jsonHeight?.type === 'match_parent') {
-            calcedHeight = height = ownerBbox.height;
+            calcedHeight = height = window.innerHeight;
         } else if (jsonHeight?.type === 'fixed' && jsonHeight.value) {
             calcedHeight = height = jsonHeight.value;
         } else {
