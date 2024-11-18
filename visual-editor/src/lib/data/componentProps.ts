@@ -157,11 +157,15 @@ export interface SplitProperty {
     list: [ComponentProperty, ComponentProperty];
 }
 
+export interface VariableNameProperty extends BaseProperty {
+    type: 'variable-name';
+}
+
 export type ComponentProperty = RadioProperty | IntegerProperty | BooleanProperty | SelectProperty |
     PercentProperty | RotationProperty | StringProperty |
     ColorProperty | FileProperty | GroupProperty | SplitProperty | AlignmentProperty |
     MarginsPaddingsProperty | Background2Property | TextAlignProperty | TextStylesProperty |
-    Actions2Property | VideoSourcesProperty | NumberProperty;
+    Actions2Property | VideoSourcesProperty | NumberProperty | VariableNameProperty;
 
 export type SiblingComponentProperty = ComponentProperty & {
     related?: {
@@ -696,8 +700,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
         list: [{
             name: 'props.text_variable',
             prop: 'text_variable',
-            type: 'string',
-            enableSources: true
+            type: 'variable-name'
         }, {
             name: 'props.keyboard_type',
             prop: 'keyboard_type',

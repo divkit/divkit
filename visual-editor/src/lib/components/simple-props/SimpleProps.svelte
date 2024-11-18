@@ -35,7 +35,8 @@
             // todo
             const enableSources = it.editor.type !== 'background2' &&
                 it.editor.type !== 'actions2' &&
-                it.editor.type !== 'video_sources';
+                it.editor.type !== 'video_sources' &&
+                it.editor.type !== 'variable-name';
 
             return {
                 rawName: it.templatePropertyName,

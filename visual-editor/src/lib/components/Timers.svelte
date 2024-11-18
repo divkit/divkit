@@ -11,6 +11,7 @@
     import { ChangeTimersCommand } from '../data/commands/changeTimers';
     import Actions2Prop from './simple-props/Actions2Prop.svelte';
     import { APP_CTX, type AppContext } from '../ctx/appContext';
+    import VariableNameProp from './simple-props/VariableNameProp.svelte';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state } = getContext<AppContext>(APP_CTX);
@@ -150,9 +151,11 @@
                         <div class="timers__label">
                             {$l10nString('timersValueVariable')}
                         </div>
-                        <Text
-                            value={timer.value_variable}
-                            disabled={$readOnly}
+                        <VariableNameProp
+                            item={{
+                                type: 'variable-name'
+                            }}
+                            value={timer.value_variable || ''}
                             on:change={event => onValueVariableChange(index, event)}
                         />
                     </label>

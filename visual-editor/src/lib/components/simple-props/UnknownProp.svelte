@@ -15,6 +15,7 @@
     import TextStylesProp from './TextStylesProp.svelte';
     import Actions2Prop from './Actions2Prop.svelte';
     import VideoSourcesProp from './VideoSourcesProp.svelte';
+    import VariableNameProp from './VariableNameProp.svelte';
 
     export let item: ComponentProperty;
     export let value;
@@ -153,6 +154,14 @@
     <VideoSourcesProp
         {item}
         {value}
+        on:change
+    />
+{:else if item.type === 'variable-name'}
+    <VariableNameProp
+        {item}
+        {value}
+        {processedJson}
+        {parentProcessedJson}
         on:change
     />
 {/if}

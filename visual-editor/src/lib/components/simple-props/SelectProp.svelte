@@ -9,8 +9,8 @@
 
     export let value: string;
     export let item: ComponentProperty;
-    export let processedJson;
-    export let parentProcessedJson;
+    export let processedJson: unknown | undefined = undefined;
+    export let parentProcessedJson: unknown | undefined = undefined;
     export let hasEmpty = true;
     export let options: {
         rawName?: string;
@@ -25,6 +25,7 @@
 
     $: filteredOptions = options.filter(
         it => it.show === undefined ||
+            processedJson && parentProcessedJson &&
             evalCondition(processedJson, parentProcessedJson, it.show)
     );
 

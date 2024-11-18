@@ -47,6 +47,7 @@ const editors = new Map([
     ['common.json#/boolean_int', 'boolean'],
     ['common.json#/color', 'color'],
     ['common.json#/url', 'file'],
+    ['div-variable-name.json', 'variable-name'],
     ['div-background.json', '__background-item'],
     ['div-action.json', '__action-item'],
     ['div-video-source.json', '__video-source-item']
