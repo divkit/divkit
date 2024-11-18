@@ -33,5 +33,11 @@ export function walk(ast: Node, visitors: {
                 walk(item, visitors);
             });
             break;
+        case 'MethodExpression':
+            walk(ast.object, visitors);
+            ast.arguments.forEach(item => {
+                walk(item, visitors);
+            });
+            break;
     }
 }

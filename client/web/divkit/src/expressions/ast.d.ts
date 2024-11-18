@@ -3,7 +3,7 @@ export type Node = BinaryExpression | LogicalExpression |
     StringLiteral | NumberLiteral | IntegerLiteral | BooleanLiteral |
     TemplateLiteral |
     ConditionalExpression | TryExpression |
-    CallExpression |
+    CallExpression | MethodExpression |
     Variable;
 
 export type UnaryOperator = '!' | '+' | '-';
