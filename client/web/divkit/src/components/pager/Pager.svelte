@@ -325,6 +325,11 @@
     }
 
     $: if (componentContext.json) {
+        const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
+        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < (componentContext.json.items || []).length) {
+            currentItem = prevSelectedItem = defaultItem;
+        }
+
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
@@ -365,6 +370,10 @@
                 item.setAttribute('id', `${instId}-panel-${index}`);
                 item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
             }
+        }
+
+        if (currentItem > 0) {
+            scrollToPagerItem(currentItem, 'instant');
         }
     });
 

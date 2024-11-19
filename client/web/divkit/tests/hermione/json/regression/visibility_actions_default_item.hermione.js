@@ -13,8 +13,8 @@ describe('regression', () => {
             await this.browser.assertView('default_item', '#root');
             let logs = await this.browser.execute(() => window.divkitLogs);
             logs = logs.map(log => log.action.log_id);
-            logs[0].should.equal('content_item_show:0');
-            logs[1].should.equal('6');
+            logs[0].should.equal('content_item_show:4');
+            logs[1].should.equal('406');
             logs[2].should.equal('container');
         });
     });

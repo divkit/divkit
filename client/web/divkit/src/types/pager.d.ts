@@ -20,5 +20,5 @@ export interface DivPagerData extends DivBaseData {
     items: DivBaseData[];
     orientation?: Orientation;
     restrict_parent_scroll?: BooleanInt;
-    // default_item?: number;
+    default_item?: number;
 }
