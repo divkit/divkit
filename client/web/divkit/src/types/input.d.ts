@@ -1,6 +1,6 @@
 import type { DivBaseData } from './base';
 import type { FontWeight } from './text';
-import type { BooleanInt } from '../../typings/common';
+import type { Action, BooleanInt } from '../../typings/common';
 import { AlignmentHorizontal, AlignmentVertical } from './alignment';
 
 export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri' | 'password';
@@ -71,6 +71,7 @@ export interface DivInputData extends DivBaseData {
     hint_color?: string;
     highlight_color?: string;
     // native_interface
+    enter_key_actions?: Action[];
     keyboard_type?: KeyboardType;
     mask?: InputMask;
     enter_key_type?: InputEnterKeyType;

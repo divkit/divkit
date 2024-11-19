@@ -66,6 +66,7 @@
     import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
+    import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
@@ -373,13 +374,27 @@
         }
     }
 
-    function onKeydown(event: KeyboardEvent): void {
+    function blockOverflow(event: KeyboardEvent): void {
         if (
             value.length >= maxLength &&
             !ALLOWED_BLOCKED_MULTILINE_KEYS.has(event.key) &&
             !(event.ctrlKey || event.altKey || event.metaKey)
         ) {
             event.preventDefault();
+        }
+    }
+
+    function onKeyDown(event: KeyboardEvent): void {
+        if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+            return;
+        }
+
+        const actions = componentContext.json.enter_key_actions;
+        if (event.key === 'Enter' && Array.isArray(actions) && actions.length) {
+            const evalledActions = componentContext.getJsonWithVars(actions);
+            const filteredActions = evalledActions.filter(action => action.log_id).filter(filterEnabledActions);
+            event.preventDefault();
+            componentContext.execAnyActions(filteredActions);
         }
     }
 
@@ -624,7 +639,8 @@
                         style={makeStyle(paddingStl)}
                         bind:innerText={contentEditableValue}
                         on:input={onInput}
-                        on:keydown={onKeydown}
+                        on:keydown={blockOverflow}
+                        on:keydown={onKeyDown}
                         on:paste={onPaste}
                         on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                         on:click={$jsonSelectAll ? onClick : undefined}
@@ -666,6 +682,7 @@
                 {value}
                 enterkeyhint={enterKeyType === 'default' ? undefined : enterKeyType}
                 on:input={onInput}
+                on:keydown={onKeyDown}
                 on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                 on:click={$jsonSelectAll ? onClick : undefined}
                 on:focus={focusHandler}
