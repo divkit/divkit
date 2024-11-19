@@ -117,6 +117,8 @@ export interface DivProEditorOptions {
     sources?: Source[];
     previewWarnFileLimit?: number;
     previewErrorFileLimit?: number;
+    warnFileLimit?: number;
+    errorFileLimit?: number;
     rootConfigurable?: boolean;
 }
 
@@ -193,6 +195,8 @@ export const DivProEditor = {
                 cardLocales: opts.cardLocales,
                 previewWarnFileLimit: opts.previewWarnFileLimit,
                 previewErrorFileLimit: opts.previewErrorFileLimit,
+                warnFileLimit: opts.warnFileLimit,
+                errorFileLimit: opts.errorFileLimit,
                 rootConfigurable: opts.rootConfigurable,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,

@@ -2,6 +2,8 @@
     import { createEventDispatcher, getContext } from 'svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
+    import { formatFileSize } from '../../utils/formatFileSize';
+    import { getFileSize } from '../../utils/fileSize';
 
     export let id: string = '';
     export let value: string | number | undefined;
@@ -24,13 +26,15 @@
     export let title = '';
 
     const dispatch = createEventDispatcher();
-    const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { file2Dialog } = getContext<AppContext>(APP_CTX);
+    const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
+    const { file2Dialog, warnFileLimit, errorFileLimit, previewWarnFileLimit, previewErrorFileLimit } = getContext<AppContext>(APP_CTX);
 
     let internalValue: string | number = 0;
     let elem: HTMLElement;
     let subtypeError = false;
     let isFocused = false;
+    let currentSize: number | undefined = undefined;
+    let sizeLabelWidth = 0;
 
     function updateInternalValue(
         subtype: string,
@@ -50,6 +54,8 @@
         } else {
             internalValue = value || defaultValue || '';
         }
+
+        loadFileSize();
     }
 
     $: updateInternalValue(subtype, value, defaultValue);
@@ -66,6 +72,10 @@
     $: resultPattern = (subtype === 'integer' || subtype === 'percent' || subtype === 'angle') ?
         '\\d+' :
         pattern;
+
+    $: fileSizeMod = fileType === 'image_preview' ?
+        calcFileSizeMod(currentSize, previewWarnFileLimit, previewErrorFileLimit) :
+        calcFileSizeMod(currentSize, warnFileLimit, errorFileLimit);
 
     function onChange() {
         if (type === 'number') {
@@ -95,6 +105,8 @@
             value = internalValue;
         }
 
+        loadFileSize();
+
         dispatch('change', {
             value
         });
@@ -114,7 +126,7 @@
         }
 
         file2Dialog().show({
-            title: $l10n(fileType === 'video' ? 'props.video_sources' : 'props.image_url'),
+            title: $l10nString(fileType === 'video' ? 'props.video_sources' : 'props.image_url'),
             target: elem,
             subtype: fileType,
             value: {
@@ -130,6 +142,32 @@
             }
         });
     }
+
+    function loadFileSize(): void {
+        if (!fileType || !value) {
+            currentSize = undefined;
+            return;
+        }
+
+        getFileSize(String(value), fileType).then(res => {
+            currentSize = res;
+        });
+    }
+
+    function calcFileSizeMod(currentSize: number | undefined, warnLimit: number, errorLimit: number): string {
+        if (!currentSize || currentSize < 1) {
+            return '';
+        }
+
+        if (currentSize > errorLimit) {
+            return 'error';
+        }
+        if (currentSize > warnLimit) {
+            return 'warn';
+        }
+
+        return '';
+    }
 </script>
 
 <div
@@ -143,6 +181,7 @@
     title={error}
     aria-label={title}
     data-custom-tooltip={title}
+    style:--inline-size-width="{(currentSize && currentSize > 0 && sizeLabelWidth > 0) ? sizeLabelWidth : 0}px"
 >
     {#if type === 'text'}
         <input
@@ -199,6 +238,18 @@
     {/if}
 
     {#if subtype === 'file'}
+        {#if currentSize && currentSize > 0}
+            <div
+                class="text__size-label"
+                class:text__size-label_error={fileSizeMod === 'error'}
+                class:text__size-label_warn={fileSizeMod === 'warn'}
+                data-custom-tooltip={$l10nString('file.too_big')}
+                bind:offsetWidth={sizeLabelWidth}
+            >
+                {formatFileSize(currentSize)}
+            </div>
+        {/if}
+
         <button class="text__more" on:click={onMore}>
             <div class="text__more-icon"></div>
         </button>
@@ -273,7 +324,7 @@
     }
 
     .text_more .text__input {
-        padding-right: 51px;
+        padding-right: calc(51px + var(--inline-size-width, 0));
     }
 
     .text_inline-label .text__input {
@@ -347,5 +398,29 @@
         align-items: center;
         color: var(--text-tertiary);
         pointer-events: none;
+    }
+
+    .text__size-label {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 24px;
+        margin: auto 0;
+        padding: 0 4px;
+        font-size: 12px;
+        background: var(--fill-transparent-1);
+        border-radius: 4px;
+    }
+
+    .text__size-label_error {
+        background: var(--fill-red-2);
+    }
+
+    .text__size-label_warn {
+        background: var(--fill-orange-2);
     }
 </style>

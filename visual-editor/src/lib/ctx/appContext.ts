@@ -218,6 +218,8 @@ export interface AppContext {
     getTranslationKey: GetTranslationKey | undefined;
     previewWarnFileLimit: number;
     previewErrorFileLimit: number;
+    warnFileLimit: number;
+    errorFileLimit: number;
     rootConfigurable: boolean;
 
     rendererApi: () => RendererApi;

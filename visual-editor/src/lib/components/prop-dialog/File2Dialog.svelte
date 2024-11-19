@@ -10,9 +10,10 @@
     import loaderImage from '../../../assets/loader.svg?raw';
     import trashIcon from '../../../assets/trash.svg?raw';
     import { loadFileAsBase64 } from '../../utils/loadFileAsBase64';
+  import { getFileSize } from '../../utils/fileSize';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { uploadFile, previewWarnFileLimit, previewErrorFileLimit } = getContext<AppContext>(APP_CTX);
+    const { uploadFile, previewWarnFileLimit, previewErrorFileLimit, warnFileLimit, errorFileLimit } = getContext<AppContext>(APP_CTX);
 
     const FILE_FILTER = {
         image: 'image/png, image/jpeg',
@@ -80,6 +81,7 @@
         disabled = props.disabled || false;
         showError = false;
         isShown = true;
+        loadFileSize();
     }
 
     export function hide(): void {
@@ -125,11 +127,9 @@
     }
 
     function upload(file: File): Promise<void> {
-        if (subtype === 'image_preview') {
-            if (file.size > previewErrorFileLimit) {
-                showError = 'big';
-                return Promise.resolve();
-            }
+        if (file.size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
+            showError = 'big';
+            return Promise.resolve();
         }
 
         loading = true;
@@ -141,7 +141,7 @@
             value.url = url;
             loading = false;
 
-            if (file.size > previewWarnFileLimit && subtype !== 'video') {
+            if (file.size > (subtype === 'image_preview' ? previewWarnFileLimit : warnFileLimit) && subtype !== 'video') {
                 showError = 'big-warn';
                 return Promise.resolve();
             }
@@ -228,7 +228,7 @@
     }
 
     function onInputChange(): void {
-        showError = false;
+        loadFileSize();
     }
 
     function onImageError(): void {
@@ -238,6 +238,18 @@
     function onCleanup(): void {
         value.url = '';
         dialog?.hide();
+    }
+
+    function loadFileSize(): void {
+        showError = false;
+
+        getFileSize(String(value), subtype).then(size => {
+            if (size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
+                showError = 'big';
+            } else if (size > (subtype === 'image_preview' ? previewWarnFileLimit : warnFileLimit)) {
+                showError = 'big-warn';
+            }
+        });
     }
 </script>
 

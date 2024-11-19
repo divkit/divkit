@@ -48,8 +48,10 @@
     export let cardLocales: CardLocale[] = [];
 
     export let previewWarnFileLimit = 10000;
-
     export let previewErrorFileLimit = Infinity;
+
+    export let warnFileLimit = Infinity;
+    export let errorFileLimit = Infinity;
 
     export let rootConfigurable = false;
 
@@ -167,6 +169,8 @@
         getTranslationKey,
         previewWarnFileLimit,
         previewErrorFileLimit,
+        warnFileLimit,
+        errorFileLimit,
         rootConfigurable,
 
         rendererApi() {

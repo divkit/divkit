@@ -42,6 +42,8 @@ const editor = window.editor = DivProEditor.init({
     renderTo: document.getElementById('app') as HTMLElement,
     locale: detectLocale(),
     rootConfigurable: true,
+    warnFileLimit: 100000,
+    errorFileLimit: 1000000,
     card: {
         json: JSON.stringify({
             card: {
