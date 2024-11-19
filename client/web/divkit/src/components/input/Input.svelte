@@ -105,6 +105,9 @@
     let maxLength = Infinity;
     let autocapitalization = 'off';
     let enterKeyType: InputEnterKeyType = 'default';
+    let describedBy = '';
+    let mounted = false;
+    let validatorsFirstRun = true;
 
     $: origJson = componentContext.origJson;
 
@@ -125,6 +128,7 @@
         maxLength = Infinity;
         autocapitalization = 'off';
         enterKeyType = 'default';
+        describedBy = '';
     }
 
     $: if (origJson) {
@@ -159,6 +163,7 @@
     $: jsonMaxLength = componentContext.getDerivedFromVars(componentContext.json.max_length);
     $: jsonAutocapitalization = componentContext.getDerivedFromVars(componentContext.json.autocapitalization);
     $: jsonEnterKeyType = componentContext.getDerivedFromVars(componentContext.json.enter_key_type);
+    $: jsonValidators = componentContext.getDerivedFromVars(componentContext.json.validators);
 
     $: if (variable) {
         hasError = false;
@@ -187,10 +192,16 @@
             valueVariable.setValue(val);
         }
         value = contentEditableValue = val;
+        runValidators();
     }
 
     $: if (inputMask && inputMask.rawValue !== $rawValueVariable) {
         runRawValueMask();
+        runValidators();
+    }
+
+    $: if ($jsonValidators && mounted) {
+        runValidators();
     }
 
     $: placeholder = $jsonHintText;
@@ -358,6 +369,7 @@
             if (inputMask) {
                 runValueMask();
             }
+            runValidators();
         }
     }
 
@@ -457,6 +469,74 @@
         }
     }
 
+    function runValidators(): void {
+        const isFirstRun = validatorsFirstRun;
+        validatorsFirstRun = false;
+
+        const validators = componentContext.json.validators;
+        if (!Array.isArray(validators) || !validators.length) {
+            return;
+        }
+
+        const evalledValidators = componentContext.getJsonWithVars(validators);
+        const filtered = evalledValidators.filter(it => (it.type === 'regex' || it.type === 'expression') && it.label_id && it.variable);
+        const describeList: string[] = [];
+
+        filtered.forEach(validator => {
+            const variable = componentContext.getVariable(validator.variable as string);
+            if (!variable) {
+                return;
+            }
+
+            if (variable.getType() !== 'boolean') {
+                if (isFirstRun) {
+                    componentContext.logError(wrapError(new Error('Incorrect variable type for the validator'), {
+                        additional: {
+                            variable: validator.variable
+                        }
+                    }));
+                }
+                return;
+            }
+
+            let isValid = false;
+            if (value === '' && (validator.allow_empty === true || validator.allow_empty === 1)) {
+                isValid = true;
+            } else if (validator.type === 'regex') {
+                if (!validator.pattern || typeof validator.pattern !== 'string') {
+                    return;
+                }
+                try {
+                    const re = new RegExp('^' + validator.pattern + '$');
+                    isValid = re.test(value);
+                } catch (err) {
+                    if (isFirstRun) {
+                        componentContext.logError(wrapError(new Error('Failed to create a regular expression using the validator pattern'), {
+                            additional: {
+                                pattern: validator.pattern
+                            }
+                        }));
+                    }
+                    return;
+                }
+            } else if (validator.type === 'expression') {
+                isValid = validator.condition === true || validator.condition === 1;
+            } else {
+                return;
+            }
+
+            variable.setValue(isValid);
+
+            if (!isValid) {
+                const htmlId = rootCtx.getComponentId(validator.label_id as string);
+                if (htmlId) {
+                    describeList.push(htmlId);
+                }
+            }
+        });
+        describedBy = describeList.join(' ');
+    }
+
     $: if (input && componentContext.json) {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
@@ -476,6 +556,8 @@
     }
 
     onMount(() => {
+        mounted = true;
+
         if (input && inputMask) {
             if ($rawValueVariable) {
                 inputMask.overrideRawValue($rawValueVariable);
@@ -485,6 +567,8 @@
     });
 
     onDestroy(() => {
+        mounted = false;
+
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
             prevId = undefined;
@@ -536,6 +620,7 @@
                         aria-label={description}
                         aria-multiline="true"
                         enterkeyhint={enterKeyType === 'default' ? undefined : enterKeyType}
+                        aria-describedby={describedBy || undefined}
                         style={makeStyle(paddingStl)}
                         bind:innerText={contentEditableValue}
                         on:input={onInput}
@@ -557,6 +642,7 @@
                         aria-label={description}
                         aria-disabled="true"
                         aria-multiline="true"
+                        aria-describedby={describedBy || undefined}
                         style={makeStyle(paddingStl)}
                         bind:innerText={contentEditableValue}
                     >
@@ -572,6 +658,7 @@
                 autocomplete="off"
                 autocapitalize={autocapitalization}
                 aria-label={description}
+                aria-describedby={describedBy || undefined}
                 style={makeStyle(paddingStl)}
                 disabled={!isEnabled}
                 maxlength={maxLength === Infinity ? undefined : maxLength}

@@ -2285,7 +2285,8 @@
       "title": "Regex input validator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
@@ -2309,7 +2310,8 @@
       "title": "Expression input validator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"

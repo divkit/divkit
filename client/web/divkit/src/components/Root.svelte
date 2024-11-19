@@ -55,7 +55,7 @@
     import type { Store, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
-    import { ROOT_CTX, type FocusableMethods, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
+    import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
     import { type LogError, wrapError, type WrappedError } from '../utils/wrapError';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
@@ -454,6 +454,47 @@
                 return acc;
             }, {} as typeof svgFiltersMap);
         }
+    }
+
+    const idPrefix = genId('byid') + '-id-';
+    const nodeGettersById = new Map<string, NodeGetter>();
+    const nodeById = new Map<string, HTMLElement>();
+
+    function fullId(id: string): string {
+        return idPrefix + id;
+    }
+
+    function registerId(id: string, getter: NodeGetter): void {
+        nodeGettersById.set(id, getter);
+    }
+
+    function unregisterId(id: string): void {
+        nodeGettersById.delete(id);
+
+        const full = fullId(id);
+
+        if (nodeById.has(full)) {
+            nodeById.delete(full);
+        }
+    }
+
+    function getComponentId(id: string): string {
+        const node = nodeGettersById.get(id)?.();
+
+        if (node) {
+            const full = fullId(id);
+            const prev = nodeById.get(full);
+
+            if (prev && prev !== node) {
+                prev.removeAttribute('id');
+            }
+            node.setAttribute('id', full);
+            nodeById.set(full, node);
+
+            return full;
+        }
+
+        return '';
     }
 
     async function setState(stateId: string | null): Promise<void> {
@@ -1642,6 +1683,9 @@
         unregisterFocusable,
         addSvgFilter,
         removeSvgFilter,
+        registerId,
+        unregisterId,
+        getComponentId,
         preparePrototypeVariables,
         getStore,
         getCustomization,

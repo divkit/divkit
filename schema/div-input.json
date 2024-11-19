@@ -213,7 +213,8 @@
           "$description": "translations.json#/div_input_validators",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ],
           "items": {
             "$ref": "div-input-validator.json"

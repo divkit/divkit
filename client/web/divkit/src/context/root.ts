@@ -26,6 +26,8 @@ export type ExecAnyActionsFunc = (actions: MaybeMissing<Action[]> | undefined, o
     processUrls?: boolean;
 }) => Promise<void>;
 
+export type NodeGetter = () => HTMLElement | null;
+
 export interface RootCtxValue {
     logStat(type: string, action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     hasTemplate(templateName: string): boolean;
@@ -50,6 +52,9 @@ export interface RootCtxValue {
     unregisterFocusable(id: string): void;
     addSvgFilter(color: string, mode: TintMode): string;
     removeSvgFilter(color: string | undefined, mode: TintMode): void;
+    registerId(id: string, getter: NodeGetter): void;
+    unregisterId(id: string): void;
+    getComponentId(id: string): string;
     preparePrototypeVariables(name: string, data: Record<string, unknown>, index: number): Map<string, Variable>;
     getStore<T>(id: string): Writable<T>;
     getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined;

@@ -33,6 +33,24 @@ export type InputAutocapitalization = 'auto' | 'none' | 'words' | 'sentences' | 
 
 export type InputEnterKeyType = 'default' | 'go' | 'search' | 'send' | 'done';
 
+export interface InputValidatorBase {
+    label_id: string;
+    allow_empty?: BooleanInt;
+    variable: string;
+}
+
+export interface InputValidatorRegex extends InputValidatorBase {
+    type: 'regex';
+    pattern: string;
+}
+
+export interface InputValidatorExpression extends InputValidatorBase {
+    type: 'expression';
+    condition: BooleanInt;
+}
+
+export type InputValidator = InputValidatorRegex | InputValidatorExpression;
+
 export interface DivInputData extends DivBaseData {
     type: 'input';
 
@@ -59,4 +77,5 @@ export interface DivInputData extends DivBaseData {
     select_all_on_focus?: BooleanInt;
     is_enabled?: BooleanInt;
     autocapitalization?: InputAutocapitalization;
+    validators?: InputValidator[];
 }

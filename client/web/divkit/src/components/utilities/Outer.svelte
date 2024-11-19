@@ -982,6 +982,7 @@
 
         const id = componentContext.id;
         if (id) {
+            rootCtx.registerId(id, () => currentNode);
             stateCtx.registerChild(id);
         }
 
@@ -1007,6 +1008,7 @@
         registred = {
             destroy() {
                 if (id) {
+                    rootCtx.unregisterId(id);
                     stateCtx.unregisterChild(id);
                 }
                 if (visAction) {
