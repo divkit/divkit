@@ -7,11 +7,6 @@ final class BlockTooltipTests: XCTestCase {
   private let targetRect = CGRect(x: 50.0, y: 50.0, width: 200.0, height: 50.0)
   private let boundsRect = CGRect(x: 0.0, y: 0.0, width: 300.0, height: 500.0)
 
-  private lazy var block: EmptyBlock = .init(
-    widthTrait: .fixed(tooltipSize.width),
-    heightTrait: .fixed(tooltipSize.height)
-  )
-
   private var testCaseOffsets: [CGPoint] {
     [
       CGPoint(x: 0.0, y: 0.0), // fits
@@ -22,30 +17,79 @@ final class BlockTooltipTests: XCTestCase {
     ]
   }
 
-  private func makeTooltip(offset: CGPoint) -> BlockTooltip {
-    BlockTooltip(
-      id: "tooltip",
-      block: block,
-      duration: 0,
-      offset: offset,
-      position: .center
-    )
-  }
-
   func test_TooltipThatFitsCalculation() {
     for (index, offset) in testCaseOffsets.enumerated() {
-      let tooltip = makeTooltip(offset: offset)
+      let tooltip = makeTooltip(
+        offset: offset,
+        block: EmptyBlock(
+          widthTrait: .fixed(tooltipSize.width),
+          heightTrait: .fixed(tooltipSize.height)
+        )
+      )
 
       let resultRect = tooltip.calculateFrame(
         targeting: targetRect,
         constrainedBy: boundsRect
       )
 
-      XCTAssertEqual(
-        resultRect.intersection(boundsRect),
-        resultRect,
+      XCTAssertTrue(
+        resultRect.isInside(boundsRect),
         "The tooltip with offset \(index) doesn't fit on the screen"
       )
     }
   }
+
+  func test_TooltipWindowClose() {
+    let tooltipView = TooltipContainerView(
+      tooltipView: TestView(),
+      tooltipID: "Tooltip",
+      handleAction: { _ in },
+      onCloseAction: {}
+    )
+
+    let mainView = UIView()
+    mainView.addSubview(tooltipView)
+
+    tooltipView.bounds = CGRect(
+      x: 0.0, y: 0.0,
+      width: 20.0, height: 20.0
+    )
+    tooltipView.forceLayout()
+    XCTAssertEqual(tooltipView.superview, mainView)
+
+    tooltipView.bounds = CGRect(
+      x: 0.0, y: 0.0,
+      width: 100.0, height: 100.0
+    )
+    tooltipView.forceLayout()
+
+    let predicate = NSPredicate { _, _ in
+      tooltipView.superview == nil
+    }
+
+    let expectSuperviewChange = expectation(for: predicate, evaluatedWith: nil)
+    wait(for: [expectSuperviewChange], timeout: 2)
+  }
+}
+
+extension CGRect {
+  fileprivate func isInside(_ boundsRect: CGRect) -> Bool {
+    intersection(boundsRect) == self
+  }
+}
+
+fileprivate func makeTooltip(offset: CGPoint, block: Block) -> BlockTooltip {
+  BlockTooltip(
+    id: "tooltip",
+    block: block,
+    duration: 0,
+    offset: offset,
+    position: .center
+  )
+}
+
+fileprivate class TestView: UIView, BlockViewProtocol {
+  var effectiveBackgroundColor: UIColor?
+
+  func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
 }
