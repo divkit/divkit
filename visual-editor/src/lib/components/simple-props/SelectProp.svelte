@@ -12,6 +12,7 @@
     export let processedJson: unknown | undefined = undefined;
     export let parentProcessedJson: unknown | undefined = undefined;
     export let hasEmpty = true;
+    export let required = false;
     export let options: {
         rawName?: string;
         name?: string;
@@ -48,6 +49,7 @@
     on:change={onChange}
     theme="normal"
     size="medium"
+    {required}
     items={[hasEmpty && {
         value: '',
         text: ''

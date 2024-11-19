@@ -1206,7 +1206,7 @@
                     };
                     if (isConnected) {
                         list.push(errorObj);
-                    } else {
+                    } else if (event.error.level !== 'warn') {
                         list = [errorObj];
                     }
                     if (isUpdating) {

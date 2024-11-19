@@ -159,13 +159,19 @@ export interface SplitProperty {
 
 export interface VariableNameProperty extends BaseProperty {
     type: 'variable-name';
+    required?: boolean;
+}
+
+export interface SelectOptionsProperty extends BaseProperty {
+    type: 'select-options';
 }
 
 export type ComponentProperty = RadioProperty | IntegerProperty | BooleanProperty | SelectProperty |
     PercentProperty | RotationProperty | StringProperty |
     ColorProperty | FileProperty | GroupProperty | SplitProperty | AlignmentProperty |
     MarginsPaddingsProperty | Background2Property | TextAlignProperty | TextStylesProperty |
-    Actions2Property | VideoSourcesProperty | NumberProperty | VariableNameProperty;
+    Actions2Property | VideoSourcesProperty | NumberProperty | VariableNameProperty |
+    SelectOptionsProperty;
 
 export type SiblingComponentProperty = ComponentProperty & {
     related?: {
@@ -700,7 +706,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
         list: [{
             name: 'props.text_variable',
             prop: 'text_variable',
-            type: 'variable-name'
+            type: 'variable-name',
+            required: true
         }, {
             name: 'props.keyboard_type',
             prop: 'keyboard_type',
@@ -735,6 +742,56 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             min: 0,
             max: 99999,
             enableSources: true
+        }, {
+            type: 'split',
+            list: [{
+                name: 'props.font_size',
+                prop: 'font_size',
+                type: 'integer',
+                min: 1,
+                max: 1000,
+                enableSources: true
+            }, {
+                name: 'props.line_height',
+                prop: 'line_height',
+                type: 'integer',
+                min: 0,
+                max: 1000,
+                enableSources: true
+            }]
+        }, {
+            name: 'props.text_color',
+            prop: 'text_color',
+            type: 'color',
+            enableSources: true
+        }, {
+            name: 'props.hint_text',
+            prop: 'hint_text',
+            type: 'string',
+            enableSources: true
+        }]
+    }],
+    select: [...BASE_COMPONENT_PROPS, {
+        type: 'group',
+        title: 'a11yProps.title',
+        list: [{
+            name: 'props.a11y_description',
+            prop: 'accessibility.description',
+            type: 'string',
+            enableSources: true
+        }]
+    }, {
+        type: 'group',
+        title: 'selectProps.title',
+        list: [{
+            name: 'props.select_options',
+            prop: 'options',
+            type: 'select-options'
+        }, {
+            name: 'props.text_variable',
+            prop: 'value_variable',
+            type: 'variable-name',
+            required: true
         }, {
             type: 'split',
             list: [{

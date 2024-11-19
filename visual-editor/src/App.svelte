@@ -24,6 +24,7 @@
     import { loadFileAsBase64 } from './lib/utils/loadFileAsBase64';
     import VideoSourcesDialog from './lib/components/prop-dialog/VideoSourcesDialog.svelte';
     import type { State } from './lib/data/state';
+    import SelectOptionsDialog from './lib/components/prop-dialog/SelectOptionsDialog.svelte';
 
     export let state: State;
 
@@ -140,6 +141,7 @@
     let tanker2Dialog: Tanker2Dialog;
     let textAlign2Dialog: TextAlign2Dialog;
     let videoSourcesDialog: VideoSourcesDialog;
+    let selectOptionsDialog: SelectOptionsDialog;
 
     setContext<LanguageContext>(LANGUAGE_CTX, {
         lang,
@@ -307,6 +309,17 @@
                 }
             };
         },
+
+        selectOptionsDialog() {
+            return {
+                show(props) {
+                    selectOptionsDialog.show(props);
+                },
+                hide() {
+                    selectOptionsDialog.hide();
+                }
+            };
+        },
     });
 
     $: components = layout.map(column => {
@@ -371,6 +384,7 @@
     <Expression2Dialog bind:this={expression2Dialog} />
     <InplaceEditorDialog bind:this={inplaceEditor} />
     <VideoSourcesDialog bind:this={videoSourcesDialog} />
+    <SelectOptionsDialog bind:this={selectOptionsDialog} />
 
     <CustomTooltip owner={currentTooltipOwner} />
 </div>

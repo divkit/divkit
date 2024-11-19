@@ -32,6 +32,7 @@
     let internalValue: string | number = 0;
     let elem: HTMLElement;
     let subtypeError = false;
+    let requiredError = false;
     let isFocused = false;
     let currentSize: number | undefined = undefined;
     let sizeLabelWidth = 0;
@@ -56,6 +57,8 @@
         }
 
         loadFileSize();
+
+        requiredError = !internalValue && required;
     }
 
     $: updateInternalValue(subtype, value, defaultValue);
@@ -106,6 +109,8 @@
         }
 
         loadFileSize();
+
+        requiredError = !value && required;
 
         dispatch('change', {
             value
@@ -177,7 +182,7 @@
     class:text_inline-label={Boolean(inlineLabel)}
     class:text_button={hasButton}
     class:text_disabled={disabled}
-    class:text_error={Boolean(error || subtypeError)}
+    class:text_error={Boolean(error || subtypeError || requiredError)}
     title={error}
     aria-label={title}
     data-custom-tooltip={title}

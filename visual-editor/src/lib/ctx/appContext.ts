@@ -4,6 +4,7 @@ import type { State } from '../data/state';
 import type { TreeLeaf } from './tree';
 import type { Background } from '../data/background';
 import type { VideoSource } from '../utils/video';
+import type { SelectOption } from '../utils/select';
 
 export const APP_CTX = Symbol('app');
 
@@ -116,6 +117,13 @@ export interface VideoSourceShowProps {
     callback(val: VideoSource): void;
 }
 
+export interface SelectOptionsShowProps {
+    value: SelectOption;
+    target: HTMLElement;
+    readOnly?: boolean;
+    callback(val: SelectOption): void;
+}
+
 export interface SelectedElemProps {
     left: number;
     top: number;
@@ -205,6 +213,11 @@ export interface VideoSource2DialogApi {
     hide(): void;
 }
 
+export interface SelectOptionsDialogApi {
+    show(props: SelectOptionsShowProps): void;
+    hide(): void;
+}
+
 export interface AppContext {
     state: State;
     uploadFile(file: File): Promise<string>;
@@ -241,4 +254,5 @@ export interface AppContext {
     tanker2Dialog: () => Tanker2DialogApi;
     textAlign2Dialog: () => TextAlign2DialogApi;
     videoSource2Dialog: () => VideoSource2DialogApi;
+    selectOptionsDialog: () => SelectOptionsDialogApi;
 }

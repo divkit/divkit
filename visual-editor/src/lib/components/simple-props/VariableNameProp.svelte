@@ -1,11 +1,11 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import type { ComponentProperty } from '../../data/componentProps';
+    import type { VariableNameProperty } from '../../data/componentProps';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import SelectProp from './SelectProp.svelte';
 
     export let value: string;
-    export let item: ComponentProperty;
+    export let item: VariableNameProperty;
     export let processedJson: unknown | undefined = undefined;
     export let parentProcessedJson: unknown | undefined = undefined;
 
@@ -26,5 +26,6 @@
     {processedJson}
     {parentProcessedJson}
     {options}
+    required={item.required}
     on:change
 />

@@ -16,6 +16,7 @@
     import Actions2Prop from './Actions2Prop.svelte';
     import VideoSourcesProp from './VideoSourcesProp.svelte';
     import VariableNameProp from './VariableNameProp.svelte';
+  import SelectOptionsProp from './SelectOptionsProp.svelte';
 
     export let item: ComponentProperty;
     export let value;
@@ -162,6 +163,12 @@
         {value}
         {processedJson}
         {parentProcessedJson}
+        on:change
+    />
+{:else if item.type === 'select-options'}
+    <SelectOptionsProp
+        {item}
+        {value}
         on:change
     />
 {/if}

@@ -35,7 +35,8 @@
         item.type === 'string' && item.enableTanker ||
         item.type === 'video_sources' ||
         item.type === 'alignment' ||
-        item.type === 'margins-paddings'
+        item.type === 'margins-paddings' ||
+        item.type === 'select-options'
     );
 
     $: hasLabel = 'name' in item && item.name || 'rawName' in item && item.rawName;

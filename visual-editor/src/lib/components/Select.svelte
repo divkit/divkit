@@ -22,11 +22,13 @@
     export let disabled = false;
     export let mix = '';
     export let title = '';
+    export let required = false;
 
     const id = 'select' + Math.random();
 
     $: text = items.find(item => item.value === value)?.text || value || '';
     $: icon = items.find(item => item.value === value)?.icon;
+    $: requiredError = required && Boolean(!items.find(item => item.value === value)?.value);
 
     const dispatch = createEventDispatcher();
 
@@ -147,6 +149,7 @@
     bind:this={node}
     class="select select_theme_{theme} select_size_{size} {mix}"
     class:select_disabled={disabled}
+    class:select_error={requiredError}
 >
     <div
         bind:this={control}
@@ -264,6 +267,10 @@
         border-radius: 6px;
         border: 1px solid var(--fill-transparent-3);
         transition: border-color .15s ease-in-out;
+    }
+
+    .select_theme_normal.select_error .select__select {
+        border-color: var(--accent-red);
     }
 
     .select_theme_normal .select__select_icon {
