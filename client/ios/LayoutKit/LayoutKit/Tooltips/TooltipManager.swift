@@ -74,7 +74,7 @@ public class DefaultTooltipManager: TooltipManager {
   private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
-  private var tooltipWindow: UIWindow?
+  private(set) var tooltipWindow: UIWindow?
   private var previousOrientation = UIDevice.current.orientation
 
   public init(
@@ -99,7 +99,7 @@ public class DefaultTooltipManager: TooltipManager {
 
     let windowBounds = tooltipWindow.bounds.inset(by: tooltipWindow.safeAreaInsets)
     guard !showingTooltips.keys.contains(info.id),
-          let tooltip = existingAnchorViews.compactMap({ 
+          let tooltip = existingAnchorViews.compactMap({
             $0?.makeTooltip(id: info.id, in: windowBounds)
           }).first
     else { return }
@@ -115,7 +115,8 @@ public class DefaultTooltipManager: TooltipManager {
     )
     // Passing the statusBarStyle control to `rootViewController` of the main window
     let vc = ProxyViewController(
-      viewController: UIApplication.shared.delegate?.window??.rootViewController ?? UIViewController()
+      viewController: UIApplication.shared.delegate?.window??
+        .rootViewController ?? UIViewController()
     )
     vc.view = view
     // Window won't rotate if `rootViewController` is not set
@@ -159,7 +160,7 @@ public class DefaultTooltipManager: TooltipManager {
     )
   }
 
-  @objc func orientationDidChange(_ notification: Notification) {
+  @objc func orientationDidChange(_: Notification) {
     let orientation = UIDevice.current.orientation
     guard orientation != previousOrientation, !orientation.isFlat else { return }
     if !(orientation.isPortrait && previousOrientation.isPortrait) {
@@ -181,18 +182,25 @@ public class DefaultTooltipManager: TooltipManager {
 }
 
 extension TooltipAnchorView {
-  fileprivate func makeTooltip(id: String, in constraint: CGRect) -> DefaultTooltipManager.Tooltip? {
+  fileprivate func makeTooltip(
+    id: String,
+    in constraint: CGRect
+  ) -> DefaultTooltipManager.Tooltip? {
     tooltips
       .first { $0.id == id }
       .flatMap {
         let tooltip = $0
+        let targetRect = window != nil ?
+          convert(bounds, to: nil) :
+          frame
+
         return DefaultTooltipManager.Tooltip(
           id: tooltip.id,
           duration: tooltip.duration,
           view: {
             let tooltipView = tooltip.tooltipViewFactory?.value ?? tooltip.block.makeBlockView()
             tooltipView.frame = tooltip.calculateFrame(
-              targeting: convert(bounds, to: nil),
+              targeting: targetRect,
               constrainedBy: constraint
             )
             return tooltipView
@@ -210,10 +218,11 @@ private final class ProxyViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   override var preferredStatusBarStyle: UIStatusBarStyle {
     viewController.preferredStatusBarStyle
   }
