@@ -1,3 +1,34 @@
+## 30.28.0
+
+# Android Client:
+* Fix gesture extension. Now extension works at regression test (note that vertical swipes are intercepted by regression container).
+* Added support for `clip_to_bounds` property in `div-state`.
+* Fixed `placeholder_color` subscription for `DivImage`.
+* Fixed animator direction when `reverse` value was not taken into account.
+* Fixed crash in `indicator` after rebind with new item count.
+* Fixed string template tokenizaton.
+* Supported `applyPatch()` for `DivData`.
+* Supported `div-switch` element.
+* Supported `enter_key_type` and `enter_key_actions` properties for `div-input`.
+
+# iOS Client:
+* Add variables to the request body in `DivNetworkSubmitter`.
+* Fixed inserting in the middle of the single `div-input`.
+* The snapshot test image generation has been updated to allow additional DivViews to be displayed.
+
+# Web Client:
+* Added support for the `default_item` property in `pager`.
+* Added support for the `enter_key_actions` property in the `input` component.
+* Added support for the `validators` property in `input` component.
+* Added support for the property `enter_key_type` in `input`.
+* Added support of variable `animators`.
+* Changed the size logic of the `match_parent` tooltips to calculate the size of the window instead of the parent element (to align with the logic of Android).
+* Fixed a bug with tracking changes to objects in methods. Also fixed an issue with `walk` api.
+* Fixed a rare markup issue with the `tab_title_delimiter` in `tabs` component.
+* In the `video` component, `aspect` is now more important than `height`.
+* Removed unintended support for numeric values (without expressions) inside the `text` property for the `text` component. This is done to align behavior across platforms.
+
+
 ## 30.27.0
 
 # Android Client:
