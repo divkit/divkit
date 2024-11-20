@@ -2311,6 +2311,10 @@
     "en": "Image height.",
     "ru": "Высота изображения."
   },
+  "div_text_image_indexing_direction": {
+    "en": "Defines direction in `start` parameter:\n`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.\n`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.",
+    "ru": "Определяет направление работы параметра `start`:\n`normal`: стандартная индексация строки ([0, 1, 2, ..., N]). Используйте, если необходимо вставить изображение по индексу относительно начала строки.\n`reversed`: индексация строки \"с конца\" ([N, ..., 2, 1, 0]). Используйте, если необходимо вставить изображение по индексу относительно конца строки."
+  },
   "div_text_image_start": {
     "en": "A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.",
     "ru": "Символ, перед которым нужно вставить изображение. Чтобы вставить изображение в конец текста, укажите номер последнего символа плюс один."
