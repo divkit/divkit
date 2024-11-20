@@ -136,8 +136,9 @@ internal class DivPagerBinder @Inject constructor(
             val id = div.id ?: div.hashCode().toString()
             val pagerState = state.getBlockState(id) as PagerState?
             view.changePageCallbackForState = UpdateStateChangePageCallback(id, state)
-            view.currentItem = pagerState?.currentPageIndex
-                ?: adapter.getPosition(div.defaultItem.evaluate(resolver).toIntSafely())
+            view.currentItem = pagerState?.currentPageIndex?.takeIf {
+                it < adapter.getRealPosition(adapter.itemsToShow.size)
+            } ?: adapter.getPosition(div.defaultItem.evaluate(resolver).toIntSafely())
         }
 
         view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->
