@@ -1,3 +1,17 @@
+## 30.28.0 (November 25, 2024)
+
+* Added support for the `default_item` property in `pager`.
+* Added support for the `enter_key_actions` property in the `input` component.
+* Added support for the `validators` property in `input` component.
+* Added support for the property `enter_key_type` in `input`.
+* Added support of variable `animators`.
+* Changed the size logic of the `match_parent` tooltips to calculate the size of the window instead of the parent element (to align with the logic of Android).
+* Fixed a bug with tracking changes to objects in methods. Also fixed an issue with `walk` api.
+* Fixed a rare markup issue with the `tab_title_delimiter` in `tabs` component.
+* In the `video` component, `aspect` is now more important than `height`.
+* Removed unintended support for numeric values (without expressions) inside the `text` property for the `text` component. This is done to align behavior across platforms.
+
+
 ## 30.26.0 (November 11, 2024)
 
 * Incorrect caching of method calls has been fixed.
