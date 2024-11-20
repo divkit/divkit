@@ -1,5 +1,8 @@
 ## 30.26.0
 
+# Android Client:
+* Fixed crash in `indicator` after rebind with new item count.
+
 # Web Client:
 * Incorrect caching of method calls has been fixed.
 
