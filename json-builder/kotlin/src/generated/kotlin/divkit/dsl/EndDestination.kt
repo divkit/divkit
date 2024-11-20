@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Specifies container's end as scroll destination.
+ * Specifies the end of the container as the scrolling end position.
  * 
  * Can be created using the method [endDestination].
  * 

@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Cloud text background. Lines draws a rectangular background with the specified color and rounded corners.
+ * Cloud-style text background. Rows have a rectangular background in the specified color with rounded corners.
  * 
  * Can be created using the method [cloudBackground].
  * 
@@ -52,7 +52,7 @@ data class CloudBackground internal constructor(
          */
         val cornerRadius: Property<Int>?,
         /**
-         * Margins between line bounds and background.
+         * Margins between the row border and background border.
          */
         val paddings: Property<EdgeInsets>?,
     ) {
@@ -70,7 +70,7 @@ data class CloudBackground internal constructor(
 /**
  * @param color Fill color.
  * @param cornerRadius Corner rounding radius.
- * @param paddings Margins between line bounds and background.
+ * @param paddings Margins between the row border and background border.
  */
 @Generated
 fun DivScope.cloudBackground(
@@ -89,7 +89,7 @@ fun DivScope.cloudBackground(
 /**
  * @param color Fill color.
  * @param cornerRadius Corner rounding radius.
- * @param paddings Margins between line bounds and background.
+ * @param paddings Margins between the row border and background border.
  */
 @Generated
 fun DivScope.cloudBackgroundProps(
@@ -106,7 +106,7 @@ fun DivScope.cloudBackgroundProps(
 /**
  * @param color Fill color.
  * @param cornerRadius Corner rounding radius.
- * @param paddings Margins between line bounds and background.
+ * @param paddings Margins between the row border and background border.
  */
 @Generated
 fun TemplateScope.cloudBackgroundRefs(
@@ -123,7 +123,7 @@ fun TemplateScope.cloudBackgroundRefs(
 /**
  * @param color Fill color.
  * @param cornerRadius Corner rounding radius.
- * @param paddings Margins between line bounds and background.
+ * @param paddings Margins between the row border and background border.
  */
 @Generated
 fun CloudBackground.override(
@@ -142,7 +142,7 @@ fun CloudBackground.override(
 /**
  * @param color Fill color.
  * @param cornerRadius Corner rounding radius.
- * @param paddings Margins between line bounds and background.
+ * @param paddings Margins between the row border and background border.
  */
 @Generated
 fun CloudBackground.defer(

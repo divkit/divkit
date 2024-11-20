@@ -141,11 +141,11 @@ data class Input internal constructor(
          */
         val disappearActions: Property<List<DisappearAction>>?,
         /**
-         * Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
+         * Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
          */
         val enterKeyActions: Property<List<Action>>?,
         /**
-         * The type of the `Enter` keyboard button.
+         * 'Enter' key type.
          * Default value: `default`.
          */
         val enterKeyType: Property<EnterKeyType>?,
@@ -422,7 +422,7 @@ data class Input internal constructor(
     sealed interface Autocapitalization
 
     /**
-     * The type of the `Enter` keyboard button.
+     * 'Enter' key type.
      * 
      * Possible values: [default], [go], [search], [send], [done].
      */
@@ -486,8 +486,8 @@ data class Input internal constructor(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -670,8 +670,8 @@ fun DivScope.input(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -852,8 +852,8 @@ fun DivScope.inputProps(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1034,8 +1034,8 @@ fun TemplateScope.inputRefs(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1218,8 +1218,8 @@ fun Input.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1397,7 +1397,7 @@ fun Input.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyType 'Enter' key type.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
@@ -1524,8 +1524,8 @@ fun Input.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1709,8 +1709,8 @@ fun Component<Input>.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1889,7 +1889,7 @@ fun Component<Input>.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param enterKeyType The type of the `Enter` keyboard button.
+ * @param enterKeyType 'Enter' key type.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>

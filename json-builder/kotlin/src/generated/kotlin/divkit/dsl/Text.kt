@@ -327,7 +327,7 @@ data class Text internal constructor(
          */
         val textShadow: Property<Shadow>?,
         /**
-         * Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+         * Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
          * Default value: `false`.
          */
         val tightenWidth: Property<Boolean>?,
@@ -720,7 +720,7 @@ data class Text internal constructor(
              */
             val border: Property<TextRangeBorder>?,
             /**
-             * Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+             * Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
              */
             val end: Property<Int>?,
             /**
@@ -863,7 +863,7 @@ data class Text internal constructor(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1073,7 +1073,7 @@ fun DivScope.text(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1281,7 +1281,7 @@ fun DivScope.textProps(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1489,7 +1489,7 @@ fun TemplateScope.textRefs(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1699,7 +1699,7 @@ fun Text.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1881,7 +1881,7 @@ fun Text.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -2041,7 +2041,7 @@ fun Text.evaluate(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -2252,7 +2252,7 @@ fun Component<Text>.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -2435,7 +2435,7 @@ fun Component<Text>.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
- * @param tightenWidth Set text width to maximal line width, works only with `wrap_content` width with `constrained=true` and `max_size` set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -2893,7 +2893,7 @@ fun Text.Image.asList() = listOf(this)
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2960,7 +2960,7 @@ fun DivScope.textRange(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3025,7 +3025,7 @@ fun DivScope.textRangeProps(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3090,7 +3090,7 @@ fun TemplateScope.textRangeRefs(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3157,7 +3157,7 @@ fun Text.Range.override(
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3221,7 +3221,7 @@ fun Text.Range.defer(
 
 /**
  * @param alignmentVertical Vertical text alignment within the row.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.

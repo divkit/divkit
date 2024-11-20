@@ -42,7 +42,7 @@ data class ActionAnimatorStop internal constructor(
 
     data class Properties internal constructor(
         /**
-         * The identifier of the animator being stopped.
+         * ID of the animator to be stopped.
          */
         val animatorId: Property<String>?,
     ) {
@@ -56,7 +56,7 @@ data class ActionAnimatorStop internal constructor(
 }
 
 /**
- * @param animatorId The identifier of the animator being stopped.
+ * @param animatorId ID of the animator to be stopped.
  */
 @Generated
 fun DivScope.actionAnimatorStop(
@@ -69,7 +69,7 @@ fun DivScope.actionAnimatorStop(
 )
 
 /**
- * @param animatorId The identifier of the animator being stopped.
+ * @param animatorId ID of the animator to be stopped.
  */
 @Generated
 fun DivScope.actionAnimatorStopProps(
@@ -80,7 +80,7 @@ fun DivScope.actionAnimatorStopProps(
 )
 
 /**
- * @param animatorId The identifier of the animator being stopped.
+ * @param animatorId ID of the animator to be stopped.
  */
 @Generated
 fun TemplateScope.actionAnimatorStopRefs(
@@ -91,7 +91,7 @@ fun TemplateScope.actionAnimatorStopRefs(
 )
 
 /**
- * @param animatorId The identifier of the animator being stopped.
+ * @param animatorId ID of the animator to be stopped.
  */
 @Generated
 fun ActionAnimatorStop.override(
@@ -104,7 +104,7 @@ fun ActionAnimatorStop.override(
 )
 
 /**
- * @param animatorId The identifier of the animator being stopped.
+ * @param animatorId ID of the animator to be stopped.
  */
 @Generated
 fun ActionAnimatorStop.defer(

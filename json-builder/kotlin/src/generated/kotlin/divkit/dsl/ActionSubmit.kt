@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Sends variables from the container via a url. The data sending configuration can be determined by the host application. By default, variables are passed in body in json format, the request method is POST.
+ * Sends variables from the container by link. Data sending configuration can be defined by the host app. By default, variables are sent as JSON in the request body using the POST method.
  * 
  * Can be created using the method [actionSubmit].
  * 
@@ -45,19 +45,19 @@ data class ActionSubmit internal constructor(
 
     data class Properties internal constructor(
         /**
-         * The identifier of the container that contains variables to submit.
+         * ID of the container with the variables to be sent.
          */
         val containerId: Property<String>?,
         /**
-         * Actions in case of unsuccessful submit.
+         * Actions when sending data is unsuccessful.
          */
         val onFailActions: Property<List<Action>>?,
         /**
-         * Actions in case of successful submit.
+         * Actions when sending data is successful.
          */
         val onSuccessActions: Property<List<Action>>?,
         /**
-         * The HTTP request parameters that are used to configure how data is sent.
+         * HTTP request parameters for configuring the sending of data.
          */
         val request: Property<Request>?,
     ) {
@@ -73,7 +73,7 @@ data class ActionSubmit internal constructor(
     }
 
     /**
-     * The HTTP request parameters that are used to configure how data is sent.
+     * HTTP request parameters for configuring the sending of data.
      * 
      * Can be created using the method [actionSubmitRequest].
      * 
@@ -97,16 +97,16 @@ data class ActionSubmit internal constructor(
 
         data class Properties internal constructor(
             /**
-             * The HTTP request headers.
+             * HTTP request headers.
              */
             val headers: Property<List<Header>>?,
             /**
-             * The HTTP request method.
+             * HTTP request method.
              * Default value: `post`.
              */
             val method: Property<Method>?,
             /**
-             * The url to which data from the container is sent.
+             * Link for sending data from the container.
              */
             val url: Property<Url>?,
         ) {
@@ -121,7 +121,7 @@ data class ActionSubmit internal constructor(
         }
 
         /**
-         * The HTTP request method.
+         * HTTP request method.
          * 
          * Possible values: [get], [post], [put], [patch], [delete], [head], [options].
          */
@@ -167,10 +167,10 @@ data class ActionSubmit internal constructor(
 }
 
 /**
- * @param containerId The identifier of the container that contains variables to submit.
- * @param onFailActions Actions in case of unsuccessful submit.
- * @param onSuccessActions Actions in case of successful submit.
- * @param request The HTTP request parameters that are used to configure how data is sent.
+ * @param containerId ID of the container with the variables to be sent.
+ * @param onFailActions Actions when sending data is unsuccessful.
+ * @param onSuccessActions Actions when sending data is successful.
+ * @param request HTTP request parameters for configuring the sending of data.
  */
 @Generated
 fun DivScope.actionSubmit(
@@ -189,10 +189,10 @@ fun DivScope.actionSubmit(
 )
 
 /**
- * @param containerId The identifier of the container that contains variables to submit.
- * @param onFailActions Actions in case of unsuccessful submit.
- * @param onSuccessActions Actions in case of successful submit.
- * @param request The HTTP request parameters that are used to configure how data is sent.
+ * @param containerId ID of the container with the variables to be sent.
+ * @param onFailActions Actions when sending data is unsuccessful.
+ * @param onSuccessActions Actions when sending data is successful.
+ * @param request HTTP request parameters for configuring the sending of data.
  */
 @Generated
 fun DivScope.actionSubmitProps(
@@ -209,10 +209,10 @@ fun DivScope.actionSubmitProps(
 )
 
 /**
- * @param containerId The identifier of the container that contains variables to submit.
- * @param onFailActions Actions in case of unsuccessful submit.
- * @param onSuccessActions Actions in case of successful submit.
- * @param request The HTTP request parameters that are used to configure how data is sent.
+ * @param containerId ID of the container with the variables to be sent.
+ * @param onFailActions Actions when sending data is unsuccessful.
+ * @param onSuccessActions Actions when sending data is successful.
+ * @param request HTTP request parameters for configuring the sending of data.
  */
 @Generated
 fun TemplateScope.actionSubmitRefs(
@@ -229,10 +229,10 @@ fun TemplateScope.actionSubmitRefs(
 )
 
 /**
- * @param containerId The identifier of the container that contains variables to submit.
- * @param onFailActions Actions in case of unsuccessful submit.
- * @param onSuccessActions Actions in case of successful submit.
- * @param request The HTTP request parameters that are used to configure how data is sent.
+ * @param containerId ID of the container with the variables to be sent.
+ * @param onFailActions Actions when sending data is unsuccessful.
+ * @param onSuccessActions Actions when sending data is successful.
+ * @param request HTTP request parameters for configuring the sending of data.
  */
 @Generated
 fun ActionSubmit.override(
@@ -251,10 +251,10 @@ fun ActionSubmit.override(
 )
 
 /**
- * @param containerId The identifier of the container that contains variables to submit.
- * @param onFailActions Actions in case of unsuccessful submit.
- * @param onSuccessActions Actions in case of successful submit.
- * @param request The HTTP request parameters that are used to configure how data is sent.
+ * @param containerId ID of the container with the variables to be sent.
+ * @param onFailActions Actions when sending data is unsuccessful.
+ * @param onSuccessActions Actions when sending data is successful.
+ * @param request HTTP request parameters for configuring the sending of data.
  */
 @Generated
 fun ActionSubmit.defer(
@@ -273,7 +273,7 @@ fun ActionSubmit.defer(
 )
 
 /**
- * @param containerId The identifier of the container that contains variables to submit.
+ * @param containerId ID of the container with the variables to be sent.
  */
 @Generated
 fun ActionSubmit.evaluate(
@@ -292,9 +292,9 @@ fun ActionSubmit.evaluate(
 fun ActionSubmit.asList() = listOf(this)
 
 /**
- * @param headers The HTTP request headers.
- * @param method The HTTP request method.
- * @param url The url to which data from the container is sent.
+ * @param headers HTTP request headers.
+ * @param method HTTP request method.
+ * @param url Link for sending data from the container.
  */
 @Generated
 fun DivScope.actionSubmitRequest(
@@ -311,9 +311,9 @@ fun DivScope.actionSubmitRequest(
 )
 
 /**
- * @param headers The HTTP request headers.
- * @param method The HTTP request method.
- * @param url The url to which data from the container is sent.
+ * @param headers HTTP request headers.
+ * @param method HTTP request method.
+ * @param url Link for sending data from the container.
  */
 @Generated
 fun DivScope.actionSubmitRequestProps(
@@ -328,9 +328,9 @@ fun DivScope.actionSubmitRequestProps(
 )
 
 /**
- * @param headers The HTTP request headers.
- * @param method The HTTP request method.
- * @param url The url to which data from the container is sent.
+ * @param headers HTTP request headers.
+ * @param method HTTP request method.
+ * @param url Link for sending data from the container.
  */
 @Generated
 fun TemplateScope.actionSubmitRequestRefs(
@@ -345,9 +345,9 @@ fun TemplateScope.actionSubmitRequestRefs(
 )
 
 /**
- * @param headers The HTTP request headers.
- * @param method The HTTP request method.
- * @param url The url to which data from the container is sent.
+ * @param headers HTTP request headers.
+ * @param method HTTP request method.
+ * @param url Link for sending data from the container.
  */
 @Generated
 fun ActionSubmit.Request.override(
@@ -364,9 +364,9 @@ fun ActionSubmit.Request.override(
 )
 
 /**
- * @param headers The HTTP request headers.
- * @param method The HTTP request method.
- * @param url The url to which data from the container is sent.
+ * @param headers HTTP request headers.
+ * @param method HTTP request method.
+ * @param url Link for sending data from the container.
  */
 @Generated
 fun ActionSubmit.Request.defer(
@@ -383,8 +383,8 @@ fun ActionSubmit.Request.defer(
 )
 
 /**
- * @param method The HTTP request method.
- * @param url The url to which data from the container is sent.
+ * @param method HTTP request method.
+ * @param url Link for sending data from the container.
  */
 @Generated
 fun ActionSubmit.Request.evaluate(

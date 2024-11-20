@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * A two-state switch that allows user to toggle a boolean variable. The element has a different appearance depending on the platform. On iOS, the switch size is fixed.
+ * Two-state toggle that allows the user to control a Boolean variable. The element's look-and-feel varies by platform. The toggle has a fixed size in iOS.
  * 
  * Can be created using the method [switch].
  * 
@@ -134,12 +134,12 @@ data class Switch internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Enables or disables the ability to switch an element.
+         * Enables or disables the element's toggle functionality.
          * Default value: `true`.
          */
         val isEnabled: Property<Boolean>?,
         /**
-         * The name of the boolean variable for the switch.
+         * Name of the Boolean variable assigned to the toggle.
          */
         val isOnVariable: Property<String>?,
         /**
@@ -151,7 +151,9 @@ data class Switch internal constructor(
          */
         val margins: Property<EdgeInsets>?,
         /**
-         * The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+         * Color of the toggle in the enabled state. If the color is omitted:
+        : iOS standard system color is used
+        : the color specified in 'Div2Context' on Android is used.
          */
         val onColor: Property<Color>?,
         /**
@@ -279,11 +281,13 @@ data class Switch internal constructor(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param isOnVariable The name of the boolean variable for the switch.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -394,11 +398,13 @@ fun DivScope.switch(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param isOnVariable The name of the boolean variable for the switch.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -507,11 +513,13 @@ fun DivScope.switchProps(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param isOnVariable The name of the boolean variable for the switch.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -620,11 +628,13 @@ fun TemplateScope.switchRefs(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param isOnVariable The name of the boolean variable for the switch.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -735,11 +745,13 @@ fun Switch.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param isOnVariable The name of the boolean variable for the switch.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -840,8 +852,10 @@ fun Switch.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
@@ -913,11 +927,13 @@ fun Switch.evaluate(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param isOnVariable The name of the boolean variable for the switch.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1029,11 +1045,13 @@ fun Component<Switch>.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param isOnVariable The name of the boolean variable for the switch.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1135,8 +1153,10 @@ fun Component<Switch>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param isEnabled Enables or disables the ability to switch an element.
- * @param onColor The color of the switch when it is on. If no color is specified, the default system color is used on iOS, and the color specified in `Div2Context` is used on Android.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in 'Div2Context' on Android is used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.

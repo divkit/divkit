@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Temporarily saves variable to the persistent storage.
+ * Temporarily saves the variable in storage.
  * 
  * Can be created using the method [actionSetStoredValue].
  * 
@@ -44,15 +44,15 @@ data class ActionSetStoredValue internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Storing time in seconds.
+         * Duration of storage in seconds.
          */
         val lifetime: Property<Int>?,
         /**
-         * Nave of stored variable.
+         * Name of the saved variable.
          */
         val name: Property<String>?,
         /**
-         * Value to be stored.
+         * Saved value.
          */
         val value: Property<TypedValue>?,
     ) {
@@ -68,9 +68,9 @@ data class ActionSetStoredValue internal constructor(
 }
 
 /**
- * @param lifetime Storing time in seconds.
- * @param name Nave of stored variable.
- * @param value Value to be stored.
+ * @param lifetime Duration of storage in seconds.
+ * @param name Name of the saved variable.
+ * @param value Saved value.
  */
 @Generated
 fun DivScope.actionSetStoredValue(
@@ -87,9 +87,9 @@ fun DivScope.actionSetStoredValue(
 )
 
 /**
- * @param lifetime Storing time in seconds.
- * @param name Nave of stored variable.
- * @param value Value to be stored.
+ * @param lifetime Duration of storage in seconds.
+ * @param name Name of the saved variable.
+ * @param value Saved value.
  */
 @Generated
 fun DivScope.actionSetStoredValueProps(
@@ -104,9 +104,9 @@ fun DivScope.actionSetStoredValueProps(
 )
 
 /**
- * @param lifetime Storing time in seconds.
- * @param name Nave of stored variable.
- * @param value Value to be stored.
+ * @param lifetime Duration of storage in seconds.
+ * @param name Name of the saved variable.
+ * @param value Saved value.
  */
 @Generated
 fun TemplateScope.actionSetStoredValueRefs(
@@ -121,9 +121,9 @@ fun TemplateScope.actionSetStoredValueRefs(
 )
 
 /**
- * @param lifetime Storing time in seconds.
- * @param name Nave of stored variable.
- * @param value Value to be stored.
+ * @param lifetime Duration of storage in seconds.
+ * @param name Name of the saved variable.
+ * @param value Saved value.
  */
 @Generated
 fun ActionSetStoredValue.override(
@@ -140,9 +140,9 @@ fun ActionSetStoredValue.override(
 )
 
 /**
- * @param lifetime Storing time in seconds.
- * @param name Nave of stored variable.
- * @param value Value to be stored.
+ * @param lifetime Duration of storage in seconds.
+ * @param name Name of the saved variable.
+ * @param value Saved value.
  */
 @Generated
 fun ActionSetStoredValue.defer(
@@ -159,8 +159,8 @@ fun ActionSetStoredValue.defer(
 )
 
 /**
- * @param lifetime Storing time in seconds.
- * @param name Nave of stored variable.
+ * @param lifetime Duration of storage in seconds.
+ * @param name Name of the saved variable.
  */
 @Generated
 fun ActionSetStoredValue.evaluate(

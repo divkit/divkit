@@ -43,6 +43,7 @@ data class State internal constructor(
             animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            clipToBounds = additive.clipToBounds ?: properties.clipToBounds,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             defaultStateId = additive.defaultStateId ?: properties.defaultStateId,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
@@ -106,6 +107,11 @@ data class State internal constructor(
          * Element stroke.
          */
         val border: Property<Border>?,
+        /**
+         * Enables the bounding of child elements by the parent's borders.
+         * Default value: `true`.
+         */
+        val clipToBounds: Property<Boolean>?,
         /**
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
@@ -243,6 +249,7 @@ data class State internal constructor(
             result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("clip_to_bounds", clipToBounds)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("default_state_id", defaultStateId)
             result.tryPutProperty("disappear_actions", disappearActions)
@@ -348,6 +355,7 @@ data class State internal constructor(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -389,6 +397,7 @@ fun DivScope.state(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -428,6 +437,7 @@ fun DivScope.state(
         animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
         disappearActions = valueOrNull(disappearActions),
@@ -469,6 +479,7 @@ fun DivScope.state(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -510,6 +521,7 @@ fun DivScope.stateProps(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -548,6 +560,7 @@ fun DivScope.stateProps(
     animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    clipToBounds = valueOrNull(clipToBounds),
     columnSpan = valueOrNull(columnSpan),
     defaultStateId = valueOrNull(defaultStateId),
     disappearActions = valueOrNull(disappearActions),
@@ -588,6 +601,7 @@ fun DivScope.stateProps(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -629,6 +643,7 @@ fun TemplateScope.stateRefs(
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -667,6 +682,7 @@ fun TemplateScope.stateRefs(
     animators = animators,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     defaultStateId = defaultStateId,
     disappearActions = disappearActions,
@@ -707,6 +723,7 @@ fun TemplateScope.stateRefs(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -748,6 +765,7 @@ fun State.override(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -787,6 +805,7 @@ fun State.override(
         animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        clipToBounds = valueOrNull(clipToBounds) ?: properties.clipToBounds,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         defaultStateId = valueOrNull(defaultStateId) ?: properties.defaultStateId,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
@@ -828,6 +847,7 @@ fun State.override(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -869,6 +889,7 @@ fun State.defer(
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -908,6 +929,7 @@ fun State.defer(
         animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
         disappearActions = disappearActions ?: properties.disappearActions,
@@ -945,6 +967,7 @@ fun State.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -958,6 +981,7 @@ fun State.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -973,6 +997,7 @@ fun State.evaluate(
         animators = properties.animators,
         background = properties.background,
         border = properties.border,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
         disappearActions = properties.disappearActions,
@@ -1014,6 +1039,7 @@ fun State.evaluate(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -1055,6 +1081,7 @@ fun Component<State>.override(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -1095,6 +1122,7 @@ fun Component<State>.override(
         animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
         disappearActions = valueOrNull(disappearActions),
@@ -1136,6 +1164,7 @@ fun Component<State>.override(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -1177,6 +1206,7 @@ fun Component<State>.defer(
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -1217,6 +1247,7 @@ fun Component<State>.defer(
         animators = animators,
         background = background,
         border = border,
+        clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
         disappearActions = disappearActions,
@@ -1254,6 +1285,7 @@ fun Component<State>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1267,6 +1299,7 @@ fun Component<State>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -1283,6 +1316,7 @@ fun Component<State>.evaluate(
         animators = null,
         background = null,
         border = null,
+        clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
         disappearActions = null,

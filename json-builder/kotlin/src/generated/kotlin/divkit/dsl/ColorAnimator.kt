@@ -52,7 +52,7 @@ data class ColorAnimator internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+         * Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
          */
         val cancelActions: Property<List<Action>>?,
         /**
@@ -65,7 +65,7 @@ data class ColorAnimator internal constructor(
          */
         val duration: Property<Long>?,
         /**
-         * Actions to be performed after the animator finishes.
+         * Actions when the animation is completed.
          */
         val endActions: Property<List<Action>>?,
         /**
@@ -120,10 +120,10 @@ data class ColorAnimator internal constructor(
 }
 
 /**
- * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param cancelActions Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
  * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions to be performed after the animator finishes.
+ * @param endActions Actions when the animation is completed.
  * @param endValue The value the variable will have when the animation ends.
  * @param id Animator ID.
  * @param interpolator Animated value interpolation function.
@@ -163,10 +163,10 @@ fun DivScope.colorAnimator(
 )
 
 /**
- * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param cancelActions Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
  * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions to be performed after the animator finishes.
+ * @param endActions Actions when the animation is completed.
  * @param endValue The value the variable will have when the animation ends.
  * @param id Animator ID.
  * @param interpolator Animated value interpolation function.
@@ -204,10 +204,10 @@ fun DivScope.colorAnimatorProps(
 )
 
 /**
- * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param cancelActions Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
  * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions to be performed after the animator finishes.
+ * @param endActions Actions when the animation is completed.
  * @param endValue The value the variable will have when the animation ends.
  * @param id Animator ID.
  * @param interpolator Animated value interpolation function.
@@ -245,10 +245,10 @@ fun TemplateScope.colorAnimatorRefs(
 )
 
 /**
- * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param cancelActions Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
  * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions to be performed after the animator finishes.
+ * @param endActions Actions when the animation is completed.
  * @param endValue The value the variable will have when the animation ends.
  * @param id Animator ID.
  * @param interpolator Animated value interpolation function.
@@ -288,10 +288,10 @@ fun ColorAnimator.override(
 )
 
 /**
- * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param cancelActions Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
  * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions to be performed after the animator finishes.
+ * @param endActions Actions when the animation is completed.
  * @param endValue The value the variable will have when the animation ends.
  * @param id Animator ID.
  * @param interpolator Animated value interpolation function.

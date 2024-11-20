@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Specifies element with provided index as scroll destination.
+ * Specifies the element with the given index as the scrolling end position.
  * 
  * Can be created using the method [indexDestination].
  * 
@@ -42,7 +42,7 @@ data class IndexDestination internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Index of contaner's item.
+         * Container element index.
          */
         val value: Property<Int>?,
     ) {
@@ -56,7 +56,7 @@ data class IndexDestination internal constructor(
 }
 
 /**
- * @param value Index of contaner's item.
+ * @param value Container element index.
  */
 @Generated
 fun DivScope.indexDestination(
@@ -69,7 +69,7 @@ fun DivScope.indexDestination(
 )
 
 /**
- * @param value Index of contaner's item.
+ * @param value Container element index.
  */
 @Generated
 fun DivScope.indexDestinationProps(
@@ -80,7 +80,7 @@ fun DivScope.indexDestinationProps(
 )
 
 /**
- * @param value Index of contaner's item.
+ * @param value Container element index.
  */
 @Generated
 fun TemplateScope.indexDestinationRefs(
@@ -91,7 +91,7 @@ fun TemplateScope.indexDestinationRefs(
 )
 
 /**
- * @param value Index of contaner's item.
+ * @param value Container element index.
  */
 @Generated
 fun IndexDestination.override(
@@ -104,7 +104,7 @@ fun IndexDestination.override(
 )
 
 /**
- * @param value Index of contaner's item.
+ * @param value Container element index.
  */
 @Generated
 fun IndexDestination.defer(
@@ -117,7 +117,7 @@ fun IndexDestination.defer(
 )
 
 /**
- * @param value Index of contaner's item.
+ * @param value Container element index.
  */
 @Generated
 fun IndexDestination.evaluate(

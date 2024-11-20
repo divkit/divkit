@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Scrolls scrollable container from current position by `item_count` or by `offset`, if both provided scroll action will be combined, negative numbers associated with backward scroll.
+ * Scrolls the container by 'item_count' or 'offset' starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.
  * 
  * Can be created using the method [actionScrollBy].
  * 
@@ -46,26 +46,26 @@ data class ActionScrollBy internal constructor(
 
     data class Properties internal constructor(
         /**
-         * If `true` (default value) scroll will be animated, else not.
+         * Enables scrolling animation.
          * Default value: `true`.
          */
         val animated: Property<Boolean>?,
         /**
-         * Identifier of the view that is going to be manipulated.
+         * ID of the element where the action should be performed.
          */
         val id: Property<String>?,
         /**
-         * Count of container items to scroll, negative value is associated with backward scroll.
+         * Number of container elements to scroll through. For scrolling back, use negative values.
          * Default value: `0`.
          */
         val itemCount: Property<Int>?,
         /**
-         * Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
+         * Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
          * Default value: `0`.
          */
         val offset: Property<Int>?,
         /**
-         * Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+         * Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
          * Default value: `clamp`.
          */
         val overflow: Property<Overflow>?,
@@ -83,7 +83,7 @@ data class ActionScrollBy internal constructor(
     }
 
     /**
-     * Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+     * Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
      * 
      * Possible values: [clamp], [ring].
      */
@@ -92,11 +92,11 @@ data class ActionScrollBy internal constructor(
 }
 
 /**
- * @param animated If `true` (default value) scroll will be animated, else not.
- * @param id Identifier of the view that is going to be manipulated.
- * @param itemCount Count of container items to scroll, negative value is associated with backward scroll.
- * @param offset Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
- * @param overflow Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+ * @param animated Enables scrolling animation.
+ * @param id ID of the element where the action should be performed.
+ * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
+ * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
+ * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun DivScope.actionScrollBy(
@@ -117,11 +117,11 @@ fun DivScope.actionScrollBy(
 )
 
 /**
- * @param animated If `true` (default value) scroll will be animated, else not.
- * @param id Identifier of the view that is going to be manipulated.
- * @param itemCount Count of container items to scroll, negative value is associated with backward scroll.
- * @param offset Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
- * @param overflow Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+ * @param animated Enables scrolling animation.
+ * @param id ID of the element where the action should be performed.
+ * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
+ * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
+ * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun DivScope.actionScrollByProps(
@@ -140,11 +140,11 @@ fun DivScope.actionScrollByProps(
 )
 
 /**
- * @param animated If `true` (default value) scroll will be animated, else not.
- * @param id Identifier of the view that is going to be manipulated.
- * @param itemCount Count of container items to scroll, negative value is associated with backward scroll.
- * @param offset Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
- * @param overflow Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+ * @param animated Enables scrolling animation.
+ * @param id ID of the element where the action should be performed.
+ * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
+ * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
+ * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun TemplateScope.actionScrollByRefs(
@@ -163,11 +163,11 @@ fun TemplateScope.actionScrollByRefs(
 )
 
 /**
- * @param animated If `true` (default value) scroll will be animated, else not.
- * @param id Identifier of the view that is going to be manipulated.
- * @param itemCount Count of container items to scroll, negative value is associated with backward scroll.
- * @param offset Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
- * @param overflow Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+ * @param animated Enables scrolling animation.
+ * @param id ID of the element where the action should be performed.
+ * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
+ * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
+ * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun ActionScrollBy.override(
@@ -188,11 +188,11 @@ fun ActionScrollBy.override(
 )
 
 /**
- * @param animated If `true` (default value) scroll will be animated, else not.
- * @param id Identifier of the view that is going to be manipulated.
- * @param itemCount Count of container items to scroll, negative value is associated with backward scroll.
- * @param offset Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
- * @param overflow Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+ * @param animated Enables scrolling animation.
+ * @param id ID of the element where the action should be performed.
+ * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
+ * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
+ * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun ActionScrollBy.defer(
@@ -213,11 +213,11 @@ fun ActionScrollBy.defer(
 )
 
 /**
- * @param animated If `true` (default value) scroll will be animated, else not.
- * @param id Identifier of the view that is going to be manipulated.
- * @param itemCount Count of container items to scroll, negative value is associated with backward scroll.
- * @param offset Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
- * @param overflow Specifies how navigation will occur when the boundary elements are reached:<li>`clamp` — Transition will stop at the boundary element (default value);</li><li>`ring` — Transition will be to the beginning or the end depending on the current element.</li>
+ * @param animated Enables scrolling animation.
+ * @param id ID of the element where the action should be performed.
+ * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
+ * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
+ * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun ActionScrollBy.evaluate(
