@@ -3,6 +3,7 @@ package com.yandex.div.core.expression.variables
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.FunctionProviderDecorator
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -10,6 +11,8 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.Evaluator
 import com.yandex.div2.DivData
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -41,8 +44,12 @@ class TwoWayVariableBinderTest {
     }
     private val path = DivStatePath(0)
     private val store = RuntimeStore(mock(), mock(), mock(), mock())
-    private val expressionResolver = ExpressionResolverImpl(mock(), mock(), mock(), mock())
-    private val expressionsRuntime = ExpressionsRuntime(expressionResolver, variableController, mock(), store)
+    private val evaluationContext = EvaluationContext(mock(), mock(), mock<FunctionProviderDecorator>(), mock())
+    private val evaluator = mock<Evaluator> {
+        on { evaluationContext } doReturn evaluationContext
+    }
+    private val expressionResolver = ExpressionResolverImpl(mock(), evaluator, mock(), mock())
+    private val expressionsRuntime = ExpressionsRuntime(expressionResolver, variableController, mock(), mock(), store)
     private val expressionsRuntimeProvider = mock<ExpressionsRuntimeProvider> {
         on { getOrCreate(any(), any(), any()) } doReturn expressionsRuntime
     }

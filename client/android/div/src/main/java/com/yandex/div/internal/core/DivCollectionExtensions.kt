@@ -2,8 +2,7 @@ package com.yandex.div.internal.core
 
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.ExpressionResolverImpl
-import com.yandex.div.core.expression.variables.VariableSource
-import com.yandex.div.data.Variable
+import com.yandex.div.core.expression.variables.ConstantsProvider
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -61,15 +60,11 @@ private fun DivCollectionItemBuilder.getItemResolver(
 ): ExpressionResolver? {
     val resolverImpl = resolver as? ExpressionResolverImpl ?: return resolver
     val validElement = resolverImpl.validateItemBuilderDataElement(dataElement, index) ?: return null
-    val localVariableSource = VariableSource(
-        mapOf(
-            dataElementName to Variable.DictVariable(dataElementName, validElement),
-            INDEX_VARIABLE_NAME to Variable.IntegerVariable(INDEX_VARIABLE_NAME, index.toLong())
-        ),
-        {},
-        mutableListOf()
-    )
-    return resolverImpl + localVariableSource
+    val localDataProvider = ConstantsProvider(mapOf(
+        dataElementName to validElement,
+        INDEX_VARIABLE_NAME to index.toLong()
+    ))
+    return resolverImpl + localDataProvider
 }
 
 private fun Div.copy(id: String? = value().id): Div {

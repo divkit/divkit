@@ -123,19 +123,20 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: MutableList<String>,
         parentRuntime: ExpressionsRuntime?
     ): ExpressionsRuntime? {
-        return if (div.value().variables.isNullOrEmpty() && div.value().variableTriggers.isNullOrEmpty()) {
-            parentRuntime
-        } else {
+        return if (div.needLocalRuntime) {
             val stringPath = path.joinToString("/")
             divView.runtimeStore?.getOrCreateRuntime(
                 path = stringPath,
                 variables = div.value().variables?.toVariables(),
                 triggers = div.value().variableTriggers,
+                functions = div.value().functions,
                 parentRuntime = parentRuntime,
             )?.also { runtime -> runtime.onAttachedToWindow(divView) } ?: run {
                 Assert.fail("ExpressionRuntimeVisitor cannot create runtime for path = $stringPath")
                 null
             }
+        } else {
+            parentRuntime
         }
     }
 

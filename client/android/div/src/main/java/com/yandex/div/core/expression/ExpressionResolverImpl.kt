@@ -2,9 +2,9 @@ package com.yandex.div.core.expression
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
-import com.yandex.div.core.expression.variables.LocalVariableController
+import com.yandex.div.core.expression.variables.ConstantsProvider
+import com.yandex.div.core.expression.variables.VariableAndConstantController
 import com.yandex.div.core.expression.variables.VariableController
-import com.yandex.div.core.expression.variables.VariableSource
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
@@ -40,7 +40,11 @@ internal class ExpressionResolverImpl(
     var suppressMissingVariableException: Boolean = false
 
     init {
-        onCreateCallback.onCreate(this, variableController)
+        onCreateCallback.onCreate(
+            this,
+            variableController,
+            evaluator.evaluationContext.functionProvider as FunctionProviderDecorator
+        )
     }
 
     override fun <R, T : Any> get(
@@ -226,13 +230,13 @@ internal class ExpressionResolverImpl(
         }
     }
 
-    operator fun plus(variableSource: VariableSource): ExpressionResolverImpl {
-        val localVariableController = LocalVariableController(variableController, variableSource)
+    operator fun plus(constants: ConstantsProvider): ExpressionResolverImpl {
+        val variableAndConstantController = VariableAndConstantController(variableController, constants)
         return ExpressionResolverImpl(
-            variableController = localVariableController,
+            variableController = variableAndConstantController,
             evaluator = Evaluator(
                 evaluationContext = EvaluationContext(
-                    variableProvider = localVariableController,
+                    variableProvider = variableAndConstantController,
                     storedValueProvider = evaluator.evaluationContext.storedValueProvider,
                     functionProvider = evaluator.evaluationContext.functionProvider,
                     warningSender = evaluator.evaluationContext.warningSender
@@ -256,6 +260,10 @@ internal class ExpressionResolverImpl(
      * as a new ExpressionRuntime we are using OnCreateCallback.
      */
     internal fun interface OnCreateCallback {
-        fun onCreate(resolver: ExpressionResolverImpl, variableController: VariableController)
+        fun onCreate(
+            resolver: ExpressionResolverImpl,
+            variableController: VariableController,
+            functionProvider: FunctionProviderDecorator
+        )
     }
 }

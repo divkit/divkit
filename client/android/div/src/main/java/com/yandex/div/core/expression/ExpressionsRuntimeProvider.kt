@@ -125,12 +125,13 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             addSource(globalVariableController.variableSource)
         }
 
+        val functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
         val evaluationContext = EvaluationContext(
             variableProvider = variableController,
             storedValueProvider = { storedValueName ->
                 storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
             },
-            functionProvider = GeneratedBuiltinFunctionProvider,
+            functionProvider = functionProvider,
             warningSender = { expressionContext, message ->
                 val rawExpr = expressionContext.evaluable.rawExpr
                 val warning = "Warning occurred while evaluating '$rawExpr': $message"
@@ -142,9 +143,9 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val evaluator = Evaluator(evaluationContext)
 
         val runtimeStore = RuntimeStore(evaluator, errorCollector, logger, divActionBinder)
-        val callback = ExpressionResolverImpl.OnCreateCallback { resolver, variableController ->
+        val callback = ExpressionResolverImpl.OnCreateCallback { resolver, variableController, functionProvider ->
             runtimeStore.putRuntime(
-                runtime = ExpressionsRuntime(resolver, variableController, null, runtimeStore)
+                runtime = ExpressionsRuntime(resolver, variableController, null, functionProvider, runtimeStore)
             )
         }
 
@@ -168,6 +169,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             expressionResolver,
             variableController,
             triggersController,
+            functionProvider,
             runtimeStore,
         ).also { runtimeStore.rootRuntime = it }
     }

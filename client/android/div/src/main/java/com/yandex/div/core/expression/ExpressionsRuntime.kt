@@ -11,6 +11,7 @@ internal class ExpressionsRuntime(
     val expressionResolver: ExpressionResolver,
     val variableController: VariableController,
     val triggersController: TriggersController? = null,
+    val functionProvider: FunctionProviderDecorator,
     val runtimeStore: RuntimeStore,
 ) {
     private val expressionResolverImpl get() = expressionResolver as? ExpressionResolverImpl

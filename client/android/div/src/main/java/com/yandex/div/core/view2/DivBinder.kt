@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.MainThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.local.needLocalRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
@@ -250,17 +251,18 @@ internal class DivBinder @Inject constructor(
     private fun getBindingContext(
         parentContext: BindingContext, div: Div, path: DivStatePath
     ): BindingContext {
-        return if (div.value().variableTriggers.isNullOrEmpty() && div.value().variables.isNullOrEmpty()) {
-                parentContext
-            } else {
+        return if (div.needLocalRuntime) {
                 parentContext.getFor(
                 parentContext.runtimeStore?.getOrCreateRuntime(
                     path = path.fullPath,
                     parentResolver = parentContext.expressionResolver,
                     variables = div.value().variables?.toVariables(),
                     triggers = div.value().variableTriggers,
+                    functions = div.value().functions,
                 )?.expressionResolver ?: parentContext.expressionResolver
             )
+        } else {
+            parentContext
         }
     }
 }

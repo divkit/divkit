@@ -630,12 +630,13 @@ internal fun resolveRuntime(
     resolver: ExpressionResolver,
     parentResolver: ExpressionResolver,
 ) = runtimeStore?.resolveRuntimeWith(
-        path = path,
-        variables = div.variables?.toVariables(),
-        triggers = div.variableTriggers,
-        resolver = resolver,
-        parentResolver = parentResolver,
-    )
+    path = path,
+    variables = div.variables?.toVariables(),
+    triggers = div.variableTriggers,
+    functions = div.functions,
+    resolver = resolver,
+    parentResolver = parentResolver,
+)
 
 internal fun DivBase.getChildPathUnit(index: Int) = id ?: ChildPathUnitCache.getValue(index)
 
