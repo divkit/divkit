@@ -152,7 +152,7 @@
     "ru": "Включает анимацию пролистывания."
   },
   "div_action_scroll_by": {
-    "en": "Scrolls the container by 'item_count' or 'offset' starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.",
+    "en": "Scrolls the container by `item_count` or `offset` starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.",
     "ru": "Пролистывает контейнер со скроллом от текущей позиции на `item_count` или `offset`. Если заданы оба значения, действие будет скомбинированным. Отрицательные значения пролистывают назад."
   },
   "div_action_scroll_by_item_count": {
@@ -160,7 +160,7 @@
     "ru": "Количество элементов контейнера, которые надо пролистать. Отрицательные значения пролистывают назад."
   },
   "div_action_scroll_by_offset": {
-    "en": "Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.",
+    "en": "Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.",
     "ru": "Расстояние для скроллинга, измеряемое в `dp` от текущей позиции. Отрицательные значения пролистывают назад. Применим только в `gallery`."
   },
   "div_action_scroll_destination": {
@@ -180,11 +180,11 @@
     "ru": "Индекс элемента контейнера."
   },
   "div_action_scroll_destination_offset": {
-    "en": "Specifies the position measured in 'dp' from the container start as the scrolling end position. Only applies in 'gallery'.",
+    "en": "Specifies the position measured in `dp` from the container start as the scrolling end position. Only applies in `gallery`.",
     "ru": "Указывает позицию, измеренную в `dp` от начала контейнера, как конечную точку пролистывания. Применим только в `gallery`."
   },
   "div_action_scroll_destination_offset_value": {
-    "en": "Position measured in 'dp'.",
+    "en": "Position measured in `dp`.",
     "ru": "Позиция в `dp`."
   },
   "div_action_scroll_destination_start": {
@@ -196,15 +196,15 @@
     "ru": "Идентификатор элемента, в котором нужно выполнить операцию."
   },
   "div_action_scroll_overflow": {
-    "en": "Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>",
+    "en": "Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>",
     "ru": "Указывает, как будет происходить навигация при достижении граничных элементов:<li>`clamp` — переход остановится на граничном элементе (значение по умолчанию);</li><li>`ring` — произойдет переход в начало или конец в зависимости от текущего элемента.</li>"
   },
   "div_action_scroll_to": {
-    "en": "Scrolls to a position or switches to the container element specified by the 'destination' parameter.",
+    "en": "Scrolls to a position or switches to the container element specified by the `destination` parameter.",
     "ru": "Выполняет скролл к позиции или переключает элемент в контейнере на указанный параметром `destination`."
   },
   "div_action_scroll_to_destination": {
-    "en": "Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>",
+    "en": "Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>",
     "ru": "Указывает конечную точку пролистывания:<li>`index` — пролистывание до элемента с индексом, указанным в `value`;</li><li>`offset` — пролистывание до позиции, измеренной в `dp` и указанной в `value`,  от начала контейнера. Применим только в `gallery`;</li><li>`start` — пролистывание в начало контейнера;</li><li>`end` — пролистывание в конец контейнера.</li>"
   },
   "div_action_set_state": {
@@ -333,7 +333,7 @@
   },
   "div_actionable_hover_end_actions": {
     "en": "Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).",
-    "ru": "Действия, выполняемые при завершении наведения на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
+    "ru": "Действия, выполняемые после наведения на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
   },
   "div_actionable_hover_start_actions": {
     "en": "Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).",
@@ -345,7 +345,7 @@
   },
   "div_actionable_press_end_actions": {
     "en": "Actions performed when an element is released.",
-    "ru": "Действия, выполняемые при завершении нажатия на элемент."
+    "ru": "Действия, выполняемые после нажатия на элемент."
   },
   "div_actionable_press_start_actions": {
     "en": "Actions performed when an element is pressed.",
@@ -2108,7 +2108,7 @@
     "ru": "Название булевой переменной для переключателя."
   },
   "div_switch_on_color": {
-    "en": "Color of the toggle in the enabled state. If the color is omitted:\n: iOS standard system color is used\n: the color specified in 'Div2Context' on Android is used.",
+    "en": "Color of the toggle in the enabled state. If the color is omitted:\n: iOS standard system color is used\n: the color specified in `Div2Context` on Android is used.",
     "ru": "Цвет переключателя во включенном состоянии. Если цвет не указан:\n- на iOS используется стандартный системный цвет;\n- на Android используется цвет, указанный в `Div2Context`."
   },
   "div_switch_short": {
@@ -2444,7 +2444,7 @@
     "ru": "Градиентный цвет текста."
   },
   "div_text_tighten_width": {
-    "en": "Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.",
+    "en": "Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.",
     "ru": "Ограничивать ширину текста максимальной шириной строки. Работает только с шириной `wrap_content`, `constrained=true` и выставленным `max_size`."
   },
   "div_text_truncate": {
