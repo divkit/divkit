@@ -447,6 +447,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     passVisibleBoundsChanged(from: from, to: to)
 
     if model.visibilityParams != nil {
+      if from == .zero, to == .zero { return }
       visibilityActionPerformers?.onVisibleBoundsChanged(to: to, bounds: bounds)
     }
   }
@@ -498,7 +499,7 @@ extension DecoratingView {
       case let .actions(actions):
         actions.forEach { $0.perform(sendingFrom: self) }
       case .contextMenu:
-        break;
+        break
       }
     }
   }
