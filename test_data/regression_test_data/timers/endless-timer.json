@@ -321,9 +321,9 @@
             {
               "type": "value_controller",
               "variable": "@{timer_interval}",
-              "major_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 1000}",
-              "moderate_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 250}",
-              "minor_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 50}",
+              "major_decrement_url": "div-action://set_variable?name=timer_interval&value=@{max(timer_interval - 1000, 50)}",
+              "moderate_decrement_url": "div-action://set_variable?name=timer_interval&value=@{max(timer_interval - 250, 50)}",
+              "minor_decrement_url": "div-action://set_variable?name=timer_interval&value=@{max(timer_interval - 50, 50)}",
               "minor_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 50}",
               "moderate_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 250}",
               "major_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 1000}"

@@ -340,9 +340,9 @@
             {
               "type": "value_controller",
               "variable": "@{timer_duration}",
-              "major_decrement_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration - 5000}",
-              "moderate_decrement_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration - 1000}",
-              "minor_decrement_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration - 100}",
+              "major_decrement_url": "div-action://set_variable?name=timer_duration&value=@{max(timer_duration - 5000, 100)}",
+              "moderate_decrement_url": "div-action://set_variable?name=timer_duration&value=@{max(timer_duration - 1000, 100)}",
+              "minor_decrement_url": "div-action://set_variable?name=timer_duration&value=@{max(timer_duration - 100, 100)}",
               "minor_increment_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration + 100}",
               "moderate_increment_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration + 1000}",
               "major_increment_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration + 5000}"
@@ -350,9 +350,9 @@
             {
               "type": "value_controller",
               "variable": "@{timer_interval}",
-              "major_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 1000}",
-              "moderate_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 250}",
-              "minor_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 50}",
+              "major_decrement_url": "div-action://set_variable?name=timer_interval&value=@{max(timer_interval - 1000, 50)}",
+              "moderate_decrement_url": "div-action://set_variable?name=timer_interval&value=@{max(timer_interval - 250, 50)}",
+              "minor_decrement_url": "div-action://set_variable?name=timer_interval&value=@{max(timer_interval - 50, 50)}",
               "minor_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 50}",
               "moderate_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 250}",
               "major_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 1000}"
