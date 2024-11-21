@@ -25,7 +25,7 @@ extension DivBaseConverter on DivBase {
     );
     final backgrounds = background;
     if (backgrounds != null) {
-      final backgroundWidgets = DivBackgroundConverter.convert(
+      final backgroundWidgets = convertBackgrounds(
         backgrounds,
         viewScale: viewScale,
       );
@@ -59,7 +59,7 @@ extension DivBaseConverter on DivBase {
       viewScale: viewScale,
     );
     if (focusBg != null) {
-      final backgroundWidgets = DivBackgroundConverter.convert(
+      final backgroundWidgets = convertBackgrounds(
         focusBg,
         viewScale: viewScale,
       );
@@ -181,20 +181,14 @@ extension DivBorderConverter on DivBorder {
   }
 }
 
-class DivBackgroundConverter {
-  final List<Widget> backgroundWidgets;
-
-  const DivBackgroundConverter({
-    required this.backgroundWidgets,
-  });
-
-  static List<Widget> convert(
-    List<DivBackground> backgrounds, {
-    required double viewScale,
-  }) {
-    final backgroundWidgets = <Widget>[];
-    // TODO: complicated DivBackground support
-    for (var bg in backgrounds) {
+List<Widget> convertBackgrounds(
+  List<DivBackground> backgrounds, {
+  required double viewScale,
+}) {
+  final backgroundWidgets = <Widget>[];
+  // TODO: complicated DivBackground support
+  for (var bg in backgrounds) {
+    try {
       bg.map(
         divImageBackground: (divImageBackground) {
           final filter = DivFilters.combine(
@@ -322,7 +316,9 @@ class DivBackgroundConverter {
           );
         },
       );
+    } catch (e, st) {
+      logger.warning('Not correct background', error: e, stackTrace: st);
     }
-    return backgroundWidgets;
   }
+  return backgroundWidgets;
 }

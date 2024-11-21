@@ -1,15 +1,4 @@
 PODS:
-  - DivKit (30.14.0):
-    - DivKit_LayoutKit (= 30.14.0)
-    - DivKit_Serialization (= 30.14.0)
-    - VGSL (~> 6.0)
-  - DivKit_LayoutKit (30.14.0):
-    - DivKit_LayoutKitInterface (= 30.14.0)
-    - VGSL (~> 6.0)
-  - DivKit_LayoutKitInterface (30.14.0):
-    - VGSL (~> 6.0)
-  - DivKit_Serialization (30.14.0):
-    - VGSL (~> 6.0)
   - Flutter (1.0.0)
   - FMDB (2.7.12):
     - FMDB/standard (= 2.7.12)
@@ -22,57 +11,30 @@ PODS:
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
-  - VGSL (6.4.0):
-    - VGSLFundamentals (= 6.4.0)
-    - VGSLNetworking (= 6.4.0)
-    - VGSLUI (= 6.4.0)
-  - VGSLFundamentals (6.4.0)
-  - VGSLNetworking (6.4.0):
-    - VGSLFundamentals (= 6.4.0)
-    - VGSLUI (= 6.4.0)
-  - VGSLUI (6.4.0):
-    - VGSLFundamentals (= 6.4.0)
 
 DEPENDENCIES:
-  - DivKit (~> 30.0)
   - Flutter (from `Flutter`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
   trunk:
-    - DivKit
-    - DivKit_LayoutKit
-    - DivKit_LayoutKitInterface
-    - DivKit_Serialization
     - FMDB
-    - VGSL
-    - VGSLFundamentals
-    - VGSLNetworking
-    - VGSLUI
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/ios"
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  DivKit: cc64dacca7e17969ee8807b85f8f13750c2c2513
-  DivKit_LayoutKit: 5ff58184d402a70bf2d7de52e90576115871b5e5
-  DivKit_LayoutKitInterface: 43ba8a2bd5693439e93474875ecefbea8f6fba79
-  DivKit_Serialization: 46290b7e09f53bf398663b145d6caa74b2612281
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   sqflite: f7868cb717a559a515967bb4033af73521c7d3f4
-  VGSL: 14a67feafe2e6203546d4557f9259d8c705fcb83
-  VGSLFundamentals: 9cb06c36cb92a72c77b689a6f5c4802dd18eeb7e
-  VGSLNetworking: 0146afd59633755bb3fab997b3a8450f8dcd5f27
-  VGSLUI: a963363d2aa3421658245d7b8951029f674e5427
 
-PODFILE CHECKSUM: 33f8f678415c6e69ec46d17ad643bfeacaa66957
+PODFILE CHECKSUM: bdb6020bee847baa4ad4ac9429c3786eff42bb51
 
 COCOAPODS: 1.15.2

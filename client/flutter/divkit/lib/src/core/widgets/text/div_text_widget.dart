@@ -13,7 +13,9 @@ class DivTextWidget extends DivMappingWidget<DivText, DivTextModel> {
   });
 
   Future<void> _onTapRanges(
-      BuildContext context, DivTextRangeModel item) async {
+    BuildContext context,
+    DivTextRangeModel item,
+  ) async {
     final divContext = watch<DivContext>(context);
     if (divContext != null) {
       final actions = item.optionModel.actions;

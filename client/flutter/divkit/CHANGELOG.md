@@ -1,4 +1,4 @@
-## 0.6.0-rc.1
+## 0.6.0-rc.2
 
 * Update generated schema
 * Support nullable end in div-ranges and cloud background fallback
@@ -8,6 +8,7 @@
 * Rewrite context initialization mechanism to synchronous
 * Rewrite conversion mechanism, simplify and standardize
 * Rewrite expression analyzer to synchronous
+* Fix unsafe map of backgrounds
 
 ## Migration 0.5.0 → 0.6.0
 * Remove DivKitView property `cacheManager` as unsupported to the proper extent
