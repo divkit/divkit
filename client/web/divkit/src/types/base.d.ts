@@ -7,6 +7,7 @@ import type { Dimension } from './sizes';
 import type { Action, DisappearAction, DivVariable, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
+import type { EvalTypes } from '../expressions/eval';
 
 export interface Accessibility {
     description?: string;
@@ -148,6 +149,18 @@ export interface ColorAnimator extends AnimatorBase {
 
 export type Animator = NumberAnimator | ColorAnimator;
 
+export interface DivFunctionArgument {
+    name: string;
+    type: EvalTypes;
+}
+
+export interface DivFunction {
+    name: string;
+    body: string;
+    return_type: EvalTypes;
+    arguments: DivFunctionArgument[];
+}
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -180,4 +193,5 @@ export interface DivBaseData {
     variables?: DivVariable[];
     variable_triggers?: VariableTrigger[];
     animators?: Animator[];
+    functions?: DivFunction[];
 }

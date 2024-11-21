@@ -33,7 +33,7 @@ function runCase(item: any) {
         }
         return;
     }
-    const res = evalExpression(vars, undefined, ast);
+    const res = evalExpression(vars, undefined, undefined, ast);
     expect(typeof res.result.value).toEqual('bigint');
 }
 

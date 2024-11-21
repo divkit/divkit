@@ -93,7 +93,7 @@ export function evalExpressionWithFullResult(expr: string, opts?: {
             warnings: []
         };
     }
-    return evalExpressionInner(opts?.variables || new Map(), undefined, ast);
+    return evalExpressionInner(opts?.variables || new Map(), undefined, undefined, ast);
 }
 
 export { valToString } from './expressions/utils';

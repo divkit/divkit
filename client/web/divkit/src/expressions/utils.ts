@@ -1,4 +1,4 @@
-import type { EvalContext, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
+import type { EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
 import type { Node, Variable } from './ast';
 import type { VariablesMap } from './eval';
 import { walk } from './walk';

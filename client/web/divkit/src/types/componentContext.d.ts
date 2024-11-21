@@ -7,6 +7,7 @@ import type { Animator, DivBaseData, Tooltip } from './base';
 import type { Store } from '../../typings/store';
 import type { evalExpression } from '../expressions/eval';
 import type { Node } from '../expressions/ast';
+import type { CustomFunctions } from '../expressions/funcs/customFuncs';
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
@@ -16,6 +17,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     origJson?: MaybeMissing<DivBaseData> | undefined;
     templateContext: TemplateContext;
     variables?: Map<string, Variable>;
+    customFunctions?: CustomFunctions;
     isRootState?: boolean;
     fakeElement?: boolean;
     parentContext?: ComponentContext;

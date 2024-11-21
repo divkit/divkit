@@ -46,7 +46,7 @@
         VariableTrigger
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
-    import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
+    import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
@@ -58,6 +58,7 @@
     import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
     import { type LogError, wrapError, type WrappedError } from '../utils/wrapError';
+    import { checkCustomFunction, customFunctionWrap, type CustomFunctions } from '../expressions/funcs/customFuncs';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
     import { ACTION_CTX, type ActionCtxValue } from '../context/action';
     import { STATE_CTX, type StateCtxValue, type StateInterface } from '../context/state';
@@ -234,18 +235,18 @@
 
     const timeouts: number[] = [];
 
-    function mergeVars(
-        variables0: Map<string, Variable>,
-        variables1: Map<string, Variable> | undefined
-    ): Map<string, Variable>;
-    function mergeVars(
-        variables0: Map<string, Variable> | undefined,
-        variables1: Map<string, Variable> | undefined
-    ): Map<string, Variable> | undefined;
-    function mergeVars(
-        variables0: Map<string, Variable> | undefined,
-        variables1: Map<string, Variable> | undefined
-    ): Map<string, Variable> | undefined {
+    function mergeMaps<T>(
+        variables0: Map<string, T>,
+        variables1: Map<string, T> | undefined
+    ): Map<string, T>;
+    function mergeMaps<T>(
+        variables0: Map<string, T> | undefined,
+        variables1: Map<string, T> | undefined
+    ): Map<string, T> | undefined;
+    function mergeMaps<T>(
+        variables0: Map<string, T> | undefined,
+        variables1: Map<string, T> | undefined
+    ): Map<string, T> | undefined {
         if (variables0 && variables1) {
             return new Map([...variables0, ...variables1]);
         } else if (variables0) {
@@ -265,18 +266,19 @@
         logError: LogError,
         jsonProp: T,
         additionalVars?: Map<string, Variable>,
-        keepComplex = false
+        keepComplex = false,
+        customFunctions: CustomFunctions | undefined = undefined
     ): Readable<MaybeMissing<T>> {
         if (!jsonProp) {
             return constStore(jsonProp);
         }
 
-        const vars = mergeVars(variables, additionalVars);
+        const vars = mergeMaps(variables, additionalVars);
 
         const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
-                return constStore(prepared.applyVars(vars));
+                return constStore(prepared.applyVars(vars, customFunctions));
             }
             return constStore(jsonProp);
         }
@@ -284,14 +286,15 @@
             return vars.get(name) || awaitVariableChanges(name);
         }).filter(Truthy);
 
-        return derived(stores, () => prepared.applyVars(vars, keepComplex));
+        return derived(stores, () => prepared.applyVars(vars, customFunctions, keepComplex));
     }
 
     function getJsonWithVars<T>(
         logError: LogError,
         jsonProp: T,
         additionalVars?: Map<string, Variable>,
-        keepComplex = false
+        keepComplex = false,
+        customFunctions: CustomFunctions | undefined = undefined
     ): MaybeMissing<T> {
         const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
 
@@ -299,9 +302,9 @@
             return jsonProp;
         }
 
-        const vars = mergeVars(variables, additionalVars);
+        const vars = mergeMaps(variables, additionalVars);
 
-        return prepared.applyVars(vars, keepComplex);
+        return prepared.applyVars(vars, customFunctions, keepComplex);
     }
 
     function preparePrototypeVariables(
@@ -1255,7 +1258,7 @@
                         componentContext.evalExpression(store, ast, {
                             weekStartDay
                         }) :
-                        evalExpression(variables, store, ast, {
+                        evalExpression(variables, undefined, store, ast, {
                             weekStartDay
                         });
 
@@ -1468,7 +1471,7 @@
 
     function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
-            variables: mergeVars(variables, componentContext.variables),
+            variables: mergeMaps(variables, componentContext.variables),
             processExpressions<T>(t: T) {
                 return getJsonWithVars(
                     logError,
@@ -1519,20 +1522,22 @@
                 return getDerivedFromVars(
                     res.logError,
                     jsonProp,
-                    mergeVars(res.variables, additionalVars),
-                    keepComplex
+                    mergeMaps(res.variables, additionalVars),
+                    keepComplex,
+                    res.customFunctions
                 );
             },
             getJsonWithVars(jsonProp, additionalVars, keepComplex = false) {
                 return getJsonWithVars(
                     res.logError,
                     jsonProp,
-                    mergeVars(res.variables, additionalVars),
-                    keepComplex
+                    mergeMaps(res.variables, additionalVars),
+                    keepComplex,
+                    res.customFunctions
                 );
             },
             evalExpression(store, expr, opts) {
-                return evalExpression(mergeVars(variables, res.variables), store, expr, opts);
+                return evalExpression(mergeMaps(variables, res.variables), res.customFunctions, store, expr, opts);
             },
             produceChildContext(div, opts = {}) {
                 const componentContext = produceComponentContext(res);
@@ -1578,11 +1583,35 @@
                         }
                     });
                 }
-
-                componentContext.variables = mergeVars(
+                componentContext.variables = mergeMaps(
                     res.variables,
-                    mergeVars(localVars, opts.variables)
+                    mergeMaps(localVars, opts.variables)
                 );
+
+                let localCustomFunctions: CustomFunctions | undefined;
+                if (Array.isArray(childProcessedJson.functions)) {
+                    localCustomFunctions = new Map();
+                    childProcessedJson.functions.forEach(desc => {
+                        if (localCustomFunctions) {
+                            try {
+                                checkCustomFunction(desc);
+                            } catch (err: unknown) {
+                                // Only Error thrown here
+                                res.logError(wrapError(err as Error));
+                                return;
+                            }
+                            const fn = desc as DivFunction;
+                            const list = localCustomFunctions.get(fn.name) || [];
+                            list.push(customFunctionWrap(fn));
+                            localCustomFunctions.set(fn.name, list);
+                        }
+                    });
+                }
+                componentContext.customFunctions = mergeMaps(
+                    res.customFunctions,
+                    localCustomFunctions
+                );
+
                 if (Array.isArray(childProcessedJson.animators)) {
                     res.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
                         (acc, item) => {

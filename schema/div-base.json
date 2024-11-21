@@ -223,7 +223,8 @@
       "$description": "translations.json#/div_base_functions",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "variables": {

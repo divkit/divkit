@@ -11,6 +11,7 @@ import { parseColor } from '../utils/correctColor';
 import { MAX_INT32, MIN_INT32 } from './const';
 import { simpleUnescapeString } from './simpleUnescapeString';
 import { cacheGet, cacheSet } from './parserCache';
+import type { CustomFunctions } from './funcs/customFuncs';
 
 class ExpressionBinding {
     private readonly ast: Node;
@@ -27,12 +28,14 @@ class ExpressionBinding {
     apply(
         {
             variables,
+            customFunctions,
             logError,
             store,
             weekStartDay,
             keepComplex
         }: {
             variables: VariablesMap;
+            customFunctions: CustomFunctions | undefined;
             logError: LogError;
             store: Store | undefined;
             weekStartDay: number;
@@ -40,7 +43,7 @@ class ExpressionBinding {
         }
     ): VariableValue | string | undefined {
         try {
-            const res = evalExpression(variables, store, this.ast, {
+            const res = evalExpression(variables, customFunctions, store, this.ast, {
                 weekStartDay
             });
             res.warnings.forEach(logError);
@@ -104,7 +107,7 @@ class VariableBinding {
      * @param variables
      * @param logError
      */
-    apply(variables: VariablesMap, logError: LogError): VariableValue | string | undefined {
+    apply(variables: VariablesMap): VariableValue | string | undefined {
         const varInstance = variables.get(this.variable);
         if (varInstance) {
             return varInstance.getValue();
@@ -196,6 +199,7 @@ function applyVars(
     jsonProp: unknown,
     opts: {
         variables: VariablesMap;
+        customFunctions: CustomFunctions | undefined;
         logError: LogError;
         store: Store | undefined;
         weekStartDay: number;
@@ -212,7 +216,7 @@ function applyVars(
             (!process.env.ENABLE_EXPRESSIONS && process.env.ENABLE_EXPRESSIONS !== undefined) &&
             jsonProp instanceof VariableBinding
         ) {
-            return jsonProp.apply(opts.variables, opts.logError);
+            return jsonProp.apply(opts.variables);
         } else if (Array.isArray(jsonProp)) {
             return jsonProp.map(it => applyVars(it, opts));
         } else if (typeof jsonProp === 'object') {
@@ -226,11 +230,18 @@ function applyVars(
     return jsonProp;
 }
 
-export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | undefined, weekStartDay: number): {
+export interface PreparedExpression<T> {
     vars: string[];
     hasExpression: boolean;
-    applyVars: (variables: VariablesMap, keepComplex?: boolean) => MaybeMissing<T>;
-} {
+    applyVars: (
+        variables: VariablesMap,
+        customFunctions?: CustomFunctions,
+        keepComplex?: boolean
+    ) => MaybeMissing<T>;
+}
+
+export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | undefined, weekStartDay: number):
+    PreparedExpression<T> {
     const result: {
         vars: string[];
         hasExpression: boolean;
@@ -245,9 +256,10 @@ export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | u
     return {
         vars,
         hasExpression: result.hasExpression,
-        applyVars(variables: VariablesMap, keepComplex?: boolean) {
+        applyVars(variables, customFunctions, keepComplex) {
             return applyVars(root, {
                 variables,
+                customFunctions,
                 logError,
                 store,
                 weekStartDay,
