@@ -66,6 +66,11 @@
                         {$l10n('design')}
                     </a>
                 </li>
+                <li class="header__subnav-item">
+                    <a class="header__subnav-link" href="/features">
+                        {$l10n('featureSupport')}
+                    </a>
+                </li>
             </ul>
         </div>
 

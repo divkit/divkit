@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -6,7 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const sveltePreprocess = require('svelte-preprocess');
 const {
     S3_PATH,
-    VERSION = require('../package.json').version
+    VERSION = fs.readFileSync(path.resolve(__dirname, '../../version'))
 } = process.env;
 const isProd = process.env.NODE_ENV === 'production';
 const publicPath = S3_PATH ?
