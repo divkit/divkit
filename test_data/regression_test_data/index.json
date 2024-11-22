@@ -2470,7 +2470,29 @@
         "Tooltips are hidden when tapping into an empty area",
         "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
       ],
-      "file": "tooltips.json"
+      "file": "tooltips/tooltips.json"
+    },
+    {
+      "title": "Tooltip on different positions",
+      "platforms": [
+        "ios"
+      ],
+      "automated": [
+        "ios"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Click on buttons to set different positions of the tooltip",
+        "After that, click the \"tooltip with close button\" button to display the tooltip"
+      ],
+      "expected_results": [
+        "The tooltip is always fully visible on the screen",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "tooltips/tooltip-positions.json"
     },
     {
       "title": "Persistent values storage",

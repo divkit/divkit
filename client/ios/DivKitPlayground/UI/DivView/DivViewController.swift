@@ -11,6 +11,8 @@ open class DivViewController: UIViewController {
   private let scrollView = VisibilityTrackingScrollView()
   private var cancellables = Set<AnyCancellable>()
 
+  private let identifier: String = "baseDivView"
+
   init(
     jsonPublisher: JsonPublisher,
     divKitComponents: DivKitComponents,
@@ -52,6 +54,8 @@ open class DivViewController: UIViewController {
       $0.id != pinchToZoomExtensionHandler.id
     }
     divKitComponents.extensionHandlers.append(pinchToZoomExtensionHandler)
+
+    setTestIdentifier()
   }
 
   public override func viewDidDisappear(_ animated: Bool) {
@@ -72,6 +76,10 @@ open class DivViewController: UIViewController {
         shouldResetPreviousCardData: true
       )
     }
+  }
+
+  private func setTestIdentifier() {
+    divView.accessibilityIdentifier = identifier
   }
 }
 
