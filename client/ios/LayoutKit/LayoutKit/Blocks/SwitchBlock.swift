@@ -4,6 +4,8 @@ import Foundation
 import VGSL
 
 public final class SwitchBlock: Block {
+  public let widthTrait: LayoutTrait
+  public let heightTrait: LayoutTrait
   public let on: Binding<Bool>
   public let enabled: Bool
   public let action: UserInterfaceAction?
@@ -11,12 +13,16 @@ public final class SwitchBlock: Block {
   public let accessibilityElement: AccessibilityElement?
 
   public init(
+    widthTrait: LayoutTrait = .intrinsic,
+    heightTrait: LayoutTrait = .intrinsic,
     on: Bool,
     enabled: Bool,
     action: UserInterfaceAction?,
     onTintColor: Color? = nil,
     accessibilityElement: AccessibilityElement? = nil
   ) {
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
     self.on = Binding(name: "", value: Property(booleanLiteral: on))
     self.enabled = enabled
     self.action = action
@@ -25,12 +31,16 @@ public final class SwitchBlock: Block {
   }
 
   public init(
+    widthTrait: LayoutTrait = .intrinsic,
+    heightTrait: LayoutTrait = .intrinsic,
     on: Binding<Bool>,
     enabled: Bool,
     action: UserInterfaceAction?,
     onTintColor: Color? = nil,
     accessibilityElement: AccessibilityElement? = nil
   ) {
+    self.widthTrait = widthTrait
+    self.heightTrait = heightTrait
     self.on = on
     self.enabled = enabled
     self.action = action
@@ -38,18 +48,32 @@ public final class SwitchBlock: Block {
     self.accessibilityElement = accessibilityElement
   }
 
-  public let isVerticallyResizable = false
-  public let isHorizontallyResizable = false
+  public var isVerticallyResizable: Bool { heightTrait.isResizable }
+  public var isHorizontallyResizable: Bool { widthTrait.isResizable }
 
   public let isVerticallyConstrained = false
   public let isHorizontallyConstrained = false
 
   public var intrinsicContentWidth: CGFloat {
-    uiSwitchSize.width
+    switch widthTrait {
+    case let .fixed(value):
+      value
+    case .intrinsic:
+      uiSwitchSize.width
+    case .weighted:
+      0
+    }
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
-    uiSwitchSize.height
+    switch heightTrait {
+    case let .fixed(value):
+      value
+    case .intrinsic:
+      uiSwitchSize.height
+    case .weighted:
+      0
+    }
   }
 
   public var widthOfHorizontallyNonResizableBlock: CGFloat { uiSwitchSize.width }

@@ -11,6 +11,8 @@ extension DivSwitch: DivBlockModeling {
     return try applyBaseProperties(
       to: {
         SwitchBlock(
+          widthTrait: resolveWidthTrait(context),
+          heightTrait: resolveHeightTrait(context),
           on: switchVariable,
           enabled: resolveIsEnabled(resolver),
           action: nil,

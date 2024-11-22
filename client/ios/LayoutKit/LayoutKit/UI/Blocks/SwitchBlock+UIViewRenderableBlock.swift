@@ -69,6 +69,12 @@ private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
     fatalError("init(coder:) has not been implemented")
   }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    aSwitch.center = bounds.center
+  }
+
   @objc func handleTap() {
     if let action = model.action {
       action.perform(sendingFrom: self)
