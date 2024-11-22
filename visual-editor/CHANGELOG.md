@@ -1,3 +1,11 @@
+## 0.4.4
+
+* Added variable selection for places where applicable
+* Added support for the `select` component
+* Added `scale` for the `lottie` component
+* Updated error logic (now it should write for input and select that there is no variable, instead of missing accessibility->description)
+* Customizable file limits have been added (previously they were for previews). The limits are now displayed directly in the text field.
+
 ## 0.4.3
 
 * The action list field now supports not only `actions`, but also single `action`

@@ -10,7 +10,7 @@
     import loaderImage from '../../../assets/loader.svg?raw';
     import trashIcon from '../../../assets/trash.svg?raw';
     import { loadFileAsBase64 } from '../../utils/loadFileAsBase64';
-  import { getFileSize } from '../../utils/fileSize';
+    import { getFileSize } from '../../utils/fileSize';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { uploadFile, previewWarnFileLimit, previewErrorFileLimit, warnFileLimit, errorFileLimit } = getContext<AppContext>(APP_CTX);
