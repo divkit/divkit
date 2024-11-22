@@ -740,6 +740,7 @@ internal class DivTextBinder @Inject constructor(
         }
         newDiv.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))
+            addSubscription(image.indexingDirection.observe(resolver, callback))
             addSubscription(image.url.observe(resolver, callback))
             addSubscription(image.alignmentVertical.observe(resolver, callback))
             addSubscription(image.tintColor?.observe(resolver, callback))
@@ -1044,7 +1045,7 @@ internal class DivTextBinder @Inject constructor(
         private val context = divView.context
         private val metrics = divView.resources.displayMetrics
         private val sb: SpannableStringBuilder = SpannableStringBuilder(text)
-        private val images = images?.filter { it.start.evaluate(resolver) <= text.length }?.sortedBy { it.start.evaluate(resolver) } ?: emptyList()
+        private val images = images?.filter { it.start.evaluate(resolver) <= text.length }?.sortedBy { it.evaluateStartWithDirection(resolver) } ?: emptyList()
 
         private var additionalCharsBeforeImage: IntArray? = null
 
@@ -1065,7 +1066,7 @@ internal class DivTextBinder @Inject constructor(
             if (textView is DivLineHeightTextView) textView.textRoundedBgHelper?.invalidateSpansCache()
             ranges?.forEach { item -> sb.addTextRange(item) }
             images.reversed().forEach {
-                sb.insert(it.start.evaluate(resolver).toIntSafely(), "#")
+                sb.insert(it.evaluateStartWithDirection(resolver).toIntSafely(), "#")
             }
 
             // You can uncomment the line below for debug purposes.
@@ -1075,7 +1076,7 @@ internal class DivTextBinder @Inject constructor(
                 additionalCharsBeforeImage?.takeIf { index > 0 }?.let { chars ->
                     chars[index] = chars[index - 1]
                 }
-                val rawStart = image.start.evaluate(resolver).toIntSafely()
+                val rawStart = image.evaluateStartWithDirection(resolver).toIntSafely()
                 val actualStart = rawStart + index + additionalCharsBeforeImage.getOrZero(index)
                 val notWhitespaceBefore = actualStart > 0 && !sb[actualStart - 1].isWhitespace()
                 val textBeforeImage = actualStart != prevImageStart + 1 && notWhitespaceBefore
@@ -1091,7 +1092,7 @@ internal class DivTextBinder @Inject constructor(
             images.forEachIndexed { index, image ->
                 val width = image.width.toPx(metrics, resolver)
                 val height = image.height.toPx(metrics, resolver)
-                val start = image.start.evaluate(resolver).toIntSafely() + index +
+                val start = image.evaluateStartWithDirection(resolver).toIntSafely() + index +
                         additionalCharsBeforeImage.getOrZero(index)
                 val alignment = image.alignmentVertical.evaluate(resolver).toTextVerticalAlignment()
                 val span = ImagePlaceholderSpan(width, height, lineHeight.unitToPx(metrics, fontSizeUnit), alignment)
@@ -1106,13 +1107,20 @@ internal class DivTextBinder @Inject constructor(
             textObserver?.invoke(sb)
 
             images.forEachIndexed { index, image ->
-
                 val reference = imageLoader.loadImage(image.url.evaluate(resolver).toString(), ImageCallback(index))
                 divView.addLoadReference(reference, textView)
             }
         }
 
         private fun IntArray?.getOrZero(index: Int) = this?.get(index) ?: 0
+
+        private fun DivText.Image.evaluateStartWithDirection(resolver: ExpressionResolver): Long {
+            val startIndex = start.evaluate(resolver)
+            return when(indexingDirection.evaluate(resolver)) {
+                DivText.Image.IndexingDirection.NORMAL -> startIndex
+                DivText.Image.IndexingDirection.REVERSED -> text.length - startIndex
+            }
+        }
 
         private fun SpannableStringBuilder.addTextRange(range: DivText.Range) {
             val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
@@ -1249,13 +1257,13 @@ internal class DivTextBinder @Inject constructor(
             return textRoundedBgHelper!!.hasSameSpan(sb, backgroundSpan, start, end)
         }
 
-        private fun SpannableStringBuilder.makeImageSpan(
+        private fun makeImageSpan(
             range: DivText.Image,
             bitmap: Bitmap,
             lineHeight: Int
         ): BitmapImageSpan {
             val imageHeight = range.height.toPx(metrics, resolver)
-            val start = range.start.evaluate(resolver).toIntSafely()
+            val start = range.evaluateStartWithDirection(resolver).toIntSafely()
 
             val onClickActions = getActionsForPosition(start)
             val onClickAction = if (onClickActions == null) {
@@ -1297,8 +1305,8 @@ internal class DivTextBinder @Inject constructor(
             override fun onSuccess(cachedBitmap: CachedBitmap) {
                 super.onSuccess(cachedBitmap)
                 val image = images[index]
-                val span = sb.makeImageSpan(image, cachedBitmap.bitmap, lineHeight.unitToPx(metrics, fontSizeUnit))
-                val start = image.start.evaluate(resolver).toIntSafely() + index +
+                val span = makeImageSpan(image, cachedBitmap.bitmap, lineHeight.unitToPx(metrics, fontSizeUnit))
+                val start = image.evaluateStartWithDirection(resolver).toIntSafely() + index +
                         additionalCharsBeforeImage.getOrZero(index)
                 sb.getSpans<ImagePlaceholderSpan>(start, start + 1).forEach { sb.removeSpan(it) }
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)

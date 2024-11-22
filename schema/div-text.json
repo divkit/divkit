@@ -212,6 +212,7 @@
           "default_value": "normal",
           "$description": "translations.json#/div_text_image_indexing_direction",
           "platforms": [
+            "android"
           ]
         }
       },
