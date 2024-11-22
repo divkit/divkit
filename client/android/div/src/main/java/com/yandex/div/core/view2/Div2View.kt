@@ -1230,19 +1230,18 @@ class Div2View private constructor(
     }
 
     private inner class BulkActionHandler {
-        private var bulkMode = false
+        private var bulkModeDepth = 0
         private var pendingState: DivData.State? = null
         private var isPendingStateTemporary: Boolean = true
         private val pendingPaths = mutableListOf<DivStatePath>()
 
         fun bulkActions(function: () -> Unit = {}) {
-            if (bulkMode) {
-                return
-            }
-            bulkMode = true
+            bulkModeDepth++
             function()
-            runBulkActions()
-            bulkMode = false
+            bulkModeDepth--
+            if (bulkModeDepth == 0) {
+                runBulkActions()
+            }
         }
 
         fun switchState(state: DivData.State?, path: DivStatePath, temporary: Boolean) {
@@ -1264,7 +1263,7 @@ class Div2View private constructor(
                 div2Component.stateManager.updateStates(divTag.id, path, temporary)
             }
 
-            if (!bulkMode) {
+            if (bulkModeDepth == 0) {
                 runBulkActions()
             }
         }
