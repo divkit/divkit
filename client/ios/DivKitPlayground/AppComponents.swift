@@ -37,6 +37,7 @@ enum AppComponents {
         VideoDurationExtensionHandler(),
         GestureExtensionHandler(),
         MarkdownExtensionHandler(),
+        ShineExtensionHandler()
       ],
       flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,
