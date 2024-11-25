@@ -1,4 +1,4 @@
-import { type Func, funcs } from '../../src/expressions/funcs/funcs';
+import { type Func, funcs, methods } from '../../src/expressions/funcs/funcs';
 import { register } from '../../src/expressions/funcs';
 
 const path = require('path');
@@ -14,7 +14,7 @@ function runCase(item: any) {
     const expectedArgs: any[] = item.arguments || [];
 
     let func: Func | null = null;
-    const list = funcs.get(item.function_name);
+    const list = (item.is_method ? methods : funcs).get(item.function_name);
     if (list) {
         for (let i = 0; i < list.length; ++i) {
             const candidate = list[i];

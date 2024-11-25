@@ -283,7 +283,10 @@ object BuiltinFunctionProvider : FunctionProvider {
         return registry.getMethod(name, args)
     }
 
-    internal fun ensureFunctionRegistered(name: String, args: List<FunctionArgument>, resultType: EvaluableType) {
-        registry.ensureRegistered(name, args, resultType)
+    internal fun ensureFunctionRegistered(name: String,
+                                          args: List<FunctionArgument>,
+                                          resultType: EvaluableType,
+                                          isMethod: Boolean,) {
+        registry.ensureRegistered(name, args, resultType, isMethod)
     }
 }

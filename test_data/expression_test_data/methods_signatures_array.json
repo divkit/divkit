@@ -1,0 +1,180 @@
+{
+  "signatures": [
+    {
+      "function_name": "getArray",
+      "is_method": true,
+      "doc": "Returns an array value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getBoolean",
+      "is_method": true,
+      "doc": "Returns a boolean value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getColor",
+      "is_method": true,
+      "doc": "Returns a color value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getDict",
+      "is_method": true,
+      "doc": "Returns a dict value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getInteger",
+      "is_method": true,
+      "doc": "Returns an integer value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getNumber",
+      "is_method": true,
+      "doc": "Returns a number value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getString",
+      "is_method": true,
+      "doc": "Returns a string value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "getUrl",
+      "is_method": true,
+      "doc": "Returns a url value from array by position.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Position in array."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "function_name": "isEmpty",
+      "is_method": true,
+      "doc": "The method returns boolean true if array is empty else false.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

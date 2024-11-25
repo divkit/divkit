@@ -28,7 +28,8 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
             functionProvider.ensureFunctionRegistered(
                 signature.functionName,
                 signature.arguments,
-                signature.resultType
+                signature.resultType,
+                signature.isMethod
             )
         } catch (e: EvaluableException) {
             throw RuntimeException("Test for signature \"$signature\" failed.", e)
@@ -40,6 +41,7 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
         val functionName: String,
         val arguments: List<FunctionArgument>,
         val resultType: EvaluableType,
+        val isMethod: Boolean,
     ) {
         override fun toString(): String {
             return name
@@ -50,10 +52,10 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
         private const val SIGNATURES_FILE_PATH = "expression_test_data"
 
         private const val SIGNATURE_FIELD = "signatures"
-        private const val SIGNATURE_NAME_FIELD = "name"
         private const val SIGNATURE_FUNCTION_NAME = "function_name"
         private const val SIGNATURE_ARGUMENTS_FIELD = "arguments"
         private const val SIGNATURE_RESULT_TYPE_FIELD = "result_type"
+        private const val SIGNATURE_IS_METHOD_FIELD = "is_method"
         private const val ARGUMENT_TYPE_FIELD = "type"
         private const val ARGUMENT_VARARG_FIELD = "vararg"
 
@@ -73,34 +75,32 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
         }
 
         private fun parseSignature(file: File, json: JSONObject): TestCaseOrError<SignatureTestCase> {
-            val name = try {
-                json.getString(SIGNATURE_NAME_FIELD)
-            } catch (e: JSONException) {
-                return TestCaseOrError(TestCaseParsingError("???", file.name, json, e))
+            val functionName = json.getString(SIGNATURE_FUNCTION_NAME)
+            val arguments = json.optJSONArray(SIGNATURE_ARGUMENTS_FIELD)?.let { array ->
+                val result = mutableListOf<FunctionArgument>()
+                for (i in 0 until array.length()) {
+                    val argument = array.getJSONObject(i)
+                    val type = EvaluableType.valueOf(
+                        argument.getString(ARGUMENT_TYPE_FIELD).uppercase()
+                    )
+                    val vararg = argument.optBoolean(ARGUMENT_VARARG_FIELD)
+                    result.add(FunctionArgument(type, vararg))
+                }
+                result
             }
-
-            try {
-                return TestCaseOrError(SignatureTestCase(
-                    name,
-                    json.getString(SIGNATURE_FUNCTION_NAME),
-                    json.optJSONArray(SIGNATURE_ARGUMENTS_FIELD)?.let { array ->
-                        val result = mutableListOf<FunctionArgument>()
-                        for (i in 0 until array.length()) {
-                            val argument = array.getJSONObject(i)
-                            val type = EvaluableType.valueOf(
-                                argument.getString(ARGUMENT_TYPE_FIELD).uppercase()
-                            )
-                            val vararg = argument.optBoolean(ARGUMENT_VARARG_FIELD)
-                            result.add(FunctionArgument(type, vararg))
-                        }
-                        result
-                    } ?: emptyList(),
-                    EvaluableType.valueOf(json.getString(SIGNATURE_RESULT_TYPE_FIELD).uppercase()),
-                ))
-
+            val resultType = try {
+                EvaluableType.valueOf(json.getString(SIGNATURE_RESULT_TYPE_FIELD).uppercase())
             } catch (e: JSONException) {
-                return TestCaseOrError(TestCaseParsingError(name, file.name, json, e))
+                return TestCaseOrError(TestCaseParsingError(functionName, file.name, json, e))
             }
+            val isMethod = json.optBoolean(SIGNATURE_IS_METHOD_FIELD)
+            return TestCaseOrError(SignatureTestCase(
+                "$functionName(${arguments ?: ""}) $resultType",
+                functionName,
+                arguments ?: emptyList(),
+                resultType,
+                isMethod)
+            )
         }
     }
 }

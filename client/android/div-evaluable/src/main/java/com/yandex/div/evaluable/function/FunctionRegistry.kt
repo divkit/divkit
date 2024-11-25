@@ -43,10 +43,17 @@ internal class FunctionRegistry : FunctionProvider {
 
     override fun getMethod(name: String, args: List<EvaluableType>): Function = get(name, args, true)
 
-    fun ensureRegistered(name: String, args: List<FunctionArgument>, resultType: EvaluableType) {
-        val overloadedFunctions = knownFunctions.getOrElse(name) {
-            throw EvaluableException("Unknown function name: '$name'.")
+    fun ensureRegistered(name: String, args: List<FunctionArgument>, resultType: EvaluableType, isMethod: Boolean,) {
+        val overloadedFunctions = if (isMethod) {
+            knownMethods.getOrElse(name) {
+                throw EvaluableException("Unknown method name: '$name'.")
+            }
+        } else {
+            knownFunctions.getOrElse(name) {
+                throw EvaluableException("Unknown function name: '$name'.")
+            }
         }
+
         if (overloadedFunctions.none { it.declaredArgs == args }) {
             throw EvaluableException("Function with declared args is not registered.")
         }
