@@ -134,7 +134,7 @@ internal class DivPagerBinder @Inject constructor(
 
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
-            val pagerState = state.getBlockState(id) as PagerState?
+            val pagerState = state.getBlockState(id) as? PagerState
             view.changePageCallbackForState = UpdateStateChangePageCallback(id, state)
             view.currentItem = pagerState?.currentPageIndex?.takeIf {
                 it < adapter.getRealPosition(adapter.itemsToShow.size)
