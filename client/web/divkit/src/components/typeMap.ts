@@ -13,6 +13,7 @@ import Slider from './slider/Slider.svelte';
 import Input from './input/Input.svelte';
 import Select from './select/Select.svelte';
 import Video from './video/Video.svelte';
+import Switch from './switch/Switch.svelte';
 import Custom from './custom/Custom.svelte';
 
 export const TYPE_MAP: Record<string, ComponentType> = {};
@@ -75,6 +76,10 @@ if (process.env.ENABLE_COMPONENT_SELECT || process.env.ENABLE_COMPONENT_SELECT =
 
 if (process.env.ENABLE_COMPONENT_VIDEO || process.env.ENABLE_COMPONENT_VIDEO === undefined) {
     TYPE_MAP.video = Video;
+}
+
+if (process.env.ENABLE_COMPONENT_SWITCH || process.env.ENABLE_COMPONENT_SWITCH === undefined) {
+    TYPE_MAP.switch = Switch;
 }
 
 if (process.env.ENABLE_COMPONENT_CUSTOM || process.env.ENABLE_COMPONENT_CUSTOM === undefined) {

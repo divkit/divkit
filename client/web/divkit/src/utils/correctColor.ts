@@ -46,7 +46,7 @@ export interface ParsedColor {
     b: number;
 }
 
-function stringifyColorToCss(color: ParsedColor): string {
+export function stringifyColorToCss(color: ParsedColor): string {
     if (color.a === 255) {
         return `#${[color.r, color.g, color.b].map(it => {
             return padLeft(Math.round(it).toString(16), 2);
