@@ -23,7 +23,7 @@ public final class ScrollableContentPager: NSObject {
 
   public func setInitialOffset(_ offset: CGFloat) {
     guard isPagingEnabled else { return }
-    
+
     currentPageIndex = pageIndex(forOffset: offset)
   }
 
@@ -36,7 +36,9 @@ public final class ScrollableContentPager: NSObject {
     var resultPageIndex = pageIndex(forOffset: offset)
 
     if resultPageIndex == startPageIndex && velocity.isApproximatelyNotEqualTo(0) ||
-        resultPageIndex == indexedPageOrigins.count - 2 && resultPageIndex <= lastTargetPageIndex ?? 0 && velocity.isApproximatelyGreaterThan(0) {
+      resultPageIndex == indexedPageOrigins
+      .count - 2 && resultPageIndex <= lastTargetPageIndex ?? 0 && velocity
+      .isApproximatelyGreaterThan(0) {
       let forcedIndexOffset = (velocity > 0 ? 1 : -1)
       resultPageIndex += forcedIndexOffset
     }

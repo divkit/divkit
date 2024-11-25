@@ -4,22 +4,22 @@ import VGSL
 
 final class TimerActionHandler {
   private let performer: DivActionURLHandler.PerformTimerAction
-  
-  init (performer: @escaping DivActionURLHandler.PerformTimerAction) {
+
+  init(performer: @escaping DivActionURLHandler.PerformTimerAction) {
     self.performer = performer
   }
-  
+
   func handle(
     _ action: DivActionTimer,
     context: DivActionHandlingContext
   ) {
     let expressionResolver = context.expressionResolver
-    
+
     guard let id = action.resolveId(expressionResolver),
           let command = action.resolveAction(expressionResolver) else {
       return
     }
-    
+
     performer(context.path.cardId, id, command.toDivTimerAction())
   }
 }
@@ -28,17 +28,17 @@ extension DivActionTimer.Action {
   func toDivTimerAction() -> DivTimerAction {
     switch self {
     case .start:
-      return .start
+      .start
     case .stop:
-      return .stop
+      .stop
     case .pause:
-      return .pause
+      .pause
     case .resume:
-      return .resume
+      .resume
     case .cancel:
-      return .cancel
+      .cancel
     case .reset:
-      return .reset
+      .reset
     }
   }
 }

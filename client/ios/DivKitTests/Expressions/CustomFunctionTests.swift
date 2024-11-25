@@ -55,7 +55,7 @@ final class CustomFunctionTests: XCTestCase {
   private let dictFunction = DivFunction(
     arguments: [
       DivFunctionArgument(name: "dict", type: .dict),
-      DivFunctionArgument(name: "key", type: .string)
+      DivFunctionArgument(name: "key", type: .string),
     ],
     body: "@{dict.containsKey(key)}",
     name: "containsKeyFunction",
@@ -260,7 +260,10 @@ final class CustomFunctionTests: XCTestCase {
   }
 
   func test_InvokeCustomFunc_WithOverloadedNumberAndIntegerArguments() {
-    functionsStorage.setIfNeeded(path: path, functions: [numberFunction, numberFunctionWithIntegerArgument])
+    functionsStorage.setIfNeeded(
+      path: path,
+      functions: [numberFunction, numberFunctionWithIntegerArgument]
+    )
 
     XCTAssertEqual(
       resolver.resolveNumeric("@{numberFunction(integer_var)}"),
@@ -273,7 +276,10 @@ final class CustomFunctionTests: XCTestCase {
   }
 
   func test_SetTwoFunctions_WithOneSignature_ReportError() {
-    functionsStorage.setIfNeeded(path: path, functions: [incrementFunction, doubleIncrementFunction])
+    functionsStorage.setIfNeeded(
+      path: path,
+      functions: [incrementFunction, doubleIncrementFunction]
+    )
 
     XCTAssertEqual(mockReporter.lastCardId, path.cardId)
     XCTAssertEqual(

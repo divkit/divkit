@@ -84,8 +84,8 @@ private struct CustomFunctionEvaluator: Function {
       var storage: DivFunctionsStorage? = customFunctionsStorage
 
       var result: Any?
-      while result == nil, storage != nil, let functions = storage?.getFunctions(with: name), 
-        !functions.isEmpty {
+      while result == nil, storage != nil, let functions = storage?.getFunctions(with: name),
+            !functions.isEmpty {
         do {
           result = try OverloadedFunction(
             functions: functions

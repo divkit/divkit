@@ -140,9 +140,9 @@ extension GestureView: VisibleBoundsTrackingContainer {
 
 extension GestureView: UIGestureRecognizerDelegate {
   func gestureRecognizer(
-    _ gestureRecognizer: UIGestureRecognizer,
-    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    _: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
   ) -> Bool {
-    return true
+    true
   }
 }

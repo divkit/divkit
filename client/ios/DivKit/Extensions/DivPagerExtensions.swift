@@ -108,7 +108,7 @@ extension DivPageTransformation {
   ) -> ElementsTransformation {
     switch self {
     case let .divPageTransformationSlide(transformation):
-      return .init(
+      .init(
         nextElementAlpha: transformation.resolveNextPageAlpha(resolver),
         previousElementAlpha: transformation.resolvePreviousPageAlpha(resolver),
         nextElementScale: transformation.resolveNextPageScale(resolver),
@@ -117,7 +117,7 @@ extension DivPageTransformation {
         scrollDirection: scrollDirection
       )
     case let .divPageTransformationOverlap(transformation):
-      return .init(
+      .init(
         nextElementAlpha: transformation.resolveNextPageAlpha(resolver),
         previousElementAlpha: transformation.resolvePreviousPageAlpha(resolver),
         nextElementScale: transformation.resolveNextPageScale(resolver),

@@ -268,9 +268,9 @@ private final class PathHolderTestBlock: TestBlock, PathHolder {
 
   override func isBestViewForReuse(_ view: BlockView) -> Bool {
     if path == ((view as? TestView)?.block as? PathHolderTestBlock)?.path {
-      return true
+      true
     } else {
-      return (view as? TestView)?.block == self
+      (view as? TestView)?.block == self
     }
   }
 }

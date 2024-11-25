@@ -107,9 +107,9 @@ extension DivCount {
   func resolve(_ expressionResolver: ExpressionResolver) -> RepeatCount? {
     switch self {
     case let .divFixedCount(count):
-      return count.resolveValue(expressionResolver).flatMap { .fixed($0) }
+      count.resolveValue(expressionResolver).flatMap { .fixed($0) }
     case .divInfinityCount:
-      return .infinity
+      .infinity
     }
   }
 }
@@ -152,13 +152,13 @@ extension DivAnimationDirection {
   var direction: AnimationDirection {
     switch self {
     case .alternate:
-      return .alternate
+      .alternate
     case .normal:
-      return .normal
+      .normal
     case .alternateReverse:
-      return .alternateReverse
+      .alternateReverse
     case .reverse:
-      return .reverse
+      .reverse
     }
   }
 }

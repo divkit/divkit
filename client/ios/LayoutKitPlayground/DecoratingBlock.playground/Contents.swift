@@ -1,8 +1,8 @@
-import UIKit
-import PlaygroundSupport
 import LayoutKit
-import VGSL
 import LayoutKitPlayground
+import PlaygroundSupport
+import UIKit
+import VGSL
 
 private func createBlock() throws -> Block {
   try ContainerBlock(
@@ -12,8 +12,8 @@ private func createBlock() throws -> Block {
     children: [
       TextBlock(
         widthTrait: .intrinsic,
-        text: "Some text.".with(typo: Typo.init(size: 26.0, weight: .medium).with(color: .blue))
-      )
+        text: "Some text.".with(typo: Typo(size: 26.0, weight: .medium).with(color: .blue))
+      ),
     ]
   ).addingDecorations(
     boundary: .clipCorner(
@@ -30,4 +30,3 @@ private func createBlock() throws -> Block {
 }
 
 PlaygroundPage.current.liveView = LayoutKitPlaygroundViewController(blockProvider: createBlock)
-

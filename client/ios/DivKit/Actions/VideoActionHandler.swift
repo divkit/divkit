@@ -8,20 +8,20 @@ final class VideoActionHandler {
     context: DivActionHandlingContext
   ) {
     let expressionResolver = context.expressionResolver
-    
+
     guard let id = action.resolveId(expressionResolver),
           let command = action.resolveAction(expressionResolver) else {
       return
     }
-    
+
     let cardId = context.path.cardId
-    
+
     context.blockStateStorage.setState(
       id: id,
       cardId: cardId,
       state: VideoBlockViewState(state: command == .start ? .playing : .paused)
     )
-    
+
     context.updateCard(.state(cardId))
   }
 }

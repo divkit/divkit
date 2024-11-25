@@ -330,8 +330,10 @@ struct FunctionSignature {
 
     let expectedArgs: [ArgumentSignature]
     if let last = arguments.last, last.vararg {
-      let extraArgs = [ArgumentSignature]
-        .init(repeating: last, times: UInt(args.count - arguments.count))
+      let extraArgs = [ArgumentSignature](
+        repeating: last,
+        times: UInt(args.count - arguments.count)
+      )
       expectedArgs = (arguments + extraArgs).map { ArgumentSignature(type: $0.type) }
     } else {
       expectedArgs = arguments

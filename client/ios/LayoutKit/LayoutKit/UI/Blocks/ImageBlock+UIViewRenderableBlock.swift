@@ -55,7 +55,7 @@ extension ImageBlock {
       case .blur:
         hasBlur = true
       case .tint:
-        hasTint = true  
+        hasTint = true
       }
     }
     return (blur: hasBlur, tint: hasTint)

@@ -69,7 +69,7 @@ extension DivVariableValue {
   }
 }
 
-extension Array where Element == DivActionSubmit.Request.Header {
+extension [DivActionSubmit.Request.Header] {
   fileprivate func toDictionary(resolver: ExpressionResolver) -> [String: String] {
     var dict = [String: String]()
     forEach { param in

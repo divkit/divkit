@@ -152,7 +152,6 @@ public final class DivVariableStorage {
     let changedVariables = lock.withLock {
       var changedVariables = Set<DivVariableName>()
       for variableName in variableNames {
-
         let removedValue = _values.removeValue(forKey: variableName)
         if removedValue != nil {
           changedVariables.insert(variableName)

@@ -22,7 +22,7 @@ final class DivAnimatorController {
         startValue: startValue,
         endValue: endValue,
         duration: duration,
-        startDelay: startDelay, 
+        startDelay: startDelay,
         direction: direction,
         progressInterpolator: progressInterpolator,
         repeatCount: repeatCount

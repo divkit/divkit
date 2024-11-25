@@ -275,9 +275,9 @@ extension UserInterfaceAction.Payload {
   public var divActionParams: UserInterfaceAction.DivActionParams? {
     switch self {
     case let .divAction(params):
-      return params
+      params
     case .empty, .menu, .url:
-      return nil
+      nil
     }
   }
 }

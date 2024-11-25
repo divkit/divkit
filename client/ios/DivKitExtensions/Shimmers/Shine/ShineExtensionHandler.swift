@@ -44,7 +44,7 @@ public final class ShineExtensionHandler: DivExtensionHandler {
           style: shineStyle,
           effectBeginTime: effectBeginTime,
           maskImageHolder: block.imageHolder
-        )
+        ),
       ]
     )
   }

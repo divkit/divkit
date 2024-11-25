@@ -1,7 +1,7 @@
 import LayoutKit
 import VGSL
 
-final public class DivFunctionsStorage {
+public final class DivFunctionsStorage {
   private var functions: [CustomFunction.Signature: CustomFunction] = [:]
   private var storages: [UIElementPath: DivFunctionsStorage] = [:]
 
@@ -29,17 +29,17 @@ final public class DivFunctionsStorage {
         storages[path] = nearestStorage
       } else {
         let storage = DivFunctionsStorage(outerStorage: nearestStorage)
-        functions.forEach { function in
+        for function in functions {
           let signature = CustomFunction.Signature(
             name: function.name,
-            arguments: function.arguments.map { $0.type }
+            arguments: function.arguments.map(\.type)
           )
           if storage.functions[signature] != nil {
             reporter.asExpressionErrorTracker(cardId: path.cardId)(
               ExpressionError(
                 makeErrorMessage(
                   name: function.name,
-                  arguments: function.arguments.map { $0.type.rawValue }
+                  arguments: function.arguments.map(\.type.rawValue)
                 )
               )
             )
@@ -87,7 +87,7 @@ final public class DivFunctionsStorage {
 
   func reset(cardId: DivCardID) {
     lock.withLock {
-      storages.keys.forEach { path in
+      for path in storages.keys {
         if path.cardId == cardId {
           storages.removeValue(forKey: path)
         }

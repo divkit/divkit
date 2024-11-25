@@ -1,8 +1,8 @@
-import UIKit
-import PlaygroundSupport
 import LayoutKit
-import VGSL
 import LayoutKitPlayground
+import PlaygroundSupport
+import UIKit
+import VGSL
 
 let randomColor = Color(
   red: Double.random(in: 0.0...1.0),
@@ -20,8 +20,8 @@ private func createTextBlock(_ text: String, padding: CGFloat) throws -> Block {
     children: [
       TextBlock(
         widthTrait: .intrinsic,
-        text: text.with(typo: Typo.init(size: 16.0, weight: .regular))
-      )
+        text: text.with(typo: Typo(size: 16.0, weight: .regular))
+      ),
     ]
   )
   .addingDecorations(backgroundColor: randomColor)
@@ -38,7 +38,7 @@ private func createBlock() throws -> Block {
     children: [
       createTextBlock("Welcome to LayoutKit!", padding: 25.0),
       createTextBlock("This is a simple example.", padding: 50.0),
-      createTextBlock("Enjoy building layouts!", padding: 100.0)
+      createTextBlock("Enjoy building layouts!", padding: 100.0),
     ]
   )
 }

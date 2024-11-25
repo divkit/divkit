@@ -666,7 +666,7 @@ extension TextInputBlockView: UITextFieldDelegate {
     return inputViewReplaceTextIn(view: textField, range: range, text: string)
   }
 
-  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+  func textFieldShouldReturn(_: UITextField) -> Bool {
     guard !enterKeyActions.isEmpty else {
       return true
     }
@@ -839,14 +839,14 @@ extension TextInputBlock.AutocapitalizationType {
 
 extension TextInputBlock.EnterKeyType {
   fileprivate var uiType: UIReturnKeyType {
-        switch self {
-        case .default: .default
-        case .search: .search
-        case .send: .send
-        case .done: .done
-        case .go: .go
-        }
+    switch self {
+    case .default: .default
+    case .search: .search
+    case .send: .send
+    case .done: .done
+    case .go: .go
     }
+  }
 }
 
 private class PatchedUITextField: UITextField {

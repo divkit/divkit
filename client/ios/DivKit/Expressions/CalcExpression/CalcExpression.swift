@@ -358,20 +358,19 @@ extension UnicodeScalarView {
       return nil
     }
 
-    let op2: String?
-    switch op1 {
+    let op2: String? = switch op1 {
     case "=", "<", ">":
-      op2 = scanCharacter { "=" == $0 }
+      scanCharacter { $0 == "=" }
     case "|":
-      op2 = scanCharacter { "|" == $0 }
+      scanCharacter { $0 == "|" }
     case "&":
-      op2 = scanCharacter { "&" == $0 }
+      scanCharacter { $0 == "&" }
     case "!":
-      op2 = scanCharacter { "=:".unicodeScalars.contains($0) }
+      scanCharacter { "=:".unicodeScalars.contains($0) }
     case "+", "-":
-      op2 = scanCharacter { "+-".unicodeScalars.contains($0) }
+      scanCharacter { "+-".unicodeScalars.contains($0) }
     default:
-      op2 = nil
+      nil
     }
 
     if let op2 {

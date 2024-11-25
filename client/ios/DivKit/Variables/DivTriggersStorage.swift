@@ -101,7 +101,7 @@ public final class DivTriggersStorage {
 
   func reset(cardId: DivCardID) {
     lock.withLock {
-      triggersByPath.keys.forEach { path in
+      for path in triggersByPath.keys {
         if path.cardId == cardId {
           triggersByPath.removeValue(forKey: path)
           disposablesByPath.removeValue(forKey: path)
@@ -109,10 +109,10 @@ public final class DivTriggersStorage {
       }
     }
   }
-  
+
   func reset(elementId: String) {
     lock.withLock {
-      triggersByPath.keys.forEach { path in
+      for path in triggersByPath.keys {
         if path.contains(elementId) {
           triggersByPath.removeValue(forKey: path)
           disposablesByPath.removeValue(forKey: path)
@@ -136,7 +136,7 @@ public final class DivTriggersStorage {
       return triggers
     }
 
-    items.forEach { path, item in
+    for (path, item) in items {
       runActions(path: path, item: item, changedVariablesNames: nil)
     }
   }
@@ -204,14 +204,14 @@ public final class DivTriggersStorage {
         if index != activeTab {
           disableTriggers(predicate: {
             $0.cardId == stateEvent.id.cardId
-            && $0.findTabId(stateEvent.id.id) == String(index)
+              && $0.findTabId(stateEvent.id.id) == String(index)
           })
         }
       }
 
       enableTriggers(predicate: {
         $0.cardId == stateEvent.id.cardId
-        && $0.findTabId(stateEvent.id.id) == String(activeTab)
+          && $0.findTabId(stateEvent.id.id) == String(activeTab)
       })
     }
   }

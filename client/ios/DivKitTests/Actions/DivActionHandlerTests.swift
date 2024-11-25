@@ -33,7 +33,7 @@ final class DivActionHandlerTests: XCTestCase {
       },
       persistentValuesStorage: DivPersistentValuesStorage(),
       reporter: reporter,
-      idToPath: idToPath, 
+      idToPath: idToPath,
       animatorController: DivAnimatorController()
     )
   }
@@ -488,7 +488,11 @@ private final class MockActionLogger: DivActionLogger {
 }
 
 private final class MockSubmitter: DivSubmitter {
-  func submit(request: SubmitRequest, data: [String : String], completion: @escaping DivSubmitterCompletion) {}
+  func submit(
+    request _: SubmitRequest,
+    data _: [String: String],
+    completion _: @escaping DivSubmitterCompletion
+  ) {}
 
   func cancelRequests() {}
 }

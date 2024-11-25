@@ -77,7 +77,8 @@ public final class DivKitComponents {
   ///   - showTooltip: Deprecated. This parameter is deprecated, use ``tooltipManager`` instead.
   ///   - stateManagement: An optional ``DivStateManagement`` object responsible for managing card
   /// states.
-  ///   - submitter: An optional ``DivSubmitter`` object responsible for submitting data from container.
+  ///   - submitter: An optional ``DivSubmitter`` object responsible for submitting data from
+  /// container.
   ///   - tooltipManager: An optional `TooltipManager` object that manages the processing and
   /// display of tooltips.
   ///   - trackVisibility: A closure that tracks the visibility of elements. Deprecated. Use
@@ -310,7 +311,7 @@ public final class DivKitComponents {
     // for now tooltip state management is broken
     let stateManager = viewId.isTooltip
       ? DivStateManager()
-      : stateManagement.getStateManagerForCard(cardId: cardId);
+      : stateManagement.getStateManagerForCard(cardId: cardId)
 
     return DivBlockModelingContext(
       viewId: viewId,

@@ -76,7 +76,7 @@ final class DivVariableStorageWithOuterStorageTest: XCTestCase {
   func test_remove_DoesNotAffectOuterStorage() {
     storage.put(variables)
     outerStorage.put(outerVariables)
-    
+
     storage.remove(variableNames: Set(variables.keys))
     storage.remove(variableNames: Set(outerVariables.keys))
 

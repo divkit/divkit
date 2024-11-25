@@ -59,7 +59,7 @@ private struct SignatureTestCase: Decodable {
     functionName = try container.decode(String.self, forKey: .functionName)
     isMethod = (try? container.decode(Bool.self, forKey: .isMethod)) ?? false
     arguments = (try? container.decode([ArgumentSignature].self, forKey: .arguments)) ?? []
-    resultType = parseType(try container.decode(String.self, forKey: .resultType))
+    resultType = try parseType(container.decode(String.self, forKey: .resultType))
     platforms = try container.decode([Platform].self, forKey: .platforms)
   }
 
@@ -113,8 +113,8 @@ extension FunctionSignature: Swift.Equatable {
 extension ArgumentSignature: Swift.Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.init(
-      type: parseType(try container.decode(String.self, forKey: .type)),
+    try self.init(
+      type: parseType(container.decode(String.self, forKey: .type)),
       vararg: (try? container.decode(Bool.self, forKey: .vararg)) ?? false
     )
   }

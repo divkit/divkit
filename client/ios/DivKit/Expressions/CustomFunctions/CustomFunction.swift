@@ -34,7 +34,7 @@ final class CustomFunction: SimpleFunction {
 
   func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
     let matchedArguments: [String: Any] = Dictionary(
-      arguments.map { $0.name },
+      arguments.map(\.name),
       args
     )
     let resolver = ExpressionResolver(
@@ -56,7 +56,7 @@ final class CustomFunction: SimpleFunction {
 
     guard let result = resolver.resolve(body) else {
       throw ExpressionError(
-        makeErrorMessage(name: name, arguments: arguments.map { $0.type.rawValue }, body: body)
+        makeErrorMessage(name: name, arguments: arguments.map(\.type.rawValue), body: body)
       )
     }
     return result

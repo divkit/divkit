@@ -63,7 +63,10 @@ extension Div {
     return applyPatchToChildren(patch, callbacks: callbacks)
   }
 
-  fileprivate func applyMultipleItemsPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> [Div] {
+  fileprivate func applyMultipleItemsPatch(
+    _ patch: DivPatch,
+    callbacks: DivPatchCallbacks
+  ) -> [Div] {
     if let id, let change = patch.getChange(id: id) {
       callbacks.elementChanged(id)
       return change.items ?? []
@@ -104,7 +107,8 @@ extension Div {
 
 extension DivContainer {
   fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivContainer {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivContainer(
       accessibility: accessibility,
       action: action,
@@ -159,7 +163,8 @@ extension DivContainer {
 
 extension DivGallery {
   fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivGallery {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivGallery(
       accessibility: accessibility,
       alignmentHorizontal: alignmentHorizontal,
@@ -210,7 +215,8 @@ extension DivGallery {
 
 extension DivGrid {
   fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivGrid {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivGrid(
       accessibility: accessibility,
       action: action,
@@ -237,7 +243,7 @@ extension DivGrid {
       layoutProvider: layoutProvider,
       longtapActions: longtapActions,
       margins: margins,
-      paddings: paddings, 
+      paddings: paddings,
       reuseId: reuseId,
       rowSpan: rowSpan,
       selectedActions: selectedActions,
@@ -259,7 +265,8 @@ extension DivGrid {
 
 extension DivPager {
   fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivPager {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivPager(
       accessibility: accessibility,
       alignmentHorizontal: alignmentHorizontal,

@@ -1,8 +1,8 @@
-import UIKit
-import PlaygroundSupport
 import LayoutKit
-import VGSL
 import LayoutKitPlayground
+import PlaygroundSupport
+import UIKit
+import VGSL
 
 private var counter = 0
 private let buttonActionURL = URL(string: "button_action")!
@@ -16,11 +16,11 @@ private func createBlock() throws -> Block {
     children: [
       TextBlock(
         widthTrait: .intrinsic,
-        text: "Tap count: \(counter)".with(typo: Typo.init(size: 26.0, weight: .medium))
+        text: "Tap count: \(counter)".with(typo: Typo(size: 26.0, weight: .medium))
       ),
       TextBlock(
         widthTrait: .intrinsic,
-        text: "+1".with(typo: Typo.init(size: 16.0, weight: .regular))
+        text: "+1".with(typo: Typo(size: 16.0, weight: .regular))
       )
       .addingEdgeGaps(32.0)
       .addingDecorations(
@@ -32,8 +32,9 @@ private func createBlock() throws -> Block {
           payload: .url(buttonActionURL),
           path: "button"
         )
-      )
-    ])
+      ),
+    ]
+  )
 }
 
 PlaygroundPage.current.liveView = LayoutKitPlaygroundViewController(

@@ -53,7 +53,7 @@ public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDele
 
   /// Removes all tooltips.
   func reset()
-  
+
   /// Sets handler for the tooltip view UI events.
   func setHandler(_ handler: @escaping (UIActionEvent) -> Void)
 }

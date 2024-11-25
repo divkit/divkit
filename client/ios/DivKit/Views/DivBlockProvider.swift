@@ -55,7 +55,7 @@ final class DivBlockProvider {
   }
 
   var lastVisibleBounds: CGRect = .zero
-  
+
   var accessibilityElementsStorage: DivAccessibilityElementsStorage?
 
   init(

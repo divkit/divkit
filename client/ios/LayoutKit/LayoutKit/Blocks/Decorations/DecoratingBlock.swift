@@ -177,6 +177,7 @@ extension DecoratingBlock {
     switch child {
     case let child as DecoratingBlock:
       child.childPath
+
     case let child as PathHolder:
       child.path
 

@@ -1,8 +1,8 @@
-import UIKit
-import PlaygroundSupport
 import LayoutKit
-import VGSL
 import LayoutKitPlayground
+import PlaygroundSupport
+import UIKit
+import VGSL
 
 private func makeTextBlock(_ number: Int) -> Block {
   TextBlock(widthTrait: .intrinsic, text: NSAttributedString(string: "Item \(number)"))
@@ -24,13 +24,13 @@ private func createBlock() throws -> Block {
     widthTrait: .fixed(200),
     heightTrait: .fixed(200)
   ).addingDecorations(backgroundColor: .darkGray)
-  
+
   return try ContainerBlock(
     layoutDirection: .horizontal,
     axialAlignment: .center,
     crossAlignment: .center,
     children: [
-      ContainerBlock.Child.init(content: gallery)
+      ContainerBlock.Child(content: gallery),
     ]
   )
 }

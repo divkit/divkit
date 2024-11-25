@@ -29,7 +29,8 @@ class ShimmerView: UIView {
     layer.addSublayer(gradientLayer)
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -190,4 +191,3 @@ extension CAGradientLayer {
     tan(theta * CGFloat.pi / 180)
   }
 }
-

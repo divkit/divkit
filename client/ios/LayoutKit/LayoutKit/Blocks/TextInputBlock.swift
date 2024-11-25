@@ -59,13 +59,13 @@ public final class TextInputBlock: BlockWithTraits {
     case bottom
   }
 
-    public enum EnterKeyType: Equatable {
-        case `default`
-        case go
-        case search
-        case send
-        case done
-    }
+  public enum EnterKeyType: Equatable {
+    case `default`
+    case go
+    case search
+    case send
+    case done
+  }
 
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
@@ -282,6 +282,7 @@ extension TextInputBlock: ElementFocusUpdating {
     )
   }
 }
+
 extension TextInputBlock: PathHolder {}
 
 private let defaultTextForMeasuring = "A"

@@ -1,7 +1,7 @@
 @testable import DivKit
 
-import XCTest
 import LayoutKit
+import XCTest
 
 final class DivTriggerTests: XCTestCase {
   private let variablesStorage = DivVariablesStorage()
@@ -223,7 +223,8 @@ final class DivTriggerTests: XCTestCase {
     XCTAssertEqual(triggersCount, 0)
   }
 
-  func test_DoesNotLocalTrigger_WhenParentAndChildVariablesWithSameNameAndParentVariableIsChanged() throws {
+  func test_DoesNotLocalTrigger_WhenParentAndChildVariablesWithSameNameAndParentVariableIsChanged(
+  ) throws {
     let variables: DivVariables = [
       "should_trigger": .bool(false),
     ]
@@ -278,7 +279,11 @@ final class DivTriggerTests: XCTestCase {
     )
     triggerStorage.setIfNeeded(path: path, triggers: [trigger])
 
-    variablesStorage.update(path: UIElementPath(cardID.rawValue), name: "should_trigger", value: "1")
+    variablesStorage.update(
+      path: UIElementPath(cardID.rawValue),
+      name: "should_trigger",
+      value: "1"
+    )
 
     XCTAssertEqual(triggersCount, 1)
   }
@@ -463,7 +468,11 @@ private class FakeDivStateUpdater: DivStateUpdater {
 }
 
 private final class FakeDivSubmitter: DivSubmitter {
-  func submit(request: SubmitRequest, data: [String : String], completion: @escaping DivSubmitterCompletion) {}
+  func submit(
+    request _: SubmitRequest,
+    data _: [String: String],
+    completion _: @escaping DivSubmitterCompletion
+  ) {}
 
   func cancelRequests() {}
 }

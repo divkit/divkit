@@ -229,7 +229,7 @@ public final class DivActionHandler {
       animatorHandler.handle(action, context: context)
     case let .divActionHideTooltip(action):
       hideTooltipActionHandler.handle(action, context: context)
-    case .divActionDownload, .divActionSetState, 
+    case .divActionDownload, .divActionSetState,
          .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
       break
     case .none:

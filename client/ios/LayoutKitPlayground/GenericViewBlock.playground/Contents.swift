@@ -1,8 +1,8 @@
-import UIKit
-import PlaygroundSupport
 import LayoutKit
-import VGSL
 import LayoutKitPlayground
+import PlaygroundSupport
+import UIKit
+import VGSL
 
 private final class SampleView: UIView {
   private let gradientLayer: CALayer = {
@@ -24,7 +24,8 @@ private final class SampleView: UIView {
     setupView(text: text)
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

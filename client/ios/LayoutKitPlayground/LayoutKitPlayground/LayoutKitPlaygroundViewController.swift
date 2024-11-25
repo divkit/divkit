@@ -1,18 +1,17 @@
-import UIKit
-import VGSL
 import CoreGraphics
 import LayoutKit
+import UIKit
+import VGSL
 
 public final class LayoutKitPlaygroundViewController: UIViewController {
-  
   private var blockView: BlockView?
-  private var blockProvider: (() throws -> Block)
-  private var actionHandler: (() -> ())?
+  private var blockProvider: () throws -> Block
+  private var actionHandler: (() -> Void)?
   private var buttonActionURL: URL?
-  
+
   public init(
     blockProvider: @escaping () throws -> Block,
-    actionHandler: (() -> ())? = nil,
+    actionHandler: (() -> Void)? = nil,
     buttonActionURL: URL? = nil
   ) {
     self.blockView = nil
@@ -21,14 +20,15 @@ public final class LayoutKitPlaygroundViewController: UIViewController {
     self.buttonActionURL = buttonActionURL
     super.init(nibName: nil, bundle: nil)
   }
-  
-  public required init?(coder: NSCoder) {
+
+  @available(*, unavailable)
+  public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   public override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     do {
       let block = try blockProvider()
       updateBlock(block: block)
@@ -38,15 +38,15 @@ public final class LayoutKitPlaygroundViewController: UIViewController {
       print("An error occurred while creating the block: \(error). Using fallback block.")
     }
   }
-  
+
   public override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews()
     blockView?.frame = view.bounds
   }
 }
 
-private extension LayoutKitPlaygroundViewController {
-  func updateBlock(block: Block) {
+extension LayoutKitPlaygroundViewController {
+  fileprivate func updateBlock(block: Block) {
     blockView = block.reuse(
       blockView,
       observer: nil,
@@ -55,8 +55,8 @@ private extension LayoutKitPlaygroundViewController {
       superview: self.view
     )
   }
-  
-  static func createDefaultBlock() -> Block {
+
+  fileprivate static func createDefaultBlock() -> Block {
     TextBlock(
       widthTrait: .intrinsic,
       text: "Default Block".with(typo: Typo(size: 16.0, weight: .medium))
@@ -70,9 +70,9 @@ private extension LayoutKitPlaygroundViewController {
 }
 
 extension LayoutKitPlaygroundViewController: UIActionEventPerforming {
-  public func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
+  public func perform(uiActionEvent event: UIActionEvent, from _: AnyObject) {
     switch event.payload {
-    case .url(let url) where url == buttonActionURL:
+    case let .url(url) where url == buttonActionURL:
       actionHandler?()
       do {
         let updatedBlock = try blockProvider()

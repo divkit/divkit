@@ -8,7 +8,7 @@ public protocol InputAccessoryViewProvider {
   func getView(actions: [String: Action]) -> UIView
 }
 
-final public class InputAccessoryViewExtensionHandler: DivExtensionHandler {
+public final class InputAccessoryViewExtensionHandler: DivExtensionHandler {
   public let id = "input_accessory_view"
   private let viewProvider: InputAccessoryViewProvider
 

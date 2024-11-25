@@ -1,8 +1,8 @@
-import UIKit
-import PlaygroundSupport
 import LayoutKit
-import VGSL
 import LayoutKitPlayground
+import PlaygroundSupport
+import UIKit
+import VGSL
 
 private func createBlock() throws -> Block {
   try ContainerBlock(
@@ -11,10 +11,10 @@ private func createBlock() throws -> Block {
     verticalChildrenAlignment: .center,
     children: [
       ImageBlock(
-        imageHolder:  UIImage(named: "ferrari_F40_front.jpg")!,
+        imageHolder: UIImage(named: "ferrari_F40_front.jpg")!,
         widthTrait: .fixed(300.0),
         heightTrait: .fixed(200.0)
-      )
+      ),
     ]
   )
 }

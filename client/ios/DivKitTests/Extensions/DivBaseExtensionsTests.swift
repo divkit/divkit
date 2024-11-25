@@ -460,7 +460,10 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   func test_WithLottieExtensionReuseId() throws {
-    let block = try makeBlock(fromFile: "div-reuse-id-lottie-wrapper", context: DivBlockModelingContext())
+    let block = try makeBlock(
+      fromFile: "div-reuse-id-lottie-wrapper",
+      context: DivBlockModelingContext()
+    )
 
     XCTAssertEqual(block.reuseId, testReuseId)
   }
@@ -503,7 +506,7 @@ private func makeBlock(
   fromFile filename: String,
   context: DivBlockModelingContext
 ) throws -> Block {
-  return try DivTextTemplate.makeBlock(fromFile: filename, context: context)
+  try DivTextTemplate.makeBlock(fromFile: filename, context: context)
 }
 
 extension TemplateValue where ResolvedValue: DivBlockModeling {
@@ -511,7 +514,7 @@ extension TemplateValue where ResolvedValue: DivBlockModeling {
     fromFile filename: String,
     context: DivBlockModelingContext
   ) throws -> Block {
-    return try Self.make(
+    try make(
       fromFile: filename,
       subdirectory: "div-base",
       context: context

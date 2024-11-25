@@ -2,7 +2,7 @@ import Foundation
 import VGSL
 
 @_spi(Internal)
-final public class DivNetworkSubmitter: DivSubmitter {
+public final class DivNetworkSubmitter: DivSubmitter {
   private let requestPerformer: URLRequestPerforming
 
   private var tasks: [NetworkTask] = []
@@ -17,7 +17,7 @@ final public class DivNetworkSubmitter: DivSubmitter {
     completion: @escaping DivSubmitterCompletion
   ) {
     var urlRequest = URLRequest(url: request.url)
-    request.headers.forEach { header in
+    for header in request.headers {
       urlRequest.setValue(header.value, forHTTPHeaderField: header.key)
     }
     urlRequest.httpMethod = request.method

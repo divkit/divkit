@@ -101,7 +101,7 @@ final class TabContentsView: BlockView {
     }
 
     if oldModel == nil || oldModel.pages !== model.pages || oldObserver !== observer {
-      let cellModels = model.pages.map { $0.block }
+      let cellModels = model.pages.map(\.block)
       cellRegistrator.register(blocks: cellModels, in: collectionView)
       dataSource.models = [cellModels]
 

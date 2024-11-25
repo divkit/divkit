@@ -90,7 +90,9 @@ final class SnapshotTestRunner {
     tooltipView.forceLayout()
 
     // Time to layout tooltips
-    for _ in 0..<2 { await Task.yield() }
+    for _ in 0..<2 {
+      await Task.yield()
+    }
 
     try check(tooltipView)
   }

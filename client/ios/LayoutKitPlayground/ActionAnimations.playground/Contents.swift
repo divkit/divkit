@@ -1,13 +1,13 @@
-import UIKit
-import PlaygroundSupport
 import LayoutKit
-import VGSL
 import LayoutKitPlayground
+import PlaygroundSupport
+import UIKit
+import VGSL
 
 private func textStyle(
   _ text: String
 ) -> TextBlock {
-  return TextBlock(
+  TextBlock(
     widthTrait: .intrinsic,
     text: text.with(typo: Typo(size: 14.0, weight: .medium).with(color: .blue)),
     verticalAlignment: .center,
@@ -25,11 +25,11 @@ private func createAnimatedTextBlock(
   let keyframes = [0, 1, 2, 3, 4].map {
     CGAffineTransform(rotationAngle: $0 * .pi / 2)
   }.map(CATransform3DMakeAffineTransform)
-  
+
   return try ContainerBlock(
     layoutDirection: .horizontal,
     children: [
-      textStyle(text)
+      textStyle(text),
     ],
     contentAnimation: BlockAnimation(
       changes: AnimationChanges.transform(keyframes),
@@ -63,7 +63,7 @@ private func createBlock() throws -> Block {
         cornerRadius: 8.0,
         backgroundColor: UIColor.black.withAlphaComponent(0.05),
         duration: 0.5
-      ).addingEdgeGaps(10.0)
+      ).addingEdgeGaps(10.0),
     ]
   ).addingDecorations(
     boundary: BoundaryTrait.clipCorner(CornerRadii(8.0)),

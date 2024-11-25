@@ -95,24 +95,22 @@ extension DivState: DivBlockModeling {
     let stateAlignment = activeStateDiv?
       .resolveAlignment(context, defaultAlignment: defaultStateAlignment)
       ?? defaultStateAlignment
-    let child: LayeredBlock.Child = {
-      if animationOut == nil, animationIn == nil {
-        return LayeredBlock.Child(
-          content: activeBlock,
-          alignment: stateAlignment
-        )
-      } else {
-        return LayeredBlock.Child(
-          content: TransitioningBlock(
-            from: previousBlock,
-            to: activeBlock,
-            animationOut: animationOut,
-            animationIn: animationIn
-          ),
-          alignment: stateAlignment
-        )
-      }
-    }()
+    let child = if animationOut == nil, animationIn == nil {
+      LayeredBlock.Child(
+        content: activeBlock,
+        alignment: stateAlignment
+      )
+    } else {
+      LayeredBlock.Child(
+        content: TransitioningBlock(
+          from: previousBlock,
+          to: activeBlock,
+          animationOut: animationOut,
+          animationIn: animationIn
+        ),
+        alignment: stateAlignment
+      )
+    }
 
     return LayeredBlock(
       widthTrait: resolveContentWidthTrait(context),

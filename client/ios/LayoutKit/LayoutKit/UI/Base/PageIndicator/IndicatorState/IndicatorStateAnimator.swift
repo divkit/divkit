@@ -60,6 +60,7 @@ struct IndicatorStateAnimator {
     switch configuration.animation {
     case .scale:
       return nil
+
     case .slider:
       return ActiveIndicatorOffsets(
         xOffset: progress * itemWidth,

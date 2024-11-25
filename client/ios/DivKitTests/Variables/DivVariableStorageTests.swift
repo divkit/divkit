@@ -239,7 +239,7 @@ final class DivVariableSorageTest: XCTestCase {
     storage.remove(variableNames: Set<DivVariableName>([
       "string_var",
       "unknown_var",
-      "number_var"
+      "number_var",
     ]))
 
     XCTAssertEqual(
@@ -261,7 +261,7 @@ final class DivVariableSorageTest: XCTestCase {
     event = nil
 
     let variableNames = Set<DivVariableName>([
-      "string_var"
+      "string_var",
     ])
     storage.remove(
       variableNames: variableNames,

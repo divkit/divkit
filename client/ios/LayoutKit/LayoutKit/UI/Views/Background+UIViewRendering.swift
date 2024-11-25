@@ -217,6 +217,7 @@ extension BackgroundView {
         renderingDelegate: renderingDelegate
       )
       viewWithContentInsets.contentInsets = contentInsets
+
     case let .ninePatchImage(image):
       let imageViewContainer = innerView as! RemoteImageViewContainer
       let imageView = imageViewContainer.contentView as! NinePatchImageView

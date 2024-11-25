@@ -51,6 +51,7 @@ extension DebugParams {
     window?.addSubview(view)
   }
 }
+
 #elseif os(macOS)
 extension DebugParams {
   public static func showDebugInfo(_: ViewType) {}

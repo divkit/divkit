@@ -11,13 +11,10 @@ final class TooltipsUITests: XCTestCase {
     return mainWindow.descendants(matching: .any).matching(identifier: "baseDivView").element
   }()
 
-  private lazy var tooltip: XCUIElement = {
-    app.staticTexts["Title tooltip"]
-  }()
+  private lazy var tooltip: XCUIElement = app.staticTexts["Title tooltip"]
 
-  private lazy var toggleTooltipButton: XCUIElement = {
-    elementsQuery.staticTexts["tooltip with close button"]
-  }()
+  private lazy var toggleTooltipButton: XCUIElement = elementsQuery
+    .staticTexts["tooltip with close button"]
 
   override func setUpWithError() throws {
     try super.setUpWithError()
