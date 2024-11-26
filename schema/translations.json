@@ -2387,6 +2387,38 @@
     "en": "Line spacing of the text. Units specified in `font_size_unit`.",
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
+  "div_text_range_mask": {
+    "en": "A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.",
+    "ru": "Маска, закрывающая участок текста, для показа скрытого текста маска может быть отключена через свойство `is_enabled`."
+  },
+  "div_text_range_mask_particles": {
+    "en": "A mask to hide text (spoiler) that looks like randomly distributed particles (telegram alike).",
+    "ru": "Маска для скрытия текста (спойлер) в виде случайно расположенных частиц, как в телеграмме."
+  },
+  "div_text_range_mask_particles_animated": {
+    "en": "Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).",
+    "ru": "Определяет будут ли частички на маске анимироваться или нет. Анимация выглядит как плавное перемещение частиц по маске, как в телеграмме."
+  },
+  "div_text_range_mask_particles_color": {
+    "en": "Color of particles on the mask.",
+    "ru": "Цвет частиц на маске."
+  },
+  "div_text_range_mask_particles_density": {
+    "en": "Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.",
+    "ru": "Плотность частиц на маске, интерпретируется как вероятность частицы появиться в заданной точке маски."
+  },
+  "div_text_range_mask_particles_size": {
+    "en": "Size of a single particle on a mask.",
+    "ru": "Размер одной частицы на маске."
+  },
+  "div_text_range_mask_is_enabled": {
+    "en": "Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.",
+    "ru": "Управляет состоянием маски, при значении `true` указанная часть текста будет скрыта под маской, иначе текст будет показан."
+  },
+  "div_text_range_mask_solid": {
+    "en": "A mask to hide text (spoiler) that looks like a rectangle filled with color specified by `color` parameter.",
+    "ru": "Маска для скрытия текста (спойлер) в виде прямоугольника, залитого указанным в параметре `color` цветом, как в телеграмме."
+  },
   "div_text_range_shadow": {
     "en": "Parameters of the shadow applied to the character range.",
     "ru": "Параметры тени, применяемой к диапазону символов."

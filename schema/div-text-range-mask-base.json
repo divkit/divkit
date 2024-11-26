@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "is_enabled": {
+      "type": "boolean",
+      "$description": "translations.json#/div_text_range_mask_is_enabled",
+      "default_value": "true"
+    }
+  }
+}

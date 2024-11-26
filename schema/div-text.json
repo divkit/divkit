@@ -118,6 +118,12 @@
             "android",
             "web"
           ]
+        },
+        "mask": {
+          "$ref": "div-text-range-mask.json",
+          "$description": "translations.json#/div_text_range_mask",
+          "platforms": [
+          ]
         }
       },
       "$description": "translations.json#/div_text_range"
