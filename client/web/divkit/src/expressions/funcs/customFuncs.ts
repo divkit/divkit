@@ -5,7 +5,7 @@ import { parse } from '../expressions';
 import type { MaybeMissing } from '../json';
 import { cacheGet, cacheSet } from '../parserCache';
 import { createConstVariable, Variable } from '../variable';
-import type { Func } from './funcs';
+import { funcToKey, type Func } from './funcs';
 
 export type CustomFunctions = Map<string, Func[]>;
 
@@ -98,4 +98,39 @@ export function customFunctionWrap(fn: DivFunction): Func {
             return result;
         },
     };
+}
+
+export function mergeCustomFunctions(
+    map0: CustomFunctions | undefined,
+    map1: CustomFunctions | undefined
+): CustomFunctions | undefined {
+    if (!map0) {
+        return map1 || undefined;
+    }
+    if (!map1) {
+        return;
+    }
+
+    const merged = new Map();
+    const defined = new Set<string>();
+    for (const [name, funcs] of map1) {
+        for (const func of funcs) {
+            const key = funcToKey(name, func);
+            defined.add(key);
+        }
+        merged.set(name, funcs);
+    }
+    for (const [name, funcs] of map0) {
+        for (const func of funcs) {
+            const key = funcToKey(name, func);
+            if (!defined.has(key)) {
+                defined.add(key);
+                const list = merged.get(name) || [];
+                list.push(func);
+                merged.set(name, list);
+            }
+        }
+    }
+
+    return merged;
 }

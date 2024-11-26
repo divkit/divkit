@@ -58,7 +58,7 @@
     import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
     import { type LogError, wrapError, type WrappedError } from '../utils/wrapError';
-    import { checkCustomFunction, customFunctionWrap, type CustomFunctions } from '../expressions/funcs/customFuncs';
+    import { checkCustomFunction, customFunctionWrap, mergeCustomFunctions, type CustomFunctions } from '../expressions/funcs/customFuncs';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
     import { ACTION_CTX, type ActionCtxValue } from '../context/action';
     import { STATE_CTX, type StateCtxValue, type StateInterface } from '../context/state';
@@ -1607,10 +1607,7 @@
                         }
                     });
                 }
-                componentContext.customFunctions = mergeMaps(
-                    res.customFunctions,
-                    localCustomFunctions
-                );
+                componentContext.customFunctions = mergeCustomFunctions(res.customFunctions, localCustomFunctions);
 
                 if (Array.isArray(childProcessedJson.animators)) {
                     res.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(

@@ -301,3 +301,7 @@ export function convertArgs(func: Func, args: EvalValue[]): EvalValue[] {
         return arg;
     });
 }
+
+export function funcToKey(funcName: string, func: Func): string {
+    return funcName + ':' + func.args.map(arg => typeof arg === 'string' ? arg : arg.type).join('#');
+}
