@@ -1,0 +1,11 @@
+{
+    "features": [{
+        "id": "state_clip_to_bounds",
+        "name": "State <code>clip_to_bounds</code> property",
+        "compat": {
+            "android": {
+                "version_added": "30.28.0"
+            }
+        }
+    }]
+}

@@ -54,5 +54,19 @@
                 "version_added": "30.19.0"
             }
         }
+    }, {
+        "id": "pager_default_item",
+        "name": "Pager property <code>default_item</code>",
+        "compat": {
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
     }]
 }

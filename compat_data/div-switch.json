@@ -5,6 +5,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.25.0"
+            },
+            "android": {
+                "version_added": "30.28.0"
             }
         }
     }]
