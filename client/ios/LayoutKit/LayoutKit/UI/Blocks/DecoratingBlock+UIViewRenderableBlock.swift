@@ -178,7 +178,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         return
       }
 
-      updateContentHighlightState(animated: true)
+      updateHighlightState(animated: true)
     }
   }
 
@@ -188,7 +188,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         return
       }
 
-      updateContentHighlightState(animated: false)
+      updateHighlightState(animated: false)
     }
   }
 
@@ -399,14 +399,14 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     setNeedsLayout()
   }
 
-  private func updateContentHighlightState(animated: Bool) {
+  private func updateHighlightState(animated: Bool) {
     updateContentBackgroundColor(animated: animated)
 
     guard let actionAnimation = model.actionAnimation(for: highlightState) else {
       return updateContentAlpha(animated: animated)
     }
 
-    childView?.perform(actionAnimation, animated: animated)
+    perform(actionAnimation, animated: animated)
   }
 
   private func updateContentAlpha(animated: Bool) {

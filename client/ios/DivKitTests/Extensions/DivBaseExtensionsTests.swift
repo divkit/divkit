@@ -348,6 +348,29 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WithBackgroundAndActions() {
+    let action = divAction(logId: "action_log_id")
+    let block = makeBlock(
+      divSeparator(
+        actions: [action],
+        background: solidBackground(color("#112233"))
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: separatorBlock(),
+        backgroundColor: color("#112233"),
+        actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
+        actionAnimation: .default,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WithLocalVariables() {
     let block = makeBlock(
       divText(
