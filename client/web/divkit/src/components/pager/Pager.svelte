@@ -49,6 +49,7 @@
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
+    import type { Variable } from '../../expressions/variable';
 
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -63,6 +64,8 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
+    import { constStore } from '../../utils/constStore';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivPagerData>;
@@ -110,6 +113,11 @@
         rebind();
     }
 
+    // eslint-disable-next-line no-nested-ternary
+    $: jsonItemBuilderData = typeof componentContext.json.item_builder?.data === 'string' ? componentContext.getDerivedFromVars(
+        componentContext.json.item_builder?.data, undefined, true
+    ) : (componentContext.json.item_builder?.data ? constStore(componentContext.json.item_builder.data) : undefined);
+
     $: jsonLayoutMode = componentContext.getDerivedFromVars(componentContext.json.layout_mode);
     $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
     $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
@@ -127,13 +135,35 @@
     }
 
     $: {
+        let newItems: {
+            div: MaybeMissing<DivBaseData>;
+            id?: string | undefined;
+            vars?: Map<string, Variable> | undefined;
+        }[] = [];
+        if (
+            componentContext.json.item_builder &&
+            Array.isArray($jsonItemBuilderData) &&
+            Array.isArray(componentContext.json.item_builder.prototypes)
+        ) {
+            const builder = componentContext.json.item_builder;
+            newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
+        } else {
+            newItems = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map(it => {
+                return {
+                    div: it
+                };
+            });
+        }
+
         items.forEach(context => {
             context.destroy();
         });
 
-        items = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map((item, index) => {
-            return componentContext.produceChildContext(item, {
-                path: index
+        items = newItems.map((item, index) => {
+            return componentContext.produceChildContext(item.div, {
+                path: index,
+                variables: item.vars,
+                id: item.id
             });
         });
     }
@@ -295,10 +325,13 @@
         const isHorizontal = orientation === 'horizontal';
         const nextPagerItem = pagerItemsWrapper.children[index] as HTMLElement;
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
+        const elementSize: keyof HTMLElement = isHorizontal ? 'offsetWidth' : 'offsetHeight';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
+        const position = nextPagerItem[elementOffset] + nextPagerItem[elementSize] / 2 -
+            pagerItemsWrapper[elementSize] / 2;
 
         pagerItemsWrapper.scroll({
-            [scrollDirection]: nextPagerItem[elementOffset],
+            [scrollDirection]: position,
             behavior
         });
         currentItem = index;
@@ -326,7 +359,7 @@
 
     $: if (componentContext.json) {
         const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
-        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < (componentContext.json.items || []).length) {
+        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
             currentItem = prevSelectedItem = defaultItem;
         }
 

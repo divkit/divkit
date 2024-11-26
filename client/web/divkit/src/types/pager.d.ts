@@ -2,6 +2,7 @@ import type { DivBaseData } from './base';
 import type { FixedSize, PercentageSize } from './sizes';
 import type { Orientation } from './orientation';
 import type { BooleanInt } from '../../typings/common';
+import type { CollectionItemBuilder } from './itemBuilder';
 
 export interface PageSize {
     type: 'percentage';
@@ -17,7 +18,8 @@ export interface DivPagerData extends DivBaseData {
     type: 'pager';
     layout_mode: PagerLayoutMode;
     item_spacing?: FixedSize;
-    items: DivBaseData[];
+    items?: DivBaseData[];
+    item_builder?: CollectionItemBuilder;
     orientation?: Orientation;
     restrict_parent_scroll?: BooleanInt;
     default_item?: number;

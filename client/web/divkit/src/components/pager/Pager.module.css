@@ -28,7 +28,7 @@
     }
 }
 
-.pager_orientation_horizontal .pager__items {
+.pager_orientation_horizontal > .pager__items {
     justify-content: start;
     grid-auto-flow: column;
     grid-template-rows: 100%;
@@ -39,7 +39,7 @@
     scroll-snap-type: x mandatory;
 }
 
-.pager_orientation_vertical .pager__items {
+.pager_orientation_vertical > .pager__items {
     align-content: start;
     grid-auto-flow: row;
     grid-template-columns: 100%;
@@ -51,23 +51,23 @@
 }
 
 
-.pager_orientation_horizontal .pager__item_height_content,
-.pager_orientation_horizontal .pager__item_height_fixed {
+.pager_orientation_horizontal > .pager__items > .pager__item_height_content,
+.pager_orientation_horizontal > .pager__items > .pager__item_height_fixed {
     height: max-content;
 }
 
-.pager_orientation_horizontal .pager__item_height_content:not(.pager__item_height-constrained),
-.pager_orientation_horizontal .pager__item_height_fixed {
+.pager_orientation_horizontal > .pager__items > .pager__item_height_content:not(.pager__item_height-constrained),
+.pager_orientation_horizontal > .pager__items > .pager__item_height_fixed {
     max-height: none;
 }
 
-.pager_orientation_vertical .pager__item_width_content,
-.pager_orientation_vertical .pager__item_width_fixed {
+.pager_orientation_vertical > .pager__items > .pager__item_width_content,
+.pager_orientation_vertical > .pager__items > .pager__item_width_fixed {
     width: max-content;
 }
 
-.pager_orientation_vertical .pager__item_width_content:not(.pager__item_width-constrained),
-.pager_orientation_vertical .pager__item_width_fixed {
+.pager_orientation_vertical > .pager__items > .pager__item_width_content:not(.pager__item_width-constrained),
+.pager_orientation_vertical > .pager__items > .pager__item_width_fixed {
     max-width: none;
 }
 

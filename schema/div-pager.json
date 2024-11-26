@@ -38,7 +38,8 @@
           "$description": "translations.json#/div_collection_item_builder",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "orientation": {

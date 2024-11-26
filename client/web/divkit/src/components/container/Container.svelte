@@ -52,6 +52,7 @@
     import { Truthy } from '../../utils/truthy';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { constStore } from '../../utils/constStore';
+    import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
     import ContainerSeparators from './ContainerSeparators.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
@@ -126,44 +127,7 @@
             Array.isArray(componentContext.json.item_builder.prototypes)
         ) {
             const builder = componentContext.json.item_builder;
-            const prototypes = componentContext.json.item_builder.prototypes;
-            newItems = [];
-
-            $jsonItemBuilderData.forEach((it, index) => {
-                if (it === null || typeof it !== 'object') {
-                    return;
-                }
-                const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>, index);
-
-                let div: MaybeMissing<DivBaseData> | undefined;
-                let id: string | undefined;
-                for (let i = 0; i < prototypes.length; ++i) {
-                    const prototype = prototypes[i];
-                    if (!prototype.div) {
-                        continue;
-                    }
-                    if (prototype.selector === undefined) {
-                        div = prototype.div;
-                        id = componentContext.getJsonWithVars(prototype.id, additionalVars);
-                        break;
-                    }
-
-                    const selectorVal = componentContext.getJsonWithVars(prototype.selector, additionalVars);
-                    if (selectorVal) {
-                        div = prototype.div;
-                        id = componentContext.getJsonWithVars(prototype.id, additionalVars);
-                        break;
-                    }
-                }
-
-                if (div) {
-                    newItems.push({
-                        div,
-                        id,
-                        vars: additionalVars
-                    });
-                }
-            });
+            newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
         } else {
             newItems = (Array.isArray(jsonItems) && jsonItems || []).map(it => {
                 return {
