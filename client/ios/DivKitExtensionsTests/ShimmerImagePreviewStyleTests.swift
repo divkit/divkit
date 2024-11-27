@@ -1,14 +1,15 @@
 import XCTest
 
-import DivKit
 @testable import DivKitExtensions
+
+import DivKit
 import VGSL
 
 final class ShimmerImagePreviewStyleTests: XCTestCase {
-  let tester = ShimmerStyleTester { dict, expressionResolver in
+  let tester = ShimmerStyleTester { dict, context in
     try ShimmerImagePreviewStyle(
       dictionary: dict,
-      expressionResolver: expressionResolver
+      expressionResolver: context.expressionResolver
     )
   }
 

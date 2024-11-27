@@ -24,7 +24,10 @@ public final class ShimmerImagePreviewViewProvider: ViewProvider {
     if let view {
       return view
     }
-    let view = createImagePreviewView()
+    let view = ShimmerImagePreviewView(
+      style: style,
+      effectBeginTime: effectBeginTime
+    )
     self.view = view
     return view
   }
@@ -34,19 +37,5 @@ public final class ShimmerImagePreviewViewProvider: ViewProvider {
       return false
     }
     return style == other.style && effectBeginTime == other.effectBeginTime && path == other.path
-  }
-
-  private func createImagePreviewView() -> UIView {
-    let view = ShimmerView()
-    view.configureShimmer(
-      colorsAndLocations: style.colorsAndLocations,
-      angle: style.angle,
-      gradientIdleState: .middle,
-      animationParams: ShimmerView.AnimationParams(
-        effectBeginTime: effectBeginTime,
-        duration: style.duration
-      )
-    )
-    return view
   }
 }

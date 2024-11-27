@@ -4,23 +4,31 @@ import Foundation
 import LayoutKit
 import VGSL
 
-final class ShineBlock: Block {
-  let style: ShineStyle
-  let effectBeginTime: CFTimeInterval
+final class ShineBlock: WrapperBlock, LayoutCachingDefaultImpl {
+  let child: Block
+  let params: ShineExtensionParams
   let maskImageHolder: ImageHolder
 
   init(
-    style: ShineStyle,
-    effectBeginTime: CFTimeInterval,
+    child: Block,
+    params: ShineExtensionParams,
     maskImageHolder: ImageHolder
   ) {
-    self.style = style
-    self.effectBeginTime = effectBeginTime
+    self.child = child
+    self.params = params
     self.maskImageHolder = maskImageHolder
   }
 
   func getImageHolders() -> [ImageHolder] {
     [maskImageHolder]
+  }
+
+  func makeCopy(wrapping block: Block) -> ShineBlock {
+    ShineBlock(
+      child: block,
+      params: params,
+      maskImageHolder: maskImageHolder
+    )
   }
 
   func equals(_ other: Block) -> Bool {
@@ -32,26 +40,17 @@ final class ShineBlock: Block {
   }
 }
 
-extension ShineBlock {
-  var intrinsicContentWidth: CGFloat { 0 }
-  func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat { 0 }
-
-  var isHorizontallyResizable: Bool { true }
-  var isVerticallyResizable: Bool { true }
-
-  var isHorizontallyConstrained: Bool { false }
-  var isVerticallyConstrained: Bool { false }
-
-  var widthOfHorizontallyNonResizableBlock: CGFloat { 0.0 }
-  func heightOfVerticallyNonResizableBlock(forWidth _: CGFloat) -> CGFloat { 0 }
-
-  var weightOfHorizontallyResizableBlock: LayoutTrait.Weight { .default }
-  var weightOfVerticallyResizableBlock: LayoutTrait.Weight { .default }
+extension ShineBlock: Equatable {
+  static func ==(lhs: ShineBlock, rhs: ShineBlock) -> Bool {
+      lhs.child == rhs.child &&
+      lhs.params == rhs.params &&
+      compare(lhs.maskImageHolder, rhs.maskImageHolder)
+  }
 }
 
-extension ShineBlock: LayoutCachingDefaultImpl {}
-extension ShineBlock: ElementStateUpdatingDefaultImpl {}
-
 extension ShineBlock: CustomDebugStringConvertible {
-  var debugDescription: String { "Shine" }
+  var debugDescription: String {
+    "ShineBlock child: \(child), " +
+      "parameters: \(params)"
+  }
 }

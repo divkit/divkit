@@ -1,4 +1,5 @@
 @testable import DivKit
+import DivKitTestsSupport
 import Foundation
 import VGSL
 
@@ -31,7 +32,7 @@ func divAction(
 }
 
 func divData(
-  logId: String = DivKitTests.cardId.rawValue,
+  logId: String = DivBlockModelingContext.testCardId.rawValue,
   states: [DivData.State]
 ) -> DivData {
   DivData(
