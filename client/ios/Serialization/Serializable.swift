@@ -25,22 +25,3 @@ extension NSArray: ValidSerializationValue {}
 public protocol Serializable {
   func toDictionary() -> [String: ValidSerializationValue]
 }
-
-#if INTERNAL_BUILD
-
-extension Serializable {
-  public func makeDebugJSON(
-    _ options: JSONSerialization
-      .WritingOptions = [.prettyPrinted]
-  ) -> String {
-    guard
-      let data = try? JSONSerialization.data(withJSONObject: toDictionary(), options: options),
-      let debugJSON = String(data: data, encoding: .utf8)
-    else {
-      return "<failed to encode>"
-    }
-    return debugJSON
-  }
-}
-
-#endif
