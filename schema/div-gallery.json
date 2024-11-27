@@ -19,7 +19,6 @@
         },
         "cross_content_alignment": {
           "$description": "translations.json#/div_gallery_cross_content_alignment",
-          "version": "2.1",
           "type": "string",
           "enum": [
             "start",
