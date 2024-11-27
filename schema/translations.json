@@ -332,11 +332,11 @@
     "ru": "Действие при двойном нажатии на элемент."
   },
   "div_actionable_hover_end_actions": {
-    "en": "Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).",
+    "en": "Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).",
     "ru": "Действия, выполняемые после наведения на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
   },
   "div_actionable_hover_start_actions": {
-    "en": "Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).",
+    "en": "Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).",
     "ru": "Действия, выполняемые при наведении на элемент. Доступны на платформах, поддерживающих указывающие устройства (мышь, стилус и т.д.)."
   },
   "div_actionable_longtap_actions": {
@@ -344,11 +344,11 @@
     "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без сенсорного экрана."
   },
   "div_actionable_press_end_actions": {
-    "en": "Actions performed when an element is released.",
+    "en": "Actions performed after clicking/tapping an element.",
     "ru": "Действия, выполняемые после нажатия на элемент."
   },
   "div_actionable_press_start_actions": {
-    "en": "Actions performed when an element is pressed.",
+    "en": "Actions performed at the start of a click/tap on an element.",
     "ru": "Действия, выполняемые в начале нажатия на элемент."
   },
   "div_animation": {
@@ -1560,11 +1560,11 @@
     "ru": "Аниматор числового значения."
   },
   "div_page_content_size": {
-    "en": "Page size equals to its content size.",
+    "en": "The page size is equal to the size of its content.",
     "ru": "Размер страницы равен размеру ее контента."
   },
   "div_page_content_size_alignment": {
-    "en": "Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.",
+    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
     "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
   },
   "div_page_size": {
@@ -2391,6 +2391,10 @@
     "en": "A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.",
     "ru": "Маска, закрывающая участок текста, для показа скрытого текста маска может быть отключена через свойство `is_enabled`."
   },
+  "div_text_range_mask_is_enabled": {
+    "en": "Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.",
+    "ru": "Управляет состоянием маски, при значении `true` указанная часть текста будет скрыта под маской, иначе текст будет показан."
+  },
   "div_text_range_mask_particles": {
     "en": "A mask to hide text (spoiler) that looks like randomly distributed particles (telegram alike).",
     "ru": "Маска для скрытия текста (спойлер) в виде случайно расположенных частиц, как в телеграмме."
@@ -2410,10 +2414,6 @@
   "div_text_range_mask_particles_size": {
     "en": "Size of a single particle on a mask.",
     "ru": "Размер одной частицы на маске."
-  },
-  "div_text_range_mask_is_enabled": {
-    "en": "Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.",
-    "ru": "Управляет состоянием маски, при значении `true` указанная часть текста будет скрыта под маской, иначе текст будет показан."
   },
   "div_text_range_mask_solid": {
     "en": "A mask to hide text (spoiler) that looks like a rectangle filled with color specified by `color` parameter.",
