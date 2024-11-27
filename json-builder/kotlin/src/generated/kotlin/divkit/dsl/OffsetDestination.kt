@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Specifies the position measured in 'dp' from the container start as the scrolling end position. Only applies in 'gallery'.
+ * Specifies the position measured in `dp` from the container start as the scrolling end position. Only applies in `gallery`.
  * 
  * Can be created using the method [offsetDestination].
  * 
@@ -42,7 +42,7 @@ data class OffsetDestination internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Position measured in 'dp'.
+         * Position measured in `dp`.
          */
         val value: Property<Int>?,
     ) {
@@ -56,7 +56,7 @@ data class OffsetDestination internal constructor(
 }
 
 /**
- * @param value Position measured in 'dp'.
+ * @param value Position measured in `dp`.
  */
 @Generated
 fun DivScope.offsetDestination(
@@ -69,7 +69,7 @@ fun DivScope.offsetDestination(
 )
 
 /**
- * @param value Position measured in 'dp'.
+ * @param value Position measured in `dp`.
  */
 @Generated
 fun DivScope.offsetDestinationProps(
@@ -80,7 +80,7 @@ fun DivScope.offsetDestinationProps(
 )
 
 /**
- * @param value Position measured in 'dp'.
+ * @param value Position measured in `dp`.
  */
 @Generated
 fun TemplateScope.offsetDestinationRefs(
@@ -91,7 +91,7 @@ fun TemplateScope.offsetDestinationRefs(
 )
 
 /**
- * @param value Position measured in 'dp'.
+ * @param value Position measured in `dp`.
  */
 @Generated
 fun OffsetDestination.override(
@@ -104,7 +104,7 @@ fun OffsetDestination.override(
 )
 
 /**
- * @param value Position measured in 'dp'.
+ * @param value Position measured in `dp`.
  */
 @Generated
 fun OffsetDestination.defer(
@@ -117,7 +117,7 @@ fun OffsetDestination.defer(
 )
 
 /**
- * @param value Position measured in 'dp'.
+ * @param value Position measured in `dp`.
  */
 @Generated
 fun OffsetDestination.evaluate(

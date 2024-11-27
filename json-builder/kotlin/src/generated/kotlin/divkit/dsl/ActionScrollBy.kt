@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Scrolls the container by 'item_count' or 'offset' starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.
+ * Scrolls the container by `item_count` or `offset` starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.
  * 
  * Can be created using the method [actionScrollBy].
  * 
@@ -60,12 +60,12 @@ data class ActionScrollBy internal constructor(
          */
         val itemCount: Property<Int>?,
         /**
-         * Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
+         * Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
          * Default value: `0`.
          */
         val offset: Property<Int>?,
         /**
-         * Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+         * Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
          * Default value: `clamp`.
          */
         val overflow: Property<Overflow>?,
@@ -83,7 +83,7 @@ data class ActionScrollBy internal constructor(
     }
 
     /**
-     * Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+     * Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
      * 
      * Possible values: [clamp], [ring].
      */
@@ -95,8 +95,8 @@ data class ActionScrollBy internal constructor(
  * @param animated Enables scrolling animation.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
- * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
- * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+ * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
+ * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun DivScope.actionScrollBy(
@@ -120,8 +120,8 @@ fun DivScope.actionScrollBy(
  * @param animated Enables scrolling animation.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
- * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
- * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+ * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
+ * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun DivScope.actionScrollByProps(
@@ -143,8 +143,8 @@ fun DivScope.actionScrollByProps(
  * @param animated Enables scrolling animation.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
- * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
- * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+ * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
+ * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun TemplateScope.actionScrollByRefs(
@@ -166,8 +166,8 @@ fun TemplateScope.actionScrollByRefs(
  * @param animated Enables scrolling animation.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
- * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
- * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+ * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
+ * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun ActionScrollBy.override(
@@ -191,8 +191,8 @@ fun ActionScrollBy.override(
  * @param animated Enables scrolling animation.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
- * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
- * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+ * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
+ * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun ActionScrollBy.defer(
@@ -216,8 +216,8 @@ fun ActionScrollBy.defer(
  * @param animated Enables scrolling animation.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
- * @param offset Scrolling distance measured in 'dp' from the current position. For scrolling back, use negative values. Only applies in 'gallery'.
- * @param overflow Defines navigation behavior at boundary elements:<li>'clamp': Stop navigation at the boundary element (default)</li><li>'ring': Navigate to the start or end, depending on the current element.</li>
+ * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
+ * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
 fun ActionScrollBy.evaluate(

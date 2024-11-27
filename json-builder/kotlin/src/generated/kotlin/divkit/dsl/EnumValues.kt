@@ -248,7 +248,8 @@ object NoAnimationEnumValue : EnumValue("no_animation"),
 
 @Generated
 object NormalEnumValue : EnumValue("normal"),
-    AnimationDirection
+    AnimationDirection,
+    Text.Image.IndexingDirection
 
 @Generated
 object ReverseEnumValue : EnumValue("reverse"),
@@ -534,6 +535,10 @@ object SlideEnumValue : EnumValue("slide"),
 @Generated
 object MiddleEnumValue : EnumValue("middle"),
     Text.Truncate
+
+@Generated
+object ReversedEnumValue : EnumValue("reversed"),
+    Text.Image.IndexingDirection
 
 @Generated
 object TopLeftEnumValue : EnumValue("top-left"),
@@ -1036,6 +1041,10 @@ val DivScope.slide: SlideEnumValue
 @Generated
 val DivScope.middle: MiddleEnumValue
     get() = MiddleEnumValue
+
+@Generated
+val DivScope.reversed: ReversedEnumValue
+    get() = ReversedEnumValue
 
 @Generated
 val DivScope.top_left: TopLeftEnumValue

@@ -153,7 +153,7 @@ data class Switch internal constructor(
         /**
          * Color of the toggle in the enabled state. If the color is omitted:
         : iOS standard system color is used
-        : the color specified in 'Div2Context' on Android is used.
+        : the color specified in `Div2Context` on Android is used.
          */
         val onColor: Property<Color>?,
         /**
@@ -287,7 +287,7 @@ data class Switch internal constructor(
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -404,7 +404,7 @@ fun DivScope.switch(
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -519,7 +519,7 @@ fun DivScope.switchProps(
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -634,7 +634,7 @@ fun TemplateScope.switchRefs(
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -751,7 +751,7 @@ fun Switch.override(
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -855,7 +855,7 @@ fun Switch.defer(
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
@@ -933,7 +933,7 @@ fun Switch.evaluate(
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1051,7 +1051,7 @@ fun Component<Switch>.override(
  * @param margins External margins from the element stroke.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1156,7 +1156,7 @@ fun Component<Switch>.defer(
  * @param isEnabled Enables or disables the element's toggle functionality.
  * @param onColor Color of the toggle in the enabled state. If the color is omitted:
 : iOS standard system color is used
-: the color specified in 'Div2Context' on Android is used.
+: the color specified in `Div2Context` on Android is used.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.

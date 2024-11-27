@@ -327,7 +327,7 @@ data class Text internal constructor(
          */
         val textShadow: Property<Shadow>?,
         /**
-         * Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+         * Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
          * Default value: `false`.
          */
         val tightenWidth: Property<Boolean>?,
@@ -550,6 +550,7 @@ data class Text internal constructor(
                 accessibility = additive.accessibility ?: properties.accessibility,
                 alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
                 height = additive.height ?: properties.height,
+                indexingDirection = additive.indexingDirection ?: properties.indexingDirection,
                 preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
                 start = additive.start ?: properties.start,
                 tintColor = additive.tintColor ?: properties.tintColor,
@@ -571,6 +572,13 @@ data class Text internal constructor(
              * Default value: `{"type": "fixed","value":20}`.
              */
             val height: Property<FixedSize>?,
+            /**
+             * Defines direction in `start` parameter:
+            `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+            `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+             * Default value: `normal`.
+             */
+            val indexingDirection: Property<IndexingDirection>?,
             /**
              * Background image must be loaded before the display.
              * Default value: `false`.
@@ -605,6 +613,7 @@ data class Text internal constructor(
                 result.tryPutProperty("accessibility", accessibility)
                 result.tryPutProperty("alignment_vertical", alignmentVertical)
                 result.tryPutProperty("height", height)
+                result.tryPutProperty("indexing_direction", indexingDirection)
                 result.tryPutProperty("preload_required", preloadRequired)
                 result.tryPutProperty("start", start)
                 result.tryPutProperty("tint_color", tintColor)
@@ -614,6 +623,16 @@ data class Text internal constructor(
                 return result
             }
         }
+
+        /**
+         * Defines direction in `start` parameter:
+        `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+        `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+         * 
+         * Possible values: [normal], [reversed].
+         */
+        @Generated
+        sealed interface IndexingDirection
 
         /**
          * Can be created using the method [textImageAccessibility].
@@ -693,6 +712,7 @@ data class Text internal constructor(
                 fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
                 letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
                 lineHeight = additive.lineHeight ?: properties.lineHeight,
+                mask = additive.mask ?: properties.mask,
                 start = additive.start ?: properties.start,
                 strike = additive.strike ?: properties.strike,
                 textColor = additive.textColor ?: properties.textColor,
@@ -757,6 +777,10 @@ data class Text internal constructor(
              */
             val lineHeight: Property<Int>?,
             /**
+             * A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+             */
+            val mask: Property<TextRangeMask>?,
+            /**
              * Ordinal number of a character which the range begins from. The first character has a number `0`.
              * Default value: `0`.
              */
@@ -798,6 +822,7 @@ data class Text internal constructor(
                 result.tryPutProperty("font_weight_value", fontWeightValue)
                 result.tryPutProperty("letter_spacing", letterSpacing)
                 result.tryPutProperty("line_height", lineHeight)
+                result.tryPutProperty("mask", mask)
                 result.tryPutProperty("start", start)
                 result.tryPutProperty("strike", strike)
                 result.tryPutProperty("text_color", textColor)
@@ -863,7 +888,7 @@ data class Text internal constructor(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1073,7 +1098,7 @@ fun DivScope.text(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1281,7 +1306,7 @@ fun DivScope.textProps(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1489,7 +1514,7 @@ fun TemplateScope.textRefs(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1699,7 +1724,7 @@ fun Text.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1881,7 +1906,7 @@ fun Text.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -2041,7 +2066,7 @@ fun Text.evaluate(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -2252,7 +2277,7 @@ fun Component<Text>.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -2435,7 +2460,7 @@ fun Component<Text>.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
- * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to 'wrap_content', 'constrained=true', and 'max_size' is specified.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -2681,6 +2706,9 @@ fun Text.Ellipsis.asList() = listOf(this)
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2694,6 +2722,7 @@ fun DivScope.textImage(
     accessibility: Text.Image.Accessibility? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
+    indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
@@ -2705,6 +2734,7 @@ fun DivScope.textImage(
         accessibility = valueOrNull(accessibility),
         alignmentVertical = valueOrNull(alignmentVertical),
         height = valueOrNull(height),
+        indexingDirection = valueOrNull(indexingDirection),
         preloadRequired = valueOrNull(preloadRequired),
         start = valueOrNull(start),
         tintColor = valueOrNull(tintColor),
@@ -2717,6 +2747,9 @@ fun DivScope.textImage(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2730,6 +2763,7 @@ fun DivScope.textImageProps(
     accessibility: Text.Image.Accessibility? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
+    indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
@@ -2740,6 +2774,7 @@ fun DivScope.textImageProps(
     accessibility = valueOrNull(accessibility),
     alignmentVertical = valueOrNull(alignmentVertical),
     height = valueOrNull(height),
+    indexingDirection = valueOrNull(indexingDirection),
     preloadRequired = valueOrNull(preloadRequired),
     start = valueOrNull(start),
     tintColor = valueOrNull(tintColor),
@@ -2751,6 +2786,9 @@ fun DivScope.textImageProps(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2764,6 +2802,7 @@ fun TemplateScope.textImageRefs(
     accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     height: ReferenceProperty<FixedSize>? = null,
+    indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
@@ -2774,6 +2813,7 @@ fun TemplateScope.textImageRefs(
     accessibility = accessibility,
     alignmentVertical = alignmentVertical,
     height = height,
+    indexingDirection = indexingDirection,
     preloadRequired = preloadRequired,
     start = start,
     tintColor = tintColor,
@@ -2785,6 +2825,9 @@ fun TemplateScope.textImageRefs(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2798,6 +2841,7 @@ fun Text.Image.override(
     accessibility: Text.Image.Accessibility? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
+    indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
@@ -2809,6 +2853,7 @@ fun Text.Image.override(
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         height = valueOrNull(height) ?: properties.height,
+        indexingDirection = valueOrNull(indexingDirection) ?: properties.indexingDirection,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         start = valueOrNull(start) ?: properties.start,
         tintColor = valueOrNull(tintColor) ?: properties.tintColor,
@@ -2821,6 +2866,9 @@ fun Text.Image.override(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2834,6 +2882,7 @@ fun Text.Image.defer(
     accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     height: ReferenceProperty<FixedSize>? = null,
+    indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
@@ -2845,6 +2894,7 @@ fun Text.Image.defer(
         accessibility = accessibility ?: properties.accessibility,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         height = height ?: properties.height,
+        indexingDirection = indexingDirection ?: properties.indexingDirection,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
         tintColor = tintColor ?: properties.tintColor,
@@ -2856,6 +2906,9 @@ fun Text.Image.defer(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2866,6 +2919,7 @@ fun Text.Image.defer(
 fun Text.Image.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
+    indexingDirection: ExpressionProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     start: ExpressionProperty<Int>? = null,
     tintColor: ExpressionProperty<Color>? = null,
@@ -2876,6 +2930,7 @@ fun Text.Image.evaluate(
         accessibility = properties.accessibility,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         height = properties.height,
+        indexingDirection = indexingDirection ?: properties.indexingDirection,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
         tintColor = tintColor ?: properties.tintColor,
@@ -2902,6 +2957,7 @@ fun Text.Image.asList() = listOf(this)
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2925,6 +2981,7 @@ fun DivScope.textRange(
     fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
+    mask: TextRangeMask? = null,
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
@@ -2946,6 +3003,7 @@ fun DivScope.textRange(
         fontWeightValue = valueOrNull(fontWeightValue),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
+        mask = valueOrNull(mask),
         start = valueOrNull(start),
         strike = valueOrNull(strike),
         textColor = valueOrNull(textColor),
@@ -2969,6 +3027,7 @@ fun DivScope.textRange(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2992,6 +3051,7 @@ fun DivScope.textRangeProps(
     fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
+    mask: TextRangeMask? = null,
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
@@ -3012,6 +3072,7 @@ fun DivScope.textRangeProps(
     fontWeightValue = valueOrNull(fontWeightValue),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
+    mask = valueOrNull(mask),
     start = valueOrNull(start),
     strike = valueOrNull(strike),
     textColor = valueOrNull(textColor),
@@ -3034,6 +3095,7 @@ fun DivScope.textRangeProps(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3057,6 +3119,7 @@ fun TemplateScope.textRangeRefs(
     fontWeightValue: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
+    mask: ReferenceProperty<TextRangeMask>? = null,
     start: ReferenceProperty<Int>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -3077,6 +3140,7 @@ fun TemplateScope.textRangeRefs(
     fontWeightValue = fontWeightValue,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
+    mask = mask,
     start = start,
     strike = strike,
     textColor = textColor,
@@ -3099,6 +3163,7 @@ fun TemplateScope.textRangeRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3122,6 +3187,7 @@ fun Text.Range.override(
     fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
+    mask: TextRangeMask? = null,
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
@@ -3143,6 +3209,7 @@ fun Text.Range.override(
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
+        mask = valueOrNull(mask) ?: properties.mask,
         start = valueOrNull(start) ?: properties.start,
         strike = valueOrNull(strike) ?: properties.strike,
         textColor = valueOrNull(textColor) ?: properties.textColor,
@@ -3166,6 +3233,7 @@ fun Text.Range.override(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3189,6 +3257,7 @@ fun Text.Range.defer(
     fontWeightValue: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
+    mask: ReferenceProperty<TextRangeMask>? = null,
     start: ReferenceProperty<Int>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -3210,6 +3279,7 @@ fun Text.Range.defer(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
+        mask = mask ?: properties.mask,
         start = start ?: properties.start,
         strike = strike ?: properties.strike,
         textColor = textColor ?: properties.textColor,
@@ -3269,6 +3339,7 @@ fun Text.Range.evaluate(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
+        mask = properties.mask,
         start = start ?: properties.start,
         strike = strike ?: properties.strike,
         textColor = textColor ?: properties.textColor,

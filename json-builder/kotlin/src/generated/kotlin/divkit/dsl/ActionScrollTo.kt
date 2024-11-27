@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Scrolls to a position or switches to the container element specified by the 'destination' parameter.
+ * Scrolls to a position or switches to the container element specified by the `destination` parameter.
  * 
  * Can be created using the method [actionScrollTo].
  * 
@@ -49,7 +49,7 @@ data class ActionScrollTo internal constructor(
          */
         val animated: Property<Boolean>?,
         /**
-         * Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>
+         * Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
          */
         val destination: Property<ActionScrollDestination>?,
         /**
@@ -70,7 +70,7 @@ data class ActionScrollTo internal constructor(
 
 /**
  * @param animated Enables scrolling animation.
- * @param destination Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>
+ * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -89,7 +89,7 @@ fun DivScope.actionScrollTo(
 
 /**
  * @param animated Enables scrolling animation.
- * @param destination Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>
+ * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -106,7 +106,7 @@ fun DivScope.actionScrollToProps(
 
 /**
  * @param animated Enables scrolling animation.
- * @param destination Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>
+ * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -123,7 +123,7 @@ fun TemplateScope.actionScrollToRefs(
 
 /**
  * @param animated Enables scrolling animation.
- * @param destination Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>
+ * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -142,7 +142,7 @@ fun ActionScrollTo.override(
 
 /**
  * @param animated Enables scrolling animation.
- * @param destination Defines the scrolling end position:<li>'index': Scroll to the element with the index provided in 'value'</li><li>'offset': Scroll to the position specified in 'value' and measured in 'dp' from the start of the container. Applies only in 'gallery';</li><li>'start': Scroll to the container start;</li><li>'end': Scroll to the container end.</li>
+ * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
  * @param id ID of the element where the action should be performed.
  */
 @Generated
