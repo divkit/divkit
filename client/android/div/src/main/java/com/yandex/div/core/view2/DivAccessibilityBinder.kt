@@ -1,6 +1,8 @@
 package com.yandex.div.core.view2
 
 import android.view.View
+import android.widget.CheckBox
+import android.widget.RadioButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.core.annotations.Mockable
@@ -123,6 +125,8 @@ internal class DivAccessibilityBinder @Inject constructor(
             AccessibilityType.SELECT -> "android.widget.Spinner"
             AccessibilityType.TAB_WIDGET -> "android.widget.TabWidget"
             AccessibilityType.TEXT -> "android.widget.TextView"
+            AccessibilityType.CHECK_BOX -> "android.widget.CheckBox"
+            AccessibilityType.RADIO_BUTTON -> "android.widget.RadioButton"
         }
 
         if (AccessibilityType.HEADER == type) {
@@ -196,6 +200,8 @@ internal class DivAccessibilityBinder @Inject constructor(
                 div is DivSlider -> AccessibilityType.SLIDER
                 div is DivImage && (div.accessibility != null || div.isClickable(resolver))-> AccessibilityType.IMAGE
                 div is DivGallery && div.accessibility?.description != null -> AccessibilityType.PAGER
+                div is RadioButton -> AccessibilityType.RADIO_BUTTON
+                div is CheckBox -> AccessibilityType.CHECK_BOX
                 else -> AccessibilityType.NONE
             }
             DivAccessibility.Type.NONE -> AccessibilityType.NONE
@@ -207,6 +213,8 @@ internal class DivAccessibilityBinder @Inject constructor(
             DivAccessibility.Type.LIST -> AccessibilityType.LIST
             DivAccessibility.Type.SELECT -> AccessibilityType.SELECT
             DivAccessibility.Type.TAB_BAR -> AccessibilityType.TAB_WIDGET
+            DivAccessibility.Type.RADIO -> AccessibilityType.RADIO_BUTTON
+            DivAccessibility.Type.CHECKBOX -> AccessibilityType.CHECK_BOX
         }
 
     private enum class AccessibilityType {
@@ -221,5 +229,7 @@ internal class DivAccessibilityBinder @Inject constructor(
         TAB_WIDGET,
         PAGER,
         TEXT,
+        RADIO_BUTTON,
+        CHECK_BOX,
     }
 }

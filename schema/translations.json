@@ -7,6 +7,10 @@
     "en": "Accessibility settings.",
     "ru": "Настройки доступности."
   },
+  "div_accessibility_is_checked": {
+    "en": "Indicates the current status of the checkbox or radio button. `true` is selected, `false` is not selected.",
+    "ru": "Указывает текущее состояние чекбокса или переключателя. `true` — выбран, `false` — не выбран."
+  },
   "div_accessibility_description": {
     "en": "Element description. It is used as the main description for screen reading applications.",
     "ru": "Описание элемента. Используется в качестве основного описания для программ экранного чтения."
