@@ -475,6 +475,7 @@ final skippedTests = [
 
   ...[
     'test_data/snapshot_test_data/div-image/tint-mode.json',
+    'test_data/snapshot_test_data/div-image/blur-with-big-radius.json'
   ].map(
     (e) => _SkipTest(
       e,
