@@ -1,3 +1,12 @@
+## 30.29.0 (December 2, 2024)
+
+* Added support for local `functions` in all components.
+* Added support for the `item_builder` in the `pager` component.
+* Added support for the `switch` component.
+* Fixed an issue with the `pager` scrolling to an item in some situations.
+* Fixed an issue with the layout of nested `pager`s.
+
+
 ## 30.28.0 (November 25, 2024)
 
 * Added support for the `default_item` property in `pager`.
