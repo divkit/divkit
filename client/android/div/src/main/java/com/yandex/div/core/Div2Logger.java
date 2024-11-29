@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.view2.Div2View;
+import com.yandex.div.core.view2.logging.patch.PatchResult;
 import com.yandex.div.json.expressions.ExpressionResolver;
 import com.yandex.div2.DivAction;
 import com.yandex.div2.DivData;
@@ -292,7 +293,7 @@ public interface Div2Logger {
     default void logPatchResult(
         @NonNull Div2View divView,
         @NonNull DivPatch patch,
-        @NonNull String result,
+        @NonNull @PatchResult String result,
         @Nullable String eventsMessage
     ) {
         //do nothing
