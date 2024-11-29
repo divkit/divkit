@@ -1,4 +1,5 @@
 @testable import DivKit
+import DivKitTestsSupport
 import Foundation
 @testable import LayoutKit
 import VGSL
@@ -76,7 +77,7 @@ extension ActionAnimation {
 }
 
 extension UIElementPath {
-  static let root = DivKitTests.cardId.path
+  static let root = DivBlockModelingContext.testCardId.path
 }
 
 extension DivAction {

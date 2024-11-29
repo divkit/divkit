@@ -6,27 +6,23 @@ import VGSL
 extension ShineBlock {
   static func makeBlockView() -> BlockView { ShineView() }
 
-  func configureBlockView(
-    _ view: BlockView,
-    observer _: ElementStateObserver?,
-    overscrollDelegate _: ScrollDelegate?,
-    renderingDelegate _: RenderingDelegate?
-  ) {
-    let shineView = view as! ShineView
-    shineView.configureShine(
-      style: style,
-      effectBeginTime: effectBeginTime,
-      maskImageHolder: maskImageHolder
-    )
-  }
-
   func canConfigureBlockView(_ view: BlockView) -> Bool {
     view is ShineView
   }
-}
 
-extension ShineView: BlockViewProtocol {
-  var effectiveBackgroundColor: UIColor? { nil }
+  func configureBlockView(
+    _ view: BlockView,
+    observer: ElementStateObserver?,
+    overscrollDelegate: ScrollDelegate?,
+    renderingDelegate: RenderingDelegate?
+  ) {
+    (view as! ShineView).configure(
+      child: child,
+      observer: observer,
+      overscrollDelegate: overscrollDelegate,
+      renderingDelegate: renderingDelegate,
+      params: params,
+      maskImageHolder: maskImageHolder
+    )
+  }
 }
-
-extension ShineView: VisibleBoundsTrackingLeaf {}

@@ -3,6 +3,7 @@
 
 import XCTest
 
+import DivKitTestsSupport
 import VGSL
 
 final class DivImageExtensionsTests: XCTestCase {

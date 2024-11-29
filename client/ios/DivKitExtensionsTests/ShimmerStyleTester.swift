@@ -1,18 +1,12 @@
 import XCTest
 
 import DivKit
-@testable import DivKitExtensions
-import VGSL
+import DivKitTestsSupport
 
 final class ShimmerStyleTester<Style: Equatable> {
-  private let styleFactory: ([String: Any], ExpressionResolver) throws -> Style
-  private let expressionResolver = ExpressionResolver(
-    variables: [:],
-    persistentValuesStorage: DivPersistentValuesStorage(),
-    errorTracker: { XCTFail($0.description) }
-  )
+  private let styleFactory: ([String: Any], DivBlockModelingContext) throws -> Style
 
-  init(styleFactory: @escaping ([String: Any], ExpressionResolver) throws -> Style) {
+  init(styleFactory: @escaping ([String: Any], DivBlockModelingContext) throws -> Style) {
     self.styleFactory = styleFactory
   }
 
@@ -20,6 +14,9 @@ final class ShimmerStyleTester<Style: Equatable> {
     _ style: Style,
     _ dictionary: [String: Any]
   ) throws {
-    XCTAssertEqual(style, try styleFactory(dictionary, expressionResolver))
+    XCTAssertEqual(
+      style,
+      try styleFactory(dictionary, .default)
+    )
   }
 }

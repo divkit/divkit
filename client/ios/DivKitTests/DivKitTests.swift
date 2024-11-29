@@ -6,8 +6,6 @@ import Serialization
 import VGSL
 
 final class DivKitTests: XCTestCase {
-  static let cardId = DivCardID(rawValue: "test_card_id")
-
   func test_multithreaded_blockCreation() {
     let expectation = XCTestExpectation()
     guard let data = try? dataFromFile(named: "heavy", subdirectory: nil) else {
@@ -70,61 +68,6 @@ extension Deserializable {
     let url = bundle.url(forResource: name, withExtension: "json")!
     let data = try Data(contentsOf: url)
     try self.init(JSONData: data)
-  }
-}
-
-extension DivBlockModelingContext {
-  static let `default` = DivBlockModelingContext()
-
-  init(
-    blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
-    extensionHandlers: [DivExtensionHandler] = [],
-    scheduler: Scheduling? = nil,
-    variableStorage: DivVariableStorage? = nil
-  ) {
-    self.init(
-      cardId: DivKitTests.cardId,
-      cardLogId: DivKitTests.cardId.rawValue,
-      stateManager: DivStateManager(),
-      blockStateStorage: blockStateStorage,
-      imageHolderFactory: FakeImageHolderFactory(),
-      extensionHandlers: extensionHandlers,
-      variablesStorage: DivVariablesStorage(outerStorage: variableStorage),
-      scheduler: scheduler,
-      persistentValuesStorage: DivPersistentValuesStorage()
-    )
-  }
-}
-
-final class FakeImageHolderFactory: DivImageHolderFactory {
-  func make(_: URL?, _: ImagePlaceholder?) -> ImageHolder {
-    FakeImageHolder()
-  }
-}
-
-final class FakeImageHolder: ImageHolder {
-  var image: Image? {
-    nil
-  }
-
-  var placeholder: ImagePlaceholder? {
-    nil
-  }
-
-  func requestImageWithCompletion(_: @escaping ((Image?) -> Void)) -> Cancellable? {
-    nil
-  }
-
-  func reused(with _: ImagePlaceholder?, remoteImageURL _: URL?) -> ImageHolder? {
-    nil
-  }
-
-  func equals(_: ImageHolder) -> Bool {
-    true
-  }
-
-  var debugDescription: String {
-    "FakeImageHolder"
   }
 }
 

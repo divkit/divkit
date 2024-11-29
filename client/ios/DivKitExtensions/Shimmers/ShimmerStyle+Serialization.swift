@@ -13,6 +13,27 @@ public struct ColorAndLocation: Equatable {
   }
 }
 
+extension [ColorAndLocation] {
+  var locations: [CGFloat] {
+    map(\.location)
+  }
+
+  var colors: [Color] {
+    map(\.color)
+  }
+
+  var fromValues: [NSNumber] {
+    guard let max = locations.max() else { return [] }
+    return locations.map { NSNumber(value: ($0 - max).native) }
+  }
+
+  var toValues: [NSNumber] {
+    guard let min = locations.min() else { return [] }
+    let addToAll = 1 - min
+    return locations.map { NSNumber(value: ($0 + addToAll).native) }
+  }
+}
+
 extension DivBase {
   func resolveExtensionParams(for extensionId: String) -> [String: Any]? {
     extensions?.first(where: { $0.id == extensionId })?.params
