@@ -31,14 +31,14 @@ internal class PatchEventReporterImpl(
     }
 
     override fun onPatchSuccess() {
-        sendLog("Div patched successfully")
+        sendLog(PatchResult.SUCCESS)
     }
 
     override fun onPatchNoState() {
-        sendLog("Patch not performed. Cannot find state to bind")
+        sendLog(PatchResult.FAIL_NO_STATE)
     }
 
-    private fun sendLog(result: String) {
+    private fun sendLog(@PatchResult result: String) {
         div2View.div2Component.div2Logger.logPatchResult(
             div2View,
             patch,
