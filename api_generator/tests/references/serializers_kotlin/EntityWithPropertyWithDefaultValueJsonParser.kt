@@ -27,7 +27,7 @@ internal class EntityWithPropertyWithDefaultValueJsonParser(
             return EntityWithPropertyWithDefaultValue(
                 int = JsonExpressionParser.readOptionalExpression(context, logger, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR, INT_DEFAULT_VALUE) ?: INT_DEFAULT_VALUE,
                 nested = JsonPropertyParser.readOptional(context, logger, data, "nested", component.entityWithPropertyWithDefaultValueNestedJsonEntityParser),
-                url = JsonExpressionParser.readOptionalExpression(context, logger, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
+                url = JsonExpressionParser.readOptionalExpression(context, logger, data, "url", TYPE_HELPER_URI, ANY_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
             )
         }
 
@@ -54,7 +54,7 @@ internal class EntityWithPropertyWithDefaultValueJsonParser(
             return EntityWithPropertyWithDefaultValueTemplate(
                 int = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "int", TYPE_HELPER_INT, allowOverride, parent?.int, NUMBER_TO_INT, INT_VALIDATOR),
                 nested = JsonFieldParser.readOptionalField(context, logger, data, "nested", allowOverride, parent?.nested, component.entityWithPropertyWithDefaultValueNestedJsonTemplateParser),
-                url = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "url", TYPE_HELPER_URI, allowOverride, parent?.url, STRING_TO_URI, URL_VALIDATOR),
+                url = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "url", TYPE_HELPER_URI, allowOverride, parent?.url, ANY_TO_URI, URL_VALIDATOR),
             )
         }
 
@@ -79,7 +79,7 @@ internal class EntityWithPropertyWithDefaultValueJsonParser(
             return EntityWithPropertyWithDefaultValue(
                 int = JsonFieldResolver.resolveOptionalExpression(context, logger, template.int, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR, INT_DEFAULT_VALUE) ?: INT_DEFAULT_VALUE,
                 nested = JsonFieldResolver.resolveOptional(context, logger, template.nested, data, "nested", component.entityWithPropertyWithDefaultValueNestedJsonTemplateResolver, component.entityWithPropertyWithDefaultValueNestedJsonEntityParser),
-                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
+                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, ANY_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
             )
         }
     }
@@ -108,7 +108,7 @@ internal class EntityWithPropertyWithDefaultValueNestedJsonParser(
             return EntityWithPropertyWithDefaultValue.Nested(
                 int = JsonExpressionParser.readOptionalExpression(context, logger, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR, INT_DEFAULT_VALUE) ?: INT_DEFAULT_VALUE,
                 nonOptional = JsonExpressionParser.readExpression(context, logger, data, "non_optional", TYPE_HELPER_STRING),
-                url = JsonExpressionParser.readOptionalExpression(context, logger, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
+                url = JsonExpressionParser.readOptionalExpression(context, logger, data, "url", TYPE_HELPER_URI, ANY_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
             )
         }
 
@@ -134,7 +134,7 @@ internal class EntityWithPropertyWithDefaultValueNestedJsonParser(
             return EntityWithPropertyWithDefaultValueTemplate.NestedTemplate(
                 int = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "int", TYPE_HELPER_INT, allowOverride, parent?.int, NUMBER_TO_INT, INT_VALIDATOR),
                 nonOptional = JsonFieldParser.readFieldWithExpression(context, logger, data, "non_optional", TYPE_HELPER_STRING, allowOverride, parent?.nonOptional),
-                url = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "url", TYPE_HELPER_URI, allowOverride, parent?.url, STRING_TO_URI, URL_VALIDATOR),
+                url = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "url", TYPE_HELPER_URI, allowOverride, parent?.url, ANY_TO_URI, URL_VALIDATOR),
             )
         }
 
@@ -158,7 +158,7 @@ internal class EntityWithPropertyWithDefaultValueNestedJsonParser(
             return EntityWithPropertyWithDefaultValue.Nested(
                 int = JsonFieldResolver.resolveOptionalExpression(context, logger, template.int, data, "int", TYPE_HELPER_INT, NUMBER_TO_INT, INT_VALIDATOR, INT_DEFAULT_VALUE) ?: INT_DEFAULT_VALUE,
                 nonOptional = JsonFieldResolver.resolveExpression(context, logger, template.nonOptional, data, "non_optional", TYPE_HELPER_STRING),
-                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
+                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, ANY_TO_URI, URL_VALIDATOR, URL_DEFAULT_VALUE) ?: URL_DEFAULT_VALUE,
             )
         }
     }

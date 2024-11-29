@@ -61,7 +61,7 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         integer = JsonTemplateParser.readOptionalFieldWithExpression(json, "integer", topLevel, parent?.integer, NUMBER_TO_INT, logger, env, TYPE_HELPER_INT)
         positiveInteger = JsonTemplateParser.readOptionalFieldWithExpression(json, "positive_integer", topLevel, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
         string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, logger, env, TYPE_HELPER_STRING)
-        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, logger, env, TYPE_HELPER_URI)
     }
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithSimpleProperties {
@@ -111,7 +111,7 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         val POSITIVE_INTEGER_READER: Reader<Expression<Long>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, env.logger, env, TYPE_HELPER_INT) }
         val STRING_READER: Reader<Expression<String>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
-        val URL_READER: Reader<Expression<Uri>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, env.logger, env, TYPE_HELPER_URI) }
+        val URL_READER: Reader<Expression<Uri>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_URI, env.logger, env, TYPE_HELPER_URI) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithSimplePropertiesTemplate(env, json = it) }
     }

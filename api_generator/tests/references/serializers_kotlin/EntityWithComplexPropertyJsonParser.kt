@@ -87,7 +87,7 @@ internal class EntityWithComplexPropertyPropertyJsonParser(
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithComplexProperty.Property {
             val logger = context.logger
             return EntityWithComplexProperty.Property(
-                value = JsonExpressionParser.readExpression(context, logger, data, "value", TYPE_HELPER_URI, STRING_TO_URI),
+                value = JsonExpressionParser.readExpression(context, logger, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
 
@@ -109,7 +109,7 @@ internal class EntityWithComplexPropertyPropertyJsonParser(
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithComplexPropertyTemplate.PropertyTemplate(
-                value = JsonFieldParser.readFieldWithExpression(context, logger, data, "value", TYPE_HELPER_URI, allowOverride, parent?.value, STRING_TO_URI),
+                value = JsonFieldParser.readFieldWithExpression(context, logger, data, "value", TYPE_HELPER_URI, allowOverride, parent?.value, ANY_TO_URI),
             )
         }
 
@@ -129,7 +129,7 @@ internal class EntityWithComplexPropertyPropertyJsonParser(
         override fun resolve(context: ParsingContext, template: EntityWithComplexPropertyTemplate.PropertyTemplate, data: JSONObject): EntityWithComplexProperty.Property {
             val logger = context.logger
             return EntityWithComplexProperty.Property(
-                value = JsonFieldResolver.resolveExpression(context, logger, template.value, data, "value", TYPE_HELPER_URI, STRING_TO_URI),
+                value = JsonFieldResolver.resolveExpression(context, logger, template.value, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
     }

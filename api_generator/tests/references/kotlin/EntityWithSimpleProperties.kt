@@ -115,7 +115,7 @@ class EntityWithSimpleProperties(
                 integer = JsonParser.readOptionalExpression(json, "integer", NUMBER_TO_INT, logger, env, INTEGER_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INTEGER_DEFAULT_VALUE,
                 positiveInteger = JsonParser.readOptionalExpression(json, "positive_integer", NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, logger, env, TYPE_HELPER_INT),
                 string = JsonParser.readOptionalExpression(json, "string", logger, env, TYPE_HELPER_STRING),
-                url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+                url = JsonParser.readOptionalExpression(json, "url", ANY_TO_URI, logger, env, TYPE_HELPER_URI)
             )
         }
 

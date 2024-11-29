@@ -73,7 +73,7 @@ class EntityWithPropertyWithDefaultValue(
             return EntityWithPropertyWithDefaultValue(
                 int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
                 nested = JsonParser.readOptional(json, "nested", Nested.CREATOR, logger, env),
-                url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
+                url = JsonParser.readOptionalExpression(json, "url", ANY_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
             )
         }
 
@@ -140,7 +140,7 @@ class EntityWithPropertyWithDefaultValue(
                 return Nested(
                     int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
                     nonOptional = JsonParser.readExpression(json, "non_optional", logger, env, TYPE_HELPER_STRING),
-                    url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
+                    url = JsonParser.readOptionalExpression(json, "url", ANY_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
                 )
             }
 

@@ -4,6 +4,7 @@ package com.yandex.div.internal.parser
 
 import android.net.Uri
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.util.toBoolean
 
 typealias Converter<T, R> = (T) -> R
@@ -46,11 +47,17 @@ val URI_TO_STRING: Converter<Uri, String> = { uri -> uri.toString() }
 fun getURI_TO_STRING() = URI_TO_STRING
 
 @JvmField
-val STRING_TO_URI: Converter<String, Uri> = { value -> Uri.parse(value) }
+val ANY_TO_URI: Converter<Any, Uri> = { value -> 
+    when(value) {
+        is String -> Uri.parse(value)
+        is Url -> Uri.parse(value.value)
+        else -> throw ClassCastException("Received value of wrong type")
+    }
+}
 
 @Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
 @Deprecated("Do not use internal API")
-fun getSTRING_TO_URI() = STRING_TO_URI
+fun getANY_TO_URI() = ANY_TO_URI
 
 @JvmField
 val ANY_TO_BOOLEAN: Converter<Any, Boolean?> = { value ->

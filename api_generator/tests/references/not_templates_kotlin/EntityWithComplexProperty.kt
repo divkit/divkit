@@ -103,7 +103,7 @@ class EntityWithComplexProperty(
             operator fun invoke(env: ParsingEnvironment, json: JSONObject): Property {
                 val logger = env.logger
                 return Property(
-                    value = JsonParser.readExpression(json, "value", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+                    value = JsonParser.readExpression(json, "value", ANY_TO_URI, logger, env, TYPE_HELPER_URI)
                 )
             }
 

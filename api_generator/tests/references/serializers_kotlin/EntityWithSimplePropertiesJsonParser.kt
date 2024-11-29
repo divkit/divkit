@@ -33,7 +33,7 @@ internal class EntityWithSimplePropertiesJsonParser(
                 integer = JsonExpressionParser.readOptionalExpression(context, logger, data, "integer", TYPE_HELPER_INT, NUMBER_TO_INT, INTEGER_DEFAULT_VALUE) ?: INTEGER_DEFAULT_VALUE,
                 positiveInteger = JsonExpressionParser.readOptionalExpression(context, logger, data, "positive_integer", TYPE_HELPER_INT, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR),
                 string = JsonExpressionParser.readOptionalExpression(context, logger, data, "string", TYPE_HELPER_STRING),
-                url = JsonExpressionParser.readOptionalExpression(context, logger, data, "url", TYPE_HELPER_URI, STRING_TO_URI),
+                url = JsonExpressionParser.readOptionalExpression(context, logger, data, "url", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
 
@@ -72,7 +72,7 @@ internal class EntityWithSimplePropertiesJsonParser(
                 integer = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "integer", TYPE_HELPER_INT, allowOverride, parent?.integer, NUMBER_TO_INT),
                 positiveInteger = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "positive_integer", TYPE_HELPER_INT, allowOverride, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR),
                 string = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "string", TYPE_HELPER_STRING, allowOverride, parent?.string),
-                url = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "url", TYPE_HELPER_URI, allowOverride, parent?.url, STRING_TO_URI),
+                url = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "url", TYPE_HELPER_URI, allowOverride, parent?.url, ANY_TO_URI),
             )
         }
 
@@ -109,7 +109,7 @@ internal class EntityWithSimplePropertiesJsonParser(
                 integer = JsonFieldResolver.resolveOptionalExpression(context, logger, template.integer, data, "integer", TYPE_HELPER_INT, NUMBER_TO_INT, INTEGER_DEFAULT_VALUE) ?: INTEGER_DEFAULT_VALUE,
                 positiveInteger = JsonFieldResolver.resolveOptionalExpression(context, logger, template.positiveInteger, data, "positive_integer", TYPE_HELPER_INT, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR),
                 string = JsonFieldResolver.resolveOptionalExpression(context, logger, template.string, data, "string", TYPE_HELPER_STRING),
-                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, STRING_TO_URI),
+                url = JsonFieldResolver.resolveOptionalExpression(context, logger, template.url, data, "url", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.yandex.div.core.expression
 
+import com.yandex.div.core.expression.variables.wrapVariableValue
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
@@ -38,7 +39,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         testCase = caseOrError.getCaseOrThrow()
         val variables = testCase.variables.map { it.toVariable() }
         for (variable in variables) {
-            whenever(variableProvider.get(variable.name)).thenReturn(variable.getValue())
+            whenever(variableProvider.get(variable.name)).thenReturn(variable.getValue().wrapVariableValue())
         }
     }
 

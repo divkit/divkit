@@ -1370,7 +1370,7 @@ class KotlinPropertyType(PropertyType):
 
     def deserialization_transform(self, string_enum_prefixed: bool) -> str:
         if isinstance(self, Url):
-            return 'STRING_TO_URI'
+            return 'ANY_TO_URI'
         elif isinstance(self, Color):
             return 'STRING_TO_COLOR_INT'
         elif isinstance(self, (Bool, BoolInt)):

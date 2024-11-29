@@ -37,7 +37,7 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         val logger = env.logger
         int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
         nested = JsonTemplateParser.readOptionalField(json, "nested", topLevel, parent?.nested, NestedTemplate.CREATOR, logger, env)
-        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
+        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
     }
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue {
@@ -71,7 +71,7 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         val INT_READER: Reader<Expression<Long>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
         val NESTED_READER: Reader<EntityWithPropertyWithDefaultValue.Nested?> = { key, json, env -> JsonParser.readOptional(json, key, EntityWithPropertyWithDefaultValue.Nested.CREATOR, env.logger, env) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
-        val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
+        val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValueTemplate(env, json = it) }
     }
@@ -100,7 +100,7 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
             val logger = env.logger
             int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
             nonOptional = JsonTemplateParser.readFieldWithExpression(json, "non_optional", topLevel, parent?.nonOptional, logger, env, TYPE_HELPER_STRING)
-            url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
+            url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
         }
 
         override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
@@ -130,7 +130,7 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
 
             val INT_READER: Reader<Expression<Long>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
             val NON_OPTIONAL_READER: Reader<Expression<String>> = { key, json, env -> JsonParser.readExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
-            val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
+            val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> NestedTemplate(env, json = it) }
         }
