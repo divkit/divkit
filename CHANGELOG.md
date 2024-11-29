@@ -1,3 +1,29 @@
+## 30.29.0
+
+# Android Client:
+* Added support for `indexing_direction` property in `text.image`.
+* Fix video cache to take videoPlayer by id.
+* Fixed `duration` and `tick_interval` values in test screens for `timers`.
+* Fixed actions specified in `focus` property in `div-input` doesn't run when focus is manipulated through actions.
+* Fixed crash in case when gallery was replaced to pager with the same id or vice versa.
+* Fixed gallery cross axis alignment.
+* Supported `div-function` in `div-base`. Functions can be declared in any div element. Access to functions is carried out in the same way as local variables.
+
+# iOS Client:
+* Added `ShineExtension`.
+* Adjusted visibility actions work for video start.
+* Fix DivTypedValue parsing.
+* Fixed background animation for actions.
+* Supported `div-size` for `div-switch`.
+
+# Web Client:
+* Added support for local `functions` in all components.
+* Added support for the `item_builder` in the `pager` component.
+* Added support for the `switch` component.
+* Fixed an issue with the `pager` scrolling to an item in some situations.
+* Fixed an issue with the layout of nested `pager`s.
+
+
 ## 30.28.0
 
 # Android Client:
