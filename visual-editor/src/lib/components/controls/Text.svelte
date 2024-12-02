@@ -3,7 +3,7 @@
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { formatFileSize } from '../../utils/formatFileSize';
-    import { getFileSize } from '../../utils/fileSize';
+    import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
 
     export let id: string = '';
     export let value: string | number | undefined;
@@ -158,21 +158,6 @@
             currentSize = res;
         });
     }
-
-    function calcFileSizeMod(currentSize: number | undefined, warnLimit: number, errorLimit: number): string {
-        if (!currentSize || currentSize < 1) {
-            return '';
-        }
-
-        if (currentSize > errorLimit) {
-            return 'error';
-        }
-        if (currentSize > warnLimit) {
-            return 'warn';
-        }
-
-        return '';
-    }
 </script>
 
 <div
@@ -248,7 +233,7 @@
                 class="text__size-label"
                 class:text__size-label_error={fileSizeMod === 'error'}
                 class:text__size-label_warn={fileSizeMod === 'warn'}
-                data-custom-tooltip={$l10nString('file.too_big')}
+                data-custom-tooltip={fileSizeMod ? $l10nString('file.too_big') : undefined}
                 bind:offsetWidth={sizeLabelWidth}
             >
                 {formatFileSize(currentSize)}
