@@ -42,7 +42,11 @@
       "$description": "translations.json#/div_action_animator_start_end_value"
     }
   },
-  "platforms": [],
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
   "required": [
     "type",
     "animator_id"
