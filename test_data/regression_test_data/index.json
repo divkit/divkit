@@ -2457,7 +2457,8 @@
       "title": "Tooltips with typed actions",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Tooltips",

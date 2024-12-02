@@ -730,7 +730,11 @@
         }
     }
 
-    function callShowTooltip(id: string | null, multiple: string | null, componentContext?: ComponentContext): void {
+    function callShowTooltip(
+        id: string | null | undefined,
+        multiple: string | boolean | null | undefined,
+        componentContext?: ComponentContext
+    ): void {
         const log = (componentContext?.logError || logError);
 
         if (!id) {
@@ -746,7 +750,7 @@
             }));
             return;
         }
-        if (multiple !== 'true' && tooltips.some(it => it.desc.id === id)) {
+        if ((multiple !== 'true' && multiple !== true) && tooltips.some(it => it.desc.id === id)) {
             return;
         }
 
@@ -767,7 +771,7 @@
         }
     }
 
-    function callHideTooltip(id: string | null, componentContext?: ComponentContext): void {
+    function callHideTooltip(id: string | null | undefined, componentContext?: ComponentContext): void {
         const log = (componentContext?.logError || logError);
 
         if (!id) {
@@ -1109,6 +1113,14 @@
                         animators.delete(actionTyped.animator_id as string);
                     }
 
+                    break;
+                }
+                case 'show_tooltip': {
+                    callShowTooltip(actionTyped.id, actionTyped.multiple, componentContext);
+                    break;
+                }
+                case 'hide_tooltip': {
+                    callHideTooltip(actionTyped.id, componentContext);
                     break;
                 }
                 default: {

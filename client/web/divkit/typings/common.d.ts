@@ -218,9 +218,20 @@ export interface ActionAnimatorStop {
     animator_id: string;
 }
 
+export interface ActionShowTooltip {
+    type: 'show_tooltip';
+    id: string;
+    multiple: boolean;
+}
+
+export interface ActionHideTooltip {
+    type: 'hide_tooltip';
+    id: string;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
-    ActionAnimatorStart | ActionAnimatorStop;
+    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip;
 
 export interface ActionBase {
     log_id: string;
