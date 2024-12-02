@@ -106,7 +106,6 @@ public class DefaultTooltipManager: TooltipManager {
 
     let view = TooltipContainerView(
       tooltipView: tooltip.view,
-      tooltipID: tooltip.id,
       handleAction: handleAction,
       onCloseAction: { [weak self] in
         self?.showingTooltips.removeValue(forKey: tooltip.id)

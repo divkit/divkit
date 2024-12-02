@@ -42,7 +42,6 @@ final class BlockTooltipTests: XCTestCase {
   func test_TooltipWindowClose() {
     let tooltipView = TooltipContainerView(
       tooltipView: TestView(),
-      tooltipID: "Tooltip",
       handleAction: { _ in },
       onCloseAction: {}
     )

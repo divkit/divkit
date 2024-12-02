@@ -4,7 +4,6 @@ import VGSL
 
 public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private let tooltipView: VisibleBoundsTrackingView
-  private let tooltipID: String
   private let handleAction: (LayoutKit.UIActionEvent) -> Void
   private let onCloseAction: Action
 
@@ -13,12 +12,10 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
   public init(
     tooltipView: VisibleBoundsTrackingView,
-    tooltipID: String,
     handleAction: @escaping (LayoutKit.UIActionEvent) -> Void,
     onCloseAction: @escaping Action
   ) {
     self.tooltipView = tooltipView
-    self.tooltipID = tooltipID
     self.handleAction = handleAction
     self.onCloseAction = onCloseAction
     let tooltipBounds = tooltipView.bounds
