@@ -11,6 +11,15 @@ enum ExpressionValueConverter {
     switch T.self {
     case is String.Type:
       return stringify(anyValue) as? T
+    case is Bool.Type:
+      if let numberValue = anyValue as? NSNumber {
+        if numberValue == 0 {
+          return false as? T
+        } else if numberValue == 1 {
+          return true as? T
+        }
+      }
+      return nil
     case let numericType as _Numeric.Type:
       if anyValue is Bool {
         return nil
