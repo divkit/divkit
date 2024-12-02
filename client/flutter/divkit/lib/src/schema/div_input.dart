@@ -31,7 +31,7 @@ import 'package:divkit/src/schema/div_variable.dart';
 import 'package:divkit/src/schema/div_visibility.dart';
 import 'package:divkit/src/schema/div_visibility_action.dart';
 import 'package:divkit/src/schema/div_wrap_content_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Text input element.
@@ -126,7 +126,7 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
 
   /// Declaration of animators that change variable values over time.
   @override
-  final List<DivAnimator>? animators;
+  final Arr<DivAnimator>? animators;
 
   /// Text auto-capitalization type.
   // default value: DivInputAutocapitalization.auto
@@ -134,7 +134,7 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
 
   /// Element background. It can contain multiple layers.
   @override
-  final List<DivBackground>? background;
+  final Arr<DivBackground>? background;
 
   /// Element stroke.
   @override
@@ -147,21 +147,21 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element disappears from the screen.
   @override
-  final List<DivDisappearAction>? disappearActions;
+  final Arr<DivDisappearAction>? disappearActions;
 
-  /// Actions when clicking on a `Enter` keyboard button. If there are actions, the default behavior will be overridden
-  final List<DivAction>? enterKeyActions;
+  /// Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+  final Arr<DivAction>? enterKeyActions;
 
-  /// The type of the `Enter` keyboard button.
+  /// 'Enter' key type.
   // default value: DivInputEnterKeyType.default_
   final Expression<DivInputEnterKeyType> enterKeyType;
 
   /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
-  final List<DivExtension>? extensions;
+  final Arr<DivExtension>? extensions;
 
   /// Filter that prevents users from entering text that doesn't satisfy the specified conditions.
-  final List<DivInputFilter>? filters;
+  final Arr<DivInputFilter>? filters;
 
   /// Parameters when focusing on an element or losing focus.
   @override
@@ -193,7 +193,7 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
 
   /// User functions.
   @override
-  final List<DivFunction>? functions;
+  final Arr<DivFunction>? functions;
 
   /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
@@ -271,7 +271,7 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
 
   /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
-  final List<DivAction>? selectedActions;
+  final Arr<DivAction>? selectedActions;
 
   /// Horizontal text alignment.
   // default value: DivAlignmentHorizontal.start
@@ -290,7 +290,7 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
 
   /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
-  final List<DivTooltip>? tooltips;
+  final Arr<DivTooltip>? tooltips;
 
   /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
@@ -311,18 +311,18 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
   /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
-  final List<DivTransitionTrigger>? transitionTriggers;
+  final Arr<DivTransitionTrigger>? transitionTriggers;
 
   /// Validator that checks that the field value meets the specified conditions.
-  final List<DivInputValidator>? validators;
+  final Arr<DivInputValidator>? validators;
 
   /// Triggers for changing variables within an element.
   @override
-  final List<DivTrigger>? variableTriggers;
+  final Arr<DivTrigger>? variableTriggers;
 
   /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
-  final List<DivVariable>? variables;
+  final Arr<DivVariable>? variables;
 
   /// Element visibility.
   // default value: DivVisibility.visible
@@ -335,7 +335,7 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element appears on the screen.
   @override
-  final List<DivVisibilityAction>? visibilityActions;
+  final Arr<DivVisibilityAction>? visibilityActions;
 
   /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
@@ -409,23 +409,23 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
-    List<DivAnimator>? Function()? animators,
+    Arr<DivAnimator>? Function()? animators,
     Expression<DivInputAutocapitalization>? autocapitalization,
-    List<DivBackground>? Function()? background,
+    Arr<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
-    List<DivDisappearAction>? Function()? disappearActions,
-    List<DivAction>? Function()? enterKeyActions,
+    Arr<DivDisappearAction>? Function()? disappearActions,
+    Arr<DivAction>? Function()? enterKeyActions,
     Expression<DivInputEnterKeyType>? enterKeyType,
-    List<DivExtension>? Function()? extensions,
-    List<DivInputFilter>? Function()? filters,
+    Arr<DivExtension>? Function()? extensions,
+    Arr<DivInputFilter>? Function()? filters,
     DivFocus? Function()? focus,
     Expression<String>? Function()? fontFamily,
     Expression<int>? fontSize,
     Expression<DivSizeUnit>? fontSizeUnit,
     Expression<DivFontWeight>? fontWeight,
     Expression<int>? Function()? fontWeightValue,
-    List<DivFunction>? Function()? functions,
+    Arr<DivFunction>? Function()? functions,
     DivSize? height,
     Expression<Color>? Function()? highlightColor,
     Expression<Color>? hintColor,
@@ -445,23 +445,23 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
     Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     Expression<bool>? selectAllOnFocus,
-    List<DivAction>? Function()? selectedActions,
+    Arr<DivAction>? Function()? selectedActions,
     Expression<DivAlignmentHorizontal>? textAlignmentHorizontal,
     Expression<DivAlignmentVertical>? textAlignmentVertical,
     Expression<Color>? textColor,
     String? textVariable,
-    List<DivTooltip>? Function()? tooltips,
+    Arr<DivTooltip>? Function()? tooltips,
     DivTransform? transform,
     DivChangeTransition? Function()? transitionChange,
     DivAppearanceTransition? Function()? transitionIn,
     DivAppearanceTransition? Function()? transitionOut,
-    List<DivTransitionTrigger>? Function()? transitionTriggers,
-    List<DivInputValidator>? Function()? validators,
-    List<DivTrigger>? Function()? variableTriggers,
-    List<DivVariable>? Function()? variables,
+    Arr<DivTransitionTrigger>? Function()? transitionTriggers,
+    Arr<DivInputValidator>? Function()? validators,
+    Arr<DivTrigger>? Function()? variableTriggers,
+    Arr<DivVariable>? Function()? variables,
     Expression<DivVisibility>? visibility,
     DivVisibilityAction? Function()? visibilityAction,
-    List<DivVisibilityAction>? Function()? visibilityActions,
+    Arr<DivVisibilityAction>? Function()? visibilityActions,
     DivSize? width,
   }) =>
       DivInput(
@@ -567,10 +567,14 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
     }
     try {
       return DivInput(
-        accessibility: safeParseObj(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        )!,
+        accessibility: reqProp<DivAccessibility>(
+          safeParseObject(
+            json['accessibility'],
+            parse: DivAccessibility.fromJson,
+            fallback: const DivAccessibility(),
+          ),
+          name: 'accessibility',
+        ),
         alignmentHorizontal: safeParseStrEnumExpr(
           json['alignment_horizontal'],
           parse: DivAlignmentHorizontal.fromJson,
@@ -579,150 +583,202 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
           json['alignment_vertical'],
           parse: DivAlignmentVertical.fromJson,
         ),
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 1.0,
-        )!,
-        animators: safeParseObj(
-          safeListMap(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 1.0,
+          ),
+          name: 'alpha',
+        ),
+        animators: safeParseObjects(
+          json['animators'],
+          (v) => reqProp<DivAnimator>(
+            safeParseObject(
+              v,
+              parse: DivAnimator.fromJson,
+            ),
           ),
         ),
-        autocapitalization: safeParseStrEnumExpr(
-          json['autocapitalization'],
-          parse: DivInputAutocapitalization.fromJson,
-          fallback: DivInputAutocapitalization.auto,
-        )!,
-        background: safeParseObj(
-          safeListMap(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
+        autocapitalization: reqVProp<DivInputAutocapitalization>(
+          safeParseStrEnumExpr(
+            json['autocapitalization'],
+            parse: DivInputAutocapitalization.fromJson,
+            fallback: DivInputAutocapitalization.auto,
+          ),
+          name: 'autocapitalization',
+        ),
+        background: safeParseObjects(
+          json['background'],
+          (v) => reqProp<DivBackground>(
+            safeParseObject(
+              v,
+              parse: DivBackground.fromJson,
+            ),
           ),
         ),
-        border: safeParseObj(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        )!,
+        border: reqProp<DivBorder>(
+          safeParseObject(
+            json['border'],
+            parse: DivBorder.fromJson,
+            fallback: const DivBorder(),
+          ),
+          name: 'border',
+        ),
         columnSpan: safeParseIntExpr(
           json['column_span'],
         ),
-        disappearActions: safeParseObj(
-          safeListMap(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
+        disappearActions: safeParseObjects(
+          json['disappear_actions'],
+          (v) => reqProp<DivDisappearAction>(
+            safeParseObject(
+              v,
+              parse: DivDisappearAction.fromJson,
+            ),
           ),
         ),
-        enterKeyActions: safeParseObj(
-          safeListMap(
-            json['enter_key_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        enterKeyActions: safeParseObjects(
+          json['enter_key_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        enterKeyType: safeParseStrEnumExpr(
-          json['enter_key_type'],
-          parse: DivInputEnterKeyType.fromJson,
-          fallback: DivInputEnterKeyType.default_,
-        )!,
-        extensions: safeParseObj(
-          safeListMap(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
+        enterKeyType: reqVProp<DivInputEnterKeyType>(
+          safeParseStrEnumExpr(
+            json['enter_key_type'],
+            parse: DivInputEnterKeyType.fromJson,
+            fallback: DivInputEnterKeyType.default_,
+          ),
+          name: 'enter_key_type',
+        ),
+        extensions: safeParseObjects(
+          json['extensions'],
+          (v) => reqProp<DivExtension>(
+            safeParseObject(
+              v,
+              parse: DivExtension.fromJson,
+            ),
           ),
         ),
-        filters: safeParseObj(
-          safeListMap(
-            json['filters'],
-            (v) => safeParseObj(
-              DivInputFilter.fromJson(v),
-            )!,
+        filters: safeParseObjects(
+          json['filters'],
+          (v) => reqProp<DivInputFilter>(
+            safeParseObject(
+              v,
+              parse: DivInputFilter.fromJson,
+            ),
           ),
         ),
-        focus: safeParseObj(
-          DivFocus.fromJson(json['focus']),
+        focus: safeParseObject(
+          json['focus'],
+          parse: DivFocus.fromJson,
         ),
         fontFamily: safeParseStrExpr(
-          json['font_family']?.toString(),
+          json['font_family'],
         ),
-        fontSize: safeParseIntExpr(
-          json['font_size'],
-          fallback: 12,
-        )!,
-        fontSizeUnit: safeParseStrEnumExpr(
-          json['font_size_unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.sp,
-        )!,
-        fontWeight: safeParseStrEnumExpr(
-          json['font_weight'],
-          parse: DivFontWeight.fromJson,
-          fallback: DivFontWeight.regular,
-        )!,
+        fontSize: reqVProp<int>(
+          safeParseIntExpr(
+            json['font_size'],
+            fallback: 12,
+          ),
+          name: 'font_size',
+        ),
+        fontSizeUnit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['font_size_unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.sp,
+          ),
+          name: 'font_size_unit',
+        ),
+        fontWeight: reqVProp<DivFontWeight>(
+          safeParseStrEnumExpr(
+            json['font_weight'],
+            parse: DivFontWeight.fromJson,
+            fallback: DivFontWeight.regular,
+          ),
+          name: 'font_weight',
+        ),
         fontWeightValue: safeParseIntExpr(
           json['font_weight_value'],
         ),
-        functions: safeParseObj(
-          safeListMap(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
+        functions: safeParseObjects(
+          json['functions'],
+          (v) => reqProp<DivFunction>(
+            safeParseObject(
+              v,
+              parse: DivFunction.fromJson,
+            ),
           ),
         ),
-        height: safeParseObj(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
+        height: reqProp<DivSize>(
+          safeParseObject(
+            json['height'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divWrapContentSize(
+              DivWrapContentSize(),
+            ),
           ),
-        )!,
+          name: 'height',
+        ),
         highlightColor: safeParseColorExpr(
           json['highlight_color'],
         ),
-        hintColor: safeParseColorExpr(
-          json['hint_color'],
-          fallback: const Color(0x73000000),
-        )!,
+        hintColor: reqVProp<Color>(
+          safeParseColorExpr(
+            json['hint_color'],
+            fallback: const Color(0x73000000),
+          ),
+          name: 'hint_color',
+        ),
         hintText: safeParseStrExpr(
-          json['hint_text']?.toString(),
+          json['hint_text'],
         ),
         id: safeParseStr(
-          json['id']?.toString(),
+          json['id'],
         ),
-        isEnabled: safeParseBoolExpr(
-          json['is_enabled'],
-          fallback: true,
-        )!,
-        keyboardType: safeParseStrEnumExpr(
-          json['keyboard_type'],
-          parse: DivInputKeyboardType.fromJson,
-          fallback: DivInputKeyboardType.multiLineText,
-        )!,
-        layoutProvider: safeParseObj(
-          DivLayoutProvider.fromJson(json['layout_provider']),
+        isEnabled: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['is_enabled'],
+            fallback: true,
+          ),
+          name: 'is_enabled',
         ),
-        letterSpacing: safeParseDoubleExpr(
-          json['letter_spacing'],
-          fallback: 0,
-        )!,
+        keyboardType: reqVProp<DivInputKeyboardType>(
+          safeParseStrEnumExpr(
+            json['keyboard_type'],
+            parse: DivInputKeyboardType.fromJson,
+            fallback: DivInputKeyboardType.multiLineText,
+          ),
+          name: 'keyboard_type',
+        ),
+        layoutProvider: safeParseObject(
+          json['layout_provider'],
+          parse: DivLayoutProvider.fromJson,
+        ),
+        letterSpacing: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['letter_spacing'],
+            fallback: 0,
+          ),
+          name: 'letter_spacing',
+        ),
         lineHeight: safeParseIntExpr(
           json['line_height'],
         ),
-        margins: safeParseObj(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        mask: safeParseObj(
-          DivInputMask.fromJson(json['mask']),
+        margins: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['margins'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'margins',
+        ),
+        mask: safeParseObject(
+          json['mask'],
+          parse: DivInputMask.fromJson,
         ),
         maxLength: safeParseIntExpr(
           json['max_length'],
@@ -730,126 +786,168 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
         maxVisibleLines: safeParseIntExpr(
           json['max_visible_lines'],
         ),
-        nativeInterface: safeParseObj(
-          DivInputNativeInterface.fromJson(json['native_interface']),
+        nativeInterface: safeParseObject(
+          json['native_interface'],
+          parse: DivInputNativeInterface.fromJson,
         ),
-        paddings: safeParseObj(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        )!,
+        paddings: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['paddings'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'paddings',
+        ),
         reuseId: safeParseStrExpr(
-          json['reuse_id']?.toString(),
+          json['reuse_id'],
         ),
         rowSpan: safeParseIntExpr(
           json['row_span'],
         ),
-        selectAllOnFocus: safeParseBoolExpr(
-          json['select_all_on_focus'],
-          fallback: false,
-        )!,
-        selectedActions: safeParseObj(
-          safeListMap(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        selectAllOnFocus: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['select_all_on_focus'],
+            fallback: false,
+          ),
+          name: 'select_all_on_focus',
+        ),
+        selectedActions: safeParseObjects(
+          json['selected_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        textAlignmentHorizontal: safeParseStrEnumExpr(
-          json['text_alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-          fallback: DivAlignmentHorizontal.start,
-        )!,
-        textAlignmentVertical: safeParseStrEnumExpr(
-          json['text_alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-          fallback: DivAlignmentVertical.center,
-        )!,
-        textColor: safeParseColorExpr(
-          json['text_color'],
-          fallback: const Color(0xFF000000),
-        )!,
-        textVariable: safeParseStr(
-          json['text_variable']?.toString(),
-        )!,
-        tooltips: safeParseObj(
-          safeListMap(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
+        textAlignmentHorizontal: reqVProp<DivAlignmentHorizontal>(
+          safeParseStrEnumExpr(
+            json['text_alignment_horizontal'],
+            parse: DivAlignmentHorizontal.fromJson,
+            fallback: DivAlignmentHorizontal.start,
+          ),
+          name: 'text_alignment_horizontal',
+        ),
+        textAlignmentVertical: reqVProp<DivAlignmentVertical>(
+          safeParseStrEnumExpr(
+            json['text_alignment_vertical'],
+            parse: DivAlignmentVertical.fromJson,
+            fallback: DivAlignmentVertical.center,
+          ),
+          name: 'text_alignment_vertical',
+        ),
+        textColor: reqVProp<Color>(
+          safeParseColorExpr(
+            json['text_color'],
+            fallback: const Color(0xFF000000),
+          ),
+          name: 'text_color',
+        ),
+        textVariable: reqProp<String>(
+          safeParseStr(
+            json['text_variable'],
+          ),
+          name: 'text_variable',
+        ),
+        tooltips: safeParseObjects(
+          json['tooltips'],
+          (v) => reqProp<DivTooltip>(
+            safeParseObject(
+              v,
+              parse: DivTooltip.fromJson,
+            ),
           ),
         ),
-        transform: safeParseObj(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        )!,
-        transitionChange: safeParseObj(
-          DivChangeTransition.fromJson(json['transition_change']),
+        transform: reqProp<DivTransform>(
+          safeParseObject(
+            json['transform'],
+            parse: DivTransform.fromJson,
+            fallback: const DivTransform(),
+          ),
+          name: 'transform',
         ),
-        transitionIn: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_in']),
+        transitionChange: safeParseObject(
+          json['transition_change'],
+          parse: DivChangeTransition.fromJson,
         ),
-        transitionOut: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_out']),
+        transitionIn: safeParseObject(
+          json['transition_in'],
+          parse: DivAppearanceTransition.fromJson,
         ),
-        transitionTriggers: safeParseObj(
-          safeListMap(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
+        transitionOut: safeParseObject(
+          json['transition_out'],
+          parse: DivAppearanceTransition.fromJson,
+        ),
+        transitionTriggers: safeParseObjects(
+          json['transition_triggers'],
+          (v) => reqProp<DivTransitionTrigger>(
+            safeParseStrEnum(
               v,
               parse: DivTransitionTrigger.fromJson,
-            )!,
+            ),
           ),
         ),
-        validators: safeParseObj(
-          safeListMap(
-            json['validators'],
-            (v) => safeParseObj(
-              DivInputValidator.fromJson(v),
-            )!,
+        validators: safeParseObjects(
+          json['validators'],
+          (v) => reqProp<DivInputValidator>(
+            safeParseObject(
+              v,
+              parse: DivInputValidator.fromJson,
+            ),
           ),
         ),
-        variableTriggers: safeParseObj(
-          safeListMap(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
+        variableTriggers: safeParseObjects(
+          json['variable_triggers'],
+          (v) => reqProp<DivTrigger>(
+            safeParseObject(
+              v,
+              parse: DivTrigger.fromJson,
+            ),
           ),
         ),
-        variables: safeParseObj(
-          safeListMap(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
+        variables: safeParseObjects(
+          json['variables'],
+          (v) => reqProp<DivVariable>(
+            safeParseObject(
+              v,
+              parse: DivVariable.fromJson,
+            ),
           ),
         ),
-        visibility: safeParseStrEnumExpr(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        )!,
-        visibilityAction: safeParseObj(
-          DivVisibilityAction.fromJson(json['visibility_action']),
+        visibility: reqVProp<DivVisibility>(
+          safeParseStrEnumExpr(
+            json['visibility'],
+            parse: DivVisibility.fromJson,
+            fallback: DivVisibility.visible,
+          ),
+          name: 'visibility',
         ),
-        visibilityActions: safeParseObj(
-          safeListMap(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
+        visibilityAction: safeParseObject(
+          json['visibility_action'],
+          parse: DivVisibilityAction.fromJson,
+        ),
+        visibilityActions: safeParseObjects(
+          json['visibility_actions'],
+          (v) => reqProp<DivVisibilityAction>(
+            safeParseObject(
+              v,
+              parse: DivVisibilityAction.fromJson,
+            ),
           ),
         ),
-        width: safeParseObj(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
+        width: reqProp<DivSize>(
+          safeParseObject(
+            json['width'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divMatchParentSize(
+              DivMatchParentSize(),
+            ),
           ),
-        )!,
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -860,23 +958,23 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
     alignmentHorizontal?.resolve(context);
     alignmentVertical?.resolve(context);
     alpha.resolve(context);
-    safeListResolve(animators, (v) => v.resolve(context));
+    tryResolveList(animators, (v) => v.resolve(context));
     autocapitalization.resolve(context);
-    safeListResolve(background, (v) => v.resolve(context));
+    tryResolveList(background, (v) => v.resolve(context));
     border.resolve(context);
     columnSpan?.resolve(context);
-    safeListResolve(disappearActions, (v) => v.resolve(context));
-    safeListResolve(enterKeyActions, (v) => v.resolve(context));
+    tryResolveList(disappearActions, (v) => v.resolve(context));
+    tryResolveList(enterKeyActions, (v) => v.resolve(context));
     enterKeyType.resolve(context);
-    safeListResolve(extensions, (v) => v.resolve(context));
-    safeListResolve(filters, (v) => v.resolve(context));
+    tryResolveList(extensions, (v) => v.resolve(context));
+    tryResolveList(filters, (v) => v.resolve(context));
     focus?.resolve(context);
     fontFamily?.resolve(context);
     fontSize.resolve(context);
     fontSizeUnit.resolve(context);
     fontWeight.resolve(context);
     fontWeightValue?.resolve(context);
-    safeListResolve(functions, (v) => v.resolve(context));
+    tryResolveList(functions, (v) => v.resolve(context));
     height.resolve(context);
     highlightColor?.resolve(context);
     hintColor.resolve(context);
@@ -895,22 +993,22 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
     reuseId?.resolve(context);
     rowSpan?.resolve(context);
     selectAllOnFocus.resolve(context);
-    safeListResolve(selectedActions, (v) => v.resolve(context));
+    tryResolveList(selectedActions, (v) => v.resolve(context));
     textAlignmentHorizontal.resolve(context);
     textAlignmentVertical.resolve(context);
     textColor.resolve(context);
-    safeListResolve(tooltips, (v) => v.resolve(context));
+    tryResolveList(tooltips, (v) => v.resolve(context));
     transform.resolve(context);
     transitionChange?.resolve(context);
     transitionIn?.resolve(context);
     transitionOut?.resolve(context);
-    safeListResolve(transitionTriggers, (v) => v.resolve(context));
-    safeListResolve(validators, (v) => v.resolve(context));
-    safeListResolve(variableTriggers, (v) => v.resolve(context));
-    safeListResolve(variables, (v) => v.resolve(context));
+    tryResolveList(transitionTriggers, (v) => v.resolve(context));
+    tryResolveList(validators, (v) => v.resolve(context));
+    tryResolveList(variableTriggers, (v) => v.resolve(context));
+    tryResolveList(variables, (v) => v.resolve(context));
     visibility.resolve(context);
     visibilityAction?.resolve(context);
-    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    tryResolveList(visibilityActions, (v) => v.resolve(context));
     width.resolve(context);
     return this;
   }
@@ -945,11 +1043,15 @@ class DivInputNativeInterface extends Resolvable with EquatableMixin {
     }
     try {
       return DivInputNativeInterface(
-        color: safeParseColorExpr(
-          json['color'],
-        )!,
+        color: reqVProp<Color>(
+          safeParseColorExpr(
+            json['color'],
+          ),
+          name: 'color',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -1044,7 +1146,12 @@ enum DivInputAutocapitalization implements Resolvable {
           return DivInputAutocapitalization.allCharacters;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivInputAutocapitalization: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
@@ -1136,7 +1243,12 @@ enum DivInputEnterKeyType implements Resolvable {
           return DivInputEnterKeyType.done;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivInputEnterKeyType: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
@@ -1250,7 +1362,12 @@ enum DivInputKeyboardType implements Resolvable {
           return DivInputKeyboardType.password;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivInputKeyboardType: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 abstract class DivInputMaskBase extends Resolvable {
   String get rawTextVariable;

@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets corner rounding.
@@ -71,7 +71,8 @@ class DivCornersRadius extends Resolvable with EquatableMixin {
           json['top-right'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

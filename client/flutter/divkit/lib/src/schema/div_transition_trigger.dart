@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivTransitionTrigger implements Resolvable {
   dataChange('data_change'),
@@ -63,7 +63,12 @@ enum DivTransitionTrigger implements Resolvable {
           return DivTransitionTrigger.visibilityChange;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivTransitionTrigger: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

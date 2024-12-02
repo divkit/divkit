@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_input_mask_base.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Mask for entering text with a fixed number of characters.
@@ -26,7 +26,7 @@ class DivFixedLengthInputMask extends Resolvable
 
   /// Template decoding is a description of the characters that will be replaced with user input.
   // at least 1 elements
-  final List<DivFixedLengthInputMaskPatternElement> patternElements;
+  final Arr<DivFixedLengthInputMaskPatternElement> patternElements;
 
   /// Name of the variable to store the unprocessed value.
   @override
@@ -43,7 +43,7 @@ class DivFixedLengthInputMask extends Resolvable
   DivFixedLengthInputMask copyWith({
     Expression<bool>? alwaysVisible,
     Expression<String>? pattern,
-    List<DivFixedLengthInputMaskPatternElement>? patternElements,
+    Arr<DivFixedLengthInputMaskPatternElement>? patternElements,
     String? rawTextVariable,
   }) =>
       DivFixedLengthInputMask(
@@ -61,26 +61,40 @@ class DivFixedLengthInputMask extends Resolvable
     }
     try {
       return DivFixedLengthInputMask(
-        alwaysVisible: safeParseBoolExpr(
-          json['always_visible'],
-          fallback: false,
-        )!,
-        pattern: safeParseStrExpr(
-          json['pattern']?.toString(),
-        )!,
-        patternElements: safeParseObj(
-          safeListMap(
-            json['pattern_elements'],
-            (v) => safeParseObj(
-              DivFixedLengthInputMaskPatternElement.fromJson(v),
-            )!,
+        alwaysVisible: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['always_visible'],
+            fallback: false,
           ),
-        )!,
-        rawTextVariable: safeParseStr(
-          json['raw_text_variable']?.toString(),
-        )!,
+          name: 'always_visible',
+        ),
+        pattern: reqVProp<String>(
+          safeParseStrExpr(
+            json['pattern'],
+          ),
+          name: 'pattern',
+        ),
+        patternElements: reqProp<Arr<DivFixedLengthInputMaskPatternElement>>(
+          safeParseObjects(
+            json['pattern_elements'],
+            (v) => reqProp<DivFixedLengthInputMaskPatternElement>(
+              safeParseObject(
+                v,
+                parse: DivFixedLengthInputMaskPatternElement.fromJson,
+              ),
+            ),
+          ),
+          name: 'pattern_elements',
+        ),
+        rawTextVariable: reqProp<String>(
+          safeParseStr(
+            json['raw_text_variable'],
+          ),
+          name: 'raw_text_variable',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -89,7 +103,7 @@ class DivFixedLengthInputMask extends Resolvable
   DivFixedLengthInputMask resolve(DivVariableContext context) {
     alwaysVisible.resolve(context);
     pattern.resolve(context);
-    safeListResolve(patternElements, (v) => v.resolve(context));
+    tryResolveList(patternElements, (v) => v.resolve(context));
     return this;
   }
 }
@@ -140,18 +154,25 @@ class DivFixedLengthInputMaskPatternElement extends Resolvable
     }
     try {
       return DivFixedLengthInputMaskPatternElement(
-        key: safeParseStrExpr(
-          json['key']?.toString(),
-        )!,
-        placeholder: safeParseStrExpr(
-          json['placeholder']?.toString(),
-          fallback: "_",
-        )!,
+        key: reqVProp<String>(
+          safeParseStrExpr(
+            json['key'],
+          ),
+          name: 'key',
+        ),
+        placeholder: reqVProp<String>(
+          safeParseStrExpr(
+            json['placeholder'],
+            fallback: "_",
+          ),
+          name: 'placeholder',
+        ),
         regex: safeParseStrExpr(
-          json['regex']?.toString(),
+          json['regex'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

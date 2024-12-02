@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/schema/div_evaluable_type.dart';
 import 'package:divkit/src/schema/div_function_argument.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// User-defined function.
@@ -15,7 +15,7 @@ class DivFunction extends Resolvable with EquatableMixin {
   });
 
   /// Function argument.
-  final List<DivFunctionArgument> arguments;
+  final Arr<DivFunctionArgument> arguments;
 
   /// Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
   final String body;
@@ -36,7 +36,7 @@ class DivFunction extends Resolvable with EquatableMixin {
       ];
 
   DivFunction copyWith({
-    List<DivFunctionArgument>? arguments,
+    Arr<DivFunctionArgument>? arguments,
     String? body,
     String? name,
     DivEvaluableType? returnType,
@@ -56,33 +56,47 @@ class DivFunction extends Resolvable with EquatableMixin {
     }
     try {
       return DivFunction(
-        arguments: safeParseObj(
-          safeListMap(
+        arguments: reqProp<Arr<DivFunctionArgument>>(
+          safeParseObjects(
             json['arguments'],
-            (v) => safeParseObj(
-              DivFunctionArgument.fromJson(v),
-            )!,
+            (v) => reqProp<DivFunctionArgument>(
+              safeParseObject(
+                v,
+                parse: DivFunctionArgument.fromJson,
+              ),
+            ),
           ),
-        )!,
-        body: safeParseStr(
-          json['body']?.toString(),
-        )!,
-        name: safeParseStr(
-          json['name']?.toString(),
-        )!,
-        returnType: safeParseStrEnum(
-          json['return_type'],
-          parse: DivEvaluableType.fromJson,
-        )!,
+          name: 'arguments',
+        ),
+        body: reqProp<String>(
+          safeParseStr(
+            json['body'],
+          ),
+          name: 'body',
+        ),
+        name: reqProp<String>(
+          safeParseStr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        returnType: reqProp<DivEvaluableType>(
+          safeParseStrEnum(
+            json['return_type'],
+            parse: DivEvaluableType.fromJson,
+          ),
+          name: 'return_type',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   @override
   DivFunction resolve(DivVariableContext context) {
-    safeListResolve(arguments, (v) => v.resolve(context));
+    tryResolveList(arguments, (v) => v.resolve(context));
     returnType.resolve(context);
     return this;
   }

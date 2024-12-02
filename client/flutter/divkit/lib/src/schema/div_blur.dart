@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Gaussian image blur.
@@ -35,11 +35,15 @@ class DivBlur extends Resolvable with EquatableMixin {
     }
     try {
       return DivBlur(
-        radius: safeParseIntExpr(
-          json['radius'],
-        )!,
+        radius: reqVProp<int>(
+          safeParseIntExpr(
+            json['radius'],
+          ),
+          name: 'radius',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

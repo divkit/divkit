@@ -23,7 +23,7 @@ import 'package:divkit/src/schema/div_trigger.dart';
 import 'package:divkit/src/schema/div_variable.dart';
 import 'package:divkit/src/schema/div_visibility.dart';
 import 'package:divkit/src/schema/div_visibility_action.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 abstract class DivBase extends Resolvable {
   DivAccessibility get accessibility;
@@ -35,22 +35,22 @@ abstract class DivBase extends Resolvable {
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   Expression<double> get alpha;
 
-  List<DivAnimator>? get animators;
+  Arr<DivAnimator>? get animators;
 
-  List<DivBackground>? get background;
+  Arr<DivBackground>? get background;
 
   DivBorder get border;
 
   // constraint: number >= 0
   Expression<int>? get columnSpan;
 
-  List<DivDisappearAction>? get disappearActions;
+  Arr<DivDisappearAction>? get disappearActions;
 
-  List<DivExtension>? get extensions;
+  Arr<DivExtension>? get extensions;
 
   DivFocus? get focus;
 
-  List<DivFunction>? get functions;
+  Arr<DivFunction>? get functions;
 
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   DivSize get height;
@@ -68,9 +68,9 @@ abstract class DivBase extends Resolvable {
   // constraint: number >= 0
   Expression<int>? get rowSpan;
 
-  List<DivAction>? get selectedActions;
+  Arr<DivAction>? get selectedActions;
 
-  List<DivTooltip>? get tooltips;
+  Arr<DivTooltip>? get tooltips;
 
   DivTransform get transform;
 
@@ -81,18 +81,18 @@ abstract class DivBase extends Resolvable {
   DivAppearanceTransition? get transitionOut;
 
   // at least 1 elements
-  List<DivTransitionTrigger>? get transitionTriggers;
+  Arr<DivTransitionTrigger>? get transitionTriggers;
 
-  List<DivTrigger>? get variableTriggers;
+  Arr<DivTrigger>? get variableTriggers;
 
-  List<DivVariable>? get variables;
+  Arr<DivVariable>? get variables;
 
   // default value: DivVisibility.visible
   Expression<DivVisibility> get visibility;
 
   DivVisibilityAction? get visibilityAction;
 
-  List<DivVisibilityAction>? get visibilityActions;
+  Arr<DivVisibilityAction>? get visibilityActions;
 
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   DivSize get width;

@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_evaluable_type.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Function argument.
@@ -40,15 +40,22 @@ class DivFunctionArgument extends Resolvable with EquatableMixin {
     }
     try {
       return DivFunctionArgument(
-        name: safeParseStr(
-          json['name']?.toString(),
-        )!,
-        type: safeParseStrEnum(
-          json['type'],
-          parse: DivEvaluableType.fromJson,
-        )!,
+        name: reqProp<String>(
+          safeParseStr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        type: reqProp<DivEvaluableType>(
+          safeParseStrEnum(
+            json['type'],
+            parse: DivEvaluableType.fromJson,
+          ),
+          name: 'type',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

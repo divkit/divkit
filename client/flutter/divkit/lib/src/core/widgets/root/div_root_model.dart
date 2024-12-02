@@ -1,21 +1,23 @@
+import 'package:collection/collection.dart';
 import 'package:divkit/divkit.dart';
 import 'package:equatable/equatable.dart';
 
 class DivRootModel with EquatableMixin {
   final List<DivDataState> states;
-  final String stateId;
+  final String? stateId;
 
   const DivRootModel({
     required this.states,
     required this.stateId,
   });
 
-  DivDataState get state => states.firstWhere(
+  DivDataState? get state =>
+      states.firstWhereOrNull(
         (element) => element.stateId.toString() == stateId,
-        orElse: () => states.first,
-      );
+      ) ??
+      (states.isNotEmpty ? states.first : null);
 
-  String get path => stateId;
+  String? get path => stateId;
 
   @override
   List<Object?> get props => [
@@ -25,7 +27,7 @@ class DivRootModel with EquatableMixin {
 }
 
 extension DivDataStateBinder on DivData {
-  DivRootModel bind(String stateId) => DivRootModel(
+  DivRootModel bind(String? stateId) => DivRootModel(
         stateId: stateId,
         states: states,
       );

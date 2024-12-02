@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_typed_value.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Temporarily saves variable to the persistent storage.
+/// Temporarily saves the variable in storage.
 class DivActionSetStoredValue extends Resolvable with EquatableMixin {
   const DivActionSetStoredValue({
     required this.lifetime,
@@ -14,13 +14,13 @@ class DivActionSetStoredValue extends Resolvable with EquatableMixin {
 
   static const type = "set_stored_value";
 
-  /// Storing time in seconds.
+  /// Duration of storage in seconds.
   final Expression<int> lifetime;
 
-  /// Nave of stored variable.
+  /// Name of the saved variable.
   final Expression<String> name;
 
-  /// Value to be stored.
+  /// Saved value.
   final DivTypedValue value;
 
   @override
@@ -49,17 +49,28 @@ class DivActionSetStoredValue extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionSetStoredValue(
-        lifetime: safeParseIntExpr(
-          json['lifetime'],
-        )!,
-        name: safeParseStrExpr(
-          json['name']?.toString(),
-        )!,
-        value: safeParseObj(
-          DivTypedValue.fromJson(json['value']),
-        )!,
+        lifetime: reqVProp<int>(
+          safeParseIntExpr(
+            json['lifetime'],
+          ),
+          name: 'lifetime',
+        ),
+        name: reqVProp<String>(
+          safeParseStrExpr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        value: reqProp<DivTypedValue>(
+          safeParseObject(
+            json['value'],
+            parse: DivTypedValue.fromJson,
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

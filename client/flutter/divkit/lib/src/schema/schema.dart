@@ -109,6 +109,7 @@ export './div_match_parent_size.dart';
 export './div_neighbour_page_size.dart';
 export './div_nine_patch_background.dart';
 export './div_number_animator.dart';
+export './div_page_content_size.dart';
 export './div_page_size.dart';
 export './div_page_transformation.dart';
 export './div_page_transformation_overlap.dart';

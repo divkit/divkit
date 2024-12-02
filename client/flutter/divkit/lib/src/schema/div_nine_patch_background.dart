@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_absolute_edge_insets.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Image in 9-patch format (https://developer.android.com/studio/write/draw9patch).
@@ -42,13 +42,23 @@ class DivNinePatchBackground extends Resolvable with EquatableMixin {
     }
     try {
       return DivNinePatchBackground(
-        imageUrl: safeParseUriExpr(json['image_url'])!,
-        insets: safeParseObj(
-          DivAbsoluteEdgeInsets.fromJson(json['insets']),
-          fallback: const DivAbsoluteEdgeInsets(),
-        )!,
+        imageUrl: reqVProp<Uri>(
+          safeParseUriExpr(
+            json['image_url'],
+          ),
+          name: 'image_url',
+        ),
+        insets: reqProp<DivAbsoluteEdgeInsets>(
+          safeParseObject(
+            json['insets'],
+            parse: DivAbsoluteEdgeInsets.fromJson,
+            fallback: const DivAbsoluteEdgeInsets(),
+          ),
+          name: 'insets',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size (%).
@@ -35,11 +35,15 @@ class DivPercentageSize extends Resolvable with EquatableMixin {
     }
     try {
       return DivPercentageSize(
-        value: safeParseDoubleExpr(
-          json['value'],
-        )!,
+        value: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

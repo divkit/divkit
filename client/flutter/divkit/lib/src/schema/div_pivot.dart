@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/schema/div_pivot_fixed.dart';
 import 'package:divkit/src/schema/div_pivot_percentage.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivPivot extends Resolvable with EquatableMixin {
@@ -87,7 +87,7 @@ class DivPivot extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }

@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
 class EntityWithOptionalProperty extends Resolvable with EquatableMixin  {
@@ -30,9 +30,10 @@ class EntityWithOptionalProperty extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithOptionalProperty(
-        property: safeParseStrExpr(json['property']?.toString(),),
+        property: safeParseStrExpr(json['property'],),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

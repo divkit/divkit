@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_size_unit.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed size of an element.
@@ -44,16 +44,23 @@ class DivFixedSize extends Resolvable with EquatableMixin {
     }
     try {
       return DivFixedSize(
-        unit: safeParseStrEnumExpr(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        )!,
-        value: safeParseIntExpr(
-          json['value'],
-        )!,
+        unit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.dp,
+          ),
+          name: 'unit',
+        ),
+        value: reqVProp<int>(
+          safeParseIntExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

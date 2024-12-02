@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/schema/div_action_typed.dart';
 import 'package:divkit/src/schema/div_download_callbacks.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 abstract class DivSightAction extends Resolvable {
   DivDownloadCallbacks? get downloadCallbacks;
@@ -15,7 +15,7 @@ abstract class DivSightAction extends Resolvable {
   // constraint: number >= 0; default value: 1
   Expression<int> get logLimit;
 
-  Map<String, dynamic>? get payload;
+  Obj? get payload;
 
   Expression<Uri>? get referer;
 

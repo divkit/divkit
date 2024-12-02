@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Specifies element with provided index as scroll destination.
+/// Specifies the element with the given index as the scrolling end position.
 class IndexDestination extends Resolvable with EquatableMixin {
   const IndexDestination({
     required this.value,
@@ -11,7 +11,7 @@ class IndexDestination extends Resolvable with EquatableMixin {
 
   static const type = "index";
 
-  /// Index of contaner's item.
+  /// Container element index.
   // constraint: number >= 0
   final Expression<int> value;
 
@@ -35,11 +35,15 @@ class IndexDestination extends Resolvable with EquatableMixin {
     }
     try {
       return IndexDestination(
-        value: safeParseIntExpr(
-          json['value'],
-        )!,
+        value: reqVProp<int>(
+          safeParseIntExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

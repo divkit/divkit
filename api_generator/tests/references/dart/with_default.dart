@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
 class WithDefault extends Resolvable with EquatableMixin  {

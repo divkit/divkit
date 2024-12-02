@@ -33,7 +33,6 @@ void main() async {
       // We cannot pass this case due to the fact that the calculator sends strings on ios
       if (![
         'String value in boolean_int property (div-text.auto_ellipsize)',
-        'Invalid item in array (transition_triggers) is ignored',
       ].contains(testCase['description'])) {
         test(
           testCase['description'] ?? testCase['path'],

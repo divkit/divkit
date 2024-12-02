@@ -4,7 +4,7 @@ import 'package:divkit/src/schema/div_appearance_set_transition.dart';
 import 'package:divkit/src/schema/div_fade_transition.dart';
 import 'package:divkit/src/schema/div_scale_transition.dart';
 import 'package:divkit/src/schema/div_slide_transition.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivAppearanceTransition extends Resolvable with EquatableMixin {
@@ -137,7 +137,7 @@ class DivAppearanceTransition extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }

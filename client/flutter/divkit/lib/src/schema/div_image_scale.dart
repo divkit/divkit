@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivImageScale implements Resolvable {
   fill('fill'),
@@ -74,7 +74,12 @@ enum DivImageScale implements Resolvable {
           return DivImageScale.stretch;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivImageScale: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

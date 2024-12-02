@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/schema/div_cloud_background.dart';
 import 'package:divkit/src/schema/div_solid_background.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivTextRangeBackground extends Resolvable with EquatableMixin {
@@ -87,7 +87,7 @@ class DivTextRangeBackground extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }

@@ -1,7 +1,7 @@
 import 'package:divkit/src/core/variable/variable.dart';
 import 'package:divkit/src/core/variable/variable_manager.dart';
 import 'package:divkit/src/core/variable/variable_storage.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> initValues = {

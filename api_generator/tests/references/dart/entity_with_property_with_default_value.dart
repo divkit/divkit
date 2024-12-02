@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
 class EntityWithPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
@@ -43,11 +43,12 @@ class EntityWithPropertyWithDefaultValue extends Resolvable with EquatableMixin 
     }
     try {
       return EntityWithPropertyWithDefaultValue(
-        iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
-        nested: safeParseObj(EntityWithPropertyWithDefaultValueNested.fromJson(json['nested']),),
-        url: safeParseUriExpr(json['url'])!,
+        iNum: reqVProp<int>(safeParseIntExpr(json['iNum'], fallback: 0,), name: 'iNum',),
+        nested: safeParseObject(json['nested'], parse: EntityWithPropertyWithDefaultValueNested.fromJson,),
+        url: reqVProp<Uri>(safeParseUriExpr(json['url'], fallback: const Uri.parse("https://yandex.ru"),), name: 'url',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -97,11 +98,12 @@ class EntityWithPropertyWithDefaultValueNested extends Resolvable with Equatable
     }
     try {
       return EntityWithPropertyWithDefaultValueNested(
-        iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
-        nonOptional: safeParseStrExpr(json['non_optional']?.toString(),)!,
-        url: safeParseUriExpr(json['url'])!,
+        iNum: reqVProp<int>(safeParseIntExpr(json['iNum'], fallback: 0,), name: 'iNum',),
+        nonOptional: reqVProp<String>(safeParseStrExpr(json['non_optional'],), name: 'non_optional',),
+        url: reqVProp<Uri>(safeParseUriExpr(json['url'], fallback: const Uri.parse("https://yandex.ru"),), name: 'url',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_action.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Timer.
@@ -20,13 +20,13 @@ class DivTimer extends Resolvable with EquatableMixin {
   final Expression<int> duration;
 
   /// Actions performed when the timer ends: when the timer has counted to the `duration` value or the `div-action://timer?action=stop&id=<id>` command has been received.
-  final List<DivAction>? endActions;
+  final Arr<DivAction>? endActions;
 
   /// Timer ID. Must be unique. Used when calling actions for the selected timer, for example: start, stop.
   final String id;
 
   /// Actions that are performed on each count of the timer.
-  final List<DivAction>? tickActions;
+  final Arr<DivAction>? tickActions;
 
   /// Duration of time intervals in milliseconds between counts. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.
   // constraint: number > 0
@@ -47,9 +47,9 @@ class DivTimer extends Resolvable with EquatableMixin {
 
   DivTimer copyWith({
     Expression<int>? duration,
-    List<DivAction>? Function()? endActions,
+    Arr<DivAction>? Function()? endActions,
     String? id,
-    List<DivAction>? Function()? tickActions,
+    Arr<DivAction>? Function()? tickActions,
     Expression<int>? Function()? tickInterval,
     String? Function()? valueVariable,
   }) =>
@@ -73,37 +73,46 @@ class DivTimer extends Resolvable with EquatableMixin {
     }
     try {
       return DivTimer(
-        duration: safeParseIntExpr(
-          json['duration'],
-          fallback: 0,
-        )!,
-        endActions: safeParseObj(
-          safeListMap(
-            json['end_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        duration: reqVProp<int>(
+          safeParseIntExpr(
+            json['duration'],
+            fallback: 0,
+          ),
+          name: 'duration',
+        ),
+        endActions: safeParseObjects(
+          json['end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        id: safeParseStr(
-          json['id']?.toString(),
-        )!,
-        tickActions: safeParseObj(
-          safeListMap(
-            json['tick_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        id: reqProp<String>(
+          safeParseStr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
+        tickActions: safeParseObjects(
+          json['tick_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         tickInterval: safeParseIntExpr(
           json['tick_interval'],
         ),
         valueVariable: safeParseStr(
-          json['value_variable']?.toString(),
+          json['value_variable'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -111,8 +120,8 @@ class DivTimer extends Resolvable with EquatableMixin {
   @override
   DivTimer resolve(DivVariableContext context) {
     duration.resolve(context);
-    safeListResolve(endActions, (v) => v.resolve(context));
-    safeListResolve(tickActions, (v) => v.resolve(context));
+    tryResolveList(endActions, (v) => v.resolve(context));
+    tryResolveList(tickActions, (v) => v.resolve(context));
     tickInterval?.resolve(context);
     return this;
   }

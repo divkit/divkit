@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
 class EntityWithComplexPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
@@ -31,9 +31,10 @@ class EntityWithComplexPropertyWithDefaultValue extends Resolvable with Equatabl
     }
     try {
       return EntityWithComplexPropertyWithDefaultValue(
-        property: safeParseObj(EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property']), fallback: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),)!,
+        property: reqProp<EntityWithComplexPropertyWithDefaultValueProperty>(safeParseObject(json['property'], parse: EntityWithComplexPropertyWithDefaultValueProperty.fromJson, fallback: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),), name: 'property',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -69,9 +70,10 @@ class EntityWithComplexPropertyWithDefaultValueProperty extends Resolvable with 
     }
     try {
       return EntityWithComplexPropertyWithDefaultValueProperty(
-        value: safeParseStrExpr(json['value']?.toString(),)!,
+        value: reqVProp<String>(safeParseStrExpr(json['value'],), name: 'value',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

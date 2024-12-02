@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Regex validator.
@@ -56,21 +56,34 @@ class DivInputValidatorRegex extends Resolvable with EquatableMixin {
     }
     try {
       return DivInputValidatorRegex(
-        allowEmpty: safeParseBoolExpr(
-          json['allow_empty'],
-          fallback: false,
-        )!,
-        labelId: safeParseStrExpr(
-          json['label_id']?.toString(),
-        )!,
-        pattern: safeParseStrExpr(
-          json['pattern']?.toString(),
-        )!,
-        variable: safeParseStr(
-          json['variable']?.toString(),
-        )!,
+        allowEmpty: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['allow_empty'],
+            fallback: false,
+          ),
+          name: 'allow_empty',
+        ),
+        labelId: reqVProp<String>(
+          safeParseStrExpr(
+            json['label_id'],
+          ),
+          name: 'label_id',
+        ),
+        pattern: reqVProp<String>(
+          safeParseStrExpr(
+            json['pattern'],
+          ),
+          name: 'pattern',
+        ),
+        variable: reqProp<String>(
+          safeParseStr(
+            json['variable'],
+          ),
+          name: 'variable',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

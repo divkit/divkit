@@ -6,7 +6,7 @@ import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_animator_base.dart';
 import 'package:divkit/src/schema/div_count.dart';
 import 'package:divkit/src/schema/div_fixed_count.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Color animator.
@@ -35,9 +35,9 @@ class DivColorAnimator extends Resolvable
 
   static const type = "color_animator";
 
-  /// Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+  /// Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
   @override
-  final List<DivAction>? cancelActions;
+  final Arr<DivAction>? cancelActions;
 
   /// Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
   // default value: DivAnimationDirection.normal
@@ -49,9 +49,9 @@ class DivColorAnimator extends Resolvable
   @override
   final Expression<int> duration;
 
-  /// Actions to be performed after the animator finishes.
+  /// Actions when the animation is completed.
   @override
-  final List<DivAction>? endActions;
+  final Arr<DivAction>? endActions;
 
   /// The value the variable will have when the animation ends.
   final Expression<Color> endValue;
@@ -98,10 +98,10 @@ class DivColorAnimator extends Resolvable
       ];
 
   DivColorAnimator copyWith({
-    List<DivAction>? Function()? cancelActions,
+    Arr<DivAction>? Function()? cancelActions,
     Expression<DivAnimationDirection>? direction,
     Expression<int>? duration,
-    List<DivAction>? Function()? endActions,
+    Arr<DivAction>? Function()? endActions,
     Expression<Color>? endValue,
     String? id,
     Expression<DivAnimationInterpolator>? interpolator,
@@ -133,73 +133,101 @@ class DivColorAnimator extends Resolvable
     }
     try {
       return DivColorAnimator(
-        cancelActions: safeParseObj(
-          safeListMap(
-            json['cancel_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        cancelActions: safeParseObjects(
+          json['cancel_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        direction: safeParseStrEnumExpr(
-          json['direction'],
-          parse: DivAnimationDirection.fromJson,
-          fallback: DivAnimationDirection.normal,
-        )!,
-        duration: safeParseIntExpr(
-          json['duration'],
-        )!,
-        endActions: safeParseObj(
-          safeListMap(
-            json['end_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        direction: reqVProp<DivAnimationDirection>(
+          safeParseStrEnumExpr(
+            json['direction'],
+            parse: DivAnimationDirection.fromJson,
+            fallback: DivAnimationDirection.normal,
+          ),
+          name: 'direction',
+        ),
+        duration: reqVProp<int>(
+          safeParseIntExpr(
+            json['duration'],
+          ),
+          name: 'duration',
+        ),
+        endActions: safeParseObjects(
+          json['end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        endValue: safeParseColorExpr(
-          json['end_value'],
-        )!,
-        id: safeParseStr(
-          json['id']?.toString(),
-        )!,
-        interpolator: safeParseStrEnumExpr(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.linear,
-        )!,
-        repeatCount: safeParseObj(
-          DivCount.fromJson(json['repeat_count']),
-          fallback: const DivCount.divFixedCount(
-            DivFixedCount(
-              value: ValueExpression(
-                1,
+        endValue: reqVProp<Color>(
+          safeParseColorExpr(
+            json['end_value'],
+          ),
+          name: 'end_value',
+        ),
+        id: reqProp<String>(
+          safeParseStr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
+        interpolator: reqVProp<DivAnimationInterpolator>(
+          safeParseStrEnumExpr(
+            json['interpolator'],
+            parse: DivAnimationInterpolator.fromJson,
+            fallback: DivAnimationInterpolator.linear,
+          ),
+          name: 'interpolator',
+        ),
+        repeatCount: reqProp<DivCount>(
+          safeParseObject(
+            json['repeat_count'],
+            parse: DivCount.fromJson,
+            fallback: const DivCount.divFixedCount(
+              DivFixedCount(
+                value: ValueExpression(
+                  1,
+                ),
               ),
             ),
           ),
-        )!,
-        startDelay: safeParseIntExpr(
-          json['start_delay'],
-          fallback: 0,
-        )!,
+          name: 'repeat_count',
+        ),
+        startDelay: reqVProp<int>(
+          safeParseIntExpr(
+            json['start_delay'],
+            fallback: 0,
+          ),
+          name: 'start_delay',
+        ),
         startValue: safeParseColorExpr(
           json['start_value'],
         ),
-        variableName: safeParseStr(
-          json['variable_name']?.toString(),
-        )!,
+        variableName: reqProp<String>(
+          safeParseStr(
+            json['variable_name'],
+          ),
+          name: 'variable_name',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   @override
   DivColorAnimator resolve(DivVariableContext context) {
-    safeListResolve(cancelActions, (v) => v.resolve(context));
+    tryResolveList(cancelActions, (v) => v.resolve(context));
     direction.resolve(context);
     duration.resolve(context);
-    safeListResolve(endActions, (v) => v.resolve(context));
+    tryResolveList(endActions, (v) => v.resolve(context));
     endValue.resolve(context);
     interpolator.resolve(context);
     repeatCount.resolve(context);

@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_edge_insets.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Cloud text background. Lines draws a rectangular background with the specified color and rounded corners.
+/// Cloud-style text background. Rows have a rectangular background in the specified color with rounded corners.
 class DivCloudBackground extends Resolvable with EquatableMixin {
   const DivCloudBackground({
     required this.color,
@@ -21,7 +21,7 @@ class DivCloudBackground extends Resolvable with EquatableMixin {
   // constraint: number >= 0
   final Expression<int> cornerRadius;
 
-  /// Margins between line bounds and background.
+  /// Margins between the row border and background border.
   final DivEdgeInsets paddings;
 
   @override
@@ -50,18 +50,29 @@ class DivCloudBackground extends Resolvable with EquatableMixin {
     }
     try {
       return DivCloudBackground(
-        color: safeParseColorExpr(
-          json['color'],
-        )!,
-        cornerRadius: safeParseIntExpr(
-          json['corner_radius'],
-        )!,
-        paddings: safeParseObj(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        )!,
+        color: reqVProp<Color>(
+          safeParseColorExpr(
+            json['color'],
+          ),
+          name: 'color',
+        ),
+        cornerRadius: reqVProp<int>(
+          safeParseIntExpr(
+            json['corner_radius'],
+          ),
+          name: 'corner_radius',
+        ),
+        paddings: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['paddings'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'paddings',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

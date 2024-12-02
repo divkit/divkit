@@ -3,7 +3,7 @@
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_dimension.dart';
 import 'package:divkit/src/schema/div_transition_base.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Slide animation.
@@ -77,29 +77,43 @@ class DivSlideTransition extends Resolvable
     }
     try {
       return DivSlideTransition(
-        distance: safeParseObj(
-          DivDimension.fromJson(json['distance']),
+        distance: safeParseObject(
+          json['distance'],
+          parse: DivDimension.fromJson,
         ),
-        duration: safeParseIntExpr(
-          json['duration'],
-          fallback: 200,
-        )!,
-        edge: safeParseStrEnumExpr(
-          json['edge'],
-          parse: DivSlideTransitionEdge.fromJson,
-          fallback: DivSlideTransitionEdge.bottom,
-        )!,
-        interpolator: safeParseStrEnumExpr(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        )!,
-        startDelay: safeParseIntExpr(
-          json['start_delay'],
-          fallback: 0,
-        )!,
+        duration: reqVProp<int>(
+          safeParseIntExpr(
+            json['duration'],
+            fallback: 200,
+          ),
+          name: 'duration',
+        ),
+        edge: reqVProp<DivSlideTransitionEdge>(
+          safeParseStrEnumExpr(
+            json['edge'],
+            parse: DivSlideTransitionEdge.fromJson,
+            fallback: DivSlideTransitionEdge.bottom,
+          ),
+          name: 'edge',
+        ),
+        interpolator: reqVProp<DivAnimationInterpolator>(
+          safeParseStrEnumExpr(
+            json['interpolator'],
+            parse: DivAnimationInterpolator.fromJson,
+            fallback: DivAnimationInterpolator.easeInOut,
+          ),
+          name: 'interpolator',
+        ),
+        startDelay: reqVProp<int>(
+          safeParseIntExpr(
+            json['start_delay'],
+            fallback: 0,
+          ),
+          name: 'start_delay',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -187,7 +201,12 @@ enum DivSlideTransitionEdge implements Resolvable {
           return DivSlideTransitionEdge.bottom;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivSlideTransitionEdge: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

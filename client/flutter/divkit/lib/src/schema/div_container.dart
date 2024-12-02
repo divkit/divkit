@@ -33,7 +33,7 @@ import 'package:divkit/src/schema/div_variable.dart';
 import 'package:divkit/src/schema/div_visibility.dart';
 import 'package:divkit/src/schema/div_visibility_action.dart';
 import 'package:divkit/src/schema/div_wrap_content_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Container. It contains other elements and is responsible for their location. It is used to arrange elements vertically, horizontally, and with an overlay in a certain order, simulating the third dimension.
@@ -77,6 +77,8 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
     this.height = const DivSize.divWrapContentSize(
       DivWrapContentSize(),
     ),
+    this.hoverEndActions,
+    this.hoverStartActions,
     this.id,
     this.itemBuilder,
     this.items,
@@ -87,6 +89,8 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
     this.margins = const DivEdgeInsets(),
     this.orientation = const ValueExpression(DivContainerOrientation.vertical),
     this.paddings = const DivEdgeInsets(),
+    this.pressEndActions,
+    this.pressStartActions,
     this.reuseId,
     this.rowSpan,
     this.selectedActions,
@@ -121,7 +125,7 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
   final DivAnimation actionAnimation;
 
   /// Multiple actions when clicking on an element.
-  final List<DivAction>? actions;
+  final Arr<DivAction>? actions;
 
   /// Horizontal alignment of an element inside the parent element.
   @override
@@ -138,7 +142,7 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
 
   /// Declaration of animators that change variable values over time.
   @override
-  final List<DivAnimator>? animators;
+  final Arr<DivAnimator>? animators;
 
   /// Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value.
   /// On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -146,7 +150,7 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
 
   /// Element background. It can contain multiple layers.
   @override
-  final List<DivBackground>? background;
+  final Arr<DivBackground>? background;
 
   /// Element stroke.
   @override
@@ -171,14 +175,14 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element disappears from the screen.
   @override
-  final List<DivDisappearAction>? disappearActions;
+  final Arr<DivDisappearAction>? disappearActions;
 
   /// Action when double-clicking on an element.
-  final List<DivAction>? doubletapActions;
+  final Arr<DivAction>? doubletapActions;
 
   /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
-  final List<DivExtension>? extensions;
+  final Arr<DivExtension>? extensions;
 
   /// Parameters when focusing on an element or losing focus.
   @override
@@ -186,12 +190,18 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
 
   /// User functions.
   @override
-  final List<DivFunction>? functions;
+  final Arr<DivFunction>? functions;
 
   /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
+
+  /// Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+  final Arr<DivAction>? hoverEndActions;
+
+  /// Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+  final Arr<DivAction>? hoverStartActions;
 
   /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
@@ -201,7 +211,7 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
   final DivCollectionItemBuilder? itemBuilder;
 
   /// Nested elements.
-  final List<Div>? items;
+  final Arr<Div>? items;
 
   /// Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:
   /// • A separate line is allocated for each element along the main axis with the size value set to `match_parent`.
@@ -217,7 +227,7 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
   final DivContainerSeparator? lineSeparator;
 
   /// Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
-  final List<DivAction>? longtapActions;
+  final Arr<DivAction>? longtapActions;
 
   /// External margins from the element stroke.
   @override
@@ -231,6 +241,12 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivEdgeInsets paddings;
 
+  /// Actions performed when an element is released.
+  final Arr<DivAction>? pressEndActions;
+
+  /// Actions performed when an element is pressed.
+  final Arr<DivAction>? pressStartActions;
+
   /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
   @override
   final Expression<String>? reuseId;
@@ -242,14 +258,14 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
 
   /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
-  final List<DivAction>? selectedActions;
+  final Arr<DivAction>? selectedActions;
 
   /// Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
   final DivContainerSeparator? separator;
 
   /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
-  final List<DivTooltip>? tooltips;
+  final Arr<DivTooltip>? tooltips;
 
   /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
@@ -270,15 +286,15 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
   /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
-  final List<DivTransitionTrigger>? transitionTriggers;
+  final Arr<DivTransitionTrigger>? transitionTriggers;
 
   /// Triggers for changing variables within an element.
   @override
-  final List<DivTrigger>? variableTriggers;
+  final Arr<DivTrigger>? variableTriggers;
 
   /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
-  final List<DivVariable>? variables;
+  final Arr<DivVariable>? variables;
 
   /// Element visibility.
   // default value: DivVisibility.visible
@@ -291,7 +307,7 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element appears on the screen.
   @override
-  final List<DivVisibilityAction>? visibilityActions;
+  final Arr<DivVisibilityAction>? visibilityActions;
 
   /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
@@ -321,6 +337,8 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
         focus,
         functions,
         height,
+        hoverEndActions,
+        hoverStartActions,
         id,
         itemBuilder,
         items,
@@ -331,6 +349,8 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
         margins,
         orientation,
         paddings,
+        pressEndActions,
+        pressStartActions,
         reuseId,
         rowSpan,
         selectedActions,
@@ -353,49 +373,53 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
     DivAccessibility? accessibility,
     DivAction? Function()? action,
     DivAnimation? actionAnimation,
-    List<DivAction>? Function()? actions,
+    Arr<DivAction>? Function()? actions,
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
-    List<DivAnimator>? Function()? animators,
+    Arr<DivAnimator>? Function()? animators,
     DivAspect? Function()? aspect,
-    List<DivBackground>? Function()? background,
+    Arr<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<bool>? clipToBounds,
     Expression<int>? Function()? columnSpan,
     Expression<DivContentAlignmentHorizontal>? contentAlignmentHorizontal,
     Expression<DivContentAlignmentVertical>? contentAlignmentVertical,
-    List<DivDisappearAction>? Function()? disappearActions,
-    List<DivAction>? Function()? doubletapActions,
-    List<DivExtension>? Function()? extensions,
+    Arr<DivDisappearAction>? Function()? disappearActions,
+    Arr<DivAction>? Function()? doubletapActions,
+    Arr<DivExtension>? Function()? extensions,
     DivFocus? Function()? focus,
-    List<DivFunction>? Function()? functions,
+    Arr<DivFunction>? Function()? functions,
     DivSize? height,
+    Arr<DivAction>? Function()? hoverEndActions,
+    Arr<DivAction>? Function()? hoverStartActions,
     String? Function()? id,
     DivCollectionItemBuilder? Function()? itemBuilder,
-    List<Div>? Function()? items,
+    Arr<Div>? Function()? items,
     Expression<DivContainerLayoutMode>? layoutMode,
     DivLayoutProvider? Function()? layoutProvider,
     DivContainerSeparator? Function()? lineSeparator,
-    List<DivAction>? Function()? longtapActions,
+    Arr<DivAction>? Function()? longtapActions,
     DivEdgeInsets? margins,
     Expression<DivContainerOrientation>? orientation,
     DivEdgeInsets? paddings,
+    Arr<DivAction>? Function()? pressEndActions,
+    Arr<DivAction>? Function()? pressStartActions,
     Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
-    List<DivAction>? Function()? selectedActions,
+    Arr<DivAction>? Function()? selectedActions,
     DivContainerSeparator? Function()? separator,
-    List<DivTooltip>? Function()? tooltips,
+    Arr<DivTooltip>? Function()? tooltips,
     DivTransform? transform,
     DivChangeTransition? Function()? transitionChange,
     DivAppearanceTransition? Function()? transitionIn,
     DivAppearanceTransition? Function()? transitionOut,
-    List<DivTransitionTrigger>? Function()? transitionTriggers,
-    List<DivTrigger>? Function()? variableTriggers,
-    List<DivVariable>? Function()? variables,
+    Arr<DivTransitionTrigger>? Function()? transitionTriggers,
+    Arr<DivTrigger>? Function()? variableTriggers,
+    Arr<DivVariable>? Function()? variables,
     Expression<DivVisibility>? visibility,
     DivVisibilityAction? Function()? visibilityAction,
-    List<DivVisibilityAction>? Function()? visibilityActions,
+    Arr<DivVisibilityAction>? Function()? visibilityActions,
     DivSize? width,
   }) =>
       DivContainer(
@@ -430,6 +454,12 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
         focus: focus != null ? focus.call() : this.focus,
         functions: functions != null ? functions.call() : this.functions,
         height: height ?? this.height,
+        hoverEndActions: hoverEndActions != null
+            ? hoverEndActions.call()
+            : this.hoverEndActions,
+        hoverStartActions: hoverStartActions != null
+            ? hoverStartActions.call()
+            : this.hoverStartActions,
         id: id != null ? id.call() : this.id,
         itemBuilder:
             itemBuilder != null ? itemBuilder.call() : this.itemBuilder,
@@ -446,6 +476,12 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
         margins: margins ?? this.margins,
         orientation: orientation ?? this.orientation,
         paddings: paddings ?? this.paddings,
+        pressEndActions: pressEndActions != null
+            ? pressEndActions.call()
+            : this.pressEndActions,
+        pressStartActions: pressStartActions != null
+            ? pressStartActions.call()
+            : this.pressStartActions,
         reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
         selectedActions: selectedActions != null
@@ -486,36 +522,46 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
     }
     try {
       return DivContainer(
-        accessibility: safeParseObj(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        )!,
-        action: safeParseObj(
-          DivAction.fromJson(json['action']),
+        accessibility: reqProp<DivAccessibility>(
+          safeParseObject(
+            json['accessibility'],
+            parse: DivAccessibility.fromJson,
+            fallback: const DivAccessibility(),
+          ),
+          name: 'accessibility',
         ),
-        actionAnimation: safeParseObj(
-          DivAnimation.fromJson(json['action_animation']),
-          fallback: const DivAnimation(
-            duration: ValueExpression(
-              100,
-            ),
-            endValue: ValueExpression(
-              0.6,
-            ),
-            name: ValueExpression(
-              DivAnimationName.fade,
-            ),
-            startValue: ValueExpression(
-              1,
+        action: safeParseObject(
+          json['action'],
+          parse: DivAction.fromJson,
+        ),
+        actionAnimation: reqProp<DivAnimation>(
+          safeParseObject(
+            json['action_animation'],
+            parse: DivAnimation.fromJson,
+            fallback: const DivAnimation(
+              duration: ValueExpression(
+                100,
+              ),
+              endValue: ValueExpression(
+                0.6,
+              ),
+              name: ValueExpression(
+                DivAnimationName.fade,
+              ),
+              startValue: ValueExpression(
+                1,
+              ),
             ),
           ),
-        )!,
-        actions: safeParseObj(
-          safeListMap(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+          name: 'action_animation',
+        ),
+        actions: safeParseObjects(
+          json['actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         alignmentHorizontal: safeParseStrEnumExpr(
@@ -526,224 +572,329 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
           json['alignment_vertical'],
           parse: DivAlignmentVertical.fromJson,
         ),
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 1.0,
-        )!,
-        animators: safeParseObj(
-          safeListMap(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 1.0,
+          ),
+          name: 'alpha',
+        ),
+        animators: safeParseObjects(
+          json['animators'],
+          (v) => reqProp<DivAnimator>(
+            safeParseObject(
+              v,
+              parse: DivAnimator.fromJson,
+            ),
           ),
         ),
-        aspect: safeParseObj(
-          DivAspect.fromJson(json['aspect']),
+        aspect: safeParseObject(
+          json['aspect'],
+          parse: DivAspect.fromJson,
         ),
-        background: safeParseObj(
-          safeListMap(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
+        background: safeParseObjects(
+          json['background'],
+          (v) => reqProp<DivBackground>(
+            safeParseObject(
+              v,
+              parse: DivBackground.fromJson,
+            ),
           ),
         ),
-        border: safeParseObj(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        )!,
-        clipToBounds: safeParseBoolExpr(
-          json['clip_to_bounds'],
-          fallback: true,
-        )!,
+        border: reqProp<DivBorder>(
+          safeParseObject(
+            json['border'],
+            parse: DivBorder.fromJson,
+            fallback: const DivBorder(),
+          ),
+          name: 'border',
+        ),
+        clipToBounds: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['clip_to_bounds'],
+            fallback: true,
+          ),
+          name: 'clip_to_bounds',
+        ),
         columnSpan: safeParseIntExpr(
           json['column_span'],
         ),
-        contentAlignmentHorizontal: safeParseStrEnumExpr(
-          json['content_alignment_horizontal'],
-          parse: DivContentAlignmentHorizontal.fromJson,
-          fallback: DivContentAlignmentHorizontal.start,
-        )!,
-        contentAlignmentVertical: safeParseStrEnumExpr(
-          json['content_alignment_vertical'],
-          parse: DivContentAlignmentVertical.fromJson,
-          fallback: DivContentAlignmentVertical.top,
-        )!,
-        disappearActions: safeParseObj(
-          safeListMap(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
+        contentAlignmentHorizontal: reqVProp<DivContentAlignmentHorizontal>(
+          safeParseStrEnumExpr(
+            json['content_alignment_horizontal'],
+            parse: DivContentAlignmentHorizontal.fromJson,
+            fallback: DivContentAlignmentHorizontal.start,
+          ),
+          name: 'content_alignment_horizontal',
+        ),
+        contentAlignmentVertical: reqVProp<DivContentAlignmentVertical>(
+          safeParseStrEnumExpr(
+            json['content_alignment_vertical'],
+            parse: DivContentAlignmentVertical.fromJson,
+            fallback: DivContentAlignmentVertical.top,
+          ),
+          name: 'content_alignment_vertical',
+        ),
+        disappearActions: safeParseObjects(
+          json['disappear_actions'],
+          (v) => reqProp<DivDisappearAction>(
+            safeParseObject(
+              v,
+              parse: DivDisappearAction.fromJson,
+            ),
           ),
         ),
-        doubletapActions: safeParseObj(
-          safeListMap(
-            json['doubletap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        doubletapActions: safeParseObjects(
+          json['doubletap_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        extensions: safeParseObj(
-          safeListMap(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
+        extensions: safeParseObjects(
+          json['extensions'],
+          (v) => reqProp<DivExtension>(
+            safeParseObject(
+              v,
+              parse: DivExtension.fromJson,
+            ),
           ),
         ),
-        focus: safeParseObj(
-          DivFocus.fromJson(json['focus']),
+        focus: safeParseObject(
+          json['focus'],
+          parse: DivFocus.fromJson,
         ),
-        functions: safeParseObj(
-          safeListMap(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
+        functions: safeParseObjects(
+          json['functions'],
+          (v) => reqProp<DivFunction>(
+            safeParseObject(
+              v,
+              parse: DivFunction.fromJson,
+            ),
           ),
         ),
-        height: safeParseObj(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
+        height: reqProp<DivSize>(
+          safeParseObject(
+            json['height'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divWrapContentSize(
+              DivWrapContentSize(),
+            ),
           ),
-        )!,
+          name: 'height',
+        ),
+        hoverEndActions: safeParseObjects(
+          json['hover_end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
+        hoverStartActions: safeParseObjects(
+          json['hover_start_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
         id: safeParseStr(
-          json['id']?.toString(),
+          json['id'],
         ),
-        itemBuilder: safeParseObj(
-          DivCollectionItemBuilder.fromJson(json['item_builder']),
+        itemBuilder: safeParseObject(
+          json['item_builder'],
+          parse: DivCollectionItemBuilder.fromJson,
         ),
-        items: safeParseObj(
-          safeListMap(
-            json['items'],
-            (v) => safeParseObj(
-              Div.fromJson(v),
-            )!,
+        items: safeParseObjects(
+          json['items'],
+          (v) => reqProp<Div>(
+            safeParseObject(
+              v,
+              parse: Div.fromJson,
+            ),
           ),
         ),
-        layoutMode: safeParseStrEnumExpr(
-          json['layout_mode'],
-          parse: DivContainerLayoutMode.fromJson,
-          fallback: DivContainerLayoutMode.noWrap,
-        )!,
-        layoutProvider: safeParseObj(
-          DivLayoutProvider.fromJson(json['layout_provider']),
+        layoutMode: reqVProp<DivContainerLayoutMode>(
+          safeParseStrEnumExpr(
+            json['layout_mode'],
+            parse: DivContainerLayoutMode.fromJson,
+            fallback: DivContainerLayoutMode.noWrap,
+          ),
+          name: 'layout_mode',
         ),
-        lineSeparator: safeParseObj(
-          DivContainerSeparator.fromJson(json['line_separator']),
+        layoutProvider: safeParseObject(
+          json['layout_provider'],
+          parse: DivLayoutProvider.fromJson,
         ),
-        longtapActions: safeParseObj(
-          safeListMap(
-            json['longtap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        lineSeparator: safeParseObject(
+          json['line_separator'],
+          parse: DivContainerSeparator.fromJson,
+        ),
+        longtapActions: safeParseObjects(
+          json['longtap_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        margins: safeParseObj(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        orientation: safeParseStrEnumExpr(
-          json['orientation'],
-          parse: DivContainerOrientation.fromJson,
-          fallback: DivContainerOrientation.vertical,
-        )!,
-        paddings: safeParseObj(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        )!,
+        margins: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['margins'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'margins',
+        ),
+        orientation: reqVProp<DivContainerOrientation>(
+          safeParseStrEnumExpr(
+            json['orientation'],
+            parse: DivContainerOrientation.fromJson,
+            fallback: DivContainerOrientation.vertical,
+          ),
+          name: 'orientation',
+        ),
+        paddings: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['paddings'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'paddings',
+        ),
+        pressEndActions: safeParseObjects(
+          json['press_end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
+        pressStartActions: safeParseObjects(
+          json['press_start_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
         reuseId: safeParseStrExpr(
-          json['reuse_id']?.toString(),
+          json['reuse_id'],
         ),
         rowSpan: safeParseIntExpr(
           json['row_span'],
         ),
-        selectedActions: safeParseObj(
-          safeListMap(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        selectedActions: safeParseObjects(
+          json['selected_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        separator: safeParseObj(
-          DivContainerSeparator.fromJson(json['separator']),
+        separator: safeParseObject(
+          json['separator'],
+          parse: DivContainerSeparator.fromJson,
         ),
-        tooltips: safeParseObj(
-          safeListMap(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
+        tooltips: safeParseObjects(
+          json['tooltips'],
+          (v) => reqProp<DivTooltip>(
+            safeParseObject(
+              v,
+              parse: DivTooltip.fromJson,
+            ),
           ),
         ),
-        transform: safeParseObj(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        )!,
-        transitionChange: safeParseObj(
-          DivChangeTransition.fromJson(json['transition_change']),
+        transform: reqProp<DivTransform>(
+          safeParseObject(
+            json['transform'],
+            parse: DivTransform.fromJson,
+            fallback: const DivTransform(),
+          ),
+          name: 'transform',
         ),
-        transitionIn: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_in']),
+        transitionChange: safeParseObject(
+          json['transition_change'],
+          parse: DivChangeTransition.fromJson,
         ),
-        transitionOut: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_out']),
+        transitionIn: safeParseObject(
+          json['transition_in'],
+          parse: DivAppearanceTransition.fromJson,
         ),
-        transitionTriggers: safeParseObj(
-          safeListMap(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
+        transitionOut: safeParseObject(
+          json['transition_out'],
+          parse: DivAppearanceTransition.fromJson,
+        ),
+        transitionTriggers: safeParseObjects(
+          json['transition_triggers'],
+          (v) => reqProp<DivTransitionTrigger>(
+            safeParseStrEnum(
               v,
               parse: DivTransitionTrigger.fromJson,
-            )!,
+            ),
           ),
         ),
-        variableTriggers: safeParseObj(
-          safeListMap(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
+        variableTriggers: safeParseObjects(
+          json['variable_triggers'],
+          (v) => reqProp<DivTrigger>(
+            safeParseObject(
+              v,
+              parse: DivTrigger.fromJson,
+            ),
           ),
         ),
-        variables: safeParseObj(
-          safeListMap(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
+        variables: safeParseObjects(
+          json['variables'],
+          (v) => reqProp<DivVariable>(
+            safeParseObject(
+              v,
+              parse: DivVariable.fromJson,
+            ),
           ),
         ),
-        visibility: safeParseStrEnumExpr(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        )!,
-        visibilityAction: safeParseObj(
-          DivVisibilityAction.fromJson(json['visibility_action']),
+        visibility: reqVProp<DivVisibility>(
+          safeParseStrEnumExpr(
+            json['visibility'],
+            parse: DivVisibility.fromJson,
+            fallback: DivVisibility.visible,
+          ),
+          name: 'visibility',
         ),
-        visibilityActions: safeParseObj(
-          safeListMap(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
+        visibilityAction: safeParseObject(
+          json['visibility_action'],
+          parse: DivVisibilityAction.fromJson,
+        ),
+        visibilityActions: safeParseObjects(
+          json['visibility_actions'],
+          (v) => reqProp<DivVisibilityAction>(
+            safeParseObject(
+              v,
+              parse: DivVisibilityAction.fromJson,
+            ),
           ),
         ),
-        width: safeParseObj(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
+        width: reqProp<DivSize>(
+          safeParseObject(
+            json['width'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divMatchParentSize(
+              DivMatchParentSize(),
+            ),
           ),
-        )!,
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -753,47 +904,51 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
     accessibility.resolve(context);
     action?.resolve(context);
     actionAnimation.resolve(context);
-    safeListResolve(actions, (v) => v.resolve(context));
+    tryResolveList(actions, (v) => v.resolve(context));
     alignmentHorizontal?.resolve(context);
     alignmentVertical?.resolve(context);
     alpha.resolve(context);
-    safeListResolve(animators, (v) => v.resolve(context));
+    tryResolveList(animators, (v) => v.resolve(context));
     aspect?.resolve(context);
-    safeListResolve(background, (v) => v.resolve(context));
+    tryResolveList(background, (v) => v.resolve(context));
     border.resolve(context);
     clipToBounds.resolve(context);
     columnSpan?.resolve(context);
     contentAlignmentHorizontal.resolve(context);
     contentAlignmentVertical.resolve(context);
-    safeListResolve(disappearActions, (v) => v.resolve(context));
-    safeListResolve(doubletapActions, (v) => v.resolve(context));
-    safeListResolve(extensions, (v) => v.resolve(context));
+    tryResolveList(disappearActions, (v) => v.resolve(context));
+    tryResolveList(doubletapActions, (v) => v.resolve(context));
+    tryResolveList(extensions, (v) => v.resolve(context));
     focus?.resolve(context);
-    safeListResolve(functions, (v) => v.resolve(context));
+    tryResolveList(functions, (v) => v.resolve(context));
     height.resolve(context);
+    tryResolveList(hoverEndActions, (v) => v.resolve(context));
+    tryResolveList(hoverStartActions, (v) => v.resolve(context));
     itemBuilder?.resolve(context);
     layoutMode.resolve(context);
     layoutProvider?.resolve(context);
     lineSeparator?.resolve(context);
-    safeListResolve(longtapActions, (v) => v.resolve(context));
+    tryResolveList(longtapActions, (v) => v.resolve(context));
     margins.resolve(context);
     orientation.resolve(context);
     paddings.resolve(context);
+    tryResolveList(pressEndActions, (v) => v.resolve(context));
+    tryResolveList(pressStartActions, (v) => v.resolve(context));
     reuseId?.resolve(context);
     rowSpan?.resolve(context);
-    safeListResolve(selectedActions, (v) => v.resolve(context));
+    tryResolveList(selectedActions, (v) => v.resolve(context));
     separator?.resolve(context);
-    safeListResolve(tooltips, (v) => v.resolve(context));
+    tryResolveList(tooltips, (v) => v.resolve(context));
     transform.resolve(context);
     transitionChange?.resolve(context);
     transitionIn?.resolve(context);
     transitionOut?.resolve(context);
-    safeListResolve(transitionTriggers, (v) => v.resolve(context));
-    safeListResolve(variableTriggers, (v) => v.resolve(context));
-    safeListResolve(variables, (v) => v.resolve(context));
+    tryResolveList(transitionTriggers, (v) => v.resolve(context));
+    tryResolveList(variableTriggers, (v) => v.resolve(context));
+    tryResolveList(variables, (v) => v.resolve(context));
     visibility.resolve(context);
     visibilityAction?.resolve(context);
-    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    tryResolveList(visibilityActions, (v) => v.resolve(context));
     width.resolve(context);
     return this;
   }
@@ -858,27 +1013,45 @@ class DivContainerSeparator extends Resolvable with EquatableMixin {
     }
     try {
       return DivContainerSeparator(
-        margins: safeParseObj(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        showAtEnd: safeParseBoolExpr(
-          json['show_at_end'],
-          fallback: false,
-        )!,
-        showAtStart: safeParseBoolExpr(
-          json['show_at_start'],
-          fallback: false,
-        )!,
-        showBetween: safeParseBoolExpr(
-          json['show_between'],
-          fallback: true,
-        )!,
-        style: safeParseObj(
-          DivDrawable.fromJson(json['style']),
-        )!,
+        margins: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['margins'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'margins',
+        ),
+        showAtEnd: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['show_at_end'],
+            fallback: false,
+          ),
+          name: 'show_at_end',
+        ),
+        showAtStart: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['show_at_start'],
+            fallback: false,
+          ),
+          name: 'show_at_start',
+        ),
+        showBetween: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['show_between'],
+            fallback: true,
+          ),
+          name: 'show_between',
+        ),
+        style: reqProp<DivDrawable>(
+          safeParseObject(
+            json['style'],
+            parse: DivDrawable.fromJson,
+          ),
+          name: 'style',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -955,7 +1128,12 @@ enum DivContainerOrientation implements Resolvable {
           return DivContainerOrientation.overlap;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivContainerOrientation: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
@@ -1014,7 +1192,12 @@ enum DivContainerLayoutMode implements Resolvable {
           return DivContainerLayoutMode.wrap;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivContainerLayoutMode: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

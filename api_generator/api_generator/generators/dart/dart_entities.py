@@ -180,66 +180,76 @@ class DartProperty(Property):
                     raise ValueError(type_val)
                 return utils.capitalize_camel_case(enum_case[0])
 
-    # ToDo(man-y): Transfer the parsing strategy to the subtypes themselves.
-    def get_parse_strategy(self, is_future=False) -> str:
+    def get_decode_strategy(self) -> str:
+        var = 'V' if self.supports_expressions else ''
+        required = not self.optional or self.has_default
+        decode = self._decode_property()
+
+        if required:
+            prop_name = f"'{self.name}'"
+            prop_type_declaration = cast(DartPropertyType, self.property_type).declaration()
+            return f"req{var}Prop<{prop_type_declaration}>({decode}, name: {prop_name},)"
+        return decode
+
+    def _decode_property(self) -> str:
         prop_type = cast(DartPropertyType, self.property_type)
-        prop_type_decl = prop_type.declaration()
-        required = '' if self.optional and not self.has_default else '!'
+        prop_type_declaration = prop_type.declaration()
         fallback = f' fallback: {self.fallback_declaration},' if self.has_default else ''
         expr = 'Expr' if self.supports_expressions else ''
-        _async = 'Async' if is_future else ''
-        _await = 'await ' if is_future else ''
-        br0 = '(' if is_future and (not self.optional or self.has_default) else ''
-        br1 = ')' if is_future and (not self.optional or self.has_default) else ''
+        src = f"json['{self.name}']"
 
         if isinstance(prop_type, Int):
-            return f"{br0}{_await}safeParseInt{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
+            return f"safeParseInt{expr}({src},{fallback})"
         elif isinstance(prop_type, Color):
-            return f"{br0}{_await}safeParseColor{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
+            return f"safeParseColor{expr}({src},{fallback})"
         elif isinstance(prop_type, Double):
-            return f"{br0}{_await}safeParseDouble{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
+            return f"safeParseDouble{expr}({src},{fallback})"
         elif isinstance(prop_type, (Bool, BoolInt)):
-            return f"{br0}{_await}safeParseBool{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
+            return f"safeParseBool{expr}({src},{fallback})"
         elif isinstance(prop_type, (String, StaticString)):
-            return f"{br0}{_await}safeParseStr{expr}{_async}(json['{self.name}']?.toString(),{fallback}){br1}{required}"
+            return f"safeParseStr{expr}({src},{fallback})"
         elif isinstance(prop_type, Dictionary):
-            return f"{br0}{_await}safeParseMap{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
+            return f"safeParseMap{expr}({src},{fallback})"
         elif isinstance(prop_type, RawArray):
-            return f"{br0}{_await}safeParseList{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
+            return f"safeParseList{expr}({src},{fallback})"
         elif isinstance(prop_type, Url):
-            return f"{br0}{_await}safeParseUri{expr}{_async}(json['{self.name}']){br1}{required}"
+            return f"safeParseUri{expr}({src},{fallback})"
         elif prop_type.is_string_enumeration():
-            return f"{br0}{_await}safeParseStrEnum{expr}{_async}(json['{self.name}'], parse: {prop_type_decl}.fromJson,{fallback}){br1}{required}"
+            return f"safeParseStrEnum{expr}({src}, " \
+                   f"parse: {prop_type_declaration}.fromJson,{fallback})"
         elif prop_type.is_class():
-            return f"{br0}{_await}safeParseObj{expr}{_async}({prop_type_decl}.fromJson(json['{self.name}']),{fallback}){br1}{required}"
+            return f"safeParseObject{expr}({src}, " \
+                   f"parse: {prop_type_declaration}.fromJson,{fallback})"
         elif prop_type.is_list():
             list_item_type = prop_type.get_list_inner_class()
-            list_item_decl = list_item_type.declaration()
+            list_item_declaration = list_item_type.declaration()
             if isinstance(list_item_type, Int):
-                strategy = "safeParseInt(v,)!"
+                strategy = "reqProp<int>(safeParseInt(v),)"
             elif isinstance(list_item_type, Color):
-                strategy = "safeParseColor(v,)!"
+                strategy = "reqProp<Color>(safeParseColor(v),)"
             elif isinstance(list_item_type, Double):
-                strategy = "safeParseDouble(v,)!"
+                strategy = "reqProp<double>(safeParseDouble(v)',)"
             elif isinstance(list_item_type, (Bool, BoolInt)):
-                strategy = "safeParseBool(v,)!"
+                strategy = "reqProp<bool>(safeParseBool(v),)"
             elif isinstance(list_item_type, (String, StaticString)):
-                strategy = "safeParseStr(v?.toString(),)!"
+                strategy = "reqProp<String>(safeParseStr(v),)"
             elif isinstance(list_item_type, Dictionary):
-                strategy = "safeParseMap(json,)!"
+                strategy = "reqProp<Obj>(safeParseMap(v),)"
             elif isinstance(list_item_type, RawArray):
-                strategy = "safeParseList(v,)!"
+                strategy = "reqProp<Arr>(safeParseList(v),)"
             elif isinstance(list_item_type, Url):
-                strategy = "safeParseUri(v)!"
+                strategy = "reqProp<Uri>(safeParseUri(v),)"
             elif list_item_type.is_string_enumeration():
-                strategy = f"safeParseStrEnum(v, parse: {list_item_decl}.fromJson,)!"
+                strategy = f"reqProp<{list_item_declaration}>(safeParseStrEnum(v, " \
+                           f"parse: {list_item_declaration}.fromJson,),)"
             elif list_item_type.is_class():
-                strategy = f"safeParseObj({list_item_decl}.fromJson(v),)!"
+                strategy = f"reqProp<{list_item_declaration}>(safeParseObject(v, " \
+                           f"parse: {list_item_declaration}.fromJson,),)"
             else:
                 strategy = ""
 
-            return f"{br0}{_await}safeParseObj{expr}{_async}({_await}safeListMap{_async}(json['{self.name}'], (v) => {strategy},)," \
-                   f"{fallback}){br1}{required}"
+            return f"safeParseObjects{expr}(json['{self.name}']," \
+                   f"(v) => {strategy}, {fallback})"
 
     def get_resolve_strategy(self) -> Optional[str]:
         prop_type = cast(DartPropertyType, self.property_type)
@@ -254,7 +264,7 @@ class DartProperty(Property):
             if prop_type.is_class():
                 return f'{name}{option}.resolve(context);'
             elif prop_type.is_list():
-                return f'safeListResolve({name}, (v) => v.resolve(context));'
+                return f'tryResolveList({name}, (v) => v.resolve(context));'
 
     @property
     def fallback_declaration(self) -> str:
@@ -339,15 +349,15 @@ class DartPropertyType(PropertyType):
         elif isinstance(self, Color):
             return 'Color'
         elif isinstance(self, Dictionary):
-            return 'Map<String, dynamic>'
+            return 'Obj'
         elif isinstance(self, RawArray):
-            return 'List<dynamic>'
+            return 'Arr'
         elif isinstance(self, Url):
             return 'Uri'
         elif isinstance(self, Array):
             item_type = cast(DartPropertyType, self.property_type)
             item_decl = item_type.declaration()
-            return f'List<{item_decl}>'
+            return f'Arr<{item_decl}>'
         elif isinstance(self, Object):
             if self.name.startswith('$predefined_'):
                 return self.name.replace('$predefined_', '')

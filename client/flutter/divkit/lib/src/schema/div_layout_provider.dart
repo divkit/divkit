@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivLayoutProvider extends Resolvable with EquatableMixin {
@@ -43,13 +43,14 @@ class DivLayoutProvider extends Resolvable with EquatableMixin {
     try {
       return DivLayoutProvider(
         heightVariableName: safeParseStr(
-          json['height_variable_name']?.toString(),
+          json['height_variable_name'],
         ),
         widthVariableName: safeParseStr(
-          json['width_variable_name']?.toString(),
+          json['width_variable_name'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

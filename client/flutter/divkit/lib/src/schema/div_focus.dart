@@ -3,7 +3,7 @@
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_border.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element behavior when focusing or losing focus.
@@ -17,7 +17,7 @@ class DivFocus extends Resolvable with EquatableMixin {
   });
 
   /// Background of an element when it is in focus. It can contain multiple layers.
-  final List<DivBackground>? background;
+  final Arr<DivBackground>? background;
 
   /// Border of an element when it's in focus.
   final DivBorder border;
@@ -26,10 +26,10 @@ class DivFocus extends Resolvable with EquatableMixin {
   final DivFocusNextFocusIds? nextFocusIds;
 
   /// Actions when an element loses focus.
-  final List<DivAction>? onBlur;
+  final Arr<DivAction>? onBlur;
 
   /// Actions when an element gets focus.
-  final List<DivAction>? onFocus;
+  final Arr<DivAction>? onFocus;
 
   @override
   List<Object?> get props => [
@@ -41,11 +41,11 @@ class DivFocus extends Resolvable with EquatableMixin {
       ];
 
   DivFocus copyWith({
-    List<DivBackground>? Function()? background,
+    Arr<DivBackground>? Function()? background,
     DivBorder? border,
     DivFocusNextFocusIds? Function()? nextFocusIds,
-    List<DivAction>? Function()? onBlur,
-    List<DivAction>? Function()? onFocus,
+    Arr<DivAction>? Function()? onBlur,
+    Arr<DivAction>? Function()? onFocus,
   }) =>
       DivFocus(
         background: background != null ? background.call() : this.background,
@@ -64,50 +64,59 @@ class DivFocus extends Resolvable with EquatableMixin {
     }
     try {
       return DivFocus(
-        background: safeParseObj(
-          safeListMap(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
+        background: safeParseObjects(
+          json['background'],
+          (v) => reqProp<DivBackground>(
+            safeParseObject(
+              v,
+              parse: DivBackground.fromJson,
+            ),
           ),
         ),
-        border: safeParseObj(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        )!,
-        nextFocusIds: safeParseObj(
-          DivFocusNextFocusIds.fromJson(json['next_focus_ids']),
+        border: reqProp<DivBorder>(
+          safeParseObject(
+            json['border'],
+            parse: DivBorder.fromJson,
+            fallback: const DivBorder(),
+          ),
+          name: 'border',
         ),
-        onBlur: safeParseObj(
-          safeListMap(
-            json['on_blur'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        nextFocusIds: safeParseObject(
+          json['next_focus_ids'],
+          parse: DivFocusNextFocusIds.fromJson,
+        ),
+        onBlur: safeParseObjects(
+          json['on_blur'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        onFocus: safeParseObj(
-          safeListMap(
-            json['on_focus'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        onFocus: safeParseObjects(
+          json['on_focus'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   @override
   DivFocus resolve(DivVariableContext context) {
-    safeListResolve(background, (v) => v.resolve(context));
+    tryResolveList(background, (v) => v.resolve(context));
     border.resolve(context);
     nextFocusIds?.resolve(context);
-    safeListResolve(onBlur, (v) => v.resolve(context));
-    safeListResolve(onFocus, (v) => v.resolve(context));
+    tryResolveList(onBlur, (v) => v.resolve(context));
+    tryResolveList(onFocus, (v) => v.resolve(context));
     return this;
   }
 }
@@ -161,22 +170,23 @@ class DivFocusNextFocusIds extends Resolvable with EquatableMixin {
     try {
       return DivFocusNextFocusIds(
         down: safeParseStrExpr(
-          json['down']?.toString(),
+          json['down'],
         ),
         forward: safeParseStrExpr(
-          json['forward']?.toString(),
+          json['forward'],
         ),
         left: safeParseStrExpr(
-          json['left']?.toString(),
+          json['left'],
         ),
         right: safeParseStrExpr(
-          json['right']?.toString(),
+          json['right'],
         ),
         up: safeParseStrExpr(
-          json['up']?.toString(),
+          json['up'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

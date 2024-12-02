@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
 class EntityWithArrayWithTransform extends Resolvable with EquatableMixin  {
@@ -12,7 +12,7 @@ class EntityWithArrayWithTransform extends Resolvable with EquatableMixin  {
 
   static const type = "entity_with_array_with_transform";
    // at least 1 elements
-  final Expression<List<Color>> array;
+  final Expression<Arr<Color>> array;
 
   @override
   List<Object?> get props => [
@@ -20,7 +20,7 @@ class EntityWithArrayWithTransform extends Resolvable with EquatableMixin  {
       ];
 
   EntityWithArrayWithTransform copyWith({
-      Expression<List<Color>>?  array,
+      Expression<Arr<Color>>?  array,
   }) => EntityWithArrayWithTransform(
       array: array ?? this.array,
     );
@@ -31,9 +31,10 @@ class EntityWithArrayWithTransform extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithArrayWithTransform(
-        array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseColor(v,)!,),)!,
+        array: reqVProp<Arr<Color>>(safeParseObjectsExpr(json['array'],(v) => reqProp<Color>(safeParseColor(v),), ), name: 'array',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

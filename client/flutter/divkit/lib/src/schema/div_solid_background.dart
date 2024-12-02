@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Solid background color.
@@ -34,11 +34,15 @@ class DivSolidBackground extends Resolvable with EquatableMixin {
     }
     try {
       return DivSolidBackground(
-        color: safeParseColorExpr(
-          json['color'],
-        )!,
+        color: reqVProp<Color>(
+          safeParseColorExpr(
+            json['color'],
+          ),
+          name: 'color',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

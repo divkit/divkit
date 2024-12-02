@@ -4,10 +4,10 @@ import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_animation_direction.dart';
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_count.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 abstract class DivAnimatorBase extends Resolvable {
-  List<DivAction>? get cancelActions;
+  Arr<DivAction>? get cancelActions;
 
   // default value: DivAnimationDirection.normal
   Expression<DivAnimationDirection> get direction;
@@ -15,7 +15,7 @@ abstract class DivAnimatorBase extends Resolvable {
   // constraint: number >= 0
   Expression<int> get duration;
 
-  List<DivAction>? get endActions;
+  Arr<DivAction>? get endActions;
 
   String get id;
 

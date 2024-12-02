@@ -1,4 +1,4 @@
-## 0.6.0-rc.2
+## 0.6.0-rc.3
 
 * Update generated schema
 * Support nullable end in div-ranges and cloud background fallback
@@ -8,15 +8,20 @@
 * Rewrite context initialization mechanism to synchronous
 * Rewrite conversion mechanism, simplify and standardize
 * Rewrite expression analyzer to synchronous
+* Rewrite parsing to improve error handling
+* Fix the missing valid state error
 * Fix unsafe map of backgrounds
 
+
 ## Migration 0.5.0 → 0.6.0
+* Remove DivData `preload` and `parse` methods for simplification
 * Remove DivKitView property `cacheManager` as unsupported to the proper extent
 * Remove DivKitView property `loadingBuilder` as unused
 * Replace DivKitView props `viewScale` and `textScale` to `scale`
-* Remove DivData `preload` and `parse` methods for simplification
+* Change `safeParseObj` to `safeParseObject`
+* Change `safeListMap` to  `safeParseObjects`
+* Change `prop.resolve(context: context)` to `prop.resolve(context)`
 * DTO models use the generated resolve instead of extension
-* Change prop.resolve(context: context) to prop.resolve(context)
 * Now are required to perform the conversion DTO to DivModel
 * Due to architecture changes and conversion mechanism changes, you need to migrate your codebase
 

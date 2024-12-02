@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_typed_value.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets the value in the array by index.
@@ -43,17 +43,28 @@ class DivActionArraySetValue extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionArraySetValue(
-        index: safeParseIntExpr(
-          json['index'],
-        )!,
-        value: safeParseObj(
-          DivTypedValue.fromJson(json['value']),
-        )!,
-        variableName: safeParseStrExpr(
-          json['variable_name']?.toString(),
-        )!,
+        index: reqVProp<int>(
+          safeParseIntExpr(
+            json['index'],
+          ),
+          name: 'index',
+        ),
+        value: reqProp<DivTypedValue>(
+          safeParseObject(
+            json['value'],
+            parse: DivTypedValue.fromJson,
+          ),
+          name: 'value',
+        ),
+        variableName: reqVProp<String>(
+          safeParseStrExpr(
+            json['variable_name'],
+          ),
+          name: 'variable_name',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_appearance_transition.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A set of animations to be applied simultaneously.
@@ -14,7 +14,7 @@ class DivAppearanceSetTransition extends Resolvable with EquatableMixin {
 
   /// An array of animations.
   // at least 1 elements
-  final List<DivAppearanceTransition> items;
+  final Arr<DivAppearanceTransition> items;
 
   @override
   List<Object?> get props => [
@@ -22,7 +22,7 @@ class DivAppearanceSetTransition extends Resolvable with EquatableMixin {
       ];
 
   DivAppearanceSetTransition copyWith({
-    List<DivAppearanceTransition>? items,
+    Arr<DivAppearanceTransition>? items,
   }) =>
       DivAppearanceSetTransition(
         items: items ?? this.items,
@@ -36,16 +36,21 @@ class DivAppearanceSetTransition extends Resolvable with EquatableMixin {
     }
     try {
       return DivAppearanceSetTransition(
-        items: safeParseObj(
-          safeListMap(
+        items: reqProp<Arr<DivAppearanceTransition>>(
+          safeParseObjects(
             json['items'],
-            (v) => safeParseObj(
-              DivAppearanceTransition.fromJson(v),
-            )!,
+            (v) => reqProp<DivAppearanceTransition>(
+              safeParseObject(
+                v,
+                parse: DivAppearanceTransition.fromJson,
+              ),
+            ),
           ),
-        )!,
+          name: 'items',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

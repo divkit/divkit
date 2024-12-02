@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_size_unit.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed coordinates of the rotation axis.
@@ -43,16 +43,20 @@ class DivPivotFixed extends Resolvable with EquatableMixin {
     }
     try {
       return DivPivotFixed(
-        unit: safeParseStrEnumExpr(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        )!,
+        unit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.dp,
+          ),
+          name: 'unit',
+        ),
         value: safeParseIntExpr(
           json['value'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// An arbitrary array in JSON format.
@@ -16,7 +16,7 @@ class ArrayVariable extends Resolvable with EquatableMixin {
   final String name;
 
   /// Value.
-  final List<dynamic> value;
+  final Arr value;
 
   @override
   List<Object?> get props => [
@@ -26,7 +26,7 @@ class ArrayVariable extends Resolvable with EquatableMixin {
 
   ArrayVariable copyWith({
     String? name,
-    List<dynamic>? value,
+    Arr? value,
   }) =>
       ArrayVariable(
         name: name ?? this.name,
@@ -41,14 +41,21 @@ class ArrayVariable extends Resolvable with EquatableMixin {
     }
     try {
       return ArrayVariable(
-        name: safeParseStr(
-          json['name']?.toString(),
-        )!,
-        value: safeParseList(
-          json['value'],
-        )!,
+        name: reqProp<String>(
+          safeParseStr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        value: reqProp<Arr>(
+          safeParseList(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

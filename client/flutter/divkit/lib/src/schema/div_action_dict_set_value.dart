@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_typed_value.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets the value in the dictionary by the specified key. Deletes the key if the value is not set.
@@ -43,17 +43,25 @@ class DivActionDictSetValue extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionDictSetValue(
-        key: safeParseStrExpr(
-          json['key']?.toString(),
-        )!,
-        value: safeParseObj(
-          DivTypedValue.fromJson(json['value']),
+        key: reqVProp<String>(
+          safeParseStrExpr(
+            json['key'],
+          ),
+          name: 'key',
         ),
-        variableName: safeParseStrExpr(
-          json['variable_name']?.toString(),
-        )!,
+        value: safeParseObject(
+          json['value'],
+          parse: DivTypedValue.fromJson,
+        ),
+        variableName: reqVProp<String>(
+          safeParseStrExpr(
+            json['variable_name'],
+          ),
+          name: 'variable_name',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

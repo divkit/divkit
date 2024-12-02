@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Location of the coordinate of the rotation axis as a percentage relative to the element size.
@@ -34,11 +34,15 @@ class DivPivotPercentage extends Resolvable with EquatableMixin {
     }
     try {
       return DivPivotPercentage(
-        value: safeParseDoubleExpr(
-          json['value'],
-        )!,
+        value: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

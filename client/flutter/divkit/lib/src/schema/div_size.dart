@@ -3,7 +3,7 @@
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_match_parent_size.dart';
 import 'package:divkit/src/schema/div_wrap_content_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivSize extends Resolvable with EquatableMixin {
@@ -112,7 +112,7 @@ class DivSize extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }

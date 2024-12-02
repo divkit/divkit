@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Shows the tooltip.
@@ -41,14 +41,18 @@ class DivActionShowTooltip extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionShowTooltip(
-        id: safeParseStrExpr(
-          json['id']?.toString(),
-        )!,
+        id: reqVProp<String>(
+          safeParseStrExpr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
         multiple: safeParseBoolExpr(
           json['multiple'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

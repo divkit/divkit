@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Deletes a value from the array
@@ -37,14 +37,21 @@ class DivActionArrayRemoveValue extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionArrayRemoveValue(
-        index: safeParseIntExpr(
-          json['index'],
-        )!,
-        variableName: safeParseStrExpr(
-          json['variable_name']?.toString(),
-        )!,
+        index: reqVProp<int>(
+          safeParseIntExpr(
+            json['index'],
+          ),
+          name: 'index',
+        ),
+        variableName: reqVProp<String>(
+          safeParseStrExpr(
+            json['variable_name'],
+          ),
+          name: 'variable_name',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

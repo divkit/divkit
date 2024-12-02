@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Variable — URL as a string.
@@ -41,12 +41,21 @@ class UrlVariable extends Resolvable with EquatableMixin {
     }
     try {
       return UrlVariable(
-        name: safeParseStr(
-          json['name']?.toString(),
-        )!,
-        value: safeParseUri(json['value'])!,
+        name: reqProp<String>(
+          safeParseStr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        value: reqProp<Uri>(
+          safeParseUri(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

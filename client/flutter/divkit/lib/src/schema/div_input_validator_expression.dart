@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) validator.
@@ -56,21 +56,34 @@ class DivInputValidatorExpression extends Resolvable with EquatableMixin {
     }
     try {
       return DivInputValidatorExpression(
-        allowEmpty: safeParseBoolExpr(
-          json['allow_empty'],
-          fallback: false,
-        )!,
-        condition: safeParseBoolExpr(
-          json['condition'],
-        )!,
-        labelId: safeParseStrExpr(
-          json['label_id']?.toString(),
-        )!,
-        variable: safeParseStr(
-          json['variable']?.toString(),
-        )!,
+        allowEmpty: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['allow_empty'],
+            fallback: false,
+          ),
+          name: 'allow_empty',
+        ),
+        condition: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['condition'],
+          ),
+          name: 'condition',
+        ),
+        labelId: reqVProp<String>(
+          safeParseStrExpr(
+            json['label_id'],
+          ),
+          name: 'label_id',
+        ),
+        variable: reqProp<String>(
+          safeParseStr(
+            json['variable'],
+          ),
+          name: 'variable',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

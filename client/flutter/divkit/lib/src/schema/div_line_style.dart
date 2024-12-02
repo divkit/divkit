@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivLineStyle implements Resolvable {
   none('none'),
@@ -52,7 +52,12 @@ enum DivLineStyle implements Resolvable {
           return DivLineStyle.single;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivLineStyle: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

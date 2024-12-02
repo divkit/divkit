@@ -29,7 +29,7 @@ import 'package:divkit/src/schema/div_variable.dart';
 import 'package:divkit/src/schema/div_visibility.dart';
 import 'package:divkit/src/schema/div_visibility_action.dart';
 import 'package:divkit/src/schema/div_wrap_content_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Animated GIF image.
@@ -73,6 +73,8 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
     this.height = const DivSize.divWrapContentSize(
       DivWrapContentSize(),
     ),
+    this.hoverEndActions,
+    this.hoverStartActions,
     this.id,
     this.layoutProvider,
     this.longtapActions,
@@ -80,6 +82,8 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
     this.paddings = const DivEdgeInsets(),
     this.placeholderColor = const ValueExpression(Color(0x14000000)),
     this.preloadRequired = const ValueExpression(false),
+    this.pressEndActions,
+    this.pressStartActions,
     this.preview,
     this.reuseId,
     this.rowSpan,
@@ -115,7 +119,7 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
   final DivAnimation actionAnimation;
 
   /// Multiple actions when clicking on an element.
-  final List<DivAction>? actions;
+  final Arr<DivAction>? actions;
 
   /// Horizontal alignment of an element inside the parent element.
   @override
@@ -132,14 +136,14 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
 
   /// Declaration of animators that change variable values over time.
   @override
-  final List<DivAnimator>? animators;
+  final Arr<DivAnimator>? animators;
 
   /// Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
   final DivAspect? aspect;
 
   /// Element background. It can contain multiple layers.
   @override
-  final List<DivBackground>? background;
+  final Arr<DivBackground>? background;
 
   /// Element stroke.
   @override
@@ -160,14 +164,14 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element disappears from the screen.
   @override
-  final List<DivDisappearAction>? disappearActions;
+  final Arr<DivDisappearAction>? disappearActions;
 
   /// Action when double-clicking on an element.
-  final List<DivAction>? doubletapActions;
+  final Arr<DivAction>? doubletapActions;
 
   /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
-  final List<DivExtension>? extensions;
+  final Arr<DivExtension>? extensions;
 
   /// Parameters when focusing on an element or losing focus.
   @override
@@ -175,7 +179,7 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
 
   /// User functions.
   @override
-  final List<DivFunction>? functions;
+  final Arr<DivFunction>? functions;
 
   /// Direct URL to a GIF image.
   final Expression<Uri> gifUrl;
@@ -184,6 +188,12 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
+
+  /// Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+  final Arr<DivAction>? hoverEndActions;
+
+  /// Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+  final Arr<DivAction>? hoverStartActions;
 
   /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
@@ -194,7 +204,7 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
   final DivLayoutProvider? layoutProvider;
 
   /// Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
-  final List<DivAction>? longtapActions;
+  final Arr<DivAction>? longtapActions;
 
   /// External margins from the element stroke.
   @override
@@ -211,6 +221,12 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
   /// Background image must be loaded before the display.
   // default value: false
   final Expression<bool> preloadRequired;
+
+  /// Actions performed when an element is released.
+  final Arr<DivAction>? pressEndActions;
+
+  /// Actions performed when an element is pressed.
+  final Arr<DivAction>? pressStartActions;
 
   /// Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
   final Expression<String>? preview;
@@ -232,11 +248,11 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
 
   /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
-  final List<DivAction>? selectedActions;
+  final Arr<DivAction>? selectedActions;
 
   /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
-  final List<DivTooltip>? tooltips;
+  final Arr<DivTooltip>? tooltips;
 
   /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
@@ -257,15 +273,15 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
   /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
-  final List<DivTransitionTrigger>? transitionTriggers;
+  final Arr<DivTransitionTrigger>? transitionTriggers;
 
   /// Triggers for changing variables within an element.
   @override
-  final List<DivTrigger>? variableTriggers;
+  final Arr<DivTrigger>? variableTriggers;
 
   /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
-  final List<DivVariable>? variables;
+  final Arr<DivVariable>? variables;
 
   /// Element visibility.
   // default value: DivVisibility.visible
@@ -278,7 +294,7 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element appears on the screen.
   @override
-  final List<DivVisibilityAction>? visibilityActions;
+  final Arr<DivVisibilityAction>? visibilityActions;
 
   /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
@@ -308,6 +324,8 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
         functions,
         gifUrl,
         height,
+        hoverEndActions,
+        hoverStartActions,
         id,
         layoutProvider,
         longtapActions,
@@ -315,6 +333,8 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
         paddings,
         placeholderColor,
         preloadRequired,
+        pressEndActions,
+        pressStartActions,
         preview,
         reuseId,
         rowSpan,
@@ -338,47 +358,51 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
     DivAccessibility? accessibility,
     DivAction? Function()? action,
     DivAnimation? actionAnimation,
-    List<DivAction>? Function()? actions,
+    Arr<DivAction>? Function()? actions,
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
-    List<DivAnimator>? Function()? animators,
+    Arr<DivAnimator>? Function()? animators,
     DivAspect? Function()? aspect,
-    List<DivBackground>? Function()? background,
+    Arr<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
     Expression<DivAlignmentHorizontal>? contentAlignmentHorizontal,
     Expression<DivAlignmentVertical>? contentAlignmentVertical,
-    List<DivDisappearAction>? Function()? disappearActions,
-    List<DivAction>? Function()? doubletapActions,
-    List<DivExtension>? Function()? extensions,
+    Arr<DivDisappearAction>? Function()? disappearActions,
+    Arr<DivAction>? Function()? doubletapActions,
+    Arr<DivExtension>? Function()? extensions,
     DivFocus? Function()? focus,
-    List<DivFunction>? Function()? functions,
+    Arr<DivFunction>? Function()? functions,
     Expression<Uri>? gifUrl,
     DivSize? height,
+    Arr<DivAction>? Function()? hoverEndActions,
+    Arr<DivAction>? Function()? hoverStartActions,
     String? Function()? id,
     DivLayoutProvider? Function()? layoutProvider,
-    List<DivAction>? Function()? longtapActions,
+    Arr<DivAction>? Function()? longtapActions,
     DivEdgeInsets? margins,
     DivEdgeInsets? paddings,
     Expression<Color>? placeholderColor,
     Expression<bool>? preloadRequired,
+    Arr<DivAction>? Function()? pressEndActions,
+    Arr<DivAction>? Function()? pressStartActions,
     Expression<String>? Function()? preview,
     Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     Expression<DivImageScale>? scale,
-    List<DivAction>? Function()? selectedActions,
-    List<DivTooltip>? Function()? tooltips,
+    Arr<DivAction>? Function()? selectedActions,
+    Arr<DivTooltip>? Function()? tooltips,
     DivTransform? transform,
     DivChangeTransition? Function()? transitionChange,
     DivAppearanceTransition? Function()? transitionIn,
     DivAppearanceTransition? Function()? transitionOut,
-    List<DivTransitionTrigger>? Function()? transitionTriggers,
-    List<DivTrigger>? Function()? variableTriggers,
-    List<DivVariable>? Function()? variables,
+    Arr<DivTransitionTrigger>? Function()? transitionTriggers,
+    Arr<DivTrigger>? Function()? variableTriggers,
+    Arr<DivVariable>? Function()? variables,
     Expression<DivVisibility>? visibility,
     DivVisibilityAction? Function()? visibilityAction,
-    List<DivVisibilityAction>? Function()? visibilityActions,
+    Arr<DivVisibilityAction>? Function()? visibilityActions,
     DivSize? width,
   }) =>
       DivGifImage(
@@ -413,6 +437,12 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
         functions: functions != null ? functions.call() : this.functions,
         gifUrl: gifUrl ?? this.gifUrl,
         height: height ?? this.height,
+        hoverEndActions: hoverEndActions != null
+            ? hoverEndActions.call()
+            : this.hoverEndActions,
+        hoverStartActions: hoverStartActions != null
+            ? hoverStartActions.call()
+            : this.hoverStartActions,
         id: id != null ? id.call() : this.id,
         layoutProvider: layoutProvider != null
             ? layoutProvider.call()
@@ -424,6 +454,12 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
         paddings: paddings ?? this.paddings,
         placeholderColor: placeholderColor ?? this.placeholderColor,
         preloadRequired: preloadRequired ?? this.preloadRequired,
+        pressEndActions: pressEndActions != null
+            ? pressEndActions.call()
+            : this.pressEndActions,
+        pressStartActions: pressStartActions != null
+            ? pressStartActions.call()
+            : this.pressStartActions,
         preview: preview != null ? preview.call() : this.preview,
         reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
@@ -465,36 +501,46 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
     }
     try {
       return DivGifImage(
-        accessibility: safeParseObj(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        )!,
-        action: safeParseObj(
-          DivAction.fromJson(json['action']),
+        accessibility: reqProp<DivAccessibility>(
+          safeParseObject(
+            json['accessibility'],
+            parse: DivAccessibility.fromJson,
+            fallback: const DivAccessibility(),
+          ),
+          name: 'accessibility',
         ),
-        actionAnimation: safeParseObj(
-          DivAnimation.fromJson(json['action_animation']),
-          fallback: const DivAnimation(
-            duration: ValueExpression(
-              100,
-            ),
-            endValue: ValueExpression(
-              0.6,
-            ),
-            name: ValueExpression(
-              DivAnimationName.fade,
-            ),
-            startValue: ValueExpression(
-              1,
+        action: safeParseObject(
+          json['action'],
+          parse: DivAction.fromJson,
+        ),
+        actionAnimation: reqProp<DivAnimation>(
+          safeParseObject(
+            json['action_animation'],
+            parse: DivAnimation.fromJson,
+            fallback: const DivAnimation(
+              duration: ValueExpression(
+                100,
+              ),
+              endValue: ValueExpression(
+                0.6,
+              ),
+              name: ValueExpression(
+                DivAnimationName.fade,
+              ),
+              startValue: ValueExpression(
+                1,
+              ),
             ),
           ),
-        )!,
-        actions: safeParseObj(
-          safeListMap(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+          name: 'action_animation',
+        ),
+        actions: safeParseObjects(
+          json['actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         alignmentHorizontal: safeParseStrEnumExpr(
@@ -505,210 +551,316 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
           json['alignment_vertical'],
           parse: DivAlignmentVertical.fromJson,
         ),
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 1.0,
-        )!,
-        animators: safeParseObj(
-          safeListMap(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 1.0,
+          ),
+          name: 'alpha',
+        ),
+        animators: safeParseObjects(
+          json['animators'],
+          (v) => reqProp<DivAnimator>(
+            safeParseObject(
+              v,
+              parse: DivAnimator.fromJson,
+            ),
           ),
         ),
-        aspect: safeParseObj(
-          DivAspect.fromJson(json['aspect']),
+        aspect: safeParseObject(
+          json['aspect'],
+          parse: DivAspect.fromJson,
         ),
-        background: safeParseObj(
-          safeListMap(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
+        background: safeParseObjects(
+          json['background'],
+          (v) => reqProp<DivBackground>(
+            safeParseObject(
+              v,
+              parse: DivBackground.fromJson,
+            ),
           ),
         ),
-        border: safeParseObj(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        )!,
+        border: reqProp<DivBorder>(
+          safeParseObject(
+            json['border'],
+            parse: DivBorder.fromJson,
+            fallback: const DivBorder(),
+          ),
+          name: 'border',
+        ),
         columnSpan: safeParseIntExpr(
           json['column_span'],
         ),
-        contentAlignmentHorizontal: safeParseStrEnumExpr(
-          json['content_alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-          fallback: DivAlignmentHorizontal.center,
-        )!,
-        contentAlignmentVertical: safeParseStrEnumExpr(
-          json['content_alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-          fallback: DivAlignmentVertical.center,
-        )!,
-        disappearActions: safeParseObj(
-          safeListMap(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
+        contentAlignmentHorizontal: reqVProp<DivAlignmentHorizontal>(
+          safeParseStrEnumExpr(
+            json['content_alignment_horizontal'],
+            parse: DivAlignmentHorizontal.fromJson,
+            fallback: DivAlignmentHorizontal.center,
+          ),
+          name: 'content_alignment_horizontal',
+        ),
+        contentAlignmentVertical: reqVProp<DivAlignmentVertical>(
+          safeParseStrEnumExpr(
+            json['content_alignment_vertical'],
+            parse: DivAlignmentVertical.fromJson,
+            fallback: DivAlignmentVertical.center,
+          ),
+          name: 'content_alignment_vertical',
+        ),
+        disappearActions: safeParseObjects(
+          json['disappear_actions'],
+          (v) => reqProp<DivDisappearAction>(
+            safeParseObject(
+              v,
+              parse: DivDisappearAction.fromJson,
+            ),
           ),
         ),
-        doubletapActions: safeParseObj(
-          safeListMap(
-            json['doubletap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        doubletapActions: safeParseObjects(
+          json['doubletap_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        extensions: safeParseObj(
-          safeListMap(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
+        extensions: safeParseObjects(
+          json['extensions'],
+          (v) => reqProp<DivExtension>(
+            safeParseObject(
+              v,
+              parse: DivExtension.fromJson,
+            ),
           ),
         ),
-        focus: safeParseObj(
-          DivFocus.fromJson(json['focus']),
+        focus: safeParseObject(
+          json['focus'],
+          parse: DivFocus.fromJson,
         ),
-        functions: safeParseObj(
-          safeListMap(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
+        functions: safeParseObjects(
+          json['functions'],
+          (v) => reqProp<DivFunction>(
+            safeParseObject(
+              v,
+              parse: DivFunction.fromJson,
+            ),
           ),
         ),
-        gifUrl: safeParseUriExpr(json['gif_url'])!,
-        height: safeParseObj(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
+        gifUrl: reqVProp<Uri>(
+          safeParseUriExpr(
+            json['gif_url'],
           ),
-        )!,
+          name: 'gif_url',
+        ),
+        height: reqProp<DivSize>(
+          safeParseObject(
+            json['height'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divWrapContentSize(
+              DivWrapContentSize(),
+            ),
+          ),
+          name: 'height',
+        ),
+        hoverEndActions: safeParseObjects(
+          json['hover_end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
+        hoverStartActions: safeParseObjects(
+          json['hover_start_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
         id: safeParseStr(
-          json['id']?.toString(),
+          json['id'],
         ),
-        layoutProvider: safeParseObj(
-          DivLayoutProvider.fromJson(json['layout_provider']),
+        layoutProvider: safeParseObject(
+          json['layout_provider'],
+          parse: DivLayoutProvider.fromJson,
         ),
-        longtapActions: safeParseObj(
-          safeListMap(
-            json['longtap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        longtapActions: safeParseObjects(
+          json['longtap_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        margins: safeParseObj(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        paddings: safeParseObj(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        placeholderColor: safeParseColorExpr(
-          json['placeholder_color'],
-          fallback: const Color(0x14000000),
-        )!,
-        preloadRequired: safeParseBoolExpr(
-          json['preload_required'],
-          fallback: false,
-        )!,
+        margins: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['margins'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'margins',
+        ),
+        paddings: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['paddings'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'paddings',
+        ),
+        placeholderColor: reqVProp<Color>(
+          safeParseColorExpr(
+            json['placeholder_color'],
+            fallback: const Color(0x14000000),
+          ),
+          name: 'placeholder_color',
+        ),
+        preloadRequired: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['preload_required'],
+            fallback: false,
+          ),
+          name: 'preload_required',
+        ),
+        pressEndActions: safeParseObjects(
+          json['press_end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
+        pressStartActions: safeParseObjects(
+          json['press_start_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
         preview: safeParseStrExpr(
-          json['preview']?.toString(),
+          json['preview'],
         ),
         reuseId: safeParseStrExpr(
-          json['reuse_id']?.toString(),
+          json['reuse_id'],
         ),
         rowSpan: safeParseIntExpr(
           json['row_span'],
         ),
-        scale: safeParseStrEnumExpr(
-          json['scale'],
-          parse: DivImageScale.fromJson,
-          fallback: DivImageScale.fill,
-        )!,
-        selectedActions: safeParseObj(
-          safeListMap(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        scale: reqVProp<DivImageScale>(
+          safeParseStrEnumExpr(
+            json['scale'],
+            parse: DivImageScale.fromJson,
+            fallback: DivImageScale.fill,
+          ),
+          name: 'scale',
+        ),
+        selectedActions: safeParseObjects(
+          json['selected_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        tooltips: safeParseObj(
-          safeListMap(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
+        tooltips: safeParseObjects(
+          json['tooltips'],
+          (v) => reqProp<DivTooltip>(
+            safeParseObject(
+              v,
+              parse: DivTooltip.fromJson,
+            ),
           ),
         ),
-        transform: safeParseObj(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        )!,
-        transitionChange: safeParseObj(
-          DivChangeTransition.fromJson(json['transition_change']),
+        transform: reqProp<DivTransform>(
+          safeParseObject(
+            json['transform'],
+            parse: DivTransform.fromJson,
+            fallback: const DivTransform(),
+          ),
+          name: 'transform',
         ),
-        transitionIn: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_in']),
+        transitionChange: safeParseObject(
+          json['transition_change'],
+          parse: DivChangeTransition.fromJson,
         ),
-        transitionOut: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_out']),
+        transitionIn: safeParseObject(
+          json['transition_in'],
+          parse: DivAppearanceTransition.fromJson,
         ),
-        transitionTriggers: safeParseObj(
-          safeListMap(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
+        transitionOut: safeParseObject(
+          json['transition_out'],
+          parse: DivAppearanceTransition.fromJson,
+        ),
+        transitionTriggers: safeParseObjects(
+          json['transition_triggers'],
+          (v) => reqProp<DivTransitionTrigger>(
+            safeParseStrEnum(
               v,
               parse: DivTransitionTrigger.fromJson,
-            )!,
+            ),
           ),
         ),
-        variableTriggers: safeParseObj(
-          safeListMap(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
+        variableTriggers: safeParseObjects(
+          json['variable_triggers'],
+          (v) => reqProp<DivTrigger>(
+            safeParseObject(
+              v,
+              parse: DivTrigger.fromJson,
+            ),
           ),
         ),
-        variables: safeParseObj(
-          safeListMap(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
+        variables: safeParseObjects(
+          json['variables'],
+          (v) => reqProp<DivVariable>(
+            safeParseObject(
+              v,
+              parse: DivVariable.fromJson,
+            ),
           ),
         ),
-        visibility: safeParseStrEnumExpr(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        )!,
-        visibilityAction: safeParseObj(
-          DivVisibilityAction.fromJson(json['visibility_action']),
+        visibility: reqVProp<DivVisibility>(
+          safeParseStrEnumExpr(
+            json['visibility'],
+            parse: DivVisibility.fromJson,
+            fallback: DivVisibility.visible,
+          ),
+          name: 'visibility',
         ),
-        visibilityActions: safeParseObj(
-          safeListMap(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
+        visibilityAction: safeParseObject(
+          json['visibility_action'],
+          parse: DivVisibilityAction.fromJson,
+        ),
+        visibilityActions: safeParseObjects(
+          json['visibility_actions'],
+          (v) => reqProp<DivVisibilityAction>(
+            safeParseObject(
+              v,
+              parse: DivVisibilityAction.fromJson,
+            ),
           ),
         ),
-        width: safeParseObj(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
+        width: reqProp<DivSize>(
+          safeParseObject(
+            json['width'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divMatchParentSize(
+              DivMatchParentSize(),
+            ),
           ),
-        )!,
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -718,46 +870,50 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
     accessibility.resolve(context);
     action?.resolve(context);
     actionAnimation.resolve(context);
-    safeListResolve(actions, (v) => v.resolve(context));
+    tryResolveList(actions, (v) => v.resolve(context));
     alignmentHorizontal?.resolve(context);
     alignmentVertical?.resolve(context);
     alpha.resolve(context);
-    safeListResolve(animators, (v) => v.resolve(context));
+    tryResolveList(animators, (v) => v.resolve(context));
     aspect?.resolve(context);
-    safeListResolve(background, (v) => v.resolve(context));
+    tryResolveList(background, (v) => v.resolve(context));
     border.resolve(context);
     columnSpan?.resolve(context);
     contentAlignmentHorizontal.resolve(context);
     contentAlignmentVertical.resolve(context);
-    safeListResolve(disappearActions, (v) => v.resolve(context));
-    safeListResolve(doubletapActions, (v) => v.resolve(context));
-    safeListResolve(extensions, (v) => v.resolve(context));
+    tryResolveList(disappearActions, (v) => v.resolve(context));
+    tryResolveList(doubletapActions, (v) => v.resolve(context));
+    tryResolveList(extensions, (v) => v.resolve(context));
     focus?.resolve(context);
-    safeListResolve(functions, (v) => v.resolve(context));
+    tryResolveList(functions, (v) => v.resolve(context));
     gifUrl.resolve(context);
     height.resolve(context);
+    tryResolveList(hoverEndActions, (v) => v.resolve(context));
+    tryResolveList(hoverStartActions, (v) => v.resolve(context));
     layoutProvider?.resolve(context);
-    safeListResolve(longtapActions, (v) => v.resolve(context));
+    tryResolveList(longtapActions, (v) => v.resolve(context));
     margins.resolve(context);
     paddings.resolve(context);
     placeholderColor.resolve(context);
     preloadRequired.resolve(context);
+    tryResolveList(pressEndActions, (v) => v.resolve(context));
+    tryResolveList(pressStartActions, (v) => v.resolve(context));
     preview?.resolve(context);
     reuseId?.resolve(context);
     rowSpan?.resolve(context);
     scale.resolve(context);
-    safeListResolve(selectedActions, (v) => v.resolve(context));
-    safeListResolve(tooltips, (v) => v.resolve(context));
+    tryResolveList(selectedActions, (v) => v.resolve(context));
+    tryResolveList(tooltips, (v) => v.resolve(context));
     transform.resolve(context);
     transitionChange?.resolve(context);
     transitionIn?.resolve(context);
     transitionOut?.resolve(context);
-    safeListResolve(transitionTriggers, (v) => v.resolve(context));
-    safeListResolve(variableTriggers, (v) => v.resolve(context));
-    safeListResolve(variables, (v) => v.resolve(context));
+    tryResolveList(transitionTriggers, (v) => v.resolve(context));
+    tryResolveList(variableTriggers, (v) => v.resolve(context));
+    tryResolveList(variables, (v) => v.resolve(context));
     visibility.resolve(context);
     visibilityAction?.resolve(context);
-    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    tryResolveList(visibilityActions, (v) => v.resolve(context));
     width.resolve(context);
     return this;
   }

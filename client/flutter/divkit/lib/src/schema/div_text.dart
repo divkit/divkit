@@ -37,7 +37,7 @@ import 'package:divkit/src/schema/div_variable.dart';
 import 'package:divkit/src/schema/div_visibility.dart';
 import 'package:divkit/src/schema/div_visibility_action.dart';
 import 'package:divkit/src/schema/div_wrap_content_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Text.
@@ -84,6 +84,8 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     this.height = const DivSize.divWrapContentSize(
       DivWrapContentSize(),
     ),
+    this.hoverEndActions,
+    this.hoverStartActions,
     this.id,
     this.images,
     this.layoutProvider,
@@ -94,6 +96,8 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     this.maxLines,
     this.minHiddenLines,
     this.paddings = const DivEdgeInsets(),
+    this.pressEndActions,
+    this.pressStartActions,
     this.ranges,
     this.reuseId,
     this.rowSpan,
@@ -141,7 +145,7 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
   final DivAnimation actionAnimation;
 
   /// Multiple actions when clicking on an element.
-  final List<DivAction>? actions;
+  final Arr<DivAction>? actions;
 
   /// Horizontal alignment of an element inside the parent element.
   @override
@@ -158,14 +162,14 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
 
   /// Declaration of animators that change variable values over time.
   @override
-  final List<DivAnimator>? animators;
+  final Arr<DivAnimator>? animators;
 
   /// Automatic text cropping to fit the container size.
   final Expression<bool>? autoEllipsize;
 
   /// Element background. It can contain multiple layers.
   @override
-  final List<DivBackground>? background;
+  final Arr<DivBackground>? background;
 
   /// Element stroke.
   @override
@@ -178,17 +182,17 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element disappears from the screen.
   @override
-  final List<DivDisappearAction>? disappearActions;
+  final Arr<DivDisappearAction>? disappearActions;
 
   /// Action when double-clicking on an element.
-  final List<DivAction>? doubletapActions;
+  final Arr<DivAction>? doubletapActions;
 
   /// Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
   final DivTextEllipsis? ellipsis;
 
   /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
-  final List<DivExtension>? extensions;
+  final Arr<DivExtension>? extensions;
 
   /// Parameters when focusing on an element or losing focus.
   @override
@@ -221,19 +225,25 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
 
   /// User functions.
   @override
-  final List<DivFunction>? functions;
+  final Arr<DivFunction>? functions;
 
   /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+  final Arr<DivAction>? hoverEndActions;
+
+  /// Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+  final Arr<DivAction>? hoverStartActions;
+
   /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
 
   /// Images embedded in text.
-  final List<DivTextImage>? images;
+  final Arr<DivTextImage>? images;
 
   /// Provides data on the actual size of the element.
   @override
@@ -248,7 +258,7 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
   final Expression<int>? lineHeight;
 
   /// Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
-  final List<DivAction>? longtapActions;
+  final Arr<DivAction>? longtapActions;
 
   /// External margins from the element stroke.
   @override
@@ -266,8 +276,14 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivEdgeInsets paddings;
 
+  /// Actions performed when an element is released.
+  final Arr<DivAction>? pressEndActions;
+
+  /// Actions performed when an element is pressed.
+  final Arr<DivAction>? pressStartActions;
+
   /// A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
-  final List<DivTextRange>? ranges;
+  final Arr<DivTextRange>? ranges;
 
   /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
   @override
@@ -284,7 +300,7 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
 
   /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
-  final List<DivAction>? selectedActions;
+  final Arr<DivAction>? selectedActions;
 
   /// Strikethrough.
   // default value: DivLineStyle.none
@@ -311,13 +327,13 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
   /// Parameters of the shadow applied to the text.
   final DivShadow? textShadow;
 
-  /// Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+  /// Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
   // default value: false
   final Expression<bool> tightenWidth;
 
   /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
-  final List<DivTooltip>? tooltips;
+  final Arr<DivTooltip>? tooltips;
 
   /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
@@ -338,7 +354,7 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
   /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
-  final List<DivTransitionTrigger>? transitionTriggers;
+  final Arr<DivTransitionTrigger>? transitionTriggers;
 
   /// Text cropping method. Use `ellipsis` instead.
   // default value: DivTextTruncate.end
@@ -350,11 +366,11 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
 
   /// Triggers for changing variables within an element.
   @override
-  final List<DivTrigger>? variableTriggers;
+  final Arr<DivTrigger>? variableTriggers;
 
   /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
-  final List<DivVariable>? variables;
+  final Arr<DivVariable>? variables;
 
   /// Element visibility.
   // default value: DivVisibility.visible
@@ -367,7 +383,7 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element appears on the screen.
   @override
-  final List<DivVisibilityAction>? visibilityActions;
+  final Arr<DivVisibilityAction>? visibilityActions;
 
   /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
@@ -402,6 +418,8 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
         fontWeightValue,
         functions,
         height,
+        hoverEndActions,
+        hoverStartActions,
         id,
         images,
         layoutProvider,
@@ -412,6 +430,8 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
         maxLines,
         minHiddenLines,
         paddings,
+        pressEndActions,
+        pressStartActions,
         ranges,
         reuseId,
         rowSpan,
@@ -445,19 +465,19 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     DivAccessibility? accessibility,
     DivAction? Function()? action,
     DivAnimation? actionAnimation,
-    List<DivAction>? Function()? actions,
+    Arr<DivAction>? Function()? actions,
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
-    List<DivAnimator>? Function()? animators,
+    Arr<DivAnimator>? Function()? animators,
     Expression<bool>? Function()? autoEllipsize,
-    List<DivBackground>? Function()? background,
+    Arr<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
-    List<DivDisappearAction>? Function()? disappearActions,
-    List<DivAction>? Function()? doubletapActions,
+    Arr<DivDisappearAction>? Function()? disappearActions,
+    Arr<DivAction>? Function()? doubletapActions,
     DivTextEllipsis? Function()? ellipsis,
-    List<DivExtension>? Function()? extensions,
+    Arr<DivExtension>? Function()? extensions,
     DivFocus? Function()? focus,
     Expression<Color>? Function()? focusedTextColor,
     Expression<String>? Function()? fontFamily,
@@ -466,23 +486,27 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     Expression<DivSizeUnit>? fontSizeUnit,
     Expression<DivFontWeight>? fontWeight,
     Expression<int>? Function()? fontWeightValue,
-    List<DivFunction>? Function()? functions,
+    Arr<DivFunction>? Function()? functions,
     DivSize? height,
+    Arr<DivAction>? Function()? hoverEndActions,
+    Arr<DivAction>? Function()? hoverStartActions,
     String? Function()? id,
-    List<DivTextImage>? Function()? images,
+    Arr<DivTextImage>? Function()? images,
     DivLayoutProvider? Function()? layoutProvider,
     Expression<double>? letterSpacing,
     Expression<int>? Function()? lineHeight,
-    List<DivAction>? Function()? longtapActions,
+    Arr<DivAction>? Function()? longtapActions,
     DivEdgeInsets? margins,
     Expression<int>? Function()? maxLines,
     Expression<int>? Function()? minHiddenLines,
     DivEdgeInsets? paddings,
-    List<DivTextRange>? Function()? ranges,
+    Arr<DivAction>? Function()? pressEndActions,
+    Arr<DivAction>? Function()? pressStartActions,
+    Arr<DivTextRange>? Function()? ranges,
     Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     Expression<bool>? selectable,
-    List<DivAction>? Function()? selectedActions,
+    Arr<DivAction>? Function()? selectedActions,
     Expression<DivLineStyle>? strike,
     Expression<String>? text,
     Expression<DivAlignmentHorizontal>? textAlignmentHorizontal,
@@ -491,19 +515,19 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     DivTextGradient? Function()? textGradient,
     DivShadow? Function()? textShadow,
     Expression<bool>? tightenWidth,
-    List<DivTooltip>? Function()? tooltips,
+    Arr<DivTooltip>? Function()? tooltips,
     DivTransform? transform,
     DivChangeTransition? Function()? transitionChange,
     DivAppearanceTransition? Function()? transitionIn,
     DivAppearanceTransition? Function()? transitionOut,
-    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    Arr<DivTransitionTrigger>? Function()? transitionTriggers,
     Expression<DivTextTruncate>? truncate,
     Expression<DivLineStyle>? underline,
-    List<DivTrigger>? Function()? variableTriggers,
-    List<DivVariable>? Function()? variables,
+    Arr<DivTrigger>? Function()? variableTriggers,
+    Arr<DivVariable>? Function()? variables,
     Expression<DivVisibility>? visibility,
     DivVisibilityAction? Function()? visibilityAction,
-    List<DivVisibilityAction>? Function()? visibilityActions,
+    Arr<DivVisibilityAction>? Function()? visibilityActions,
     DivSize? width,
   }) =>
       DivText(
@@ -548,6 +572,12 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
             : this.fontWeightValue,
         functions: functions != null ? functions.call() : this.functions,
         height: height ?? this.height,
+        hoverEndActions: hoverEndActions != null
+            ? hoverEndActions.call()
+            : this.hoverEndActions,
+        hoverStartActions: hoverStartActions != null
+            ? hoverStartActions.call()
+            : this.hoverStartActions,
         id: id != null ? id.call() : this.id,
         images: images != null ? images.call() : this.images,
         layoutProvider: layoutProvider != null
@@ -564,6 +594,12 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
             ? minHiddenLines.call()
             : this.minHiddenLines,
         paddings: paddings ?? this.paddings,
+        pressEndActions: pressEndActions != null
+            ? pressEndActions.call()
+            : this.pressEndActions,
+        pressStartActions: pressStartActions != null
+            ? pressStartActions.call()
+            : this.pressStartActions,
         ranges: ranges != null ? ranges.call() : this.ranges,
         reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
@@ -618,36 +654,46 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     }
     try {
       return DivText(
-        accessibility: safeParseObj(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        )!,
-        action: safeParseObj(
-          DivAction.fromJson(json['action']),
+        accessibility: reqProp<DivAccessibility>(
+          safeParseObject(
+            json['accessibility'],
+            parse: DivAccessibility.fromJson,
+            fallback: const DivAccessibility(),
+          ),
+          name: 'accessibility',
         ),
-        actionAnimation: safeParseObj(
-          DivAnimation.fromJson(json['action_animation']),
-          fallback: const DivAnimation(
-            duration: ValueExpression(
-              100,
-            ),
-            endValue: ValueExpression(
-              0.6,
-            ),
-            name: ValueExpression(
-              DivAnimationName.fade,
-            ),
-            startValue: ValueExpression(
-              1,
+        action: safeParseObject(
+          json['action'],
+          parse: DivAction.fromJson,
+        ),
+        actionAnimation: reqProp<DivAnimation>(
+          safeParseObject(
+            json['action_animation'],
+            parse: DivAnimation.fromJson,
+            fallback: const DivAnimation(
+              duration: ValueExpression(
+                100,
+              ),
+              endValue: ValueExpression(
+                0.6,
+              ),
+              name: ValueExpression(
+                DivAnimationName.fade,
+              ),
+              startValue: ValueExpression(
+                1,
+              ),
             ),
           ),
-        )!,
-        actions: safeParseObj(
-          safeListMap(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+          name: 'action_animation',
+        ),
+        actions: safeParseObjects(
+          json['actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         alignmentHorizontal: safeParseStrEnumExpr(
@@ -658,287 +704,416 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
           json['alignment_vertical'],
           parse: DivAlignmentVertical.fromJson,
         ),
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 1.0,
-        )!,
-        animators: safeParseObj(
-          safeListMap(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 1.0,
+          ),
+          name: 'alpha',
+        ),
+        animators: safeParseObjects(
+          json['animators'],
+          (v) => reqProp<DivAnimator>(
+            safeParseObject(
+              v,
+              parse: DivAnimator.fromJson,
+            ),
           ),
         ),
         autoEllipsize: safeParseBoolExpr(
           json['auto_ellipsize'],
         ),
-        background: safeParseObj(
-          safeListMap(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
+        background: safeParseObjects(
+          json['background'],
+          (v) => reqProp<DivBackground>(
+            safeParseObject(
+              v,
+              parse: DivBackground.fromJson,
+            ),
           ),
         ),
-        border: safeParseObj(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        )!,
+        border: reqProp<DivBorder>(
+          safeParseObject(
+            json['border'],
+            parse: DivBorder.fromJson,
+            fallback: const DivBorder(),
+          ),
+          name: 'border',
+        ),
         columnSpan: safeParseIntExpr(
           json['column_span'],
         ),
-        disappearActions: safeParseObj(
-          safeListMap(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
+        disappearActions: safeParseObjects(
+          json['disappear_actions'],
+          (v) => reqProp<DivDisappearAction>(
+            safeParseObject(
+              v,
+              parse: DivDisappearAction.fromJson,
+            ),
           ),
         ),
-        doubletapActions: safeParseObj(
-          safeListMap(
-            json['doubletap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        doubletapActions: safeParseObjects(
+          json['doubletap_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        ellipsis: safeParseObj(
-          DivTextEllipsis.fromJson(json['ellipsis']),
+        ellipsis: safeParseObject(
+          json['ellipsis'],
+          parse: DivTextEllipsis.fromJson,
         ),
-        extensions: safeParseObj(
-          safeListMap(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
+        extensions: safeParseObjects(
+          json['extensions'],
+          (v) => reqProp<DivExtension>(
+            safeParseObject(
+              v,
+              parse: DivExtension.fromJson,
+            ),
           ),
         ),
-        focus: safeParseObj(
-          DivFocus.fromJson(json['focus']),
+        focus: safeParseObject(
+          json['focus'],
+          parse: DivFocus.fromJson,
         ),
         focusedTextColor: safeParseColorExpr(
           json['focused_text_color'],
         ),
         fontFamily: safeParseStrExpr(
-          json['font_family']?.toString(),
+          json['font_family'],
         ),
         fontFeatureSettings: safeParseStrExpr(
-          json['font_feature_settings']?.toString(),
+          json['font_feature_settings'],
         ),
-        fontSize: safeParseIntExpr(
-          json['font_size'],
-          fallback: 12,
-        )!,
-        fontSizeUnit: safeParseStrEnumExpr(
-          json['font_size_unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.sp,
-        )!,
-        fontWeight: safeParseStrEnumExpr(
-          json['font_weight'],
-          parse: DivFontWeight.fromJson,
-          fallback: DivFontWeight.regular,
-        )!,
+        fontSize: reqVProp<int>(
+          safeParseIntExpr(
+            json['font_size'],
+            fallback: 12,
+          ),
+          name: 'font_size',
+        ),
+        fontSizeUnit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['font_size_unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.sp,
+          ),
+          name: 'font_size_unit',
+        ),
+        fontWeight: reqVProp<DivFontWeight>(
+          safeParseStrEnumExpr(
+            json['font_weight'],
+            parse: DivFontWeight.fromJson,
+            fallback: DivFontWeight.regular,
+          ),
+          name: 'font_weight',
+        ),
         fontWeightValue: safeParseIntExpr(
           json['font_weight_value'],
         ),
-        functions: safeParseObj(
-          safeListMap(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
+        functions: safeParseObjects(
+          json['functions'],
+          (v) => reqProp<DivFunction>(
+            safeParseObject(
+              v,
+              parse: DivFunction.fromJson,
+            ),
           ),
         ),
-        height: safeParseObj(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
+        height: reqProp<DivSize>(
+          safeParseObject(
+            json['height'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divWrapContentSize(
+              DivWrapContentSize(),
+            ),
           ),
-        )!,
+          name: 'height',
+        ),
+        hoverEndActions: safeParseObjects(
+          json['hover_end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
+        hoverStartActions: safeParseObjects(
+          json['hover_start_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
         id: safeParseStr(
-          json['id']?.toString(),
+          json['id'],
         ),
-        images: safeParseObj(
-          safeListMap(
-            json['images'],
-            (v) => safeParseObj(
-              DivTextImage.fromJson(v),
-            )!,
+        images: safeParseObjects(
+          json['images'],
+          (v) => reqProp<DivTextImage>(
+            safeParseObject(
+              v,
+              parse: DivTextImage.fromJson,
+            ),
           ),
         ),
-        layoutProvider: safeParseObj(
-          DivLayoutProvider.fromJson(json['layout_provider']),
+        layoutProvider: safeParseObject(
+          json['layout_provider'],
+          parse: DivLayoutProvider.fromJson,
         ),
-        letterSpacing: safeParseDoubleExpr(
-          json['letter_spacing'],
-          fallback: 0,
-        )!,
+        letterSpacing: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['letter_spacing'],
+            fallback: 0,
+          ),
+          name: 'letter_spacing',
+        ),
         lineHeight: safeParseIntExpr(
           json['line_height'],
         ),
-        longtapActions: safeParseObj(
-          safeListMap(
-            json['longtap_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        longtapActions: safeParseObjects(
+          json['longtap_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        margins: safeParseObj(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        )!,
+        margins: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['margins'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'margins',
+        ),
         maxLines: safeParseIntExpr(
           json['max_lines'],
         ),
         minHiddenLines: safeParseIntExpr(
           json['min_hidden_lines'],
         ),
-        paddings: safeParseObj(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        ranges: safeParseObj(
-          safeListMap(
-            json['ranges'],
-            (v) => safeParseObj(
-              DivTextRange.fromJson(v),
-            )!,
+        paddings: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['paddings'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'paddings',
+        ),
+        pressEndActions: safeParseObjects(
+          json['press_end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
+        pressStartActions: safeParseObjects(
+          json['press_start_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
+          ),
+        ),
+        ranges: safeParseObjects(
+          json['ranges'],
+          (v) => reqProp<DivTextRange>(
+            safeParseObject(
+              v,
+              parse: DivTextRange.fromJson,
+            ),
           ),
         ),
         reuseId: safeParseStrExpr(
-          json['reuse_id']?.toString(),
+          json['reuse_id'],
         ),
         rowSpan: safeParseIntExpr(
           json['row_span'],
         ),
-        selectable: safeParseBoolExpr(
-          json['selectable'],
-          fallback: false,
-        )!,
-        selectedActions: safeParseObj(
-          safeListMap(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        selectable: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['selectable'],
+            fallback: false,
+          ),
+          name: 'selectable',
+        ),
+        selectedActions: safeParseObjects(
+          json['selected_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        strike: safeParseStrEnumExpr(
-          json['strike'],
-          parse: DivLineStyle.fromJson,
-          fallback: DivLineStyle.none,
-        )!,
-        text: safeParseStrExpr(
-          json['text']?.toString(),
-        )!,
-        textAlignmentHorizontal: safeParseStrEnumExpr(
-          json['text_alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-          fallback: DivAlignmentHorizontal.start,
-        )!,
-        textAlignmentVertical: safeParseStrEnumExpr(
-          json['text_alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-          fallback: DivAlignmentVertical.top,
-        )!,
-        textColor: safeParseColorExpr(
-          json['text_color'],
-          fallback: const Color(0xFF000000),
-        )!,
-        textGradient: safeParseObj(
-          DivTextGradient.fromJson(json['text_gradient']),
+        strike: reqVProp<DivLineStyle>(
+          safeParseStrEnumExpr(
+            json['strike'],
+            parse: DivLineStyle.fromJson,
+            fallback: DivLineStyle.none,
+          ),
+          name: 'strike',
         ),
-        textShadow: safeParseObj(
-          DivShadow.fromJson(json['text_shadow']),
+        text: reqVProp<String>(
+          safeParseStrExpr(
+            json['text'],
+          ),
+          name: 'text',
         ),
-        tightenWidth: safeParseBoolExpr(
-          json['tighten_width'],
-          fallback: false,
-        )!,
-        tooltips: safeParseObj(
-          safeListMap(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
+        textAlignmentHorizontal: reqVProp<DivAlignmentHorizontal>(
+          safeParseStrEnumExpr(
+            json['text_alignment_horizontal'],
+            parse: DivAlignmentHorizontal.fromJson,
+            fallback: DivAlignmentHorizontal.start,
+          ),
+          name: 'text_alignment_horizontal',
+        ),
+        textAlignmentVertical: reqVProp<DivAlignmentVertical>(
+          safeParseStrEnumExpr(
+            json['text_alignment_vertical'],
+            parse: DivAlignmentVertical.fromJson,
+            fallback: DivAlignmentVertical.top,
+          ),
+          name: 'text_alignment_vertical',
+        ),
+        textColor: reqVProp<Color>(
+          safeParseColorExpr(
+            json['text_color'],
+            fallback: const Color(0xFF000000),
+          ),
+          name: 'text_color',
+        ),
+        textGradient: safeParseObject(
+          json['text_gradient'],
+          parse: DivTextGradient.fromJson,
+        ),
+        textShadow: safeParseObject(
+          json['text_shadow'],
+          parse: DivShadow.fromJson,
+        ),
+        tightenWidth: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['tighten_width'],
+            fallback: false,
+          ),
+          name: 'tighten_width',
+        ),
+        tooltips: safeParseObjects(
+          json['tooltips'],
+          (v) => reqProp<DivTooltip>(
+            safeParseObject(
+              v,
+              parse: DivTooltip.fromJson,
+            ),
           ),
         ),
-        transform: safeParseObj(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        )!,
-        transitionChange: safeParseObj(
-          DivChangeTransition.fromJson(json['transition_change']),
+        transform: reqProp<DivTransform>(
+          safeParseObject(
+            json['transform'],
+            parse: DivTransform.fromJson,
+            fallback: const DivTransform(),
+          ),
+          name: 'transform',
         ),
-        transitionIn: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_in']),
+        transitionChange: safeParseObject(
+          json['transition_change'],
+          parse: DivChangeTransition.fromJson,
         ),
-        transitionOut: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_out']),
+        transitionIn: safeParseObject(
+          json['transition_in'],
+          parse: DivAppearanceTransition.fromJson,
         ),
-        transitionTriggers: safeParseObj(
-          safeListMap(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
+        transitionOut: safeParseObject(
+          json['transition_out'],
+          parse: DivAppearanceTransition.fromJson,
+        ),
+        transitionTriggers: safeParseObjects(
+          json['transition_triggers'],
+          (v) => reqProp<DivTransitionTrigger>(
+            safeParseStrEnum(
               v,
               parse: DivTransitionTrigger.fromJson,
-            )!,
+            ),
           ),
         ),
-        truncate: safeParseStrEnumExpr(
-          json['truncate'],
-          parse: DivTextTruncate.fromJson,
-          fallback: DivTextTruncate.end,
-        )!,
-        underline: safeParseStrEnumExpr(
-          json['underline'],
-          parse: DivLineStyle.fromJson,
-          fallback: DivLineStyle.none,
-        )!,
-        variableTriggers: safeParseObj(
-          safeListMap(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
+        truncate: reqVProp<DivTextTruncate>(
+          safeParseStrEnumExpr(
+            json['truncate'],
+            parse: DivTextTruncate.fromJson,
+            fallback: DivTextTruncate.end,
+          ),
+          name: 'truncate',
+        ),
+        underline: reqVProp<DivLineStyle>(
+          safeParseStrEnumExpr(
+            json['underline'],
+            parse: DivLineStyle.fromJson,
+            fallback: DivLineStyle.none,
+          ),
+          name: 'underline',
+        ),
+        variableTriggers: safeParseObjects(
+          json['variable_triggers'],
+          (v) => reqProp<DivTrigger>(
+            safeParseObject(
+              v,
+              parse: DivTrigger.fromJson,
+            ),
           ),
         ),
-        variables: safeParseObj(
-          safeListMap(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
+        variables: safeParseObjects(
+          json['variables'],
+          (v) => reqProp<DivVariable>(
+            safeParseObject(
+              v,
+              parse: DivVariable.fromJson,
+            ),
           ),
         ),
-        visibility: safeParseStrEnumExpr(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        )!,
-        visibilityAction: safeParseObj(
-          DivVisibilityAction.fromJson(json['visibility_action']),
+        visibility: reqVProp<DivVisibility>(
+          safeParseStrEnumExpr(
+            json['visibility'],
+            parse: DivVisibility.fromJson,
+            fallback: DivVisibility.visible,
+          ),
+          name: 'visibility',
         ),
-        visibilityActions: safeParseObj(
-          safeListMap(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
+        visibilityAction: safeParseObject(
+          json['visibility_action'],
+          parse: DivVisibilityAction.fromJson,
+        ),
+        visibilityActions: safeParseObjects(
+          json['visibility_actions'],
+          (v) => reqProp<DivVisibilityAction>(
+            safeParseObject(
+              v,
+              parse: DivVisibilityAction.fromJson,
+            ),
           ),
         ),
-        width: safeParseObj(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
+        width: reqProp<DivSize>(
+          safeParseObject(
+            json['width'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divMatchParentSize(
+              DivMatchParentSize(),
+            ),
           ),
-        )!,
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -948,19 +1123,19 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     accessibility.resolve(context);
     action?.resolve(context);
     actionAnimation.resolve(context);
-    safeListResolve(actions, (v) => v.resolve(context));
+    tryResolveList(actions, (v) => v.resolve(context));
     alignmentHorizontal?.resolve(context);
     alignmentVertical?.resolve(context);
     alpha.resolve(context);
-    safeListResolve(animators, (v) => v.resolve(context));
+    tryResolveList(animators, (v) => v.resolve(context));
     autoEllipsize?.resolve(context);
-    safeListResolve(background, (v) => v.resolve(context));
+    tryResolveList(background, (v) => v.resolve(context));
     border.resolve(context);
     columnSpan?.resolve(context);
-    safeListResolve(disappearActions, (v) => v.resolve(context));
-    safeListResolve(doubletapActions, (v) => v.resolve(context));
+    tryResolveList(disappearActions, (v) => v.resolve(context));
+    tryResolveList(doubletapActions, (v) => v.resolve(context));
     ellipsis?.resolve(context);
-    safeListResolve(extensions, (v) => v.resolve(context));
+    tryResolveList(extensions, (v) => v.resolve(context));
     focus?.resolve(context);
     focusedTextColor?.resolve(context);
     fontFamily?.resolve(context);
@@ -969,22 +1144,26 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     fontSizeUnit.resolve(context);
     fontWeight.resolve(context);
     fontWeightValue?.resolve(context);
-    safeListResolve(functions, (v) => v.resolve(context));
+    tryResolveList(functions, (v) => v.resolve(context));
     height.resolve(context);
-    safeListResolve(images, (v) => v.resolve(context));
+    tryResolveList(hoverEndActions, (v) => v.resolve(context));
+    tryResolveList(hoverStartActions, (v) => v.resolve(context));
+    tryResolveList(images, (v) => v.resolve(context));
     layoutProvider?.resolve(context);
     letterSpacing.resolve(context);
     lineHeight?.resolve(context);
-    safeListResolve(longtapActions, (v) => v.resolve(context));
+    tryResolveList(longtapActions, (v) => v.resolve(context));
     margins.resolve(context);
     maxLines?.resolve(context);
     minHiddenLines?.resolve(context);
     paddings.resolve(context);
-    safeListResolve(ranges, (v) => v.resolve(context));
+    tryResolveList(pressEndActions, (v) => v.resolve(context));
+    tryResolveList(pressStartActions, (v) => v.resolve(context));
+    tryResolveList(ranges, (v) => v.resolve(context));
     reuseId?.resolve(context);
     rowSpan?.resolve(context);
     selectable.resolve(context);
-    safeListResolve(selectedActions, (v) => v.resolve(context));
+    tryResolveList(selectedActions, (v) => v.resolve(context));
     strike.resolve(context);
     text.resolve(context);
     textAlignmentHorizontal.resolve(context);
@@ -993,19 +1172,19 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
     textGradient?.resolve(context);
     textShadow?.resolve(context);
     tightenWidth.resolve(context);
-    safeListResolve(tooltips, (v) => v.resolve(context));
+    tryResolveList(tooltips, (v) => v.resolve(context));
     transform.resolve(context);
     transitionChange?.resolve(context);
     transitionIn?.resolve(context);
     transitionOut?.resolve(context);
-    safeListResolve(transitionTriggers, (v) => v.resolve(context));
+    tryResolveList(transitionTriggers, (v) => v.resolve(context));
     truncate.resolve(context);
     underline.resolve(context);
-    safeListResolve(variableTriggers, (v) => v.resolve(context));
-    safeListResolve(variables, (v) => v.resolve(context));
+    tryResolveList(variableTriggers, (v) => v.resolve(context));
+    tryResolveList(variables, (v) => v.resolve(context));
     visibility.resolve(context);
     visibilityAction?.resolve(context);
-    safeListResolve(visibilityActions, (v) => v.resolve(context));
+    tryResolveList(visibilityActions, (v) => v.resolve(context));
     width.resolve(context);
     return this;
   }
@@ -1036,7 +1215,7 @@ class DivTextRange extends Resolvable with EquatableMixin {
   });
 
   /// Action when clicking on text.
-  final List<DivAction>? actions;
+  final Arr<DivAction>? actions;
 
   /// Vertical text alignment within the row.
   final Expression<DivTextAlignmentVertical>? alignmentVertical;
@@ -1047,7 +1226,7 @@ class DivTextRange extends Resolvable with EquatableMixin {
   /// Character range border.
   final DivTextRangeBorder? border;
 
-  /// Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.
+  /// Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
   // constraint: number > 0
   final Expression<int>? end;
 
@@ -1128,7 +1307,7 @@ class DivTextRange extends Resolvable with EquatableMixin {
       ];
 
   DivTextRange copyWith({
-    List<DivAction>? Function()? actions,
+    Arr<DivAction>? Function()? actions,
     Expression<DivTextAlignmentVertical>? Function()? alignmentVertical,
     DivTextRangeBackground? Function()? background,
     DivTextRangeBorder? Function()? border,
@@ -1185,41 +1364,47 @@ class DivTextRange extends Resolvable with EquatableMixin {
     }
     try {
       return DivTextRange(
-        actions: safeParseObj(
-          safeListMap(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        actions: safeParseObjects(
+          json['actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         alignmentVertical: safeParseStrEnumExpr(
           json['alignment_vertical'],
           parse: DivTextAlignmentVertical.fromJson,
         ),
-        background: safeParseObj(
-          DivTextRangeBackground.fromJson(json['background']),
+        background: safeParseObject(
+          json['background'],
+          parse: DivTextRangeBackground.fromJson,
         ),
-        border: safeParseObj(
-          DivTextRangeBorder.fromJson(json['border']),
+        border: safeParseObject(
+          json['border'],
+          parse: DivTextRangeBorder.fromJson,
         ),
         end: safeParseIntExpr(
           json['end'],
         ),
         fontFamily: safeParseStrExpr(
-          json['font_family']?.toString(),
+          json['font_family'],
         ),
         fontFeatureSettings: safeParseStrExpr(
-          json['font_feature_settings']?.toString(),
+          json['font_feature_settings'],
         ),
         fontSize: safeParseIntExpr(
           json['font_size'],
         ),
-        fontSizeUnit: safeParseStrEnumExpr(
-          json['font_size_unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.sp,
-        )!,
+        fontSizeUnit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['font_size_unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.sp,
+          ),
+          name: 'font_size_unit',
+        ),
         fontWeight: safeParseStrEnumExpr(
           json['font_weight'],
           parse: DivFontWeight.fromJson,
@@ -1233,10 +1418,13 @@ class DivTextRange extends Resolvable with EquatableMixin {
         lineHeight: safeParseIntExpr(
           json['line_height'],
         ),
-        start: safeParseIntExpr(
-          json['start'],
-          fallback: 0,
-        )!,
+        start: reqVProp<int>(
+          safeParseIntExpr(
+            json['start'],
+            fallback: 0,
+          ),
+          name: 'start',
+        ),
         strike: safeParseStrEnumExpr(
           json['strike'],
           parse: DivLineStyle.fromJson,
@@ -1244,8 +1432,9 @@ class DivTextRange extends Resolvable with EquatableMixin {
         textColor: safeParseColorExpr(
           json['text_color'],
         ),
-        textShadow: safeParseObj(
-          DivShadow.fromJson(json['text_shadow']),
+        textShadow: safeParseObject(
+          json['text_shadow'],
+          parse: DivShadow.fromJson,
         ),
         topOffset: safeParseIntExpr(
           json['top_offset'],
@@ -1255,14 +1444,15 @@ class DivTextRange extends Resolvable with EquatableMixin {
           parse: DivLineStyle.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   @override
   DivTextRange resolve(DivVariableContext context) {
-    safeListResolve(actions, (v) => v.resolve(context));
+    tryResolveList(actions, (v) => v.resolve(context));
     alignmentVertical?.resolve(context);
     background?.resolve(context);
     border?.resolve(context);
@@ -1296,6 +1486,8 @@ class DivTextImage extends Resolvable with EquatableMixin {
         20,
       ),
     ),
+    this.indexingDirection =
+        const ValueExpression(DivTextImageIndexingDirection.normal),
     this.preloadRequired = const ValueExpression(false),
     required this.start,
     this.tintColor,
@@ -1317,6 +1509,12 @@ class DivTextImage extends Resolvable with EquatableMixin {
   /// Image height.
   // default value: const DivFixedSize(value: ValueExpression(20,),)
   final DivFixedSize height;
+
+  /// Defines direction in `start` parameter:
+  /// `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+  /// `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+  // default value: DivTextImageIndexingDirection.normal
+  final Expression<DivTextImageIndexingDirection> indexingDirection;
 
   /// Background image must be loaded before the display.
   // default value: false
@@ -1345,6 +1543,7 @@ class DivTextImage extends Resolvable with EquatableMixin {
         accessibility,
         alignmentVertical,
         height,
+        indexingDirection,
         preloadRequired,
         start,
         tintColor,
@@ -1357,6 +1556,7 @@ class DivTextImage extends Resolvable with EquatableMixin {
     DivTextImageAccessibility? accessibility,
     Expression<DivTextAlignmentVertical>? alignmentVertical,
     DivFixedSize? height,
+    Expression<DivTextImageIndexingDirection>? indexingDirection,
     Expression<bool>? preloadRequired,
     Expression<int>? start,
     Expression<Color>? Function()? tintColor,
@@ -1368,6 +1568,7 @@ class DivTextImage extends Resolvable with EquatableMixin {
         accessibility: accessibility ?? this.accessibility,
         alignmentVertical: alignmentVertical ?? this.alignmentVertical,
         height: height ?? this.height,
+        indexingDirection: indexingDirection ?? this.indexingDirection,
         preloadRequired: preloadRequired ?? this.preloadRequired,
         start: start ?? this.start,
         tintColor: tintColor != null ? tintColor.call() : this.tintColor,
@@ -1384,49 +1585,87 @@ class DivTextImage extends Resolvable with EquatableMixin {
     }
     try {
       return DivTextImage(
-        accessibility: safeParseObj(
-          DivTextImageAccessibility.fromJson(json['accessibility']),
-          fallback: const DivTextImageAccessibility(),
-        )!,
-        alignmentVertical: safeParseStrEnumExpr(
-          json['alignment_vertical'],
-          parse: DivTextAlignmentVertical.fromJson,
-          fallback: DivTextAlignmentVertical.center,
-        )!,
-        height: safeParseObj(
-          DivFixedSize.fromJson(json['height']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              20,
+        accessibility: reqProp<DivTextImageAccessibility>(
+          safeParseObject(
+            json['accessibility'],
+            parse: DivTextImageAccessibility.fromJson,
+            fallback: const DivTextImageAccessibility(),
+          ),
+          name: 'accessibility',
+        ),
+        alignmentVertical: reqVProp<DivTextAlignmentVertical>(
+          safeParseStrEnumExpr(
+            json['alignment_vertical'],
+            parse: DivTextAlignmentVertical.fromJson,
+            fallback: DivTextAlignmentVertical.center,
+          ),
+          name: 'alignment_vertical',
+        ),
+        height: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['height'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                20,
+              ),
             ),
           ),
-        )!,
-        preloadRequired: safeParseBoolExpr(
-          json['preload_required'],
-          fallback: false,
-        )!,
-        start: safeParseIntExpr(
-          json['start'],
-        )!,
+          name: 'height',
+        ),
+        indexingDirection: reqVProp<DivTextImageIndexingDirection>(
+          safeParseStrEnumExpr(
+            json['indexing_direction'],
+            parse: DivTextImageIndexingDirection.fromJson,
+            fallback: DivTextImageIndexingDirection.normal,
+          ),
+          name: 'indexing_direction',
+        ),
+        preloadRequired: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['preload_required'],
+            fallback: false,
+          ),
+          name: 'preload_required',
+        ),
+        start: reqVProp<int>(
+          safeParseIntExpr(
+            json['start'],
+          ),
+          name: 'start',
+        ),
         tintColor: safeParseColorExpr(
           json['tint_color'],
         ),
-        tintMode: safeParseStrEnumExpr(
-          json['tint_mode'],
-          parse: DivBlendMode.fromJson,
-          fallback: DivBlendMode.sourceIn,
-        )!,
-        url: safeParseUriExpr(json['url'])!,
-        width: safeParseObj(
-          DivFixedSize.fromJson(json['width']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              20,
+        tintMode: reqVProp<DivBlendMode>(
+          safeParseStrEnumExpr(
+            json['tint_mode'],
+            parse: DivBlendMode.fromJson,
+            fallback: DivBlendMode.sourceIn,
+          ),
+          name: 'tint_mode',
+        ),
+        url: reqVProp<Uri>(
+          safeParseUriExpr(
+            json['url'],
+          ),
+          name: 'url',
+        ),
+        width: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['width'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                20,
+              ),
             ),
           ),
-        )!,
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -1436,6 +1675,7 @@ class DivTextImage extends Resolvable with EquatableMixin {
     accessibility.resolve(context);
     alignmentVertical.resolve(context);
     height.resolve(context);
+    indexingDirection.resolve(context);
     preloadRequired.resolve(context);
     start.resolve(context);
     tintColor?.resolve(context);
@@ -1484,15 +1724,19 @@ class DivTextImageAccessibility extends Resolvable with EquatableMixin {
     try {
       return DivTextImageAccessibility(
         description: safeParseStrExpr(
-          json['description']?.toString(),
+          json['description'],
         ),
-        type: safeParseStrEnum(
-          json['type'],
-          parse: DivTextImageAccessibilityType.fromJson,
-          fallback: DivTextImageAccessibilityType.auto,
-        )!,
+        type: reqProp<DivTextImageAccessibilityType>(
+          safeParseStrEnum(
+            json['type'],
+            parse: DivTextImageAccessibilityType.fromJson,
+            fallback: DivTextImageAccessibilityType.auto,
+          ),
+          name: 'type',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -1588,13 +1832,82 @@ enum DivTextImageAccessibilityType implements Resolvable {
           return DivTextImageAccessibilityType.auto;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivTextImageAccessibilityType: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
 
   @override
   DivTextImageAccessibilityType resolve(DivVariableContext context) => this;
+}
+
+enum DivTextImageIndexingDirection implements Resolvable {
+  normal('normal'),
+  reversed('reversed');
+
+  final String value;
+
+  const DivTextImageIndexingDirection(this.value);
+  bool get isNormal => this == normal;
+
+  bool get isReversed => this == reversed;
+
+  T map<T>({
+    required T Function() normal,
+    required T Function() reversed,
+  }) {
+    switch (this) {
+      case DivTextImageIndexingDirection.normal:
+        return normal();
+      case DivTextImageIndexingDirection.reversed:
+        return reversed();
+    }
+  }
+
+  T maybeMap<T>({
+    T Function()? normal,
+    T Function()? reversed,
+    required T Function() orElse,
+  }) {
+    switch (this) {
+      case DivTextImageIndexingDirection.normal:
+        return normal?.call() ?? orElse();
+      case DivTextImageIndexingDirection.reversed:
+        return reversed?.call() ?? orElse();
+    }
+  }
+
+  static DivTextImageIndexingDirection? fromJson(
+    String? json,
+  ) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'normal':
+          return DivTextImageIndexingDirection.normal;
+        case 'reversed':
+          return DivTextImageIndexingDirection.reversed;
+      }
+      return null;
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivTextImageIndexingDirection: $json",
+        error: e,
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
+  @override
+  DivTextImageIndexingDirection resolve(DivVariableContext context) => this;
 }
 
 /// Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
@@ -1607,13 +1920,13 @@ class DivTextEllipsis extends Resolvable with EquatableMixin {
   });
 
   /// Actions when clicking on a crop marker.
-  final List<DivAction>? actions;
+  final Arr<DivAction>? actions;
 
   /// Images embedded in a crop marker.
-  final List<DivTextImage>? images;
+  final Arr<DivTextImage>? images;
 
   /// Character ranges inside a crop marker with different text styles.
-  final List<DivTextRange>? ranges;
+  final Arr<DivTextRange>? ranges;
 
   /// Marker text.
   final Expression<String> text;
@@ -1627,9 +1940,9 @@ class DivTextEllipsis extends Resolvable with EquatableMixin {
       ];
 
   DivTextEllipsis copyWith({
-    List<DivAction>? Function()? actions,
-    List<DivTextImage>? Function()? images,
-    List<DivTextRange>? Function()? ranges,
+    Arr<DivAction>? Function()? actions,
+    Arr<DivTextImage>? Function()? images,
+    Arr<DivTextRange>? Function()? ranges,
     Expression<String>? text,
   }) =>
       DivTextEllipsis(
@@ -1647,44 +1960,51 @@ class DivTextEllipsis extends Resolvable with EquatableMixin {
     }
     try {
       return DivTextEllipsis(
-        actions: safeParseObj(
-          safeListMap(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        actions: safeParseObjects(
+          json['actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        images: safeParseObj(
-          safeListMap(
-            json['images'],
-            (v) => safeParseObj(
-              DivTextImage.fromJson(v),
-            )!,
+        images: safeParseObjects(
+          json['images'],
+          (v) => reqProp<DivTextImage>(
+            safeParseObject(
+              v,
+              parse: DivTextImage.fromJson,
+            ),
           ),
         ),
-        ranges: safeParseObj(
-          safeListMap(
-            json['ranges'],
-            (v) => safeParseObj(
-              DivTextRange.fromJson(v),
-            )!,
+        ranges: safeParseObjects(
+          json['ranges'],
+          (v) => reqProp<DivTextRange>(
+            safeParseObject(
+              v,
+              parse: DivTextRange.fromJson,
+            ),
           ),
         ),
-        text: safeParseStrExpr(
-          json['text']?.toString(),
-        )!,
+        text: reqVProp<String>(
+          safeParseStrExpr(
+            json['text'],
+          ),
+          name: 'text',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   @override
   DivTextEllipsis resolve(DivVariableContext context) {
-    safeListResolve(actions, (v) => v.resolve(context));
-    safeListResolve(images, (v) => v.resolve(context));
-    safeListResolve(ranges, (v) => v.resolve(context));
+    tryResolveList(actions, (v) => v.resolve(context));
+    tryResolveList(images, (v) => v.resolve(context));
+    tryResolveList(ranges, (v) => v.resolve(context));
     text.resolve(context);
     return this;
   }
@@ -1762,7 +2082,12 @@ enum DivTextTruncate implements Resolvable {
           return DivTextTruncate.middle;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivTextTruncate: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

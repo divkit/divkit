@@ -3,7 +3,7 @@
 import 'package:divkit/src/schema/div.dart';
 import 'package:divkit/src/schema/div_animation.dart';
 import 'package:divkit/src/schema/div_point.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Tooltip.
@@ -80,31 +80,48 @@ class DivTooltip extends Resolvable with EquatableMixin {
     }
     try {
       return DivTooltip(
-        animationIn: safeParseObj(
-          DivAnimation.fromJson(json['animation_in']),
+        animationIn: safeParseObject(
+          json['animation_in'],
+          parse: DivAnimation.fromJson,
         ),
-        animationOut: safeParseObj(
-          DivAnimation.fromJson(json['animation_out']),
+        animationOut: safeParseObject(
+          json['animation_out'],
+          parse: DivAnimation.fromJson,
         ),
-        div: safeParseObj(
-          Div.fromJson(json['div']),
-        )!,
-        duration: safeParseIntExpr(
-          json['duration'],
-          fallback: 5000,
-        )!,
-        id: safeParseStr(
-          json['id']?.toString(),
-        )!,
-        offset: safeParseObj(
-          DivPoint.fromJson(json['offset']),
+        div: reqProp<Div>(
+          safeParseObject(
+            json['div'],
+            parse: Div.fromJson,
+          ),
+          name: 'div',
         ),
-        position: safeParseStrEnumExpr(
-          json['position'],
-          parse: DivTooltipPosition.fromJson,
-        )!,
+        duration: reqVProp<int>(
+          safeParseIntExpr(
+            json['duration'],
+            fallback: 5000,
+          ),
+          name: 'duration',
+        ),
+        id: reqProp<String>(
+          safeParseStr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
+        offset: safeParseObject(
+          json['offset'],
+          parse: DivPoint.fromJson,
+        ),
+        position: reqVProp<DivTooltipPosition>(
+          safeParseStrEnumExpr(
+            json['position'],
+            parse: DivTooltipPosition.fromJson,
+          ),
+          name: 'position',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -247,7 +264,12 @@ enum DivTooltipPosition implements Resolvable {
           return DivTooltipPosition.center;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivTooltipPosition: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

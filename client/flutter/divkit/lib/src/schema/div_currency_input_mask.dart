@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_input_mask_base.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Mask for entering currency in the specified regional format.
@@ -46,13 +46,17 @@ class DivCurrencyInputMask extends Resolvable
     try {
       return DivCurrencyInputMask(
         locale: safeParseStrExpr(
-          json['locale']?.toString(),
+          json['locale'],
         ),
-        rawTextVariable: safeParseStr(
-          json['raw_text_variable']?.toString(),
-        )!,
+        rawTextVariable: reqProp<String>(
+          safeParseStr(
+            json['raw_text_variable'],
+          ),
+          name: 'raw_text_variable',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

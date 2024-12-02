@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_dimension.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A point with fixed coordinates.
@@ -40,14 +40,23 @@ class DivPoint extends Resolvable with EquatableMixin {
     }
     try {
       return DivPoint(
-        x: safeParseObj(
-          DivDimension.fromJson(json['x']),
-        )!,
-        y: safeParseObj(
-          DivDimension.fromJson(json['y']),
-        )!,
+        x: reqProp<DivDimension>(
+          safeParseObject(
+            json['x'],
+            parse: DivDimension.fromJson,
+          ),
+          name: 'x',
+        ),
+        y: reqProp<DivDimension>(
+          safeParseObject(
+            json['y'],
+            parse: DivDimension.fromJson,
+          ),
+          name: 'y',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

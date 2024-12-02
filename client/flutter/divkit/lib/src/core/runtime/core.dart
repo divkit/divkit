@@ -3,8 +3,9 @@ import 'dart:ui';
 
 import 'package:divkit/src/core/runtime/compatible/integer.dart';
 
-typedef RuntimeFunction = Object Function(List);
+export 'package:divkit/src/core/types.dart';
 
+typedef RuntimeFunction = Object Function(List);
 typedef RuntimeContextFunction = Object Function(List, Map<String, dynamic>);
 
 bool equals(Object left, Object right) {
@@ -250,15 +251,6 @@ T expectResult<T>({
     return res;
   }
   throw onThrow;
-}
-
-/// Error handling with explicit fallback.
-T guard<T>(T Function() tst, T alt) {
-  try {
-    return tst();
-  } catch (_) {
-    return alt;
-  }
 }
 
 bool toBoolean(Object src) {

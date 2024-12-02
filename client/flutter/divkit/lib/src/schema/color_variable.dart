@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Variable — HEX color as a string.
@@ -41,14 +41,21 @@ class ColorVariable extends Resolvable with EquatableMixin {
     }
     try {
       return ColorVariable(
-        name: safeParseStr(
-          json['name']?.toString(),
-        )!,
-        value: safeParseColor(
-          json['value'],
-        )!,
+        name: reqProp<String>(
+          safeParseStr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        value: reqProp<Color>(
+          safeParseColor(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

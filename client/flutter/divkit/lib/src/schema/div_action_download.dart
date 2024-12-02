@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_action.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Loads additional data in `div-patch` format and updates the current element.
@@ -15,10 +15,10 @@ class DivActionDownload extends Resolvable with EquatableMixin {
   static const type = "download";
 
   /// Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
-  final List<DivAction>? onFailActions;
+  final Arr<DivAction>? onFailActions;
 
   /// Actions in case of successful loading.
-  final List<DivAction>? onSuccessActions;
+  final Arr<DivAction>? onSuccessActions;
 
   /// Link for receiving changes.
   final Expression<String> url;
@@ -31,8 +31,8 @@ class DivActionDownload extends Resolvable with EquatableMixin {
       ];
 
   DivActionDownload copyWith({
-    List<DivAction>? Function()? onFailActions,
-    List<DivAction>? Function()? onSuccessActions,
+    Arr<DivAction>? Function()? onFailActions,
+    Arr<DivAction>? Function()? onSuccessActions,
     Expression<String>? url,
   }) =>
       DivActionDownload(
@@ -52,35 +52,41 @@ class DivActionDownload extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionDownload(
-        onFailActions: safeParseObj(
-          safeListMap(
-            json['on_fail_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        onFailActions: safeParseObjects(
+          json['on_fail_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        onSuccessActions: safeParseObj(
-          safeListMap(
-            json['on_success_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        onSuccessActions: safeParseObjects(
+          json['on_success_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        url: safeParseStrExpr(
-          json['url']?.toString(),
-        )!,
+        url: reqVProp<String>(
+          safeParseStrExpr(
+            json['url'],
+          ),
+          name: 'url',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   @override
   DivActionDownload resolve(DivVariableContext context) {
-    safeListResolve(onFailActions, (v) => v.resolve(context));
-    safeListResolve(onSuccessActions, (v) => v.resolve(context));
+    tryResolveList(onFailActions, (v) => v.resolve(context));
+    tryResolveList(onSuccessActions, (v) => v.resolve(context));
     url.resolve(context);
     return this;
   }

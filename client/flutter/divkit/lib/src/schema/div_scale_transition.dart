@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_transition_base.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Scale animation.
@@ -83,33 +83,52 @@ class DivScaleTransition extends Resolvable
     }
     try {
       return DivScaleTransition(
-        duration: safeParseIntExpr(
-          json['duration'],
-          fallback: 200,
-        )!,
-        interpolator: safeParseStrEnumExpr(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        )!,
-        pivotX: safeParseDoubleExpr(
-          json['pivot_x'],
-          fallback: 0.5,
-        )!,
-        pivotY: safeParseDoubleExpr(
-          json['pivot_y'],
-          fallback: 0.5,
-        )!,
-        scale: safeParseDoubleExpr(
-          json['scale'],
-          fallback: 0.0,
-        )!,
-        startDelay: safeParseIntExpr(
-          json['start_delay'],
-          fallback: 0,
-        )!,
+        duration: reqVProp<int>(
+          safeParseIntExpr(
+            json['duration'],
+            fallback: 200,
+          ),
+          name: 'duration',
+        ),
+        interpolator: reqVProp<DivAnimationInterpolator>(
+          safeParseStrEnumExpr(
+            json['interpolator'],
+            parse: DivAnimationInterpolator.fromJson,
+            fallback: DivAnimationInterpolator.easeInOut,
+          ),
+          name: 'interpolator',
+        ),
+        pivotX: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['pivot_x'],
+            fallback: 0.5,
+          ),
+          name: 'pivot_x',
+        ),
+        pivotY: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['pivot_y'],
+            fallback: 0.5,
+          ),
+          name: 'pivot_y',
+        ),
+        scale: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['scale'],
+            fallback: 0.0,
+          ),
+          name: 'scale',
+        ),
+        startDelay: reqVProp<int>(
+          safeParseIntExpr(
+            json['start_delay'],
+            fallback: 0,
+          ),
+          name: 'start_delay',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

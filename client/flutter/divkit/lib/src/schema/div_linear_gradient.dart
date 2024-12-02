@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Linear gradient.
@@ -18,7 +18,7 @@ class DivLinearGradient extends Resolvable with EquatableMixin {
 
   /// Colors. Gradient points are located at an equal distance from each other.
   // at least 2 elements
-  final Expression<List<Color>> colors;
+  final Expression<Arr<Color>> colors;
 
   @override
   List<Object?> get props => [
@@ -28,7 +28,7 @@ class DivLinearGradient extends Resolvable with EquatableMixin {
 
   DivLinearGradient copyWith({
     Expression<int>? angle,
-    Expression<List<Color>>? colors,
+    Expression<Arr<Color>>? colors,
   }) =>
       DivLinearGradient(
         angle: angle ?? this.angle,
@@ -43,20 +43,25 @@ class DivLinearGradient extends Resolvable with EquatableMixin {
     }
     try {
       return DivLinearGradient(
-        angle: safeParseIntExpr(
-          json['angle'],
-          fallback: 0,
-        )!,
-        colors: safeParseObjExpr(
-          safeListMap(
-            json['colors'],
-            (v) => safeParseColor(
-              v,
-            )!,
+        angle: reqVProp<int>(
+          safeParseIntExpr(
+            json['angle'],
+            fallback: 0,
           ),
-        )!,
+          name: 'angle',
+        ),
+        colors: reqVProp<Arr<Color>>(
+          safeParseObjectsExpr(
+            json['colors'],
+            (v) => reqProp<Color>(
+              safeParseColor(v),
+            ),
+          ),
+          name: 'colors',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivFontWeight implements Resolvable {
   light('light'),
@@ -74,7 +74,12 @@ enum DivFontWeight implements Resolvable {
           return DivFontWeight.bold;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivFontWeight: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

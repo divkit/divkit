@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivAnimationInterpolator implements Resolvable {
   linear('linear'),
@@ -96,7 +96,12 @@ enum DivAnimationInterpolator implements Resolvable {
           return DivAnimationInterpolator.spring;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAnimationInterpolator: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

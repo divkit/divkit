@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_action.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Sends variables from the container via a url. The data sending configuration can be determined by the host application. By default, variables are passed in body in json format, the request method is POST.
+/// Sends variables from the container by link. Data sending configuration can be defined by the host app. By default, variables are sent as JSON in the request body using the POST method.
 class DivActionSubmit extends Resolvable with EquatableMixin {
   const DivActionSubmit({
     required this.containerId,
@@ -15,16 +15,16 @@ class DivActionSubmit extends Resolvable with EquatableMixin {
 
   static const type = "submit";
 
-  /// The identifier of the container that contains variables to submit.
+  /// ID of the container with the variables to be sent.
   final Expression<String> containerId;
 
-  /// Actions in case of unsuccessful submit.
-  final List<DivAction>? onFailActions;
+  /// Actions when sending data is unsuccessful.
+  final Arr<DivAction>? onFailActions;
 
-  /// Actions in case of successful submit.
-  final List<DivAction>? onSuccessActions;
+  /// Actions when sending data is successful.
+  final Arr<DivAction>? onSuccessActions;
 
-  /// The HTTP request parameters that are used to configure how data is sent.
+  /// HTTP request parameters for configuring the sending of data.
   final DivActionSubmitRequest request;
 
   @override
@@ -37,8 +37,8 @@ class DivActionSubmit extends Resolvable with EquatableMixin {
 
   DivActionSubmit copyWith({
     Expression<String>? containerId,
-    List<DivAction>? Function()? onFailActions,
-    List<DivAction>? Function()? onSuccessActions,
+    Arr<DivAction>? Function()? onFailActions,
+    Arr<DivAction>? Function()? onSuccessActions,
     DivActionSubmitRequest? request,
   }) =>
       DivActionSubmit(
@@ -59,30 +59,40 @@ class DivActionSubmit extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionSubmit(
-        containerId: safeParseStrExpr(
-          json['container_id']?.toString(),
-        )!,
-        onFailActions: safeParseObj(
-          safeListMap(
-            json['on_fail_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        containerId: reqVProp<String>(
+          safeParseStrExpr(
+            json['container_id'],
+          ),
+          name: 'container_id',
+        ),
+        onFailActions: safeParseObjects(
+          json['on_fail_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        onSuccessActions: safeParseObj(
-          safeListMap(
-            json['on_success_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        onSuccessActions: safeParseObjects(
+          json['on_success_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        request: safeParseObj(
-          DivActionSubmitRequest.fromJson(json['request']),
-        )!,
+        request: reqProp<DivActionSubmitRequest>(
+          safeParseObject(
+            json['request'],
+            parse: DivActionSubmitRequest.fromJson,
+          ),
+          name: 'request',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -90,14 +100,14 @@ class DivActionSubmit extends Resolvable with EquatableMixin {
   @override
   DivActionSubmit resolve(DivVariableContext context) {
     containerId.resolve(context);
-    safeListResolve(onFailActions, (v) => v.resolve(context));
-    safeListResolve(onSuccessActions, (v) => v.resolve(context));
+    tryResolveList(onFailActions, (v) => v.resolve(context));
+    tryResolveList(onSuccessActions, (v) => v.resolve(context));
     request.resolve(context);
     return this;
   }
 }
 
-/// The HTTP request parameters that are used to configure how data is sent.
+/// HTTP request parameters for configuring the sending of data.
 class DivActionSubmitRequest extends Resolvable with EquatableMixin {
   const DivActionSubmitRequest({
     this.headers,
@@ -105,14 +115,14 @@ class DivActionSubmitRequest extends Resolvable with EquatableMixin {
     required this.url,
   });
 
-  /// The HTTP request headers.
-  final List<DivActionSubmitRequestHeader>? headers;
+  /// HTTP request headers.
+  final Arr<DivActionSubmitRequestHeader>? headers;
 
-  /// The HTTP request method.
+  /// HTTP request method.
   // default value: DivActionSubmitRequestMethod.post
   final Expression<DivActionSubmitRequestMethod> method;
 
-  /// The url to which data from the container is sent.
+  /// Link for sending data from the container.
   final Expression<Uri> url;
 
   @override
@@ -123,7 +133,7 @@ class DivActionSubmitRequest extends Resolvable with EquatableMixin {
       ];
 
   DivActionSubmitRequest copyWith({
-    List<DivActionSubmitRequestHeader>? Function()? headers,
+    Arr<DivActionSubmitRequestHeader>? Function()? headers,
     Expression<DivActionSubmitRequestMethod>? method,
     Expression<Uri>? url,
   }) =>
@@ -141,29 +151,39 @@ class DivActionSubmitRequest extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionSubmitRequest(
-        headers: safeParseObj(
-          safeListMap(
-            json['headers'],
-            (v) => safeParseObj(
-              DivActionSubmitRequestHeader.fromJson(v),
-            )!,
+        headers: safeParseObjects(
+          json['headers'],
+          (v) => reqProp<DivActionSubmitRequestHeader>(
+            safeParseObject(
+              v,
+              parse: DivActionSubmitRequestHeader.fromJson,
+            ),
           ),
         ),
-        method: safeParseStrEnumExpr(
-          json['method'],
-          parse: DivActionSubmitRequestMethod.fromJson,
-          fallback: DivActionSubmitRequestMethod.post,
-        )!,
-        url: safeParseUriExpr(json['url'])!,
+        method: reqVProp<DivActionSubmitRequestMethod>(
+          safeParseStrEnumExpr(
+            json['method'],
+            parse: DivActionSubmitRequestMethod.fromJson,
+            fallback: DivActionSubmitRequestMethod.post,
+          ),
+          name: 'method',
+        ),
+        url: reqVProp<Uri>(
+          safeParseUriExpr(
+            json['url'],
+          ),
+          name: 'url',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   @override
   DivActionSubmitRequest resolve(DivVariableContext context) {
-    safeListResolve(headers, (v) => v.resolve(context));
+    tryResolveList(headers, (v) => v.resolve(context));
     method.resolve(context);
     url.resolve(context);
     return this;
@@ -202,14 +222,21 @@ class DivActionSubmitRequestHeader extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionSubmitRequestHeader(
-        name: safeParseStrExpr(
-          json['name']?.toString(),
-        )!,
-        value: safeParseStrExpr(
-          json['value']?.toString(),
-        )!,
+        name: reqVProp<String>(
+          safeParseStrExpr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        value: reqVProp<String>(
+          safeParseStrExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -327,7 +354,12 @@ enum DivActionSubmitRequestMethod implements Resolvable {
           return DivActionSubmitRequestMethod.options;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivActionSubmitRequestMethod: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

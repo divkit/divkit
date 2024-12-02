@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_change_transition.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Animations.
@@ -14,7 +14,7 @@ class DivChangeSetTransition extends Resolvable with EquatableMixin {
 
   /// List of animations.
   // at least 1 elements
-  final List<DivChangeTransition> items;
+  final Arr<DivChangeTransition> items;
 
   @override
   List<Object?> get props => [
@@ -22,7 +22,7 @@ class DivChangeSetTransition extends Resolvable with EquatableMixin {
       ];
 
   DivChangeSetTransition copyWith({
-    List<DivChangeTransition>? items,
+    Arr<DivChangeTransition>? items,
   }) =>
       DivChangeSetTransition(
         items: items ?? this.items,
@@ -36,16 +36,21 @@ class DivChangeSetTransition extends Resolvable with EquatableMixin {
     }
     try {
       return DivChangeSetTransition(
-        items: safeParseObj(
-          safeListMap(
+        items: reqProp<Arr<DivChangeTransition>>(
+          safeParseObjects(
             json['items'],
-            (v) => safeParseObj(
-              DivChangeTransition.fromJson(v),
-            )!,
+            (v) => reqProp<DivChangeTransition>(
+              safeParseObject(
+                v,
+                parse: DivChangeTransition.fromJson,
+              ),
+            ),
           ),
-        )!,
+          name: 'items',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

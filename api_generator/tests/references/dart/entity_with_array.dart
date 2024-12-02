@@ -3,7 +3,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'entity.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
 class EntityWithArray extends Resolvable with EquatableMixin  {
@@ -13,7 +13,7 @@ class EntityWithArray extends Resolvable with EquatableMixin  {
 
   static const type = "entity_with_array";
    // at least 1 elements
-  final List<Entity> array;
+  final Arr<Entity> array;
 
   @override
   List<Object?> get props => [
@@ -21,7 +21,7 @@ class EntityWithArray extends Resolvable with EquatableMixin  {
       ];
 
   EntityWithArray copyWith({
-      List<Entity>?  array,
+      Arr<Entity>?  array,
   }) => EntityWithArray(
       array: array ?? this.array,
     );
@@ -32,15 +32,16 @@ class EntityWithArray extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithArray(
-        array: safeParseObj(safeListMap(json['array'], (v) => safeParseObj(Entity.fromJson(v),)!,),)!,
+        array: reqProp<Arr<Entity>>(safeParseObjects(json['array'],(v) => reqProp<Entity>(safeParseObject(v, parse: Entity.fromJson,),), ), name: 'array',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
 
   EntityWithArray resolve(DivVariableContext context) {
-    safeListResolve(array, (v) => v.resolve(context));
+    tryResolveList(array, (v) => v.resolve(context));
     return this;
   }
 }

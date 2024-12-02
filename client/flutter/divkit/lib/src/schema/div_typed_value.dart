@@ -8,7 +8,7 @@ import 'package:divkit/src/schema/integer_value.dart';
 import 'package:divkit/src/schema/number_value.dart';
 import 'package:divkit/src/schema/string_value.dart';
 import 'package:divkit/src/schema/url_value.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivTypedValue extends Resolvable with EquatableMixin {
@@ -237,7 +237,7 @@ class DivTypedValue extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }

@@ -59,7 +59,11 @@ class _DivRendererState extends State<DivRenderer> {
   void initState() {
     super.initState();
     final divContext = read<DivContext>(context)!;
-    final initialState = widget.data.states.first.stateId.toString();
+
+    final states = widget.data.states;
+    final initialState =
+        states.isNotEmpty ? states.first.stateId.toString() : null;
+
     // Register first state
     divContext.stateManager.registerState('root', initialState);
     widget.data.resolve(divContext.variables);
@@ -73,7 +77,7 @@ class _DivRendererState extends State<DivRenderer> {
     if (stream == null) {
       final divContext = watch<DivContext>(context)!;
       stream = divContext.stateManager.watch((state) {
-        return widget.data.bind(state['root']!);
+        return widget.data.bind(state['root']);
       });
     }
   }
@@ -89,7 +93,7 @@ class _DivRendererState extends State<DivRenderer> {
       divContext.stateManager.updateState('root', initialState);
       value = widget.data.bind(initialState);
       stream = divContext.stateManager.watch((state) {
-        return widget.data.bind(state['root']!);
+        return widget.data.bind(state['root']);
       });
     }
   }
@@ -100,12 +104,19 @@ class _DivRendererState extends State<DivRenderer> {
         stream: stream,
         builder: (context, snapshot) {
           final model = snapshot.requireData;
+
+          if (model.state?.div == null) {
+            loggerUse(watch<DivContext>(context)?.loggerContext).error(
+              'DivKitView is not drawn! Valid root state is missing',
+            );
+          }
+
           return provide(
             DivStateId(model.path),
             child: DivWidget(
               // The unique identifier of the state subtree
               key: ValueKey(model.path),
-              model.state.div,
+              model.state?.div,
             ),
           );
         },

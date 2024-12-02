@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivAlignmentHorizontal implements Resolvable {
   left('left'),
@@ -85,7 +85,12 @@ enum DivAlignmentHorizontal implements Resolvable {
           return DivAlignmentHorizontal.end;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAlignmentHorizontal: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Manages video playback.
@@ -43,15 +43,22 @@ class DivActionVideo extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionVideo(
-        action: safeParseStrEnumExpr(
-          json['action'],
-          parse: DivActionVideoAction.fromJson,
-        )!,
-        id: safeParseStrExpr(
-          json['id']?.toString(),
-        )!,
+        action: reqVProp<DivActionVideoAction>(
+          safeParseStrEnumExpr(
+            json['action'],
+            parse: DivActionVideoAction.fromJson,
+          ),
+          name: 'action',
+        ),
+        id: reqVProp<String>(
+          safeParseStrExpr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -114,7 +121,12 @@ enum DivActionVideoAction implements Resolvable {
           return DivActionVideoAction.pause;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivActionVideoAction: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

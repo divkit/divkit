@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivVideoSource extends Resolvable with EquatableMixin {
@@ -57,15 +57,25 @@ class DivVideoSource extends Resolvable with EquatableMixin {
         bitrate: safeParseIntExpr(
           json['bitrate'],
         ),
-        mimeType: safeParseStrExpr(
-          json['mime_type']?.toString(),
-        )!,
-        resolution: safeParseObj(
-          DivVideoSourceResolution.fromJson(json['resolution']),
+        mimeType: reqVProp<String>(
+          safeParseStrExpr(
+            json['mime_type'],
+          ),
+          name: 'mime_type',
         ),
-        url: safeParseUriExpr(json['url'])!,
+        resolution: safeParseObject(
+          json['resolution'],
+          parse: DivVideoSourceResolution.fromJson,
+        ),
+        url: reqVProp<Uri>(
+          safeParseUriExpr(
+            json['url'],
+          ),
+          name: 'url',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -120,14 +130,21 @@ class DivVideoSourceResolution extends Resolvable with EquatableMixin {
     }
     try {
       return DivVideoSourceResolution(
-        height: safeParseIntExpr(
-          json['height'],
-        )!,
-        width: safeParseIntExpr(
-          json['width'],
-        )!,
+        height: reqVProp<int>(
+          safeParseIntExpr(
+            json['height'],
+          ),
+          name: 'height',
+        ),
+        width: reqVProp<int>(
+          safeParseIntExpr(
+            json['width'],
+          ),
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

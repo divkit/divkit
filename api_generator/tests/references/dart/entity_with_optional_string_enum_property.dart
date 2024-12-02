@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
 class EntityWithOptionalStringEnumProperty extends Resolvable with EquatableMixin  {
@@ -33,6 +33,7 @@ class EntityWithOptionalStringEnumProperty extends Resolvable with EquatableMixi
         property: safeParseStrEnumExpr(json['property'], parse: EntityWithOptionalStringEnumPropertyProperty.fromJson,),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -94,6 +95,7 @@ enum EntityWithOptionalStringEnumPropertyProperty implements Resolvable {
       }
       return null;
     } catch (e, st) {
+      logger.warning("Invalid type of EntityWithOptionalStringEnumPropertyProperty: $json", error: e, stackTrace: st,);
       return null;
     }
   }

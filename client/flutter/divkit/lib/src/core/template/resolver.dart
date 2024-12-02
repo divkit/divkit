@@ -1,5 +1,4 @@
-typedef Obj = Map<String, dynamic>;
-typedef Arr = List<dynamic>;
+import 'package:divkit/src/core/types.dart';
 
 class _ReplaceResult {
   final Obj obj;

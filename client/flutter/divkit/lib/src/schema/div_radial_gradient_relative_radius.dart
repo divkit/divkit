@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Relative radius of the gradient transition.
@@ -34,12 +34,16 @@ class DivRadialGradientRelativeRadius extends Resolvable with EquatableMixin {
     }
     try {
       return DivRadialGradientRelativeRadius(
-        value: safeParseStrEnumExpr(
-          json['value'],
-          parse: DivRadialGradientRelativeRadiusValue.fromJson,
-        )!,
+        value: reqVProp<DivRadialGradientRelativeRadiusValue>(
+          safeParseStrEnumExpr(
+            json['value'],
+            parse: DivRadialGradientRelativeRadiusValue.fromJson,
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -123,7 +127,12 @@ enum DivRadialGradientRelativeRadiusValue implements Resolvable {
           return DivRadialGradientRelativeRadiusValue.farthestSide;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivRadialGradientRelativeRadiusValue: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

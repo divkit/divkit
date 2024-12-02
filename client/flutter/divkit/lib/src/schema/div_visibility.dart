@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivVisibility implements Resolvable {
   visible('visible'),
@@ -63,7 +63,12 @@ enum DivVisibility implements Resolvable {
           return DivVisibility.gone;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivVisibility: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

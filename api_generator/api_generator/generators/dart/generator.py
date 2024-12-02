@@ -56,7 +56,7 @@ class DartGenerator(Generator):
                            filter(None, [d.get_default_import for d in entity.instance_properties])]
 
         # Parsing utils import
-        parsing_ext_import = ["import 'package:divkit/src/utils/parsing_utils.dart';"]
+        parsing_ext_import = ["import 'package:divkit/src/utils/parsing.dart';"]
 
         # Imports section declaration
         if entity.is_main_declaration:
@@ -153,10 +153,11 @@ class DartGenerator(Generator):
             result += '    try {'
             result += f'      return {full_name}('
             for prop in entity.instance_properties:
-                decode_strategy = prop.get_parse_strategy()
+                decode_strategy = prop.get_decode_strategy()
                 result += f"        {utils.lower_camel_case(prop.name)}: {decode_strategy},"
             result += '      );'
             result += '    } catch (e, st) {'
+            result += '      logger.warning("Parsing error", error: e, stackTrace: st);'
             result += '      return null;'
             result += '    }'
             result += '  }'
@@ -198,7 +199,7 @@ class DartGenerator(Generator):
             # Equatable util import
             result += "import 'package:equatable/equatable.dart';\n"
             # Parsing utils import
-            result += "import 'package:divkit/src/utils/parsing_utils.dart';"
+            result += "import 'package:divkit/src/utils/parsing.dart';"
             result += EMPTY
 
         full_name = get_full_name(entity_enumeration)
@@ -281,9 +282,9 @@ class DartGenerator(Generator):
         for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
             result += f'      case {utils.capitalize_camel_case(n)}.type :\n' \
                       f'        return {full_name}.{utils.lower_camel_case(n)}({utils.capitalize_camel_case(n)}.fromJson(json)!,);'
-        result += '    }'
+        result += '      }'
         result += '      return null;'
-        result += '    } catch (e, st) {'
+        result += '    } catch (_) {'
         result += '      return null;'
         result += '    }'
         result += '  }'
@@ -300,7 +301,7 @@ class DartGenerator(Generator):
 
         if string_enumeration.parent is None:
             # Parsing utils import
-            result += "import 'package:divkit/src/utils/parsing_utils.dart';"
+            result += "import 'package:divkit/src/utils/parsing.dart';"
             result += EMPTY
 
         full_name = get_full_name(string_enumeration)
@@ -362,6 +363,7 @@ class DartGenerator(Generator):
         result += '      }'
         result += '      return null;'
         result += '    } catch (e, st) {'
+        result += f'      logger.warning("Invalid type of {full_name}: $json", error: e, stackTrace: st,);'
         result += '      return null;'
         result += '    }'
         result += '  }'

@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_stroke.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A rectangle with rounded corners.
@@ -84,35 +84,49 @@ class DivRoundedRectangleShape extends Resolvable with EquatableMixin {
         backgroundColor: safeParseColorExpr(
           json['background_color'],
         ),
-        cornerRadius: safeParseObj(
-          DivFixedSize.fromJson(json['corner_radius']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              5,
+        cornerRadius: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['corner_radius'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                5,
+              ),
             ),
           ),
-        )!,
-        itemHeight: safeParseObj(
-          DivFixedSize.fromJson(json['item_height']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              10,
+          name: 'corner_radius',
+        ),
+        itemHeight: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['item_height'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                10,
+              ),
             ),
           ),
-        )!,
-        itemWidth: safeParseObj(
-          DivFixedSize.fromJson(json['item_width']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              10,
+          name: 'item_height',
+        ),
+        itemWidth: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['item_width'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                10,
+              ),
             ),
           ),
-        )!,
-        stroke: safeParseObj(
-          DivStroke.fromJson(json['stroke']),
+          name: 'item_width',
+        ),
+        stroke: safeParseObject(
+          json['stroke'],
+          parse: DivStroke.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

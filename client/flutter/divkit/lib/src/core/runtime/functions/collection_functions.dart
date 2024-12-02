@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:divkit/src/core/runtime/core.dart';
 
 const collectionFunctions = <String, RuntimeFunction>{

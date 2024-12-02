@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
@@ -12,7 +12,7 @@ class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
   });
 
   /// Data that will be used to create collection elements.
-  final Expression<List<dynamic>> data;
+  final Expression<Arr> data;
 
   /// Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
   // default value: "it"
@@ -20,7 +20,7 @@ class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
 
   /// Array of `div` elements from which the collection elements will be created.
   // at least 1 elements
-  final List<DivCollectionItemBuilderPrototype> prototypes;
+  final Arr<DivCollectionItemBuilderPrototype> prototypes;
 
   @override
   List<Object?> get props => [
@@ -30,9 +30,9 @@ class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
       ];
 
   DivCollectionItemBuilder copyWith({
-    Expression<List<dynamic>>? data,
+    Expression<Arr>? data,
     String? dataElementName,
-    List<DivCollectionItemBuilderPrototype>? prototypes,
+    Arr<DivCollectionItemBuilderPrototype>? prototypes,
   }) =>
       DivCollectionItemBuilder(
         data: data ?? this.data,
@@ -48,23 +48,34 @@ class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
     }
     try {
       return DivCollectionItemBuilder(
-        data: safeParseListExpr(
-          json['data'],
-        )!,
-        dataElementName: safeParseStr(
-          json['data_element_name']?.toString(),
-          fallback: "it",
-        )!,
-        prototypes: safeParseObj(
-          safeListMap(
-            json['prototypes'],
-            (v) => safeParseObj(
-              DivCollectionItemBuilderPrototype.fromJson(v),
-            )!,
+        data: reqVProp<Arr>(
+          safeParseListExpr(
+            json['data'],
           ),
-        )!,
+          name: 'data',
+        ),
+        dataElementName: reqProp<String>(
+          safeParseStr(
+            json['data_element_name'],
+            fallback: "it",
+          ),
+          name: 'data_element_name',
+        ),
+        prototypes: reqProp<Arr<DivCollectionItemBuilderPrototype>>(
+          safeParseObjects(
+            json['prototypes'],
+            (v) => reqProp<DivCollectionItemBuilderPrototype>(
+              safeParseObject(
+                v,
+                parse: DivCollectionItemBuilderPrototype.fromJson,
+              ),
+            ),
+          ),
+          name: 'prototypes',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -72,7 +83,7 @@ class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
   @override
   DivCollectionItemBuilder resolve(DivVariableContext context) {
     data.resolve(context);
-    safeListResolve(prototypes, (v) => v.resolve(context));
+    tryResolveList(prototypes, (v) => v.resolve(context));
     return this;
   }
 }
@@ -120,18 +131,26 @@ class DivCollectionItemBuilderPrototype extends Resolvable with EquatableMixin {
     }
     try {
       return DivCollectionItemBuilderPrototype(
-        div: safeParseObj(
-          Div.fromJson(json['div']),
-        )!,
-        id: safeParseStrExpr(
-          json['id']?.toString(),
+        div: reqProp<Div>(
+          safeParseObject(
+            json['div'],
+            parse: Div.fromJson,
+          ),
+          name: 'div',
         ),
-        selector: safeParseBoolExpr(
-          json['selector'],
-          fallback: true,
-        )!,
+        id: safeParseStrExpr(
+          json['id'],
+        ),
+        selector: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['selector'],
+            fallback: true,
+          ),
+          name: 'selector',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

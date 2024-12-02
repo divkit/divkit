@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivAnimationDirection implements Resolvable {
   normal('normal'),
@@ -74,7 +74,12 @@ enum DivAnimationDirection implements Resolvable {
           return DivAnimationDirection.alternateReverse;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAnimationDirection: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

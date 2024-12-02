@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Hides the tooltip.
@@ -34,11 +34,15 @@ class DivActionHideTooltip extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionHideTooltip(
-        id: safeParseStrExpr(
-          json['id']?.toString(),
-        )!,
+        id: reqVProp<String>(
+          safeParseStrExpr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

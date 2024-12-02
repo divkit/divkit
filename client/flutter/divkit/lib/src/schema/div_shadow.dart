@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_point.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element shadow.
@@ -57,23 +57,37 @@ class DivShadow extends Resolvable with EquatableMixin {
     }
     try {
       return DivShadow(
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 0.19,
-        )!,
-        blur: safeParseIntExpr(
-          json['blur'],
-          fallback: 2,
-        )!,
-        color: safeParseColorExpr(
-          json['color'],
-          fallback: const Color(0xFF000000),
-        )!,
-        offset: safeParseObj(
-          DivPoint.fromJson(json['offset']),
-        )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 0.19,
+          ),
+          name: 'alpha',
+        ),
+        blur: reqVProp<int>(
+          safeParseIntExpr(
+            json['blur'],
+            fallback: 2,
+          ),
+          name: 'blur',
+        ),
+        color: reqVProp<Color>(
+          safeParseColorExpr(
+            json['color'],
+            fallback: const Color(0xFF000000),
+          ),
+          name: 'color',
+        ),
+        offset: reqProp<DivPoint>(
+          safeParseObject(
+            json['offset'],
+            parse: DivPoint.fromJson,
+          ),
+          name: 'offset',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

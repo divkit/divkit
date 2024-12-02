@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_fixed_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
@@ -40,16 +40,21 @@ class DivDefaultIndicatorItemPlacement extends Resolvable with EquatableMixin {
     }
     try {
       return DivDefaultIndicatorItemPlacement(
-        spaceBetweenCenters: safeParseObj(
-          DivFixedSize.fromJson(json['space_between_centers']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              15,
+        spaceBetweenCenters: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['space_between_centers'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                15,
+              ),
             ),
           ),
-        )!,
+          name: 'space_between_centers',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }

@@ -3,7 +3,7 @@
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_count.dart';
 import 'package:divkit/src/schema/div_infinity_count.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element animation parameters.
@@ -38,7 +38,7 @@ class DivAnimation extends Resolvable with EquatableMixin {
   final Expression<DivAnimationInterpolator> interpolator;
 
   /// Animation elements.
-  final List<DivAnimation>? items;
+  final Arr<DivAnimation>? items;
 
   /// Animation type.
   final Expression<DivAnimationName> name;
@@ -70,7 +70,7 @@ class DivAnimation extends Resolvable with EquatableMixin {
     Expression<int>? duration,
     Expression<double>? Function()? endValue,
     Expression<DivAnimationInterpolator>? interpolator,
-    List<DivAnimation>? Function()? items,
+    Arr<DivAnimation>? Function()? items,
     Expression<DivAnimationName>? name,
     DivCount? repeat,
     Expression<int>? startDelay,
@@ -95,45 +95,63 @@ class DivAnimation extends Resolvable with EquatableMixin {
     }
     try {
       return DivAnimation(
-        duration: safeParseIntExpr(
-          json['duration'],
-          fallback: 300,
-        )!,
+        duration: reqVProp<int>(
+          safeParseIntExpr(
+            json['duration'],
+            fallback: 300,
+          ),
+          name: 'duration',
+        ),
         endValue: safeParseDoubleExpr(
           json['end_value'],
         ),
-        interpolator: safeParseStrEnumExpr(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.spring,
-        )!,
-        items: safeParseObj(
-          safeListMap(
-            json['items'],
-            (v) => safeParseObj(
-              DivAnimation.fromJson(v),
-            )!,
+        interpolator: reqVProp<DivAnimationInterpolator>(
+          safeParseStrEnumExpr(
+            json['interpolator'],
+            parse: DivAnimationInterpolator.fromJson,
+            fallback: DivAnimationInterpolator.spring,
+          ),
+          name: 'interpolator',
+        ),
+        items: safeParseObjects(
+          json['items'],
+          (v) => reqProp<DivAnimation>(
+            safeParseObject(
+              v,
+              parse: DivAnimation.fromJson,
+            ),
           ),
         ),
-        name: safeParseStrEnumExpr(
-          json['name'],
-          parse: DivAnimationName.fromJson,
-        )!,
-        repeat: safeParseObj(
-          DivCount.fromJson(json['repeat']),
-          fallback: const DivCount.divInfinityCount(
-            DivInfinityCount(),
+        name: reqVProp<DivAnimationName>(
+          safeParseStrEnumExpr(
+            json['name'],
+            parse: DivAnimationName.fromJson,
           ),
-        )!,
-        startDelay: safeParseIntExpr(
-          json['start_delay'],
-          fallback: 0,
-        )!,
+          name: 'name',
+        ),
+        repeat: reqProp<DivCount>(
+          safeParseObject(
+            json['repeat'],
+            parse: DivCount.fromJson,
+            fallback: const DivCount.divInfinityCount(
+              DivInfinityCount(),
+            ),
+          ),
+          name: 'repeat',
+        ),
+        startDelay: reqVProp<int>(
+          safeParseIntExpr(
+            json['start_delay'],
+            fallback: 0,
+          ),
+          name: 'start_delay',
+        ),
         startValue: safeParseDoubleExpr(
           json['start_value'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -245,7 +263,12 @@ enum DivAnimationName implements Resolvable {
           return DivAnimationName.noAnimation;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAnimationName: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

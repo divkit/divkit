@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Accessibility settings.
@@ -74,30 +74,40 @@ class DivAccessibility extends Resolvable with EquatableMixin {
     try {
       return DivAccessibility(
         description: safeParseStrExpr(
-          json['description']?.toString(),
+          json['description'],
         ),
         hint: safeParseStrExpr(
-          json['hint']?.toString(),
+          json['hint'],
         ),
-        mode: safeParseStrEnumExpr(
-          json['mode'],
-          parse: DivAccessibilityMode.fromJson,
-          fallback: DivAccessibilityMode.default_,
-        )!,
-        muteAfterAction: safeParseBoolExpr(
-          json['mute_after_action'],
-          fallback: false,
-        )!,
+        mode: reqVProp<DivAccessibilityMode>(
+          safeParseStrEnumExpr(
+            json['mode'],
+            parse: DivAccessibilityMode.fromJson,
+            fallback: DivAccessibilityMode.default_,
+          ),
+          name: 'mode',
+        ),
+        muteAfterAction: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['mute_after_action'],
+            fallback: false,
+          ),
+          name: 'mute_after_action',
+        ),
         stateDescription: safeParseStrExpr(
-          json['state_description']?.toString(),
+          json['state_description'],
         ),
-        type: safeParseStrEnum(
-          json['type'],
-          parse: DivAccessibilityType.fromJson,
-          fallback: DivAccessibilityType.auto,
-        )!,
+        type: reqProp<DivAccessibilityType>(
+          safeParseStrEnum(
+            json['type'],
+            parse: DivAccessibilityType.fromJson,
+            fallback: DivAccessibilityType.auto,
+          ),
+          name: 'type',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
@@ -252,7 +262,12 @@ enum DivAccessibilityType implements Resolvable {
           return DivAccessibilityType.auto;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAccessibilityType: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
@@ -322,7 +337,12 @@ enum DivAccessibilityMode implements Resolvable {
           return DivAccessibilityMode.exclude;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAccessibilityMode: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }

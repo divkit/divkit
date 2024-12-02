@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 enum DivSizeUnit implements Resolvable {
   dp('dp'),
@@ -63,7 +63,12 @@ enum DivSizeUnit implements Resolvable {
           return DivSizeUnit.px;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivSizeUnit: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
