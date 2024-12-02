@@ -1,6 +1,13 @@
 <script lang="ts" context="module">
     const MIN_SWIPE_PX = 8;
     const MIN_LONG_TAP_DURATION = 400;
+
+    const SUPPORTED_ACCESSIBILITY_TYPES = new Set([
+        'button',
+        'image',
+        'checkbox',
+        'radio'
+    ]);
 </script>
 
 <script lang="ts">
@@ -11,6 +18,7 @@
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
     import type { ComponentContext } from '../../types/componentContext';
+    import type { Accessibility } from '../../types/base';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { doNothing } from '../../utils/doNothing';
     import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
@@ -30,6 +38,7 @@
     export let customAction: ((event: Event) => boolean) | null = null;
     export let isNativeActionAnimation = true;
     export let hasInnerFocusable = false;
+    export let customAccessibility: MaybeMissing<Accessibility> | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
@@ -48,6 +57,8 @@
     let isChanged = false;
     let hasJSAction = false;
     let longtapTimer: number;
+    let role: string | undefined;
+    let isChecked: boolean | undefined;
 
     $: {
         if (Array.isArray(actions) && actions?.length) {
@@ -86,6 +97,22 @@
                     }
                 }));
             }
+        }
+    }
+
+    $: {
+        if (customAccessibility?.type && SUPPORTED_ACCESSIBILITY_TYPES.has(customAccessibility.type)) {
+            role = customAccessibility.type;
+        } else if (href) {
+            role = undefined;
+        } else if (hasJSAction) {
+            role = 'button';
+        }
+
+        if ((role === 'checkbox' || role === 'radio') && typeof customAccessibility?.is_checked === 'boolean') {
+            isChecked = customAccessibility.is_checked;
+        } else {
+            isChecked = undefined;
         }
     }
 
@@ -269,6 +296,8 @@
         {href}
         {target}
         {style}
+        {role}
+        aria-checked={isChecked}
         class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
         on:click
         on:keydown={onKeydown}
@@ -285,7 +314,8 @@
         use:use
         class="{cls}{hasJSAction ? ` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
         {style}
-        role={hasJSAction ? 'button' : null}
+        {role}
+        aria-checked={isChecked}
         tabindex={hasJSAction ? 0 : null}
         on:click
         on:keydown={onKeydown}

@@ -4,16 +4,20 @@ import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
-import type { Action, DisappearAction, DivVariable, VariableTrigger, VisibilityAction } from '../../typings/common';
+import type { Action, BooleanInt, DisappearAction, DivVariable, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
 import type { EvalTypes } from '../expressions/eval';
 
+export type AccessibilityType = 'none' | 'button' | 'image' | 'text' | 'edit_text' |
+    'header' | 'tab_bar' | 'list' | 'select' | 'checkbox' | 'radio' | 'auto';
+
 export interface Accessibility {
     description?: string;
-    // type
+    type?: AccessibilityType;
     // state_description
     // hint
+    is_checked?: BooleanInt;
     // mode
 }
 

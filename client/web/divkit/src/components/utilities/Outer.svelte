@@ -1080,6 +1080,7 @@
         {attrs}
         {hasInnerFocusable}
         isNativeActionAnimation={!actionAnimationList.length || hasNativeAnimation(actionAnimationList)}
+        customAccessibility={$jsonAccessibility}
         on:focus={focusHandler}
         on:blur={blurHandler}
     >

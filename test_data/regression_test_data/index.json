@@ -645,6 +645,24 @@
       "file": "accessibility/mode/mode_change.json"
     },
     {
+      "title": "Checkbox with accessibility",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Toggle checkbox"
+      ],
+      "expected_results": [
+        "Checkbox with text can be focused. Checkbox is read by screen reader as 'approved'.",
+        "Checkbox changes state on activasion. State changes is read by screen reader in a appropriate way ('Checked' / 'Unchecked' or similar)."
+      ],
+      "file": "accessibility/checkbox.json"
+    },
+    {
       "title": "Actions on tap",
       "automated": [
         "web"
