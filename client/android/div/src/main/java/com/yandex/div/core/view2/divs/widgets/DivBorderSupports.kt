@@ -24,6 +24,10 @@ internal interface DivBorderSupports {
     fun releaseBorderDrawer() {
         getDivBorderDrawer()?.release()
     }
+
+    fun invalidateBorder() {
+        getDivBorderDrawer()?.invalidateBorder()
+    }
 }
 
 internal inline fun DivBorderSupports.drawBorderClipped(canvas: Canvas, callback: (Canvas) -> Unit) {
