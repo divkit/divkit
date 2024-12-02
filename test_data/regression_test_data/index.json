@@ -3298,6 +3298,28 @@
         "Active indicator item follows swipe direction"
       ],
       "file": "indicator/indicator_with_invisible_items_and_infinite_scroll.json"
+    },
+    {
+      "title": "Shine (extension)",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "extensions"
+      ],
+      "steps": [
+        "Wait 1 second for shine animation to start",
+        "Wait 1 second for 1 shine animation cycle to pass",
+        "Wait 1 second for a second shine animation cycle to start",
+        "Wait several seconds for 3 animation cycles to pass"
+      ],
+      "expected_results": [
+        "Shine animation cycle started and cycle counter equals 1",
+        "Shine animation cycle ended and cycle counter still equals 1",
+        "Second animation cycle started and counter equals 2",
+        "There is no 4th animation cycle and the counter equals 3"
+      ],
+      "file": "shine.json"
     }
   ]
 }
