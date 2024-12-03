@@ -77,6 +77,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
     fun showTooltip(tooltipId: String, context: BindingContext, multiple: Boolean = false) {
         findChildWithTooltip(tooltipId, context.divView)?.let { (divTooltip, anchor) ->
             showTooltip(divTooltip, anchor, context, multiple)
+        } ?: run {
+            context.divView.logError(IllegalStateException(
+                "Unable to find view for tooltip '$tooltipId'"))
         }
     }
 

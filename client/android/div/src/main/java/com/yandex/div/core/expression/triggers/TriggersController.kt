@@ -5,6 +5,7 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
@@ -115,6 +116,7 @@ private class TriggerExecutor(
     private var wasConditionSatisfied = false
     private var observersDisposable = Disposable.NULL
     private var removingDisposable = Disposable.NULL
+    private var bindCompletionDisposable = Disposable.NULL
 
     var view: DivViewFacade? = null
         set(value) {
@@ -130,6 +132,7 @@ private class TriggerExecutor(
         modeObserver.close()
         observersDisposable.close()
         removingDisposable.close()
+        bindCompletionDisposable.close()
     }
 
     private fun startObserving() {
@@ -154,6 +157,11 @@ private class TriggerExecutor(
 
         val viewFacade = view ?: return
 
+        (viewFacade as? Div2View)?.takeIf { it.inMiddleOfBind }?.let { div2View ->
+            tryTriggerActionsAfterBind(div2View)
+            return
+        }
+
         if (!conditionSatisfied()) {
             return
         }
@@ -164,6 +172,22 @@ private class TriggerExecutor(
             }
         }
         divActionBinder.handleActions(viewFacade, resolver, actions, DivActionReason.TRIGGER)
+    }
+
+    private fun tryTriggerActionsAfterBind(div2View: Div2View) {
+        bindCompletionDisposable.close()
+
+        val observer = object : PersistentDivDataObserver {
+            override fun onAfterDivDataChanged() {
+                div2View.removePersistentDivDataObserver(this)
+                tryTriggerActions()
+            }
+        }
+        bindCompletionDisposable = Disposable {
+            div2View.removePersistentDivDataObserver(observer)
+        }
+
+        div2View.addPersistentDivDataObserver(observer)
     }
 
     private fun conditionSatisfied(): Boolean {

@@ -2,6 +2,8 @@ package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.ObserverList
+import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
@@ -22,9 +24,12 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 /**
@@ -43,8 +48,17 @@ class TriggersControllerTest {
     }
     private val errorCollector = mock<ErrorCollector>()
     private val logger = mock<Div2Logger>()
+    private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val view = mock<Div2View> {
         on { expressionResolver } doReturn mock()
+        on { addPersistentDivDataObserver(any()) } doAnswer {
+            persistentDivDataObservers.addObserver(it.getArgument(0))
+            Unit
+        }
+        on { removePersistentDivDataObserver(any()) } doAnswer {
+            persistentDivDataObservers.removeObserver(it.getArgument(0))
+            Unit
+        }
     }
 
     private val env = object : ParsingEnvironment {
@@ -86,6 +100,41 @@ class TriggersControllerTest {
         underTest.ensureTriggersSynced(triggersA)
 
         verifyActionTriggered(logIdA)
+    }
+
+    @Test
+    fun `actions not triggered during bind`() {
+        notifyBindStarted()
+
+        underTest.onAttachedToWindow(view)
+        underTest.ensureTriggersSynced(triggersA)
+
+        verifyNoInteractions(divActionBinder)
+    }
+
+    @Test
+    fun `actions will be triggered after bind`() {
+        notifyBindStarted()
+
+        underTest.onAttachedToWindow(view)
+        underTest.ensureTriggersSynced(triggersA)
+        notifyBindEnded()
+
+        verifyActionTriggered(logIdA, times = 1)
+    }
+
+    @Test
+    fun `actions will be triggered after bind only once`() {
+        notifyBindStarted()
+
+        underTest.onAttachedToWindow(view)
+        underTest.ensureTriggersSynced(triggersA)
+        notifyBindEnded()
+
+        notifyBindStarted()
+        notifyBindEnded()
+
+        verifyActionTriggered(logIdA, times = 1)
     }
 
     @Test
@@ -131,5 +180,19 @@ class TriggersControllerTest {
             }
         """.trimIndent()
         return DivTrigger(env, JSONObject(rawJson))
+    }
+
+    private fun notifyBindStarted() {
+        whenever(view.inMiddleOfBind).doReturn(true)
+        persistentDivDataObservers.forEach {
+            it.onBeforeDivDataChanged()
+        }
+    }
+
+    private fun notifyBindEnded() {
+        whenever(view.inMiddleOfBind).doReturn(false)
+        persistentDivDataObservers.forEach {
+            it.onAfterDivDataChanged()
+        }
     }
 }
