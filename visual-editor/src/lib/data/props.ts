@@ -19,9 +19,12 @@ export function getProp(obj: any, prop: string, fallback?: any): any {
     return res;
 }
 
-function getAnyProp(obj: any, parentObj: any, prop: string): any {
+function getAnyProp(obj: any, parentObj: any, prop: string, conditionsContext: Record<string, unknown>): any {
     if (prop.startsWith('$parent.')) {
         return getProp(parentObj, prop.substring(8));
+    }
+    if (prop.startsWith('$')) {
+        return conditionsContext[prop];
     }
     return getProp(obj, prop);
 }
@@ -50,18 +53,23 @@ export interface ConditionNot {
 
 export type ConditionObject = ConditionEqual | ConditionEmpty | ConditionOr | ConditionAnd | ConditionNot;
 
-export function evalCondition(obj: any, parentObj: any, tree: ConditionObject): boolean {
+export function evalCondition(
+    obj: any,
+    parentObj: any,
+    tree: ConditionObject,
+    conditionsContext: Record<string, unknown> = {}
+): boolean {
     if ('equal' in tree) {
-        const val = getAnyProp(obj, parentObj, tree.prop);
+        const val = getAnyProp(obj, parentObj, tree.prop, conditionsContext);
         return val === tree.equal;
     } else if ('isEmpty' in tree) {
-        return getAnyProp(obj, parentObj, tree.prop) === undefined;
+        return getAnyProp(obj, parentObj, tree.prop, conditionsContext) === undefined;
     } else if ('or' in tree) {
-        return tree.or.some(it => evalCondition(obj, parentObj, it));
+        return tree.or.some(it => evalCondition(obj, parentObj, it, conditionsContext));
     } else if ('and' in tree) {
-        return tree.and.every(it => evalCondition(obj, parentObj, it));
+        return tree.and.every(it => evalCondition(obj, parentObj, it, conditionsContext));
     } else if ('not' in tree) {
-        return !evalCondition(obj, parentObj, tree.not);
+        return !evalCondition(obj, parentObj, tree.not, conditionsContext);
     }
 
     throw new Error('Unknown condition');

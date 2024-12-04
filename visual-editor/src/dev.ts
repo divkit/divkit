@@ -44,6 +44,13 @@ const editor = window.editor = DivProEditor.init({
     rootConfigurable: true,
     warnFileLimit: 100000,
     errorFileLimit: 1000000,
+    customFontFaces: [{
+        value: 'monospace',
+        text: {
+            ru: 'Моноширинный',
+            en: 'Monospace'
+        }
+    }],
     card: {
         json: JSON.stringify({
             card: {

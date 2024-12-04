@@ -1,5 +1,5 @@
 import type { Action } from '@divkitframework/divkit/typings/common';
-import type { CardLocale, EditorInstance, EditorOptions, GetTranslationKey, GetTranslationSuggest } from '../../lib';
+import type { CardLocale, EditorInstance, EditorOptions, FontFaceDesc, GetTranslationKey, GetTranslationSuggest } from '../../lib';
 import type { State } from '../data/state';
 import type { TreeLeaf } from './tree';
 import type { Background } from '../data/background';
@@ -234,6 +234,7 @@ export interface AppContext {
     warnFileLimit: number;
     errorFileLimit: number;
     rootConfigurable: boolean;
+    customFontFaces: FontFaceDesc[];
 
     rendererApi: () => RendererApi;
     setRendererApi(api: RendererApi): void;

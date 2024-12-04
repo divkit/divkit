@@ -7,9 +7,10 @@
     import SimplePropsGroup from './SimplePropsGroup.svelte';
     import UnknownPropWithLabel from './UnknownPropWithLabel.svelte';
     import { formatSize } from '../../utils/formatSize';
-    import type { SelectedElemProps } from '../../ctx/appContext';
+    import { APP_CTX, type AppContext, type SelectedElemProps } from '../../ctx/appContext';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
+    const { customFontFaces } = getContext<AppContext>(APP_CTX);
 
     const dispatch = createEventDispatcher();
 
@@ -20,6 +21,10 @@
     export let evalJson: Record<string, unknown> | null;
     export let selectedElemProps: SelectedElemProps | null;
     export let hasMargins = true;
+
+    const conditionsContext = {
+        $fontFamily: customFontFaces.length > 0 ? 'yes' : 'no'
+    };
 
     function onChange(event: CustomEvent): void {
         // Avoid TypeScript type infinite loop - manual bypass events
@@ -79,53 +84,55 @@
                     false :
                     (
                         !item.enabled ||
-                        evalCondition(processedJson, parentProcessedJson, item.enabled)
+                        evalCondition(processedJson, parentProcessedJson, item.enabled, conditionsContext)
                     )
                 }
 
-                <li
-                    class="simple-props-group__item"
-                    class:simple-props-group__item_raw={hasMargins}
-                    class:simple-props-group__item_disabled={!enabled}
-                    inert={!enabled}
-                >
-                    <UnknownPropWithLabel
-                        {item}
-                        {value}
-                        {evalValue}
-                        {processedJson}
-                        {parentProcessedJson}
-                        {parentEvalJson}
-                        on:change
-                    />
+                {#if !('show' in item && item.show) || evalCondition(processedJson, parentProcessedJson, item.show, conditionsContext)}
+                    <li
+                        class="simple-props-group__item"
+                        class:simple-props-group__item_raw={hasMargins}
+                        class:simple-props-group__item_disabled={!enabled}
+                        inert={!enabled}
+                    >
+                        <UnknownPropWithLabel
+                            {item}
+                            {value}
+                            {evalValue}
+                            {processedJson}
+                            {parentProcessedJson}
+                            {parentEvalJson}
+                            on:change
+                        />
 
-                    {#if item.siblings}
-                        {#each item.siblings as sibling}
-                            {#if !('show' in sibling && sibling.show) || evalCondition(processedJson, parentProcessedJson, sibling.show)}
-                                {@const value = ('sizeValue' in sibling && sibling.sizeValue) ?
-                                    formatSize(selectedElemProps?.[sibling.sizeValue]) :
-                                    ('prop' in sibling && sibling.prop && getProp(processedJson, sibling.prop, sibling.default))
-                                }
-                                {@const evalValue = ('sizeValue' in sibling && sibling.sizeValue) ?
-                                    formatSize(selectedElemProps?.[sibling.sizeValue]) :
-                                    ('prop' in sibling && sibling.prop && getProp(evalJson, sibling.prop, sibling.default))
-                                }
+                        {#if item.siblings}
+                            {#each item.siblings as sibling}
+                                {#if !('show' in sibling && sibling.show) || evalCondition(processedJson, parentProcessedJson, sibling.show, conditionsContext)}
+                                    {@const value = ('sizeValue' in sibling && sibling.sizeValue) ?
+                                        formatSize(selectedElemProps?.[sibling.sizeValue]) :
+                                        ('prop' in sibling && sibling.prop && getProp(processedJson, sibling.prop, sibling.default))
+                                    }
+                                    {@const evalValue = ('sizeValue' in sibling && sibling.sizeValue) ?
+                                        formatSize(selectedElemProps?.[sibling.sizeValue]) :
+                                        ('prop' in sibling && sibling.prop && getProp(evalJson, sibling.prop, sibling.default))
+                                    }
 
-                                <div class="simple-props-group__sibling" transition:slide|local>
-                                    <UnknownPropWithLabel
-                                        item={sibling}
-                                        {value}
-                                        {evalValue}
-                                        {processedJson}
-                                        {parentProcessedJson}
-                                        {parentEvalJson}
-                                        on:change
-                                    />
-                                </div>
-                            {/if}
-                        {/each}
-                    {/if}
-                </li>
+                                    <div class="simple-props-group__sibling" transition:slide|local>
+                                        <UnknownPropWithLabel
+                                            item={sibling}
+                                            {value}
+                                            {evalValue}
+                                            {processedJson}
+                                            {parentProcessedJson}
+                                            {parentEvalJson}
+                                            on:change
+                                        />
+                                    </div>
+                                {/if}
+                            {/each}
+                        {/if}
+                    </li>
+                {/if}
             {/if}
         {/each}
     </ul>

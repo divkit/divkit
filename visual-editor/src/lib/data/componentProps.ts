@@ -166,12 +166,16 @@ export interface SelectOptionsProperty extends BaseProperty {
     type: 'select-options';
 }
 
+export interface SelectFontFamily extends BaseProperty {
+    type: 'select-font-family';
+}
+
 export type ComponentProperty = RadioProperty | IntegerProperty | BooleanProperty | SelectProperty |
     PercentProperty | RotationProperty | StringProperty |
     ColorProperty | FileProperty | GroupProperty | SplitProperty | AlignmentProperty |
     MarginsPaddingsProperty | Background2Property | TextAlignProperty | TextStylesProperty |
     Actions2Property | VideoSourcesProperty | NumberProperty | VariableNameProperty |
-    SelectOptionsProperty;
+    SelectOptionsProperty | SelectFontFamily;
 
 export type SiblingComponentProperty = ComponentProperty & {
     related?: {
@@ -433,6 +437,15 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
                 name: 'props.font_weight_bold',
                 value: 'bold'
             }],
+            enableSources: true
+        }, {
+            name: 'props.font_family',
+            prop: 'font_family',
+            type: 'select-font-family',
+            show: {
+                prop: '$fontFamily',
+                equal: 'yes'
+            },
             enableSources: true
         }, {
             name: 'props.text_color',
