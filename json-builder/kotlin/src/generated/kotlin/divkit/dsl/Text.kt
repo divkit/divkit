@@ -221,11 +221,11 @@ data class Text internal constructor(
          */
         val height: Property<Size>?,
         /**
-         * Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+         * Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
          */
         val hoverEndActions: Property<List<Action>>?,
         /**
-         * Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+         * Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
          */
         val hoverStartActions: Property<List<Action>>?,
         /**
@@ -270,11 +270,11 @@ data class Text internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * Actions performed when an element is released.
+         * Actions performed after clicking/tapping an element.
          */
         val pressEndActions: Property<List<Action>>?,
         /**
-         * Actions performed when an element is pressed.
+         * Actions performed at the start of a click/tap on an element.
          */
         val pressStartActions: Property<List<Action>>?,
         /**
@@ -863,8 +863,8 @@ data class Text internal constructor(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -875,8 +875,8 @@ data class Text internal constructor(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1073,8 +1073,8 @@ fun DivScope.text(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1085,8 +1085,8 @@ fun DivScope.text(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1281,8 +1281,8 @@ fun DivScope.textProps(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1293,8 +1293,8 @@ fun DivScope.textProps(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1489,8 +1489,8 @@ fun TemplateScope.textRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1501,8 +1501,8 @@ fun TemplateScope.textRefs(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1699,8 +1699,8 @@ fun Text.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1711,8 +1711,8 @@ fun Text.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -2041,8 +2041,8 @@ fun Text.evaluate(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -2053,8 +2053,8 @@ fun Text.evaluate(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -2252,8 +2252,8 @@ fun Component<Text>.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -2264,8 +2264,8 @@ fun Component<Text>.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.

@@ -84,6 +84,14 @@ object SelectEnumValue : EnumValue("select"),
     Accessibility.Type
 
 @Generated
+object CheckboxEnumValue : EnumValue("checkbox"),
+    Accessibility.Type
+
+@Generated
+object RadioEnumValue : EnumValue("radio"),
+    Accessibility.Type
+
+@Generated
 object AutoEnumValue : EnumValue("auto"),
     Accessibility.Type,
     Gallery.Scrollbar,
@@ -641,6 +649,14 @@ val DivScope.list: ListEnumValue
 @Generated
 val DivScope.select: SelectEnumValue
     get() = SelectEnumValue
+
+@Generated
+val DivScope.checkbox: CheckboxEnumValue
+    get() = CheckboxEnumValue
+
+@Generated
+val DivScope.radio: RadioEnumValue
+    get() = RadioEnumValue
 
 @Generated
 val DivScope.auto: AutoEnumValue

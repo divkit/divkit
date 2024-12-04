@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Page size equals to its content size.
+ * The page size is equal to the size of its content.
  * 
  * Can be created using the method [pageContentSize].
  * 
@@ -42,7 +42,7 @@ data class PageContentSize internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+         * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
          * Default value: `center`.
          */
         val alignment: Property<Alignment>?,
@@ -56,7 +56,7 @@ data class PageContentSize internal constructor(
     }
 
     /**
-     * Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+     * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
      * 
      * Possible values: [start], [center], [end].
      */
@@ -65,7 +65,7 @@ data class PageContentSize internal constructor(
 }
 
 /**
- * @param alignment Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+ * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  */
 @Generated
 fun DivScope.pageContentSize(
@@ -78,7 +78,7 @@ fun DivScope.pageContentSize(
 )
 
 /**
- * @param alignment Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+ * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  */
 @Generated
 fun DivScope.pageContentSizeProps(
@@ -89,7 +89,7 @@ fun DivScope.pageContentSizeProps(
 )
 
 /**
- * @param alignment Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+ * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  */
 @Generated
 fun TemplateScope.pageContentSizeRefs(
@@ -100,7 +100,7 @@ fun TemplateScope.pageContentSizeRefs(
 )
 
 /**
- * @param alignment Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+ * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  */
 @Generated
 fun PageContentSize.override(
@@ -113,7 +113,7 @@ fun PageContentSize.override(
 )
 
 /**
- * @param alignment Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+ * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  */
 @Generated
 fun PageContentSize.defer(
@@ -126,7 +126,7 @@ fun PageContentSize.defer(
 )
 
 /**
- * @param alignment Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+ * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  */
 @Generated
 fun PageContentSize.evaluate(
