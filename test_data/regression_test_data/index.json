@@ -369,10 +369,12 @@
     {
       "title": "Pager with infinite scroll",
       "platforms": [
-        "ios"
+        "ios",
+        "android"
       ],
       "tags": [
-        "DivPager"
+        "DivPager",
+        "DivIndicator"
       ],
       "file": "pager/pager_infinite_scroll.json"
     },
@@ -1213,7 +1215,8 @@
       ],
       "platforms": [
         "ios",
-        "web"
+        "web",
+        "android"
       ],
       "tags": [
         "Disappear_actions"
@@ -2866,7 +2869,8 @@
       ],
       "platforms": [
         "web",
-        "ios"
+        "ios",
+        "android"
       ],
       "steps": [
         "Press buttons with div-actions."
@@ -3094,7 +3098,8 @@
       "title": "Container with item_builder",
       "platforms": [
         "ios",
-        "web"
+        "web",
+        "android"
       ],
       "tags": [
         "actions",
@@ -3254,28 +3259,6 @@
         "Active indicator item follows swipe direction"
       ],
       "file": "indicator/indicator_with_invisible_items.json"
-    },
-    {
-      "title": "Indicator with pager with infinite scroll",
-      "tags": [
-        "DivPager",
-        "DivIndicator"
-      ],
-      "platforms": [
-        "android"
-      ],
-      "steps": [
-        "Swipe forward from 0 to 5 element",
-        "Swipe forward",
-        "Swipe backward"
-      ],
-      "expected_results": [
-        "There are 6 circles in indicator",
-        "Page with number 0 appears after the page with number 5",
-        "Page with number 5 appears before the page with number 0",
-        "Active indicator item follows swipe direction"
-      ],
-      "file": "indicator/indicator_with_infinite_scroll.json"
     },
     {
       "title": "Indicator with pager with invisible items and infinite scroll",
