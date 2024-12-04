@@ -31,10 +31,10 @@ public final class TextBlock: BlockWithTraits {
   public let canSelect: Bool
   public let tightenWidth: Bool
   public let additionalTextInsets: EdgeInsets
+  public let truncationToken: NSAttributedString?
+  public let truncationImages: [InlineImage]
 
   let attachments: [TextAttachment]
-  let truncationToken: NSAttributedString?
-  let truncationImages: [InlineImage]
   let truncationAttachments: [TextAttachment]
 
   private var cachedIntrinsicWidth: CGFloat?
