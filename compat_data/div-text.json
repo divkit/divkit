@@ -111,5 +111,13 @@
                 "version_added": "30.24.0"
             }
         }
+    }, {
+        "id": "text_image_indexing_direction",
+        "name": "<code>indexing_direction</code> property for the image of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.29.0"
+            }
+        }
     }]
 }
