@@ -50,7 +50,10 @@
         "input has focus, label says that timer is started",
         "input had lost the focus, label says that timer is finished"
       ],
-      "file": "actions/clear-focus.json"
+      "file": "actions/clear-focus.json",
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "Focus action",
@@ -68,7 +71,10 @@
         "related element is selected",
         "button changes to input and it gets focus"
       ],
-      "file": "actions/focus-element-mobile.json"
+      "file": "actions/focus-element-mobile.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Simple tap",
@@ -200,6 +206,9 @@
         "android",
         "ios"
       ],
+      "automated": [
+        "android"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -249,7 +258,8 @@
     {
       "title": "Gallery default item states",
       "automated": [
-        "web"
+        "web",
+        "android"
       ],
       "tags": [
         "DivGallery"
@@ -266,6 +276,7 @@
     {
       "title": "Gallery paging default item states",
       "automated": [
+        "android",
         "web"
       ],
       "tags": [
@@ -297,6 +308,9 @@
       "tags": [
         "DivGallery"
       ],
+      "automated": [
+        "android"
+      ],
       "file": "gallery/gallery-bottom-multiline.json"
     },
     {
@@ -304,10 +318,16 @@
       "tags": [
         "DivGallery"
       ],
+      "automated": [
+        "android"
+      ],
       "file": "gallery/gallery-bottom-multiline-selected-action.json"
     },
     {
       "title": "Gallery bottom singleline",
+      "automated": [
+        "android"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -317,6 +337,9 @@
       "title": "Gallery top multiline",
       "tags": [
         "DivGallery"
+      ],
+      "automated": [
+        "android"
       ],
       "file": "gallery/gallery-top-multiline.json"
     },
@@ -428,6 +451,9 @@
       "title": "Slider preferences",
       "tags": [
         "Slider"
+      ],
+      "automated": [
+        "android"
       ],
       "steps": [
         "Interact with slider"
@@ -1389,6 +1415,7 @@
     {
       "title": "Visibility action in visible block",
       "automated": [
+        "android",
         "web"
       ],
       "tags": [
@@ -1405,6 +1432,7 @@
     {
       "title": "Visibility actions in DivState",
       "automated": [
+        "android",
         "web"
       ],
       "tags": [
@@ -1425,6 +1453,9 @@
       "title": "Variables in gallery",
       "tags": [
         "DivGallery"
+      ],
+      "automated": [
+        "android"
       ],
       "steps": [
         "Check different combinations of gallery properties"
@@ -1460,6 +1491,9 @@
       "tags": [
         "DivPager"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Check different combinations of pager properties"
       ],
@@ -1487,6 +1521,9 @@
       "title": "Variables in tabs",
       "tags": [
         "DivTabs"
+      ],
+      "automated": [
+        "android"
       ],
       "steps": [
         "Check different combinations of tabs properties"
@@ -1558,6 +1595,7 @@
     {
       "title": "Variables in DivImage",
       "automated": [
+        "android",
         "web"
       ],
       "tags": [
@@ -1583,6 +1621,7 @@
     {
       "title": "Variables triggers",
       "automated": [
+        "android",
         "web"
       ],
       "tags": [
@@ -1604,6 +1643,9 @@
       "tags": [
         "Triggers"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "'Thumb value' show current thumb position",
         "'First selected positive position' show first selected positive thumb value",
@@ -1621,6 +1663,9 @@
         "Slider",
         "Triggers",
         "Functions"
+      ],
+      "automated": [
+        "android"
       ],
       "expected_results": [
         "Slider and input values should be synchronized",
@@ -1712,6 +1757,9 @@
       "tags": [
         "DivInput"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Tap on input field",
         "Change text"
@@ -1734,7 +1782,10 @@
         "Text under the input should be equal to text in input and change on input changes.",
         "Max lines = 1. Line break is unavailable."
       ],
-      "file": "single_line_input.json"
+      "file": "single_line_input.json",
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "Text input max_length",
@@ -1922,6 +1973,7 @@
     {
       "title": "Grid layout",
       "automated": [
+        "android",
         "web"
       ],
       "file": "grid_layout.json"
@@ -1939,19 +1991,25 @@
     },
     {
       "title": "Custom container",
+      "file": "custom-container.json",
       "platforms": [
         "android",
         "web"
       ],
-      "file": "custom-container.json"
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "Custom card",
+      "file": "custom-card.json",
       "platforms": [
         "android",
         "web"
       ],
-      "file": "custom-card.json"
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "Rive animations",
@@ -2038,6 +2096,9 @@
     {
       "title": "Indicator shapes",
       "platforms": [
+        "android"
+      ],
+      "automated": [
         "android"
       ],
       "tags": [
@@ -2144,7 +2205,10 @@
         "Starting blur radius is 4",
         "Blur radius is changed to 0 or 8 when clicking on images"
       ],
-      "file": "div_image_blur.json"
+      "file": "div_image_blur.json",
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "Blur in background image",
@@ -2156,7 +2220,10 @@
         "Starting blur radius is 4",
         "Blur radius is changed to 0 or 8 when clicking on buttons"
       ],
-      "file": "div_background_blur.json"
+      "file": "div_background_blur.json",
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "Container with aspect size",
@@ -2166,7 +2233,10 @@
       "expected_results": [
         "Containers with correct height appear"
       ],
-      "file": "container/aspect.json"
+      "file": "container/aspect.json",
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "LayoutProvider",
@@ -2206,6 +2276,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "android"
+      ],
       "tags": [
         "extensions",
         "SizeProvider"
@@ -2222,6 +2295,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "android"
+      ],
       "tags": [
         "extensions",
         "SizeProvider"
@@ -2237,6 +2313,9 @@
         "android",
         "web",
         "ios"
+      ],
+      "automated": [
+        "android"
       ],
       "tags": [
         "DivInput"
@@ -2270,6 +2349,9 @@
       "platforms": [
         "android",
         "ios"
+      ],
+      "automated": [
+        "android"
       ],
       "tags": [
         "DivInput"
@@ -2306,6 +2388,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "android"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -2331,6 +2416,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "android"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -2345,7 +2433,10 @@
       "tags": [
         "DivInput"
       ],
-      "file": "currency_input_mask.json"
+      "file": "currency_input_mask.json",
+      "automated": [
+        "android"
+      ]
     },
     {
       "title": "Video with controls",
@@ -2442,6 +2533,9 @@
       "title": "state_id_variable",
       "tags": [
         "DivState"
+      ],
+      "automated": [
+        "android"
       ],
       "steps": [
         "Open example",
@@ -2561,6 +2655,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2593,6 +2690,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2623,6 +2723,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2649,6 +2752,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2662,6 +2768,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2674,6 +2783,9 @@
       "title": "Patch pager",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android"
       ],
       "steps": [
         "Wait 1 second"
@@ -2701,6 +2813,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second",
         "toggle state"
@@ -2716,6 +2831,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second",
         "toggle state"
@@ -2729,6 +2847,9 @@
       "title": "Patch state transactional success",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android"
       ],
       "steps": [
         "Wait 1 second",
@@ -2745,6 +2866,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second",
         "Check all tabs"
@@ -2759,6 +2883,9 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Wait 1 second",
         "Check all tabs"
@@ -2772,6 +2899,9 @@
       "title": "Patch tabs transactional success",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android"
       ],
       "steps": [
         "Wait 1 second",
@@ -3147,6 +3277,9 @@
         "android",
         "web"
       ],
+      "automated": [
+        "android"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -3165,6 +3298,9 @@
       "platforms": [
         "android",
         "web"
+      ],
+      "automated": [
+        "android"
       ],
       "tags": [
         "Vector"
