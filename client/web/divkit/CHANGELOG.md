@@ -1,3 +1,9 @@
+## 30.30.0 (December 9, 2024)
+
+* Added limited support for the `accessibility->type` property (only `button`, `image`, `checkbox` and `radio` values is supported). Added support for the `accessibility->is_checked` property.
+* Added typed actions `show_tooltip` and `hide_tooltip`.
+
+
 ## 30.29.0 (December 2, 2024)
 
 * Added support for local `functions` in all components.

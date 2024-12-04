@@ -1,3 +1,18 @@
+## 30.30.0
+
+# Android Client:
+* Fixed border clipping of views placed in transient container.
+* Postpone trigger execution until the end of the bind process. Otherwise, actions for displaying tooltips may not work properly.
+
+# iOS Client:
+* Fixed `div-gallery` paddings and page size calculation.
+* Fixed number to boolean conversion.
+
+# Web Client:
+* Added limited support for the `accessibility->type` property (only `button`, `image`, `checkbox` and `radio` values is supported). Added support for the `accessibility->is_checked` property.
+* Added typed actions `show_tooltip` and `hide_tooltip`.
+
+
 ## 30.29.0
 
 # Android Client:
