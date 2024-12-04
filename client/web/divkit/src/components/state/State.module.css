@@ -5,6 +5,10 @@
     grid-template-rows: 100%;
 }
 
+.state_overflow_visible {
+    overflow: visible;
+}
+
 .state__animations {
     position: absolute;
     top: 0;

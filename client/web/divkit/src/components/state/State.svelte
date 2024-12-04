@@ -15,6 +15,7 @@
     import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';
+    import { genClassName } from '../../utils/genClassName';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
@@ -41,7 +42,10 @@
     $: stateId = componentContext.json.div_id || componentContext.id;
     let selectedId: string | undefined;
     let selectedComponentContext: ComponentContext | undefined;
+
     $: jsonDefaultStateId = componentContext.getJsonWithVars(componentContext.json.default_state_id);
+    $: jsonClipToBounds = componentContext.getDerivedFromVars(componentContext.json.clip_to_bounds);
+
     $: stateVariableName = componentContext.json.state_id_variable;
     $: stateVariable = stateVariableName ?
         componentContext.getVariable(stateVariableName, 'string') :
@@ -548,6 +552,10 @@
         }
     }
 
+    $: mods = {
+        overflow: ($jsonClipToBounds === false || $jsonClipToBounds === 0) ? 'visible' : undefined
+    };
+
     onDestroy(() => {
         if (selectedComponentContext) {
             selectedComponentContext.destroy();
@@ -561,7 +569,7 @@
 
 {#if !hasError}
     <Outer
-        cls={css.state}
+        cls={genClassName('state', css, mods)}
         {componentContext}
         {layoutParams}
         parentOf={parentOfItems}
