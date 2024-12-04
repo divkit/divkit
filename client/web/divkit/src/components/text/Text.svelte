@@ -307,7 +307,7 @@
         images.forEach((image, index) => {
             if (image.start !== undefined && image.url && image.start <= content.length) {
                 list.push({
-                    index: image.start,
+                    index: image.indexing_direction === 'reversed' ? text.length - image.start : image.start,
                     image: image as typeof image & {
                         start: number;
                         url: string;

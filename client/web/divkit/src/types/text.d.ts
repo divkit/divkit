@@ -56,6 +56,8 @@ export interface TextRange extends TextStyles {
     alignment_vertical?: TextVerticalAlignment;
 }
 
+export type TextIndexingDirection = 'normal' | 'reversed';
+
 export interface TextImage {
     start: number;
     url: string;
@@ -65,6 +67,7 @@ export interface TextImage {
     tint_mode?: TintMode;
     preload_required?: BooleanInt;
     alignment_vertical?: TextVerticalAlignment;
+    indexing_direction?: TextIndexingDirection;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

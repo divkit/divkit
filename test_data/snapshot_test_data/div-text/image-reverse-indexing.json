@@ -1,7 +1,8 @@
 {
   "description": "Images in different positions in text, using indexing_direction parameter",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",
