@@ -325,15 +325,16 @@
             if (border.corners_radius && typeof border.corners_radius === 'object') {
                 cornersRadius = correctBorderRadiusObject(border.corners_radius, cornersRadius);
                 newBorderStyle['border-radius'] = borderRadius(cornersRadius);
+                const biasedRadius: CornersRadius = {};
                 ([
                     'top-left',
                     'top-right',
                     'bottom-right',
                     'bottom-left'
                 ] as const).forEach(corner => {
-                    cornersRadius[corner] = (cornersRadius[corner] || 0) + 1;
+                    biasedRadius[corner] = (cornersRadius[corner] || 0) + 1;
                 });
-                newBorderElemStyle['--divkit-border-radius'] = borderRadius(cornersRadius);
+                newBorderElemStyle['--divkit-border-radius'] = borderRadius(biasedRadius);
             } else if (border.corner_radius) {
                 cornerRadius = correctNonNegativeNumber(border.corner_radius, cornerRadius);
                 cornersRadius = {
