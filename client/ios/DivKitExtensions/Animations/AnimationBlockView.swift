@@ -4,7 +4,7 @@ import LayoutKit
 import VGSL
 
 final class AnimationBlockView: BlockView {
-  var animatableView: AnimatableView? {
+  var animatableView: AsyncSourceAnimatableView? {
     didSet {
       if let animatablView = animatableView {
         oldValue?.removeFrom(self)
@@ -29,13 +29,16 @@ final class AnimationBlockView: BlockView {
         .requestAnimationWithCompletion { [weak self] animationSource in
           guard let self,
                 newValue === self.animationHolder,
-                let animationSource else {
+                let animationSource,
+                let view = self.animatableView else {
             return
           }
 
-          self.animatableView?.contentMode = animationContentMode
-          self.animatableView?.setSource(animationSource)
-          self.animatableView?.play()
+          view.contentMode = animationContentMode
+          Task { @MainActor in
+            await view.setSourceAsync(animationSource)
+            view.play()
+          }
         }
     }
   }
