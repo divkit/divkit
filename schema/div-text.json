@@ -241,36 +241,21 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "$description": "translations.json#/div_text_ellipsis_actions",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_ellipsis_actions"
         },
         "ranges": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/range"
           },
-          "$description": "translations.json#/div_text_ellipsis_ranges",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_ellipsis_ranges"
         },
         "images": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/image"
           },
-          "$description": "translations.json#/div_text_ellipsis_images",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_ellipsis_images"
         }
       },
       "required": [
