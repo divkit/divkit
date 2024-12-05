@@ -20,18 +20,19 @@ public final class DivActionHandler {
   private let reporter: DivReporter
   private let idToPath: IdToPath
 
+  private let animatorActionHandler: AnimatorActionHandler
   private let arrayActionsHandler = ArrayActionsHandler()
-  private let dictSetValueActionHandler = DictSetValueActionHandler()
   private let clearFocusActionHandler = ClearFocusActionHandler()
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
+  private let dictSetValueActionHandler = DictSetValueActionHandler()
   private let focusElementActionHandler = FocusElementActionHandler()
+  private let hideTooltipActionHandler: HideTooltipActionHandler
+  private let setStateActionHandler: SetStateActionHandler
   private let setVariableActionHandler = SetVariableActionHandler()
+  private let showTooltipActionHandler: ShowTooltipActionHandler
   private let submitActionHandler: SubmitActionHandler
   private let timerActionHandler: TimerActionHandler
   private let videoActionHandler = VideoActionHandler()
-  private let animatorHandler: AnimatorActionHandler
-  private let showTooltipActionHandler: ShowTooltipActionHandler
-  private let hideTooltipActionHandler: HideTooltipActionHandler
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   public convenience init(
@@ -107,7 +108,6 @@ public final class DivActionHandler {
     )
     self.urlHandler = urlHandler
     self.logger = logger
-    self.submitActionHandler = SubmitActionHandler(submitter: submitter)
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
@@ -116,17 +116,20 @@ public final class DivActionHandler {
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
     self.reporter = reporter
-    self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
     self.idToPath = idToPath
-    self.animatorHandler = AnimatorActionHandler(animatorController: animatorController)
-    self.showTooltipActionHandler = ShowTooltipActionHandler(
-      performer: tooltipActionPerformer,
-      showTooltip: showTooltip
-    )
+
+    self.animatorActionHandler = AnimatorActionHandler(animatorController: animatorController)
     self.hideTooltipActionHandler = HideTooltipActionHandler(
       performer: tooltipActionPerformer,
       showTooltip: showTooltip
     )
+    self.setStateActionHandler = SetStateActionHandler(stateUpdater: stateUpdater)
+    self.showTooltipActionHandler = ShowTooltipActionHandler(
+      performer: tooltipActionPerformer,
+      showTooltip: showTooltip
+    )
+    self.submitActionHandler = SubmitActionHandler(submitter: submitter)
+    self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
   }
 
   public func handle(
@@ -200,6 +203,10 @@ public final class DivActionHandler {
 
     var isHandled = true
     switch action.typed {
+    case let .divActionAnimatorStart(action):
+      animatorActionHandler.handle(action, context: context)
+    case let .divActionAnimatorStop(action):
+      animatorActionHandler.handle(action, context: context)
     case let .divActionArrayInsertValue(action):
       arrayActionsHandler.handle(action, context: context)
     case let .divActionArrayRemoveValue(action):
@@ -216,6 +223,8 @@ public final class DivActionHandler {
       focusElementActionHandler.handle(action, context: context)
     case let .divActionSetVariable(action):
       setVariableActionHandler.handle(action, context: context)
+    case let .divActionSetState(action):
+      setStateActionHandler.handle(action, context: context)
     case let .divActionTimer(action):
       timerActionHandler.handle(action, context: context)
     case let .divActionVideo(action):
@@ -224,14 +233,12 @@ public final class DivActionHandler {
       showTooltipActionHandler.handle(action, context: context)
     case let .divActionSubmit(action):
       submitActionHandler.handle(action, context: context)
-    case let .divActionAnimatorStart(action):
-      animatorHandler.handle(action, context: context)
-    case let .divActionAnimatorStop(action):
-      animatorHandler.handle(action, context: context)
     case let .divActionHideTooltip(action):
       hideTooltipActionHandler.handle(action, context: context)
-    case .divActionDownload, .divActionSetState,
-         .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
+    case .divActionDownload,
+         .divActionSetStoredValue,
+         .divActionScrollBy,
+         .divActionScrollTo:
       break
     case .none:
       isHandled = false
