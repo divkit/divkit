@@ -49,10 +49,13 @@
               "aspect": {
                 "ratio": 2
               },
+              "paddings": {
+                "left": 20
+              },
               "items": [
                 {
                   "type": "content",
-                  "text": "width = match_parent\naspect = 2"
+                  "text": "width = match_parent\naspect = 2\npaddings.left = 20"
                 }
               ]
             },

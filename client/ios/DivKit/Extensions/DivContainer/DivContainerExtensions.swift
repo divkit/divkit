@@ -203,9 +203,12 @@ extension DivBase {
   ) -> ContainerBlock.CrossAlignment? {
     let expressionResolver = context.expressionResolver
     switch direction {
-    case .horizontal: return resolveAlignmentVertical(expressionResolver)?.crossAlignment
-    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?
-      .makeCrossAlignment(uiLayoutDirection: context.layoutDirection)
+    case .horizontal:
+      return resolveAlignmentVertical(expressionResolver)?.crossAlignment
+    case .vertical:
+      return resolveAlignmentHorizontal(expressionResolver)?.makeCrossAlignment(
+        layoutDirection: context.layoutDirection
+      )
     }
   }
 }
@@ -236,34 +239,20 @@ extension DivAlignmentHorizontal {
     }
   }
 
-  func makeCrossAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> ContainerBlock
-    .CrossAlignment {
+  fileprivate func makeCrossAlignment(
+    layoutDirection: UserInterfaceLayoutDirection
+  ) -> ContainerBlock.CrossAlignment {
     switch self {
     case .left:
       .leading
     case .right:
       .trailing
     case .start:
-      uiLayoutDirection == .leftToRight ? .leading : .trailing
+      layoutDirection == .leftToRight ? .leading : .trailing
     case .center:
       .center
     case .end:
-      uiLayoutDirection == .rightToLeft ? .leading : .trailing
-    }
-  }
-
-  func makeContentAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> Alignment {
-    switch self {
-    case .left:
-      .leading
-    case .right:
-      .trailing
-    case .start:
-      uiLayoutDirection == .leftToRight ? .leading : .trailing
-    case .center:
-      .center
-    case .end:
-      uiLayoutDirection == .rightToLeft ? .leading : .trailing
+      layoutDirection == .rightToLeft ? .leading : .trailing
     }
   }
 }
@@ -283,7 +272,7 @@ extension DivAlignmentVertical {
     }
   }
 
-  var crossAlignment: ContainerBlock.CrossAlignment {
+  fileprivate var crossAlignment: ContainerBlock.CrossAlignment {
     switch self {
     case .top:
       .leading

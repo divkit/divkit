@@ -192,7 +192,7 @@ extension DivBase {
     let expressionResolver = context.expressionResolver
     return BlockAlignment2D(
       horizontal: resolveAlignmentHorizontal(expressionResolver)?
-        .makeContentAlignment(uiLayoutDirection: context.layoutDirection)
+        .makeContentAlignment(layoutDirection: context.layoutDirection)
         ?? defaultAlignment.horizontal,
       vertical: resolveAlignmentVertical(expressionResolver)?.alignment
         ?? defaultAlignment.vertical
@@ -366,6 +366,25 @@ extension LayoutTrait {
       )
     case .weighted:
       self
+    }
+  }
+}
+
+extension DivAlignmentHorizontal {
+  fileprivate func makeContentAlignment(
+    layoutDirection: UserInterfaceLayoutDirection
+  ) -> Alignment {
+    switch self {
+    case .left:
+      .leading
+    case .right:
+      .trailing
+    case .start:
+      layoutDirection == .leftToRight ? .leading : .trailing
+    case .center:
+      .center
+    case .end:
+      layoutDirection == .rightToLeft ? .leading : .trailing
     }
   }
 }
