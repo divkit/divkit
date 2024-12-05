@@ -2,6 +2,7 @@
   "description": "The first/last separator with the space-around should be in the center of the empty space",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {
