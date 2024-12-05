@@ -159,7 +159,8 @@ public final class DivActionHandler {
     divActionURLHandler.handleURL(url, cardId: cardId)
   }
 
-  func handle(
+  @_spi(Internal)
+  public func handle(
     _ action: DivActionBase,
     path: UIElementPath,
     source: UserInterfaceAction.DivActionSource,
