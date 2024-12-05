@@ -273,6 +273,15 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetOptArrayFromArray)
         registry.register(GetOptDictFromArray)
         registry.register(GetArrayLength)
+        registry.registerMethod(ArrayGetArray)
+        registry.registerMethod(ArrayGetBoolean)
+        registry.registerMethod(ArrayGetColor)
+        registry.registerMethod(ArrayGetDict)
+        registry.registerMethod(ArrayGetInteger)
+        registry.registerMethod(ArrayGetNumber)
+        registry.registerMethod(ArrayGetString)
+        registry.registerMethod(ArrayGetUrl)
+        registry.registerMethod(ArrayIsEmpty)
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {

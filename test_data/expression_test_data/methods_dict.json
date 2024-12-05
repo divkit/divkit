@@ -342,7 +342,8 @@
       ],
       "platforms": [
         "ios",
-        "web"
+        "web",
+        "android"
       ]
     },
     {
@@ -360,7 +361,8 @@
       ],
       "platforms": [
         "ios",
-        "web"
+        "web",
+        "android"
       ]
     },
     {

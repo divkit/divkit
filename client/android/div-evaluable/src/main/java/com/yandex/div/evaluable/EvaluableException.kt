@@ -70,7 +70,7 @@ internal fun functionToMessageFormat(name: String, args: List<Any>): String {
 
 internal fun methodToMessageFormat(name: String, args: List<Any>): String {
     return if (args.size > 1) {
-        args.subList(1, args.size).joinToString(prefix = "${args.first()}.$name(", postfix = ")", separator = ",")
+        args.subList(1, args.size).joinToString(prefix = "$name(", postfix = ")", separator = ",")
     } else "$name()"
 }
 

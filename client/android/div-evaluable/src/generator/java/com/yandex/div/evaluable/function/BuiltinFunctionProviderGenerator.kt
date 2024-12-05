@@ -98,9 +98,10 @@ object BuiltinFunctionProviderGenerator {
                         addStatement("return %T", function)
                         endControlFlow()
                     }
+                    val capitalizedTypeDescription = type.description.replaceFirstChar { it.titlecase() }
                     code.addStatement(
                         "throw %N(%N, %N)",
-                        FunSpec.builder("getFunctionArgumentsException").build(),
+                        FunSpec.builder("get${capitalizedTypeDescription}ArgumentsException").build(),
                         nameParameterSpec,
                         argsParameterSpec
                     )
