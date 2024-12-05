@@ -3,6 +3,7 @@
         "name": "Rus",
         "languageChooser": "Выбранный язык",
         "playground": "Веб песочница",
+        "playgroundShort": "Песочница",
         "samples": "Примеры",
         "design": "Визуальный редактор",
         "share": "Поделиться",
@@ -41,12 +42,14 @@
         "telegram": "Есть вопросы?",
         "telegramError": "Что-то не работает или у вас есть предложения?",
         "featureSupport": "Поддержка платформ",
+        "featureSupportSmall": "Поддержка",
         "search": "Поиск..."
     },
     "en": {
         "name": "Eng",
         "languageChooser": "Selected language",
         "playground": "Web playground",
+        "playgroundShort": "Playground",
         "samples": "Samples",
         "design": "Visual editor",
         "share": "Share",
@@ -85,6 +88,7 @@
         "telegram": "Have a question?",
         "telegramError": "Is something not working or do you have any suggestions?",
         "featureSupport": "Platforms support",
+        "featureSupportSmall": "Support",
         "search": "Search..."
     }
 }
