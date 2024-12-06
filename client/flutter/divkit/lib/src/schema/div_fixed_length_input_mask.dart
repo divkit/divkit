@@ -5,9 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Mask for entering text with a fixed number of characters.
-class DivFixedLengthInputMask extends Resolvable
-    with EquatableMixin
-    implements DivInputMaskBase {
+class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
   const DivFixedLengthInputMask({
     this.alwaysVisible = const ValueExpression(false),
     required this.pattern,
@@ -98,19 +96,10 @@ class DivFixedLengthInputMask extends Resolvable
       return null;
     }
   }
-
-  @override
-  DivFixedLengthInputMask resolve(DivVariableContext context) {
-    alwaysVisible.resolve(context);
-    pattern.resolve(context);
-    tryResolveList(patternElements, (v) => v.resolve(context));
-    return this;
-  }
 }
 
 /// Template decoding is a description of the characters that will be replaced with user input.
-class DivFixedLengthInputMaskPatternElement extends Resolvable
-    with EquatableMixin {
+class DivFixedLengthInputMaskPatternElement with EquatableMixin {
   const DivFixedLengthInputMaskPatternElement({
     required this.key,
     this.placeholder = const ValueExpression("_"),
@@ -175,13 +164,5 @@ class DivFixedLengthInputMaskPatternElement extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivFixedLengthInputMaskPatternElement resolve(DivVariableContext context) {
-    key.resolve(context);
-    placeholder.resolve(context);
-    regex?.resolve(context);
-    return this;
   }
 }

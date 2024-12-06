@@ -6,9 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Scale animation.
-class DivScaleTransition extends Resolvable
-    with EquatableMixin
-    implements DivTransitionBase {
+class DivScaleTransition with EquatableMixin implements DivTransitionBase {
   const DivScaleTransition({
     this.duration = const ValueExpression(200),
     this.interpolator =
@@ -131,16 +129,5 @@ class DivScaleTransition extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivScaleTransition resolve(DivVariableContext context) {
-    duration.resolve(context);
-    interpolator.resolve(context);
-    pivotX.resolve(context);
-    pivotY.resolve(context);
-    scale.resolve(context);
-    startDelay.resolve(context);
-    return this;
   }
 }

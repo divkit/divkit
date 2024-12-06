@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A Boolean variable in binary format.
-class BooleanVariable extends Resolvable with EquatableMixin {
+class BooleanVariable with EquatableMixin {
   const BooleanVariable({
     required this.name,
     required this.value,
@@ -58,10 +58,5 @@ class BooleanVariable extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  BooleanVariable resolve(DivVariableContext context) {
-    return this;
   }
 }

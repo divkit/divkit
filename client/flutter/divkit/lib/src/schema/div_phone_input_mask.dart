@@ -5,9 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Mask for entering phone numbers with dynamic regional format identification.
-class DivPhoneInputMask extends Resolvable
-    with EquatableMixin
-    implements DivInputMaskBase {
+class DivPhoneInputMask with EquatableMixin implements DivInputMaskBase {
   const DivPhoneInputMask({
     required this.rawTextVariable,
   });
@@ -49,10 +47,5 @@ class DivPhoneInputMask extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPhoneInputMask resolve(DivVariableContext context) {
-    return this;
   }
 }

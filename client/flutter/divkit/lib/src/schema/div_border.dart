@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stroke around the element.
-class DivBorder extends Resolvable with EquatableMixin {
+class DivBorder with EquatableMixin {
   const DivBorder({
     this.cornerRadius,
     this.cornersRadius,
@@ -94,15 +94,5 @@ class DivBorder extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivBorder resolve(DivVariableContext context) {
-    cornerRadius?.resolve(context);
-    cornersRadius?.resolve(context);
-    hasShadow.resolve(context);
-    shadow?.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

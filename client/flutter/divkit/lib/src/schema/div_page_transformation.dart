@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_page_transformation_overlap.dart';
 import 'package:divkit/src/schema/div_page_transformation_slide.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivPageTransformation extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivPageTransformation with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -91,11 +90,5 @@ class DivPageTransformation extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivPageTransformation resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

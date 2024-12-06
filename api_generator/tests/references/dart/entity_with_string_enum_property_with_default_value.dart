@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithStringEnumPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
+class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin  {
   const EntityWithStringEnumPropertyWithDefaultValue({
     this.value = const ValueExpression(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
@@ -38,14 +38,9 @@ class EntityWithStringEnumPropertyWithDefaultValue extends Resolvable with Equat
       return null;
     }
   }
-
-  EntityWithStringEnumPropertyWithDefaultValue resolve(DivVariableContext context) {
-    value?.resolve(context);
-    return this;
-  }
 }
 
-enum EntityWithStringEnumPropertyWithDefaultValueValue implements Resolvable {
+enum EntityWithStringEnumPropertyWithDefaultValueValue {
   first('first'),
   second('second'),
   third('third');
@@ -111,5 +106,4 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue implements Resolvable {
       return null;
     }
   }
-  EntityWithStringEnumPropertyWithDefaultValueValue resolve(DivVariableContext context) => this;
 }

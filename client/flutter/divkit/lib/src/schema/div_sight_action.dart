@@ -4,7 +4,7 @@ import 'package:divkit/src/schema/div_action_typed.dart';
 import 'package:divkit/src/schema/div_download_callbacks.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
-abstract class DivSightAction extends Resolvable {
+abstract class DivSightAction {
   DivDownloadCallbacks? get downloadCallbacks;
 
   // default value: true
@@ -24,6 +24,4 @@ abstract class DivSightAction extends Resolvable {
   DivActionTyped? get typed;
 
   Expression<Uri>? get url;
-  @override
-  DivSightAction resolve(DivVariableContext context);
 }

@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivFontWeight implements Resolvable {
+enum DivFontWeight {
   light('light'),
   medium('medium'),
   regular('regular'),
@@ -83,7 +83,4 @@ enum DivFontWeight implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivFontWeight resolve(DivVariableContext context) => this;
 }

@@ -203,7 +203,7 @@ class DivDownloadHandlerUrl implements DivActionHandler {
 
           if (patch != null) {
             final success = await context.patchManager.applyPatch(
-              patch.resolve(context.variables).convert(),
+              patch.resolve(context.variables),
             );
 
             if (success) {

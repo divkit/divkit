@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Specifies the element with the given index as the scrolling end position.
-class IndexDestination extends Resolvable with EquatableMixin {
+class IndexDestination with EquatableMixin {
   const IndexDestination({
     required this.value,
   });
@@ -46,11 +46,5 @@ class IndexDestination extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  IndexDestination resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

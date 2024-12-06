@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed width value of the visible part of a neighbouring page.
-class DivNeighbourPageSize extends Resolvable with EquatableMixin {
+class DivNeighbourPageSize with EquatableMixin {
   const DivNeighbourPageSize({
     required this.neighbourPageWidth,
   });
@@ -47,11 +47,5 @@ class DivNeighbourPageSize extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivNeighbourPageSize resolve(DivVariableContext context) {
-    neighbourPageWidth.resolve(context);
-    return this;
   }
 }

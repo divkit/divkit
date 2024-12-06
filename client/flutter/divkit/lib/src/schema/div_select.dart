@@ -32,7 +32,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// List of options with only one to be selected.
-class DivSelect extends Resolvable with EquatableMixin implements DivBase {
+class DivSelect with EquatableMixin implements DivBase {
   const DivSelect({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -740,57 +740,10 @@ class DivSelect extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivSelect resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    fontFamily?.resolve(context);
-    fontSize.resolve(context);
-    fontSizeUnit.resolve(context);
-    fontWeight.resolve(context);
-    fontWeightValue?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    hintColor.resolve(context);
-    hintText?.resolve(context);
-    layoutProvider?.resolve(context);
-    letterSpacing.resolve(context);
-    lineHeight?.resolve(context);
-    margins.resolve(context);
-    tryResolveList(options, (v) => v.resolve(context));
-    paddings.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    textColor.resolve(context);
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
 /// List option.
-class DivSelectOption extends Resolvable with EquatableMixin {
+class DivSelectOption with EquatableMixin {
   const DivSelectOption({
     this.text,
     required this.value,
@@ -839,12 +792,5 @@ class DivSelectOption extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivSelectOption resolve(DivVariableContext context) {
-    text?.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

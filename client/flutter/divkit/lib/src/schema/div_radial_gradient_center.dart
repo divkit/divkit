@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_radial_gradient_fixed_center.dart';
 import 'package:divkit/src/schema/div_radial_gradient_relative_center.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivRadialGradientCenter extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivRadialGradientCenter with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -93,11 +92,5 @@ class DivRadialGradientCenter extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivRadialGradientCenter resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

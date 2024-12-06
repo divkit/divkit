@@ -31,7 +31,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A separating line between elements.
-class DivSeparator extends Resolvable with EquatableMixin implements DivBase {
+class DivSeparator with EquatableMixin implements DivBase {
   const DivSeparator({
     this.accessibility = const DivAccessibility(),
     this.action,
@@ -167,10 +167,10 @@ class DivSeparator extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivSize height;
 
-  /// Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverEndActions;
 
-  /// Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverStartActions;
 
   /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -192,10 +192,10 @@ class DivSeparator extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivEdgeInsets paddings;
 
-  /// Actions performed when an element is released.
+  /// Actions performed after clicking/tapping an element.
   final Arr<DivAction>? pressEndActions;
 
-  /// Actions performed when an element is pressed.
+  /// Actions performed at the start of a click/tap on an element.
   final Arr<DivAction>? pressStartActions;
 
   /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
@@ -759,56 +759,10 @@ class DivSeparator extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivSeparator resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    action?.resolve(context);
-    actionAnimation.resolve(context);
-    tryResolveList(actions, (v) => v.resolve(context));
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    delimiterStyle.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(doubletapActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    tryResolveList(hoverEndActions, (v) => v.resolve(context));
-    tryResolveList(hoverStartActions, (v) => v.resolve(context));
-    layoutProvider?.resolve(context);
-    tryResolveList(longtapActions, (v) => v.resolve(context));
-    margins.resolve(context);
-    paddings.resolve(context);
-    tryResolveList(pressEndActions, (v) => v.resolve(context));
-    tryResolveList(pressStartActions, (v) => v.resolve(context));
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
 /// Separator display settings.
-class DivSeparatorDelimiterStyle extends Resolvable with EquatableMixin {
+class DivSeparatorDelimiterStyle with EquatableMixin {
   const DivSeparatorDelimiterStyle({
     this.color = const ValueExpression(Color(0x14000000)),
     this.orientation =
@@ -869,16 +823,9 @@ class DivSeparatorDelimiterStyle extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivSeparatorDelimiterStyle resolve(DivVariableContext context) {
-    color.resolve(context);
-    orientation.resolve(context);
-    return this;
-  }
 }
 
-enum DivSeparatorDelimiterStyleOrientation implements Resolvable {
+enum DivSeparatorDelimiterStyleOrientation {
   vertical('vertical'),
   horizontal('horizontal');
 
@@ -937,8 +884,4 @@ enum DivSeparatorDelimiterStyleOrientation implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivSeparatorDelimiterStyleOrientation resolve(DivVariableContext context) =>
-      this;
 }

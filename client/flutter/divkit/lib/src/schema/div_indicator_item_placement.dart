@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_default_indicator_item_placement.dart';
 import 'package:divkit/src/schema/div_stretch_indicator_item_placement.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivIndicatorItemPlacement extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivIndicatorItemPlacement with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -94,11 +93,5 @@ class DivIndicatorItemPlacement extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivIndicatorItemPlacement resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivContentAlignmentHorizontal implements Resolvable {
+enum DivContentAlignmentHorizontal {
   left('left'),
   center('center'),
   right('right'),
@@ -127,7 +127,4 @@ enum DivContentAlignmentHorizontal implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivContentAlignmentHorizontal resolve(DivVariableContext context) => this;
 }

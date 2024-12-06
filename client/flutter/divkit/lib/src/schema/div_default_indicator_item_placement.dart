@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
-class DivDefaultIndicatorItemPlacement extends Resolvable with EquatableMixin {
+class DivDefaultIndicatorItemPlacement with EquatableMixin {
   const DivDefaultIndicatorItemPlacement({
     this.spaceBetweenCenters = const DivFixedSize(
       value: ValueExpression(
@@ -57,11 +57,5 @@ class DivDefaultIndicatorItemPlacement extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivDefaultIndicatorItemPlacement resolve(DivVariableContext context) {
-    spaceBetweenCenters.resolve(context);
-    return this;
   }
 }

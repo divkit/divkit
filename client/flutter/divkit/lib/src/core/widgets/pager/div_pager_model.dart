@@ -18,9 +18,13 @@ class DivPagerModel with EquatableMixin {
       ];
 }
 
-extension DivPagerBinder on DivPager {
+extension DivPagerConvereter on DivPager {
   DivPagerModel init(BuildContext context) {
-    final orientation = _convertOrientation(this.orientation.value);
+    final divContext = read<DivContext>(context)!;
+    final variables = divContext.variables;
+
+    final orientation =
+        _convertOrientation(this.orientation.resolve(variables));
     final children = items?.map((e) => DivWidget(e)).toList() ?? [];
     return DivPagerModel(
       children: children,
@@ -28,26 +32,29 @@ extension DivPagerBinder on DivPager {
     );
   }
 
-  DivPagerModel bind(
+  DivPagerModel resolve(
     BuildContext context,
     PageController controller,
     ValueGetter<int> currentPage,
   ) {
     final divContext = read<DivContext>(context)!;
+
     final id = this.id;
-    final variables = divContext.variableManager;
+    final variables = divContext.variables;
+
     final length = items?.length;
     if (id != null && length != null) {
-      if (variables.context.current[id] != currentPage()) {
+      if (variables.current[id] != currentPage()) {
         controller.animateToPage(
-          variables.context.current[id],
+          variables.current[id],
           duration: const Duration(milliseconds: 200),
           curve: Curves.linear,
         );
       }
     }
 
-    final orientation = _convertOrientation(this.orientation.value);
+    final orientation =
+        _convertOrientation(this.orientation.resolve(variables));
     final children = items?.map((e) => DivWidget(e)).toList();
     return DivPagerModel(
       orientation: orientation,

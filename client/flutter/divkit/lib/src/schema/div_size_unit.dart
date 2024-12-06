@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivSizeUnit implements Resolvable {
+enum DivSizeUnit {
   dp('dp'),
   sp('sp'),
   px('px');
@@ -72,7 +72,4 @@ enum DivSizeUnit implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivSizeUnit resolve(DivVariableContext context) => this;
 }

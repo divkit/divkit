@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivEvaluableType implements Resolvable {
+enum DivEvaluableType {
   string('string'),
   integer('integer'),
   number('number'),
@@ -138,7 +138,4 @@ enum DivEvaluableType implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivEvaluableType resolve(DivVariableContext context) => this;
 }

@@ -50,7 +50,7 @@ class DivStateModel with EquatableMixin {
       ];
 }
 
-extension DivStateBinder on DivState {
+extension DivStateConverter on DivState {
   String resolveDivId(BuildContext context) {
     final inheritedDivId = read<DivStateId>(context)?.id;
 
@@ -69,13 +69,17 @@ extension DivStateBinder on DivState {
     return divId;
   }
 
-  DivStateModel bind(BuildContext context) {
+  DivStateModel resolve(BuildContext context) {
+    final divContext = read<DivContext>(context)!;
+    final state = divContext.stateManager;
+    final variables = divContext.variables;
+
     final resolvedId = resolveDivId(context);
-    final state = read<DivContext>(context)!.stateManager;
+
     return DivStateModel(
       divId: resolvedId,
       stateId: state.states[resolvedId],
-      defaultStateId: defaultStateId?.value,
+      defaultStateId: defaultStateId?.resolve(variables),
       states: states,
     );
   }

@@ -7,8 +7,8 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'with_default.dart';
 import 'without_default.dart';
 
-class EnumWithDefaultType extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class EnumWithDefaultType with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -76,5 +76,4 @@ class EnumWithDefaultType extends Resolvable with EquatableMixin {
       return null;
     }
   }
-  EnumWithDefaultType resolve(DivVariableContext context) { value.resolve(context); return this; }
 }

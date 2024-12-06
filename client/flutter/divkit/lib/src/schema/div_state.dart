@@ -33,7 +33,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// It contains sets of states for visual elements and switches between them.
-class DivState extends Resolvable with EquatableMixin implements DivBase {
+class DivState with EquatableMixin implements DivBase {
   const DivState({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -656,49 +656,9 @@ class DivState extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivState resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    clipToBounds.resolve(context);
-    columnSpan?.resolve(context);
-    defaultStateId?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    paddings.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    tryResolveList(states, (v) => v.resolve(context));
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionAnimationSelector.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
-class DivStateState extends Resolvable with EquatableMixin {
+class DivStateState with EquatableMixin {
   const DivStateState({
     this.animationIn,
     this.animationOut,
@@ -790,13 +750,5 @@ class DivStateState extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivStateState resolve(DivVariableContext context) {
-    animationIn?.resolve(context);
-    animationOut?.resolve(context);
-    tryResolveList(swipeOutActions, (v) => v.resolve(context));
-    return this;
   }
 }

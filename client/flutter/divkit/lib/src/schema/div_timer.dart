@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Timer.
-class DivTimer extends Resolvable with EquatableMixin {
+class DivTimer with EquatableMixin {
   const DivTimer({
     this.duration = const ValueExpression(0),
     this.endActions,
@@ -115,14 +115,5 @@ class DivTimer extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivTimer resolve(DivVariableContext context) {
-    duration.resolve(context);
-    tryResolveList(endActions, (v) => v.resolve(context));
-    tryResolveList(tickActions, (v) => v.resolve(context));
-    tickInterval?.resolve(context);
-    return this;
   }
 }

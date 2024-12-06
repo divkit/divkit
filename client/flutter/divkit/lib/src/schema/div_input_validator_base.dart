@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivInputValidatorBase extends Resolvable with EquatableMixin {
+class DivInputValidatorBase with EquatableMixin {
   const DivInputValidatorBase({
     this.allowEmpty = const ValueExpression(false),
     this.labelId,
@@ -64,12 +64,5 @@ class DivInputValidatorBase extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivInputValidatorBase resolve(DivVariableContext context) {
-    allowEmpty.resolve(context);
-    labelId?.resolve(context);
-    return this;
   }
 }

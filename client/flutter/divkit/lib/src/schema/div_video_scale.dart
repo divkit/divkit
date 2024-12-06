@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivVideoScale implements Resolvable {
+enum DivVideoScale {
   fill('fill'),
   noScale('no_scale'),
   fit('fit');
@@ -72,7 +72,4 @@ enum DivVideoScale implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivVideoScale resolve(DivVariableContext context) => this;
 }

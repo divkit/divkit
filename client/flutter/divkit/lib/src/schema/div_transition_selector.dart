@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivTransitionSelector implements Resolvable {
+enum DivTransitionSelector {
   none('none'),
   dataChange('data_change'),
   stateChange('state_change'),
@@ -83,7 +83,4 @@ enum DivTransitionSelector implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTransitionSelector resolve(DivVariableContext context) => this;
 }

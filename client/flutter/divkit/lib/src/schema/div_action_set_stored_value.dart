@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Temporarily saves the variable in storage.
-class DivActionSetStoredValue extends Resolvable with EquatableMixin {
+class DivActionSetStoredValue with EquatableMixin {
   const DivActionSetStoredValue({
     required this.lifetime,
     required this.name,
@@ -73,13 +73,5 @@ class DivActionSetStoredValue extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionSetStoredValue resolve(DivVariableContext context) {
-    lifetime.resolve(context);
-    name.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

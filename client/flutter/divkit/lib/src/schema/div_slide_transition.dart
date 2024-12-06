@@ -7,9 +7,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Slide animation.
-class DivSlideTransition extends Resolvable
-    with EquatableMixin
-    implements DivTransitionBase {
+class DivSlideTransition with EquatableMixin implements DivTransitionBase {
   const DivSlideTransition({
     this.distance,
     this.duration = const ValueExpression(200),
@@ -117,19 +115,9 @@ class DivSlideTransition extends Resolvable
       return null;
     }
   }
-
-  @override
-  DivSlideTransition resolve(DivVariableContext context) {
-    distance?.resolve(context);
-    duration.resolve(context);
-    edge.resolve(context);
-    interpolator.resolve(context);
-    startDelay.resolve(context);
-    return this;
-  }
 }
 
-enum DivSlideTransitionEdge implements Resolvable {
+enum DivSlideTransitionEdge {
   left('left'),
   top('top'),
   right('right'),
@@ -210,7 +198,4 @@ enum DivSlideTransitionEdge implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivSlideTransitionEdge resolve(DivVariableContext context) => this;
 }

@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class UrlValue extends Resolvable with EquatableMixin {
+class UrlValue with EquatableMixin {
   const UrlValue({
     required this.value,
   });
@@ -42,11 +42,5 @@ class UrlValue extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  UrlValue resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

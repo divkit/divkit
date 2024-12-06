@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Page width (%).
-class DivPageSize extends Resolvable with EquatableMixin {
+class DivPageSize with EquatableMixin {
   const DivPageSize({
     required this.pageWidth,
   });
@@ -47,11 +47,5 @@ class DivPageSize extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPageSize resolve(DivVariableContext context) {
-    pageWidth.resolve(context);
-    return this;
   }
 }

@@ -251,21 +251,6 @@ class DartProperty(Property):
             return f"safeParseObjects{expr}(json['{self.name}']," \
                    f"(v) => {strategy}, {fallback})"
 
-    def get_resolve_strategy(self) -> Optional[str]:
-        prop_type = cast(DartPropertyType, self.property_type)
-        option = '?' if self.optional else ''
-        name = utils.lower_camel_case(self.name)
-
-        if {"item", "items", "div"}.__contains__(name):
-            return
-        if self.supports_expressions:
-            return f'{name}{option}.resolve(context);'
-        else:
-            if prop_type.is_class():
-                return f'{name}{option}.resolve(context);'
-            elif prop_type.is_list():
-                return f'tryResolveList({name}, (v) => v.resolve(context));'
-
     @property
     def fallback_declaration(self) -> str:
         prop_type = cast(DartPropertyType, self.property_type)

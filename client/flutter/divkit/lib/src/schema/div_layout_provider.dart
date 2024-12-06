@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivLayoutProvider extends Resolvable with EquatableMixin {
+class DivLayoutProvider with EquatableMixin {
   const DivLayoutProvider({
     this.heightVariableName,
     this.widthVariableName,
@@ -53,10 +53,5 @@ class DivLayoutProvider extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivLayoutProvider resolve(DivVariableContext context) {
-    return this;
   }
 }

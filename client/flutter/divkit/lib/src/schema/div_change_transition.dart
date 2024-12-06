@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_change_bounds_transition.dart';
 import 'package:divkit/src/schema/div_change_set_transition.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivChangeTransition extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivChangeTransition with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -90,11 +89,5 @@ class DivChangeTransition extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivChangeTransition resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

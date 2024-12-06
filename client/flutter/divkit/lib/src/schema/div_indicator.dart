@@ -34,7 +34,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Progress indicator for [pager](div-pager.md).
-class DivIndicator extends Resolvable with EquatableMixin implements DivBase {
+class DivIndicator with EquatableMixin implements DivBase {
   const DivIndicator({
     this.accessibility = const DivAccessibility(),
     this.activeItemColor = const ValueExpression(Color(0xFFFFDC60)),
@@ -752,56 +752,9 @@ class DivIndicator extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivIndicator resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    activeItemColor.resolve(context);
-    activeItemSize.resolve(context);
-    activeShape?.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    animation.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    inactiveItemColor.resolve(context);
-    inactiveMinimumShape?.resolve(context);
-    inactiveShape?.resolve(context);
-    itemsPlacement?.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    minimumItemSize.resolve(context);
-    paddings.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    shape.resolve(context);
-    spaceBetweenCenters.resolve(context);
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
-enum DivIndicatorAnimation implements Resolvable {
+enum DivIndicatorAnimation {
   scale('scale'),
   worm('worm'),
   slider('slider');
@@ -871,7 +824,4 @@ enum DivIndicatorAnimation implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivIndicatorAnimation resolve(DivVariableContext context) => this;
 }

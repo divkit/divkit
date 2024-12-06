@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// The size of an element adjusts to its contents.
-class DivWrapContentSize extends Resolvable with EquatableMixin {
+class DivWrapContentSize with EquatableMixin {
   const DivWrapContentSize({
     this.constrained,
     this.maxSize,
@@ -67,17 +67,9 @@ class DivWrapContentSize extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivWrapContentSize resolve(DivVariableContext context) {
-    constrained?.resolve(context);
-    maxSize?.resolve(context);
-    minSize?.resolve(context);
-    return this;
-  }
 }
 
-class DivWrapContentSizeConstraintSize extends Resolvable with EquatableMixin {
+class DivWrapContentSizeConstraintSize with EquatableMixin {
   const DivWrapContentSizeConstraintSize({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -134,12 +126,5 @@ class DivWrapContentSizeConstraintSize extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivWrapContentSizeConstraintSize resolve(DivVariableContext context) {
-    unit.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

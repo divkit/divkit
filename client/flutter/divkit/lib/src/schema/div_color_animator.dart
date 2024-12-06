@@ -10,9 +10,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Color animator.
-class DivColorAnimator extends Resolvable
-    with EquatableMixin
-    implements DivAnimatorBase {
+class DivColorAnimator with EquatableMixin implements DivAnimatorBase {
   const DivColorAnimator({
     this.cancelActions,
     this.direction = const ValueExpression(DivAnimationDirection.normal),
@@ -220,19 +218,5 @@ class DivColorAnimator extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivColorAnimator resolve(DivVariableContext context) {
-    tryResolveList(cancelActions, (v) => v.resolve(context));
-    direction.resolve(context);
-    duration.resolve(context);
-    tryResolveList(endActions, (v) => v.resolve(context));
-    endValue.resolve(context);
-    interpolator.resolve(context);
-    repeatCount.resolve(context);
-    startDelay.resolve(context);
-    startValue?.resolve(context);
-    return this;
   }
 }

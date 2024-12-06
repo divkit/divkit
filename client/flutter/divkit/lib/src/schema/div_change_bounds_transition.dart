@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element position and size change animation.
-class DivChangeBoundsTransition extends Resolvable
+class DivChangeBoundsTransition
     with EquatableMixin
     implements DivTransitionBase {
   const DivChangeBoundsTransition({
@@ -86,13 +86,5 @@ class DivChangeBoundsTransition extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivChangeBoundsTransition resolve(DivVariableContext context) {
-    duration.resolve(context);
-    interpolator.resolve(context);
-    startDelay.resolve(context);
-    return this;
   }
 }

@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Pages are stacked during animation overlapping one another.
-class DivPageTransformationOverlap extends Resolvable with EquatableMixin {
+class DivPageTransformationOverlap with EquatableMixin {
   const DivPageTransformationOverlap({
     this.interpolator =
         const ValueExpression(DivAnimationInterpolator.easeInOut),
@@ -131,16 +131,5 @@ class DivPageTransformationOverlap extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPageTransformationOverlap resolve(DivVariableContext context) {
-    interpolator.resolve(context);
-    nextPageAlpha.resolve(context);
-    nextPageScale.resolve(context);
-    previousPageAlpha.resolve(context);
-    previousPageScale.resolve(context);
-    reversedStackingOrder.resolve(context);
-    return this;
   }
 }

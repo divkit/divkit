@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Character range border.
-class DivTextRangeBorder extends Resolvable with EquatableMixin {
+class DivTextRangeBorder with EquatableMixin {
   const DivTextRangeBorder({
     this.cornerRadius,
     this.stroke,
@@ -54,12 +54,5 @@ class DivTextRangeBorder extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivTextRangeBorder resolve(DivVariableContext context) {
-    cornerRadius?.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

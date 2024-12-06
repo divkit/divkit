@@ -4,7 +4,7 @@ import 'package:divkit/src/schema/div.dart';
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
+class DivCollectionItemBuilder with EquatableMixin {
   const DivCollectionItemBuilder({
     required this.data,
     this.dataElementName = "it",
@@ -79,16 +79,9 @@ class DivCollectionItemBuilder extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivCollectionItemBuilder resolve(DivVariableContext context) {
-    data.resolve(context);
-    tryResolveList(prototypes, (v) => v.resolve(context));
-    return this;
-  }
 }
 
-class DivCollectionItemBuilderPrototype extends Resolvable with EquatableMixin {
+class DivCollectionItemBuilderPrototype with EquatableMixin {
   const DivCollectionItemBuilderPrototype({
     required this.div,
     this.id,
@@ -153,12 +146,5 @@ class DivCollectionItemBuilderPrototype extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivCollectionItemBuilderPrototype resolve(DivVariableContext context) {
-    id?.resolve(context);
-    selector.resolve(context);
-    return this;
   }
 }

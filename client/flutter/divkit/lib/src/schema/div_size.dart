@@ -3,11 +3,10 @@
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_match_parent_size.dart';
 import 'package:divkit/src/schema/div_wrap_content_size.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivSize extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivSize with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -115,11 +114,5 @@ class DivSize extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivSize resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Hides the tooltip.
-class DivActionHideTooltip extends Resolvable with EquatableMixin {
+class DivActionHideTooltip with EquatableMixin {
   const DivActionHideTooltip({
     required this.id,
   });
@@ -45,11 +45,5 @@ class DivActionHideTooltip extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionHideTooltip resolve(DivVariableContext context) {
-    id.resolve(context);
-    return this;
   }
 }

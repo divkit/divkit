@@ -27,17 +27,15 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
   void initState() {
     super.initState();
     final divContext = read<DivContext>(context)!;
-    widget.data.resolve(divContext.variables);
+    final variables = divContext.variables;
     value = widget.data.init(context);
 
     final length = widget.data.items?.length ?? 0;
-    currentPage = widget.data.defaultItem.value.clamp(0, length);
+    currentPage = widget.data.defaultItem.resolve(variables).clamp(0, length);
 
     final id = widget.data.id;
-    final variables = divContext.variableManager;
-
-    if (id != null && !variables.context.current.containsKey(id)) {
-      variables.putVariable(id, currentPage);
+    if (id != null && !variables.current.containsKey(id)) {
+      divContext.variableManager.putVariable(id, currentPage);
     }
 
     controller = PageController(initialPage: currentPage);
@@ -47,17 +45,13 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (stream == null) {
-      final divContext = watch<DivContext>(context)!;
-      stream = divContext.variableManager.watch((values) {
-        widget.data.resolve(values);
-        return widget.data.bind(
-          context,
-          controller,
-          () => currentPage,
-        );
-      });
-    }
+    stream ??= watch<DivContext>(context)!.variableManager.watch((values) {
+      return widget.data.resolve(
+        context,
+        controller,
+        () => currentPage,
+      );
+    });
   }
 
   @override
@@ -65,17 +59,14 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
-      final divContext = watch<DivContext>(context)!;
-      widget.data.resolve(divContext.variables);
       value = widget.data.init(context);
-      stream = divContext.variableManager.watch((values) {
-        widget.data.resolve(values);
-        return widget.data.bind(
-          context,
-          controller,
-          () => currentPage,
-        );
-      });
+      stream = watch<DivContext>(context)!.variableManager.watch(
+            (values) => widget.data.resolve(
+              context,
+              controller,
+              () => currentPage,
+            ),
+          );
     }
   }
 

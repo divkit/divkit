@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivImageScale implements Resolvable {
+enum DivImageScale {
   fill('fill'),
   noScale('no_scale'),
   fit('fit'),
@@ -83,7 +83,4 @@ enum DivImageScale implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivImageScale resolve(DivVariableContext context) => this;
 }

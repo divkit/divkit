@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Applies a new appearance to the content in `div-state'.
-class DivActionSetState extends Resolvable with EquatableMixin {
+class DivActionSetState with EquatableMixin {
   const DivActionSetState({
     required this.stateId,
     this.temporary = const ValueExpression(true),
@@ -65,12 +65,5 @@ class DivActionSetState extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionSetState resolve(DivVariableContext context) {
-    stateId.resolve(context);
-    temporary.resolve(context);
-    return this;
   }
 }

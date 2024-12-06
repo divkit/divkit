@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element animation parameters.
-class DivAnimation extends Resolvable with EquatableMixin {
+class DivAnimation with EquatableMixin {
   const DivAnimation({
     this.duration = const ValueExpression(300),
     this.endValue,
@@ -155,21 +155,9 @@ class DivAnimation extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivAnimation resolve(DivVariableContext context) {
-    duration.resolve(context);
-    endValue?.resolve(context);
-    interpolator.resolve(context);
-    name.resolve(context);
-    repeat.resolve(context);
-    startDelay.resolve(context);
-    startValue?.resolve(context);
-    return this;
-  }
 }
 
-enum DivAnimationName implements Resolvable {
+enum DivAnimationName {
   fade('fade'),
   translate('translate'),
   scale('scale'),
@@ -272,7 +260,4 @@ enum DivAnimationName implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivAnimationName resolve(DivVariableContext context) => this;
 }

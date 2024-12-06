@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stroke.
-class DivStroke extends Resolvable with EquatableMixin {
+class DivStroke with EquatableMixin {
   const DivStroke({
     required this.color,
     this.unit = const ValueExpression(DivSizeUnit.dp),
@@ -73,13 +73,5 @@ class DivStroke extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivStroke resolve(DivVariableContext context) {
-    color.resolve(context);
-    unit.resolve(context);
-    width.resolve(context);
-    return this;
   }
 }

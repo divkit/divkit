@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithoutProperties extends Resolvable with EquatableMixin  {
+class EntityWithoutProperties with EquatableMixin  {
   const EntityWithoutProperties();
 
   static const type = "entity_without_properties";
@@ -21,6 +21,4 @@ class EntityWithoutProperties extends Resolvable with EquatableMixin  {
     }
     return const EntityWithoutProperties();
   }
-
-  EntityWithoutProperties resolve(DivVariableContext context) => this;
 }

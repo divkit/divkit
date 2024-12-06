@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivAnimationDirection implements Resolvable {
+enum DivAnimationDirection {
   normal('normal'),
   reverse('reverse'),
   alternate('alternate'),
@@ -83,7 +83,4 @@ enum DivAnimationDirection implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivAnimationDirection resolve(DivVariableContext context) => this;
 }

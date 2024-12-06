@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithOptionalStringEnumProperty extends Resolvable with EquatableMixin  {
+class EntityWithOptionalStringEnumProperty with EquatableMixin  {
   const EntityWithOptionalStringEnumProperty({
     this.property,
   });
@@ -37,14 +37,9 @@ class EntityWithOptionalStringEnumProperty extends Resolvable with EquatableMixi
       return null;
     }
   }
-
-  EntityWithOptionalStringEnumProperty resolve(DivVariableContext context) {
-    property?.resolve(context);
-    return this;
-  }
 }
 
-enum EntityWithOptionalStringEnumPropertyProperty implements Resolvable {
+enum EntityWithOptionalStringEnumPropertyProperty {
   first('first'),
   second('second');
 
@@ -99,5 +94,4 @@ enum EntityWithOptionalStringEnumPropertyProperty implements Resolvable {
       return null;
     }
   }
-  EntityWithOptionalStringEnumPropertyProperty resolve(DivVariableContext context) => this;
 }

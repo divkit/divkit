@@ -29,6 +29,7 @@ import 'package:divkit/src/schema/div_text_alignment_vertical.dart';
 import 'package:divkit/src/schema/div_text_gradient.dart';
 import 'package:divkit/src/schema/div_text_range_background.dart';
 import 'package:divkit/src/schema/div_text_range_border.dart';
+import 'package:divkit/src/schema/div_text_range_mask.dart';
 import 'package:divkit/src/schema/div_tooltip.dart';
 import 'package:divkit/src/schema/div_transform.dart';
 import 'package:divkit/src/schema/div_transition_trigger.dart';
@@ -41,7 +42,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Text.
-class DivText extends Resolvable with EquatableMixin implements DivBase {
+class DivText with EquatableMixin implements DivBase {
   const DivText({
     this.accessibility = const DivAccessibility(),
     this.action,
@@ -232,10 +233,10 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivSize height;
 
-  /// Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverEndActions;
 
-  /// Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverStartActions;
 
   /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -276,10 +277,10 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivEdgeInsets paddings;
 
-  /// Actions performed when an element is released.
+  /// Actions performed after clicking/tapping an element.
   final Arr<DivAction>? pressEndActions;
 
-  /// Actions performed when an element is pressed.
+  /// Actions performed at the start of a click/tap on an element.
   final Arr<DivAction>? pressStartActions;
 
   /// A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
@@ -1117,81 +1118,10 @@ class DivText extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivText resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    action?.resolve(context);
-    actionAnimation.resolve(context);
-    tryResolveList(actions, (v) => v.resolve(context));
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    autoEllipsize?.resolve(context);
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(doubletapActions, (v) => v.resolve(context));
-    ellipsis?.resolve(context);
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    focusedTextColor?.resolve(context);
-    fontFamily?.resolve(context);
-    fontFeatureSettings?.resolve(context);
-    fontSize.resolve(context);
-    fontSizeUnit.resolve(context);
-    fontWeight.resolve(context);
-    fontWeightValue?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    tryResolveList(hoverEndActions, (v) => v.resolve(context));
-    tryResolveList(hoverStartActions, (v) => v.resolve(context));
-    tryResolveList(images, (v) => v.resolve(context));
-    layoutProvider?.resolve(context);
-    letterSpacing.resolve(context);
-    lineHeight?.resolve(context);
-    tryResolveList(longtapActions, (v) => v.resolve(context));
-    margins.resolve(context);
-    maxLines?.resolve(context);
-    minHiddenLines?.resolve(context);
-    paddings.resolve(context);
-    tryResolveList(pressEndActions, (v) => v.resolve(context));
-    tryResolveList(pressStartActions, (v) => v.resolve(context));
-    tryResolveList(ranges, (v) => v.resolve(context));
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    selectable.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    strike.resolve(context);
-    text.resolve(context);
-    textAlignmentHorizontal.resolve(context);
-    textAlignmentVertical.resolve(context);
-    textColor.resolve(context);
-    textGradient?.resolve(context);
-    textShadow?.resolve(context);
-    tightenWidth.resolve(context);
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    truncate.resolve(context);
-    underline.resolve(context);
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
 /// Additional parameters of the character range.
-class DivTextRange extends Resolvable with EquatableMixin {
+class DivTextRange with EquatableMixin {
   const DivTextRange({
     this.actions,
     this.alignmentVertical,
@@ -1206,6 +1136,7 @@ class DivTextRange extends Resolvable with EquatableMixin {
     this.fontWeightValue,
     this.letterSpacing,
     this.lineHeight,
+    this.mask,
     this.start = const ValueExpression(0),
     this.strike,
     this.textColor,
@@ -1263,6 +1194,9 @@ class DivTextRange extends Resolvable with EquatableMixin {
   // constraint: number >= 0
   final Expression<int>? lineHeight;
 
+  /// A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+  final DivTextRangeMask? mask;
+
   /// Ordinal number of a character which the range begins from. The first character has a number `0`.
   // constraint: number >= 0; default value: 0
   final Expression<int> start;
@@ -1298,6 +1232,7 @@ class DivTextRange extends Resolvable with EquatableMixin {
         fontWeightValue,
         letterSpacing,
         lineHeight,
+        mask,
         start,
         strike,
         textColor,
@@ -1320,6 +1255,7 @@ class DivTextRange extends Resolvable with EquatableMixin {
     Expression<int>? Function()? fontWeightValue,
     Expression<double>? Function()? letterSpacing,
     Expression<int>? Function()? lineHeight,
+    DivTextRangeMask? Function()? mask,
     Expression<int>? start,
     Expression<DivLineStyle>? Function()? strike,
     Expression<Color>? Function()? textColor,
@@ -1348,6 +1284,7 @@ class DivTextRange extends Resolvable with EquatableMixin {
         letterSpacing:
             letterSpacing != null ? letterSpacing.call() : this.letterSpacing,
         lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
+        mask: mask != null ? mask.call() : this.mask,
         start: start ?? this.start,
         strike: strike != null ? strike.call() : this.strike,
         textColor: textColor != null ? textColor.call() : this.textColor,
@@ -1418,6 +1355,10 @@ class DivTextRange extends Resolvable with EquatableMixin {
         lineHeight: safeParseIntExpr(
           json['line_height'],
         ),
+        mask: safeParseObject(
+          json['mask'],
+          parse: DivTextRangeMask.fromJson,
+        ),
         start: reqVProp<int>(
           safeParseIntExpr(
             json['start'],
@@ -1449,34 +1390,10 @@ class DivTextRange extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTextRange resolve(DivVariableContext context) {
-    tryResolveList(actions, (v) => v.resolve(context));
-    alignmentVertical?.resolve(context);
-    background?.resolve(context);
-    border?.resolve(context);
-    end?.resolve(context);
-    fontFamily?.resolve(context);
-    fontFeatureSettings?.resolve(context);
-    fontSize?.resolve(context);
-    fontSizeUnit.resolve(context);
-    fontWeight?.resolve(context);
-    fontWeightValue?.resolve(context);
-    letterSpacing?.resolve(context);
-    lineHeight?.resolve(context);
-    start.resolve(context);
-    strike?.resolve(context);
-    textColor?.resolve(context);
-    textShadow?.resolve(context);
-    topOffset?.resolve(context);
-    underline?.resolve(context);
-    return this;
-  }
 }
 
 /// Image.
-class DivTextImage extends Resolvable with EquatableMixin {
+class DivTextImage with EquatableMixin {
   const DivTextImage({
     this.accessibility = const DivTextImageAccessibility(),
     this.alignmentVertical =
@@ -1669,24 +1586,9 @@ class DivTextImage extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTextImage resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentVertical.resolve(context);
-    height.resolve(context);
-    indexingDirection.resolve(context);
-    preloadRequired.resolve(context);
-    start.resolve(context);
-    tintColor?.resolve(context);
-    tintMode.resolve(context);
-    url.resolve(context);
-    width.resolve(context);
-    return this;
-  }
 }
 
-class DivTextImageAccessibility extends Resolvable with EquatableMixin {
+class DivTextImageAccessibility with EquatableMixin {
   const DivTextImageAccessibility({
     this.description,
     this.type = DivTextImageAccessibilityType.auto,
@@ -1740,16 +1642,9 @@ class DivTextImageAccessibility extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTextImageAccessibility resolve(DivVariableContext context) {
-    description?.resolve(context);
-    type.resolve(context);
-    return this;
-  }
 }
 
-enum DivTextImageAccessibilityType implements Resolvable {
+enum DivTextImageAccessibilityType {
   none('none'),
   button('button'),
   image('image'),
@@ -1841,12 +1736,9 @@ enum DivTextImageAccessibilityType implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTextImageAccessibilityType resolve(DivVariableContext context) => this;
 }
 
-enum DivTextImageIndexingDirection implements Resolvable {
+enum DivTextImageIndexingDirection {
   normal('normal'),
   reversed('reversed');
 
@@ -1905,13 +1797,10 @@ enum DivTextImageIndexingDirection implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTextImageIndexingDirection resolve(DivVariableContext context) => this;
 }
 
 /// Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
-class DivTextEllipsis extends Resolvable with EquatableMixin {
+class DivTextEllipsis with EquatableMixin {
   const DivTextEllipsis({
     this.actions,
     this.images,
@@ -1999,18 +1888,9 @@ class DivTextEllipsis extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTextEllipsis resolve(DivVariableContext context) {
-    tryResolveList(actions, (v) => v.resolve(context));
-    tryResolveList(images, (v) => v.resolve(context));
-    tryResolveList(ranges, (v) => v.resolve(context));
-    text.resolve(context);
-    return this;
-  }
 }
 
-enum DivTextTruncate implements Resolvable {
+enum DivTextTruncate {
   none('none'),
   start('start'),
   end('end'),
@@ -2091,7 +1971,4 @@ enum DivTextTruncate implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTextTruncate resolve(DivVariableContext context) => this;
 }

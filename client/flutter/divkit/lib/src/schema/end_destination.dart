@@ -1,10 +1,9 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Specifies the end of the container as the scrolling end position.
-class EndDestination extends Resolvable with EquatableMixin {
+class EndDestination with EquatableMixin {
   const EndDestination();
 
   static const type = "end";
@@ -22,7 +21,4 @@ class EndDestination extends Resolvable with EquatableMixin {
     }
     return const EndDestination();
   }
-
-  @override
-  EndDestination resolve(DivVariableContext context) => this;
 }

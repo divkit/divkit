@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Circle.
-class DivCircleShape extends Resolvable with EquatableMixin {
+class DivCircleShape with EquatableMixin {
   const DivCircleShape({
     this.backgroundColor,
     this.radius = const DivFixedSize(
@@ -81,13 +81,5 @@ class DivCircleShape extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivCircleShape resolve(DivVariableContext context) {
-    backgroundColor?.resolve(context);
-    radius.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

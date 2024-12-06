@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithComplexProperty extends Resolvable with EquatableMixin  {
+class EntityWithComplexProperty with EquatableMixin  {
   const EntityWithComplexProperty({
     required this.property,
   });
@@ -37,15 +37,10 @@ class EntityWithComplexProperty extends Resolvable with EquatableMixin  {
       return null;
     }
   }
-
-  EntityWithComplexProperty resolve(DivVariableContext context) {
-    property.resolve(context);
-    return this;
-  }
 }
 
 
-class EntityWithComplexPropertyProperty extends Resolvable with EquatableMixin  {
+class EntityWithComplexPropertyProperty with EquatableMixin  {
   const EntityWithComplexPropertyProperty({
     required this.value,
   });
@@ -75,10 +70,5 @@ class EntityWithComplexPropertyProperty extends Resolvable with EquatableMixin  
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithComplexPropertyProperty resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

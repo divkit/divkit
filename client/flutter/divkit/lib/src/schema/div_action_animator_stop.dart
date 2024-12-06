@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stops the specified animator.
-class DivActionAnimatorStop extends Resolvable with EquatableMixin {
+class DivActionAnimatorStop with EquatableMixin {
   const DivActionAnimatorStop({
     required this.animatorId,
   });
@@ -45,10 +45,5 @@ class DivActionAnimatorStop extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionAnimatorStop resolve(DivVariableContext context) {
-    return this;
   }
 }

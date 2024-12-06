@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets margins without regard to screen properties.
-class DivAbsoluteEdgeInsets extends Resolvable with EquatableMixin {
+class DivAbsoluteEdgeInsets with EquatableMixin {
   const DivAbsoluteEdgeInsets({
     this.bottom = const ValueExpression(0),
     this.left = const ValueExpression(0),
@@ -90,14 +90,5 @@ class DivAbsoluteEdgeInsets extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivAbsoluteEdgeInsets resolve(DivVariableContext context) {
-    bottom.resolve(context);
-    left.resolve(context);
-    right.resolve(context);
-    top.resolve(context);
-    return this;
   }
 }

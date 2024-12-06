@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithArrayWithTransform extends Resolvable with EquatableMixin  {
+class EntityWithArrayWithTransform with EquatableMixin  {
   const EntityWithArrayWithTransform({
     required this.array,
   });
@@ -37,10 +37,5 @@ class EntityWithArrayWithTransform extends Resolvable with EquatableMixin  {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithArrayWithTransform resolve(DivVariableContext context) {
-    array.resolve(context);
-    return this;
   }
 }

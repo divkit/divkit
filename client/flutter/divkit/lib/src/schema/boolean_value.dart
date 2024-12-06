@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class BooleanValue extends Resolvable with EquatableMixin {
+class BooleanValue with EquatableMixin {
   const BooleanValue({
     required this.value,
   });
@@ -42,11 +42,5 @@ class BooleanValue extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  BooleanValue resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

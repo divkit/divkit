@@ -9,7 +9,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Root structure.
-class DivData extends Resolvable with EquatableMixin {
+class DivData with EquatableMixin {
   const DivData({
     required this.logId,
     required this.states,
@@ -137,19 +137,9 @@ class DivData extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivData resolve(DivVariableContext context) {
-    tryResolveList(states, (v) => v.resolve(context));
-    tryResolveList(timers, (v) => v.resolve(context));
-    transitionAnimationSelector.resolve(context);
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    return this;
-  }
 }
 
-class DivDataState extends Resolvable with EquatableMixin {
+class DivDataState with EquatableMixin {
   const DivDataState({
     required this.div,
     required this.stateId,
@@ -202,10 +192,5 @@ class DivDataState extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivDataState resolve(DivVariableContext context) {
-    return this;
   }
 }

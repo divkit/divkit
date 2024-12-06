@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element shadow.
-class DivShadow extends Resolvable with EquatableMixin {
+class DivShadow with EquatableMixin {
   const DivShadow({
     this.alpha = const ValueExpression(0.19),
     this.blur = const ValueExpression(2),
@@ -90,14 +90,5 @@ class DivShadow extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivShadow resolve(DivVariableContext context) {
-    alpha.resolve(context);
-    blur.resolve(context);
-    color.resolve(context);
-    offset.resolve(context);
-    return this;
   }
 }

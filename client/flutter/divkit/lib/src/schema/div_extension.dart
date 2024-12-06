@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Extension that affects an element.
-class DivExtension extends Resolvable with EquatableMixin {
+class DivExtension with EquatableMixin {
   const DivExtension({
     required this.id,
     this.params,
@@ -53,10 +53,5 @@ class DivExtension extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivExtension resolve(DivVariableContext context) {
-    return this;
   }
 }

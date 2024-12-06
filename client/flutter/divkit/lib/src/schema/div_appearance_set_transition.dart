@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A set of animations to be applied simultaneously.
-class DivAppearanceSetTransition extends Resolvable with EquatableMixin {
+class DivAppearanceSetTransition with EquatableMixin {
   const DivAppearanceSetTransition({
     required this.items,
   });
@@ -53,10 +53,5 @@ class DivAppearanceSetTransition extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivAppearanceSetTransition resolve(DivVariableContext context) {
-    return this;
   }
 }

@@ -7,7 +7,7 @@ import 'entity_with_string_enum_property.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithEntityProperty extends Resolvable with EquatableMixin  {
+class EntityWithEntityProperty with EquatableMixin  {
   const EntityWithEntityProperty({
     this.entity = const Entity.entityWithStringEnumProperty(const EntityWithStringEnumProperty(property: ValueExpression(EntityWithStringEnumPropertyProperty.second,),),),
   });
@@ -39,10 +39,5 @@ class EntityWithEntityProperty extends Resolvable with EquatableMixin  {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithEntityProperty resolve(DivVariableContext context) {
-    entity?.resolve(context);
-    return this;
   }
 }

@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
-class DivStretchIndicatorItemPlacement extends Resolvable with EquatableMixin {
+class DivStretchIndicatorItemPlacement with EquatableMixin {
   const DivStretchIndicatorItemPlacement({
     this.itemSpacing = const DivFixedSize(
       value: ValueExpression(
@@ -72,12 +72,5 @@ class DivStretchIndicatorItemPlacement extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivStretchIndicatorItemPlacement resolve(DivVariableContext context) {
-    itemSpacing.resolve(context);
-    maxVisibleItems.resolve(context);
-    return this;
   }
 }

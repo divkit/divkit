@@ -8,11 +8,10 @@ import 'package:divkit/src/schema/integer_variable.dart';
 import 'package:divkit/src/schema/number_variable.dart';
 import 'package:divkit/src/schema/string_variable.dart';
 import 'package:divkit/src/schema/url_variable.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivVariable extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivVariable with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -240,11 +239,5 @@ class DivVariable extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivVariable resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

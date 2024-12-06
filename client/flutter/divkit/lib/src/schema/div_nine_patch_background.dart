@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Image in 9-patch format (https://developer.android.com/studio/write/draw9patch).
-class DivNinePatchBackground extends Resolvable with EquatableMixin {
+class DivNinePatchBackground with EquatableMixin {
   const DivNinePatchBackground({
     required this.imageUrl,
     this.insets = const DivAbsoluteEdgeInsets(),
@@ -61,12 +61,5 @@ class DivNinePatchBackground extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivNinePatchBackground resolve(DivVariableContext context) {
-    imageUrl.resolve(context);
-    insets.resolve(context);
-    return this;
   }
 }

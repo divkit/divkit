@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Linear gradient.
-class DivLinearGradient extends Resolvable with EquatableMixin {
+class DivLinearGradient with EquatableMixin {
   const DivLinearGradient({
     this.angle = const ValueExpression(0),
     required this.colors,
@@ -64,12 +64,5 @@ class DivLinearGradient extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivLinearGradient resolve(DivVariableContext context) {
-    angle.resolve(context);
-    colors.resolve(context);
-    return this;
   }
 }

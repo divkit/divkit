@@ -41,7 +41,6 @@ class _DivInputWidget extends State<DivInputWidget> {
     super.initState();
 
     final divContext = read<DivContext>(context)!;
-    widget.data.resolve(divContext.variables);
     controller.addListener(() {
       if (divContext.variables.current[widget.data.textVariable] !=
           controller.text) {
@@ -51,20 +50,16 @@ class _DivInputWidget extends State<DivInputWidget> {
         );
       }
     });
-    value = widget.data.bind(context, controller);
+    value = widget.data.resolve(context, controller);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (stream == null) {
-      final divContext = watch<DivContext>(context)!;
-      stream = divContext.variableManager.watch((values) {
-        widget.data.resolve(values);
-        return widget.data.bind(context, controller);
-      });
-    }
+    stream ??= watch<DivContext>(context)!.variableManager.watch(
+          (values) => widget.data.resolve(context, controller),
+        );
   }
 
   @override
@@ -73,8 +68,6 @@ class _DivInputWidget extends State<DivInputWidget> {
 
     if (widget.data != oldWidget.data) {
       final divContext = watch<DivContext>(context)!;
-      widget.data.resolve(divContext.variables);
-
       controller.clear();
       controller.addListener(() {
         if (divContext.variables.current[widget.data.textVariable] !=
@@ -86,10 +79,9 @@ class _DivInputWidget extends State<DivInputWidget> {
         }
       });
 
-      value = widget.data.bind(context, controller);
+      value = widget.data.resolve(context, controller);
       stream ??= divContext.variableManager.watch((values) {
-        widget.data.resolve(values);
-        return widget.data.bind(context, controller);
+        return widget.data.resolve(context, controller);
       });
     }
   }

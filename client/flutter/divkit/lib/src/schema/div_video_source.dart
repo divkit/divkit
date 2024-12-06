@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivVideoSource extends Resolvable with EquatableMixin {
+class DivVideoSource with EquatableMixin {
   const DivVideoSource({
     this.bitrate,
     required this.mimeType,
@@ -79,19 +79,10 @@ class DivVideoSource extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivVideoSource resolve(DivVariableContext context) {
-    bitrate?.resolve(context);
-    mimeType.resolve(context);
-    resolution?.resolve(context);
-    url.resolve(context);
-    return this;
-  }
 }
 
 /// Media file resolution.
-class DivVideoSourceResolution extends Resolvable with EquatableMixin {
+class DivVideoSourceResolution with EquatableMixin {
   const DivVideoSourceResolution({
     required this.height,
     required this.width,
@@ -147,12 +138,5 @@ class DivVideoSourceResolution extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivVideoSourceResolution resolve(DivVariableContext context) {
-    height.resolve(context);
-    width.resolve(context);
-    return this;
   }
 }

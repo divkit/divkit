@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Loads additional data in `div-patch` format and updates the current element.
-class DivActionDownload extends Resolvable with EquatableMixin {
+class DivActionDownload with EquatableMixin {
   const DivActionDownload({
     this.onFailActions,
     this.onSuccessActions,
@@ -81,13 +81,5 @@ class DivActionDownload extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionDownload resolve(DivVariableContext context) {
-    tryResolveList(onFailActions, (v) => v.resolve(context));
-    tryResolveList(onSuccessActions, (v) => v.resolve(context));
-    url.resolve(context);
-    return this;
   }
 }

@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A point with fixed coordinates.
-class DivPoint extends Resolvable with EquatableMixin {
+class DivPoint with EquatableMixin {
   const DivPoint({
     required this.x,
     required this.y,
@@ -59,12 +59,5 @@ class DivPoint extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPoint resolve(DivVariableContext context) {
-    x.resolve(context);
-    y.resolve(context);
-    return this;
   }
 }

@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// It defines an action when clicking on an element.
-class DivAction extends Resolvable with EquatableMixin {
+class DivAction with EquatableMixin {
   const DivAction({
     this.downloadCallbacks,
     this.isEnabled = const ValueExpression(true),
@@ -160,23 +160,9 @@ class DivAction extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivAction resolve(DivVariableContext context) {
-    downloadCallbacks?.resolve(context);
-    isEnabled.resolve(context);
-    logId.resolve(context);
-    logUrl?.resolve(context);
-    tryResolveList(menuItems, (v) => v.resolve(context));
-    referer?.resolve(context);
-    target?.resolve(context);
-    typed?.resolve(context);
-    url?.resolve(context);
-    return this;
-  }
 }
 
-class DivActionMenuItem extends Resolvable with EquatableMixin {
+class DivActionMenuItem with EquatableMixin {
   const DivActionMenuItem({
     this.action,
     this.actions,
@@ -243,17 +229,9 @@ class DivActionMenuItem extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivActionMenuItem resolve(DivVariableContext context) {
-    action?.resolve(context);
-    tryResolveList(actions, (v) => v.resolve(context));
-    text.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionTarget implements Resolvable {
+enum DivActionTarget {
   self('_self'),
   blank('_blank');
 
@@ -312,7 +290,4 @@ enum DivActionTarget implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivActionTarget resolve(DivVariableContext context) => this;
 }

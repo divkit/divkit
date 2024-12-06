@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/configuration.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
 
-class DivErrorWidget extends StatefulWidget {
+class DivErrorWidget extends StatelessWidget {
   static const errorColor = Color(0xFFFF0000);
 
   final String? error;
@@ -17,34 +17,26 @@ class DivErrorWidget extends StatefulWidget {
   });
 
   @override
-  State<DivErrorWidget> createState() => _DivErrorWidgetState();
-}
+  Widget build(BuildContext context) {
+    final showUnsupportedDivs =
+        watch<DivConfiguration>(context)?.showUnsupportedDivs ?? false;
 
-class _DivErrorWidgetState extends State<DivErrorWidget> {
-  @override
-  void initState() {
-    super.initState();
-    final divContext = read<DivContext>(context)!;
-    widget.data.resolve(divContext.variables);
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-      watch<DivConfiguration>(context)?.showUnsupportedDivs ?? false
-          ? DivBaseWidget(
-              data: widget.data,
-              child: Placeholder(
-                color: DivErrorWidget.errorColor,
-                child: Center(
-                  child: Material(
-                    type: MaterialType.transparency,
-                    child: Text(
-                      widget.error ?? '',
-                      style: const TextStyle(color: DivErrorWidget.errorColor),
-                    ),
+    return showUnsupportedDivs
+        ? DivBaseWidget(
+            data: data,
+            child: Placeholder(
+              color: DivErrorWidget.errorColor,
+              child: Center(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Text(
+                    error ?? '',
+                    style: const TextStyle(color: DivErrorWidget.errorColor),
                   ),
                 ),
               ),
-            )
-          : const SizedBox.shrink();
+            ),
+          )
+        : const SizedBox.shrink();
+  }
 }

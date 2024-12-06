@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_fixed_count.dart';
 import 'package:divkit/src/schema/div_infinity_count.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivCount extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivCount with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -90,11 +89,5 @@ class DivCount extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivCount resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

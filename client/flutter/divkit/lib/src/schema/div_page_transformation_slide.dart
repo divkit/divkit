@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Pages move without overlapping during pager scrolling.
-class DivPageTransformationSlide extends Resolvable with EquatableMixin {
+class DivPageTransformationSlide with EquatableMixin {
   const DivPageTransformationSlide({
     this.interpolator =
         const ValueExpression(DivAnimationInterpolator.easeInOut),
@@ -115,15 +115,5 @@ class DivPageTransformationSlide extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPageTransformationSlide resolve(DivVariableContext context) {
-    interpolator.resolve(context);
-    nextPageAlpha.resolve(context);
-    nextPageScale.resolve(context);
-    previousPageAlpha.resolve(context);
-    previousPageScale.resolve(context);
-    return this;
   }
 }

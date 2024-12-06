@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class WithDefault extends Resolvable with EquatableMixin  {
+class WithDefault with EquatableMixin  {
   const WithDefault();
 
   static const type = "default";
@@ -21,6 +21,4 @@ class WithDefault extends Resolvable with EquatableMixin  {
     }
     return const WithDefault();
   }
-
-  WithDefault resolve(DivVariableContext context) => this;
 }

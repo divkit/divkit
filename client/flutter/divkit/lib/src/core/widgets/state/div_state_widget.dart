@@ -14,23 +14,19 @@ class DivStateWidget extends DivMappingWidget<DivState, DivStateModel> {
 
   @override
   DivStateModel value(BuildContext context) {
-    final divContext = read<DivContext>(context)!;
-    divContext.stateManager.registerState(data.resolveDivId(context));
-    data.resolve(divContext.variables);
-    return data.bind(context);
+    read<DivContext>(context)!
+        .stateManager
+        .registerState(data.resolveDivId(context));
+    return data.resolve(context);
   }
 
   @override
   Stream<DivStateModel> stream(BuildContext context) {
     final divContext = watch<DivContext>(context)!;
-    return CombineLatestStream.combine2<DivVariableContext,
-        Map<String, String?>, DivStateModel>(
+    return CombineLatestStream.combine2(
       divContext.variableManager.contextStream,
       divContext.stateManager.statesStream,
-      (values, states) {
-        data.resolve(values);
-        return data.bind(context);
-      },
+      (values, states) => data.resolve(context),
     );
   }
 

@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivTextAlignmentVertical implements Resolvable {
+enum DivTextAlignmentVertical {
   top('top'),
   center('center'),
   bottom('bottom'),
@@ -83,7 +83,4 @@ enum DivTextAlignmentVertical implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTextAlignmentVertical resolve(DivVariableContext context) => this;
 }

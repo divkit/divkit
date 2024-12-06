@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element dimension value.
-class DivDimension extends Resolvable with EquatableMixin {
+class DivDimension with EquatableMixin {
   const DivDimension({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -59,12 +59,5 @@ class DivDimension extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivDimension resolve(DivVariableContext context) {
-    unit.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

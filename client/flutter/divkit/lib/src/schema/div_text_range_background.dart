@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_cloud_background.dart';
 import 'package:divkit/src/schema/div_solid_background.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivTextRangeBackground extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivTextRangeBackground with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -90,11 +89,5 @@ class DivTextRangeBackground extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivTextRangeBackground resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

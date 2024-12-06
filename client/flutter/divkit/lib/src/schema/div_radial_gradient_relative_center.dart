@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Location of the central point of the gradient relative to the element borders.
-class DivRadialGradientRelativeCenter extends Resolvable with EquatableMixin {
+class DivRadialGradientRelativeCenter with EquatableMixin {
   const DivRadialGradientRelativeCenter({
     required this.value,
   });
@@ -45,11 +45,5 @@ class DivRadialGradientRelativeCenter extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivRadialGradientRelativeCenter resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

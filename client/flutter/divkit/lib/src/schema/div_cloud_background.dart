@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Cloud-style text background. Rows have a rectangular background in the specified color with rounded corners.
-class DivCloudBackground extends Resolvable with EquatableMixin {
+class DivCloudBackground with EquatableMixin {
   const DivCloudBackground({
     required this.color,
     required this.cornerRadius,
@@ -75,13 +75,5 @@ class DivCloudBackground extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivCloudBackground resolve(DivVariableContext context) {
-    color.resolve(context);
-    cornerRadius.resolve(context);
-    paddings.resolve(context);
-    return this;
   }
 }

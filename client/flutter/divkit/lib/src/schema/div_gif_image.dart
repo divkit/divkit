@@ -33,7 +33,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Animated GIF image.
-class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
+class DivGifImage with EquatableMixin implements DivBase {
   const DivGifImage({
     this.accessibility = const DivAccessibility(),
     this.action,
@@ -189,10 +189,10 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivSize height;
 
-  /// Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverEndActions;
 
-  /// Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverStartActions;
 
   /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -222,10 +222,10 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
   // default value: false
   final Expression<bool> preloadRequired;
 
-  /// Actions performed when an element is released.
+  /// Actions performed after clicking/tapping an element.
   final Arr<DivAction>? pressEndActions;
 
-  /// Actions performed when an element is pressed.
+  /// Actions performed at the start of a click/tap on an element.
   final Arr<DivAction>? pressStartActions;
 
   /// Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
@@ -863,58 +863,5 @@ class DivGifImage extends Resolvable with EquatableMixin implements DivBase {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivGifImage resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    action?.resolve(context);
-    actionAnimation.resolve(context);
-    tryResolveList(actions, (v) => v.resolve(context));
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    aspect?.resolve(context);
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    contentAlignmentHorizontal.resolve(context);
-    contentAlignmentVertical.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(doubletapActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    gifUrl.resolve(context);
-    height.resolve(context);
-    tryResolveList(hoverEndActions, (v) => v.resolve(context));
-    tryResolveList(hoverStartActions, (v) => v.resolve(context));
-    layoutProvider?.resolve(context);
-    tryResolveList(longtapActions, (v) => v.resolve(context));
-    margins.resolve(context);
-    paddings.resolve(context);
-    placeholderColor.resolve(context);
-    preloadRequired.resolve(context);
-    tryResolveList(pressEndActions, (v) => v.resolve(context));
-    tryResolveList(pressStartActions, (v) => v.resolve(context));
-    preview?.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    scale.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
   }
 }

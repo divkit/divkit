@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivTransitionTrigger implements Resolvable {
+enum DivTransitionTrigger {
   dataChange('data_change'),
   stateChange('state_change'),
   visibilityChange('visibility_change');
@@ -72,7 +72,4 @@ enum DivTransitionTrigger implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTransitionTrigger resolve(DivVariableContext context) => this;
 }

@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_input_filter_expression.dart';
 import 'package:divkit/src/schema/div_input_filter_regex.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivInputFilter extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivInputFilter with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -90,11 +89,5 @@ class DivInputFilter extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivInputFilter resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

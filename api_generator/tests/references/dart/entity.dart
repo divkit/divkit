@@ -24,8 +24,8 @@ import 'entity_with_string_enum_property.dart';
 import 'entity_with_string_enum_property_with_default_value.dart';
 import 'entity_without_properties.dart';
 
-class Entity extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class Entity with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -382,5 +382,4 @@ class Entity extends Resolvable with EquatableMixin {
       return null;
     }
   }
-  Entity resolve(DivVariableContext context) { value.resolve(context); return this; }
 }

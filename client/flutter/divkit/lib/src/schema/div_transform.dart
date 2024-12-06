@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Transformation of the element.
-class DivTransform extends Resolvable with EquatableMixin {
+class DivTransform with EquatableMixin {
   const DivTransform({
     this.pivotX = const DivPivot.divPivotPercentage(
       DivPivotPercentage(
@@ -98,13 +98,5 @@ class DivTransform extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivTransform resolve(DivVariableContext context) {
-    pivotX.resolve(context);
-    pivotY.resolve(context);
-    rotation?.resolve(context);
-    return this;
   }
 }

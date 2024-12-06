@@ -7,9 +7,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Actions performed when an element is no longer visible.
-class DivDisappearAction extends Resolvable
-    with EquatableMixin
-    implements DivSightAction {
+class DivDisappearAction with EquatableMixin implements DivSightAction {
   const DivDisappearAction({
     this.disappearDuration = const ValueExpression(800),
     this.downloadCallbacks,
@@ -179,19 +177,5 @@ class DivDisappearAction extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivDisappearAction resolve(DivVariableContext context) {
-    disappearDuration.resolve(context);
-    downloadCallbacks?.resolve(context);
-    isEnabled.resolve(context);
-    logId.resolve(context);
-    logLimit.resolve(context);
-    referer?.resolve(context);
-    typed?.resolve(context);
-    url?.resolve(context);
-    visibilityPercentage.resolve(context);
-    return this;
   }
 }

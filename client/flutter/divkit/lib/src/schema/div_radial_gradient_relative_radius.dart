@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Relative radius of the gradient transition.
-class DivRadialGradientRelativeRadius extends Resolvable with EquatableMixin {
+class DivRadialGradientRelativeRadius with EquatableMixin {
   const DivRadialGradientRelativeRadius({
     required this.value,
   });
@@ -47,15 +47,9 @@ class DivRadialGradientRelativeRadius extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivRadialGradientRelativeRadius resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
-  }
 }
 
-enum DivRadialGradientRelativeRadiusValue implements Resolvable {
+enum DivRadialGradientRelativeRadiusValue {
   nearestCorner('nearest_corner'),
   farthestCorner('farthest_corner'),
   nearestSide('nearest_side'),
@@ -136,8 +130,4 @@ enum DivRadialGradientRelativeRadiusValue implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivRadialGradientRelativeRadiusValue resolve(DivVariableContext context) =>
-      this;
 }

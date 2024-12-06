@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Deletes a value from the array
-class DivActionArrayRemoveValue extends Resolvable with EquatableMixin {
+class DivActionArrayRemoveValue with EquatableMixin {
   const DivActionArrayRemoveValue({
     required this.index,
     required this.variableName,
@@ -54,12 +54,5 @@ class DivActionArrayRemoveValue extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionArrayRemoveValue resolve(DivVariableContext context) {
-    index.resolve(context);
-    variableName.resolve(context);
-    return this;
   }
 }

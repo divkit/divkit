@@ -10,9 +10,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Numeric value animator.
-class DivNumberAnimator extends Resolvable
-    with EquatableMixin
-    implements DivAnimatorBase {
+class DivNumberAnimator with EquatableMixin implements DivAnimatorBase {
   const DivNumberAnimator({
     this.cancelActions,
     this.direction = const ValueExpression(DivAnimationDirection.normal),
@@ -220,19 +218,5 @@ class DivNumberAnimator extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivNumberAnimator resolve(DivVariableContext context) {
-    tryResolveList(cancelActions, (v) => v.resolve(context));
-    direction.resolve(context);
-    duration.resolve(context);
-    tryResolveList(endActions, (v) => v.resolve(context));
-    endValue.resolve(context);
-    interpolator.resolve(context);
-    repeatCount.resolve(context);
-    startDelay.resolve(context);
-    startValue?.resolve(context);
-    return this;
   }
 }

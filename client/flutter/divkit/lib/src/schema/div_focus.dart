@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element behavior when focusing or losing focus.
-class DivFocus extends Resolvable with EquatableMixin {
+class DivFocus with EquatableMixin {
   const DivFocus({
     this.background,
     this.border = const DivBorder(),
@@ -109,20 +109,10 @@ class DivFocus extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivFocus resolve(DivVariableContext context) {
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    nextFocusIds?.resolve(context);
-    tryResolveList(onBlur, (v) => v.resolve(context));
-    tryResolveList(onFocus, (v) => v.resolve(context));
-    return this;
-  }
 }
 
 /// IDs of elements that will be next to get focus.
-class DivFocusNextFocusIds extends Resolvable with EquatableMixin {
+class DivFocusNextFocusIds with EquatableMixin {
   const DivFocusNextFocusIds({
     this.down,
     this.forward,
@@ -189,15 +179,5 @@ class DivFocusNextFocusIds extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivFocusNextFocusIds resolve(DivVariableContext context) {
-    down?.resolve(context);
-    forward?.resolve(context);
-    left?.resolve(context);
-    right?.resolve(context);
-    up?.resolve(context);
-    return this;
   }
 }

@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Function argument.
-class DivFunctionArgument extends Resolvable with EquatableMixin {
+class DivFunctionArgument with EquatableMixin {
   const DivFunctionArgument({
     required this.name,
     required this.type,
@@ -58,11 +58,5 @@ class DivFunctionArgument extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivFunctionArgument resolve(DivVariableContext context) {
-    type.resolve(context);
-    return this;
   }
 }

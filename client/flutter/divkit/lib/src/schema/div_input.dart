@@ -35,7 +35,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Text input element.
-class DivInput extends Resolvable with EquatableMixin implements DivBase {
+class DivInput with EquatableMixin implements DivBase {
   const DivInput({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -951,71 +951,10 @@ class DivInput extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivInput resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    autocapitalization.resolve(context);
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(enterKeyActions, (v) => v.resolve(context));
-    enterKeyType.resolve(context);
-    tryResolveList(extensions, (v) => v.resolve(context));
-    tryResolveList(filters, (v) => v.resolve(context));
-    focus?.resolve(context);
-    fontFamily?.resolve(context);
-    fontSize.resolve(context);
-    fontSizeUnit.resolve(context);
-    fontWeight.resolve(context);
-    fontWeightValue?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    highlightColor?.resolve(context);
-    hintColor.resolve(context);
-    hintText?.resolve(context);
-    isEnabled.resolve(context);
-    keyboardType.resolve(context);
-    layoutProvider?.resolve(context);
-    letterSpacing.resolve(context);
-    lineHeight?.resolve(context);
-    margins.resolve(context);
-    mask?.resolve(context);
-    maxLength?.resolve(context);
-    maxVisibleLines?.resolve(context);
-    nativeInterface?.resolve(context);
-    paddings.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    selectAllOnFocus.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    textAlignmentHorizontal.resolve(context);
-    textAlignmentVertical.resolve(context);
-    textColor.resolve(context);
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(validators, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
 /// Text input line used in the native interface.
-class DivInputNativeInterface extends Resolvable with EquatableMixin {
+class DivInputNativeInterface with EquatableMixin {
   const DivInputNativeInterface({
     required this.color,
   });
@@ -1055,15 +994,9 @@ class DivInputNativeInterface extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivInputNativeInterface resolve(DivVariableContext context) {
-    color.resolve(context);
-    return this;
-  }
 }
 
-enum DivInputAutocapitalization implements Resolvable {
+enum DivInputAutocapitalization {
   auto('auto'),
   none('none'),
   words('words'),
@@ -1155,12 +1088,9 @@ enum DivInputAutocapitalization implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivInputAutocapitalization resolve(DivVariableContext context) => this;
 }
 
-enum DivInputEnterKeyType implements Resolvable {
+enum DivInputEnterKeyType {
   default_('default'),
   go('go'),
   search('search'),
@@ -1252,12 +1182,9 @@ enum DivInputEnterKeyType implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivInputEnterKeyType resolve(DivVariableContext context) => this;
 }
 
-enum DivInputKeyboardType implements Resolvable {
+enum DivInputKeyboardType {
   singleLineText('single_line_text'),
   multiLineText('multi_line_text'),
   phone('phone'),
@@ -1371,7 +1298,4 @@ enum DivInputKeyboardType implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivInputKeyboardType resolve(DivVariableContext context) => this;
 }

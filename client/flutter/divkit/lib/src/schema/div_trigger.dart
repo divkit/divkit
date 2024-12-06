@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A trigger that causes an action when activated.
-class DivTrigger extends Resolvable with EquatableMixin {
+class DivTrigger with EquatableMixin {
   const DivTrigger({
     required this.actions,
     required this.condition,
@@ -83,17 +83,9 @@ class DivTrigger extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTrigger resolve(DivVariableContext context) {
-    tryResolveList(actions, (v) => v.resolve(context));
-    condition.resolve(context);
-    mode.resolve(context);
-    return this;
-  }
 }
 
-enum DivTriggerMode implements Resolvable {
+enum DivTriggerMode {
   onCondition('on_condition'),
   onVariable('on_variable');
 
@@ -152,7 +144,4 @@ enum DivTriggerMode implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTriggerMode resolve(DivVariableContext context) => this;
 }

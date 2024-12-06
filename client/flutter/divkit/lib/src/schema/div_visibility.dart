@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivVisibility implements Resolvable {
+enum DivVisibility {
   visible('visible'),
   invisible('invisible'),
   gone('gone');
@@ -72,7 +72,4 @@ enum DivVisibility implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivVisibility resolve(DivVariableContext context) => this;
 }

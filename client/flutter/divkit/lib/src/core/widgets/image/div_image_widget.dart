@@ -19,20 +19,13 @@ class DivImageWidget extends DivMappingWidget<DivImage, DivImageModel> {
   });
 
   @override
-  DivImageModel value(BuildContext context) {
-    final divContext = read<DivContext>(context)!;
-    data.resolve(divContext.variables);
-    return data.bind(context);
-  }
+  DivImageModel value(BuildContext context) => data.resolve(context);
 
   @override
-  Stream<DivImageModel> stream(BuildContext context) {
-    final divContext = watch<DivContext>(context)!;
-    return divContext.variableManager.watch((values) {
-      data.resolve(values);
-      return data.bind(context);
-    });
-  }
+  Stream<DivImageModel> stream(BuildContext context) =>
+      watch<DivContext>(context)!.variableManager.watch(
+            (values) => data.resolve(context),
+          );
 
   @override
   Widget build(BuildContext context, DivImageModel model) {

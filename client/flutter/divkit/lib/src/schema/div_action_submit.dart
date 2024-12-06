@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sends variables from the container by link. Data sending configuration can be defined by the host app. By default, variables are sent as JSON in the request body using the POST method.
-class DivActionSubmit extends Resolvable with EquatableMixin {
+class DivActionSubmit with EquatableMixin {
   const DivActionSubmit({
     required this.containerId,
     this.onFailActions,
@@ -96,19 +96,10 @@ class DivActionSubmit extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivActionSubmit resolve(DivVariableContext context) {
-    containerId.resolve(context);
-    tryResolveList(onFailActions, (v) => v.resolve(context));
-    tryResolveList(onSuccessActions, (v) => v.resolve(context));
-    request.resolve(context);
-    return this;
-  }
 }
 
 /// HTTP request parameters for configuring the sending of data.
-class DivActionSubmitRequest extends Resolvable with EquatableMixin {
+class DivActionSubmitRequest with EquatableMixin {
   const DivActionSubmitRequest({
     this.headers,
     this.method = const ValueExpression(DivActionSubmitRequestMethod.post),
@@ -180,17 +171,9 @@ class DivActionSubmitRequest extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivActionSubmitRequest resolve(DivVariableContext context) {
-    tryResolveList(headers, (v) => v.resolve(context));
-    method.resolve(context);
-    url.resolve(context);
-    return this;
-  }
 }
 
-class DivActionSubmitRequestHeader extends Resolvable with EquatableMixin {
+class DivActionSubmitRequestHeader with EquatableMixin {
   const DivActionSubmitRequestHeader({
     required this.name,
     required this.value,
@@ -240,16 +223,9 @@ class DivActionSubmitRequestHeader extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivActionSubmitRequestHeader resolve(DivVariableContext context) {
-    name.resolve(context);
-    value.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionSubmitRequestMethod implements Resolvable {
+enum DivActionSubmitRequestMethod {
   get('get'),
   post('post'),
   put('put'),
@@ -363,7 +339,4 @@ enum DivActionSubmitRequestMethod implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivActionSubmitRequestMethod resolve(DivVariableContext context) => this;
 }

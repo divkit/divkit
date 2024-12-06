@@ -8,7 +8,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Background image.
-class DivImageBackground extends Resolvable with EquatableMixin {
+class DivImageBackground with EquatableMixin {
   const DivImageBackground({
     this.alpha = const ValueExpression(1.0),
     this.contentAlignmentHorizontal =
@@ -147,17 +147,5 @@ class DivImageBackground extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivImageBackground resolve(DivVariableContext context) {
-    alpha.resolve(context);
-    contentAlignmentHorizontal.resolve(context);
-    contentAlignmentVertical.resolve(context);
-    tryResolveList(filters, (v) => v.resolve(context));
-    imageUrl.resolve(context);
-    preloadRequired.resolve(context);
-    scale.resolve(context);
-    return this;
   }
 }

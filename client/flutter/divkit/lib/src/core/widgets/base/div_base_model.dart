@@ -3,6 +3,7 @@ import 'package:divkit/src/core/converters/alignment.dart';
 import 'package:divkit/src/core/converters/base_specific.dart';
 import 'package:divkit/src/core/converters/decoration.dart';
 import 'package:divkit/src/core/converters/edge_insets.dart';
+import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
@@ -55,30 +56,37 @@ class DivBaseModel with EquatableMixin {
 }
 
 extension DivBaseConverter on DivBase {
-  DivBaseModel convert({
-    required double viewScale,
+  DivBaseModel resolve(
+    BuildContext context, {
     Expression<double>? aspect,
   }) {
+    final divContext = read<DivContext>(context)!;
+    final variables = divContext.variables;
+    final viewScale = divContext.scale.view;
+
     final alignment = DivAlignmentConverter(
       alignmentVertical,
       alignmentHorizontal,
-    ).convert();
+    ).resolve(variables);
 
     return DivBaseModel(
-      isGone: visibility.value.isGone,
-      opacity: convertOpacity().clamp(0.0, 1.0),
+      isGone: visibility.resolve(variables).isGone,
+      opacity: resolveOpacity(variables).clamp(0.0, 1.0),
       alignment: alignment,
-      width: valueWidth(viewScale: viewScale),
-      height: valueHeight(viewScale: viewScale),
-      visibilityActions: visibilityActions?.map((e) => e.convert()).toList() ??
-          (visibilityAction != null ? [visibilityAction!.convert()] : []),
-      padding: paddings.convert(viewScale: viewScale),
-      margin: margins.convert(viewScale: viewScale),
-      aspect: aspect?.value,
-      decoration: convertDecoration(viewScale: viewScale),
+      width: resolveWidth(variables, viewScale: viewScale),
+      height: resolveHeight(variables, viewScale: viewScale),
+      visibilityActions:
+          visibilityActions?.map((e) => e.resolve(variables)).toList() ??
+              (visibilityAction != null
+                  ? [visibilityAction!.resolve(variables)]
+                  : []),
+      padding: paddings.resolve(variables, viewScale: viewScale),
+      margin: margins.resolve(variables, viewScale: viewScale),
+      aspect: aspect?.resolve(variables),
+      decoration: resolveDecoration(variables, viewScale: viewScale),
       divId: id,
-      focusDecoration: convertFocusDecoration(viewScale: viewScale),
-      divVisibility: visibility.value,
+      focusDecoration: resolveFocusDecoration(variables, viewScale: viewScale),
+      divVisibility: visibility.resolve(variables),
     );
   }
 }

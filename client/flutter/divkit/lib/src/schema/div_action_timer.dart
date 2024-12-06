@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Controls the timer.
-class DivActionTimer extends Resolvable with EquatableMixin {
+class DivActionTimer with EquatableMixin {
   const DivActionTimer({
     required this.action,
     required this.id,
@@ -66,16 +66,9 @@ class DivActionTimer extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivActionTimer resolve(DivVariableContext context) {
-    action.resolve(context);
-    id.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionTimerAction implements Resolvable {
+enum DivActionTimerAction {
   start('start'),
   stop('stop'),
   pause('pause'),
@@ -178,7 +171,4 @@ enum DivActionTimerAction implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivActionTimerAction resolve(DivVariableContext context) => this;
 }

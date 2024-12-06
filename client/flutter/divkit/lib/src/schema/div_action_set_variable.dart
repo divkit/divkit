@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Assigns a value to the variable
-class DivActionSetVariable extends Resolvable with EquatableMixin {
+class DivActionSetVariable with EquatableMixin {
   const DivActionSetVariable({
     required this.value,
     required this.variableName,
@@ -56,12 +56,5 @@ class DivActionSetVariable extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionSetVariable resolve(DivVariableContext context) {
-    value.resolve(context);
-    variableName.resolve(context);
-    return this;
   }
 }

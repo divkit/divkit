@@ -35,7 +35,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Pager. It contains a horizontal set of cards that can be scrolled page by page. It shows the main page and the beginning of the next one.
-class DivPager extends Resolvable with EquatableMixin implements DivBase {
+class DivPager with EquatableMixin implements DivBase {
   const DivPager({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -718,53 +718,9 @@ class DivPager extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivPager resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    defaultItem.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    infiniteScroll.resolve(context);
-    itemBuilder?.resolve(context);
-    itemSpacing.resolve(context);
-    layoutMode.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    orientation.resolve(context);
-    paddings.resolve(context);
-    pageTransformation?.resolve(context);
-    restrictParentScroll.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
-enum DivPagerOrientation implements Resolvable {
+enum DivPagerOrientation {
   horizontal('horizontal'),
   vertical('vertical');
 
@@ -823,7 +779,4 @@ enum DivPagerOrientation implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivPagerOrientation resolve(DivVariableContext context) => this;
 }

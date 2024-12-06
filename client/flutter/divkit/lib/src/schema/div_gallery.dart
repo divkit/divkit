@@ -32,7 +32,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Gallery. It contains a horizontal or vertical set of cards that can be scrolled.
-class DivGallery extends Resolvable with EquatableMixin implements DivBase {
+class DivGallery with EquatableMixin implements DivBase {
   const DivGallery({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -746,55 +746,9 @@ class DivGallery extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivGallery resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnCount?.resolve(context);
-    columnSpan?.resolve(context);
-    crossContentAlignment.resolve(context);
-    crossSpacing?.resolve(context);
-    defaultItem.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    itemBuilder?.resolve(context);
-    itemSpacing.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    orientation.resolve(context);
-    paddings.resolve(context);
-    restrictParentScroll.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    scrollMode.resolve(context);
-    scrollbar.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
-enum DivGalleryCrossContentAlignment implements Resolvable {
+enum DivGalleryCrossContentAlignment {
   start('start'),
   center('center'),
   end('end');
@@ -864,12 +818,9 @@ enum DivGalleryCrossContentAlignment implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivGalleryCrossContentAlignment resolve(DivVariableContext context) => this;
 }
 
-enum DivGalleryScrollMode implements Resolvable {
+enum DivGalleryScrollMode {
   paging('paging'),
   default_('default');
 
@@ -928,12 +879,9 @@ enum DivGalleryScrollMode implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivGalleryScrollMode resolve(DivVariableContext context) => this;
 }
 
-enum DivGalleryOrientation implements Resolvable {
+enum DivGalleryOrientation {
   horizontal('horizontal'),
   vertical('vertical');
 
@@ -992,12 +940,9 @@ enum DivGalleryOrientation implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivGalleryOrientation resolve(DivVariableContext context) => this;
 }
 
-enum DivGalleryScrollbar implements Resolvable {
+enum DivGalleryScrollbar {
   none('none'),
   auto('auto');
 
@@ -1056,7 +1001,4 @@ enum DivGalleryScrollbar implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivGalleryScrollbar resolve(DivVariableContext context) => this;
 }

@@ -37,7 +37,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Container. It contains other elements and is responsible for their location. It is used to arrange elements vertically, horizontally, and with an overlay in a certain order, simulating the third dimension.
-class DivContainer extends Resolvable with EquatableMixin implements DivBase {
+class DivContainer with EquatableMixin implements DivBase {
   const DivContainer({
     this.accessibility = const DivAccessibility(),
     this.action,
@@ -197,10 +197,10 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivSize height;
 
-  /// Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverEndActions;
 
-  /// Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+  /// Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
   final Arr<DivAction>? hoverStartActions;
 
   /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -241,10 +241,10 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
   @override
   final DivEdgeInsets paddings;
 
-  /// Actions performed when an element is released.
+  /// Actions performed after clicking/tapping an element.
   final Arr<DivAction>? pressEndActions;
 
-  /// Actions performed when an element is pressed.
+  /// Actions performed at the start of a click/tap on an element.
   final Arr<DivAction>? pressStartActions;
 
   /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
@@ -898,63 +898,9 @@ class DivContainer extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivContainer resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    action?.resolve(context);
-    actionAnimation.resolve(context);
-    tryResolveList(actions, (v) => v.resolve(context));
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    aspect?.resolve(context);
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    clipToBounds.resolve(context);
-    columnSpan?.resolve(context);
-    contentAlignmentHorizontal.resolve(context);
-    contentAlignmentVertical.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(doubletapActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    tryResolveList(hoverEndActions, (v) => v.resolve(context));
-    tryResolveList(hoverStartActions, (v) => v.resolve(context));
-    itemBuilder?.resolve(context);
-    layoutMode.resolve(context);
-    layoutProvider?.resolve(context);
-    lineSeparator?.resolve(context);
-    tryResolveList(longtapActions, (v) => v.resolve(context));
-    margins.resolve(context);
-    orientation.resolve(context);
-    paddings.resolve(context);
-    tryResolveList(pressEndActions, (v) => v.resolve(context));
-    tryResolveList(pressStartActions, (v) => v.resolve(context));
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    separator?.resolve(context);
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
-class DivContainerSeparator extends Resolvable with EquatableMixin {
+class DivContainerSeparator with EquatableMixin {
   const DivContainerSeparator({
     this.margins = const DivEdgeInsets(),
     this.showAtEnd = const ValueExpression(false),
@@ -1055,19 +1001,9 @@ class DivContainerSeparator extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivContainerSeparator resolve(DivVariableContext context) {
-    margins.resolve(context);
-    showAtEnd.resolve(context);
-    showAtStart.resolve(context);
-    showBetween.resolve(context);
-    style.resolve(context);
-    return this;
-  }
 }
 
-enum DivContainerOrientation implements Resolvable {
+enum DivContainerOrientation {
   vertical('vertical'),
   horizontal('horizontal'),
   overlap('overlap');
@@ -1137,12 +1073,9 @@ enum DivContainerOrientation implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivContainerOrientation resolve(DivVariableContext context) => this;
 }
 
-enum DivContainerLayoutMode implements Resolvable {
+enum DivContainerLayoutMode {
   noWrap('no_wrap'),
   wrap('wrap');
 
@@ -1201,7 +1134,4 @@ enum DivContainerLayoutMode implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivContainerLayoutMode resolve(DivVariableContext context) => this;
 }

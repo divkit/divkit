@@ -7,9 +7,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Actions performed when an element becomes visible.
-class DivVisibilityAction extends Resolvable
-    with EquatableMixin
-    implements DivSightAction {
+class DivVisibilityAction with EquatableMixin implements DivSightAction {
   const DivVisibilityAction({
     this.downloadCallbacks,
     this.isEnabled = const ValueExpression(true),
@@ -179,19 +177,5 @@ class DivVisibilityAction extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivVisibilityAction resolve(DivVariableContext context) {
-    downloadCallbacks?.resolve(context);
-    isEnabled.resolve(context);
-    logId.resolve(context);
-    logLimit.resolve(context);
-    referer?.resolve(context);
-    typed?.resolve(context);
-    url?.resolve(context);
-    visibilityDuration.resolve(context);
-    visibilityPercentage.resolve(context);
-    return this;
   }
 }

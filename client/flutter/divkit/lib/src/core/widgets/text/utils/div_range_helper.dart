@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class DivRangeHelper {
   static List<DivTextRangeModel> getRangeItems(
+    DivVariableContext context,
     String text,
     List<DivTextRange> divTextRange,
     TextStyle style,
@@ -16,6 +17,7 @@ class DivRangeHelper {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
       final mapEntry = _getRangeInputMapEntry(
+        context,
         text.length,
         range,
         style,
@@ -45,6 +47,7 @@ class DivRangeHelper {
 
   static MapEntry<DivTextRangeInterval, DivTextRangeOptionModel>
       _getRangeInputMapEntry(
+    DivVariableContext context,
     int len,
     DivTextRange divTextRange,
     TextStyle style,
@@ -52,41 +55,43 @@ class DivRangeHelper {
     double viewScale,
     DivFontProvider fontProvider,
   ) {
-    final start = divTextRange.start.value;
-    final end = divTextRange.end?.value ?? len;
+    final start = divTextRange.start.resolve(context);
+    final end = divTextRange.end?.resolve(context) ?? len;
 
-    final topOffset = divTextRange.topOffset?.value;
+    final topOffset = divTextRange.topOffset?.resolve(context);
 
-    final strike = divTextRange.strike?.value ?? linesStyleList[1];
+    final strike = divTextRange.strike?.resolve(context) ?? linesStyleList[1];
 
-    final underline = divTextRange.underline?.value ?? linesStyleList[0];
+    final underline =
+        divTextRange.underline?.resolve(context) ?? linesStyleList[0];
 
-    final textColor = divTextRange.textColor?.value;
+    final textColor = divTextRange.textColor?.resolve(context);
 
     Color? background;
     divTextRange.background?.map(
       divSolidBackground: (divSolidBackground) {
-        background = divSolidBackground.color.value;
+        background = divSolidBackground.color.resolve(context);
       },
       divCloudBackground: (_) {},
     );
 
-    final fontFamily = divTextRange.fontFamily?.value;
+    final fontFamily = divTextRange.fontFamily?.resolve(context);
 
     final fontAsset = fontProvider.resolve(fontFamily);
 
-    final fontSize = divTextRange.fontSize?.value;
+    final fontSize = divTextRange.fontSize?.resolve(context);
 
-    final fontWeightValue = divTextRange.fontWeightValue?.value;
+    final fontWeightValue = divTextRange.fontWeightValue?.resolve(context);
 
     FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
       (element) => element.value == fontWeightValue,
     );
-    fontWeight ??= divTextRange.fontWeight?.value.convert();
+    fontWeight ??= divTextRange.fontWeight?.resolve(context).convert();
 
-    final letterSpacing = divTextRange.letterSpacing?.value;
+    final letterSpacing = divTextRange.letterSpacing?.resolve(context);
 
-    final shadow = divTextRange.textShadow?.convertShadow(viewScale: viewScale);
+    final shadow =
+        divTextRange.textShadow?.resolveShadow(context, viewScale: viewScale);
 
     style = TextStyle(
       package: fontAsset.package,
@@ -113,7 +118,8 @@ class DivRangeHelper {
       ),
       DivTextRangeOptionModel(
         style: style,
-        actions: divTextRange.actions?.map((e) => e.convert()).toList() ?? [],
+        actions:
+            divTextRange.actions?.map((e) => e.resolve(context)).toList() ?? [],
         topOffset: topOffset,
       ),
     );

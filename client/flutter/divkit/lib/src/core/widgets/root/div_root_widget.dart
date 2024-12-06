@@ -66,7 +66,6 @@ class _DivRendererState extends State<DivRenderer> {
 
     // Register first state
     divContext.stateManager.registerState('root', initialState);
-    widget.data.resolve(divContext.variables);
     value = widget.data.bind(initialState);
   }
 
@@ -89,7 +88,6 @@ class _DivRendererState extends State<DivRenderer> {
     if (widget.data != oldWidget.data) {
       final divContext = watch<DivContext>(context)!;
       final initialState = widget.data.states.first.stateId.toString();
-      widget.data.resolve(divContext.variables);
       divContext.stateManager.updateState('root', initialState);
       value = widget.data.bind(initialState);
       stream = divContext.stateManager.watch((state) {

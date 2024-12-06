@@ -6,7 +6,7 @@ import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_count.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
-abstract class DivAnimatorBase extends Resolvable {
+abstract class DivAnimatorBase {
   Arr<DivAction>? get cancelActions;
 
   // default value: DivAnimationDirection.normal
@@ -29,6 +29,4 @@ abstract class DivAnimatorBase extends Resolvable {
   Expression<int> get startDelay;
 
   String get variableName;
-  @override
-  DivAnimatorBase resolve(DivVariableContext context);
 }

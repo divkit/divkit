@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Regex validator.
-class DivInputValidatorRegex extends Resolvable with EquatableMixin {
+class DivInputValidatorRegex with EquatableMixin {
   const DivInputValidatorRegex({
     this.allowEmpty = const ValueExpression(false),
     required this.labelId,
@@ -86,13 +86,5 @@ class DivInputValidatorRegex extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivInputValidatorRegex resolve(DivVariableContext context) {
-    allowEmpty.resolve(context);
-    labelId.resolve(context);
-    pattern.resolve(context);
-    return this;
   }
 }

@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Drawable of a simple geometric shape.
-class DivShapeDrawable extends Resolvable with EquatableMixin {
+class DivShapeDrawable with EquatableMixin {
   const DivShapeDrawable({
     required this.color,
     required this.shape,
@@ -72,13 +72,5 @@ class DivShapeDrawable extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivShapeDrawable resolve(DivVariableContext context) {
-    color.resolve(context);
-    shape.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

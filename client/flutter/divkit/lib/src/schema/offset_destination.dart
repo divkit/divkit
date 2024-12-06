@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Specifies the position measured in `dp` from the container start as the scrolling end position. Only applies in `gallery`.
-class OffsetDestination extends Resolvable with EquatableMixin {
+class OffsetDestination with EquatableMixin {
   const OffsetDestination({
     required this.value,
   });
@@ -46,11 +46,5 @@ class OffsetDestination extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  OffsetDestination resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

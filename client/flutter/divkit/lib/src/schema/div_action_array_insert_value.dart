@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Adds a value to the array
-class DivActionArrayInsertValue extends Resolvable with EquatableMixin {
+class DivActionArrayInsertValue with EquatableMixin {
   const DivActionArrayInsertValue({
     this.index,
     required this.value,
@@ -64,13 +64,5 @@ class DivActionArrayInsertValue extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionArrayInsertValue resolve(DivVariableContext context) {
-    index?.resolve(context);
-    value.resolve(context);
-    variableName.resolve(context);
-    return this;
   }
 }

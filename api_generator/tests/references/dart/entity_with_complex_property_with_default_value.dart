@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithComplexPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
+class EntityWithComplexPropertyWithDefaultValue with EquatableMixin  {
   const EntityWithComplexPropertyWithDefaultValue({
     this.property = const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),
   });
@@ -38,15 +38,10 @@ class EntityWithComplexPropertyWithDefaultValue extends Resolvable with Equatabl
       return null;
     }
   }
-
-  EntityWithComplexPropertyWithDefaultValue resolve(DivVariableContext context) {
-    property?.resolve(context);
-    return this;
-  }
 }
 
 
-class EntityWithComplexPropertyWithDefaultValueProperty extends Resolvable with EquatableMixin  {
+class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin  {
   const EntityWithComplexPropertyWithDefaultValueProperty({
     required this.value,
   });
@@ -76,10 +71,5 @@ class EntityWithComplexPropertyWithDefaultValueProperty extends Resolvable with 
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithComplexPropertyWithDefaultValueProperty resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

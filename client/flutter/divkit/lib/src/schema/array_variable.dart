@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// An arbitrary array in JSON format.
-class ArrayVariable extends Resolvable with EquatableMixin {
+class ArrayVariable with EquatableMixin {
   const ArrayVariable({
     required this.name,
     required this.value,
@@ -58,10 +58,5 @@ class ArrayVariable extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  ArrayVariable resolve(DivVariableContext context) {
-    return this;
   }
 }

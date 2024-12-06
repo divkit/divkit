@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/content_text.dart';
 import 'package:divkit/src/schema/content_url.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivActionCopyToClipboardContent extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivActionCopyToClipboardContent with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -90,11 +89,5 @@ class DivActionCopyToClipboardContent extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivActionCopyToClipboardContent resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

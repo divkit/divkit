@@ -33,7 +33,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Video.
-class DivVideo extends Resolvable with EquatableMixin implements DivBase {
+class DivVideo with EquatableMixin implements DivBase {
   const DivVideo({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -794,54 +794,5 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivVideo resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    aspect?.resolve(context);
-    autostart.resolve(context);
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    tryResolveList(bufferingActions, (v) => v.resolve(context));
-    columnSpan?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(endActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    tryResolveList(fatalActions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    muted.resolve(context);
-    paddings.resolve(context);
-    tryResolveList(pauseActions, (v) => v.resolve(context));
-    preloadRequired.resolve(context);
-    preview?.resolve(context);
-    repeatable.resolve(context);
-    tryResolveList(resumeActions, (v) => v.resolve(context));
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    scale.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    tryResolveList(videoSources, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
   }
 }

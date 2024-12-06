@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivLineStyle implements Resolvable {
+enum DivLineStyle {
   none('none'),
   single('single');
 
@@ -61,7 +61,4 @@ enum DivLineStyle implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivLineStyle resolve(DivVariableContext context) => this;
 }

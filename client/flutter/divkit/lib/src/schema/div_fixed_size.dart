@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed size of an element.
-class DivFixedSize extends Resolvable with EquatableMixin {
+class DivFixedSize with EquatableMixin {
   const DivFixedSize({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -63,12 +63,5 @@ class DivFixedSize extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivFixedSize resolve(DivVariableContext context) {
-    unit.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

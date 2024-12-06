@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Manages video playback.
-class DivActionVideo extends Resolvable with EquatableMixin {
+class DivActionVideo with EquatableMixin {
   const DivActionVideo({
     required this.action,
     required this.id,
@@ -62,16 +62,9 @@ class DivActionVideo extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivActionVideo resolve(DivVariableContext context) {
-    action.resolve(context);
-    id.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionVideoAction implements Resolvable {
+enum DivActionVideoAction {
   start('start'),
   pause('pause');
 
@@ -130,7 +123,4 @@ enum DivActionVideoAction implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivActionVideoAction resolve(DivVariableContext context) => this;
 }

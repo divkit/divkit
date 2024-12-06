@@ -6,9 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Transparency animation.
-class DivFadeTransition extends Resolvable
-    with EquatableMixin
-    implements DivTransitionBase {
+class DivFadeTransition with EquatableMixin implements DivTransitionBase {
   const DivFadeTransition({
     this.alpha = const ValueExpression(0.0),
     this.duration = const ValueExpression(200),
@@ -101,14 +99,5 @@ class DivFadeTransition extends Resolvable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivFadeTransition resolve(DivVariableContext context) {
-    alpha.resolve(context);
-    duration.resolve(context);
-    interpolator.resolve(context);
-    startDelay.resolve(context);
-    return this;
   }
 }

@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) validator.
-class DivInputValidatorExpression extends Resolvable with EquatableMixin {
+class DivInputValidatorExpression with EquatableMixin {
   const DivInputValidatorExpression({
     this.allowEmpty = const ValueExpression(false),
     required this.condition,
@@ -86,13 +86,5 @@ class DivInputValidatorExpression extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivInputValidatorExpression resolve(DivVariableContext context) {
-    allowEmpty.resolve(context);
-    condition.resolve(context);
-    labelId.resolve(context);
-    return this;
   }
 }

@@ -18,10 +18,9 @@ import 'package:divkit/src/schema/div_switch.dart';
 import 'package:divkit/src/schema/div_tabs.dart';
 import 'package:divkit/src/schema/div_text.dart';
 import 'package:divkit/src/schema/div_video.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class Div extends Resolvable with EquatableMixin {
+class Div with EquatableMixin {
   final DivBase value;
   final int _index;
 
@@ -466,11 +465,5 @@ class Div extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  Div resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

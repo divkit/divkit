@@ -35,7 +35,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Tabs. Height of the first tab is determined by its contents, and height of the remaining [depends on the platform](https://divkit.tech/docs/en/concepts/location#tabs).
-class DivTabs extends Resolvable with EquatableMixin implements DivBase {
+class DivTabs with EquatableMixin implements DivBase {
   const DivTabs({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -799,56 +799,10 @@ class DivTabs extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivTabs resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    dynamicHeight.resolve(context);
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    hasSeparator.resolve(context);
-    height.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    paddings.resolve(context);
-    restrictParentScroll.resolve(context);
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    selectedTab.resolve(context);
-    separatorColor.resolve(context);
-    separatorPaddings.resolve(context);
-    switchTabsByContentSwipeEnabled.resolve(context);
-    tabTitleDelimiter?.resolve(context);
-    tabTitleStyle.resolve(context);
-    titlePaddings.resolve(context);
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
 /// Design style of tab titles.
-class DivTabsTabTitleStyle extends Resolvable with EquatableMixin {
+class DivTabsTabTitleStyle with EquatableMixin {
   const DivTabsTabTitleStyle({
     this.activeBackgroundColor = const ValueExpression(Color(0xFFFFDC60)),
     this.activeFontWeight,
@@ -1157,32 +1111,9 @@ class DivTabsTabTitleStyle extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTabsTabTitleStyle resolve(DivVariableContext context) {
-    activeBackgroundColor.resolve(context);
-    activeFontWeight?.resolve(context);
-    activeTextColor.resolve(context);
-    animationDuration.resolve(context);
-    animationType.resolve(context);
-    cornerRadius?.resolve(context);
-    cornersRadius?.resolve(context);
-    fontFamily?.resolve(context);
-    fontSize.resolve(context);
-    fontSizeUnit.resolve(context);
-    fontWeight.resolve(context);
-    inactiveBackgroundColor?.resolve(context);
-    inactiveFontWeight?.resolve(context);
-    inactiveTextColor.resolve(context);
-    itemSpacing.resolve(context);
-    letterSpacing.resolve(context);
-    lineHeight?.resolve(context);
-    paddings.resolve(context);
-    return this;
-  }
 }
 
-enum DivTabsTabTitleStyleAnimationType implements Resolvable {
+enum DivTabsTabTitleStyleAnimationType {
   slide('slide'),
   fade('fade'),
   none('none');
@@ -1252,13 +1183,10 @@ enum DivTabsTabTitleStyleAnimationType implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTabsTabTitleStyleAnimationType resolve(DivVariableContext context) => this;
 }
 
 /// Design style of separators between tab titles.
-class DivTabsTabTitleDelimiter extends Resolvable with EquatableMixin {
+class DivTabsTabTitleDelimiter with EquatableMixin {
   const DivTabsTabTitleDelimiter({
     this.height = const DivFixedSize(
       value: ValueExpression(
@@ -1346,18 +1274,10 @@ class DivTabsTabTitleDelimiter extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTabsTabTitleDelimiter resolve(DivVariableContext context) {
-    height.resolve(context);
-    imageUrl.resolve(context);
-    width.resolve(context);
-    return this;
-  }
 }
 
 /// Tab.
-class DivTabsItem extends Resolvable with EquatableMixin {
+class DivTabsItem with EquatableMixin {
   const DivTabsItem({
     required this.div,
     required this.title,
@@ -1423,12 +1343,5 @@ class DivTabsItem extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivTabsItem resolve(DivVariableContext context) {
-    title.resolve(context);
-    titleClickAction?.resolve(context);
-    return this;
   }
 }

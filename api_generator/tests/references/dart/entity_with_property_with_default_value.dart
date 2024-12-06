@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
+class EntityWithPropertyWithDefaultValue with EquatableMixin  {
   const EntityWithPropertyWithDefaultValue({
     this.iNum = const ValueExpression(0),
     this.nested,
@@ -52,17 +52,10 @@ class EntityWithPropertyWithDefaultValue extends Resolvable with EquatableMixin 
       return null;
     }
   }
-
-  EntityWithPropertyWithDefaultValue resolve(DivVariableContext context) {
-    iNum?.resolve(context);
-    nested?.resolve(context);
-    url?.resolve(context);
-    return this;
-  }
 }
 
 /// non_optional is used to suppress auto-generation of default value for object with all-optional fields.
-class EntityWithPropertyWithDefaultValueNested extends Resolvable with EquatableMixin  {
+class EntityWithPropertyWithDefaultValueNested with EquatableMixin  {
   const EntityWithPropertyWithDefaultValueNested({
     this.iNum = const ValueExpression(0),
     required this.nonOptional,
@@ -106,12 +99,5 @@ class EntityWithPropertyWithDefaultValueNested extends Resolvable with Equatable
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithPropertyWithDefaultValueNested resolve(DivVariableContext context) {
-    iNum?.resolve(context);
-    nonOptional.resolve(context);
-    url?.resolve(context);
-    return this;
   }
 }

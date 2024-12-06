@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed coordinates of the central point of the gradient.
-class DivRadialGradientFixedCenter extends Resolvable with EquatableMixin {
+class DivRadialGradientFixedCenter with EquatableMixin {
   const DivRadialGradientFixedCenter({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -62,12 +62,5 @@ class DivRadialGradientFixedCenter extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivRadialGradientFixedCenter resolve(DivVariableContext context) {
-    unit.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

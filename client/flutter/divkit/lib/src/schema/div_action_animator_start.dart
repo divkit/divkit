@@ -8,7 +8,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Launches the specified animator.
-class DivActionAnimatorStart extends Resolvable with EquatableMixin {
+class DivActionAnimatorStart with EquatableMixin {
   const DivActionAnimatorStart({
     required this.animatorId,
     this.direction,
@@ -128,17 +128,5 @@ class DivActionAnimatorStart extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionAnimatorStart resolve(DivVariableContext context) {
-    direction?.resolve(context);
-    duration?.resolve(context);
-    endValue?.resolve(context);
-    interpolator?.resolve(context);
-    repeatCount?.resolve(context);
-    startDelay?.resolve(context);
-    startValue?.resolve(context);
-    return this;
   }
 }

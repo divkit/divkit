@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Scrolls the container by `item_count` or `offset` starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.
-class DivActionScrollBy extends Resolvable with EquatableMixin {
+class DivActionScrollBy with EquatableMixin {
   const DivActionScrollBy({
     this.animated = const ValueExpression(true),
     required this.id,
@@ -109,19 +109,9 @@ class DivActionScrollBy extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivActionScrollBy resolve(DivVariableContext context) {
-    animated.resolve(context);
-    id.resolve(context);
-    itemCount.resolve(context);
-    offset.resolve(context);
-    overflow.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionScrollByOverflow implements Resolvable {
+enum DivActionScrollByOverflow {
   clamp('clamp'),
   ring('ring');
 
@@ -180,7 +170,4 @@ enum DivActionScrollByOverflow implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivActionScrollByOverflow resolve(DivVariableContext context) => this;
 }

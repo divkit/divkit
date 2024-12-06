@@ -7,7 +7,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Tooltip.
-class DivTooltip extends Resolvable with EquatableMixin {
+class DivTooltip with EquatableMixin {
   const DivTooltip({
     this.animationIn,
     this.animationOut,
@@ -125,19 +125,9 @@ class DivTooltip extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivTooltip resolve(DivVariableContext context) {
-    animationIn?.resolve(context);
-    animationOut?.resolve(context);
-    duration.resolve(context);
-    offset?.resolve(context);
-    position.resolve(context);
-    return this;
-  }
 }
 
-enum DivTooltipPosition implements Resolvable {
+enum DivTooltipPosition {
   left('left'),
   topLeft('top-left'),
   top('top'),
@@ -273,7 +263,4 @@ enum DivTooltipPosition implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivTooltipPosition resolve(DivVariableContext context) => this;
 }

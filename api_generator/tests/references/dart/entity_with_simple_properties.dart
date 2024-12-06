@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 /// Entity with simple properties.
-class EntityWithSimpleProperties extends Resolvable with EquatableMixin  {
+class EntityWithSimpleProperties with EquatableMixin  {
   const EntityWithSimpleProperties({
     this.boolean,
     this.booleanInt,
@@ -95,17 +95,5 @@ class EntityWithSimpleProperties extends Resolvable with EquatableMixin  {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithSimpleProperties resolve(DivVariableContext context) {
-    boolean?.resolve(context);
-    booleanInt?.resolve(context);
-    color?.resolve(context);
-    dNum?.resolve(context);
-    integer?.resolve(context);
-    positiveInteger?.resolve(context);
-    string?.resolve(context);
-    url?.resolve(context);
-    return this;
   }
 }

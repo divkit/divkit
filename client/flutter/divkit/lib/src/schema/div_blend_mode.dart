@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivBlendMode implements Resolvable {
+enum DivBlendMode {
   sourceIn('source_in'),
   sourceAtop('source_atop'),
   darken('darken'),
@@ -105,7 +105,4 @@ enum DivBlendMode implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivBlendMode resolve(DivVariableContext context) => this;
 }

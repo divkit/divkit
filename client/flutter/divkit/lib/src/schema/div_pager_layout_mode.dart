@@ -3,11 +3,10 @@
 import 'package:divkit/src/schema/div_neighbour_page_size.dart';
 import 'package:divkit/src/schema/div_page_content_size.dart';
 import 'package:divkit/src/schema/div_page_size.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivPagerLayoutMode extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivPagerLayoutMode with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -115,11 +114,5 @@ class DivPagerLayoutMode extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivPagerLayoutMode resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

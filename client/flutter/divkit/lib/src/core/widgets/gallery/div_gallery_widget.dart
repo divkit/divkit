@@ -12,20 +12,13 @@ class DivGalleryWidget extends DivMappingWidget<DivGallery, DivGalleryModel> {
   });
 
   @override
-  DivGalleryModel value(BuildContext context) {
-    final divContext = read<DivContext>(context)!;
-    data.resolve(divContext.variables);
-    return data.bind(context);
-  }
+  DivGalleryModel value(BuildContext context) => data.resolve(context);
 
   @override
-  Stream<DivGalleryModel> stream(BuildContext context) {
-    final divContext = watch<DivContext>(context)!;
-    return divContext.variableManager.watch((values) {
-      data.resolve(values);
-      return data.bind(context);
-    });
-  }
+  Stream<DivGalleryModel> stream(BuildContext context) =>
+      watch<DivContext>(context)!.variableManager.watch(
+            (values) => data.resolve(context),
+          );
 
   @override
   Widget build(BuildContext context, DivGalleryModel model) {

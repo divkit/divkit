@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class NumberValue extends Resolvable with EquatableMixin {
+class NumberValue with EquatableMixin {
   const NumberValue({
     required this.value,
   });
@@ -42,11 +42,5 @@ class NumberValue extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  NumberValue resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

@@ -2,7 +2,7 @@
 
 import 'package:divkit/src/utils/parsing.dart';
 
-enum DivAnimationInterpolator implements Resolvable {
+enum DivAnimationInterpolator {
   linear('linear'),
   ease('ease'),
   easeIn('ease_in'),
@@ -105,7 +105,4 @@ enum DivAnimationInterpolator implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivAnimationInterpolator resolve(DivVariableContext context) => this;
 }

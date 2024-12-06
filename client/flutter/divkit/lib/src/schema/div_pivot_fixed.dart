@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed coordinates of the rotation axis.
-class DivPivotFixed extends Resolvable with EquatableMixin {
+class DivPivotFixed with EquatableMixin {
   const DivPivotFixed({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     this.value,
@@ -59,12 +59,5 @@ class DivPivotFixed extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPivotFixed resolve(DivVariableContext context) {
-    unit.resolve(context);
-    value?.resolve(context);
-    return this;
   }
 }

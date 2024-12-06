@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_linear_gradient.dart';
 import 'package:divkit/src/schema/div_radial_gradient.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivTextGradient extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivTextGradient with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -90,11 +89,5 @@ class DivTextGradient extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivTextGradient resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

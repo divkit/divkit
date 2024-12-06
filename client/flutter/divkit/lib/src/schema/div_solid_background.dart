@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Solid background color.
-class DivSolidBackground extends Resolvable with EquatableMixin {
+class DivSolidBackground with EquatableMixin {
   const DivSolidBackground({
     required this.color,
   });
@@ -45,11 +45,5 @@ class DivSolidBackground extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivSolidBackground resolve(DivVariableContext context) {
-    color.resolve(context);
-    return this;
   }
 }

@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Callbacks that are called after [data loading](https://divkit.tech/docs/en/concepts/interaction#loading-data).
-class DivDownloadCallbacks extends Resolvable with EquatableMixin {
+class DivDownloadCallbacks with EquatableMixin {
   const DivDownloadCallbacks({
     this.onFailActions,
     this.onSuccessActions,
@@ -66,12 +66,5 @@ class DivDownloadCallbacks extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivDownloadCallbacks resolve(DivVariableContext context) {
-    tryResolveList(onFailActions, (v) => v.resolve(context));
-    tryResolveList(onSuccessActions, (v) => v.resolve(context));
-    return this;
   }
 }

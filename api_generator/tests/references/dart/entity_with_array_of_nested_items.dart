@@ -6,7 +6,7 @@ import 'entity.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithArrayOfNestedItems extends Resolvable with EquatableMixin  {
+class EntityWithArrayOfNestedItems with EquatableMixin  {
   const EntityWithArrayOfNestedItems({
     required this.items,
   });
@@ -39,14 +39,10 @@ class EntityWithArrayOfNestedItems extends Resolvable with EquatableMixin  {
       return null;
     }
   }
-
-  EntityWithArrayOfNestedItems resolve(DivVariableContext context) {
-    return this;
-  }
 }
 
 
-class EntityWithArrayOfNestedItemsItem extends Resolvable with EquatableMixin  {
+class EntityWithArrayOfNestedItemsItem with EquatableMixin  {
   const EntityWithArrayOfNestedItemsItem({
     required this.entity,
     required this.property,
@@ -82,11 +78,5 @@ class EntityWithArrayOfNestedItemsItem extends Resolvable with EquatableMixin  {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithArrayOfNestedItemsItem resolve(DivVariableContext context) {
-    entity.resolve(context);
-    property.resolve(context);
-    return this;
   }
 }

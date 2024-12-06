@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets the value in the dictionary by the specified key. Deletes the key if the value is not set.
-class DivActionDictSetValue extends Resolvable with EquatableMixin {
+class DivActionDictSetValue with EquatableMixin {
   const DivActionDictSetValue({
     required this.key,
     this.value,
@@ -64,13 +64,5 @@ class DivActionDictSetValue extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionDictSetValue resolve(DivVariableContext context) {
-    key.resolve(context);
-    value?.resolve(context);
-    variableName.resolve(context);
-    return this;
   }
 }

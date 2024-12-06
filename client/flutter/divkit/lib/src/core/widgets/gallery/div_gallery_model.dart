@@ -25,16 +25,17 @@ class DivGalleryModel with EquatableMixin {
       ];
 }
 
-extension DivGalleryBinder on DivGallery {
-  DivGalleryModel bind(BuildContext context) {
+extension DivGalleryConverter on DivGallery {
+  DivGalleryModel resolve(BuildContext context) {
     final divContext = read<DivContext>(context)!;
-
+    final variables = divContext.variables;
     final viewScale = divContext.scale.view;
 
-    final alignment = crossContentAlignment.value.convert();
-    final orientation = this.orientation.value.convert();
+    final alignment = crossContentAlignment.resolve(variables).convert();
+    final orientation = this.orientation.resolve(variables).convert();
     final children = items?.map((e) => DivWidget(e)).toList();
-    final itemSpacing = this.itemSpacing.value.toDouble() * viewScale;
+    final itemSpacing =
+        this.itemSpacing.resolve(variables).toDouble() * viewScale;
 
     return DivGalleryModel(
       crossContentAlignment: alignment,

@@ -34,7 +34,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Slider for selecting a value in the range.
-class DivSlider extends Resolvable with EquatableMixin implements DivBase {
+class DivSlider with EquatableMixin implements DivBase {
   const DivSlider({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -763,57 +763,9 @@ class DivSlider extends Resolvable with EquatableMixin implements DivBase {
       return null;
     }
   }
-
-  @override
-  DivSlider resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    tryResolveList(animators, (v) => v.resolve(context));
-    tryResolveList(background, (v) => v.resolve(context));
-    border.resolve(context);
-    columnSpan?.resolve(context);
-    tryResolveList(disappearActions, (v) => v.resolve(context));
-    tryResolveList(extensions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    tryResolveList(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    maxValue.resolve(context);
-    minValue.resolve(context);
-    paddings.resolve(context);
-    tryResolveList(ranges, (v) => v.resolve(context));
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    secondaryValueAccessibility.resolve(context);
-    tryResolveList(selectedActions, (v) => v.resolve(context));
-    thumbSecondaryStyle?.resolve(context);
-    thumbSecondaryTextStyle?.resolve(context);
-    thumbStyle.resolve(context);
-    thumbTextStyle?.resolve(context);
-    tickMarkActiveStyle?.resolve(context);
-    tickMarkInactiveStyle?.resolve(context);
-    tryResolveList(tooltips, (v) => v.resolve(context));
-    trackActiveStyle.resolve(context);
-    trackInactiveStyle.resolve(context);
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    tryResolveList(transitionTriggers, (v) => v.resolve(context));
-    tryResolveList(variableTriggers, (v) => v.resolve(context));
-    tryResolveList(variables, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    tryResolveList(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
-  }
 }
 
-class DivSliderTextStyle extends Resolvable with EquatableMixin {
+class DivSliderTextStyle with EquatableMixin {
   const DivSliderTextStyle({
     required this.fontSize,
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
@@ -923,20 +875,9 @@ class DivSliderTextStyle extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivSliderTextStyle resolve(DivVariableContext context) {
-    fontSize.resolve(context);
-    fontSizeUnit.resolve(context);
-    fontWeight.resolve(context);
-    fontWeightValue?.resolve(context);
-    offset?.resolve(context);
-    textColor.resolve(context);
-    return this;
-  }
 }
 
-class DivSliderRange extends Resolvable with EquatableMixin {
+class DivSliderRange with EquatableMixin {
   const DivSliderRange({
     this.end,
     this.margins = const DivEdgeInsets(),
@@ -1023,15 +964,5 @@ class DivSliderRange extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivSliderRange resolve(DivVariableContext context) {
-    end?.resolve(context);
-    margins.resolve(context);
-    start?.resolve(context);
-    trackActiveStyle?.resolve(context);
-    trackInactiveStyle?.resolve(context);
-    return this;
   }
 }

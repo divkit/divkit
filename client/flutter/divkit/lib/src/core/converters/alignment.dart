@@ -7,9 +7,9 @@ class DivAlignmentConverter {
 
   const DivAlignmentConverter(this.vertical, this.horizontal);
 
-  AlignmentGeometry? convert() {
-    final vertical = this.vertical?.value;
-    final horizontal = this.horizontal?.value;
+  AlignmentGeometry? resolve(DivVariableContext context) {
+    final vertical = this.vertical?.resolve(context);
+    final horizontal = this.horizontal?.resolve(context);
 
     if (vertical != null && horizontal != null) {
       return vertical.map(
@@ -70,8 +70,8 @@ class DivTextAlignmentConverter {
 
   const DivTextAlignmentConverter(this.vertical, this.horizontal);
 
-  TextAlign convertHorizontal() {
-    switch (horizontal.value) {
+  TextAlign resolveHorizontal(DivVariableContext context) {
+    switch (horizontal.resolve(context)) {
       case DivAlignmentHorizontal.left:
         return TextAlign.left;
       case DivAlignmentHorizontal.center:
@@ -85,8 +85,8 @@ class DivTextAlignmentConverter {
     }
   }
 
-  TextAlignVertical convertVertical() {
-    switch (vertical.value) {
+  TextAlignVertical resolveVertical(DivVariableContext context) {
+    switch (vertical.resolve(context)) {
       case DivAlignmentVertical.top:
         return TextAlignVertical.top;
       case DivAlignmentVertical.center:

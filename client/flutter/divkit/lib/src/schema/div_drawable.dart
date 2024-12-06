@@ -1,11 +1,10 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_shape_drawable.dart';
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DivDrawable extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivDrawable with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -65,11 +64,5 @@ class DivDrawable extends Resolvable with EquatableMixin {
     } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivDrawable resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

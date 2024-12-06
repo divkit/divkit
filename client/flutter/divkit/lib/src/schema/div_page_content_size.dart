@@ -3,15 +3,15 @@
 import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Page size equals to its content size.
-class DivPageContentSize extends Resolvable with EquatableMixin {
+/// The page size is equal to the size of its content.
+class DivPageContentSize with EquatableMixin {
   const DivPageContentSize({
     this.alignment = const ValueExpression(DivPageContentSizeAlignment.center),
   });
 
   static const type = "wrap_content";
 
-  /// Pager pages' alignment along the scroll axis. For edge alignment, offset from parent edge is equal to the corresponding padding.
+  /// Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
   // default value: DivPageContentSizeAlignment.center
   final Expression<DivPageContentSizeAlignment> alignment;
 
@@ -49,15 +49,9 @@ class DivPageContentSize extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivPageContentSize resolve(DivVariableContext context) {
-    alignment.resolve(context);
-    return this;
-  }
 }
 
-enum DivPageContentSizeAlignment implements Resolvable {
+enum DivPageContentSizeAlignment {
   start('start'),
   center('center'),
   end('end');
@@ -127,7 +121,4 @@ enum DivPageContentSizeAlignment implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivPageContentSizeAlignment resolve(DivVariableContext context) => this;
 }

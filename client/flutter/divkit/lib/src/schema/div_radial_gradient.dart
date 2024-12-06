@@ -8,7 +8,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Radial gradient.
-class DivRadialGradient extends Resolvable with EquatableMixin {
+class DivRadialGradient with EquatableMixin {
   const DivRadialGradient({
     this.centerX =
         const DivRadialGradientCenter.divRadialGradientRelativeCenter(
@@ -142,14 +142,5 @@ class DivRadialGradient extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivRadialGradient resolve(DivVariableContext context) {
-    centerX.resolve(context);
-    centerY.resolve(context);
-    colors.resolve(context);
-    radius.resolve(context);
-    return this;
   }
 }

@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Variable — HEX color as a string.
-class ColorVariable extends Resolvable with EquatableMixin {
+class ColorVariable with EquatableMixin {
   const ColorVariable({
     required this.name,
     required this.value,
@@ -58,10 +58,5 @@ class ColorVariable extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  ColorVariable resolve(DivVariableContext context) {
-    return this;
   }
 }

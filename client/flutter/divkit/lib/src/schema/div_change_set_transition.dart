@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Animations.
-class DivChangeSetTransition extends Resolvable with EquatableMixin {
+class DivChangeSetTransition with EquatableMixin {
   const DivChangeSetTransition({
     required this.items,
   });
@@ -53,10 +53,5 @@ class DivChangeSetTransition extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivChangeSetTransition resolve(DivVariableContext context) {
-    return this;
   }
 }

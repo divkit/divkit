@@ -1,10 +1,9 @@
 ## 0.6.0-rc.3
 
-* Update generated schema
-* Support nullable end in div-ranges and cloud background fallback
 * Clean dependencies
+* Update generated schema
 * Add a synchronous method to resolve expression
-* Auto generate resolve DTO mechanism
+* Add nullable end in div-ranges and cloud background fallback
 * Rewrite context initialization mechanism to synchronous
 * Rewrite conversion mechanism, simplify and standardize
 * Rewrite expression analyzer to synchronous
@@ -12,18 +11,20 @@
 * Fix the missing valid state error
 * Fix unsafe map of backgrounds
 
-
 ## Migration 0.5.0 → 0.6.0
 * Remove DivData `preload` and `parse` methods for simplification
 * Remove DivKitView property `cacheManager` as unsupported to the proper extent
 * Remove DivKitView property `loadingBuilder` as unused
 * Replace DivKitView props `viewScale` and `textScale` to `scale`
-* Change `safeParseObj` to `safeParseObject`
-* Change `safeListMap` to  `safeParseObjects`
-* Change `prop.resolve(context: context)` to `prop.resolve(context)`
-* DTO models use the generated resolve instead of extension
-* Now are required to perform the conversion DTO to DivModel
-* Due to architecture changes and conversion mechanism changes, you need to migrate your codebase
+* Replace `safeParseObj` to `safeParseObject`
+* Replace `safeListMap` to `safeParseObjects`
+* Simplify expression resolving syntax:
+  ```diff
+  - prop.resolve(context: context)
+  + prop.resolve(context)
+  ```
+* Due to architecture and conversion mechanism changes, 
+  you need to check your application when updating
 
 ## 0.5.0
 
@@ -38,7 +39,7 @@
 ## Migration 0.4 → 0.5
 * The DivExpressionResolver method `clearVariables` was removed as unused
 * To ensure stability and a large change in the main calculation mechanism,
-  you need to check the your application when updating
+  you need to check your application when updating
 
 ## 0.4.0
 

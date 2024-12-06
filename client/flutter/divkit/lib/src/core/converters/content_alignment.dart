@@ -165,15 +165,15 @@ class DivContentAlignmentConverter {
     this.layoutMode,
   );
 
-  ContentAlignment convert() {
+  ContentAlignment resolve(DivVariableContext context) {
     final safeVertical = vertical;
     final safeHorizontal = horizontal;
-    final resolvedOrientation = orientation.value;
+    final resolvedOrientation = orientation.resolve(context);
 
-    final divVertical = safeVertical.value;
-    final divHorizontal = safeHorizontal.value;
+    final divVertical = safeVertical.resolve(context);
+    final divHorizontal = safeHorizontal.resolve(context);
 
-    final isWrap = layoutMode.value == DivContainerLayoutMode.wrap;
+    final isWrap = layoutMode.resolve(context) == DivContainerLayoutMode.wrap;
 
     return resolvedOrientation.map(
       vertical: () {

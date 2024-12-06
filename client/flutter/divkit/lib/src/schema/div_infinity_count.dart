@@ -1,10 +1,9 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Infinite number of repetitions.
-class DivInfinityCount extends Resolvable with EquatableMixin {
+class DivInfinityCount with EquatableMixin {
   const DivInfinityCount();
 
   static const type = "infinity";
@@ -22,7 +21,4 @@ class DivInfinityCount extends Resolvable with EquatableMixin {
     }
     return const DivInfinityCount();
   }
-
-  @override
-  DivInfinityCount resolve(DivVariableContext context) => this;
 }

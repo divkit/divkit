@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// It sets margins.
-class DivEdgeInsets extends Resolvable with EquatableMixin {
+class DivEdgeInsets with EquatableMixin {
   const DivEdgeInsets({
     this.bottom = const ValueExpression(0),
     this.end,
@@ -127,17 +127,5 @@ class DivEdgeInsets extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivEdgeInsets resolve(DivVariableContext context) {
-    bottom.resolve(context);
-    end?.resolve(context);
-    left.resolve(context);
-    right.resolve(context);
-    start?.resolve(context);
-    top.resolve(context);
-    unit.resolve(context);
-    return this;
   }
 }

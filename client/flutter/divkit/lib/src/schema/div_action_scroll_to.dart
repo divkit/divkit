@@ -5,7 +5,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Scrolls to a position or switches to the container element specified by the `destination` parameter.
-class DivActionScrollTo extends Resolvable with EquatableMixin {
+class DivActionScrollTo with EquatableMixin {
   const DivActionScrollTo({
     this.animated = const ValueExpression(true),
     required this.destination,
@@ -79,13 +79,5 @@ class DivActionScrollTo extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionScrollTo resolve(DivVariableContext context) {
-    animated.resolve(context);
-    destination.resolve(context);
-    id.resolve(context);
-    return this;
   }
 }

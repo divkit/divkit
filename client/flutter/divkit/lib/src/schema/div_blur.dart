@@ -4,7 +4,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Gaussian image blur.
-class DivBlur extends Resolvable with EquatableMixin {
+class DivBlur with EquatableMixin {
   const DivBlur({
     required this.radius,
   });
@@ -46,11 +46,5 @@ class DivBlur extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivBlur resolve(DivVariableContext context) {
-    radius.resolve(context);
-    return this;
   }
 }

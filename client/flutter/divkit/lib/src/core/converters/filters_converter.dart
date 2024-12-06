@@ -11,7 +11,8 @@ class DivFilters {
     this.blurRadius,
   });
 
-  static DivFilters combine({
+  static DivFilters combine(
+    DivVariableContext context, {
     required List<DivFilter> filters,
     required double viewScale,
   }) {
@@ -20,7 +21,7 @@ class DivFilters {
     for (var el in filters) {
       el.map(
         divBlur: (divBlur) {
-          blurRadius = divBlur.radius.value.toDouble() * viewScale;
+          blurRadius = divBlur.radius.resolve(context).toDouble() * viewScale;
         },
         divFilterRtlMirror: (divFilterRtlMirror) {
           isRtl = true;

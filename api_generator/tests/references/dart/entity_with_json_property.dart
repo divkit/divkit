@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithJsonProperty extends Resolvable with EquatableMixin  {
+class EntityWithJsonProperty with EquatableMixin  {
   const EntityWithJsonProperty({
     this.jsonProperty = None,
   });
@@ -37,9 +37,5 @@ class EntityWithJsonProperty extends Resolvable with EquatableMixin  {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithJsonProperty resolve(DivVariableContext context) {
-    return this;
   }
 }

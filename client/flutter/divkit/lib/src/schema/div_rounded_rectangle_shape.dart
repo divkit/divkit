@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A rectangle with rounded corners.
-class DivRoundedRectangleShape extends Resolvable with EquatableMixin {
+class DivRoundedRectangleShape with EquatableMixin {
   const DivRoundedRectangleShape({
     this.backgroundColor,
     this.cornerRadius = const DivFixedSize(
@@ -129,15 +129,5 @@ class DivRoundedRectangleShape extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivRoundedRectangleShape resolve(DivVariableContext context) {
-    backgroundColor?.resolve(context);
-    cornerRadius.resolve(context);
-    itemHeight.resolve(context);
-    itemWidth.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

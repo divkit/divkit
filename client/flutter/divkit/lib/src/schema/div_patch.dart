@@ -6,7 +6,7 @@ import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Edits the element.
-class DivPatch extends Resolvable with EquatableMixin {
+class DivPatch with EquatableMixin {
   const DivPatch({
     required this.changes,
     this.mode = const ValueExpression(DivPatchMode.partial),
@@ -107,18 +107,9 @@ class DivPatch extends Resolvable with EquatableMixin {
       return null;
     }
   }
-
-  @override
-  DivPatch resolve(DivVariableContext context) {
-    tryResolveList(changes, (v) => v.resolve(context));
-    mode.resolve(context);
-    tryResolveList(onAppliedActions, (v) => v.resolve(context));
-    tryResolveList(onFailedActions, (v) => v.resolve(context));
-    return this;
-  }
 }
 
-enum DivPatchMode implements Resolvable {
+enum DivPatchMode {
   transactional('transactional'),
   partial('partial');
 
@@ -177,12 +168,9 @@ enum DivPatchMode implements Resolvable {
       return null;
     }
   }
-
-  @override
-  DivPatchMode resolve(DivVariableContext context) => this;
 }
 
-class DivPatchChange extends Resolvable with EquatableMixin {
+class DivPatchChange with EquatableMixin {
   const DivPatchChange({
     required this.id,
     this.items,
@@ -237,10 +225,5 @@ class DivPatchChange extends Resolvable with EquatableMixin {
       logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPatchChange resolve(DivVariableContext context) {
-    return this;
   }
 }
