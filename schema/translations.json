@@ -1955,6 +1955,10 @@
     "en": "Slider for selecting a value in the range.",
     "ru": "Слайдер для выбора значения в диапазоне."
   },
+  "div_slider_is_enabled": {
+    "en": "Enables or disables value selecting by click/tap or swipe.",
+    "ru": "Включает или отключает возможность переключения значения нажатием или свайпом."
+  },
   "div_slider_max_value": {
     "en": "Maximum value. It must be greater than the minimum value.",
     "ru": "Максимальное значение. Должно быть больше минимального."

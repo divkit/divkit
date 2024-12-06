@@ -440,6 +440,24 @@
       "file": "slider_presets.json"
     },
     {
+      "title": "Disabled slider",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Tap the \"Disable\" button and try to change slider value",
+        "Tap the \"Enable\" button and try to change slider value"
+      ],
+      "expected_results": [
+        "Value is not changed",
+        "Value changes"
+      ],
+      "file": "slider_is_enabled.json"
+    },
+    {
       "title": "Root state switching",
       "automated": [
         "web"

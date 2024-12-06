@@ -71,6 +71,10 @@ internal class DivSliderBinder @Inject constructor(
             }
         )
 
+        view.addSubscription(
+            div.isEnabled.observeAndGet(expressionResolver) { view.interactive = it }
+        )
+
         view.clearOnThumbChangedListener()
         view.setupThumb(div, context, path)
         view.setupSecondaryThumb(div, context, path)
