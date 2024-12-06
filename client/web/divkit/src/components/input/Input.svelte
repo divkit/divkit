@@ -358,7 +358,7 @@
         }
 
         if (val.length > maxLength) {
-            val = contentEditableValue = val.slice(0, maxLength);
+            val = contentEditableValue = value;
             if (input instanceof HTMLInputElement) {
                 input.value = val;
             }
