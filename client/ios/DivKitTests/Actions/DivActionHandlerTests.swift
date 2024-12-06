@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 import LayoutKit
 
 final class DivActionHandlerTests: XCTestCase {

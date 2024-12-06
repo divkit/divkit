@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 @testable import LayoutKit
 import Testing
 import UIKit
