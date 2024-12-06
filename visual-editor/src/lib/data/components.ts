@@ -10,7 +10,7 @@ export const DEFAULT_ALLOWED_COMPONENTS = [
     'separator'
 ];
 
-const MAP = (schema.div.anyOf || []).filter(it => it.$ref !== 'div-switch.json').reduce((acc, item) => {
+const MAP = (schema.div.anyOf || []).reduce((acc, item) => {
     if (item.$ref) {
         const type = getTypeBySchemaName(item.$ref.replace(/\.json$/, '')) as string;
 

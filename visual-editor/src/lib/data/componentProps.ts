@@ -22,7 +22,8 @@ export const supportedComponents = new Set([
     'slider',
     'input',
     'select',
-    'video'
+    'video',
+    'switch'
 ]);
 
 export const containerComponents = new Set([
@@ -831,6 +832,36 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             name: 'props.hint_text',
             prop: 'hint_text',
             type: 'string',
+            enableSources: true
+        }]
+    }],
+    switch: [...BASE_COMPONENT_PROPS, {
+        type: 'group',
+        title: 'a11yProps.title',
+        list: [{
+            name: 'props.a11y_description',
+            prop: 'accessibility.description',
+            type: 'string',
+            enableSources: true
+        }]
+    }, {
+        type: 'group',
+        title: 'switchProps.title',
+        list: [{
+            name: 'props.text_variable',
+            prop: 'is_on_variable',
+            type: 'variable-name',
+            required: true
+        }, {
+            name: 'props.is_enabled',
+            prop: 'is_enabled',
+            type: 'boolean',
+            default: true,
+            enableSources: true
+        }, {
+            name: 'props.on_color',
+            prop: 'on_color',
+            type: 'color',
             enableSources: true
         }]
     }]

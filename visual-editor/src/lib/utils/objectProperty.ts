@@ -58,7 +58,7 @@ export function setObjectProperty(obj: object, name: string, value: unknown): vo
     while (i < parts.length) {
         const key = parts[i] as keyof typeof curObj;
         if (i + 1 === parts.length) {
-            if (!value && value !== 0) {
+            if (!value && value !== 0 && value !== false) {
                 if (Array.isArray(curObj)) {
                     curObj.splice(Number(parts[i]), 1);
                 } else {
