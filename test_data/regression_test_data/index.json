@@ -294,6 +294,10 @@
     },
     {
       "title": "Gallery bottom multiline",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -301,6 +305,10 @@
     },
     {
       "title": "Gallery bottom multiline selected actions",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -308,6 +316,10 @@
     },
     {
       "title": "Gallery bottom singleline",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
