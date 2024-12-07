@@ -45,14 +45,6 @@ func cast<T>(_ value: Any) -> T? {
     return Int(doubleValue) as? T
   }
 
-  if T.self == String.self {
-    if let intValue = value as? Int {
-      return String(intValue) as? T
-    } else if let doubleValue = value as? Double {
-      return String(doubleValue) as? T
-    }
-  }
-
   return nil
 }
 
