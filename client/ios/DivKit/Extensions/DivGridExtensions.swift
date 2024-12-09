@@ -39,6 +39,13 @@ extension DivGrid: DivBlockModeling {
       )
     }
 
+    if items.isEmpty {
+      return EmptyBlock(
+        widthTrait: resolveContentWidthTrait(context),
+        heightTrait: resolveContentHeightTrait(context)
+      )
+    }
+
     let expressionResolver = context.expressionResolver
     return try GridBlock(
       widthTrait: resolveContentWidthTrait(context),
