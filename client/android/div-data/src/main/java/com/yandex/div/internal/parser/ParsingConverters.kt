@@ -47,6 +47,13 @@ val URI_TO_STRING: Converter<Uri, String> = { uri -> uri.toString() }
 fun getURI_TO_STRING() = URI_TO_STRING
 
 @JvmField
+val STRING_TO_URI: Converter<String, Uri> = { value -> Uri.parse(value) }
+
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getSTRING_TO_URI() = STRING_TO_URI
+
+@JvmField
 val ANY_TO_URI: Converter<Any, Uri> = { value -> 
     when(value) {
         is String -> Uri.parse(value)
