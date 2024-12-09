@@ -31,6 +31,10 @@
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
     export let doubleTapActions: MaybeMissing<Action[]> | undefined = undefined;
     export let longTapActions: MaybeMissing<Action[]> | undefined = undefined;
+    export let pressStartActions: MaybeMissing<Action[]> | undefined = undefined;
+    export let pressEndActions: MaybeMissing<Action[]> | undefined = undefined;
+    export let hoverStartActions: MaybeMissing<Action[]> | undefined = undefined;
+    export let hoverEndActions: MaybeMissing<Action[]> | undefined = undefined;
     export let cls = '';
     export let style: string | null = null;
     export let attrs: Record<string, string | undefined> | undefined = undefined;
@@ -59,6 +63,7 @@
     let longtapTimer: number;
     let role: string | undefined;
     let isChecked: boolean | undefined;
+    let pointerdown = false;
 
     $: {
         if (Array.isArray(actions) && actions?.length) {
@@ -147,6 +152,26 @@
             node.removeEventListener('touchmove', onTouchMove);
             node.removeEventListener('touchend', onTouchEnd);
             node.removeEventListener('touchcancel', onTouchEnd);
+        }
+
+        if (pressStartActions?.length || pressEndActions?.length) {
+            node.addEventListener('pointerdown', onPointerDown);
+            window.addEventListener('pointerup', onPointerUp);
+            window.addEventListener('pointercancel', onPointerUp);
+        } else {
+            node.removeEventListener('pointerdown', onPointerDown);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+        }
+        if (hoverStartActions?.length) {
+            node.addEventListener('pointerenter', onPointerEnter);
+        } else {
+            node.removeEventListener('pointerenter', onPointerEnter);
+        }
+        if (hoverEndActions?.length) {
+            node.addEventListener('pointerleave', onPointerLeave);
+        } else {
+            node.removeEventListener('pointerleave', onPointerLeave);
         }
     }
 
@@ -247,6 +272,40 @@
         }, 100);
     }
 
+    function onPointerDown(): void {
+        if (actionCtx.hasAction()) {
+            return;
+        }
+
+        pointerdown = true;
+        componentContext.execAnyActions(pressStartActions, { node });
+    }
+
+    function onPointerUp(): void {
+        if (actionCtx.hasAction() || !pointerdown) {
+            return;
+        }
+
+        pointerdown = false;
+        componentContext.execAnyActions(pressEndActions, { node });
+    }
+
+    function onPointerEnter(): void {
+        if (actionCtx.hasAction()) {
+            return;
+        }
+
+        componentContext.execAnyActions(hoverStartActions, { node });
+    }
+
+    function onPointerLeave(): void {
+        if (actionCtx.hasAction()) {
+            return;
+        }
+
+        componentContext.execAnyActions(hoverEndActions, { node });
+    }
+
     function onKeydown(event: KeyboardEvent): void {
         // todo check event.target is not inside current element
 
@@ -280,6 +339,11 @@
     });
 
     onDestroy(() => {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+        }
+
         if (id && !hasInnerFocusable) {
             rootCtx.unregisterFocusable(id);
         }

@@ -41,7 +41,9 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_press_start_actions",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "press_end_actions": {
       "type": "array",
@@ -49,7 +51,9 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_press_end_actions",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "hover_start_actions": {
       "type": "array",
@@ -57,7 +61,9 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_hover_start_actions",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "hover_end_actions": {
       "type": "array",
@@ -65,7 +71,9 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_hover_end_actions",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "action_animation": {
       "$ref": "div-animation.json",
