@@ -7,7 +7,9 @@
         ActionFocusElement,
         ActionSetVariable,
         ActionDictSetValue,
-        ActionArraySetValue
+        ActionArraySetValue,
+        ActionShowTooltip,
+        ActionHideTooltip
     } from '@divkitframework/divkit/typings/common';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { parseAction } from '../../data/actions';
@@ -58,6 +60,12 @@
             } else if (parsed.type === 'typed:copy_to_clipboard') {
                 type = $l10n('actions.copy_to_clipboard');
                 text = '';
+            } else if (parsed.type === 'typed:show_tooltip') {
+                type = $l10n('actions.show_tooltip');
+                text = (parsed.typedParams as ActionShowTooltip)?.id || '';
+            } else if (parsed.type === 'typed:hide_tooltip') {
+                type = $l10n('actions.hide_tooltip');
+                text = (parsed.typedParams as ActionHideTooltip)?.id || '';
             } else {
                 type = $l10n('actions-unknown');
                 text = parsed.url || '';

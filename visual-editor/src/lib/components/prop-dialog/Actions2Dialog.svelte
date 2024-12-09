@@ -7,7 +7,9 @@
         array_remove_value: 'div-action-array-remove-value',
         dict_set_value: 'div-action-dict-set-value',
         array_set_value: 'div-action-array-set-value',
-        copy_to_clipboard: 'div-action-copy-to-clipboard'
+        copy_to_clipboard: 'div-action-copy-to-clipboard',
+        show_tooltip: 'div-action-show-tooltip',
+        hide_tooltip: 'div-action-hide-tooltip'
     };
 </script>
 
@@ -141,6 +143,12 @@
     }, {
         value: 'typed:copy_to_clipboard',
         text: $l10n('actions.copy_to_clipboard')
+    }, {
+        value: 'typed:show_tooltip',
+        text: $l10n('actions.show_tooltip')
+    }, {
+        value: 'typed:hide_tooltip',
+        text: $l10n('actions.hide_tooltip')
     }].concat($customActions.map((actionDesc, i) => {
         return {
             value: `custom:${i}`,
