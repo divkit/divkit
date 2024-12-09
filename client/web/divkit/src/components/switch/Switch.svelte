@@ -44,7 +44,7 @@
 
     $: variable = componentContext.json.is_on_variable;
 
-    $: valueVariable = variable && componentContext.getVariable(variable, 'boolean') || createVariable('temp', 'boolean', '');
+    $: valueVariable = variable && componentContext.getVariable(variable, 'boolean') || createVariable('temp', 'boolean', false);
 
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
