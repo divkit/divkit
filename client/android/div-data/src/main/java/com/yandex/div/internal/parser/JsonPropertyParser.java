@@ -20,8 +20,6 @@ import static com.yandex.div.internal.parser.JsonParsers.alwaysValid;
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValidList;
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValidString;
 import static com.yandex.div.internal.parser.JsonParsers.doNotConvert;
-import static com.yandex.div.internal.parser.JsonParsers.nullable;
-import static com.yandex.div.internal.parser.JsonParsers.optSafe;
 import static com.yandex.div.json.ParsingExceptionKt.dependencyFailed;
 import static com.yandex.div.json.ParsingExceptionKt.invalidValue;
 import static com.yandex.div.json.ParsingExceptionKt.missingValue;
@@ -297,9 +295,9 @@ public class JsonPropertyParser {
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final ListValidator<String> validator
+            @NonNull final ListValidator<String> listValidator
     ) {
-        return readList(context, logger, jsonObject, key, doNotConvert(), validator, alwaysValidString());
+        return readList(context, logger, jsonObject, key, doNotConvert(), listValidator, alwaysValidString());
     }
 
     @NonNull
@@ -309,9 +307,9 @@ public class JsonPropertyParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator
+            @NonNull final ListValidator<V> listValidator
     ) {
-        return readList(context, logger, jsonObject, key, converter, validator, alwaysValid());
+        return readList(context, logger, jsonObject, key, converter, listValidator, alwaysValid());
     }
 
     @NonNull
@@ -321,7 +319,7 @@ public class JsonPropertyParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator,
+            @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
@@ -333,7 +331,7 @@ public class JsonPropertyParser {
         if (length == 0) {
             List<V> emptyList = Collections.emptyList();
             try {
-                if (!validator.isValid(emptyList)) {
+                if (!listValidator.isValid(emptyList)) {
                     logger.logError(invalidValue(jsonObject, key, emptyList));
                     return emptyList;
                 }
@@ -381,7 +379,7 @@ public class JsonPropertyParser {
         }
 
         try {
-            if (!validator.isValid(list)) {
+            if (!listValidator.isValid(list)) {
                 throw invalidValue(jsonObject, key, list);
             }
         } catch (ClassCastException castException) {
@@ -442,7 +440,7 @@ public class JsonPropertyParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
-            @NonNull final ListValidator<V> validator
+            @NonNull final ListValidator<V> listValidator
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
         if (array == null) {
@@ -453,7 +451,7 @@ public class JsonPropertyParser {
         if (length == 0) {
             List<V> emptyList = Collections.emptyList();
             try {
-                if (!validator.isValid(emptyList)) {
+                if (!listValidator.isValid(emptyList)) {
                     logger.logError(invalidValue(jsonObject, key, emptyList));
                     return emptyList;
                 }
@@ -488,7 +486,7 @@ public class JsonPropertyParser {
         }
 
         try {
-            if (!validator.isValid(list)) {
+            if (!listValidator.isValid(list)) {
                 throw invalidValue(jsonObject, key, list);
             }
         } catch (ClassCastException castException) {
@@ -516,9 +514,9 @@ public class JsonPropertyParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator
+            @NonNull final ListValidator<V> listValidator
     ) {
-        return readOptionalList(context, logger, jsonObject, key, converter, validator, alwaysValid());
+        return readOptionalList(context, logger, jsonObject, key, converter, listValidator, alwaysValid());
     }
 
     @Nullable
@@ -528,7 +526,7 @@ public class JsonPropertyParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator,
+            @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
@@ -540,7 +538,7 @@ public class JsonPropertyParser {
         if (length == 0) {
             List<V> emptyList = Collections.emptyList();
             try {
-                if (!validator.isValid(emptyList)) {
+                if (!listValidator.isValid(emptyList)) {
                     logger.logError(invalidValue(jsonObject, key, emptyList));
                     return null;
                 }
@@ -588,7 +586,7 @@ public class JsonPropertyParser {
         }
 
         try {
-            if (!validator.isValid(list)) {
+            if (!listValidator.isValid(list)) {
                 logger.logError(invalidValue(jsonObject, key, list));
                 return null;
             }
@@ -651,7 +649,7 @@ public class JsonPropertyParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
-            @NonNull final ListValidator<V> validator
+            @NonNull final ListValidator<V> listValidator
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
         if (array == null) {
@@ -662,7 +660,7 @@ public class JsonPropertyParser {
         if (length == 0) {
             List<V> emptyList = Collections.emptyList();
             try {
-                if (!validator.isValid(emptyList)) {
+                if (!listValidator.isValid(emptyList)) {
                     logger.logError(invalidValue(jsonObject, key, emptyList));
                     return null;
                 }
@@ -697,7 +695,7 @@ public class JsonPropertyParser {
         }
 
         try {
-            if (!validator.isValid(list)) {
+            if (!listValidator.isValid(list)) {
                 logger.logError(invalidValue(jsonObject, key, list));
                 return null;
             }
@@ -707,5 +705,34 @@ public class JsonPropertyParser {
         }
 
         return list;
+    }
+
+    @Nullable
+    private static JSONObject nullable(@Nullable JSONObject json) {
+        if (json == null || json == JSONObject.NULL) {
+            return null;
+        }
+
+        return json;
+    }
+
+    @Nullable
+    private static <T> T optSafe(JSONObject json, String key) {
+        Object value = json.opt(key);
+        if (value == JSONObject.NULL) {
+            return null;
+        }
+
+        return (T) value;
+    }
+
+    @Nullable
+    private static <T> T optSafe(JSONArray json, int index) {
+        Object value = json.opt(index);
+        if (value == JSONObject.NULL) {
+            return null;
+        }
+
+        return (T) value;
     }
 }

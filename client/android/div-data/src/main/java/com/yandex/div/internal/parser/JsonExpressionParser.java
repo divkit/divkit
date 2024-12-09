@@ -3,13 +3,11 @@ package com.yandex.div.internal.parser;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.json.ParsingErrorLogger;
-import com.yandex.div.json.ParsingException;
 import com.yandex.div.json.expressions.ConstantExpressionList;
 import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.json.expressions.MutableExpressionList;
 import com.yandex.div.serialization.ParsingContext;
-
 import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONArray;
@@ -23,7 +21,6 @@ import static com.yandex.div.internal.parser.JsonParsers.alwaysValid;
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValidList;
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValidString;
 import static com.yandex.div.internal.parser.JsonParsers.doNotConvert;
-import static com.yandex.div.internal.parser.JsonParsers.optSafe;
 import static com.yandex.div.internal.parser.TypeHelpersKt.TYPE_HELPER_STRING;
 import static com.yandex.div.json.ParsingExceptionKt.invalidValue;
 import static com.yandex.div.json.ParsingExceptionKt.missingValue;
@@ -227,49 +224,41 @@ public class JsonExpressionParser {
     ) {
         final Object intermediate = optSafe(jsonObject, key);
 
-        if (intermediate == null
-        ) {
+        if (intermediate == null) {
             return null;
         }
 
-        if (Expression.mayBeExpression(intermediate)
-        ) {
+        if (Expression.mayBeExpression(intermediate)) {
             return new Expression.MutableExpression<>(
                     key, intermediate.toString(), converter, validator, logger, typeHelper, defaultValue);
         } else {
             V value;
             try {
                 value = converter.invoke((R) intermediate);
-            } catch (ClassCastException castException
-            ) {
+            } catch (ClassCastException castException) {
                 logger.logError(typeMismatch(jsonObject, key, intermediate));
                 return null;
-            } catch (Exception e
-            ) {
+            } catch (Exception e) {
                 logger.logError(invalidValue(jsonObject, key, intermediate, e));
                 return null;
             }
 
-            if (value == null
-            ) {
+            if (value == null) {
                 logger.logError(invalidValue(jsonObject, key, intermediate));
                 return null;
             }
 
-            if (!typeHelper.isTypeValid(value)
-            ) {
+            if (!typeHelper.isTypeValid(value)) {
                 logger.logError(typeMismatch(jsonObject, key, intermediate));
                 return null;
             }
 
             try {
-                if (!validator.isValid(value)
-                ) {
+                if (!validator.isValid(value)) {
                     logger.logError(invalidValue(jsonObject, key, intermediate));
                     return null;
                 }
-            } catch (ClassCastException castException
-            ) {
+            } catch (ClassCastException castException) {
                 logger.logError(typeMismatch(jsonObject, key, intermediate));
                 return null;
             }
@@ -283,9 +272,10 @@ public class JsonExpressionParser {
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final ListValidator<String> validator
+            @NonNull final ListValidator<String> listValidator
     ) {
-        return readExpressionList(context, logger, jsonObject, key, TYPE_HELPER_STRING, doNotConvert(), validator, alwaysValidString());
+        return readExpressionList(
+                context, logger, jsonObject, key, TYPE_HELPER_STRING, doNotConvert(), listValidator, alwaysValidString());
     }
 
     @NonNull
@@ -307,9 +297,10 @@ public class JsonExpressionParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final TypeHelper<String> typeHelper,
-            @NonNull final ListValidator<String> validator
+            @NonNull final ListValidator<String> listValidator
     ) {
-        return readExpressionList(context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, alwaysValidString());
+        return readExpressionList(
+                context, logger, jsonObject, key, typeHelper, doNotConvert(), listValidator, alwaysValidString());
     }
 
     @NonNull
@@ -320,9 +311,10 @@ public class JsonExpressionParser {
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
             @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator
+            @NonNull final ListValidator<V> listValidator
     ) {
-        return readExpressionList(context, logger, jsonObject, key, typeHelper, converter, validator, alwaysValid());
+        return readExpressionList(
+                context, logger, jsonObject, key, typeHelper, converter, listValidator, alwaysValid());
     }
 
     @NonNull
@@ -332,10 +324,11 @@ public class JsonExpressionParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
-            @NonNull final ListValidator<V> validator,
+            @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
-        return readExpressionList(context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, itemValidator);
+        return readExpressionList(
+                context, logger, jsonObject, key, typeHelper, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
@@ -346,15 +339,110 @@ public class JsonExpressionParser {
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
             @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator,
+            @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<V> result = readOptionalExpressionList(
-                context, logger, jsonObject, key, typeHelper, converter, validator, itemValidator, failFastHandler());
-        if (result == null) {
-            throw invalidValue(key, jsonObject);
+        JSONArray array = jsonObject.optJSONArray(key);
+        if (array == null) {
+            throw missingValue(jsonObject, key);
         }
-        return result;
+
+        int length = array.length();
+        if (length == 0) {
+            List<V> emptyList = Collections.emptyList();
+            try {
+                if (!listValidator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return emptyExpressionList();
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return emptyExpressionList();
+            }
+            return emptyExpressionList();
+        }
+
+        // This list may have content of mixed types (raw values and expressions) intentionally.
+        // At the end of this method we'll transform it's elements to single type.
+        List untypedList = new ArrayList(length);
+        boolean containsExpressions = false;
+
+        for (int i = 0; i < length; i++) {
+            final Object intermediate = optSafe(array, i);
+
+            if (intermediate == null) {
+                continue;
+            }
+
+            if (Expression.mayBeExpression(intermediate)) {
+                containsExpressions = true;
+                untypedList.add(new Expression.MutableExpression<>(
+                        /*expressionKey*/ key + "[" + i + "]",
+                        /*rawExpression*/ intermediate.toString(),
+                        /*converter*/ converter,
+                        /*valueValidator*/ itemValidator,
+                        /*logger*/ logger,
+                        /*typeHelper*/ typeHelper,
+                        /*fieldDefaultValue*/ null));
+            } else {
+                V item;
+                try {
+                    item = converter.invoke((R) intermediate);
+                } catch (ClassCastException castException) {
+                    logger.logError(typeMismatch(array, key, i, intermediate));
+                    continue;
+                } catch (Exception e) {
+                    logger.logError(invalidValue(array, key, i, intermediate, e));
+                    continue;
+                }
+
+                if (item == null) {
+                    continue;
+                }
+
+                if (!typeHelper.isTypeValid(item)) {
+                    logger.logError(typeMismatch(array, key, i, intermediate));
+                    continue;
+                }
+
+                try {
+                    if (!itemValidator.isValid(item)) {
+                        logger.logError(invalidValue(array, key, i, item));
+                        continue;
+                    }
+                } catch (ClassCastException castException) {
+                    logger.logError(typeMismatch(array, key, i, item));
+                    continue;
+                }
+
+                untypedList.add(item);
+            }
+        }
+
+        if (containsExpressions) {
+            int untypedLength = untypedList.size();
+            for (int i = 0; i < untypedLength; i++) {
+                Object item = untypedList.get(i);
+                if (item instanceof Expression) {
+                    continue;
+                }
+                untypedList.set(i, Expression.constant(item));
+            }
+
+            List<Expression<V>> list = (List<Expression<V>>) untypedList;
+            return new MutableExpressionList<V>(key, list, listValidator, logger);
+        } else {
+            List<V> list = (List<V>) untypedList;
+            try {
+                if (!listValidator.isValid(list)) {
+                    throw invalidValue(jsonObject, key, list);
+                }
+            } catch (ClassCastException castException) {
+                throw typeMismatch(jsonObject, key, list);
+            }
+
+            return new ConstantExpressionList<>(list);
+        }
     }
 
     @Nullable
@@ -377,10 +465,10 @@ public class JsonExpressionParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
-            @NonNull final ListValidator<V> validator
+            @NonNull final ListValidator<V> listValidator
     ) {
         return readOptionalExpressionList(
-                context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, alwaysValid());
+                context, logger, jsonObject, key, typeHelper, doNotConvert(), listValidator, alwaysValid());
     }
 
     @Nullable
@@ -390,11 +478,11 @@ public class JsonExpressionParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
-            @NonNull final ListValidator<V> validator,
+            @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
         return readOptionalExpressionList(
-                context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, itemValidator);
+                context, logger, jsonObject, key, typeHelper, doNotConvert(), listValidator, itemValidator);
     }
 
     @Nullable
@@ -405,28 +493,12 @@ public class JsonExpressionParser {
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
             @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator,
+            @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
-    ) {
-        return readOptionalExpressionList(
-                context, logger, jsonObject, key, typeHelper, converter, validator, itemValidator, ignoreErrorHandler());
-    }
-
-    @Nullable
-    private static <R, V> ExpressionList<V> readOptionalExpressionList(
-            @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
-            @NonNull final JSONObject jsonObject,
-            @NonNull final String key,
-            @NonNull final TypeHelper<V> typeHelper,
-            @NonNull final Function1<R, V> converter,
-            @NonNull final ListValidator<V> validator,
-            @NonNull final ValueValidator<V> itemValidator,
-            @NonNull final ErrorHandler errorHandler
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
         if (array == null) {
-            errorHandler.process(missingValue(jsonObject, key));
+            logger.logError(missingValue(jsonObject, key));
             return null;
         }
 
@@ -434,7 +506,7 @@ public class JsonExpressionParser {
         if (length == 0) {
             List<V> emptyList = Collections.emptyList();
             try {
-                if (!validator.isValid(emptyList)) {
+                if (!listValidator.isValid(emptyList)) {
                     logger.logError(invalidValue(jsonObject, key, emptyList));
                     return emptyExpressionList();
                 }
@@ -514,16 +586,16 @@ public class JsonExpressionParser {
             }
 
             List<Expression<V>> list = (List<Expression<V>>) untypedList;
-            return new MutableExpressionList<V>(key, list, validator, logger);
+            return new MutableExpressionList<V>(key, list, listValidator, logger);
         } else {
             List<V> list = (List<V>) untypedList;
             try {
-                if (!validator.isValid(list)) {
-                    errorHandler.process(invalidValue(jsonObject, key, list));
+                if (!listValidator.isValid(list)) {
+                    logger.logError(invalidValue(jsonObject, key, list));
                     return null;
                 }
             } catch (ClassCastException castException) {
-                errorHandler.process(typeMismatch(jsonObject, key, list));
+                logger.logError(typeMismatch(jsonObject, key, list));
                 return null;
             }
 
@@ -531,28 +603,28 @@ public class JsonExpressionParser {
         }
     }
 
+    @Nullable
+    private static <T> T optSafe(JSONObject json, String key) {
+        Object value = json.opt(key);
+        if (value == JSONObject.NULL) {
+            return null;
+        }
+
+        return (T) value;
+    }
+
+    @Nullable
+    private static <T> T optSafe(JSONArray json, int index) {
+        Object value = json.opt(index);
+        if (value == JSONObject.NULL) {
+            return null;
+        }
+
+        return (T) value;
+    }
+
     @NonNull
     private static <V> ExpressionList<V> emptyExpressionList() {
         return (ExpressionList<V>) EMPTY_EXPRESSION_LIST;
-    }
-
-    @NonNull
-    private static ErrorHandler failFastHandler() {
-        return ErrorHandler.FAIL_FAST;
-    }
-
-    @NonNull
-    private static ErrorHandler ignoreErrorHandler() {
-        return ErrorHandler.IGNORE;
-    }
-
-    private interface ErrorHandler {
-        void process(ParsingException e);
-
-        ErrorHandler FAIL_FAST = (e) -> {
-            throw e;
-        };
-
-        ErrorHandler IGNORE = (e) -> { /* do nothing */ };
     }
 }
