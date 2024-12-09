@@ -1005,7 +1005,7 @@ internal fun <T> T.bindClipChildren(
 internal fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
     needClipping = clip
     val parent = parent
-    if (parent is ViewGroup) {
-        parent.clipChildren = clip
+    if (!clip && parent is ViewGroup) {
+        parent.clipChildren = false
     }
 }
