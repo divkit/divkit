@@ -1,6 +1,6 @@
-import type { TypedValue } from '../../typings/common';
+import type { AnimatorDirection, TypedValue } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
-import type { Animator, AnimatorDirection } from '../types/base';
+import type { Animator } from '../types/base';
 import type { Variable, VariableType } from '../../typings/variables';
 import type { ExecAnyActionsFunc } from '../context/root';
 import { stringifyColor } from '../expressions/utils';

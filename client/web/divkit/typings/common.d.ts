@@ -1,5 +1,15 @@
-import type { AnimatorDirection, AnimatorRepeatCount, Interpolation } from '../src/types/base';
 import type { Variable } from './variables';
+
+export type Interpolation = 'linear' | 'ease' | 'ease_in' | 'ease_out' | 'ease_in_out' | 'spring';
+
+export type AnimatorRepeatCount = {
+    type: 'infinity';
+} | {
+    type: 'fixed';
+    value: number;
+};
+
+export type AnimatorDirection = 'normal' | 'reverse' | 'alternate' | 'alternate_reverse';
 
 export type BooleanInt = 0 | 1 | false | true;
 

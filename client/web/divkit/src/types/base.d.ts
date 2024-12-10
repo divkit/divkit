@@ -4,7 +4,7 @@ import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
-import type { Action, BooleanInt, DisappearAction, DivVariable, VariableTrigger, VisibilityAction } from '../../typings/common';
+import type { Action, AnimatorDirection, AnimatorRepeatCount, BooleanInt, DisappearAction, DivVariable, Interpolation, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
 import type { EvalTypes } from '../expressions/eval';
@@ -20,8 +20,6 @@ export interface Accessibility {
     is_checked?: BooleanInt;
     // mode
 }
-
-export type Interpolation = 'linear' | 'ease' | 'ease_in' | 'ease_out' | 'ease_in_out' | 'spring';
 
 export interface TransitionBase {
     start_delay?: number;
@@ -117,15 +115,6 @@ export interface DivLayoutProvider {
     width_variable_name?: string;
     height_variable_name?: string;
 }
-
-export type AnimatorDirection = 'normal' | 'reverse' | 'alternate' | 'alternate_reverse';
-
-export type AnimatorRepeatCount = {
-    type: 'infinity';
-} | {
-    type: 'fixed';
-    value: number;
-};
 
 export interface AnimatorBase {
     id: string;
