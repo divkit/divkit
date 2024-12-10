@@ -1643,7 +1643,7 @@
                 return componentContext;
             },
             getVariable(varName, type) {
-                const variable = (res.variables || variables).get(varName);
+                const variable = res.variables?.get(varName) || variables.get(varName);
 
                 if (variable) {
                     const foundType = variable.getType();
