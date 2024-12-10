@@ -23,9 +23,8 @@ internal class EntityWithArrayWithTransformJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithArrayWithTransform {
-            val logger = context.logger
             return EntityWithArrayWithTransform(
-                array = JsonExpressionParser.readExpressionList(context, logger, data, "array", TYPE_HELPER_COLOR, STRING_TO_COLOR_INT, ARRAY_VALIDATOR),
+                array = JsonExpressionParser.readExpressionList(context, data, "array", TYPE_HELPER_COLOR, STRING_TO_COLOR_INT, ARRAY_VALIDATOR),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithArrayWithTransformJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithArrayWithTransformTemplate?, data: JSONObject): EntityWithArrayWithTransformTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithArrayWithTransformTemplate(
-                array = JsonFieldParser.readExpressionListField(context, logger, data, "array", TYPE_HELPER_COLOR, allowOverride, parent?.array, STRING_TO_COLOR_INT, ARRAY_VALIDATOR.cast()),
+                array = JsonFieldParser.readExpressionListField(context, data, "array", TYPE_HELPER_COLOR, allowOverride, parent?.array, STRING_TO_COLOR_INT, ARRAY_VALIDATOR.cast()),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithArrayWithTransformJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithArrayWithTransformTemplate, data: JSONObject): EntityWithArrayWithTransform {
-            val logger = context.logger
             return EntityWithArrayWithTransform(
-                array = JsonFieldResolver.resolveExpressionList(context, logger, template.array, data, "array", TYPE_HELPER_COLOR, STRING_TO_COLOR_INT, ARRAY_VALIDATOR),
+                array = JsonFieldResolver.resolveExpressionList(context, template.array, data, "array", TYPE_HELPER_COLOR, STRING_TO_COLOR_INT, ARRAY_VALIDATOR),
             )
         }
     }

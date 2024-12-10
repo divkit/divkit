@@ -23,9 +23,8 @@ internal class EntityWithOptionalStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithOptionalStringEnumProperty {
-            val logger = context.logger
             return EntityWithOptionalStringEnumProperty(
-                property = JsonExpressionParser.readOptionalExpression(context, logger, data, "property", TYPE_HELPER_PROPERTY, EntityWithOptionalStringEnumProperty.Property.FROM_STRING),
+                property = JsonExpressionParser.readOptionalExpression(context, data, "property", TYPE_HELPER_PROPERTY, EntityWithOptionalStringEnumProperty.Property.FROM_STRING),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithOptionalStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithOptionalStringEnumPropertyTemplate?, data: JSONObject): EntityWithOptionalStringEnumPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithOptionalStringEnumPropertyTemplate(
-                property = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "property", TYPE_HELPER_PROPERTY, allowOverride, parent?.property, EntityWithOptionalStringEnumProperty.Property.FROM_STRING),
+                property = JsonFieldParser.readOptionalFieldWithExpression(context, data, "property", TYPE_HELPER_PROPERTY, allowOverride, parent?.property, EntityWithOptionalStringEnumProperty.Property.FROM_STRING),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithOptionalStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithOptionalStringEnumPropertyTemplate, data: JSONObject): EntityWithOptionalStringEnumProperty {
-            val logger = context.logger
             return EntityWithOptionalStringEnumProperty(
-                property = JsonFieldResolver.resolveOptionalExpression(context, logger, template.property, data, "property", TYPE_HELPER_PROPERTY, EntityWithOptionalStringEnumProperty.Property.FROM_STRING),
+                property = JsonFieldResolver.resolveOptionalExpression(context, template.property, data, "property", TYPE_HELPER_PROPERTY, EntityWithOptionalStringEnumProperty.Property.FROM_STRING),
             )
         }
     }

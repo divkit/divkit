@@ -286,7 +286,6 @@ class KotlinEntity(Entity):
         result += '    @Throws(ParsingException::class)'
         result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {entity_type} {{'
         if self.instance_properties_kotlin:
-            result += '        val logger = context.logger'
             if self.errors_collector_enabled:
                 result += '        @Suppress("NAME_SHADOWING") val context = context.collectingErrors()'
             result += f'        return {entity_type}('
@@ -319,7 +318,6 @@ class KotlinEntity(Entity):
         result += '    @Throws(ParsingException::class)'
         result += f'    override fun deserialize(context: ParsingContext, parent: {template_type}?, data: JSONObject): {template_type} {{'
         if self.instance_properties_kotlin:
-            result += '        val logger = context.logger'
             result += '        val allowOverride = context.allowPropertyOverride'
             result += '        @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()'
             result += f'        return {template_type}('
@@ -351,7 +349,6 @@ class KotlinEntity(Entity):
         result += '    @Throws(ParsingException::class)'
         result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: JSONObject): {entity_type} {{'
         if self.instance_properties_kotlin:
-            result += '        val logger = context.logger'
             result += f'        return {entity_type}('
             for property in self.instance_properties_kotlin:
                 result += self.property_resolving_declaration(property, mode=GenerationMode.TEMPLATE).indented(indent_width=12)
@@ -435,7 +432,7 @@ class KotlinEntity(Entity):
         )
         if validator and isinstance(property_type, Array) and mode.is_template:
             validator = validator + '.cast()'
-        arg_list = ['context', 'logger', 'data', key, type_helper, template_args, deserializer, transform, validator]
+        arg_list = ['context', 'data', key, type_helper, template_args, deserializer, transform, validator]
         if isinstance(property_type, Array):
             arg_list.append(cast(KotlinPropertyType, property_type.property_type).validator_arg(
                 property_name=property.name + '_item',
@@ -520,8 +517,7 @@ class KotlinEntity(Entity):
             with_template_validators=False
         )
 
-        context = 'context'
-        arg_list = [context, 'logger', f'template.{property.declaration_name}', 'data',
+        arg_list = ['context', f'template.{property.declaration_name}', 'data',
                     f'"{property.dict_field}"', type_helper, resolver, value_deserializer, transform, validator]
         if isinstance(property_type, Array):
             arg_list.append(cast(KotlinPropertyType, property_type.property_type).validator_arg(

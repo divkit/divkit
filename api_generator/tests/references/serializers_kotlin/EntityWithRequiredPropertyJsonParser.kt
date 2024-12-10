@@ -23,9 +23,8 @@ internal class EntityWithRequiredPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithRequiredProperty {
-            val logger = context.logger
             return EntityWithRequiredProperty(
-                property = JsonExpressionParser.readExpression(context, logger, data, "property", TYPE_HELPER_STRING, PROPERTY_VALIDATOR),
+                property = JsonExpressionParser.readExpression(context, data, "property", TYPE_HELPER_STRING, PROPERTY_VALIDATOR),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithRequiredPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithRequiredPropertyTemplate?, data: JSONObject): EntityWithRequiredPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithRequiredPropertyTemplate(
-                property = JsonFieldParser.readFieldWithExpression(context, logger, data, "property", TYPE_HELPER_STRING, allowOverride, parent?.property, PROPERTY_VALIDATOR),
+                property = JsonFieldParser.readFieldWithExpression(context, data, "property", TYPE_HELPER_STRING, allowOverride, parent?.property, PROPERTY_VALIDATOR),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithRequiredPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithRequiredPropertyTemplate, data: JSONObject): EntityWithRequiredProperty {
-            val logger = context.logger
             return EntityWithRequiredProperty(
-                property = JsonFieldResolver.resolveExpression(context, logger, template.property, data, "property", TYPE_HELPER_STRING, PROPERTY_VALIDATOR),
+                property = JsonFieldResolver.resolveExpression(context, template.property, data, "property", TYPE_HELPER_STRING, PROPERTY_VALIDATOR),
             )
         }
     }

@@ -23,9 +23,8 @@ internal class EntityWithArrayJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithArray {
-            val logger = context.logger
             return EntityWithArray(
-                array = JsonPropertyParser.readList(context, logger, data, "array", component.entityJsonEntityParser, ARRAY_VALIDATOR),
+                array = JsonPropertyParser.readList(context, data, "array", component.entityJsonEntityParser, ARRAY_VALIDATOR),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithArrayJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithArrayTemplate?, data: JSONObject): EntityWithArrayTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithArrayTemplate(
-                array = JsonFieldParser.readListField(context, logger, data, "array", allowOverride, parent?.array, component.entityJsonTemplateParser, ARRAY_VALIDATOR.cast()),
+                array = JsonFieldParser.readListField(context, data, "array", allowOverride, parent?.array, component.entityJsonTemplateParser, ARRAY_VALIDATOR.cast()),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithArrayJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithArrayTemplate, data: JSONObject): EntityWithArray {
-            val logger = context.logger
             return EntityWithArray(
-                array = JsonFieldResolver.resolveList(context, logger, template.array, data, "array", component.entityJsonTemplateResolver, component.entityJsonEntityParser, ARRAY_VALIDATOR),
+                array = JsonFieldResolver.resolveList(context, template.array, data, "array", component.entityJsonTemplateResolver, component.entityJsonEntityParser, ARRAY_VALIDATOR),
             )
         }
     }

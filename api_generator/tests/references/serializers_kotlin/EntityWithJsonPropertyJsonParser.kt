@@ -23,9 +23,8 @@ internal class EntityWithJsonPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithJsonProperty {
-            val logger = context.logger
             return EntityWithJsonProperty(
-                jsonProperty = JsonPropertyParser.readOptional(context, logger, data, "json_property") ?: JSON_PROPERTY_DEFAULT_VALUE,
+                jsonProperty = JsonPropertyParser.readOptional(context, data, "json_property") ?: JSON_PROPERTY_DEFAULT_VALUE,
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithJsonPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithJsonPropertyTemplate?, data: JSONObject): EntityWithJsonPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithJsonPropertyTemplate(
-                jsonProperty = JsonFieldParser.readOptionalField(context, logger, data, "json_property", allowOverride, parent?.jsonProperty),
+                jsonProperty = JsonFieldParser.readOptionalField(context, data, "json_property", allowOverride, parent?.jsonProperty),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithJsonPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithJsonPropertyTemplate, data: JSONObject): EntityWithJsonProperty {
-            val logger = context.logger
             return EntityWithJsonProperty(
-                jsonProperty = JsonFieldResolver.resolveOptional(context, logger, template.jsonProperty, data, "json_property") ?: JSON_PROPERTY_DEFAULT_VALUE,
+                jsonProperty = JsonFieldResolver.resolveOptional(context, template.jsonProperty, data, "json_property") ?: JSON_PROPERTY_DEFAULT_VALUE,
             )
         }
     }

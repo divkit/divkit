@@ -2,7 +2,6 @@ package com.yandex.div.internal.parser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.ParsingExceptionKt;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
@@ -42,6 +41,7 @@ public class JsonPropertyParser {
 
     @NonNull
     public static String readString(
+            @NonNull final ParsingContext context,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key
     ) {
@@ -64,7 +64,7 @@ public class JsonPropertyParser {
 
     @Nullable
     public static String readOptionalString(
-            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingContext context,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key
     ) {
@@ -77,9 +77,9 @@ public class JsonPropertyParser {
         try {
             result = (String) value;
         } catch (ClassCastException castException) {
-            logger.logError(typeMismatch(jsonObject, key, value));
+            context.getLogger().logError(typeMismatch(jsonObject, key, value));
         } catch (Exception e) {
-            logger.logError(invalidValue(jsonObject, key, value, e));
+            context.getLogger().logError(invalidValue(jsonObject, key, value, e));
         }
 
         return result;
@@ -88,39 +88,35 @@ public class JsonPropertyParser {
     @NonNull
     public static <V> V read(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key
     ) {
-        return read(context, logger, jsonObject, key, doNotConvert(), alwaysValid());
+        return read(context, jsonObject, key, doNotConvert(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> V read(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter
     ) {
-        return read(context, logger, jsonObject, key, converter, alwaysValid());
+        return read(context, jsonObject, key, converter, alwaysValid());
     }
 
     @NonNull
     public static <V> V read(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final ValueValidator<V> validator
     ) {
-        return read(context, logger, jsonObject, key, doNotConvert(), validator);
+        return read(context, jsonObject, key, doNotConvert(), validator);
     }
 
     @NonNull
     public static <R, V> V read(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
@@ -158,7 +154,6 @@ public class JsonPropertyParser {
     @NonNull
     public static <V> V read(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
@@ -185,39 +180,35 @@ public class JsonPropertyParser {
     @Nullable
     public static <V> V readOptional(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key
     ) {
-        return readOptional(context, logger, jsonObject, key, doNotConvert(), alwaysValid());
+        return readOptional(context, jsonObject, key, doNotConvert(), alwaysValid());
     }
 
     @Nullable
     public static <R, V> V readOptional(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter
     ) {
-        return readOptional(context, logger, jsonObject, key, converter, alwaysValid());
+        return readOptional(context, jsonObject, key, converter, alwaysValid());
     }
 
     @Nullable
     public static <V> V readOptional(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final ValueValidator<V> validator
     ) {
-        return readOptional(context, logger, jsonObject, key, doNotConvert(), validator);
+        return readOptional(context, jsonObject, key, doNotConvert(), validator);
     }
 
     @Nullable
     public static <R, V> V readOptional(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
@@ -232,25 +223,25 @@ public class JsonPropertyParser {
         try {
             result = converter.invoke(intermediate);
         } catch (ClassCastException castException) {
-            logger.logError(typeMismatch(jsonObject, key, intermediate));
+            context.getLogger().logError(typeMismatch(jsonObject, key, intermediate));
             return null;
         } catch (Exception e) {
-            logger.logError(invalidValue(jsonObject, key, intermediate, e));
+            context.getLogger().logError(invalidValue(jsonObject, key, intermediate, e));
             return null;
         }
 
         if (result == null) {
-            logger.logError(ParsingExceptionKt.invalidValue(jsonObject, key, intermediate));
+            context.getLogger().logError(ParsingExceptionKt.invalidValue(jsonObject, key, intermediate));
             return null;
         }
 
         try {
             if (!validator.isValid(result)) {
-                logger.logError(invalidValue(jsonObject, key, intermediate));
+                context.getLogger().logError(invalidValue(jsonObject, key, intermediate));
                 return null;
             }
         } catch (ClassCastException castException) {
-            logger.logError(typeMismatch(jsonObject, key, intermediate));
+            context.getLogger().logError(typeMismatch(jsonObject, key, intermediate));
             return null;
         }
 
@@ -260,7 +251,6 @@ public class JsonPropertyParser {
     @Nullable
     public static <V> V readOptional(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
@@ -273,7 +263,7 @@ public class JsonPropertyParser {
         try {
             return deserializer.getValue().deserialize(context, json);
         } catch (Exception e) {
-            logger.logError(dependencyFailed(jsonObject, key, e));
+            context.getLogger().logError(dependencyFailed(jsonObject, key, e));
             return null;
         }
     }
@@ -281,41 +271,37 @@ public class JsonPropertyParser {
     @NonNull
     public static <R, V> List<V> readList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter
     ) {
-        return readList(context, logger, jsonObject, key, converter, alwaysValidList(), alwaysValid());
+        return readList(context, jsonObject, key, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
     public static List<String> readList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final ListValidator<String> listValidator
     ) {
-        return readList(context, logger, jsonObject, key, doNotConvert(), listValidator, alwaysValidString());
+        return readList(context, jsonObject, key, doNotConvert(), listValidator, alwaysValidString());
     }
 
     @NonNull
     public static <R, V> List<V> readList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
             @NonNull final ListValidator<V> listValidator
     ) {
-        return readList(context, logger, jsonObject, key, converter, listValidator, alwaysValid());
+        return readList(context, jsonObject, key, converter, listValidator, alwaysValid());
     }
 
     @NonNull
     public static <R, V> List<V> readList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
@@ -332,11 +318,11 @@ public class JsonPropertyParser {
             List<V> emptyList = Collections.emptyList();
             try {
                 if (!listValidator.isValid(emptyList)) {
-                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    context.getLogger().logError(invalidValue(jsonObject, key, emptyList));
                     return emptyList;
                 }
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                context.getLogger().logError(typeMismatch(jsonObject, key, emptyList));
                 return emptyList;
             }
             return emptyList;
@@ -354,10 +340,10 @@ public class JsonPropertyParser {
             try {
                 item = converter.invoke(intermediate);
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, intermediate));
+                context.getLogger().logError(typeMismatch(array, key, i, intermediate));
                 continue;
             } catch (Exception e) {
-                logger.logError(invalidValue(array, key, i, intermediate, e));
+                context.getLogger().logError(invalidValue(array, key, i, intermediate, e));
                 continue;
             }
 
@@ -367,11 +353,11 @@ public class JsonPropertyParser {
 
             try {
                 if (!itemValidator.isValid(item)) {
-                    logger.logError(invalidValue(array, key, i, item));
+                    context.getLogger().logError(invalidValue(array, key, i, item));
                     continue;
                 }
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, item));
+                context.getLogger().logError(typeMismatch(array, key, i, item));
                 continue;
             }
 
@@ -392,7 +378,6 @@ public class JsonPropertyParser {
     @NonNull
     public static <V> List<V> readList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
@@ -419,7 +404,7 @@ public class JsonPropertyParser {
             try {
                 item = deserializer.getValue().deserialize(context, json);
             } catch (Exception e) {
-                logger.logError(dependencyFailed(array, key, i, e));
+                context.getLogger().logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 
@@ -436,7 +421,6 @@ public class JsonPropertyParser {
     @NonNull
     public static <V> List<V> readList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
@@ -452,11 +436,11 @@ public class JsonPropertyParser {
             List<V> emptyList = Collections.emptyList();
             try {
                 if (!listValidator.isValid(emptyList)) {
-                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    context.getLogger().logError(invalidValue(jsonObject, key, emptyList));
                     return emptyList;
                 }
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                context.getLogger().logError(typeMismatch(jsonObject, key, emptyList));
                 return emptyList;
             }
             return emptyList;
@@ -474,7 +458,7 @@ public class JsonPropertyParser {
             try {
                 item = deserializer.getValue().deserialize(context, json);
             } catch (Exception e) {
-                logger.logError(dependencyFailed(array, key, i, e));
+                context.getLogger().logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 
@@ -499,30 +483,27 @@ public class JsonPropertyParser {
     @Nullable
     public static <R, V> List<V> readOptionalList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter
     ) {
-        return readOptionalList(context, logger, jsonObject, key, converter, alwaysValidList(), alwaysValid());
+        return readOptionalList(context, jsonObject, key, converter, alwaysValidList(), alwaysValid());
     }
 
     @Nullable
     public static <R, V> List<V> readOptionalList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
             @NonNull final ListValidator<V> listValidator
     ) {
-        return readOptionalList(context, logger, jsonObject, key, converter, listValidator, alwaysValid());
+        return readOptionalList(context, jsonObject, key, converter, listValidator, alwaysValid());
     }
 
     @Nullable
     public static <R, V> List<V> readOptionalList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function1<R, V> converter,
@@ -539,11 +520,11 @@ public class JsonPropertyParser {
             List<V> emptyList = Collections.emptyList();
             try {
                 if (!listValidator.isValid(emptyList)) {
-                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    context.getLogger().logError(invalidValue(jsonObject, key, emptyList));
                     return null;
                 }
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                context.getLogger().logError(typeMismatch(jsonObject, key, emptyList));
                 return null;
             }
             return emptyList;
@@ -561,10 +542,10 @@ public class JsonPropertyParser {
             try {
                 item = converter.invoke(intermediate);
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, intermediate));
+                context.getLogger().logError(typeMismatch(array, key, i, intermediate));
                 continue;
             } catch (Exception e) {
-                logger.logError(invalidValue(array, key, i, intermediate, e));
+                context.getLogger().logError(invalidValue(array, key, i, intermediate, e));
                 continue;
             }
 
@@ -574,11 +555,11 @@ public class JsonPropertyParser {
 
             try {
                 if (!itemValidator.isValid(item)) {
-                    logger.logError(invalidValue(array, key, i, item));
+                    context.getLogger().logError(invalidValue(array, key, i, item));
                     continue;
                 }
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, item));
+                context.getLogger().logError(typeMismatch(array, key, i, item));
                 continue;
             }
 
@@ -587,11 +568,11 @@ public class JsonPropertyParser {
 
         try {
             if (!listValidator.isValid(list)) {
-                logger.logError(invalidValue(jsonObject, key, list));
+                context.getLogger().logError(invalidValue(jsonObject, key, list));
                 return null;
             }
         } catch (ClassCastException castException) {
-            logger.logError(typeMismatch(jsonObject, key, list));
+            context.getLogger().logError(typeMismatch(jsonObject, key, list));
             return null;
         }
 
@@ -601,7 +582,6 @@ public class JsonPropertyParser {
     @Nullable
     public static <V> List<V> readOptionalList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
@@ -628,7 +608,7 @@ public class JsonPropertyParser {
             try {
                 item = deserializer.getValue().deserialize(context, json);
             } catch (Exception e) {
-                logger.logError(dependencyFailed(array, key, i, e));
+                context.getLogger().logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 
@@ -645,7 +625,6 @@ public class JsonPropertyParser {
     @Nullable
     public static <V> List<V> readOptionalList(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
@@ -661,11 +640,11 @@ public class JsonPropertyParser {
             List<V> emptyList = Collections.emptyList();
             try {
                 if (!listValidator.isValid(emptyList)) {
-                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    context.getLogger().logError(invalidValue(jsonObject, key, emptyList));
                     return null;
                 }
             } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                context.getLogger().logError(typeMismatch(jsonObject, key, emptyList));
                 return null;
             }
             return emptyList;
@@ -683,7 +662,7 @@ public class JsonPropertyParser {
             try {
                 item = deserializer.getValue().deserialize(context, json);
             } catch (Exception e) {
-                logger.logError(dependencyFailed(array, key, i, e));
+                context.getLogger().logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 
@@ -696,11 +675,11 @@ public class JsonPropertyParser {
 
         try {
             if (!listValidator.isValid(list)) {
-                logger.logError(invalidValue(jsonObject, key, list));
+                context.getLogger().logError(invalidValue(jsonObject, key, list));
                 return null;
             }
         } catch (ClassCastException castException) {
-            logger.logError(typeMismatch(jsonObject, key, list));
+            context.getLogger().logError(typeMismatch(jsonObject, key, list));
             return null;
         }
 

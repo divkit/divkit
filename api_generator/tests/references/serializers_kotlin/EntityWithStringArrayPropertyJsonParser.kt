@@ -23,9 +23,8 @@ internal class EntityWithStringArrayPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithStringArrayProperty {
-            val logger = context.logger
             return EntityWithStringArrayProperty(
-                array = JsonExpressionParser.readExpressionList(context, logger, data, "array", TYPE_HELPER_STRING, ARRAY_VALIDATOR),
+                array = JsonExpressionParser.readExpressionList(context, data, "array", TYPE_HELPER_STRING, ARRAY_VALIDATOR),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithStringArrayPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithStringArrayPropertyTemplate?, data: JSONObject): EntityWithStringArrayPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithStringArrayPropertyTemplate(
-                array = JsonFieldParser.readExpressionListField(context, logger, data, "array", TYPE_HELPER_STRING, allowOverride, parent?.array, ARRAY_VALIDATOR.cast()),
+                array = JsonFieldParser.readExpressionListField(context, data, "array", TYPE_HELPER_STRING, allowOverride, parent?.array, ARRAY_VALIDATOR.cast()),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithStringArrayPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithStringArrayPropertyTemplate, data: JSONObject): EntityWithStringArrayProperty {
-            val logger = context.logger
             return EntityWithStringArrayProperty(
-                array = JsonFieldResolver.resolveExpressionList(context, logger, template.array, data, "array", TYPE_HELPER_STRING, ARRAY_VALIDATOR),
+                array = JsonFieldResolver.resolveExpressionList(context, template.array, data, "array", TYPE_HELPER_STRING, ARRAY_VALIDATOR),
             )
         }
     }

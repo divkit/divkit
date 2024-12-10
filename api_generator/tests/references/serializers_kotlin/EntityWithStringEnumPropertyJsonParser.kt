@@ -23,9 +23,8 @@ internal class EntityWithStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithStringEnumProperty {
-            val logger = context.logger
             return EntityWithStringEnumProperty(
-                property = JsonExpressionParser.readExpression(context, logger, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
+                property = JsonExpressionParser.readExpression(context, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithStringEnumPropertyTemplate?, data: JSONObject): EntityWithStringEnumPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithStringEnumPropertyTemplate(
-                property = JsonFieldParser.readFieldWithExpression(context, logger, data, "property", TYPE_HELPER_PROPERTY, allowOverride, parent?.property, EntityWithStringEnumProperty.Property.FROM_STRING),
+                property = JsonFieldParser.readFieldWithExpression(context, data, "property", TYPE_HELPER_PROPERTY, allowOverride, parent?.property, EntityWithStringEnumProperty.Property.FROM_STRING),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithStringEnumPropertyTemplate, data: JSONObject): EntityWithStringEnumProperty {
-            val logger = context.logger
             return EntityWithStringEnumProperty(
-                property = JsonFieldResolver.resolveExpression(context, logger, template.property, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
+                property = JsonFieldResolver.resolveExpression(context, template.property, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
             )
         }
     }

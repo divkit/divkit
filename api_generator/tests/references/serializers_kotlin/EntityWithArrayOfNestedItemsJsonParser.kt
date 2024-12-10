@@ -23,9 +23,8 @@ internal class EntityWithArrayOfNestedItemsJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithArrayOfNestedItems {
-            val logger = context.logger
             return EntityWithArrayOfNestedItems(
-                items = JsonPropertyParser.readList(context, logger, data, "items", component.entityWithArrayOfNestedItemsItemJsonEntityParser, ITEMS_VALIDATOR),
+                items = JsonPropertyParser.readList(context, data, "items", component.entityWithArrayOfNestedItemsItemJsonEntityParser, ITEMS_VALIDATOR),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithArrayOfNestedItemsJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithArrayOfNestedItemsTemplate?, data: JSONObject): EntityWithArrayOfNestedItemsTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithArrayOfNestedItemsTemplate(
-                items = JsonFieldParser.readListField(context, logger, data, "items", allowOverride, parent?.items, component.entityWithArrayOfNestedItemsItemJsonTemplateParser, ITEMS_VALIDATOR.cast()),
+                items = JsonFieldParser.readListField(context, data, "items", allowOverride, parent?.items, component.entityWithArrayOfNestedItemsItemJsonTemplateParser, ITEMS_VALIDATOR.cast()),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithArrayOfNestedItemsJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithArrayOfNestedItemsTemplate, data: JSONObject): EntityWithArrayOfNestedItems {
-            val logger = context.logger
             return EntityWithArrayOfNestedItems(
-                items = JsonFieldResolver.resolveList(context, logger, template.items, data, "items", component.entityWithArrayOfNestedItemsItemJsonTemplateResolver, component.entityWithArrayOfNestedItemsItemJsonEntityParser, ITEMS_VALIDATOR),
+                items = JsonFieldResolver.resolveList(context, template.items, data, "items", component.entityWithArrayOfNestedItemsItemJsonTemplateResolver, component.entityWithArrayOfNestedItemsItemJsonEntityParser, ITEMS_VALIDATOR),
             )
         }
     }
@@ -90,10 +87,9 @@ internal class EntityWithArrayOfNestedItemsItemJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithArrayOfNestedItems.Item {
-            val logger = context.logger
             return EntityWithArrayOfNestedItems.Item(
-                entity = JsonPropertyParser.read(context, logger, data, "entity", component.entityJsonEntityParser),
-                property = JsonExpressionParser.readExpression(context, logger, data, "property", TYPE_HELPER_STRING),
+                entity = JsonPropertyParser.read(context, data, "entity", component.entityJsonEntityParser),
+                property = JsonExpressionParser.readExpression(context, data, "property", TYPE_HELPER_STRING),
             )
         }
 
@@ -112,12 +108,11 @@ internal class EntityWithArrayOfNestedItemsItemJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithArrayOfNestedItemsTemplate.ItemTemplate?, data: JSONObject): EntityWithArrayOfNestedItemsTemplate.ItemTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithArrayOfNestedItemsTemplate.ItemTemplate(
-                entity = JsonFieldParser.readField(context, logger, data, "entity", allowOverride, parent?.entity, component.entityJsonTemplateParser),
-                property = JsonFieldParser.readFieldWithExpression(context, logger, data, "property", TYPE_HELPER_STRING, allowOverride, parent?.property),
+                entity = JsonFieldParser.readField(context, data, "entity", allowOverride, parent?.entity, component.entityJsonTemplateParser),
+                property = JsonFieldParser.readFieldWithExpression(context, data, "property", TYPE_HELPER_STRING, allowOverride, parent?.property),
             )
         }
 
@@ -136,10 +131,9 @@ internal class EntityWithArrayOfNestedItemsItemJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithArrayOfNestedItemsTemplate.ItemTemplate, data: JSONObject): EntityWithArrayOfNestedItems.Item {
-            val logger = context.logger
             return EntityWithArrayOfNestedItems.Item(
-                entity = JsonFieldResolver.resolve(context, logger, template.entity, data, "entity", component.entityJsonTemplateResolver, component.entityJsonEntityParser),
-                property = JsonFieldResolver.resolveExpression(context, logger, template.property, data, "property", TYPE_HELPER_STRING),
+                entity = JsonFieldResolver.resolve(context, template.entity, data, "entity", component.entityJsonTemplateResolver, component.entityJsonEntityParser),
+                property = JsonFieldResolver.resolveExpression(context, template.property, data, "property", TYPE_HELPER_STRING),
             )
         }
     }

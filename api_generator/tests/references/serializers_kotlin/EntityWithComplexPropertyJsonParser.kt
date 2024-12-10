@@ -23,9 +23,8 @@ internal class EntityWithComplexPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithComplexProperty {
-            val logger = context.logger
             return EntityWithComplexProperty(
-                property = JsonPropertyParser.read(context, logger, data, "property", component.entityWithComplexPropertyPropertyJsonEntityParser),
+                property = JsonPropertyParser.read(context, data, "property", component.entityWithComplexPropertyPropertyJsonEntityParser),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithComplexPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithComplexPropertyTemplate?, data: JSONObject): EntityWithComplexPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithComplexPropertyTemplate(
-                property = JsonFieldParser.readField(context, logger, data, "property", allowOverride, parent?.property, component.entityWithComplexPropertyPropertyJsonTemplateParser),
+                property = JsonFieldParser.readField(context, data, "property", allowOverride, parent?.property, component.entityWithComplexPropertyPropertyJsonTemplateParser),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithComplexPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithComplexPropertyTemplate, data: JSONObject): EntityWithComplexProperty {
-            val logger = context.logger
             return EntityWithComplexProperty(
-                property = JsonFieldResolver.resolve(context, logger, template.property, data, "property", component.entityWithComplexPropertyPropertyJsonTemplateResolver, component.entityWithComplexPropertyPropertyJsonEntityParser),
+                property = JsonFieldResolver.resolve(context, template.property, data, "property", component.entityWithComplexPropertyPropertyJsonTemplateResolver, component.entityWithComplexPropertyPropertyJsonEntityParser),
             )
         }
     }
@@ -85,9 +82,8 @@ internal class EntityWithComplexPropertyPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithComplexProperty.Property {
-            val logger = context.logger
             return EntityWithComplexProperty.Property(
-                value = JsonExpressionParser.readExpression(context, logger, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
+                value = JsonExpressionParser.readExpression(context, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
 
@@ -105,11 +101,10 @@ internal class EntityWithComplexPropertyPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithComplexPropertyTemplate.PropertyTemplate?, data: JSONObject): EntityWithComplexPropertyTemplate.PropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithComplexPropertyTemplate.PropertyTemplate(
-                value = JsonFieldParser.readFieldWithExpression(context, logger, data, "value", TYPE_HELPER_URI, allowOverride, parent?.value, ANY_TO_URI),
+                value = JsonFieldParser.readFieldWithExpression(context, data, "value", TYPE_HELPER_URI, allowOverride, parent?.value, ANY_TO_URI),
             )
         }
 
@@ -127,9 +122,8 @@ internal class EntityWithComplexPropertyPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithComplexPropertyTemplate.PropertyTemplate, data: JSONObject): EntityWithComplexProperty.Property {
-            val logger = context.logger
             return EntityWithComplexProperty.Property(
-                value = JsonFieldResolver.resolveExpression(context, logger, template.value, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
+                value = JsonFieldResolver.resolveExpression(context, template.value, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
     }

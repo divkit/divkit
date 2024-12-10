@@ -23,9 +23,8 @@ internal class EntityWithRawArrayJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithRawArray {
-            val logger = context.logger
             return EntityWithRawArray(
-                array = JsonExpressionParser.readExpression(context, logger, data, "array", TYPE_HELPER_JSON_ARRAY),
+                array = JsonExpressionParser.readExpression(context, data, "array", TYPE_HELPER_JSON_ARRAY),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithRawArrayJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithRawArrayTemplate?, data: JSONObject): EntityWithRawArrayTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithRawArrayTemplate(
-                array = JsonFieldParser.readFieldWithExpression(context, logger, data, "array", TYPE_HELPER_JSON_ARRAY, allowOverride, parent?.array),
+                array = JsonFieldParser.readFieldWithExpression(context, data, "array", TYPE_HELPER_JSON_ARRAY, allowOverride, parent?.array),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithRawArrayJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithRawArrayTemplate, data: JSONObject): EntityWithRawArray {
-            val logger = context.logger
             return EntityWithRawArray(
-                array = JsonFieldResolver.resolveExpression(context, logger, template.array, data, "array", TYPE_HELPER_JSON_ARRAY),
+                array = JsonFieldResolver.resolveExpression(context, template.array, data, "array", TYPE_HELPER_JSON_ARRAY),
             )
         }
     }

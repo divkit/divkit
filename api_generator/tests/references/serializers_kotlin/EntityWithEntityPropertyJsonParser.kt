@@ -23,9 +23,8 @@ internal class EntityWithEntityPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithEntityProperty {
-            val logger = context.logger
             return EntityWithEntityProperty(
-                entity = JsonPropertyParser.readOptional(context, logger, data, "entity", component.entityJsonEntityParser) ?: ENTITY_DEFAULT_VALUE,
+                entity = JsonPropertyParser.readOptional(context, data, "entity", component.entityJsonEntityParser) ?: ENTITY_DEFAULT_VALUE,
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithEntityPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithEntityPropertyTemplate?, data: JSONObject): EntityWithEntityPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithEntityPropertyTemplate(
-                entity = JsonFieldParser.readOptionalField(context, logger, data, "entity", allowOverride, parent?.entity, component.entityJsonTemplateParser),
+                entity = JsonFieldParser.readOptionalField(context, data, "entity", allowOverride, parent?.entity, component.entityJsonTemplateParser),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithEntityPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithEntityPropertyTemplate, data: JSONObject): EntityWithEntityProperty {
-            val logger = context.logger
             return EntityWithEntityProperty(
-                entity = JsonFieldResolver.resolveOptional(context, logger, template.entity, data, "entity", component.entityJsonTemplateResolver, component.entityJsonEntityParser) ?: ENTITY_DEFAULT_VALUE,
+                entity = JsonFieldResolver.resolveOptional(context, template.entity, data, "entity", component.entityJsonTemplateResolver, component.entityJsonEntityParser) ?: ENTITY_DEFAULT_VALUE,
             )
         }
     }

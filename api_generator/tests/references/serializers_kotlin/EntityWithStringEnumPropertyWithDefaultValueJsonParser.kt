@@ -23,9 +23,8 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
-            val logger = context.logger
             return EntityWithStringEnumPropertyWithDefaultValue(
-                value = JsonExpressionParser.readOptionalExpression(context, logger, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
+                value = JsonExpressionParser.readOptionalExpression(context, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValueTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithStringEnumPropertyWithDefaultValueTemplate(
-                value = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "value", TYPE_HELPER_VALUE, allowOverride, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING),
+                value = JsonFieldParser.readOptionalFieldWithExpression(context, data, "value", TYPE_HELPER_VALUE, allowOverride, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithStringEnumPropertyWithDefaultValueTemplate, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
-            val logger = context.logger
             return EntityWithStringEnumPropertyWithDefaultValue(
-                value = JsonFieldResolver.resolveOptionalExpression(context, logger, template.value, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
+                value = JsonFieldResolver.resolveOptionalExpression(context, template.value, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
             )
         }
     }

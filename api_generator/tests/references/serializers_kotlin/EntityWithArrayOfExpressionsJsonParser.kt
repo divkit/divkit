@@ -23,9 +23,8 @@ internal class EntityWithArrayOfExpressionsJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithArrayOfExpressions {
-            val logger = context.logger
             return EntityWithArrayOfExpressions(
-                items = JsonExpressionParser.readExpressionList(context, logger, data, "items", TYPE_HELPER_STRING, ITEMS_VALIDATOR),
+                items = JsonExpressionParser.readExpressionList(context, data, "items", TYPE_HELPER_STRING, ITEMS_VALIDATOR),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithArrayOfExpressionsJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithArrayOfExpressionsTemplate?, data: JSONObject): EntityWithArrayOfExpressionsTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithArrayOfExpressionsTemplate(
-                items = JsonFieldParser.readExpressionListField(context, logger, data, "items", TYPE_HELPER_STRING, allowOverride, parent?.items, ITEMS_VALIDATOR.cast()),
+                items = JsonFieldParser.readExpressionListField(context, data, "items", TYPE_HELPER_STRING, allowOverride, parent?.items, ITEMS_VALIDATOR.cast()),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithArrayOfExpressionsJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithArrayOfExpressionsTemplate, data: JSONObject): EntityWithArrayOfExpressions {
-            val logger = context.logger
             return EntityWithArrayOfExpressions(
-                items = JsonFieldResolver.resolveExpressionList(context, logger, template.items, data, "items", TYPE_HELPER_STRING, ITEMS_VALIDATOR),
+                items = JsonFieldResolver.resolveExpressionList(context, template.items, data, "items", TYPE_HELPER_STRING, ITEMS_VALIDATOR),
             )
         }
     }

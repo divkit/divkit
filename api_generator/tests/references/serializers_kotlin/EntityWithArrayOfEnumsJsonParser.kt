@@ -23,9 +23,8 @@ internal class EntityWithArrayOfEnumsJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithArrayOfEnums {
-            val logger = context.logger
             return EntityWithArrayOfEnums(
-                items = JsonPropertyParser.readList(context, logger, data, "items", EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_VALIDATOR),
+                items = JsonPropertyParser.readList(context, data, "items", EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_VALIDATOR),
             )
         }
 
@@ -44,11 +43,10 @@ internal class EntityWithArrayOfEnumsJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithArrayOfEnumsTemplate?, data: JSONObject): EntityWithArrayOfEnumsTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithArrayOfEnumsTemplate(
-                items = JsonFieldParser.readListField(context, logger, data, "items", allowOverride, parent?.items, EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_VALIDATOR.cast()),
+                items = JsonFieldParser.readListField(context, data, "items", allowOverride, parent?.items, EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_VALIDATOR.cast()),
             )
         }
 
@@ -67,9 +65,8 @@ internal class EntityWithArrayOfEnumsJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithArrayOfEnumsTemplate, data: JSONObject): EntityWithArrayOfEnums {
-            val logger = context.logger
             return EntityWithArrayOfEnums(
-                items = JsonFieldResolver.resolveList(context, logger, template.items, data, "items", EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_VALIDATOR),
+                items = JsonFieldResolver.resolveList(context, template.items, data, "items", EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_VALIDATOR),
             )
         }
     }
