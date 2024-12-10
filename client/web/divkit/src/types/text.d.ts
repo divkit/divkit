@@ -58,6 +58,13 @@ export interface TextRange extends TextStyles {
 
 export type TextIndexingDirection = 'normal' | 'reversed';
 
+export type TextImageAccessibilityType = 'none' | 'button' | 'image' | 'text' | 'auto';
+
+export interface TextImageAccessibility {
+    description?: string;
+    type?: TextImageAccessibilityType;
+}
+
 export interface TextImage {
     start: number;
     url: string;
@@ -68,6 +75,7 @@ export interface TextImage {
     preload_required?: BooleanInt;
     alignment_vertical?: TextVerticalAlignment;
     indexing_direction?: TextIndexingDirection;
+    accessibility?: TextImageAccessibility;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

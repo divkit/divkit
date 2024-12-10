@@ -546,7 +546,8 @@
         "Accessibility"
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "steps": [
         "Turn on Screen reader",

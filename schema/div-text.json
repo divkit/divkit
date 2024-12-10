@@ -197,7 +197,8 @@
             }
           },
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "alignment_vertical": {
