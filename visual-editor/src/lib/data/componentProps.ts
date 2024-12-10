@@ -122,6 +122,7 @@ export interface VideoSourcesProperty extends BaseProperty {
 export interface FileProperty extends BaseProperty {
     type: 'file';
     subtype: 'image' | 'gif' | 'lottie' | 'image_preview';
+    generateFromVideoProperty?: string;
 }
 
 export interface AlignmentProperty extends BaseProperty {
@@ -559,6 +560,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             name: 'props.preview',
             prop: 'preview',
             type: 'file',
+            generateFromVideoProperty: 'video_sources',
             subtype: 'image_preview',
             enableSources: true
         }, {

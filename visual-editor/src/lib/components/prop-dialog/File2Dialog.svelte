@@ -2,6 +2,7 @@
     import { getContext } from 'svelte';
 
     import type { AnimationItem } from 'lottie-web';
+    import type { VideoSource } from '../../utils/video';
     import Text from '../controls/Text.svelte';
     import ContextDialog from './ContextDialog.svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
@@ -9,8 +10,10 @@
     import { APP_CTX, type AppContext, type File2DialogCallback, type File2DialogShowProps, type File2DialogValue } from '../../ctx/appContext';
     import loaderImage from '../../../assets/loader.svg?raw';
     import trashIcon from '../../../assets/trash.svg?raw';
+    import generateIcon from '../../../assets/generate.svg?raw';
     import { loadFileAsBase64 } from '../../utils/loadFileAsBase64';
     import { getFileSize } from '../../utils/fileSize';
+    import { hasRequestVideoFrame } from '../../utils/hasRequestVideoFrame';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { uploadFile, previewWarnFileLimit, previewErrorFileLimit, warnFileLimit, errorFileLimit } = getContext<AppContext>(APP_CTX);
@@ -79,6 +82,7 @@
         direction = props.direction;
         onHide = props.onHide;
         disabled = props.disabled || false;
+        generateFromVideo = props.generateFromVideo;
         showError = false;
         isShown = true;
         loadFileSize();
@@ -113,6 +117,7 @@
     let direction: 'left' | 'right' | undefined;
     let onHide: (() => void) | undefined;
     let disabled = false;
+    let generateFromVideo: VideoSource[] | undefined;
     let dialog: ContextDialog | undefined;
 
     $: showFileSelect = !value.url;
@@ -251,6 +256,37 @@
             }
         });
     }
+
+    function generatePreview(): void {
+        if (!generateFromVideo) {
+            return;
+        }
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            return;
+        }
+
+        const video = document.createElement('video');
+        for (const item of generateFromVideo) {
+            if (
+                item.url && typeof item.url === 'string' &&
+                item.mime_type && typeof item.mime_type === 'string'
+            ) {
+                const source = document.createElement('source');
+                source.setAttribute('src', item.url);
+                source.setAttribute('type', item.mime_type);
+                video.appendChild(source);
+            }
+        }
+        video.requestVideoFrameCallback((_now, meta) => {
+            canvas.width = meta.width;
+            canvas.height = meta.height;
+            ctx.drawImage(video, 0, 0);
+            value.url = canvas.toDataURL();
+        });
+    }
 </script>
 
 <svelte:window
@@ -328,15 +364,26 @@
                     on:change={onInputChange}
                     {disabled}
                 >
-                    <div slot="button">
+                    <div slot="button" class="file2-dialog__text-inline-buttons">
                         {#if value.url && hasDelete && !disabled}
                             <button
-                                class="file2-dialog__cleanup"
+                                class="file2-dialog__text-inline-button file2-dialog__cleanup"
                                 title={$l10nString('delete')}
                                 on:click={onCleanup}
                             >
                                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                                 {@html trashIcon}
+                            </button>
+                        {/if}
+
+                        {#if generateFromVideo && hasRequestVideoFrame}
+                            <button
+                                class="file2-dialog__text-inline-button file2-dialog__generate"
+                                title={$l10nString('file.generate_from_video')}
+                                on:click={generatePreview}
+                            >
+                                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                                {@html generateIcon}
                             </button>
                         {/if}
                     </div>
@@ -577,18 +624,24 @@
         color: var(--text-secondary);
     }
 
-    .file2-dialog__cleanup {
-        position: absolute;
-        top: 0;
-        right: 4px;
-        bottom: 0;
+    .file2-dialog__text-inline-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        margin: auto 4px;
+    }
+
+    .file2-dialog__text-inline-button {
         box-sizing: border-box;
         display: flex;
+        flex: 0 0 auto;
         align-items: center;
         justify-content: center;
         width: 32px;
         height: 32px;
-        margin: auto 0;
+        margin: 0;
         border: none;
         border-radius: 4px;
         background: none;
@@ -598,7 +651,7 @@
         cursor: pointer;
     }
 
-    .file2-dialog__cleanup:hover {
+    .file2-dialog__text-inline-button:hover {
         color: var(--accent-red);
     }
 

@@ -4,6 +4,7 @@
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { formatFileSize } from '../../utils/formatFileSize';
     import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
+    import type { VideoSource } from '../../utils/video';
 
     export let id: string = '';
     export let value: string | number | undefined;
@@ -24,6 +25,7 @@
     export let pattern: string | null = null;
     export let error = '';
     export let title = '';
+    export let generateFromVideo: VideoSource[] | undefined = undefined;
 
     const dispatch = createEventDispatcher();
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
@@ -36,6 +38,7 @@
     let isFocused = false;
     let currentSize: number | undefined = undefined;
     let sizeLabelWidth = 0;
+    let customButtonsWidth = 0;
 
     function updateInternalValue(
         subtype: string,
@@ -79,6 +82,9 @@
     $: fileSizeMod = fileType === 'image_preview' ?
         calcFileSizeMod(currentSize, previewWarnFileLimit, previewErrorFileLimit) :
         calcFileSizeMod(currentSize, warnFileLimit, errorFileLimit);
+
+    $: totalInlineButtonsWidth = ((currentSize && currentSize > 0 && sizeLabelWidth > 0) ? sizeLabelWidth : 0) +
+        customButtonsWidth;
 
     function onChange() {
         if (type === 'number') {
@@ -138,6 +144,7 @@
                 url: value ? String(value) : ''
             },
             disabled,
+            generateFromVideo,
             callback(val) {
                 value = val.url;
 
@@ -171,7 +178,7 @@
     title={error}
     aria-label={title}
     data-custom-tooltip={title}
-    style:--inline-size-width="{(currentSize && currentSize > 0 && sizeLabelWidth > 0) ? sizeLabelWidth : 0}px"
+    style:--inline-size-width="{totalInlineButtonsWidth}px"
 >
     {#if type === 'text'}
         <input
@@ -249,7 +256,12 @@
         <div class="text__inline-label">{inlineLabel}</div>
     {/if}
 
-    <slot name="button" />
+    <div
+        class="text__custom-buttons"
+        bind:offsetWidth={customButtonsWidth}
+    >
+        <slot name="button" />
+    </div>
 </div>
 
 <style>
@@ -260,8 +272,9 @@
     .text__input {
         box-sizing: border-box;
         width: 100%;
+        min-width: 0;
         margin: 0;
-        padding: 9px 14px;
+        padding: 9px calc(14px + var(--inline-size-width, 0)) 9px 14px;
         font: inherit;
         font-size: 14px;
         line-height: 20px;
@@ -412,5 +425,14 @@
 
     .text__size-label_warn {
         background: var(--fill-orange-2);
+    }
+
+    .text__custom-buttons {
+        position: absolute;
+        top: 0;
+        right: 4px;
+        bottom: 0;
+        height: 32px;
+        margin: auto 0;
     }
 </style>

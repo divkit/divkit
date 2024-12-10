@@ -66,6 +66,7 @@
     <FileProp
         {item}
         {value}
+        {processedJson}
         on:change
         on:showMore
     />
