@@ -50,7 +50,7 @@ function createInteractiveTestCase(testCase, testPath) {
         await this.browser.yaOpenCrossplatformJson(testPath);
 
         for (let i = 0; i < steps.length; i++) {
-            const { div_actions } = steps[i];
+            const { delay, div_actions } = steps[i];
 
             if (div_actions) {
                 for (const action of div_actions) {
@@ -58,6 +58,10 @@ function createInteractiveTestCase(testCase, testPath) {
                         window.divkitRoot.execAction(action);
                     }, action);
                 }
+            }
+
+            if (delay) {
+                await this.browser.pause(delay);
             }
 
             await this.browser.pause(300);
