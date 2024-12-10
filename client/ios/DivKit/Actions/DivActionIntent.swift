@@ -9,8 +9,8 @@ enum DivActionIntent {
   case setState(divStatePath: DivStatePath, lifetime: DivStateLifetime)
   case setVariable(name: String, value: String)
   case setCurrentItem(id: String, index: Int)
-  case setNextItem(id: String, overflow: OverflowMode)
-  case setPreviousItem(id: String, overflow: OverflowMode)
+  case setNextItem(id: String, step: Int, overflow: OverflowMode)
+  case setPreviousItem(id: String, step: Int, overflow: OverflowMode)
   case scroll(id: String, mode: ScrollMode)
   case timer(id: String, action: DivTimerAction)
   case video(id: String, action: DivVideoAction)
@@ -58,24 +58,24 @@ enum DivActionIntent {
       guard let id = url.id else {
         return nil
       }
-      self = .setNextItem(id: id, overflow: url.overflow)
+      self = .setNextItem(id: id, step: url.step ?? 1, overflow: url.overflow)
     case "set_previous_item":
       guard let id = url.id else {
         return nil
       }
-      self = .setPreviousItem(id: id, overflow: url.overflow)
+      self = .setPreviousItem(id: id, step: url.step ?? 1, overflow: url.overflow)
     case "scroll_forward":
-      guard let id = url.id, let step = url.step else {
+      guard let id = url.id, let step = url.floatStep else {
         return nil
       }
       self = .scroll(id: id, mode: .forward(step: step, overflow: url.overflow))
     case "scroll_backward":
-      guard let id = url.id, let step = url.step else {
+      guard let id = url.id, let step = url.floatStep else {
         return nil
       }
       self = .scroll(id: id, mode: .backward(step: step, overflow: url.overflow))
     case "scroll_to_position":
-      guard let id = url.id, let step = url.step else {
+      guard let id = url.id, let step = url.floatStep else {
         return nil
       }
       self = .scroll(id: id, mode: .position(step: step))
@@ -197,8 +197,12 @@ extension URL {
     }
   }
 
-  fileprivate var step: CGFloat? {
-    queryParamValue(forName: "step").flatMap(Int.init).flatMap(CGFloat.init)
+  fileprivate var floatStep: CGFloat? {
+    step.flatMap(CGFloat.init)
+  }
+
+  fileprivate var step: Int? {
+    queryParamValue(forName: "step").flatMap(Int.init)
   }
 
   fileprivate var storedValue: DivStoredValue? {

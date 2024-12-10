@@ -98,9 +98,10 @@ final class DivActionIntentTests: XCTestCase {
   }
 
   func test_SetNextItem() {
-    switch makeIntent("div-action://set_next_item?id=div_id&overflow=ring") {
-    case let .setNextItem(id, overflow):
+    switch makeIntent("div-action://set_next_item?id=div_id&step=3&overflow=ring") {
+    case let .setNextItem(id, step, overflow):
       XCTAssertEqual("div_id", id)
+      XCTAssertEqual(3, step)
       XCTAssertEqual(.ring, overflow)
     default:
       XCTFail("Invalid intent")
@@ -108,9 +109,10 @@ final class DivActionIntentTests: XCTestCase {
   }
 
   func test_SetPreviousItem() {
-    switch makeIntent("div-action://set_previous_item?id=div_id&overflow=clamp") {
-    case let .setPreviousItem(id, overflow):
+    switch makeIntent("div-action://set_previous_item?id=div_id&step=3&overflow=clamp") {
+    case let .setPreviousItem(id, step, overflow):
       XCTAssertEqual("div_id", id)
+      XCTAssertEqual(3, step)
       XCTAssertEqual(.clamp, overflow)
     default:
       XCTFail("Invalid intent")

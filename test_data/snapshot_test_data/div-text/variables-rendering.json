@@ -2,6 +2,7 @@
   "description": "Text with variables",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "card": {

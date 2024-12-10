@@ -1,6 +1,5 @@
 @testable import DivKit
 @testable import LayoutKit
-
 import XCTest
 
 final class DivActionURLHandlerTests: XCTestCase {
@@ -24,15 +23,31 @@ final class DivActionURLHandlerTests: XCTestCase {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
       afterState: SetItemAction.secondElementState,
-      mode: .next(.clamp)
+      mode: .next(step: nil, overflow: .clamp)
     )
   }
 
   func test_setNextItemActionWithRingOverflow() {
     setItemTestCases(
-      beforeStates: SetItemAction.lastElementsStates,
+      beforeStates: SetItemAction.lastElementState,
       afterState: SetItemAction.firstElementState,
-      mode: .next(.ring)
+      mode: .next(step: nil, overflow: .ring)
+    )
+  }
+
+  func test_setNextItem_WithStep() {
+    setItemTestCases(
+      beforeStates: SetItemAction.firstElementState,
+      afterState: SetItemAction.thirdElementState,
+      mode: .next(step: 2, overflow: .clamp)
+    )
+  }
+
+  func test_setNextItem_WithStepAndRingOverflow() {
+    setItemTestCases(
+      beforeStates: SetItemAction.lastElementState,
+      afterState: SetItemAction.secondElementState,
+      mode: .next(step: 2, overflow: .ring)
     )
   }
 
@@ -40,7 +55,7 @@ final class DivActionURLHandlerTests: XCTestCase {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStates,
       afterState: SetItemAction.emptyStates,
-      mode: .next(.clamp)
+      mode: .next(step: nil, overflow: .clamp)
     )
   }
 
@@ -48,15 +63,31 @@ final class DivActionURLHandlerTests: XCTestCase {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementState,
       afterState: SetItemAction.firstElementState,
-      mode: .previous(.clamp)
+      mode: .previous(step: nil, overflow: .clamp)
     )
   }
 
   func test_setPreviousItemActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
-      afterState: SetItemAction.lastElementsStates,
-      mode: .previous(.ring)
+      afterState: SetItemAction.lastElementState,
+      mode: .previous(step: nil, overflow: .ring)
+    )
+  }
+
+  func test_setPreviousItem_WithStep() {
+    setItemTestCases(
+      beforeStates: SetItemAction.thirdElementState,
+      afterState: SetItemAction.firstElementState,
+      mode: .previous(step: 2, overflow: .clamp)
+    )
+  }
+
+  func test_setPreviousItem_WithStepAndRingOverflow() {
+    setItemTestCases(
+      beforeStates: SetItemAction.firstElementState,
+      afterState: SetItemAction.thirdElementState,
+      mode: .previous(step: 8, overflow: .ring)
     )
   }
 
@@ -64,7 +95,7 @@ final class DivActionURLHandlerTests: XCTestCase {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStates,
       afterState: SetItemAction.emptyStates,
-      mode: .previous(.clamp)
+      mode: .previous(step: nil, overflow: .clamp)
     )
   }
 
@@ -233,9 +264,9 @@ final class DivActionURLHandlerTests: XCTestCase {
     afterState: State,
     mode: SetItemAction.Mode
   ) {
-    blockStateStorage.setState(id: elementID, cardId: cardID, state: beforeState)
-    let _ = actionHandler.handleURL(SetItemAction.makeURL(mode: mode), cardId: cardID)
-    XCTAssertEqual(blockStateStorage.getState(elementID, cardId: cardID), afterState)
+    blockStateStorage.setState(id: elementId, cardId: cardId, state: beforeState)
+    let _ = actionHandler.handleURL(SetItemAction.makeURL(mode: mode), cardId: cardId)
+    XCTAssertEqual(blockStateStorage.getState(elementId, cardId: cardId), afterState)
   }
 }
 
@@ -246,8 +277,8 @@ private enum SetItemAction {
       case ring
     }
 
-    case next(Overflow)
-    case previous(Overflow)
+    case next(step: Int?, overflow: Overflow)
+    case previous(step: Int?, overflow: Overflow)
     case current(Int)
     case forward(CGFloat, Overflow)
     case backward(CGFloat, Overflow)
@@ -268,7 +299,13 @@ private enum SetItemAction {
     TabViewState(selectedPageIndex: 1, countOfPages: 10),
   ]
 
-  static let lastElementsStates: [ElementState] = [
+  static let thirdElementState: [ElementState] = [
+    PagerViewState(numberOfPages: 10, currentPage: 2),
+    GalleryViewState(contentPageIndex: 2, itemsCount: 10),
+    TabViewState(selectedPageIndex: 2, countOfPages: 10),
+  ]
+
+  static let lastElementState: [ElementState] = [
     PagerViewState(numberOfPages: 10, currentPage: 9),
     GalleryViewState(contentPageIndex: 9, itemsCount: 10),
     TabViewState(selectedPageIndex: 9, countOfPages: 10),
@@ -324,25 +361,33 @@ private enum SetItemAction {
 
   static func makeURL(mode: Mode) -> URL {
     switch mode {
-    case let .next(overflow):
-      url("div-action://set_next_item?id=\(elementID)&overflow=\(overflow)")
-    case let .previous(overflow):
-      url("div-action://set_previous_item?id=\(elementID)&overflow=\(overflow)")
+    case let .next(step, overflow):
+      var urlString = "div-action://set_next_item?id=\(elementId)&overflow=\(overflow)"
+      if let step {
+        urlString = urlString + "&step=\(step)"
+      }
+      return url(urlString)
+    case let .previous(step, overflow):
+      var urlString = "div-action://set_previous_item?id=\(elementId)&overflow=\(overflow)"
+      if let step {
+        urlString = urlString + "&step=\(step)"
+      }
+      return url(urlString)
     case let .current(item):
-      url("div-action://set_current_item?id=\(elementID)&item=\(item)")
+      return url("div-action://set_current_item?id=\(elementId)&item=\(item)")
     case let .forward(step, overflow):
-      url("div-action://scroll_forward?id=\(elementID)&step=\(Int(step))&overflow=\(overflow)")
+      return url("div-action://scroll_forward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)")
     case let .backward(step, overflow):
-      url("div-action://scroll_backward?id=\(elementID)&step=\(Int(step))&overflow=\(overflow)")
+      return url("div-action://scroll_backward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)")
     case let .position(step):
-      url("div-action://scroll_to_position?id=\(elementID)&step=\(Int(step))")
+      return url("div-action://scroll_to_position?id=\(elementId)&step=\(Int(step))")
     case .start:
-      url("div-action://scroll_to_start?id=\(elementID)")
+      return url("div-action://scroll_to_start?id=\(elementId)")
     case .end:
-      url("div-action://scroll_to_end?id=\(elementID)")
+      return url("div-action://scroll_to_end?id=\(elementId)")
     }
   }
 }
 
-private let cardID: DivCardID = "cardID"
-private let elementID: String = "element"
+private let cardId: DivCardID = "cardId"
+private let elementId: String = "element"

@@ -123,11 +123,11 @@ public final class DivActionURLHandler {
     case let .setCurrentItem(id, index):
       setCurrentItem(id: id, cardId: cardId, index: index)
       updateCard(.state(cardId))
-    case let .setNextItem(id, overflow):
-      setNextItem(id: id, cardId: cardId, overflow: overflow)
+    case let .setNextItem(id, step, overflow):
+      setNextItem(cardId: cardId, id: id, step: step, overflow: overflow)
       updateCard(.state(cardId))
-    case let .setPreviousItem(id, overflow):
-      setPreviousItem(id: id, cardId: cardId, overflow: overflow)
+    case let .setPreviousItem(id, step, overflow):
+      setPreviousItem(cardId: cardId, id: id, step: step, overflow: overflow)
       updateCard(.state(cardId))
     case let .scroll(id, mode):
       setContentOffset(id: id, cardId: cardId, mode: mode)
@@ -269,7 +269,12 @@ public final class DivActionURLHandler {
     updateCard(.state(cardId))
   }
 
-  private func setNextItem(id: String, cardId: DivCardID, overflow: OverflowMode) {
+  private func setNextItem(
+    cardId: DivCardID,
+    id: String,
+    step: Int,
+    overflow: OverflowMode
+  ) {
     guard let state = blockStateStorage
       .getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState else {
       DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
@@ -279,6 +284,7 @@ public final class DivActionURLHandler {
     let index = getNextIndex(
       current: state.currentItemIndex,
       count: state.itemsCount,
+      step: step,
       overflow: overflow
     )
 
@@ -292,6 +298,7 @@ public final class DivActionURLHandler {
   private func getNextIndex(
     current: Int,
     count: Int,
+    step: Int,
     overflow: OverflowMode
   ) -> Int {
     guard count != 0 else {
@@ -299,13 +306,18 @@ public final class DivActionURLHandler {
     }
     switch overflow {
     case .ring:
-      return (current + 1) % count
+      return (current + step) % count
     case .clamp:
-      return min(current + 1, count - 1)
+      return min(current + step, count - 1)
     }
   }
 
-  private func setPreviousItem(id: String, cardId: DivCardID, overflow: OverflowMode) {
+  private func setPreviousItem(
+    cardId: DivCardID,
+    id: String,
+    step: Int,
+    overflow: OverflowMode
+  ) {
     guard let state = blockStateStorage
       .getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState else {
       DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
@@ -315,6 +327,7 @@ public final class DivActionURLHandler {
     let index = getPreviousIndex(
       current: state.currentItemIndex,
       count: state.itemsCount,
+      step: step,
       overflow: overflow
     )
 
@@ -328,6 +341,7 @@ public final class DivActionURLHandler {
   private func getPreviousIndex(
     current: Int,
     count: Int,
+    step: Int,
     overflow: OverflowMode
   ) -> Int {
     guard count != 0 else {
@@ -335,9 +349,9 @@ public final class DivActionURLHandler {
     }
     switch overflow {
     case .ring:
-      return (current + count - 1) % count
+      return (current + count - step) % count
     case .clamp:
-      return max(0, current - 1)
+      return max(0, current - step)
     }
   }
 }
