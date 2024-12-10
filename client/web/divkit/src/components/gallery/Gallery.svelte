@@ -15,6 +15,7 @@
     import type { Size } from '../../types/sizes';
     import type { Style } from '../../types/general';
     import type { ComponentContext } from '../../types/componentContext';
+    import type { Variable } from '../../expressions/variable';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
@@ -29,6 +30,8 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { constStore } from '../../utils/constStore';
+    import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
 
@@ -100,6 +103,10 @@
     }
 
     $: jsonItems = Array.isArray(componentContext.json.items) && componentContext.json.items || [];
+    // eslint-disable-next-line no-nested-ternary
+    $: jsonItemBuilderData = typeof componentContext.json.item_builder?.data === 'string' ? componentContext.getDerivedFromVars(
+        componentContext.json.item_builder?.data, undefined, true
+    ) : (componentContext.json.item_builder?.data ? constStore(componentContext.json.item_builder.data) : undefined);
 
     $: jsonColumnCount = componentContext.getDerivedFromVars(componentContext.json.column_count);
     $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
@@ -126,13 +133,35 @@
     let items: ComponentContext[] = [];
 
     $: {
+        let newItems: {
+            div: MaybeMissing<DivBaseData>;
+            id?: string | undefined;
+            vars?: Map<string, Variable> | undefined;
+        }[] = [];
+        if (
+            componentContext.json.item_builder &&
+            Array.isArray($jsonItemBuilderData) &&
+            Array.isArray(componentContext.json.item_builder.prototypes)
+        ) {
+            const builder = componentContext.json.item_builder;
+            newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
+        } else {
+            newItems = (Array.isArray(jsonItems) && jsonItems || []).map(it => {
+                return {
+                    div: it
+                };
+            });
+        }
+
         items.forEach(context => {
             context.destroy();
         });
 
-        items = jsonItems.map((item, index) => {
-            return componentContext.produceChildContext(item, {
-                path: index
+        items = newItems.map((item, index) => {
+            return componentContext.produceChildContext(item.div, {
+                path: index,
+                variables: item.vars,
+                id: item.id
             });
         });
     }
