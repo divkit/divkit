@@ -1,0 +1,31 @@
+{
+    "features": [{
+        "id": "accessibility_type",
+        "name": "accessibility <code>type</code> property",
+        "status": {
+            "notes": "Partial implementation refers to a limited values support"
+        },
+        "compat": {
+            "android": {
+                "version_added": "1.0.0",
+                "partial_implementation": true
+            },
+            "ios": {
+                "version_added": "1.0.0",
+                "partial_implementation": true
+            },
+            "web": {
+                "version_added": "30.30.0",
+                "partial_implementation": true
+            }
+        }
+    }, {
+        "id": "accessibility_is_checked",
+        "name": "accessibility <code>is_checked</code> property",
+        "compat": {
+            "web": {
+                "version_added": "30.30.0"
+            }
+        }
+    }]
+}
