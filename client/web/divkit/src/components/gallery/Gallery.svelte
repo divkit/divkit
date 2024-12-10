@@ -40,6 +40,12 @@
         visibility?: string;
     }
 
+    interface Item {
+        index: number;
+        hasGapBefore: boolean;
+        componentContext: ComponentContext;
+    }
+
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     const direction = rootCtx.direction;
@@ -65,6 +71,13 @@
     let crossGridGap: string | undefined;
     let crossSpacing;
     let padding = '';
+    let lastPaddingSize: {
+        width: string;
+        height: string;
+        'margin-left'?: string;
+        'margin-right'?: string;
+        'margin-bottom'?: string;
+    } | undefined;
     let templateSizes: string[] = [];
     let childStore: Readable<ChildInfo[]>;
     let scrollerStyle: Style = {};
@@ -142,15 +155,23 @@
         columns = correctPositiveNumber($jsonColumnCount, columns);
     }
 
-    function rebuildItemsGrid(items: ComponentContext[], columns: number): ComponentContext[][] {
+    function rebuildItemsGrid(items: ComponentContext[], info: ChildInfo[], columns: number): Item[][] {
         let column = 0;
-        let res: ComponentContext[][] = [];
+        let res: Item[][] = [];
+        let wasFirstVisibleItem = [];
 
         for (let i = 0; i < items.length; ++i) {
             if (!res[column]) {
                 res[column] = [];
             }
-            res[column].push(items[i]);
+            res[column].push({
+                index: i,
+                hasGapBefore: wasFirstVisibleItem[column] && info[i].visibility !== 'gone',
+                componentContext: items[i]
+            });
+            if (!wasFirstVisibleItem[column] && info[i].visibility !== 'gone') {
+                wasFirstVisibleItem[column] = true;
+            }
             if (++column >= columns) {
                 column = 0;
             }
@@ -158,7 +179,6 @@
 
         return res;
     }
-    $: itemsGrid = rebuildItemsGrid(items, columns);
 
     $: {
         orientation = correctGeneralOrientation($jsonOrientation, orientation);
@@ -180,6 +200,17 @@
 
     $: {
         padding = correctEdgeInserts($jsonPaddings, $direction, padding);
+        const size = orientation === 'horizontal' ?
+            ($jsonPaddings?.end ?? $jsonPaddings?.[($direction === 'ltr' ? 'right' : 'left')] ?? 0) :
+            ($jsonPaddings?.bottom ?? 0);
+        const calcedSize = pxToEm(size);
+        lastPaddingSize = {
+            width: orientation === 'horizontal' ? calcedSize : '1px',
+            height: orientation === 'horizontal' ? '1px' : calcedSize,
+            'margin-right': orientation === 'horizontal' && $direction === 'ltr' ? '-' + calcedSize : undefined,
+            'margin-left': orientation === 'horizontal' && $direction === 'rtl' ? '-' + calcedSize : undefined,
+            'margin-bottom': orientation === 'vertical' ? '-' + calcedSize : undefined,
+        };
     }
 
     $: gridTemplate = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
@@ -197,13 +228,16 @@
         // Create a new array every time so it is not equal to the previous one
         childStore = derived(children, val => [...val]);
     }
+
+    $: itemsGrid = rebuildItemsGrid(items, $childStore, columns);
+
     $: {
         templateSizes = [];
         if (columns > 1) {
             // TODO: think about match_parent in this task DIVKIT-307
             templateSizes.push('auto');
         } else {
-            $childStore.forEach(childInfo => {
+            $childStore.forEach((childInfo, index) => {
                 if (childInfo.visibility === 'gone') {
                     return;
                 }
@@ -213,7 +247,12 @@
                 } else {
                     templateSizes.push('max-content');
                 }
+
+                if (index + 1 < $childStore.length) {
+                    templateSizes.push('auto');
+                }
             });
+            templateSizes.push('auto');
         }
     }
 
@@ -250,7 +289,6 @@
     };
 
     $: columnStyle = {
-        'grid-gap': gridGap,
         [gridTemplate]: joinTemplateSizes(templateSizes)
     };
 
@@ -302,7 +340,7 @@
         let res: HTMLElement[] = [];
         let maxLen = galleryItemsWrappers[0].children.length;
 
-        for (let j = 0; j < maxLen; ++j) {
+        for (let j = 0; j < maxLen; j += 2) {
             for (let i = 0; i < columns; ++i) {
                 const elem = galleryItemsWrappers[i].children[j] as HTMLElement;
                 if (elem) {
@@ -549,11 +587,21 @@
                     bind:this={galleryItemsWrappers[rowIndex]}
                 >
                     {#each itemsRow as item}
+                        {#if item.hasGapBefore}
+                            <div
+                                class={css.gallery__gap}
+                                style:width={orientation === 'horizontal' ? gridGap : undefined}
+                                style:height={orientation !== 'horizontal' ? gridGap : undefined}
+                            ></div>
+                        {/if}
+
                         <Unknown
-                            componentContext={item}
+                            componentContext={item.componentContext}
                             layoutParams={childLayoutParams}
                         />
                     {/each}
+
+                    <div style={makeStyle(lastPaddingSize)}></div>
                 </div>
             {/each}
         </div>
