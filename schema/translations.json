@@ -16,8 +16,8 @@
     "ru": "Подсказка, что произойдет при взаимодействии. Если на iOS в настройках VoiceOver включен Speak Hints, то подсказка воспроизводится после `description`."
   },
   "div_accessibility_is_checked": {
-    "en": "Indicates the current state of the item. `true` is enabled, `false` is disabled.",
-    "ru": "Указывает текущее состояние элемента. `true` — включено, `false` — отключено."
+    "en": "Shows the current state of the checkbox or radio button. `true` is selected, `false` is not selected.",
+    "ru": "Указывает текущее состояние чекбокса или переключателя. `true` — выбран, `false` — не выбран."
   },
   "div_accessibility_mode": {
     "en": "The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.",
