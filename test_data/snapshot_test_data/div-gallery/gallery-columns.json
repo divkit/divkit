@@ -1,0 +1,74 @@
+{
+  "description": "Vertical gallery with 2 columns.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "background": [
+        {
+          "color": "#3cab12",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "column_count": 2,
+          "item_spacing": 10,
+          "items": [
+            {
+              "type": "text_block",
+              "header": "Item 1",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "text_block",
+              "header": "Item 2"
+            },
+            {
+              "type": "text_block",
+              "header": "Item 3"
+            },
+            {
+              "type": "text_block",
+              "header": "Item 4"
+            },
+            {
+              "type": "text_block",
+              "header": "Item 5"
+            },
+            {
+              "type": "text_block",
+              "header": "Item 6"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

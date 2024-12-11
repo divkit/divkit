@@ -195,20 +195,6 @@
       "file": "gallery/gallery_swipe_paged.json"
     },
     {
-      "title": "Gallery columns",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "tags": [
-        "DivGallery"
-      ],
-      "expected_results": [
-        "Gallery has 2 columns. First column has 2 elements, second - 4 elements."
-      ],
-      "file": "gallery/gallery-columns.json"
-    },
-    {
       "title": "Gallery item actions",
       "tags": [
         "DivGallery"
@@ -2070,19 +2056,6 @@
       "file": "animations/transition/transition_triggers_complex_src.json"
     },
     {
-      "title": "Indicator shapes",
-      "platforms": [
-        "android"
-      ],
-      "tags": [
-        "DivIndicator"
-      ],
-      "expected_results": [
-        "Two pagers with indicator of different shapes - Rounded Rectangle and Circle"
-      ],
-      "file": "indicator/indicator_shapes.json"
-    },
-    {
       "title": "Gallery items posing",
       "automated": [
         "web"
@@ -2181,28 +2154,6 @@
       "file": "div_image_blur.json"
     },
     {
-      "title": "Blur in background image",
-      "steps": [
-        "Click on 'Disable/Enable blur' buttons"
-      ],
-      "expected_results": [
-        "Text background is blurred according to blur radius",
-        "Starting blur radius is 4",
-        "Blur radius is changed to 0 or 8 when clicking on buttons"
-      ],
-      "file": "div_background_blur.json"
-    },
-    {
-      "title": "Container with aspect size",
-      "tags": [
-        "DivContainer"
-      ],
-      "expected_results": [
-        "Containers with correct height appear"
-      ],
-      "file": "container/aspect.json"
-    },
-    {
       "title": "LayoutProvider",
       "platforms": [
         "android",
@@ -2236,10 +2187,12 @@
     {
       "title": "SizeProvider extension",
       "platforms": [
-        "android",
         "ios",
         "web"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by snapshot_test_data/div-container/size_provider.json"
+      },
       "tags": [
         "extensions",
         "SizeProvider"
@@ -2252,10 +2205,12 @@
     {
       "title": "SizeProvider extension (recursive)",
       "platforms": [
-        "android",
         "ios",
         "web"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by snapshot_test_data/div-container/size_provider_recursive.json"
+      },
       "tags": [
         "extensions",
         "SizeProvider"

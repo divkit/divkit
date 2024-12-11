@@ -1,0 +1,141 @@
+{
+  "description": "different shapes for indicators.",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "pager_preset": {
+      "type": "pager",
+      "item_spacing": {
+        "type": "fixed",
+        "value": 8
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "items": [
+        {
+          "type": "text_block",
+          "text": "Item 0"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 1"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 2"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 3"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 4"
+        }
+      ],
+      "layout_mode": {
+        "type": "fixed",
+        "neighbour_page_width": {
+          "type": "fixed",
+          "value": 16
+        }
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#3cab12"
+        }
+      ]
+    },
+    "indicator_preset": {
+      "type": "indicator",
+      "active_item_color": "#000000",
+      "active_item_size": 1.5,
+      "height": {
+        "type": "fixed",
+        "value": 10
+      },
+      "space_between_centers": 10,
+      "inactive_item_color": "#9b6bad",
+      "shape": {
+        "type": "rounded_rectangle",
+        "corner_radius": {
+          "type": "fixed",
+          "value": 2
+        },
+        "item_height": {
+          "type": "fixed",
+          "value": 2
+        },
+        "item_width": {
+          "type": "fixed",
+          "value": 10
+        }
+      }
+    },
+    "indicator_circle": {
+      "type": "indicator_preset",
+      "shape": {
+        "type": "circle",
+        "radius": {
+          "type": "fixed",
+          "value": 2
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Pager with Indicator of Rounded Rectangle Shape."
+            },
+            {
+              "type": "indicator_preset",
+              "id": "indicator_round_rect",
+              "pager_id": "pager_round_rect"
+            },
+            {
+              "type": "pager_preset",
+              "id": "pager_round_rect"
+            },
+            {
+              "type": "text",
+              "text": "Pager with Indicator of Circle Shape."
+            },
+            {
+              "type": "indicator_circle",
+              "id": "indicator_circle",
+              "pager_id": "pager_circle"
+            },
+            {
+              "type": "pager_preset",
+              "id": "pager_circle"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
