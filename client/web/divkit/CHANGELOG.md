@@ -1,3 +1,20 @@
+## 30.31.0 (December 16, 2024)
+
+* Added support for `accessibility` property in images of `text`.
+* Added support for `indexing_direction` in `images` inside `text`.
+* Added support for the `clip_to_bounds` property in the `state`.
+* Added support for the `press_start_actions`, `press_end_actions`, `hover_start_actions` and `hover_end_actions`.
+* Added suuport for the `item_buildr` in the `gallery` component.
+* Change the `max_length` implementation for the `imput` component to provide a better experience for mobile users.
+* Fixed `paddings` logic in the end of the `gallery`.
+* Fixed a bug with modification of the original json when processing `corners_radius`.
+* Fixed access to card-level variables and global variables "through" local variables.
+* Fixed an unhandled error when the `switch` component was created without required variable.
+* Fixed the `action_animation` bug, which took effect for components without `actions`.
+* Fixed the logic of layout the `video` using the width and height of `match_parent`.
+* Fixed types for the package.
+
+
 ## 30.30.0 (December 9, 2024)
 
 * Added limited support for the `accessibility->type` property (only `button`, `image`, `checkbox` and `radio` values is supported). Added support for the `accessibility->is_checked` property.
