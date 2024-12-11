@@ -25,7 +25,7 @@ import static com.yandex.div.json.ParsingExceptionKt.dependencyFailed;
 import static com.yandex.div.json.ParsingExceptionKt.invalidValue;
 import static com.yandex.div.json.ParsingExceptionKt.missingValue;
 
-@SuppressWarnings({"ForLoopReplaceableByForEach", "unused"})
+@SuppressWarnings({"unused"})
 @OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonFieldResolver {
 
@@ -501,31 +501,16 @@ public class JsonFieldResolver {
             @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
-        List<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonPropertyParser.readList(context, data, key, converter, listValidator, itemValidator);
+            return JsonPropertyParser.readList(context, data, key, converter, listValidator, itemValidator);
         } else if (field.type == Field.TYPE_VALUE) {
-            result = ((Field.Value<List<V>>) field).value;
+            return ((Field.Value<List<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonPropertyParser.readList(
-                    context, data, reference, converter, listValidator, itemValidator);
+            return JsonPropertyParser.readList(context, data, reference, converter, listValidator, itemValidator);
         }
 
-        if (result == null) {
-            throw missingValue(data, key);
-        } else if (!listValidator.isValid(result)) {
-            throw invalidValue(data, key, result);
-        } else if (itemValidator != alwaysValidList()) {
-            int length = result.size();
-            for (int i = 0; i < length; i++) {
-                V item = result.get(i);
-                if (!itemValidator.isValid(item)) {
-                    throw invalidValue(data, key, item);
-                }
-            }
-        }
-        return result;
+        throw missingValue(data, key);
     }
 
     @NonNull
@@ -537,13 +522,12 @@ public class JsonFieldResolver {
             @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        List<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonPropertyParser.readList(context, data, key, deserializer);
+            return JsonPropertyParser.readList(context, data, key, deserializer);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
             int length = templates.size();
-            result = new ArrayList<V>(length);
+            List<V> result = new ArrayList<V>(length);
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
@@ -552,15 +536,13 @@ public class JsonFieldResolver {
                     result.add(value);
                 }
             }
+            return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonPropertyParser.readList(context, data, reference, deserializer);
+            return JsonPropertyParser.readList(context, data, reference, deserializer);
         }
 
-        if (result == null) {
-            throw missingValue(data, key);
-        }
-        return result;
+        throw missingValue(data, key);
     }
 
     @NonNull
@@ -573,13 +555,12 @@ public class JsonFieldResolver {
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
             @NonNull final ListValidator<V> listValidator
     ) {
-        List<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonPropertyParser.readList(context, data, key, deserializer, listValidator);
+            return JsonPropertyParser.readList(context, data, key, deserializer, listValidator);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
             int length = templates.size();
-            result = new ArrayList<V>(length);
+            List<V> result = new ArrayList<V>(length);
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
@@ -588,17 +569,16 @@ public class JsonFieldResolver {
                     result.add(value);
                 }
             }
+            if (!listValidator.isValid(result)) {
+                throw invalidValue(data, key, result);
+            }
+            return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonPropertyParser.readList(context, data, reference, deserializer, listValidator);
+            return JsonPropertyParser.readList(context, data, reference, deserializer, listValidator);
         }
 
-        if (result == null) {
-            throw missingValue(data, key);
-        } else if (!listValidator.isValid(result)) {
-            throw invalidValue(data, key, result);
-        }
-        return result;
+        throw missingValue(data, key);
     }
 
     @Nullable
@@ -659,32 +639,15 @@ public class JsonFieldResolver {
     ) {
         List<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonPropertyParser.readOptionalList(
-                    context, data, key, converter, listValidator, itemValidator);
+            return JsonPropertyParser.readOptionalList(context, data, key, converter, listValidator, itemValidator);
         } else if (field.type == Field.TYPE_VALUE) {
-            result = ((Field.Value<List<V>>) field).value;
+            return  ((Field.Value<List<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonPropertyParser.readOptionalList(
-                    context, data, reference, converter, listValidator, itemValidator);
+            return JsonPropertyParser.readOptionalList(context, data, reference, converter, listValidator, itemValidator);
         }
 
-        if (result == null) {
-            return null;
-        } else if (!listValidator.isValid(result)) {
-            context.getLogger().logError(invalidValue(data, key, result));
-            return null;
-        } else if (itemValidator != alwaysValidList()) {
-            int length = result.size();
-            for (int i = 0; i < length; i++) {
-                V item = result.get(i);
-                if (!itemValidator.isValid(item)) {
-                    context.getLogger().logError(invalidValue(data, key, item));
-                    return null;
-                }
-            }
-        }
-        return result;
+        return null;
     }
 
     @Nullable
@@ -696,13 +659,12 @@ public class JsonFieldResolver {
             @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        List<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonPropertyParser.readOptionalList(context, data, key, deserializer);
+            return JsonPropertyParser.readOptionalList(context, data, key, deserializer);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
             int length = templates.size();
-            result = new ArrayList<V>(length);
+            List<V> result = new ArrayList<V>(length);
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
@@ -711,12 +673,13 @@ public class JsonFieldResolver {
                     result.add(value);
                 }
             }
+            return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonPropertyParser.readOptionalList(context, data, reference, deserializer);
+            return JsonPropertyParser.readOptionalList(context, data, reference, deserializer);
         }
 
-        return result;
+        return null;
     }
 
     @Nullable
@@ -729,13 +692,12 @@ public class JsonFieldResolver {
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
             @NonNull final ListValidator<V> listValidator
     ) {
-        List<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonPropertyParser.readOptionalList(context, data, key, deserializer, listValidator);
+            return JsonPropertyParser.readOptionalList(context, data, key, deserializer, listValidator);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
             int length = templates.size();
-            result = new ArrayList<V>(length);
+            List<V> result = new ArrayList<V>(length);
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
@@ -744,18 +706,17 @@ public class JsonFieldResolver {
                     result.add(value);
                 }
             }
+            if (!listValidator.isValid(result)) {
+                context.getLogger().logError(invalidValue(data, key, result));
+                return null;
+            }
+            return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonPropertyParser.readOptionalList(context, data, reference, deserializer, listValidator);
+            return JsonPropertyParser.readOptionalList(context, data, reference, deserializer, listValidator);
         }
 
-        if (result == null) {
-            return null;
-        } else if (!listValidator.isValid(result)) {
-            context.getLogger().logError(invalidValue(data, key, result));
-            return null;
-        }
-        return result;
+        return null;
     }
 
     @NonNull
@@ -818,22 +779,18 @@ public class JsonFieldResolver {
             @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonExpressionParser.readExpressionList(
+            return JsonExpressionParser.readExpressionList(
                     context, data, key, typeHelper, converter, listValidator, itemValidator);
         } else if (field.type == Field.TYPE_VALUE) {
-            result = ((Field.Value<ExpressionList<V>>) field).value;
+            return  ((Field.Value<ExpressionList<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonExpressionParser.readExpressionList(
+            return JsonExpressionParser.readExpressionList(
                     context, data, reference, typeHelper, converter, listValidator, itemValidator);
         }
 
-        if (result == null) {
-            throw missingValue(data, key);
-        }
-        return result;
+        throw missingValue(data, key);
     }
 
     @Nullable
@@ -913,19 +870,18 @@ public class JsonFieldResolver {
             @NonNull final ListValidator<V> listValidator,
             @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<V> result = null;
         if (field.overridable && data.has(key)) {
-            result = JsonExpressionParser.readOptionalExpressionList(
+            return JsonExpressionParser.readOptionalExpressionList(
                     context, data, key, typeHelper, converter, listValidator, itemValidator);
         } else if (field.type == Field.TYPE_VALUE) {
-            result = ((Field.Value<ExpressionList<V>>) field).value;
+            return ((Field.Value<ExpressionList<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
-            result = JsonExpressionParser.readOptionalExpressionList(
+            return JsonExpressionParser.readOptionalExpressionList(
                     context, data, reference, typeHelper, converter, listValidator, itemValidator);
         }
 
-        return result;
+        return null;
     }
 
     @NonNull
