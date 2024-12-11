@@ -216,7 +216,7 @@
         {layoutParams}
         heightByAspect={aspectPaddingBottom !== '0'}
     >
-        {#if mods.absolute}
+        {#if aspectPaddingBottom !== '0'}
             <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
                 <video
                     bind:this={videoElem}
