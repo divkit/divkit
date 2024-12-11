@@ -9,6 +9,7 @@ import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
+import com.yandex.div.serialization.Serializer;
 import kotlin.Lazy;
 import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
@@ -756,6 +757,128 @@ public class JsonFieldParser {
             return FieldKt.clone(fallback, overridable);
         } else {
             return overridable ? Field.Companion.nullField(overridable) : null;
+        }
+    }
+
+    public static <V> void writeField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<V> field
+    ) {
+        writeField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<V> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.write(context, jsonObject, key, ((Field.Value<V>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<V> field,
+            @NonNull final Lazy<Serializer<JSONObject, V>> serializer
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.write(context, jsonObject, key, ((Field.Value<V>) field).value, serializer);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<List<V>> field
+    ) {
+        writeListField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<List<V>> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.writeList(context, jsonObject, key, ((Field.Value<List<V>>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<List<V>> field,
+            @NonNull final Lazy<Serializer<JSONObject, V>> serializer
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.writeList(context, jsonObject, key, ((Field.Value<List<V>>) field).value, serializer);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeExpressionField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<Expression<V>> field
+    ) {
+        writeExpressionField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeExpressionField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<Expression<V>> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonExpressionParser.writeExpression(
+                    context, jsonObject, key, ((Field.Value<Expression<V>>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeExpressionListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<ExpressionList<V>> field
+    ) {
+        writeExpressionListField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeExpressionListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<ExpressionList<V>> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonExpressionParser.writeExpressionList(
+                    context, jsonObject, key, ((Field.Value<ExpressionList<V>>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
         }
     }
 }

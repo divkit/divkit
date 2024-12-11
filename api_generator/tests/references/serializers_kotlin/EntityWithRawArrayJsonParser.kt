@@ -31,8 +31,8 @@ internal class EntityWithRawArrayJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithRawArray): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "array", value = value.array)
-            data.write(key = "type", value = EntityWithRawArray.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "array", value.array)
+            JsonPropertyParser.write(context, data, "type", EntityWithRawArray.TYPE)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithRawArrayJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithRawArrayTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "array", field = value.array)
-            data.write(key = "type", value = EntityWithRawArray.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "array", value.array)
+            JsonPropertyParser.write(context, data, "type", EntityWithRawArray.TYPE)
           return data
         }
     }

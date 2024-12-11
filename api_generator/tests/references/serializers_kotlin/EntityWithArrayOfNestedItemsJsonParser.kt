@@ -31,8 +31,8 @@ internal class EntityWithArrayOfNestedItemsJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayOfNestedItems): JSONObject {
             val data = JSONObject()
-            data.write(key = "items", value = component.entityWithArrayOfNestedItemsItemJsonEntityParser.value.serialize(context, value.items))
-            data.write(key = "type", value = EntityWithArrayOfNestedItems.TYPE)
+            JsonPropertyParser.writeList(context, data, "items", value.items, component.entityWithArrayOfNestedItemsItemJsonEntityParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithArrayOfNestedItems.TYPE)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithArrayOfNestedItemsJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayOfNestedItemsTemplate): JSONObject {
             val data = JSONObject()
-            data.writeField(key = "items", field = value.items, converter = component.entityWithArrayOfNestedItemsItemJsonTemplateParser.value.asConverter(context))
-            data.write(key = "type", value = EntityWithArrayOfNestedItems.TYPE)
+            JsonFieldParser.writeListField(context, data, "items", value.items, component.entityWithArrayOfNestedItemsItemJsonTemplateParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithArrayOfNestedItems.TYPE)
           return data
         }
     }
@@ -96,8 +96,8 @@ internal class EntityWithArrayOfNestedItemsItemJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayOfNestedItems.Item): JSONObject {
             val data = JSONObject()
-            data.write(key = "entity", value = component.entityJsonEntityParser.value.serialize(context, value.entity))
-            data.writeExpression(key = "property", value = value.property)
+            JsonPropertyParser.write(context, data, "entity", value.entity, component.entityJsonEntityParser)
+            JsonExpressionParser.writeExpression(context, data, "property", value.property)
             return data
         }
     }
@@ -119,8 +119,8 @@ internal class EntityWithArrayOfNestedItemsItemJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayOfNestedItemsTemplate.ItemTemplate): JSONObject {
             val data = JSONObject()
-            data.writeField(key = "entity", field = value.entity, converter = component.entityJsonTemplateParser.value.asConverter(context))
-            data.writeFieldWithExpression(key = "property", field = value.property)
+            JsonFieldParser.writeField(context, data, "entity", value.entity, component.entityJsonTemplateParser)
+            JsonFieldParser.writeExpressionField(context, data, "property", value.property)
           return data
         }
     }

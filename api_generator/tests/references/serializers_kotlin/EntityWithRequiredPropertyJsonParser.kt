@@ -31,8 +31,8 @@ internal class EntityWithRequiredPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithRequiredProperty): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "property", value = value.property)
-            data.write(key = "type", value = EntityWithRequiredProperty.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "property", value.property)
+            JsonPropertyParser.write(context, data, "type", EntityWithRequiredProperty.TYPE)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithRequiredPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithRequiredPropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "property", field = value.property)
-            data.write(key = "type", value = EntityWithRequiredProperty.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "property", value.property)
+            JsonPropertyParser.write(context, data, "type", EntityWithRequiredProperty.TYPE)
           return data
         }
     }

@@ -31,8 +31,8 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithStringEnumPropertyWithDefaultValue): JSONObject {
             val data = JSONObject()
-            data.write(key = "type", value = EntityWithStringEnumPropertyWithDefaultValue.TYPE)
-            data.writeExpression(key = "value", value = value.value, converter = EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithStringEnumPropertyWithDefaultValue.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "value", value.value, EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithStringEnumPropertyWithDefaultValueTemplate): JSONObject {
             val data = JSONObject()
-            data.write(key = "type", value = EntityWithStringEnumPropertyWithDefaultValue.TYPE)
-            data.writeFieldWithExpression(key = "value", field = value.value, converter = EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithStringEnumPropertyWithDefaultValue.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "value", value.value, EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
           return data
         }
     }

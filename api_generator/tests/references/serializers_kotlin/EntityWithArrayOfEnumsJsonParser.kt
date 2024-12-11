@@ -31,8 +31,8 @@ internal class EntityWithArrayOfEnumsJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayOfEnums): JSONObject {
             val data = JSONObject()
-            data.write(key = "items", value = value.items, converter = EntityWithArrayOfEnums.Item.TO_STRING)
-            data.write(key = "type", value = EntityWithArrayOfEnums.TYPE)
+            JsonPropertyParser.writeList(context, data, "items", value.items, EntityWithArrayOfEnums.Item.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithArrayOfEnums.TYPE)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithArrayOfEnumsJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayOfEnumsTemplate): JSONObject {
             val data = JSONObject()
-            data.writeField(key = "items", field = value.items, converter = EntityWithArrayOfEnums.Item.TO_STRING)
-            data.write(key = "type", value = EntityWithArrayOfEnums.TYPE)
+            JsonFieldParser.writeListField(context, data, "items", value.items, EntityWithArrayOfEnums.Item.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithArrayOfEnums.TYPE)
           return data
         }
     }

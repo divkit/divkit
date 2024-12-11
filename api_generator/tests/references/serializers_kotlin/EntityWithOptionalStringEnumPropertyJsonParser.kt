@@ -31,8 +31,8 @@ internal class EntityWithOptionalStringEnumPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalStringEnumProperty): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "property", value = value.property, converter = EntityWithOptionalStringEnumProperty.Property.TO_STRING)
-            data.write(key = "type", value = EntityWithOptionalStringEnumProperty.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "property", value.property, EntityWithOptionalStringEnumProperty.Property.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalStringEnumProperty.TYPE)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithOptionalStringEnumPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalStringEnumPropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "property", field = value.property, converter = EntityWithOptionalStringEnumProperty.Property.TO_STRING)
-            data.write(key = "type", value = EntityWithOptionalStringEnumProperty.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "property", value.property, EntityWithOptionalStringEnumProperty.Property.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalStringEnumProperty.TYPE)
           return data
         }
     }

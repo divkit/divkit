@@ -31,8 +31,8 @@ internal class EntityWithOptionalComplexPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexProperty): JSONObject {
             val data = JSONObject()
-            data.write(key = "property", value = component.entityWithOptionalComplexPropertyPropertyJsonEntityParser.value.serialize(context, value.property))
-            data.write(key = "type", value = EntityWithOptionalComplexProperty.TYPE)
+            JsonPropertyParser.write(context, data, "property", value.property, component.entityWithOptionalComplexPropertyPropertyJsonEntityParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalComplexProperty.TYPE)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithOptionalComplexPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexPropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeField(key = "property", field = value.property, converter = component.entityWithOptionalComplexPropertyPropertyJsonTemplateParser.value.asConverter(context))
-            data.write(key = "type", value = EntityWithOptionalComplexProperty.TYPE)
+            JsonFieldParser.writeField(context, data, "property", value.property, component.entityWithOptionalComplexPropertyPropertyJsonTemplateParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalComplexProperty.TYPE)
           return data
         }
     }
@@ -90,7 +90,7 @@ internal class EntityWithOptionalComplexPropertyPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexProperty.Property): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "value", value = value.value, converter = URI_TO_STRING)
+            JsonExpressionParser.writeExpression(context, data, "value", value.value, URI_TO_STRING)
             return data
         }
     }
@@ -111,7 +111,7 @@ internal class EntityWithOptionalComplexPropertyPropertyJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "value", field = value.value, converter = URI_TO_STRING)
+            JsonFieldParser.writeExpressionField(context, data, "value", value.value, URI_TO_STRING)
           return data
         }
     }

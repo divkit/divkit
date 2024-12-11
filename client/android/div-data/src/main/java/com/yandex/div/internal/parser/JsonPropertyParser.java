@@ -5,10 +5,12 @@ import androidx.annotation.Nullable;
 import com.yandex.div.json.ParsingExceptionKt;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
+import com.yandex.div.serialization.Serializer;
 import kotlin.Lazy;
 import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -713,5 +715,100 @@ public class JsonPropertyParser {
         }
 
         return (T) value;
+    }
+
+    public static <V> void write(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final V value
+    ) {
+        write(context, jsonObject, key, value, doNotConvert());
+    }
+
+    public static <R, V> void write(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final V value,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (value != null) {
+            try {
+                jsonObject.put(key, converter.invoke(value));
+            } catch (JSONException e) {
+                context.getLogger().logError(e);
+            }
+        }
+    }
+
+    public static <V> void write(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final V value,
+            @NonNull final Lazy<Serializer<JSONObject, V>> serializer
+    ) {
+        if (value != null) {
+            try {
+                jsonObject.put(key, serializer.getValue().serialize(context, value));
+            } catch (JSONException e) {
+                context.getLogger().logError(e);
+            }
+        }
+    }
+
+    public static <V> void writeList(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final List<V> list
+    ) {
+        writeList(context, jsonObject, key, list, (Function1<V, ?>) doNotConvert());
+    }
+
+    public static <R, V> void writeList(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final List<V> list,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (list != null && !list.isEmpty()) {
+            int length = list.size();
+            JSONArray array = new JSONArray();
+            for (int i = 0; i < length; i++) {
+                V item = list.get(i);
+                array.put(converter.invoke(item));
+            }
+            try {
+                jsonObject.put(key, array);
+            } catch (JSONException e) {
+                context.getLogger().logError(e);
+            }
+        }
+    }
+
+    public static <V> void writeList(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final List<V> list,
+            @NonNull final Lazy<Serializer<JSONObject, V>> serializer
+    ) {
+        if (list != null && !list.isEmpty()) {
+            int length = list.size();
+            JSONArray array = new JSONArray();
+
+            for (int i = 0; i < length; i++) {
+                V item = list.get(i);
+                array.put(serializer.getValue().serialize(context, item));
+            }
+            try {
+                jsonObject.put(key, array);
+            } catch (JSONException e) {
+                context.getLogger().logError(e);
+            }
+        }
     }
 }

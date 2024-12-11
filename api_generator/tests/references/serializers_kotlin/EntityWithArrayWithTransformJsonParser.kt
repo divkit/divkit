@@ -31,8 +31,8 @@ internal class EntityWithArrayWithTransformJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayWithTransform): JSONObject {
             val data = JSONObject()
-            data.writeExpressionList(key = "array", value = value.array, converter = COLOR_INT_TO_STRING)
-            data.write(key = "type", value = EntityWithArrayWithTransform.TYPE)
+            JsonExpressionParser.writeExpressionList(context, data, "array", value.array, COLOR_INT_TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithArrayWithTransform.TYPE)
             return data
         }
     }
@@ -53,8 +53,8 @@ internal class EntityWithArrayWithTransformJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithArrayWithTransformTemplate): JSONObject {
             val data = JSONObject()
-            data.writeExpressionListField(key = "array", field = value.array, converter = COLOR_INT_TO_STRING)
-            data.write(key = "type", value = EntityWithArrayWithTransform.TYPE)
+            JsonFieldParser.writeExpressionListField(context, data, "array", value.array, COLOR_INT_TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithArrayWithTransform.TYPE)
           return data
         }
     }

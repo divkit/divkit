@@ -39,16 +39,16 @@ internal class EntityWithSimplePropertiesJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithSimpleProperties): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "boolean", value = value.boolean)
-            data.writeExpression(key = "boolean_int", value = value.booleanInt)
-            data.writeExpression(key = "color", value = value.color, converter = COLOR_INT_TO_STRING)
-            data.writeExpression(key = "double", value = value.double)
-            data.write(key = "id", value = value.id)
-            data.writeExpression(key = "integer", value = value.integer)
-            data.writeExpression(key = "positive_integer", value = value.positiveInteger)
-            data.writeExpression(key = "string", value = value.string)
-            data.write(key = "type", value = EntityWithSimpleProperties.TYPE)
-            data.writeExpression(key = "url", value = value.url, converter = URI_TO_STRING)
+            JsonExpressionParser.writeExpression(context, data, "boolean", value.boolean)
+            JsonExpressionParser.writeExpression(context, data, "boolean_int", value.booleanInt)
+            JsonExpressionParser.writeExpression(context, data, "color", value.color, COLOR_INT_TO_STRING)
+            JsonExpressionParser.writeExpression(context, data, "double", value.double)
+            JsonPropertyParser.write(context, data, "id", value.id)
+            JsonExpressionParser.writeExpression(context, data, "integer", value.integer)
+            JsonExpressionParser.writeExpression(context, data, "positive_integer", value.positiveInteger)
+            JsonExpressionParser.writeExpression(context, data, "string", value.string)
+            JsonPropertyParser.write(context, data, "type", EntityWithSimpleProperties.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "url", value.url, URI_TO_STRING)
             return data
         }
     }
@@ -77,16 +77,16 @@ internal class EntityWithSimplePropertiesJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithSimplePropertiesTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "boolean", field = value.boolean)
-            data.writeFieldWithExpression(key = "boolean_int", field = value.booleanInt)
-            data.writeFieldWithExpression(key = "color", field = value.color, converter = COLOR_INT_TO_STRING)
-            data.writeFieldWithExpression(key = "double", field = value.double)
-            data.writeField(key = "id", field = value.id)
-            data.writeFieldWithExpression(key = "integer", field = value.integer)
-            data.writeFieldWithExpression(key = "positive_integer", field = value.positiveInteger)
-            data.writeFieldWithExpression(key = "string", field = value.string)
-            data.write(key = "type", value = EntityWithSimpleProperties.TYPE)
-            data.writeFieldWithExpression(key = "url", field = value.url, converter = URI_TO_STRING)
+            JsonFieldParser.writeExpressionField(context, data, "boolean", value.boolean)
+            JsonFieldParser.writeExpressionField(context, data, "boolean_int", value.booleanInt)
+            JsonFieldParser.writeExpressionField(context, data, "color", value.color, COLOR_INT_TO_STRING)
+            JsonFieldParser.writeExpressionField(context, data, "double", value.double)
+            JsonFieldParser.writeField(context, data, "id", value.id)
+            JsonFieldParser.writeExpressionField(context, data, "integer", value.integer)
+            JsonFieldParser.writeExpressionField(context, data, "positive_integer", value.positiveInteger)
+            JsonFieldParser.writeExpressionField(context, data, "string", value.string)
+            JsonPropertyParser.write(context, data, "type", EntityWithSimpleProperties.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "url", value.url, URI_TO_STRING)
           return data
         }
     }

@@ -6,11 +6,13 @@ import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.expressions.ConstantExpressionList;
 import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
+import com.yandex.div.json.expressions.ExpressionResolver;
 import com.yandex.div.json.expressions.MutableExpressionList;
 import com.yandex.div.serialization.ParsingContext;
 import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -610,5 +612,98 @@ public class JsonExpressionParser {
     @NonNull
     private static <V> ExpressionList<V> emptyExpressionList() {
         return (ExpressionList<V>) EMPTY_EXPRESSION_LIST;
+    }
+
+    public static <V> void writeExpression(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Expression<V> expression
+    ) {
+        writeExpression(context, jsonObject, key, expression, doNotConvert());
+    }
+
+    public static <R, V> void writeExpression(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Expression<V> expression,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (expression == null) {
+            return;
+        }
+
+        Object rawExpression = expression.getRawValue();
+        boolean needsConversion = !(expression instanceof Expression.MutableExpression<?, ?>);
+
+        try {
+            if (needsConversion) {
+                jsonObject.put(key, converter.invoke((V) rawExpression));
+            } else {
+                jsonObject.put(key, rawExpression);
+            }
+        } catch (JSONException e) {
+            context.getLogger().logError(e);
+        }
+    }
+
+    public static <V> void writeExpressionList(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final ExpressionList<V> expressionList
+    ) {
+        writeExpressionList(context, jsonObject, key, expressionList, doNotConvert());
+    }
+
+    public static <R, V> void writeExpressionList(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final ExpressionList<V> expressionList,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (expressionList == null) {
+            return;
+        }
+
+        if (expressionList instanceof ConstantExpressionList<?>) {
+            List<V> list = expressionList.evaluate(ExpressionResolver.EMPTY);
+            int length = list.size();
+            JSONArray array = new JSONArray();
+            for (int i = 0; i < length; i++) {
+                V item = list.get(i);
+                array.put(converter.invoke(item));
+            }
+            try {
+                jsonObject.put(key, array);
+            } catch (JSONException e) {
+                context.getLogger().logError(e);
+            }
+            return;
+        }
+
+        if (expressionList instanceof MutableExpressionList<?>) {
+            List<Expression<V>> rawExpressions = ((MutableExpressionList<V>) expressionList).getExpressionsInternal();
+            if (rawExpressions.isEmpty()) {
+                return;
+            }
+            int length = rawExpressions.size();
+            JSONArray array = new JSONArray();
+            for (int i = 0; i < length; i++) {
+                Expression<V> expression = rawExpressions.get(i);
+                if (expression instanceof Expression.ConstantExpression<?>) {
+                    array.put(converter.invoke(expression.evaluate(ExpressionResolver.EMPTY)));
+                } else {
+                    array.put(expression.getRawValue());
+                }
+            }
+            try {
+                jsonObject.put(key, array);
+            } catch (JSONException e) {
+                context.getLogger().logError(e);
+            }
+        }
     }
 }

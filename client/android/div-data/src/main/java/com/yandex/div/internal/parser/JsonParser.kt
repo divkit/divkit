@@ -365,7 +365,7 @@ fun <T : Any, R> JSONObject.writeExpressionList(
         }
 
         is MutableExpressionList -> {
-            val rawExpressions = value.expressions
+            val rawExpressions = value.getExpressions()
             if (rawExpressions.isEmpty()) {
                 return
             }

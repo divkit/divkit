@@ -33,10 +33,10 @@ internal class EntityWithPropertyWithDefaultValueJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithPropertyWithDefaultValue): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "int", value = value.int)
-            data.write(key = "nested", value = component.entityWithPropertyWithDefaultValueNestedJsonEntityParser.value.serialize(context, value.nested))
-            data.write(key = "type", value = EntityWithPropertyWithDefaultValue.TYPE)
-            data.writeExpression(key = "url", value = value.url, converter = URI_TO_STRING)
+            JsonExpressionParser.writeExpression(context, data, "int", value.int)
+            JsonPropertyParser.write(context, data, "nested", value.nested, component.entityWithPropertyWithDefaultValueNestedJsonEntityParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithPropertyWithDefaultValue.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "url", value.url, URI_TO_STRING)
             return data
         }
     }
@@ -59,10 +59,10 @@ internal class EntityWithPropertyWithDefaultValueJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithPropertyWithDefaultValueTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "int", field = value.int)
-            data.writeField(key = "nested", field = value.nested, converter = component.entityWithPropertyWithDefaultValueNestedJsonTemplateParser.value.asConverter(context))
-            data.write(key = "type", value = EntityWithPropertyWithDefaultValue.TYPE)
-            data.writeFieldWithExpression(key = "url", field = value.url, converter = URI_TO_STRING)
+            JsonFieldParser.writeExpressionField(context, data, "int", value.int)
+            JsonFieldParser.writeField(context, data, "nested", value.nested, component.entityWithPropertyWithDefaultValueNestedJsonTemplateParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithPropertyWithDefaultValue.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "url", value.url, URI_TO_STRING)
           return data
         }
     }
@@ -111,9 +111,9 @@ internal class EntityWithPropertyWithDefaultValueNestedJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithPropertyWithDefaultValue.Nested): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "int", value = value.int)
-            data.writeExpression(key = "non_optional", value = value.nonOptional)
-            data.writeExpression(key = "url", value = value.url, converter = URI_TO_STRING)
+            JsonExpressionParser.writeExpression(context, data, "int", value.int)
+            JsonExpressionParser.writeExpression(context, data, "non_optional", value.nonOptional)
+            JsonExpressionParser.writeExpression(context, data, "url", value.url, URI_TO_STRING)
             return data
         }
     }
@@ -136,9 +136,9 @@ internal class EntityWithPropertyWithDefaultValueNestedJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "int", field = value.int)
-            data.writeFieldWithExpression(key = "non_optional", field = value.nonOptional)
-            data.writeFieldWithExpression(key = "url", field = value.url, converter = URI_TO_STRING)
+            JsonFieldParser.writeExpressionField(context, data, "int", value.int)
+            JsonFieldParser.writeExpressionField(context, data, "non_optional", value.nonOptional)
+            JsonFieldParser.writeExpressionField(context, data, "url", value.url, URI_TO_STRING)
           return data
         }
     }

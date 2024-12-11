@@ -29,7 +29,7 @@ internal class EntityWithoutPropertiesJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithoutProperties): JSONObject {
             val data = JSONObject()
-            data.write(key = "type", value = EntityWithoutProperties.TYPE)
+            JsonPropertyParser.write(context, data, "type", EntityWithoutProperties.TYPE)
             return data
         }
     }
@@ -46,7 +46,7 @@ internal class EntityWithoutPropertiesJsonParser(
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithoutPropertiesTemplate): JSONObject {
             val data = JSONObject()
-            data.write(key = "type", value = EntityWithoutProperties.TYPE)
+            JsonPropertyParser.write(context, data, "type", EntityWithoutProperties.TYPE)
           return data
         }
     }
