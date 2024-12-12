@@ -8,15 +8,11 @@ final class DivTriggerTests: XCTestCase {
   private let persistentValuesStorage = DivPersistentValuesStorage()
 
   private lazy var actionHandler = DivActionHandler(
-    stateUpdater: FakeDivStateUpdater(),
-    patchProvider: FakeDivPatchDownloader(),
-    submitter: FakeDivSubmitter(),
-    variablesStorage: variablesStorage,
-    updateCard: { _ in },
+    persistentValuesStorage: persistentValuesStorage,
     urlHandler: DivUrlHandlerDelegate { [unowned self] _, _ in
       self.triggersCount += 1
     },
-    persistentValuesStorage: persistentValuesStorage
+    variablesStorage: variablesStorage
   )
 
   private lazy var blockStateStorage = DivBlockStateStorage()
@@ -457,33 +453,6 @@ final class DivTriggerTests: XCTestCase {
   private func setVariable(_ name: DivVariableName, _ value: String) {
     variablesStorage.append(variables: [name: .string(value)], triggerUpdate: true)
   }
-}
-
-private class FakeDivStateUpdater: DivStateUpdater {
-  func set(
-    path _: DivStatePath,
-    cardId _: DivCardID,
-    lifetime _: DivStateLifetime
-  ) {}
-}
-
-private final class FakeDivSubmitter: DivSubmitter {
-  func submit(
-    request _: SubmitRequest,
-    data _: [String: String],
-    completion _: @escaping DivSubmitterCompletion
-  ) {}
-
-  func cancelRequests() {}
-}
-
-private class FakeDivPatchDownloader: DivPatchProvider {
-  func getPatch(
-    url _: URL,
-    completion _: @escaping DivPatchProviderCompletion
-  ) {}
-
-  func cancelRequests() {}
 }
 
 private let action = divAction(logId: "1", url: "action://host")

@@ -1,11 +1,14 @@
 @testable import DivKit
 import Foundation
+import LayoutKit
+import XCTest
 
 extension DivActionHandler {
   convenience init(
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     idToPath: IdToPath = IdToPath(),
     logger: DivActionLogger = EmptyDivActionLogger(),
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
     updateCard: @escaping DivActionURLHandler.UpdateCardAction = { _ in },
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
@@ -26,11 +29,17 @@ extension DivActionHandler {
       trackDisappear: { _, _ in },
       performTimerAction: { _, _, _ in },
       urlHandler: urlHandler,
-      persistentValuesStorage: DivPersistentValuesStorage(),
+      persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,
       idToPath: idToPath,
       animatorController: DivAnimatorController()
     )
+  }
+}
+
+private final class TestReporter: DivReporter {
+  func reportError(cardId _: DivCardID, error: DivError) {
+    XCTFail(error.message)
   }
 }
 

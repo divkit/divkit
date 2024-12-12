@@ -1,6 +1,4 @@
 import Foundation
-
-import Foundation
 import VGSL
 
 public final class DivPersistentValuesStorage {
@@ -53,6 +51,10 @@ public final class DivPersistentValuesStorage {
       return nil
     }
     return value
+  }
+
+  func reset() {
+    storage.value = StoredValues(items: [:])
   }
 
   private func removeOutdatedStoredValues() {

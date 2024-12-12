@@ -1,38 +1,19 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 import LayoutKit
 import XCTest
 
 final class ScrollActionHandlerTests: XCTestCase {
   private let blockStateStorage = DivBlockStateStorage()
-  private var context: DivActionHandlingContext!
-  private var handler: ScrollActionHandler!
+  private var handler: DivActionHandler!
 
   private var isUpdateCardCalled = false
 
   override func setUp() {
-    let updateCard: DivActionURLHandler.UpdateCardAction = { _ in
-      self.isUpdateCardCalled = true
-    }
-
-    let modelingContext = DivBlockModelingContext(
-      blockStateStorage: blockStateStorage
-    )
-
-    context = DivActionHandlingContext(
-      path: cardId.path + "element_id",
-      expressionResolver: modelingContext.expressionResolver,
-      variablesStorage: modelingContext.variablesStorage,
+    handler = DivActionHandler(
       blockStateStorage: blockStateStorage,
-      actionHandler: DivActionHandler(
-        blockStateStorage: blockStateStorage,
-        updateCard: updateCard
-      ),
-      updateCard: updateCard
-    )
-
-    handler = ScrollActionHandler(
-      blockStateStorage: blockStateStorage,
-      updateCard: updateCard
+      updateCard: { [unowned self] _ in
+        self.isUpdateCardCalled = true
+      }
     )
   }
 
@@ -407,11 +388,18 @@ final class ScrollActionHandlerTests: XCTestCase {
 
   private func handleScrollTo(_ destination: DivActionScrollDestination) {
     handler.handle(
-      DivActionScrollTo(
-        destination: destination,
-        id: .value("element_id")
+      divAction(
+        logId: "action_id",
+        typed: .divActionScrollTo(
+          DivActionScrollTo(
+            destination: destination,
+            id: .value("element_id")
+          )
+        )
       ),
-      context: context
+      path: cardId.path,
+      source: .callback,
+      sender: nil
     )
   }
 
@@ -421,14 +409,21 @@ final class ScrollActionHandlerTests: XCTestCase {
     overflow: DivActionScrollBy.Overflow = .clamp
   ) {
     handler.handle(
-      DivActionScrollBy(
-        animated: .value(false),
-        id: .value("element_id"),
-        itemCount: .value(itemCount),
-        offset: .value(offset),
-        overflow: .value(overflow)
+      divAction(
+        logId: "action_id",
+        typed: .divActionScrollBy(
+          DivActionScrollBy(
+            animated: .value(false),
+            id: .value("element_id"),
+            itemCount: .value(itemCount),
+            offset: .value(offset),
+            overflow: .value(overflow)
+          )
+        )
       ),
-      context: context
+      path: cardId.path,
+      source: .callback,
+      sender: nil
     )
   }
 

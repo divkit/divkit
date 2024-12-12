@@ -14,7 +14,7 @@ enum DivActionIntent {
   case scroll(id: String, mode: ScrollMode)
   case timer(id: String, action: DivTimerAction)
   case video(id: String, action: DivVideoAction)
-  case setStoredValue(storedValue: DivStoredValue)
+  case setStoredValue(DivStoredValue)
 
   public static let scheme = "div-action"
 
@@ -103,7 +103,7 @@ enum DivActionIntent {
       guard let storedValue = url.storedValue else {
         return nil
       }
-      self = .setStoredValue(storedValue: storedValue)
+      self = .setStoredValue(storedValue)
     default:
       return nil
     }

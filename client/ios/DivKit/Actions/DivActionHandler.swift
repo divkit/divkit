@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import Serialization
 import VGSL
@@ -29,6 +28,7 @@ public final class DivActionHandler {
   private let hideTooltipActionHandler: HideTooltipActionHandler
   private let scrollActionHandler: ScrollActionHandler
   private let setStateActionHandler: SetStateActionHandler
+  private let setStoredValueActionHandler: SetStoredValueActionHandler
   private let setVariableActionHandler = SetVariableActionHandler()
   private let showTooltipActionHandler: ShowTooltipActionHandler
   private let submitActionHandler: SubmitActionHandler
@@ -129,6 +129,9 @@ public final class DivActionHandler {
       updateCard: updateCard
     )
     setStateActionHandler = SetStateActionHandler(stateUpdater: stateUpdater)
+    setStoredValueActionHandler = SetStoredValueActionHandler(
+      persistentValuesStorage: persistentValuesStorage
+    )
     showTooltipActionHandler = ShowTooltipActionHandler(
       performer: tooltipActionPerformer,
       showTooltip: showTooltip
@@ -218,14 +221,16 @@ public final class DivActionHandler {
       arrayActionsHandler.handle(action, context: context)
     case let .divActionArraySetValue(action):
       arrayActionsHandler.handle(action, context: context)
-    case let .divActionDictSetValue(action):
-      dictSetValueActionHandler.handle(action, context: context)
     case .divActionClearFocus:
       clearFocusActionHandler.handle(context: context)
     case let .divActionCopyToClipboard(action):
       copyToClipboardActionHandler.handle(action, context: context)
+    case let .divActionDictSetValue(action):
+      dictSetValueActionHandler.handle(action, context: context)
     case let .divActionFocusElement(action):
       focusElementActionHandler.handle(action, context: context)
+    case let .divActionHideTooltip(action):
+      hideTooltipActionHandler.handle(action, context: context)
     case let .divActionScrollBy(action):
       scrollActionHandler.handle(action, context: context)
     case let .divActionScrollTo(action):
@@ -234,18 +239,17 @@ public final class DivActionHandler {
       setVariableActionHandler.handle(action, context: context)
     case let .divActionSetState(action):
       setStateActionHandler.handle(action, context: context)
-    case let .divActionTimer(action):
-      timerActionHandler.handle(action, context: context)
-    case let .divActionVideo(action):
-      videoActionHandler.handle(action, context: context)
+    case let .divActionSetStoredValue(action):
+      setStoredValueActionHandler.handle(action, context: context)
     case let .divActionShowTooltip(action):
       showTooltipActionHandler.handle(action, context: context)
     case let .divActionSubmit(action):
       submitActionHandler.handle(action, context: context)
-    case let .divActionHideTooltip(action):
-      hideTooltipActionHandler.handle(action, context: context)
-    case .divActionDownload,
-         .divActionSetStoredValue:
+    case let .divActionTimer(action):
+      timerActionHandler.handle(action, context: context)
+    case let .divActionVideo(action):
+      videoActionHandler.handle(action, context: context)
+    case .divActionDownload:
       break
     case .none:
       isHandled = false
