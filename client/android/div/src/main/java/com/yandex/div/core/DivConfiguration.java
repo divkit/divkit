@@ -87,6 +87,7 @@ public class DivConfiguration {
 
     private final boolean mTapBeaconsEnabled;
     private final boolean mVisibilityBeaconsEnabled;
+    private final boolean mSwipeOutBeaconsEnabled;
     private final boolean mLongtapActionsPassToChild;
     private final boolean mShouldIgnoreMenuItemsInActions;
     private final boolean mVisualErrors;
@@ -129,6 +130,7 @@ public class DivConfiguration {
             @NonNull DivVariableController divVariableController,
             boolean tapBeaconsEnabled,
             boolean visibilityBeaconsEnabled,
+            boolean swipeOutBeaconsEnabled,
             boolean longtapActionsPassToChild,
             boolean shouldIgnoreMenuItemsInActions,
             boolean visualErrors,
@@ -166,6 +168,7 @@ public class DivConfiguration {
         mViewPoolReporter = reporter;
         mTapBeaconsEnabled = tapBeaconsEnabled;
         mVisibilityBeaconsEnabled = visibilityBeaconsEnabled;
+        mSwipeOutBeaconsEnabled = swipeOutBeaconsEnabled;
         mLongtapActionsPassToChild = longtapActionsPassToChild;
         mShouldIgnoreMenuItemsInActions = shouldIgnoreMenuItemsInActions;
         mVisualErrors = visualErrors;
@@ -296,6 +299,12 @@ public class DivConfiguration {
     @ExperimentFlag(experiment = Experiment.VISIBILITY_BEACONS_ENABLED)
     public boolean isVisibilityBeaconsEnabled() {
         return mVisibilityBeaconsEnabled;
+    }
+
+    @Provides
+    @ExperimentFlag(experiment = Experiment.SWIPE_OUT_BEACONS_ENABLED)
+    public boolean isSwipeOutBeaconsEnabled() {
+        return mSwipeOutBeaconsEnabled;
     }
 
     @Provides
@@ -480,6 +489,7 @@ public class DivConfiguration {
         private DivVariableController mDivVariableController;
         private boolean mTapBeaconsEnabled = Experiment.TAP_BEACONS_ENABLED.getDefaultValue();
         private boolean mVisibilityBeaconsEnabled = Experiment.VISIBILITY_BEACONS_ENABLED.getDefaultValue();
+        private boolean mSwipeOutBeaconsEnabled = Experiment.SWIPE_OUT_BEACONS_ENABLED.getDefaultValue();
         private boolean mLongtapActionsPassToChild = Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED.getDefaultValue();
         private boolean mShouldIgnoreMenuItemsInActions = Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED.getDefaultValue();
         private boolean mSupportHyphenation = Experiment.HYPHENATION_SUPPORT_ENABLED.getDefaultValue();
@@ -614,6 +624,12 @@ public class DivConfiguration {
         @NonNull
         public Builder enableVisibilityBeacons() {
             mVisibilityBeaconsEnabled = true;
+            return this;
+        }
+
+        @NonNull
+        public Builder swipeOutBeacons(Boolean enabled) {
+            mSwipeOutBeaconsEnabled = enabled;
             return this;
         }
 
@@ -795,6 +811,7 @@ public class DivConfiguration {
                     mDivVariableController == null ? new DivVariableController() : mDivVariableController,
                     mTapBeaconsEnabled,
                     mVisibilityBeaconsEnabled,
+                    mSwipeOutBeaconsEnabled,
                     mLongtapActionsPassToChild,
                     mShouldIgnoreMenuItemsInActions,
                     mVisualErrors,
