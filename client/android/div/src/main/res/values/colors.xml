@@ -2,6 +2,7 @@
 
 <resources>
 
+    <color name="div_accent_color">#0077cc</color>
     <color name="div_separator_color">#33919cb5</color>
     <color name="div_button_color">#edf0f2</color>
     <color name="div_traffic_item_stroke_color">#edf0f2</color>
