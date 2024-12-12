@@ -272,17 +272,12 @@ final class DivActionURLHandlerTests: XCTestCase {
 
 private enum SetItemAction {
   enum Mode {
-    enum Overflow: String {
-      case clamp
-      case ring
-    }
-
-    case next(step: Int?, overflow: Overflow)
-    case previous(step: Int?, overflow: Overflow)
+    case next(step: Int?, overflow: OverflowMode)
+    case previous(step: Int?, overflow: OverflowMode)
     case current(Int)
-    case forward(CGFloat, Overflow)
-    case backward(CGFloat, Overflow)
-    case position(CGFloat)
+    case forward(Int, OverflowMode)
+    case backward(Int, OverflowMode)
+    case position(Int)
     case start
     case end
   }
@@ -376,9 +371,13 @@ private enum SetItemAction {
     case let .current(item):
       return url("div-action://set_current_item?id=\(elementId)&item=\(item)")
     case let .forward(step, overflow):
-      return url("div-action://scroll_forward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)")
+      return url(
+        "div-action://scroll_forward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
+      )
     case let .backward(step, overflow):
-      return url("div-action://scroll_backward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)")
+      return url(
+        "div-action://scroll_backward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
+      )
     case let .position(step):
       return url("div-action://scroll_to_position?id=\(elementId)&step=\(Int(step))")
     case .start:

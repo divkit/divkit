@@ -65,20 +65,20 @@ enum DivActionIntent {
       }
       self = .setPreviousItem(id: id, step: url.step ?? 1, overflow: url.overflow)
     case "scroll_forward":
-      guard let id = url.id, let step = url.floatStep else {
+      guard let id = url.id, let step = url.step else {
         return nil
       }
-      self = .scroll(id: id, mode: .forward(step: step, overflow: url.overflow))
+      self = .scroll(id: id, mode: .forward(step, overflow: url.overflow))
     case "scroll_backward":
-      guard let id = url.id, let step = url.floatStep else {
+      guard let id = url.id, let step = url.step else {
         return nil
       }
-      self = .scroll(id: id, mode: .backward(step: step, overflow: url.overflow))
+      self = .scroll(id: id, mode: .backward(step, overflow: url.overflow))
     case "scroll_to_position":
-      guard let id = url.id, let step = url.floatStep else {
+      guard let id = url.id, let step = url.step else {
         return nil
       }
-      self = .scroll(id: id, mode: .position(step: step))
+      self = .scroll(id: id, mode: .position(step))
     case "scroll_to_start":
       guard let id = url.id else {
         return nil
@@ -195,10 +195,6 @@ extension URL {
       DivKitLogger.failure("Unknown overflow: '\(overflow)'.")
       return .clamp
     }
-  }
-
-  fileprivate var floatStep: CGFloat? {
-    step.flatMap(CGFloat.init)
   }
 
   fileprivate var step: Int? {

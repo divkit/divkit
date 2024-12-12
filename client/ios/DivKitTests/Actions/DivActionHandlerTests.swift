@@ -14,26 +14,13 @@ final class DivActionHandlerTests: XCTestCase {
     let idToPath = IdToPath()
     idToPath[cardId.path + "element_id"] = cardId.path + "element_id"
     actionHandler = DivActionHandler(
-      stateUpdater: DefaultDivStateManagement(),
-      blockStateStorage: DivBlockStateStorage(),
-      patchProvider: MockPatchProvider(),
-      submitter: MockSubmitter(),
-      variablesStorage: variablesStorage,
-      functionsStorage: nil,
-      updateCard: { _ in },
-      showTooltip: nil,
-      tooltipActionPerformer: nil,
+      idToPath: idToPath,
       logger: logger,
-      trackVisibility: { _, _ in },
-      trackDisappear: { _, _ in },
-      performTimerAction: { _, _, _ in },
+      reporter: reporter,
       urlHandler: DivUrlHandlerDelegate { url, _ in
         self.handledUrl = url
       },
-      persistentValuesStorage: DivPersistentValuesStorage(),
-      reporter: reporter,
-      idToPath: idToPath,
-      animatorController: DivAnimatorController()
+      variablesStorage: variablesStorage
     )
   }
 
@@ -501,22 +488,6 @@ private final class MockActionLogger: DivActionLogger {
     lastReferer = referer
     lastPayload = payload
   }
-}
-
-private final class MockSubmitter: DivSubmitter {
-  func submit(
-    request _: SubmitRequest,
-    data _: [String: String],
-    completion _: @escaping DivSubmitterCompletion
-  ) {}
-
-  func cancelRequests() {}
-}
-
-final class MockPatchProvider: DivPatchProvider {
-  func getPatch(url _: URL, completion _: @escaping DivPatchProviderCompletion) {}
-
-  func cancelRequests() {}
 }
 
 private final class MockReporter: DivReporter {
