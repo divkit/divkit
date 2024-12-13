@@ -3,6 +3,7 @@
 # Android Client:
 * Supported `is_enabled` property in `slider`.
 * Supported array methods: `getInteger`, `getNumber`, `getString`, `getBoolean`, `getColor`, `getUrl`, `getArray`, `getDict`, `isEmpty`.
+* Use neutral accent colors to ensure they contrast well with any theme.
 
 # iOS Client:
 * Added `set_state` action support.
