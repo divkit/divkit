@@ -1,0 +1,78 @@
+{
+  "description": "Texts with different alpha parameters and shadow",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "orientation": "horizontal",
+      "width": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ff8888"
+        }
+      ],
+      "margins": {
+        "bottom": 15,
+        "right": 15
+      },
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "border": {
+        "has_shadow": true,
+        "shadow": {
+          "offset": {
+            "x": {
+              "value": 10
+            },
+            "y": {
+              "value": 10
+            }
+          },
+          "blur": 5,
+          "color": "#000000",
+          "alpha": 1.0
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "text_block",
+              "text": "alpha = 0.3",
+              "alpha": 0.3
+            },
+            {
+              "type": "text_block",
+              "text": "alpha = 0.6",
+              "alpha": 0.6
+            },
+            {
+              "type": "text_block",
+              "text": "alpha = 0.9",
+              "alpha": 0.9
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -351,6 +351,7 @@ private fun View.getPivotValue(len: Int, divPivot: DivPivot, resolver: Expressio
 
 internal fun View.applyAlpha(alpha: Double) {
     this.alpha = alpha.toFloat()
+    (this as? DivBorderSupports)?.invalidateBorder()
 }
 
 internal fun DivContainer.isHorizontal(resolver: ExpressionResolver) =
