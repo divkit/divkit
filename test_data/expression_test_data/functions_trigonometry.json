@@ -1,0 +1,127 @@
+{
+  "cases": [
+    {
+      "expression": "@{pi()}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{toRadians(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+
+    {
+      "expression": "@{toRadians(-90.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5707963267948966
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{toRadians(degrees)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5707963267948966
+      },
+      "variables": [
+        {
+          "name": "degrees",
+          "type": "number",
+          "value": 90.0
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{toDegrees(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+
+    {
+      "expression": "@{toDegrees(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": -90.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{toDegrees(radians)}",
+      "expected": {
+        "type": "number",
+        "value": 90.0
+      },
+      "variables": [
+        {
+          "name": "radians",
+          "type": "number",
+          "value": 1.5707963267948966
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{sin(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{sin(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{sin(sin_var)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "variables": [
+        {
+          "name": "sin_var",
+          "type": "number",
+          "value": 1.5707963267948966
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    }
+  ]
+}

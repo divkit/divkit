@@ -64,6 +64,12 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(DoubleFloor)
         registry.register(DoubleRound)
 
+        // Trigonometric functions
+        registry.register(Pi)
+        registry.register(DegreesToRadians)
+        registry.register(RadiansToDegrees)
+        registry.register(Sine)
+
         // Color functions
         registry.register(ColorAlphaComponentGetter)
         registry.register(ColorStringAlphaComponentGetter)

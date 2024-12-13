@@ -1,0 +1,54 @@
+{
+  "signatures": [
+    {
+      "function_name": "pi",
+      "doc": "Returns value of the `π`: ratio of the circumference of a circle to its diameter",
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "function_name": "toRadians",
+      "doc": "Converts the argument value from degrees to radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value representing degrees."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "function_name": "toDegrees",
+      "doc": "Converts the argument value from radians to degrees",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value representing radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "function_name": "sin",
+      "doc": "Calculates the sine of an argument represented in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    }
+  ]
+}
