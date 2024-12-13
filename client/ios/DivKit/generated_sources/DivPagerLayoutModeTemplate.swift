@@ -8,12 +8,15 @@ import VGSL
 public enum DivPagerLayoutModeTemplate: TemplateValue {
   case divPageSizeTemplate(DivPageSizeTemplate)
   case divNeighbourPageSizeTemplate(DivNeighbourPageSizeTemplate)
+  case divPageContentSizeTemplate(DivPageContentSizeTemplate)
 
   public var value: Any {
     switch self {
     case let .divPageSizeTemplate(value):
       return value
     case let .divNeighbourPageSizeTemplate(value):
+      return value
+    case let .divPageContentSizeTemplate(value):
       return value
     }
   }
@@ -24,6 +27,8 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
       return .divPageSizeTemplate(try value.resolveParent(templates: templates))
     case let .divNeighbourPageSizeTemplate(value):
       return .divNeighbourPageSizeTemplate(try value.resolveParent(templates: templates))
+    case let .divPageContentSizeTemplate(value):
+      return .divPageContentSizeTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -60,6 +65,17 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
           }
         } else { return nil }
       }()
+      result = result ?? {
+        if case let .divPageContentSizeTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divPageContentSize(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divPageContentSize(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
       return result
     }()
   }
@@ -89,6 +105,15 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == DivPageContentSize.type {
+      let result = { DivPageContentSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.divPageContentSize(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPageContentSize(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }()
   }
@@ -103,6 +128,8 @@ extension DivPagerLayoutModeTemplate {
       self = .divPageSizeTemplate(try DivPageSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivNeighbourPageSizeTemplate.type:
       self = .divNeighbourPageSizeTemplate(try DivNeighbourPageSizeTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivPageContentSizeTemplate.type:
+      self = .divPageContentSizeTemplate(try DivPageContentSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-pager-layout-mode_template", representation: dictionary)
     }

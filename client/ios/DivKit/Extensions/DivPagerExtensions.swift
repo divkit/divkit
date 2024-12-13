@@ -42,6 +42,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     )
     return try PagerBlock(
       pagerPath: pagerPath,
+      alignment: resolveScrollAxisAlignment(expressionResolver).system,
       layoutMode: layoutMode.resolve(expressionResolver),
       gallery: gallery,
       selectedActions: items.map { $0.value.makeSelectedActions(context: context) },
@@ -89,6 +90,18 @@ extension DivPagerLayoutMode {
     case let .divNeighbourPageSize(neighbourPageSize):
       let size = neighbourPageSize.neighbourPageWidth.resolveValue(expressionResolver) ?? 0
       return .neighbourPageSize(CGFloat(size))
+    case .divPageContentSize:
+      return .pageContentSize
+    }
+  }
+}
+
+extension DivPager.ScrollAxisAlignment {
+  fileprivate var system: Alignment {
+    switch self {
+    case .center: .center
+    case .start: .leading
+    case .end: .trailing
     }
   }
 }

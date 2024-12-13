@@ -7,19 +7,10 @@
       "enum": [
         "wrap_content"
       ]
-    },
-    "alignment": {
-      "type": "string",
-      "enum": [
-        "start",
-        "center",
-        "end"
-      ],
-      "default_value": "center",
-      "$description": "translations.json#/div_page_content_size_alignment"
     }
   },
   "platforms": [
+    "ios"
   ],
   "required": [
     "type"

@@ -78,6 +78,7 @@ final class PagerViewLayoutTests: XCTestCase {
     return PagerViewLayout(
       model: model,
       pageIndex: 0,
+      alignment: .center,
       layoutMode: .neighbourPageSize(10.0),
       boundsSize: CGSize(width: 390.0, height: 23.0)
     )
@@ -104,6 +105,7 @@ final class PagerViewLayoutTests: XCTestCase {
     return PagerViewLayout(
       model: model,
       pageIndex: 0,
+      alignment: .center,
       layoutMode: .pageSize(RelativeValue(integerLiteral: 1)),
       boundsSize: CGSize(width: 390.0, height: 23.0)
     )

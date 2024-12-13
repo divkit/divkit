@@ -11,6 +11,13 @@ public final class DivPager: DivBase {
     case vertical = "vertical"
   }
 
+  @frozen
+  public enum ScrollAxisAlignment: String, CaseIterable {
+    case start = "start"
+    case center = "center"
+    case end = "end"
+  }
+
   public static let type: String = "pager"
   public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
@@ -40,6 +47,7 @@ public final class DivPager: DivBase {
   public let restrictParentScroll: Expression<Bool> // default value: false
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
+  public let scrollAxisAlignment: Expression<ScrollAxisAlignment> // default value: center
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
@@ -94,6 +102,10 @@ public final class DivPager: DivBase {
     resolver.resolveNumeric(rowSpan)
   }
 
+  public func resolveScrollAxisAlignment(_ resolver: ExpressionResolver) -> ScrollAxisAlignment {
+    resolver.resolveEnum(scrollAxisAlignment) ?? ScrollAxisAlignment.center
+  }
+
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
     resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
@@ -142,6 +154,7 @@ public final class DivPager: DivBase {
     restrictParentScroll: Expression<Bool>?,
     reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
+    scrollAxisAlignment: Expression<ScrollAxisAlignment>?,
     selectedActions: [DivAction]?,
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
@@ -184,6 +197,7 @@ public final class DivPager: DivBase {
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
     self.reuseId = reuseId
     self.rowSpan = rowSpan
+    self.scrollAxisAlignment = scrollAxisAlignment ?? .value(.center)
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform
@@ -268,33 +282,34 @@ extension DivPager: Equatable {
     }
     guard
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.scrollAxisAlignment == rhs.scrollAxisAlignment,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -337,6 +352,7 @@ extension DivPager: Serializable {
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
+    result["scroll_axis_alignment"] = scrollAxisAlignment.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()

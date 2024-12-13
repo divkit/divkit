@@ -296,6 +296,7 @@ extension DivPager {
       restrictParentScroll: restrictParentScroll,
       reuseId: reuseId,
       rowSpan: rowSpan,
+      scrollAxisAlignment: scrollAxisAlignment,
       selectedActions: selectedActions,
       tooltips: tooltips,
       transform: transform,

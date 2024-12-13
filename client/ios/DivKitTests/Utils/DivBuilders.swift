@@ -349,6 +349,7 @@ func divPager(
     restrictParentScroll: nil,
     reuseId: nil,
     rowSpan: nil,
+    scrollAxisAlignment: nil,
     selectedActions: nil,
     tooltips: nil,
     transform: nil,

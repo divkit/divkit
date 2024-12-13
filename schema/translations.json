@@ -1567,10 +1567,6 @@
     "en": "The page size is equal to the size of its content.",
     "ru": "Размер страницы равен размеру ее контента."
   },
-  "div_page_content_size_alignment": {
-    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
-    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
-  },
   "div_page_size": {
     "en": "Page width (%).",
     "ru": "Ширина страницы в процентах."
@@ -1598,6 +1594,10 @@
   "div_pager_items": {
     "en": "Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.",
     "ru": "Элементы пейджера. Варианты постраничного перехода можно осуществить с помощью:<li>`div-action://set_current_item?id=&item=` — задать текущую страницу с порядковым номером `item` внутри элемента, с заданным `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\\|ring}]` — перейти на следующую страницу внутри элемента, с заданным `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\\|ring}]` — перейти на предыдущую страницу внутри элемента, с заданным `id`.</li></p><p>Опциональный параметр `overflow` позволяет задать навигацию при достижении первого или последнего элемента:<li>`clamp` — переход остановится на пограничном элементе;</li><li>`ring` — переход в начало или конец, в зависимости от текущего элемента.</li></p><p>По умолчанию, `clamp`."
+  },
+  "div_pager_scroll_axis_alignment": {
+    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
+    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
   },
   "div_pager_layout_mode": {
     "en": "Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>",

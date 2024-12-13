@@ -8,12 +8,15 @@ import VGSL
 public enum DivPagerLayoutMode {
   case divPageSize(DivPageSize)
   case divNeighbourPageSize(DivNeighbourPageSize)
+  case divPageContentSize(DivPageContentSize)
 
   public var value: Serializable {
     switch self {
     case let .divPageSize(value):
       return value
     case let .divNeighbourPageSize(value):
+      return value
+    case let .divPageContentSize(value):
       return value
     }
   }
@@ -26,6 +29,8 @@ extension DivPagerLayoutMode: Equatable {
     case let (.divPageSize(l), .divPageSize(r)):
       return l == r
     case let (.divNeighbourPageSize(l), .divNeighbourPageSize(r)):
+      return l == r
+    case let (.divPageContentSize(l), .divPageContentSize(r)):
       return l == r
     default:
       return false

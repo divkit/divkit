@@ -7,6 +7,8 @@ import VGSL
 public final class DivPagerTemplate: TemplateValue {
   public typealias Orientation = DivPager.Orientation
 
+  public typealias ScrollAxisAlignment = DivPager.ScrollAxisAlignment
+
   public static let type: String = "pager"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?
@@ -37,6 +39,7 @@ public final class DivPagerTemplate: TemplateValue {
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
+  public let scrollAxisAlignment: Field<Expression<ScrollAxisAlignment>>? // default value: center
   public let selectedActions: Field<[DivActionTemplate]>?
   public let tooltips: Field<[DivTooltipTemplate]>?
   public let transform: Field<DivTransformTemplate>?
@@ -82,6 +85,7 @@ public final class DivPagerTemplate: TemplateValue {
       restrictParentScroll: dictionary.getOptionalExpressionField("restrict_parent_scroll"),
       reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
+      scrollAxisAlignment: dictionary.getOptionalExpressionField("scroll_axis_alignment"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
       tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
       transform: dictionary.getOptionalField("transform", templateToType: templateToType),
@@ -128,6 +132,7 @@ public final class DivPagerTemplate: TemplateValue {
     restrictParentScroll: Field<Expression<Bool>>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
+    scrollAxisAlignment: Field<Expression<ScrollAxisAlignment>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
@@ -171,6 +176,7 @@ public final class DivPagerTemplate: TemplateValue {
     self.restrictParentScroll = restrictParentScroll
     self.reuseId = reuseId
     self.rowSpan = rowSpan
+    self.scrollAxisAlignment = scrollAxisAlignment
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform
@@ -215,6 +221,7 @@ public final class DivPagerTemplate: TemplateValue {
     let restrictParentScrollValue = { parent?.restrictParentScroll?.resolveOptionalValue(context: context) ?? .noValue }()
     let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
     let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
+    let scrollAxisAlignmentValue = { parent?.scrollAxisAlignment?.resolveOptionalValue(context: context) ?? .noValue }()
     let selectedActionsValue = { parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let tooltipsValue = { parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transformValue = { parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -257,6 +264,7 @@ public final class DivPagerTemplate: TemplateValue {
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      scrollAxisAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_axis_alignment", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -308,6 +316,7 @@ public final class DivPagerTemplate: TemplateValue {
       restrictParentScroll: { restrictParentScrollValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
+      scrollAxisAlignment: { scrollAxisAlignmentValue.value }(),
       selectedActions: { selectedActionsValue.value }(),
       tooltips: { tooltipsValue.value }(),
       transform: { transformValue.value }(),
@@ -357,6 +366,7 @@ public final class DivPagerTemplate: TemplateValue {
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = { parent?.restrictParentScroll?.value() ?? .noValue }()
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
+    var scrollAxisAlignmentValue: DeserializationResult<Expression<DivPager.ScrollAxisAlignment>> = { parent?.scrollAxisAlignment?.value() ?? .noValue }()
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
@@ -513,6 +523,11 @@ public final class DivPagerTemplate: TemplateValue {
         _ = {
           if key == "row_span" {
            rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
+          }
+        }()
+        _ = {
+          if key == "scroll_axis_alignment" {
+           scrollAxisAlignmentValue = deserialize(__dictValue).merged(with: scrollAxisAlignmentValue)
           }
         }()
         _ = {
@@ -721,6 +736,11 @@ public final class DivPagerTemplate: TemplateValue {
           }
         }()
         _ = {
+         if key == parent?.scrollAxisAlignment?.link {
+           scrollAxisAlignmentValue = scrollAxisAlignmentValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.selectedActions?.link {
            selectedActionsValue = selectedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
           }
@@ -846,6 +866,7 @@ public final class DivPagerTemplate: TemplateValue {
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      scrollAxisAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_axis_alignment", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -897,6 +918,7 @@ public final class DivPagerTemplate: TemplateValue {
       restrictParentScroll: { restrictParentScrollValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
+      scrollAxisAlignment: { scrollAxisAlignmentValue.value }(),
       selectedActions: { selectedActionsValue.value }(),
       tooltips: { tooltipsValue.value }(),
       transform: { transformValue.value }(),
@@ -951,6 +973,7 @@ public final class DivPagerTemplate: TemplateValue {
       restrictParentScroll: restrictParentScroll ?? mergedParent.restrictParentScroll,
       reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
+      scrollAxisAlignment: scrollAxisAlignment ?? mergedParent.scrollAxisAlignment,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
@@ -1000,6 +1023,7 @@ public final class DivPagerTemplate: TemplateValue {
       restrictParentScroll: merged.restrictParentScroll,
       reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
+      scrollAxisAlignment: merged.scrollAxisAlignment,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),

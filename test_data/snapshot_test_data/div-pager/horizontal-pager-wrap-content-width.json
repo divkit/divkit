@@ -1,0 +1,71 @@
+{
+  "description": "Horizontal pager with wrap_content layout mode and children with different widths.",
+  "platforms": [
+    "ios"
+  ],
+  "templates": {
+    "text_page_wrap_content": {
+      "type": "text",
+      "height": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "item_spacing": {
+            "type": "fixed",
+            "value": 10
+          },
+          "layout_mode": {
+            "type": "wrap_content"
+          },
+          "width": {
+            "type": "fixed",
+            "value": 340
+          },
+          "items": [
+            {
+              "type": "text_page_wrap_content",
+              "width": {
+                "type": "fixed",
+                "unit": "dp",
+                "value": 100
+              },
+              "text": "For millions of years mankind lived just like animals"
+            },
+            {
+              "type": "text_page_wrap_content",
+              "width": {
+                "type": "fixed",
+                "unit": "dp",
+                "value": 150
+              },
+              "text": "Then something happened which unleashed the power of our imagination"
+            },
+            {
+              "type": "text_page_wrap_content",
+              "width": {
+                "type": "fixed",
+                "unit": "dp",
+                "value": 70
+              },
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
