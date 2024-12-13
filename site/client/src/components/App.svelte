@@ -12,8 +12,11 @@
     import Loader from './Loader.svelte';
     import ErrorPage from './ErrorPage.svelte';
     import type langObj from '../auto/lang.json';
+    import { getLs, setLs } from '../utils/localStorage';
 
-    let langVal = (location.pathname.match(/(\w+)\/playground/) || [])[1] || 'en';
+    const LS_LANG_KEY = 'playground:lang';
+
+    let langVal = getLs(LS_LANG_KEY);
     if (langVal !== 'ru' && langVal !== 'en') {
         langVal = 'en';
     }
@@ -26,7 +29,7 @@
 
     lang.subscribe(val => {
         if (val !== langVal) {
-            history.pushState(null, document.title, `/${val}/playground${location.search}`);
+            setLs(LS_LANG_KEY, val);
             langVal = val;
         }
     });
