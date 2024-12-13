@@ -1,6 +1,5 @@
+@testable import DivKit
 import XCTest
-
-import DivKit
 
 final class ExpressionResolverAnyTests: XCTestCase {
   private var isErrorExpected = false
@@ -9,10 +8,12 @@ final class ExpressionResolverAnyTests: XCTestCase {
   private var variables: DivVariables = [:]
 
   private lazy var expressionResolver = ExpressionResolver(
+    functionsProvider: FunctionsProvider(
+      persistentValuesStorage: DivPersistentValuesStorage()
+    ),
     variableValueProvider: { [unowned self] in
       self.variables[DivVariableName(rawValue: $0)]?.typedValue()
     },
-    persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
       error = $0.description
       if !self.isErrorExpected {
