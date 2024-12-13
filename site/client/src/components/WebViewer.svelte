@@ -151,10 +151,11 @@
                 type: 'mount' | 'destroy';
                 node: HTMLElement;
             }) {
-                ++count;
                 if (event.type === 'mount') {
+                    ++count;
                     components.set(event.node, event);
                 } else if (event.type === 'destroy') {
+                    --count;
                     components.delete(event.node);
                 }
 
