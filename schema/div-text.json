@@ -33,6 +33,14 @@
             "web"
           ]
         },
+        "baseline_offset": {
+          "type": "number",
+          "$description": "translations.json#/div_text_range_baseline_offset",
+          "default_value": "0",
+          "platforms": [
+            "android"
+          ]
+        },
         "font_size": {
           "$ref": "common.json#/non_negative_integer",
           "$description": "translations.json#/div_font_size"

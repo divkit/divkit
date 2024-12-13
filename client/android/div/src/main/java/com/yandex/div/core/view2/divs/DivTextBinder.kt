@@ -35,6 +35,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div.core.view2.spannable.BaselineShiftSpan
 import com.yandex.div.core.view2.spannable.FontFeatureSpan
 import com.yandex.div.core.view2.spannable.FontSizeSpan
 import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
@@ -72,6 +73,7 @@ import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTextGradient
 import javax.inject.Inject
 import kotlin.math.min
@@ -1127,7 +1129,16 @@ internal class DivTextBinder @Inject constructor(
             val end = (range.end?.evaluate(resolver)?.toIntSafely() ?: text.length).coerceAtMost(text.length)
             if (start > end) return
 
-            range.alignmentVertical?.evaluate(resolver)?.let { alignment ->
+            val alignment = range.alignmentVertical?.evaluate(resolver) ?: DivTextAlignmentVertical.BASELINE
+            val baselineOffset = range.baselineOffset.evaluate(resolver)
+            if (baselineOffset != 0.0) {
+                setSpan(
+                    BaselineShiftSpan(
+                        baselineShift = baselineOffset.unitToPx(metrics, fontSizeUnit),
+                        lineHeight = lineHeight.unitToPx(metrics, fontSizeUnit)
+                    ),
+                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            } else if (alignment != DivTextAlignmentVertical.BASELINE) {
                 val fontSize = range.fontSize?.evaluate(resolver) ?: fontSize
                 val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
                 setSpan(

@@ -2372,12 +2372,16 @@
     "ru": "Действие при нажатии на текст."
   },
   "div_text_range_alignment_vertical": {
-    "en": "Vertical text alignment within the row.",
-    "ru": "Вертикальное выравнивание текста внутри строки."
+    "en": "Vertical text alignment within the row. Ignored when a baseline offset is specified.",
+    "ru": "Вертикальное выравнивание текста внутри строки. Данный параметр игнорируется, если указано смещение базовой линии."
   },
   "div_text_range_background": {
     "en": "Character range background.",
     "ru": "Фон для диапазона символов."
+  },
+  "div_text_range_baseline_offset": {
+    "en": "Character baseline vertial offset. If set, vertical alignment is ignored.",
+    "ru": "Вертикальное смещение базовой линии в диапазоне символов. Если этот параметр задан, то вертикальное выравнивание игнорируется."
   },
   "div_text_range_border": {
     "en": "Character range border.",
