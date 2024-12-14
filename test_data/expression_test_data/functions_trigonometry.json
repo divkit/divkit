@@ -134,26 +134,26 @@
       ]
     },
     {
-      "expression": "@{tan(0.0)}",
+      "expression": "@{tan(45.0)}",
       "expected": {
         "type": "number",
-        "value": 0.0
+        "value": 1.6197751905438615
       },
       "platforms": [
         "android"
       ]
     },
     {
-      "expression": "@{tan(sin_var)}",
+      "expression": "@{tan(tan_var)}",
       "expected": {
         "type": "number",
-        "value": 0.0
+        "value": -1.995200412208242
       },
       "variables": [
         {
-          "name": "sin_var",
+          "name": "tan_var",
           "type": "number",
-          "value": 0.0
+          "value": 90.0
         }
       ],
       "platforms": [
