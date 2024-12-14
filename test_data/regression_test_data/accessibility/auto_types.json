@@ -1,343 +1,110 @@
 {
   "templates": {
-    "tabItem": {
-      "type": "text",
-      "margins": {
-        "right": 12,
-        "top": 2,
-        "bottom": 2,
-        "left": 12
-      },
-      "line_height": 20,
-      "font_size": 16,
-      "max_lines": 3,
-      "background": [
+    "tutorialCard": {
+      "type": "container",
+      "items": [
         {
-          "color": "#E0E2E6",
-          "type": "solid"
+          "type": "text",
+          "font_size": 21,
+          "font_weight": "bold",
+          "margins": {
+            "bottom": 16
+          },
+          "$text": "title"
+        },
+        {
+          "type": "text",
+          "font_size": 16,
+          "margins": {
+            "bottom": 16
+          },
+          "$text": "body"
+        },
+        {
+          "type": "container",
+          "$items": "links"
         }
       ],
-      "border": {
-        "corner_radius": 5
+      "margins": {
+        "bottom": 6
       },
-      "text": "   "
+      "orientation": "vertical",
+      "paddings": {
+        "top": 10,
+        "bottom": 0,
+        "left": 30,
+        "right": 30
+      }
+    },
+    "link": {
+      "type": "text",
+      "action": {
+        "$url": "link",
+        "$log_id": "log"
+      },
+      "font_size": 14,
+      "margins": {
+        "bottom": 2
+      },
+      "text_color": "#0000ff",
+      "underline": "single",
+      "$text": "link_text"
     }
   },
   "card": {
-    "log_id": "accessibility/types",
-    "variables": [
-      {
-        "name": "text_variable",
-        "type": "string",
-        "value": "edit text"
-      },
-      {
-        "name": "select_variable",
-        "type": "string",
-        "value": "select value 2"
-      },
-      {
-        "name": "int_variable",
-        "type": "integer",
-        "value": 5
-      }
-    ],
+    "log_id": "div2_sample_card",
     "states": [
       {
         "state_id": 0,
         "div": {
           "type": "container",
-          "margins": {
-            "top": 16,
-            "bottom": 8
-          },
-          "orientation": "vertical",
           "items": [
             {
-              "id": "text",
-              "type": "text",
-              "text": "text",
-              "paddings": {
-                "left": 16,
-                "top": 16,
-                "right": 16,
-                "bottom": 16
-              },
-              "height": {
-                "type": "fixed",
-                "value": 60
-              },
-              "margins": {
-                "bottom": 16,
-                "left": 16,
-                "right": 16
-              },
-              "border": {
-                "corner_radius": 8
-              },
-              "background": [
-                {
-                  "type": "solid",
-                  "color": "#0E000000"
-                }
-              ],
-              "font_size": 16,
-              "font_weight": "medium",
-              "text_alignment_vertical": "center",
-              "text_alignment_horizontal": "center",
-              "text_color": "#000000",
-              "alpha": 1.0,
-              "alignment_horizontal": "center",
-              "alignment_vertical": "center"
-            },
-            {
-              "id": "input",
-              "type": "input",
-              "text": "input_text",
-              "paddings": {
-                "left": 16,
-                "top": 16,
-                "right": 16,
-                "bottom": 16
-              },
-              "height": {
-                "type": "fixed",
-                "value": 60
-              },
-              "margins": {
-                "bottom": 16,
-                "left": 16,
-                "right": 16
-              },
-              "border": {
-                "corner_radius": 8
-              },
-              "background": [
-                {
-                  "type": "solid",
-                  "color": "#0E000000"
-                }
-              ],
-              "text_variable": "text_variable",
-              "font_size": 16,
-              "font_weight": "medium",
-              "text_alignment_vertical": "center",
-              "text_alignment_horizontal": "center",
-              "text_color": "#000000",
-              "alpha": 1.0,
-              "alignment_horizontal": "center",
-              "alignment_vertical": "center"
-            },
-            {
-              "id": "image",
               "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/logo.png",
               "margins": {
-                "bottom": 16,
-                "left": 16,
-                "right": 16
-              },
-              "border": {
-                "corner_radius": 8
-              },
-              "height": {
-                "type": "fixed",
-                "value": 60
-              },
-              "background": [
-                {
-                  "type": "solid",
-                  "color": "#0E000000"
-                }
-              ],
-              "image_url": "none://",
-              "preview": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAALCAASACABAREA/8QAFwABAAMAAAAAAAAAAAAAAAAABQMEB//EACcQAAEDAwMBCQAAAAAAAAAAAAEAAgMEBiEREzFRBRIWIjJhcYGR/9oACAEBAAA/ANprbho426tc36Q1ZeEIicA8IuO8YWTZkb+pbxvSbIG43jqsAmvKskYQHnjqjZbnrCHd6RG1dx1L/RJke6qG5u0AMyO0UdKTnKirT5D8IyiJMztcq1OBsHA4X//Z",
-              "alignment_horizontal": "center",
-              "alignment_vertical": "center"
+                "top": 10,
+                "right": 60,
+                "bottom": 10,
+                "left": 60
+              }
             },
             {
-              "id": "image with description",
-              "type": "image",
-              "margins": {
-                "bottom": 16,
-                "left": 16,
-                "right": 16
-              },
-              "height": {
-                "type": "fixed",
-                "value": 60
-              },
-              "border": {
-                "corner_radius": 8
-              },
-              "background": [
+              "type": "tutorialCard",
+              "title": "DivKit",
+              "body": "What is DivKit and why did I get here?\n\nDivKit is a new Yandex open source framework that helps speed up mobile development.\n\niOS, Android, Web — update the interface of any applications directly from the server, without publishing updates.\n\nFor 5 years we have been using DivKit in the Yandex search app, Alice, Edadeal, Market, and now we are sharing it with you.\n\nThe source code is published on GitHub under the Apache 2.0 license.",
+              "links": [
                 {
-                  "type": "solid",
-                  "color": "#0E000000"
-                }
-              ],
-              "image_url": "none://",
-              "preview": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAALCAASACABAREA/8QAFwABAAMAAAAAAAAAAAAAAAAABQMEB//EACcQAAEDAwMBCQAAAAAAAAAAAAEAAgMEBiEREzFRBRIWIjJhcYGR/9oACAEBAAA/ANprbho426tc36Q1ZeEIicA8IuO8YWTZkb+pbxvSbIG43jqsAmvKskYQHnjqjZbnrCHd6RG1dx1L/RJke6qG5u0AMyO0UdKTnKirT5D8IyiJMztcq1OBsHA4X//Z",
-              "alignment_horizontal": "center",
-              "accessibility": {
-                "description": "image"
-              },
-              "alignment_vertical": "center"
-            },
-            {
-              "id": "select",
-              "type": "select",
-              "options": [
-                {
-                  "value": "select value 1",
-                  "text": "select value 1"
+                  "type": "link",
+                  "link_text": "@{round(tan(toRadians(45)))}",
+                  "link": "https://divkit.tech/",
+                  "log": "landing"
                 },
                 {
-                  "value": "select value 2",
-                  "text": "select value 2"
-                }
-              ],
-              "paddings": {
-                "left": 16,
-                "top": 16,
-                "right": 16,
-                "bottom": 16
-              },
-              "height": {
-                "type": "fixed",
-                "value": 60
-              },
-              "margins": {
-                "bottom": 16,
-                "left": 16,
-                "right": 16
-              },
-              "border": {
-                "corner_radius": 8
-              },
-              "background": [
-                {
-                  "type": "solid",
-                  "color": "#0E000000"
-                }
-              ],
-              "font_size": 16,
-              "font_weight": "medium",
-              "text_alignment_vertical": "center",
-              "text_alignment_horizontal": "center",
-              "text_color": "#000000",
-              "alpha": 1.0,
-              "alignment_horizontal": "center",
-              "alignment_vertical": "center",
-              "value_variable": "select_variable"
-            },
-            {
-              "id": "slider",
-              "type": "slider",
-              "width": {
-                "type": "match_parent"
-              },
-              "paddings": {
-                "left": 16,
-                "top": 16,
-                "right": 16,
-                "bottom": 16
-              },
-              "height": {
-                "type": "fixed",
-                "value": 60
-              },
-              "margins": {
-                "bottom": 16,
-                "left": 16,
-                "right": 16
-              },
-              "border": {
-                "corner_radius": 8
-              },
-              "background": [
-                {
-                  "type": "solid",
-                  "color": "#0E000000"
-                }
-              ],
-              "thumb_style": {
-                "type": "shape_drawable",
-                "color": "#FFCC00",
-                "stroke": {
-                  "color": "#ffffff",
-                  "width": 3
+                  "type": "link",
+                  "link_text": "Documentation",
+                  "link": "https://divkit.tech/doc/",
+                  "log": "docs"
                 },
-                "shape": {
-                  "type": "rounded_rectangle",
-                  "item_height": {
-                    "type": "fixed",
-                    "value": 32
-                  },
-                  "item_width": {
-                    "type": "fixed",
-                    "value": 32
-                  },
-                  "corner_radius": {
-                    "type": "fixed",
-                    "value": 100
-                  }
-                }
-              },
-              "track_active_style": {
-                "type": "shape_drawable",
-                "color": "#FFCC00",
-                "shape": {
-                  "type": "rounded_rectangle",
-                  "item_height": {
-                    "type": "fixed",
-                    "value": 6
-                  }
-                }
-              },
-              "track_inactive_style": {
-                "type": "shape_drawable",
-                "color": "#20000000",
-                "shape": {
-                  "type": "rounded_rectangle",
-                  "item_height": {
-                    "type": "fixed",
-                    "value": 6
-                  }
-                }
-              },
-              "max_value": 10,
-              "min_value": 1,
-              "thumb_value_variable": "int_variable"
-            },
-            {
-              "id": "separator",
-              "type": "separator",
-              "paddings": {
-                "left": 16,
-                "top": 16,
-                "right": 16,
-                "bottom": 16
-              },
-              "height": {
-                "type": "fixed",
-                "value": 60
-              },
-              "margins": {
-                "bottom": 16,
-                "left": 16,
-                "right": 16
-              },
-              "border": {
-                "corner_radius": 8
-              },
-              "background": [
                 {
-                  "type": "solid",
-                  "color": "#0E000000"
+                  "type": "link",
+                  "link_text": "News channel",
+                  "link": "https://t.me/divkit_news",
+                  "log": "tg_news"
+                },
+                {
+                  "type": "link",
+                  "link_text": "EN Community chat",
+                  "link": "https://t.me/divkit_community_en",
+                  "log": "tg_en_chat"
+                },
+                {
+                  "type": "link",
+                  "link_text": "RU Community chat",
+                  "link": "https://t.me/divkit_community_ru",
+                  "log": "tg_ru_chat"
                 }
-              ],
-              "alignment_horizontal": "center",
-              "alignment_vertical": "center"
+              ]
             }
           ]
         }
