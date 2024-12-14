@@ -913,6 +913,48 @@
         "android",
         "ios"
       ]
+    },
+    {
+      "name": "avg([1, 2, 3]) === 2",
+      "expression": "@{avg(array)}",
+      "expected": {
+        "type": "number",
+        "value": 2
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "platforms": [
+        "web",
+        "android"
+      ]
+    },
+    {
+      "name": "avg([]) === 0",
+      "expression": "@{avg(array)}",
+      "expected": {
+        "type": "number",
+        "value": 0
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": []
+        }
+      ],
+      "platforms": [
+        "web",
+        "android"
+      ]
     }
   ]
 }
