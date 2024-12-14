@@ -5,7 +5,8 @@
       "doc": "Returns value of the `π`: ratio of the circumference of a circle to its diameter",
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -19,7 +20,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -33,7 +35,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -47,7 +50,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

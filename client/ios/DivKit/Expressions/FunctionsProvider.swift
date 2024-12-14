@@ -163,6 +163,7 @@ private let staticFunctions: [String: Function] = {
   functions.addIntervalFunctions()
   functions.addStringFunctions()
   functions.addToStringFunctions()
+  functions.addTrigonometricFunctions()
   return functions
 }()
 
