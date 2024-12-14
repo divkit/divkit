@@ -275,6 +275,28 @@
       ]
     },
     {
+      "expression": "@{array_var.max()}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            1,
+            2
+          ]
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ]
+    },
+    {
       "expression": "@{array_var.isEmpty()}",
       "expected": {
         "type": "boolean",

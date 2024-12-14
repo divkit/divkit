@@ -41,6 +41,7 @@ extension [String: Function] {
     addFunction("getString", _getString)
     addFunction("getUrl", _getUrl)
     addFunction("isEmpty", _isEmpty)
+    addFunction("max", _max)
   }
 
   private mutating func addFunctions(
@@ -87,6 +88,10 @@ private let _getUrl = FunctionBinary<[AnyHashable], Int, URL> {
 private let _isEmpty = FunctionUnary<[AnyHashable], Bool> {
   $0.isEmpty
 }
+
+private let _max = FunctionUnary<[AnyHashable], AnyHashable> {
+  $0.getMax()
+])
 
 private let _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
   (try? $0.getArray(index: $1)) ?? []
@@ -220,6 +225,24 @@ extension [AnyHashable] {
       throw ExpressionError.incorrectType("Url", value)
     }
     return url
+  }
+
+  fileprivate func getMax() throws -> AnyHashable {
+    let isNumber = false
+    for index in 0...(count - 1) {
+      let value = try getValue(index: index)
+      if value.isBool {
+        throw ExpressionError.unsupportedType()
+      }
+      guard let intValue = value as? Int
+      else guard
+        let numberValue = value as? Number,
+        let isNumber = true
+      else {
+        throw ExpressionError.unsupportedType()
+      }
+    }
+    return self.max()
   }
 
   private func getValue(index: Int) throws -> AnyHashable {
