@@ -275,6 +275,28 @@
       ]
     },
     {
+      "expression": "@{array_var.min()}",
+      "expected": {
+        "type": "number",
+        "value": -20.0
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            100.0,
+            -20.0,
+            69.0,
+            1337.0
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "expression": "@{array_var.isEmpty()}",
       "expected": {
         "type": "boolean",

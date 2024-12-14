@@ -41,6 +41,7 @@ extension [String: Function] {
     addFunction("getString", _getString)
     addFunction("getUrl", _getUrl)
     addFunction("isEmpty", _isEmpty)
+    addFunction("min", _min)
   }
 
   private mutating func addFunctions(
@@ -87,6 +88,26 @@ private let _getUrl = FunctionBinary<[AnyHashable], Int, URL> {
 private let _isEmpty = FunctionUnary<[AnyHashable], Bool> {
   $0.isEmpty
 }
+
+private let _min = OverloadedFunction(
+  functions: [
+    FunctionUnary<[Int], Int> {
+      $0.min() ?? Int.max
+    },
+    FunctionUnary<[AnyHashable], Double> {
+      var result = Double.infinity
+      for item in $0 {
+        guard let doubleItem = item as? Double else {
+          throw ExpressionError.incorrectType("Double", item)
+        }
+        if result > doubleItem {
+          result = doubleItem
+        }
+      }
+      return result
+    }
+  ]
+)
 
 private let _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
   (try? $0.getArray(index: $1)) ?? []
