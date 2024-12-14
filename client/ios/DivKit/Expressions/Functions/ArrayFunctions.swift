@@ -228,18 +228,18 @@ extension [AnyHashable] {
   }
 
   fileprivate func getMax() throws -> AnyHashable {
-    let isNumber = false
     for index in 0...(count - 1) {
       let value = try getValue(index: index)
       if value.isBool {
-        throw ExpressionError.unsupportedType()
+        throw ExpressionError.incorrectType("Number", value)
       }
       guard let intValue = value as? Int
-      else guard
-        let numberValue = value as? Number,
-        let isNumber = true
       else {
-        throw ExpressionError.unsupportedType()
+        guard
+          let numberValue = value as? Number
+        else {
+          throw ExpressionError.incorrectType("Number", value)
+        }
       }
     }
     return self.max()
