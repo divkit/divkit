@@ -134,26 +134,26 @@
       ]
     },
     {
-      "expression": "@{tan(45.0)}",
+      "expression": "@{tan(toRadians(45.0))}",
       "expected": {
         "type": "number",
-        "value": 1.6197751905438615
+        "value": 1.0
       },
       "platforms": [
         "android"
       ]
     },
     {
-      "expression": "@{tan(tan_var)}",
+      "expression": "@{tan(toRadians(tan_var))}",
       "expected": {
         "type": "number",
-        "value": -1.995200412208242
+        "value": 0.0
       },
       "variables": [
         {
           "name": "tan_var",
           "type": "number",
-          "value": 90.0
+          "value": 180.0
         }
       ],
       "platforms": [
