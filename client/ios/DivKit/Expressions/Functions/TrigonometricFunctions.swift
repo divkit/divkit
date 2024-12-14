@@ -4,6 +4,7 @@ extension [String: Function] {
   mutating func addTrigonometricFunctions() {
     addFunction("pi", ConstantFunction(Double.pi))
     addFunction("sin", _sinFunction)
+    addFunction("ctan", _ctanFunction)
     addFunction("toRadians", _toRadians)
     addFunction("toDegrees", _toDegrees)
   }
@@ -11,6 +12,10 @@ extension [String: Function] {
 
 private let _sinFunction = FunctionUnary { (radians: Double) in
   sin(radians)
+}
+
+private let _ctanFunction = FunctionUnary { (radians: Double) in
+  ctan(radians)
 }
 
 private let _toRadians = FunctionUnary { (degrees: Double) in
