@@ -288,6 +288,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.registerMethod(ArrayGetString)
         registry.registerMethod(ArrayGetUrl)
         registry.registerMethod(ArrayIsEmpty)
+        registry.registerMethod(ArrayAvg)
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {
