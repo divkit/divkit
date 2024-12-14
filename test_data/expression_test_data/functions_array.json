@@ -913,6 +913,72 @@
         "android",
         "ios"
       ]
+    },
+    {
+      "name": "min(array) => -1",
+      "expression": "@{min(array)}",
+      "expected": {
+        "type": "number",
+        "value": -1
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            10,
+            -1,
+            5
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "min(array) => 1.4",
+      "expression": "@{min(array)}",
+      "expected": {
+        "type": "number",
+        "value": 1.4
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            10.8,
+            1.4,
+            5.1
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "min(array) => -18",
+      "expression": "@{min(array)}",
+      "expected": {
+        "type": "number",
+        "value": -18
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            -18,
+            -1,
+            -5
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }
