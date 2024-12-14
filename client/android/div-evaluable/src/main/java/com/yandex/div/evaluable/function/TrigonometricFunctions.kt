@@ -5,7 +5,6 @@ import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
-import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.tan
 
@@ -77,7 +76,6 @@ internal object Tane : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>,
     ): Any {
-        println("JAVA_LOG ${args.first()}  ${tan(args.first() as Double)}")
         return tan(args.first() as Double)
     }
 }

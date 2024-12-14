@@ -55,27 +55,12 @@
       ]
     },
     {
-      "function_name": "sin",
-      "doc": "Calculates the sine of an argument represented in radians",
-      "arguments": [
-        {
-          "type": "number",
-          "doc": "Number value."
-        }
-      ],
-      "result_type": "number",
-      "platforms": [
-        "android",
-        "ios"
-      ]
-    },
-    {
       "function_name": "tan",
       "doc": "Calculates the tan of an argument represented in radians",
       "arguments": [
         {
           "type": "number",
-          "doc": "Number value."
+          "doc": "Number value representing radians."
         }
       ],
       "result_type": "number",
