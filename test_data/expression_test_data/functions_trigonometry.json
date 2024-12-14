@@ -152,10 +152,10 @@
       ]
     },
     {
-      "expression": "@{tan(0)}",
+      "expression": "@{tan(0.0)}",
       "expected": {
         "type": "number",
-        "value": 0
+        "value": 0.0
       },
       "platforms": [
         "android"
@@ -165,13 +165,13 @@
       "expression": "@{tan(sin_var)}",
       "expected": {
         "type": "number",
-        "value": 0
+        "value": 0.0
       },
       "variables": [
         {
           "name": "sin_var",
           "type": "number",
-          "value": 0
+          "value": 0.0
         }
       ],
       "platforms": [

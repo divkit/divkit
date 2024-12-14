@@ -80,6 +80,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(ColorStringGreenComponentGetter)
         registry.register(ColorBlueComponentGetter)
         registry.register(ColorStringBlueComponentGetter)
+
         registry.register(ColorAlphaComponentSetter)
         registry.register(ColorStringAlphaComponentSetter)
         registry.register(ColorRedComponentSetter)
