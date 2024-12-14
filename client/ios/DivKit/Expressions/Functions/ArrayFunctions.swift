@@ -91,7 +91,7 @@ private let _isEmpty = FunctionUnary<[AnyHashable], Bool> {
 
 private let _max = FunctionUnary<[AnyHashable], AnyHashable> {
   $0.getMax()
-])
+)
 
 private let _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
   (try? $0.getArray(index: $1)) ?? []
