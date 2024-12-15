@@ -53,6 +53,20 @@
         "android",
         "ios"
       ]
+    },
+    {
+      "function_name": "atan",
+      "doc": "Calculates the angle in radians for a given tangent value",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value representing the tangent."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
