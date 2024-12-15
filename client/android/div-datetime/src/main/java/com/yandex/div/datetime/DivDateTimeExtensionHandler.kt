@@ -24,6 +24,7 @@ import java.util.Locale
 
 /**
  * DivExtension that allows to show date/time picker from input.
+ * Setting this extension will make input field non-focusable to prevent showing keyboard.
  *
  * Parameters:
  * * text_variable – name of string variable to set selected date and time
@@ -41,6 +42,7 @@ import java.util.Locale
  *    }
  * ],
  * ```
+ *
  */
 
 public class DivDateTimeExtensionHandler : DivExtensionHandler {
@@ -50,6 +52,7 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
     private var inputVariableName: String? = null
     private var dateFormatter: SimpleDateFormat? = null
     private var pickerType: PickerType? = null
+    private var inputWasFocusable = false
 
     override fun matches(div: DivBase): Boolean {
         if (div !is DivInput) {
@@ -66,7 +69,7 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
         view: View,
         div: DivBase
     ) {
-        initVariablesOnBind(divView, div)
+        initVariablesOnBind(divView, div, view)
         divView.doOnAttach {
             val lifecycleOwner = divView.findViewTreeLifecycleOwner() as? AppCompatActivity
             if (lifecycleOwner != null) {
@@ -86,6 +89,7 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
         div: DivBase
     ) {
         view.setOnClickListener(null)
+        view.isFocusable = inputWasFocusable
         fragmentManagerRef = null
         divViewRef = null
         inputVariableName = null
@@ -95,7 +99,8 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
 
     private fun initVariablesOnBind(
         divView: Div2View,
-        divBase: DivBase
+        divBase: DivBase,
+        view: View
     ) {
         val params = divBase.extensions?.first { it.id == EXTENSION_ID }?.params ?: return
         val modes = readMode(params)
@@ -105,6 +110,7 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
         divViewRef = divView
         pickerType = parsedPickerType
         dateFormatter = SimpleDateFormat(parsedPickerType.toDateFormatter(), Locale.getDefault())
+        inputWasFocusable = view.isFocusable
     }
 
     private fun handleClickEvent() {
@@ -168,12 +174,13 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
         PickerType.DATE_TIME -> DATETIME_FORMATTER
     }
 
-    private companion object {
-        private const val EXTENSION_ID = "date_time_picker"
-        private const val PARAM_TEXT_VARIABLE = "text_variable"
-        private const val PARAM_MODE = "mode"
-        private const val DATE_FORMATTER = "dd.MM.yyyy"
-        private const val TIME_FORMATTER = "HH:mm"
-        private const val DATETIME_FORMATTER = "dd.MM.yyyy HH:mm"
+
+    public companion object {
+        public const val EXTENSION_ID: String = "date_time_picker"
+        private const val PARAM_TEXT_VARIABLE: String = "text_variable"
+        private const val PARAM_MODE: String = "mode"
+        private const val DATE_FORMATTER: String = "dd.MM.yyyy"
+        private const val TIME_FORMATTER: String = "HH:mm"
+        private const val DATETIME_FORMATTER: String = "dd.MM.yyyy HH:mm"
     }
 }
