@@ -175,12 +175,12 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
     }
 
 
-    public companion object {
-        public const val EXTENSION_ID: String = "date_time_picker"
-        private const val PARAM_TEXT_VARIABLE: String = "text_variable"
-        private const val PARAM_MODE: String = "mode"
-        private const val DATE_FORMATTER: String = "dd.MM.yyyy"
-        private const val TIME_FORMATTER: String = "HH:mm"
-        private const val DATETIME_FORMATTER: String = "dd.MM.yyyy HH:mm"
+    internal companion object {
+        const val EXTENSION_ID = "date_time_picker"
+        private const val PARAM_TEXT_VARIABLE = "text_variable"
+        private const val PARAM_MODE = "mode"
+        private const val DATE_FORMATTER = "dd.MM.yyyy"
+        private const val TIME_FORMATTER = "HH:mm"
+        private const val DATETIME_FORMATTER = "dd.MM.yyyy HH:mm"
     }
 }
