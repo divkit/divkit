@@ -24,6 +24,7 @@ import java.util.Locale
 
 /**
  * DivExtension that allows to show date/time picker from input.
+ * Date and time will be set into string variable in dd.MM.yyyy and HH:mm format respectively.
  * Setting this extension will make input field non-focusable to prevent showing keyboard.
  *
  * Parameters:
