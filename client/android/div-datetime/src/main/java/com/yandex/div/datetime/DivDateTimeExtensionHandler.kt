@@ -4,10 +4,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.doOnAttach
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.datetime.data.PickerMode
+import com.yandex.div.datetime.domain.PickerType
 import com.yandex.div.datetime.utils.parseMode
 import com.yandex.div.datetime.utils.toPickerType
 import com.yandex.div.internal.util.getStringOrEmpty
@@ -15,8 +17,6 @@ import com.yandex.div.internal.util.getStringOrNull
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivInput
-import com.yandex.div2.DivVariable
-import com.yandex.div2.StrVariable
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -24,6 +24,10 @@ import java.util.Locale
 
 /**
  * DivExtension that allows to show date/time picker from input.
+ *
+ * Parameters:
+ * * text_variable – name of string variable to set selected date and time
+ * * mode – sets the type of picker. Can be "date", "time" or both separated by vertical bar (|) sign.
  *
  * Example of usage:
  * ```json
@@ -41,6 +45,12 @@ import java.util.Locale
 
 public class DivDateTimeExtensionHandler : DivExtensionHandler {
 
+    private var fragmentManagerRef: FragmentManager? = null
+    private var divViewRef: Div2View? = null
+    private var inputVariableName: String? = null
+    private var dateFormatter: SimpleDateFormat? = null
+    private var pickerType: PickerType? = null
+
     override fun matches(div: DivBase): Boolean {
         if (div !is DivInput) {
             return false
@@ -50,52 +60,23 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
         return hasExtensionSetUp
     }
 
-    private var fragmentManagerRef: FragmentManager? = null
-    private var viewRef: Div2View? = null
-    private var inputVariableName: String? = null
-    private var dateFormatter: SimpleDateFormat? = null
-
     override fun bindView(
         divView: Div2View,
         expressionResolver: ExpressionResolver,
         view: View,
         div: DivBase
     ) {
-        // TODO extract methods
-        val params = div.extensions?.first { it.id == EXTENSION_ID }?.params ?: return
-        val modes = readMode(params)
-        validateMode(modes)
-        val pickerType = requireNotNull(modes.toPickerType())
-        inputVariableName = readTextVariable(params)
-        viewRef = divView
-        dateFormatter = SimpleDateFormat(pickerType.toDateFormatter(), Locale.getDefault())
+        initVariablesOnBind(divView, div)
         divView.doOnAttach {
-            val owner = divView.findViewTreeLifecycleOwner() as? AppCompatActivity
-            if (owner != null) {
-                fragmentManagerRef = owner.supportFragmentManager
-                fragmentManagerRef?.setFragmentResultListener(
-                    DivDateTimePickerDialogFragment.RESULT_KEY,
-                    owner,
-                ) { _, bundle ->
-                    if (bundle.containsKey(DivDateTimePickerDialogFragment.RESULT_SELECTED_DATETIME)) {
-                        val result =
-                            bundle.getSerializable(
-                                DivDateTimePickerDialogFragment.RESULT_SELECTED_DATETIME
-                            ) as Date
-                        onDateSet(result)
-                    }
-                }
+            val lifecycleOwner = divView.findViewTreeLifecycleOwner() as? AppCompatActivity
+            if (lifecycleOwner != null) {
+                val fragmentManager = lifecycleOwner.supportFragmentManager
+                fragmentManagerRef = fragmentManager
+                observePickerResult(fragmentManager, lifecycleOwner)
             }
         }
         view.isFocusable = false
-        view.setOnClickListener { _ ->
-            fragmentManagerRef?.let { fragmentManager ->
-                DivDateTimePickerDialogFragment.newInstance(pickerType).show(
-                    fragmentManager,
-                    null
-                )
-            }
-        }
+        view.setOnClickListener { _ -> handleClickEvent() }
     }
 
     override fun unbindView(
@@ -106,13 +87,57 @@ public class DivDateTimeExtensionHandler : DivExtensionHandler {
     ) {
         view.setOnClickListener(null)
         fragmentManagerRef = null
-        viewRef = null
+        divViewRef = null
         inputVariableName = null
         dateFormatter = null
+        pickerType = null
+    }
+
+    private fun initVariablesOnBind(
+        divView: Div2View,
+        divBase: DivBase
+    ) {
+        val params = divBase.extensions?.first { it.id == EXTENSION_ID }?.params ?: return
+        val modes = readMode(params)
+        validateMode(modes)
+        val parsedPickerType = requireNotNull(modes.toPickerType())
+        inputVariableName = readTextVariable(params)
+        divViewRef = divView
+        pickerType = parsedPickerType
+        dateFormatter = SimpleDateFormat(parsedPickerType.toDateFormatter(), Locale.getDefault())
+    }
+
+    private fun handleClickEvent() {
+        val currentPickerType = pickerType
+        val fragmentManager = fragmentManagerRef
+        if (currentPickerType != null && fragmentManager != null) {
+            DivDateTimePickerDialogFragment.newInstance(currentPickerType).show(
+                fragmentManager,
+                null
+            )
+        }
+    }
+
+    private fun observePickerResult(
+        fragmentManager: FragmentManager,
+        lifecycleOwner: LifecycleOwner
+    ) {
+        fragmentManager.setFragmentResultListener(
+            DivDateTimePickerDialogFragment.RESULT_KEY,
+            lifecycleOwner,
+        ) { _, bundle ->
+            if (bundle.containsKey(DivDateTimePickerDialogFragment.RESULT_SELECTED_DATETIME)) {
+                val result =
+                    bundle.getSerializable(
+                        DivDateTimePickerDialogFragment.RESULT_SELECTED_DATETIME
+                    ) as Date
+                onDateSet(result)
+            }
+        }
     }
 
     private fun onDateSet(result: Date) {
-        val view = viewRef
+        val view = divViewRef
         val variable = inputVariableName
         val dateFormatter = dateFormatter
         if (view != null && variable != null && dateFormatter != null) {

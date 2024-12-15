@@ -1,6 +1,6 @@
 package com.yandex.div.datetime.utils
 
-import com.yandex.div.datetime.PickerType
+import com.yandex.div.datetime.domain.PickerType
 import com.yandex.div.datetime.data.PickerMode
 
 private const val MODE_DELIMETER = "|"
