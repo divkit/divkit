@@ -2,9 +2,7 @@ package com.yandex.div.datetime
 
 import com.yandex.div.datetime.data.PickerMode
 import com.yandex.div.datetime.utils.parseMode
-import com.yandex.div.json.ParsingException
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
