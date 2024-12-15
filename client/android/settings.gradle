@@ -58,6 +58,7 @@ include ':ui-test-common'
 include ':unit-test-common'
 include ':utils'
 include ':video-custom'
+include ':div-datetime'
 
 def internalSettings = file("settings.internal.gradle")
 if (internalSettings.exists()) {
