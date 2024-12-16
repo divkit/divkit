@@ -154,14 +154,14 @@
       ]
     },
     {
-      "expression": "@{atan(sin_var)}",
+      "expression": "@{atan(atan_var)}",
       "expected": {
         "type": "number",
         "value": 0.5
       },
       "variables": [
         {
-          "name": "sin_var",
+          "name": "atan_var",
           "type": "number",
           "value": 0.54630248984
         }
