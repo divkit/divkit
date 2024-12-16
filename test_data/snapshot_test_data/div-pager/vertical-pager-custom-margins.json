@@ -16,7 +16,18 @@
           "color": "#AAAAAA",
           "type": "solid"
         }
-      ]
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
     }
   },
   "card": {
@@ -27,10 +38,9 @@
         "div": {
           "type": "pager",
           "layout_mode": {
-            "type": "fixed",
-            "neighbour_page_width": {
-              "type": "fixed",
-              "value": 0
+            "type": "percentage",
+            "page_width": {
+              "value": 90
             }
           },
           "orientation": "vertical",
@@ -54,13 +64,12 @@
             "stroke": {
               "color": "#BBFF0000",
               "width": 1
-            },
-            "corner_radius": 10
+            }
           },
           "items": [
             {
               "type": "text_page_match_parent_height",
-              "text": "For millions of years mankind lived just like animals"
+              "text": "Left margin = 50\nTop margin = 5\nRight margin = 30\nBottom margin = 10"
             },
             {
               "type": "text_page_match_parent_height",

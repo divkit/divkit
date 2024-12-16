@@ -2,11 +2,12 @@
   "description": "Pager with wrap_content height and children with different height have height of the tallest initially visible child.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "block": {
-      "type": "container",
+      "type": "text",
       "background": [
         {
           "type": "solid",
@@ -16,6 +17,18 @@
       "height": {
         "type": "fixed",
         "$value": "block_height"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
       }
     }
   },
@@ -30,30 +43,38 @@
             "type": "fixed",
             "value": 200
           },
+          "border": {
+            "stroke": {
+              "color": "#FF0000",
+              "width": 1
+            }
+          },
           "item_spacing": {
             "type": "fixed",
             "value": 4
           },
           "layout_mode": {
-            "type": "fixed",
-            "neighbour_page_width": {
-              "type": "fixed",
-              "value": 20
+            "type": "percentage",
+            "page_width": {
+              "value": 70
             }
           },
           "default_item": 1,
           "items": [
             {
               "type": "block",
-              "block_height": 70
+              "block_height": 70,
+              "text": "Height = 70"
             },
             {
               "type": "block",
-              "block_height": 30
+              "block_height": 50,
+              "text": "Pager height is equal to tallest page height"
             },
             {
               "type": "block",
-              "block_height": 50
+              "block_height": 60,
+              "text": "Height = 60"
             }
           ]
         }
