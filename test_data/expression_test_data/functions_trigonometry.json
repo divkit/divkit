@@ -132,6 +132,43 @@
         "android",
         "ios"
       ]
+    },
+    {
+      "expression": "@{ctan(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{ctan(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": -6.123233995736766
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{ctan(cos_var)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0000000000000002
+      },
+      "variables": [
+        {
+          "name": "ctan_var",
+          "type": "number",
+          "value": 0.7853981633974483
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }
