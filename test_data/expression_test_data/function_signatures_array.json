@@ -752,6 +752,21 @@
         "android",
         "ios"
       ]
+    },
+    {
+      "name": "min(array) number",
+      "function_name": "min",
+      "doc": "Gets the minimun value of array. Returns number value.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array value to get length of."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

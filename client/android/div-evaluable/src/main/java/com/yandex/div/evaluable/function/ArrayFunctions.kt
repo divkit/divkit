@@ -493,6 +493,49 @@ internal object ArrayIsEmpty : Function() {
     }
 }
 
+internal object ArrayMin : Function() {
+    override val name: String = "min"
+
+    override val declaredArgs: List<FunctionArgument> = listOf(
+        FunctionArgument(type = EvaluableType.ARRAY)
+    )
+
+    override val resultType: EvaluableType = EvaluableType.NUMBER
+
+    override val isPure: Boolean = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val array = args[0] as JSONArray
+
+        if (array.length() == 0) {
+            throwArrayException(name, args, "Array is empty")
+        }
+
+        val getDouble = { index: Int ->
+            val value = array.get(index)
+            if (value !is Number) {
+                throwArrayWrongTypeException(name, args, EvaluableType.NUMBER, value)
+            }
+            (value as Number).toDouble()
+        }
+
+        var minValue = getDouble(0)
+
+        for (i in 1 until array.length()) {
+            val value = getDouble(i)
+            if (value < minValue) {
+                minValue = value
+            }
+        }
+
+        return minValue
+    }
+}
+
 internal fun evaluateArray(functionName: String, args: List<Any>, isMethod: Boolean = false): Any {
     checkIndexOfBoundException(functionName, args, isMethod)
     val array = args[0] as JSONArray
