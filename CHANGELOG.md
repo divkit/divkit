@@ -5,6 +5,7 @@
 * Supported `is_enabled` property in `slider`.
 * Supported array methods: `getInteger`, `getNumber`, `getString`, `getBoolean`, `getColor`, `getUrl`, `getArray`, `getDict`, `isEmpty`.
 * Use neutral accent colors to ensure they contrast well with any theme.
+* Fix border drawing of transient views.
 
 # iOS Client:
 * Added `set_state` action support.

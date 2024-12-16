@@ -27,6 +27,7 @@ import com.yandex.div.core.view2.divs.spToPxF
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.widget.isInTransientHierarchy
 import com.yandex.div.internal.widget.isTransient
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
@@ -188,14 +189,14 @@ internal class DivBorderDrawer(
     private fun invalidateOutline() {
         if (shouldUseCanvasClipping()) {
             view.clipToOutline = false
-            view.outlineProvider = ViewOutlineProvider.BACKGROUND
+            view.outlineProvider = if (shouldUseNinePatchShadows()) null else ViewOutlineProvider.BACKGROUND
             return
         }
 
         val cornerRadius = cornerRadii?.first() ?: DEFAULT_CORNER_RADIUS
         if (cornerRadius == DEFAULT_CORNER_RADIUS) {
             view.clipToOutline = false
-            view.outlineProvider = ViewOutlineProvider.BACKGROUND
+            view.outlineProvider = if (shouldUseNinePatchShadows()) null else ViewOutlineProvider.BACKGROUND
             return
         }
 
@@ -207,6 +208,10 @@ internal class DivBorderDrawer(
     private fun shouldUseCanvasClipping(): Boolean {
         return needClipping && (divView.forceCanvasClipping || hasCustomShadow ||
             (!hasShadow && (hasDifferentCornerRadii || hasBorder) || view.isTransient()))
+    }
+
+    private fun shouldUseNinePatchShadows(): Boolean {
+        return hasCustomShadow || view.isInTransientHierarchy()
     }
 
     fun clipCorners(canvas: Canvas) {
