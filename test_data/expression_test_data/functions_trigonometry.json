@@ -154,14 +154,14 @@
       ]
     },
     {
-      "expression": "@{cos(sin_var)}",
+      "expression": "@{cos(cos_var)}",
       "expected": {
         "type": "number",
         "value": 0.5
       },
       "variables": [
         {
-          "name": "sin_var",
+          "name": "cos_var",
           "type": "number",
           "value": 1.0471975512
         }
