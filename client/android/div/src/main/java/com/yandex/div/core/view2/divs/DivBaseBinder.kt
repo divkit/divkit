@@ -276,6 +276,9 @@ internal class DivBaseBinder @Inject constructor(
             updateSizeVariable(divView, metrics, widthVariable, variablesHolder, left, right, oldLeft, oldRight, resolver)
             updateSizeVariable(divView, metrics, heightVariable, variablesHolder, top, bottom, oldTop, oldBottom, resolver)
         }
+        if (width > 0 || height > 0) {
+            listener.onLayoutChange(this, left, top, right, bottom, 0, 0, 0, 0)
+        }
         addOnLayoutChangeListener(listener)
         setTag(R.id.div_layout_provider_listener_id, listener)
         if (divView.clearVariablesListener != null) return
