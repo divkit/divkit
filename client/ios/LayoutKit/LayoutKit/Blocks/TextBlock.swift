@@ -145,7 +145,8 @@ public final class TextBlock: BlockWithTraits {
         text.heightForWidth(
           width,
           maxNumberOfLines: maxIntrinsicNumberOfLines,
-          minNumberOfHiddenLines: minNumberOfHiddenLines
+          minNumberOfHiddenLines: minNumberOfHiddenLines,
+          truncationToken: truncationToken
         ) + additionalTextInsets.vertical.sum
       )
       let result = clamp(height, min: minSize, max: maxSize)
