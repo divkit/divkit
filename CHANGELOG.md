@@ -1,6 +1,7 @@
 ## 30.31.0
 
 # Android Client:
+* Fixed updating variables by `layout_provider` for recycled views in `gallery`.
 * Supported `is_enabled` property in `slider`.
 * Supported array methods: `getInteger`, `getNumber`, `getString`, `getBoolean`, `getColor`, `getUrl`, `getArray`, `getDict`, `isEmpty`.
 * Use neutral accent colors to ensure they contrast well with any theme.
