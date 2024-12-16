@@ -132,6 +132,28 @@
         "android",
         "ios"
       ]
+    },
+    {
+      "expression": "@{ctan(pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{ctan(pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android",
+        "ios"
+      ]
     }
   ]
 }
