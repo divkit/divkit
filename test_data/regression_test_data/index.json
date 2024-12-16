@@ -35,10 +35,12 @@
     {
       "title": "Clear focus actions",
       "platforms": [
-        "android",
-        "web",
         "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json"
+      },
       "tags": [
         "DivAction"
       ],
@@ -1408,9 +1410,13 @@
     },
     {
       "title": "Visibility action in visible block",
-      "automated": [
-        "web"
+      "platforms": [
+        "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/visibility_actions_visible_block.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/visibility_actions_visible_block.json"
+      },
       "tags": [
         "visibility_actions"
       ],
@@ -2550,6 +2556,13 @@
       "tags": [
         "patch"
       ],
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json"
+      },
       "steps": [
         "Wait 1 second"
       ],
@@ -2582,6 +2595,13 @@
       "tags": [
         "patch"
       ],
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json"
+      },
       "steps": [
         "Wait 1 second"
       ],
