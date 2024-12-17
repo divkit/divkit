@@ -69,6 +69,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(DegreesToRadians)
         registry.register(RadiansToDegrees)
         registry.register(Sine)
+        registry.register(Asin)
 
         // Color functions
         registry.register(ColorAlphaComponentGetter)

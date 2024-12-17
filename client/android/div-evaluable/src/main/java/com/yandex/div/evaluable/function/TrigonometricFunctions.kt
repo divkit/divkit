@@ -5,6 +5,7 @@ import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
+import java.lang.Math.asin
 import kotlin.math.sin
 
 internal object Pi : Function() {
@@ -62,5 +63,20 @@ internal object Sine : Function() {
         args: List<Any>,
     ): Any {
         return sin(args.first() as Double)
+    }
+}
+
+internal object Asin : Function() {
+    override val name = "asin"
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.NUMBER))
+    override val resultType = EvaluableType.NUMBER
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>,
+    ): Any {
+        return asin(args.first() as Double)
     }
 }
