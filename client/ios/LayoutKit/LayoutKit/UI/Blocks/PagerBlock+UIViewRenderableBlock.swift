@@ -107,7 +107,7 @@ private final class PagerView: BlockView {
         selectedPageIndex: pageIndex
       ).sendFrom(self)
 
-      if selectedActions.count > pageIndex {
+      if selectedActions.count > pageIndex, pageIndex >= 0 {
         selectedActions[pageIndex].perform(sendingFrom: self)
       }
     }
