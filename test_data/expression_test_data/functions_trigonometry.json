@@ -132,6 +132,43 @@
         "android",
         "ios"
       ]
+    },
+    {
+      "expression": "@{cos(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{cos(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{cos(cos_var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "variables": [
+        {
+          "name": "cos_var",
+          "type": "number",
+          "value": 1.0471975512
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
