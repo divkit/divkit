@@ -493,6 +493,30 @@ internal object ArrayIsEmpty : Function() {
     }
 }
 
+internal object ArrayAvg : Function() {
+    override val name: String = "avg"
+
+    override val declaredArgs: List<FunctionArgument> = listOf(
+        FunctionArgument(type = EvaluableType.ARRAY)
+    )
+
+    override val resultType: EvaluableType = EvaluableType.BOOLEAN
+
+    override val isPure: Boolean = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Number {
+        if (!args[0] is Array<Integer> || !args[0] is Array<Number>) {
+            throwArrayWrongTypeException(name, args, resultType, result, isMethod)
+        }
+        val array = args[0] as Array<Number>
+        return array.length == 0 ? 0 : array.sum() / array.length
+    }
+}
+
 internal fun evaluateArray(functionName: String, args: List<Any>, isMethod: Boolean = false): Any {
     checkIndexOfBoundException(functionName, args, isMethod)
     val array = args[0] as JSONArray
