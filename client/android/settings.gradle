@@ -55,7 +55,6 @@ include ':picasso'
 include ':sample'
 include ':screenshot-test-runtime'
 include ':ui-test-common'
-include ':unit-test-common'
 include ':utils'
 include ':video-custom'
 

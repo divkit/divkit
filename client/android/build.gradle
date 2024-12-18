@@ -112,7 +112,6 @@ apiValidation {
         "sample",
         "screenshot-test-runtime",
         "ui-test-common",
-        "unit-test-common"
     ]
     ignoredPackages += ["com.yandex.div.internal"]
     nonPublicMarkers += [
