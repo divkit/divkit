@@ -1,13 +1,12 @@
 import DivKitExtensions
 import Foundation
 import Lottie
-import VGSLFundamentals
 
-final class LottieAnimationFactory: AsyncSourceAnimatableViewFactory {
-  public func createAsyncSourceAnimatableView(
+final class LottieAnimationFactory: AnimatableViewFactory {
+  public func createAnimatableView(
     withMode mode: AnimationRepeatMode,
     repeatCount count: Float
-  ) -> AsyncSourceAnimatableView {
+  ) -> AnimatableView {
     let animationView = LottieAnimationView()
     switch mode {
     case .restart:
@@ -19,23 +18,22 @@ final class LottieAnimationFactory: AsyncSourceAnimatableViewFactory {
   }
 }
 
-extension LottieAnimationView: DivKitExtensions.AsyncSourceAnimatableView {
+extension LottieAnimationView: DivKitExtensions.AnimatableView {
   public func play() {
     self.play(completion: nil)
     self.forceDisplayUpdate()
   }
 
-  public func setSourceAsync(_ source: AnimationSourceType) async {
-    guard let source = source as? LottieAnimationSourceType else {
-      return
-    }
-    animation = await Task(priority: .userInitiated) {
+  public func setSource(_ source: AnimationSourceType) {
+    var animation: LottieAnimation?
+    if let source = source as? LottieAnimationSourceType {
       switch source {
       case let .data(data):
-        try? JSONDecoder().decode(LottieAnimation.self, from: data)
+        animation = try? JSONDecoder().decode(LottieAnimation.self, from: data)
       case let .json(json):
-        try? LottieAnimation(dictionary: json)
+        animation = try? LottieAnimation(dictionary: json)
       }
-    }.value
+      self.animation = animation
+    }
   }
 }
