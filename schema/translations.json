@@ -2376,8 +2376,8 @@
     "ru": "Действие при нажатии на текст."
   },
   "div_text_range_alignment_vertical": {
-    "en": "Vertical text alignment within the row.",
-    "ru": "Вертикальное выравнивание текста внутри строки."
+    "en": "Vertical text alignment within the row. Ignored when a baseline offset is specified.",
+    "ru": "Вертикальное выравнивание текста внутри строки. Данный параметр игнорируется, если указано смещение базовой линии."
   },
   "div_text_range_background": {
     "en": "Character range background.",
