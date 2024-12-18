@@ -41,6 +41,7 @@ extension [String: Function] {
     addFunction("getString", _getString)
     addFunction("getUrl", _getUrl)
     addFunction("isEmpty", _isEmpty)
+    addFunction("avg", _avg)
   }
 
   private mutating func addFunctions(
@@ -86,6 +87,21 @@ private let _getUrl = FunctionBinary<[AnyHashable], Int, URL> {
 
 private let _isEmpty = FunctionUnary<[AnyHashable], Bool> {
   $0.isEmpty
+}
+
+private let _avg = FunctionUnary<[AnyHashable], Double> {
+    let array: [AnyHashable] = $0
+
+    guard array is [Double] || array is [Int] else {
+        throw ExpressionError.incorrectType("unsupportedType", array.self)
+    }
+
+    if let array = array as? [Double] {
+        return Double(array.reduce(0,+)) / Double(array.count)
+    } else if let array = array as? [Int] {
+        return Double(array.reduce(0,+)) / Double(array.count)
+    }
+    return .zero
 }
 
 private let _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
