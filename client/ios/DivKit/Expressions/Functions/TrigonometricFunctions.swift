@@ -5,6 +5,7 @@ extension [String: Function] {
     addFunction("pi", ConstantFunction(Double.pi))
     addFunction("sin", _sinFunction)
     addFunction("cos", _cosFunction)
+    addFunction("atan", _atanFunction)
     addFunction("toRadians", _toRadians)
     addFunction("toDegrees", _toDegrees)
   }
@@ -16,6 +17,10 @@ private let _sinFunction = FunctionUnary { (radians: Double) in
 
 private let _cosFunction = FunctionUnary { (radians: Double) in
   cos(radians)
+}
+
+private let _atanFunction = FunctionUnary { (radians: Double) in
+  atan(radians)
 }
 
 private let _toRadians = FunctionUnary { (degrees: Double) in

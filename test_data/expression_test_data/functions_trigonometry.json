@@ -169,6 +169,43 @@
       "platforms": [
         "ios"
       ]
+    },
+    {
+      "expression": "@{atan(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{atan(pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": 0.66577375
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{atan(atan_var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "variables": [
+        {
+          "name": "atan_var",
+          "type": "number",
+          "value": 0.54630248984
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
