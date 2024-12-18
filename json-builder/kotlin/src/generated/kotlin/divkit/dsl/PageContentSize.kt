@@ -25,121 +25,13 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-data class PageContentSize internal constructor(
-    @JsonIgnore
-    val properties: Properties,
-) : PagerLayoutMode {
+data object PageContentSize : PagerLayoutMode {
     @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "wrap_content")
-    )
-
-    operator fun plus(additive: Properties): PageContentSize = PageContentSize(
-        Properties(
-            alignment = additive.alignment ?: properties.alignment,
-        )
-    )
-
-    data class Properties internal constructor(
-        /**
-         * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
-         * Default value: `center`.
-         */
-        val alignment: Property<Alignment>?,
-    ) {
-        internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
-            val result = mutableMapOf<String, Any>()
-            result.putAll(properties)
-            result.tryPutProperty("alignment", alignment)
-            return result
-        }
-    }
-
-    /**
-     * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
-     * 
-     * Possible values: [start], [center], [end].
-     */
-    @Generated
-    sealed interface Alignment
+    internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "wrap_content")
 }
 
-/**
- * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
- */
 @Generated
-fun DivScope.pageContentSize(
-    `use named arguments`: Guard = Guard.instance,
-    alignment: PageContentSize.Alignment? = null,
-): PageContentSize = PageContentSize(
-    PageContentSize.Properties(
-        alignment = valueOrNull(alignment),
-    )
-)
-
-/**
- * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
- */
-@Generated
-fun DivScope.pageContentSizeProps(
-    `use named arguments`: Guard = Guard.instance,
-    alignment: PageContentSize.Alignment? = null,
-) = PageContentSize.Properties(
-    alignment = valueOrNull(alignment),
-)
-
-/**
- * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
- */
-@Generated
-fun TemplateScope.pageContentSizeRefs(
-    `use named arguments`: Guard = Guard.instance,
-    alignment: ReferenceProperty<PageContentSize.Alignment>? = null,
-) = PageContentSize.Properties(
-    alignment = alignment,
-)
-
-/**
- * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
- */
-@Generated
-fun PageContentSize.override(
-    `use named arguments`: Guard = Guard.instance,
-    alignment: PageContentSize.Alignment? = null,
-): PageContentSize = PageContentSize(
-    PageContentSize.Properties(
-        alignment = valueOrNull(alignment) ?: properties.alignment,
-    )
-)
-
-/**
- * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
- */
-@Generated
-fun PageContentSize.defer(
-    `use named arguments`: Guard = Guard.instance,
-    alignment: ReferenceProperty<PageContentSize.Alignment>? = null,
-): PageContentSize = PageContentSize(
-    PageContentSize.Properties(
-        alignment = alignment ?: properties.alignment,
-    )
-)
-
-/**
- * @param alignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
- */
-@Generated
-fun PageContentSize.evaluate(
-    `use named arguments`: Guard = Guard.instance,
-    alignment: ExpressionProperty<PageContentSize.Alignment>? = null,
-): PageContentSize = PageContentSize(
-    PageContentSize.Properties(
-        alignment = alignment ?: properties.alignment,
-    )
-)
+fun DivScope.pageContentSize(): PageContentSize = PageContentSize
 
 @Generated
 fun PageContentSize.asList() = listOf(this)
-
-@Generated
-fun PageContentSize.Alignment.asList() = listOf(this)
