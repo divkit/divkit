@@ -1,9 +1,8 @@
 import Foundation
-
 import Serialization
 import VGSL
 
-public struct ExpressionLink<T> {
+public struct ExpressionLink<T: Sendable>: Sendable {
   enum Item {
     case string(String)
     case calcExpression(CalcExpression)

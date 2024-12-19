@@ -2505,6 +2505,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.playground;
 				PRODUCT_NAME = "DivKit Playground";
 				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 			};
 			name = Debug;
 		};
@@ -2526,6 +2527,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.playground;
 				PRODUCT_NAME = "DivKit Playground";
 				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 			};
 			name = Release;
 		};
@@ -2809,6 +2811,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DivKitPlayground;
@@ -2875,6 +2878,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DivKitPlayground;
