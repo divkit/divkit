@@ -7,12 +7,12 @@ import VGSL
 public final class LottieExtensionHandler: DivExtensionHandler {
   public let id = "lottie"
 
-  private let factory: AsyncSourceAnimatableViewFactory
+  private let factory: AnimatableViewFactory
   private let requester: URLResourceRequesting
   private let localAnimationDataProvider: ((URL) -> Data?)?
 
   public init(
-    factory: AsyncSourceAnimatableViewFactory,
+    factory: AnimatableViewFactory,
     requester: URLResourceRequesting,
     localAnimationDataProvider: ((URL) -> Data?)? = nil
   ) {
@@ -49,7 +49,7 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     return LottieAnimationBlock(
       animatableView: Lazy(
         getter: {
-          self.factory.createAsyncSourceAnimatableView(
+          self.factory.createAnimatableView(
             withMode: params.repeatMode,
             repeatCount: params.repeatCount
           )
