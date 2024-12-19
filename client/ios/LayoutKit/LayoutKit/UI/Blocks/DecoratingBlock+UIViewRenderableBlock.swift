@@ -48,7 +48,8 @@ extension DecoratingBlock {
       visibilityParams: visibilityParams,
       tooltips: tooltips,
       accessibility: accessibilityElement,
-      reuseId: reuseId
+      reuseId: reuseId,
+      path: path
     )
     view.configure(
       model: model,
@@ -122,6 +123,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let tooltips: [BlockTooltip]
     let accessibility: AccessibilityElement?
     let reuseId: String?
+    let path: UIElementPath?
 
     var hasResponsiveUI: Bool {
       actions.hasPayload || longTapActions.hasPayload || doubleTapActions.hasPayload
@@ -257,6 +259,18 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     doubleTapRecognizer?.isEnabled = model.shouldHandleDoubleTap
     longPressRecognizer?.isEnabled = model.shouldHandleLongTap
   }
+  
+  private func checkTouchableArea() {
+    guard tapRecognizer != nil || doubleTapRecognizer != nil || longPressRecognizer != nil else { return }
+    guard !bounds.size.isApproximatelyEqualTo(.zero) else { return }
+    if bounds.width < 44 || bounds.height < 44 {
+      renderingDelegate?.reportRenderingError(
+        message: "Touchable view is too small: \(bounds.size), \(model.child)",
+        isWarning: true,
+        path: model.path ?? UIElementPath("")
+      )
+    }
+  }
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -321,6 +335,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
 
     blurView?.frame = bounds
+    
+    checkTouchableArea()
 
     guard let view = childView else { return }
 

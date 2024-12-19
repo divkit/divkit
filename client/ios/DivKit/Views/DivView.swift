@@ -180,17 +180,23 @@ public final class DivView: VisibleBoundsTrackingView {
   }
 
   private func update(block: Block) {
+    let renderingDelegate: RenderingDelegate?
+    if blockProvider?.id != nil, let divCardId = blockProvider?.cardId {
+      renderingDelegate = divKitComponents.renderingDelegate(for: divCardId)
+    } else {
+      renderingDelegate = nil
+    }
     if let blockView, block.canConfigureBlockView(blockView) {
       block.configureBlockView(
         blockView,
         observer: self,
         overscrollDelegate: nil,
-        renderingDelegate: divKitComponents.tooltipManager
+        renderingDelegate: renderingDelegate
       )
     } else {
       blockView = block.makeBlockView(
         observer: self,
-        renderingDelegate: divKitComponents.tooltipManager
+        renderingDelegate: renderingDelegate
       )
     }
     invalidateIntrinsicContentSize()

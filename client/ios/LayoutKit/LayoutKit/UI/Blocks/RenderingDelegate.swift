@@ -7,6 +7,7 @@ public protocol RenderingDelegate: AnyObject {
   func mapView(_ view: BlockView, to id: BlockViewID)
   func tooltipAnchorViewAdded(anchorView: TooltipAnchorView)
   func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView)
+  func reportRenderingError(message: String, isWarning: Bool, path: UIElementPath)
 }
 
 public typealias BlockViewID = Tagged<BlockViewProtocol, String>
@@ -17,6 +18,10 @@ public protocol DivViewMetaProviding: AnyObject {
 
 public protocol TooltipAnchorView: ViewType {
   var tooltips: [BlockTooltip] { get }
+}
+
+extension RenderingDelegate {
+  public func reportRenderingError(message: String, isWarning: Bool, path: UIElementPath) { }
 }
 #else
 public protocol RenderingDelegate {}

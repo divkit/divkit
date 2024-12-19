@@ -68,6 +68,10 @@ private final class SubviewStorage: RenderingDelegate {
   func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView) {
     wrappedRenderingDelegate?.tooltipAnchorViewRemoved(anchorView: anchorView)
   }
+    
+  func reportRenderingError(message: String, isWarning: Bool, path: UIElementPath) {
+    wrappedRenderingDelegate?.reportRenderingError(message: message, isWarning: isWarning, path: path)
+  }
 
   func getView(_ id: BlockViewID) -> DetachableAnimationBlockView? {
     views.first { $0.id == id }?.view
