@@ -98,6 +98,7 @@ dependencies {
     implementation project(path: ':picasso')
     implementation project(path: ':glide')
     implementation project(path: ':coil')
+    implementation project(path: ':div-datetime')
 
     implementation libs.androidx.browser
     implementation libs.androidx.constraintlayout
