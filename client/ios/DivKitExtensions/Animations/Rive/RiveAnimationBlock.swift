@@ -4,7 +4,7 @@ import VGSL
 
 public final class RiveAnimationBlock: BlockWithTraits {
   let animationHolder: AnimationHolder
-  let animatableView: Lazy<AnimatableView>
+  let animatableView: Lazy<AsyncSourceAnimatableView>
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
@@ -14,7 +14,7 @@ public final class RiveAnimationBlock: BlockWithTraits {
 
   public init(
     animationHolder: AnimationHolder,
-    animatableView: Lazy<AnimatableView>,
+    animatableView: Lazy<AsyncSourceAnimatableView>,
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait
   ) {

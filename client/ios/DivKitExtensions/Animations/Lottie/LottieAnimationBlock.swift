@@ -5,7 +5,7 @@ import LayoutKit
 import VGSL
 
 final class LottieAnimationBlock: SizeForwardingBlock {
-  let animatableView: Lazy<AnimatableView>
+  let animatableView: Lazy<AsyncSourceAnimatableView>
   let animationHolder: AnimationHolder
   let sizeProvider: Block
   let scale: DivImageScale
@@ -15,7 +15,7 @@ final class LottieAnimationBlock: SizeForwardingBlock {
   }
 
   init(
-    animatableView: Lazy<AnimatableView>,
+    animatableView: Lazy<AsyncSourceAnimatableView>,
     animationHolder: AnimationHolder,
     sizeProvider: Block,
     scale: DivImageScale
