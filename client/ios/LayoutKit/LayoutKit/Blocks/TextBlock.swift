@@ -1,7 +1,6 @@
 import CoreGraphics
 import CoreText
 import Foundation
-
 import VGSL
 
 public final class TextBlock: BlockWithTraits {

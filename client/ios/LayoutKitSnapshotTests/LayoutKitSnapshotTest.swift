@@ -1,8 +1,7 @@
 import CoreGraphics
-import XCTest
-
 import LayoutKit
 import VGSL
+import XCTest
 
 open class LayoutKitSnapshotTest: XCTestCase {
   open override func setUp() {

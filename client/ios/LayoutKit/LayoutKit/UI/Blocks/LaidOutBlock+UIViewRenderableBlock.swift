@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 extension LaidOutBlock where T: BlockWithLayout {

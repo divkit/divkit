@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import LayoutKit
+import XCTest
 
 final class DivBlockModelingContextTests: XCTestCase {
   func test_modifying_cardLogId() {

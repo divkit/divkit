@@ -1,7 +1,6 @@
 import AVFoundation
 import Foundation
 import UIKit
-
 import VGSL
 
 public final class DefaultPlayerFactory: PlayerFactory {

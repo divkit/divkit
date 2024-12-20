@@ -1,5 +1,4 @@
 import CoreFoundation
-
 import Serialization
 import VGSL
 

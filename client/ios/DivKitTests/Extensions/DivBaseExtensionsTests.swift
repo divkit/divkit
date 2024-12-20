@@ -1,10 +1,8 @@
 @testable import DivKit
-@testable import LayoutKit
-
-import XCTest
-
 import DivKitTestsSupport
+@testable import LayoutKit
 import VGSL
+import XCTest
 
 final class DivBaseExtensionsTests: XCTestCase {
   private let timer = TestTimerScheduler()

@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 
 extension Div {
   public func makeImageURLs(with expressionResolver: ExpressionResolver) -> [URL] {

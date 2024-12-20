@@ -1,6 +1,5 @@
-import UIKit
-
 import DivKit
+import UIKit
 import VGSL
 
 final class VisibilityTrackingScrollView: UIScrollView {

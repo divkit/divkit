@@ -1,5 +1,4 @@
 @testable import DivKit
-
 import Foundation
 import XCTest
 

@@ -1,8 +1,7 @@
 import AVFoundation
-import UIKit
-
 import DivKit
 import LayoutKit
+import UIKit
 import VGSL
 
 extension LottieAnimationBlock {

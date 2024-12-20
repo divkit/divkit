@@ -1,6 +1,5 @@
-import UIKit
-
 import DivKit
+import UIKit
 import VGSL
 
 public struct ShimmerImagePreviewStyle: Equatable {

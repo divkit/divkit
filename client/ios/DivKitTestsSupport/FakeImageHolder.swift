@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 import VGSL
 
 public final class FakeImageHolderFactory: DivImageHolderFactory {

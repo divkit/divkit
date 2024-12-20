@@ -1,9 +1,7 @@
 @testable import LayoutKit
-
 import UIKit
-import XCTest
-
 import VGSL
+import XCTest
 
 final class VisibilityActionPerformerTests: XCTestCase {
   private let view = TestView()

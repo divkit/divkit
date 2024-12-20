@@ -1,6 +1,5 @@
 import CoreGraphics
 import QuartzCore
-
 import VGSL
 
 public enum BoundaryTrait: Equatable {

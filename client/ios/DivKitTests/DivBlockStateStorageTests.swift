@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import LayoutKit
+import XCTest
 
 final class DivBlockStateStorageTests: XCTestCase {
   private var storage: DivBlockStateStorage!

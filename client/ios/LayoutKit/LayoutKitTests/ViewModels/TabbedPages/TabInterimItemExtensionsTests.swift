@@ -1,9 +1,7 @@
-@testable import LayoutKit
-
 import Foundation
-import XCTest
-
+@testable import LayoutKit
 import VGSL
+import XCTest
 
 final class TabInterimItemExtensionsTests: XCTestCase {
   func test_InterimElementChangesProportionallyToIndex() {

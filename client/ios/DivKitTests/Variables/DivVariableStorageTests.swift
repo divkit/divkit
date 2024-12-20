@@ -1,7 +1,6 @@
-import XCTest
-
 import DivKit
 import VGSL
+import XCTest
 
 final class DivVariableSorageTest: XCTestCase {
   private let storage = DivVariableStorage()

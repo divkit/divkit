@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 
 final class DivReporterDelegate: DivReporter {
   private let reportError: (DivError) -> Void

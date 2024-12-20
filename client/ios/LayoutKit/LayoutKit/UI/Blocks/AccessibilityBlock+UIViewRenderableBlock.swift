@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 #if INTERNAL_BUILD

@@ -1,9 +1,8 @@
 @testable import DivKit
+import enum DivKit.Expression
 import DivKitTestsSupport
 import Foundation
 import VGSL
-
-import enum DivKit.Expression
 
 func divAction(
   isEnabled: Bool = true,

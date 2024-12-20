@@ -1,6 +1,5 @@
-import XCTest
-
 import LayoutKit
+import XCTest
 
 final class UIElementPathTests: XCTestCase {
   func test_description() {

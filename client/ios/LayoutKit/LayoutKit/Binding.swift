@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 public struct Binding<T: Equatable>: Equatable {

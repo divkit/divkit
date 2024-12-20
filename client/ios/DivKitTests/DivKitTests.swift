@@ -1,9 +1,8 @@
-import XCTest
-
 @testable import DivKit
 import LayoutKit
 import Serialization
 import VGSL
+import XCTest
 
 final class DivKitTests: XCTestCase {
   func test_multithreaded_blockCreation() {

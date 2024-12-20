@@ -1,7 +1,6 @@
-import XCTest
-
 @testable import DivKit
 import LayoutKit
+import XCTest
 
 final class DivLastVisibleBoundsCacheTests: XCTestCase {
   private let cache = DivLastVisibleBoundsCache()

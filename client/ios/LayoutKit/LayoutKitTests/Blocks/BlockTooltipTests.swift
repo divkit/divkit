@@ -1,5 +1,4 @@
 @testable import LayoutKit
-
 import XCTest
 
 final class BlockTooltipTests: XCTestCase {

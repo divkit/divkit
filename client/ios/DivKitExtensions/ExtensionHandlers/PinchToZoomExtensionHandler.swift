@@ -1,7 +1,6 @@
-import UIKit
-
 import DivKit
 import LayoutKit
+import UIKit
 
 public final class PinchToZoomExtensionHandler: DivExtensionHandler {
   private weak var overlayView: UIView?

@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import DivKit
+import XCTest
 
 final class DivFontProviderTests: XCTestCase {
   private var fontProvider: DivFontProvider = DefaultFontProvider()

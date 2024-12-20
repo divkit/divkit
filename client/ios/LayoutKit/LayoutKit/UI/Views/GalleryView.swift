@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 private typealias CellType = GenericCollectionViewCell

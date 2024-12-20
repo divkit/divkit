@@ -1,9 +1,7 @@
 @testable import DivKit
 @testable import LayoutKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class DivInputExtensionsTests: XCTestCase {
   private let variableStorage = DivVariableStorage()

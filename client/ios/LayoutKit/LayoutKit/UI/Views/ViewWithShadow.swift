@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-
 import VGSL
 
 open class ViewWithShadow: UIView {

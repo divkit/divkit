@@ -1,6 +1,5 @@
-import UIKit
-
 import LayoutKit
+import UIKit
 import VGSL
 
 /// ``DivView`` is a view that allows you to draw the layout for `DivKit`.
@@ -180,11 +179,11 @@ public final class DivView: VisibleBoundsTrackingView {
   }
 
   private func update(block: Block) {
-    let renderingDelegate: RenderingDelegate?
-    if blockProvider?.id != nil, let divCardId = blockProvider?.cardId {
-      renderingDelegate = divKitComponents.renderingDelegate(for: divCardId)
+    let renderingDelegate: RenderingDelegate? = if blockProvider?.id != nil,
+                                                   let divCardId = blockProvider?.cardId {
+      divKitComponents.renderingDelegate(for: divCardId)
     } else {
-      renderingDelegate = nil
+      nil
     }
     if let blockView, block.canConfigureBlockView(blockView) {
       block.configureBlockView(

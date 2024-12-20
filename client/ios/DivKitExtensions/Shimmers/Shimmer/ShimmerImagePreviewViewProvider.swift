@@ -1,7 +1,6 @@
 import Foundation
-import UIKit
-
 import LayoutKit
+import UIKit
 import VGSL
 
 public final class ShimmerImagePreviewViewProvider: ViewProvider {

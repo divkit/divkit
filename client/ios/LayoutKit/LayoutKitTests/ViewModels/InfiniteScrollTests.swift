@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import LayoutKit
+import XCTest
 
 final class InfiniteScrollTests: XCTestCase {
   func test_newPosition() throws {
