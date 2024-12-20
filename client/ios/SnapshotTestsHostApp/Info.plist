@@ -11,5 +11,7 @@
 	</array>
 	<key>REFERENCE_SNAPSHOTS_PATH</key>
 	<string>$(PROJECT_DIR)/Tests/reference_snapshots/</string>
+	<key>RESULT_SNAPSHOTS_PATH</key>
+	<string>$(PROJECT_DIR)/Tests/results/</string>
 </dict>
 </plist>

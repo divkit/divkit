@@ -28,7 +28,6 @@
 		43C1F9F12BA0ED2000134AD2 /* JsonFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C1F9F02BA0ED2000134AD2 /* JsonFile.swift */; };
 		43C1F9F32BA20B2500134AD2 /* DivKitSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C1F9F22BA20B2500134AD2 /* DivKitSnapshotTests.swift */; };
 		43D05A9C2BA336CD003290AD /* TestingFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D05A9B2BA336CD003290AD /* TestingFiles.swift */; };
-		43EA1B4F2B9F83D400350EC5 /* Testing in Frameworks */ = {isa = PBXBuildFile; productRef = 43EA1B4E2B9F83D400350EC5 /* Testing */; };
 		52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52184FD7296C68E400ECC0E9 /* DivKitExtensions */; };
 		5219194D297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */; };
 		52907F662A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52907F652A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift */; };
@@ -717,7 +716,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43EA1B4F2B9F83D400350EC5 /* Testing in Frameworks */,
 				8C0E7371288AE219009BEB3C /* DivKit in Frameworks */,
 				E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */,
 				52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */,
@@ -1215,15 +1213,15 @@
 			children = (
 				E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */,
 				8C0E7372288AE563009BEB3C /* snapshot_test_data */,
-				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
-				8C035199288EC5AB0016A747 /* Images.xcassets */,
 				43BF1CDC2BA063B400198EAF /* FilesPreprocessing */,
-				8C9284D6288ACCE400BEA1FA /* SnapshotTestRunner.swift */,
-				43C1F9F02BA0ED2000134AD2 /* JsonFile.swift */,
-				43D05A9B2BA336CD003290AD /* TestingFiles.swift */,
+				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
 				43C1F9F22BA20B2500134AD2 /* DivKitSnapshotTests.swift */,
+				43C1F9F02BA0ED2000134AD2 /* JsonFile.swift */,
 				8C9284D5288ACCE400BEA1FA /* ReferenceSet.swift */,
+				8C9284D6288ACCE400BEA1FA /* SnapshotTestRunner.swift */,
+				43D05A9B2BA336CD003290AD /* TestingFiles.swift */,
 				8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */,
+				8C035199288EC5AB0016A747 /* Images.xcassets */,
 			);
 			path = DivKitSnapshotTests;
 			sourceTree = "<group>";
@@ -1596,7 +1594,6 @@
 			packageProductDependencies = (
 				8C0E7370288AE219009BEB3C /* DivKit */,
 				52184FD7296C68E400ECC0E9 /* DivKitExtensions */,
-				43EA1B4E2B9F83D400350EC5 /* Testing */,
 				E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */,
 			);
 			productName = DivKitSnapshotTests;
@@ -1744,7 +1741,6 @@
 			packageReferences = (
 				0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */,
-				43EA1B4B2B9F833C00350EC5 /* XCRemoteSwiftPackageReference "swift-testing" */,
 				7E2DFA9F2C7C7F430095775C /* XCRemoteSwiftPackageReference "vgsl" */,
 				98C920F22C8F46EE00B2FFD8 /* XCRemoteSwiftPackageReference "LookinServer" */,
 			);
@@ -3132,14 +3128,6 @@
 				version = 4.2.0;
 			};
 		};
-		43EA1B4B2B9F833C00350EC5 /* XCRemoteSwiftPackageReference "swift-testing" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-testing";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.1;
-			};
-		};
 		76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rive-app/rive-ios";
@@ -3171,11 +3159,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
-		};
-		43EA1B4E2B9F83D400350EC5 /* Testing */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43EA1B4B2B9F833C00350EC5 /* XCRemoteSwiftPackageReference "swift-testing" */;
-			productName = Testing;
 		};
 		52184FD7296C68E400ECC0E9 /* DivKitExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
