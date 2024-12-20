@@ -453,8 +453,7 @@ private final class ErrorsReportingRenderingDelegate: RenderingDelegate {
     guard let divReporter else { return }
     let error: DivError = if isWarning {
       DivLayoutWarning(message, path: path)
-    }
-    else {
+    } else {
       DivLayoutError(message, path: path)
     }
     divReporter.reportError(cardId: cardId, error: error)

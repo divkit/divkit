@@ -35,7 +35,7 @@ final class ShineView: UIView {
     childView.frame = bounds
     maskLayer.frame = bounds
     gradientLayer.frame =
-    ShimmerGradientGeometry.frameScaledToAspectFill(for: bounds)
+      ShimmerGradientGeometry.frameScaledToAspectFill(for: bounds)
   }
 
   override func didMoveToWindow() {

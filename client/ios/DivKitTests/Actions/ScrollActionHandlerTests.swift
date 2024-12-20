@@ -290,7 +290,7 @@ final class ScrollActionHandlerTests: XCTestCase {
       getState()
     )
   }
-  
+
   func test_ScrollTo_Start_Pager() {
     setState(pagerState(index: 2, itemCount: 5))
 

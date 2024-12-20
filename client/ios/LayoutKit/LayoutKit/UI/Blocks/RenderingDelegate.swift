@@ -21,7 +21,7 @@ public protocol TooltipAnchorView: ViewType {
 }
 
 extension RenderingDelegate {
-  public func reportRenderingError(message: String, isWarning: Bool, path: UIElementPath) { }
+  public func reportRenderingError(message _: String, isWarning _: Bool, path _: UIElementPath) {}
 }
 #else
 public protocol RenderingDelegate {}

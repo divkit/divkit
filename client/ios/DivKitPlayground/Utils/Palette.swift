@@ -14,10 +14,10 @@ struct Palette {
     }
 
     var result: [String: Color] = [:]
-    palette.forEach {
-      guard let name = $0["name"],
-            let colorStr = $0["color"],
-            let color = Color.color(withHexString: colorStr) else { return }
+    for item in palette {
+      guard let name = item["name"],
+            let colorStr = item["color"],
+            let color = Color.color(withHexString: colorStr) else { continue }
       result[name] = color
     }
     return result.mapToDivVariables()

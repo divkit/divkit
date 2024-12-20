@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 public struct PagerViewLayout: GalleryViewLayouting, Equatable {
@@ -47,8 +46,7 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
     blockPages = model.pages(
       for: blockFrames,
       fitting: boundsSize,
-      alignment: alignment,
-      layoutMode: layoutMode
+      alignment: alignment
     )
 
     let contentSize = model.contentSize(
@@ -121,8 +119,7 @@ extension GalleryViewModel {
   fileprivate func pages(
     for frames: [CGRect],
     fitting size: CGSize?,
-    alignment: Alignment,
-    layoutMode: PagerBlock.LayoutMode
+    alignment: Alignment
   ) -> [PagerViewLayout.Page] {
     let bound = (size ?? .zero).dimension(in: direction)
     let contentSize = contentSize(

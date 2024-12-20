@@ -23,9 +23,9 @@ extension Field {
   ) -> DeserializationResult<T> where T == Expression<E>, E.RawValue == String {
     switch self {
     case let .value(value):
-      return .success(value)
+      .success(value)
     case let .link(link):
-      return safeValueForLink {
+      safeValueForLink {
         try context.templateData.getField(
           link,
           transform: {
@@ -44,9 +44,9 @@ extension Field {
   ) -> DeserializationResult<T> where T == Expression<E> {
     switch self {
     case let .value(value):
-      return .success(value)
+      .success(value)
     case let .link(link):
-      return safeValueForLink {
+      safeValueForLink {
         try context.templateData.getField(
           link,
           transform: { expressionTransform($0, transform: transform, validator: validator) }

@@ -24,7 +24,7 @@ private let _atanFunction = FunctionUnary { (radians: Double) in
 }
 
 private let _toRadians = FunctionUnary { (degrees: Double) in
-	degrees * Double.pi / 180
+  degrees * Double.pi / 180
 }
 
 private let _toDegrees = FunctionUnary { (radians: Double) in

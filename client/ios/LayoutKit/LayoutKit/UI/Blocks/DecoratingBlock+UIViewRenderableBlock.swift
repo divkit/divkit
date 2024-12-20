@@ -259,9 +259,11 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     doubleTapRecognizer?.isEnabled = model.shouldHandleDoubleTap
     longPressRecognizer?.isEnabled = model.shouldHandleLongTap
   }
-  
+
   private func checkTouchableArea() {
-    guard tapRecognizer != nil || doubleTapRecognizer != nil || longPressRecognizer != nil else { return }
+    guard tapRecognizer != nil || doubleTapRecognizer != nil || longPressRecognizer != nil else {
+      return
+    }
     guard !bounds.size.isApproximatelyEqualTo(.zero) else { return }
     if bounds.width < 44 || bounds.height < 44 {
       renderingDelegate?.reportRenderingError(
@@ -335,7 +337,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
 
     blurView?.frame = bounds
-    
+
     checkTouchableArea()
 
     guard let view = childView else { return }

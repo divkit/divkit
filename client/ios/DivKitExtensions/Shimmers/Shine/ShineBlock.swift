@@ -42,7 +42,7 @@ final class ShineBlock: WrapperBlock, LayoutCachingDefaultImpl {
 
 extension ShineBlock: Equatable {
   static func ==(lhs: ShineBlock, rhs: ShineBlock) -> Bool {
-      lhs.child == rhs.child &&
+    lhs.child == rhs.child &&
       lhs.params == rhs.params &&
       compare(lhs.maskImageHolder, rhs.maskImageHolder)
   }
