@@ -62,6 +62,9 @@
         "compat": {
             "android": {
                 "version_added": "30.17.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
             }
         }
     }, {
@@ -117,6 +120,9 @@
         "compat": {
             "android": {
                 "version_added": "30.29.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
             }
         }
     }]
