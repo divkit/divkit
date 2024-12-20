@@ -108,6 +108,28 @@
       "file": "long_tap.json"
     },
     {
+      "title": "Hover and press",
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "Hover the top button with cursor or stylus",
+        "Move the cursor away from the top button",
+        "Press and hold the bottom button",
+        "Release the bottom button"
+      ],
+      "expected_results": [
+        "Button state changes to 'Hovered'",
+        "Button state changes to 'Not hovered'",
+        "Button state changes to 'Pressed'",
+        "Button state changes to 'Not pressed'"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "file": "actions/hover-and-press.json"
+    },
+    {
       "title": "Tab swipe",
       "automated": [
         "web"

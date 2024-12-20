@@ -1,6 +1,8 @@
 package com.yandex.div.core.view2.divs
 
+import android.annotation.SuppressLint
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -29,7 +31,11 @@ import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_CLIC
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_DOUBLE_CLICK
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTER
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_FOCUS
+import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_HOVER
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_LONG_CLICK
+import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_PRESS
+import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_RELEASE
+import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_UNHOVER
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -70,6 +76,10 @@ internal class DivActionBinder @Inject constructor(
         actions: List<DivAction>?,
         longTapActions: List<DivAction>?,
         doubleTapActions: List<DivAction>?,
+        hoverStartActions: List<DivAction>?,
+        hoverEndActions: List<DivAction>?,
+        pressStartActions: List<DivAction>?,
+        pressEndActions: List<DivAction>?,
         actionAnimation: DivAnimation,
         accessibility: DivAccessibility?,
     ) {
@@ -81,6 +91,10 @@ internal class DivActionBinder @Inject constructor(
                 actions = actions.onlyEnabled(resolver),
                 doubleTapActions = doubleTapActions.onlyEnabled(resolver),
                 longTapActions = longTapActions.onlyEnabled(resolver),
+                hoverStartActions = hoverStartActions.onlyEnabled(resolver),
+                hoverEndActions = hoverEndActions.onlyEnabled(resolver),
+                pressStartActions = pressStartActions.onlyEnabled(resolver),
+                pressEndActions = pressEndActions.onlyEnabled(resolver),
                 actionAnimation = actionAnimation,
                 accessibility = accessibility,
             )
@@ -99,6 +113,10 @@ internal class DivActionBinder @Inject constructor(
         actions: List<DivAction>,
         longTapActions: List<DivAction>,
         doubleTapActions: List<DivAction>,
+        hoverStartActions: List<DivAction>,
+        hoverEndActions: List<DivAction>,
+        pressStartActions: List<DivAction>,
+        pressEndActions: List<DivAction>,
         actionAnimation: DivAnimation,
         accessibility: DivAccessibility?,
     ) {
@@ -113,11 +131,16 @@ internal class DivActionBinder @Inject constructor(
         // Order is urgent: tap actions depend on double tap actions
         bindTapActions(context, target, divGestureListener, actions, shouldIgnoreActionMenuItems)
 
-        target.setAnimatedTouchListener(
+        val animatedTouchListener = target.createAnimatedTouchListener(
             context,
             actionAnimation.takeUnless { allIsNullOrEmpty(actions, longTapActions, doubleTapActions) },
             divGestureListener
         )
+        val pressTouchListener = createPressTouchListener(context, target, pressStartActions, pressEndActions)
+
+        bindHoverActions(context, target, hoverStartActions, hoverEndActions)
+
+        target.attachTouchListeners(animatedTouchListener, pressTouchListener)
 
         if (accessibilityEnabled) {
             if (DivAccessibility.Mode.MERGE == context.divView.getPropagatedAccessibilityMode(target) &&
@@ -306,6 +329,72 @@ internal class DivActionBinder @Inject constructor(
         }
     }
 
+    private fun bindHoverActions(
+        context: BindingContext,
+        target: View,
+        startActions: List<DivAction>,
+        endActions: List<DivAction>
+    ) {
+        if (startActions.isNotEmpty() || endActions.isNotEmpty()) {
+            target.setOnHoverListener { _, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_HOVER_ENTER -> {
+                        handleBulkActions(context, target, startActions, LOG_HOVER)
+                    }
+                    MotionEvent.ACTION_HOVER_EXIT -> {
+                        handleBulkActions(context, target, endActions, LOG_UNHOVER)
+                    }
+                }
+
+                false
+            }
+        } else {
+            target.setOnHoverListener(null)
+        }
+    }
+
+    private fun createPressTouchListener(
+        context: BindingContext,
+        target: View,
+        pressStartActions: List<DivAction>,
+        pressEndActions: List<DivAction>
+    ): ((View, MotionEvent) -> Boolean)? {
+        return if (pressStartActions.isNotEmpty() || pressEndActions.isNotEmpty()) {
+            { _, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        handleBulkActions(context, target, pressStartActions, LOG_PRESS)
+
+                        true
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        handleBulkActions(context, target, pressEndActions, LOG_RELEASE)
+
+                        true
+                    }
+                    else -> false
+                }
+            }
+        } else {
+            null
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun View.attachTouchListeners(vararg listeners: ((View, MotionEvent) -> Boolean)?) {
+        val nnListeners = listeners.filterNotNull()
+
+        if (nnListeners.isNotEmpty()) {
+            setOnTouchListener { view, motionEvent ->
+                nnListeners.fold(false) { acc, listener ->
+                    listener(view, motionEvent) || acc
+                }
+            }
+        } else {
+            setOnTouchListener(null)
+        }
+    }
+
     internal fun handleBulkActions(
         context: BindingContext,
         target: View,
@@ -325,6 +414,10 @@ internal class DivActionBinder @Inject constructor(
                     LOG_FOCUS -> logger.logFocusChanged(divView, resolver, target, action, true)
                     LOG_BLUR -> logger.logFocusChanged(divView, resolver, target, action, false)
                     LOG_ENTER -> logger.logImeEnter(divView, resolver, target, action)
+                    LOG_HOVER -> logger.logHoverChanged(divView, resolver, target, action, true)
+                    LOG_UNHOVER -> logger.logHoverChanged(divView, resolver, target, action, false)
+                    LOG_PRESS -> logger.logPressChanged(divView, resolver, target, action, true)
+                    LOG_RELEASE -> logger.logPressChanged(divView, resolver, target, action, false)
                     else -> Assert.fail("Please, add new logType")
                 }
                 divActionBeaconSender.sendTapActionBeacon(action, resolver)
@@ -340,6 +433,10 @@ internal class DivActionBinder @Inject constructor(
         LOG_FOCUS -> DivActionReason.FOCUS
         LOG_BLUR -> DivActionReason.BLUR
         LOG_ENTER -> DivActionReason.ENTER
+        LOG_HOVER -> DivActionReason.HOVER
+        LOG_UNHOVER -> DivActionReason.UNHOVER
+        LOG_PRESS -> DivActionReason.PRESS
+        LOG_RELEASE -> DivActionReason.RELEASE
         else -> DivActionReason.EXTERNAL
     }
 
@@ -474,7 +571,7 @@ internal class DivActionBinder @Inject constructor(
 
 
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(LOG_CLICK, LOG_LONG_CLICK, LOG_DOUBLE_CLICK, LOG_FOCUS, LOG_BLUR, LOG_ENTER)
+    @StringDef(LOG_CLICK, LOG_LONG_CLICK, LOG_DOUBLE_CLICK, LOG_FOCUS, LOG_BLUR, LOG_ENTER, LOG_HOVER, LOG_UNHOVER, LOG_PRESS, LOG_RELEASE)
     internal annotation class LogType {
         companion object {
             const val LOG_CLICK = "click"
@@ -483,6 +580,10 @@ internal class DivActionBinder @Inject constructor(
             const val LOG_FOCUS = "focus"
             const val LOG_BLUR = "blur"
             const val LOG_ENTER = "enter"
+            const val LOG_HOVER = "hover"
+            const val LOG_UNHOVER = "unhover"
+            const val LOG_PRESS = "press"
+            const val LOG_RELEASE = "release"
         }
     }
 }

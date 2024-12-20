@@ -69,6 +69,32 @@ class DemoDiv2Logger(
         }
     }
 
+    override fun logHoverChanged(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        view: View,
+        action: DivAction,
+        isHovered: Boolean
+    ) {
+        val actionLogId = action.logId.evaluate(resolver)
+        log {
+            "logHoverChanged(cardId = ${divView.logId}, id = $actionLogId, isHovered = $isHovered)"
+        }
+    }
+
+    override fun logPressChanged(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        view: View,
+        action: DivAction,
+        isPressed: Boolean
+    ) {
+        val actionLogId = action.logId.evaluate(resolver)
+        log {
+            "logPressChanged(cardId = ${divView.logId}, id = $actionLogId, isPressed = $isPressed)"
+        }
+    }
+
     override fun logTabPageChanged(divView: Div2View, selectedTab: Int) {
         log {
             "logTabPageChanged(cardId = ${divView.logId}, selectedTab = $selectedTab)"
