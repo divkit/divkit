@@ -275,6 +275,48 @@
       ]
     },
     {
+      "expression": "@{array_var.avg()}",
+      "expected": {
+        "type": "number",
+        "value": 9.0
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            8,
+            9,
+            10
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{array_var.avg()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [avg()]. Incorrect value type: expected unsupportedType, got Array."
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "one",
+            "two",
+            "three"
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "expression": "@{array_var.isEmpty()}",
       "expected": {
         "type": "boolean",
