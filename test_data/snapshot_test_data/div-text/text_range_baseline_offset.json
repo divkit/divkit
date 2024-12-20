@@ -1,7 +1,8 @@
 {
   "description": "Ranges with text baseline offset",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "title": {

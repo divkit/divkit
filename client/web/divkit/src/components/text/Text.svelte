@@ -529,6 +529,7 @@
                             textStyles={item.textStyles}
                             {singleline}
                             actions={item.actions}
+                            {customLineHeight}
                         />
                     {/if}
                 {:else if item.image}
@@ -560,6 +561,7 @@
                 rootFontSize={fontSize}
                 textStyles={$jsonRootTextStyles}
                 {singleline}
+                {customLineHeight}
             />
         {/if}
     </span>
