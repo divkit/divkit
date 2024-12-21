@@ -915,8 +915,8 @@
       ]
     },
     {
-      "name": "avg([1, 2, 3]) === 2",
-      "expression": "@{avg(array)}",
+      "name": "[1, 2, 3].avg() === 2",
+      "expression": "@{array.avg()}",
       "expected": {
         "type": "number",
         "value": 2
@@ -938,8 +938,8 @@
       ]
     },
     {
-      "name": "avg([]) === 0",
-      "expression": "@{avg(array)}",
+      "name": "[].avg() === 0",
+      "expression": "@{array.avg()}",
       "expected": {
         "type": "number",
         "value": 0

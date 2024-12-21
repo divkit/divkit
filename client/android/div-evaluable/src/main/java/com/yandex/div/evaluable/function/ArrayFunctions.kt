@@ -509,7 +509,7 @@ internal object ArrayAvg : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Number {
-        if (!args[0] is Array<Integer> || !args[0] is Array<Number>) {
+        if (!args[0] is Array<Integer> && !args[0] is Array<Number>) {
             throwArrayWrongTypeException(name, args, resultType, result, isMethod)
         }
         val array = args[0] as Array<Number>
