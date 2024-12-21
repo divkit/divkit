@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {

@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 protocol _SimpleFunctionsProvider {

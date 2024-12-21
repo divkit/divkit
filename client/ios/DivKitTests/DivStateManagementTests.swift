@@ -1,9 +1,7 @@
 @testable import DivKit
-
 import Foundation
-import XCTest
-
 import VGSL
+import XCTest
 
 final class DivStateManagementTests: XCTestCase {
   private var stateManagement: DivStateManagement!

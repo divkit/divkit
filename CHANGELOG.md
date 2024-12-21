@@ -1,9 +1,28 @@
+## 30.32.0
+
+# Android Client:
+* Added `baseline_offset` property for text ranges.
+* Added `pi`, `toRadians`, `toDegrees`, `sin` functions.
+* Fixed alpha in div wasn't applied to shadow.
+* Fixed empty URL beacon sending.
+
+# iOS Client:
+* Added `cos` function.
+* Added `pi`, `sin`, `toRadians`, `toDegrees` functions.
+* Added `scroll_by`/`scroll_to` actions support.
+* Added `set_stored_value` action support.
+* Supported wrap-content `layout_mode` in `div-pager`.
+* Trunсation token is taken into account when calculating the height of the text block.
+
+
 ## 30.31.0
 
 # Android Client:
+* Fixed updating variables by `layout_provider` for recycled views in `gallery`.
 * Supported `is_enabled` property in `slider`.
 * Supported array methods: `getInteger`, `getNumber`, `getString`, `getBoolean`, `getColor`, `getUrl`, `getArray`, `getDict`, `isEmpty`.
 * Use neutral accent colors to ensure they contrast well with any theme.
+* Fix border drawing of transient views.
 
 # iOS Client:
 * Added `set_state` action support.

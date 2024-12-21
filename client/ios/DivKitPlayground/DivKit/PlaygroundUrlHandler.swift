@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 
 final class PlaygroundUrlHandler: DivUrlHandler {
   private let loadJsonUrl: (URL) -> Void

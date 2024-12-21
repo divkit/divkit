@@ -59,6 +59,10 @@ internal class DivGifImageBinder @Inject constructor(
             div.actions,
             div.longtapActions,
             div.doubletapActions,
+            div.hoverStartActions,
+            div.hoverEndActions,
+            div.pressStartActions,
+            div.pressEndActions,
             div.actionAnimation,
             div.accessibility,
         )

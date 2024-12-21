@@ -38,7 +38,8 @@
           "$description": "translations.json#/div_text_range_baseline_offset",
           "default_value": "0",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "font_size": {

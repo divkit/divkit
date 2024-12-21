@@ -1,8 +1,7 @@
 import CoreGraphics
-import XCTest
-
 import LayoutKit
 import VGSL
+import XCTest
 
 final class GenericCollectionLayoutTests: XCTestCase {
   func test_WhenConstructingFromFramesAndPageSize_IncreasesContentSizeToFitLastPageSize() {

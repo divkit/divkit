@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import Serialization
 import VGSL
@@ -50,6 +49,7 @@ public final class DivKitComponents {
   private let variableTracker = DivVariableTracker()
   private let idToPath = IdToPath()
   private let animatorController = DivAnimatorController()
+  private var debugErrorCollectors = [DivCardID: DebugErrorCollector]()
 
   /// You can create an instance of `DivKitComponents` with various optional parameters that allow
   /// you to customize the behavior and functionality of `DivKit` to suit your specific needs.
@@ -231,6 +231,7 @@ public final class DivKitComponents {
     tooltipManager.reset()
     idToPath.reset()
     animatorController.reset()
+    debugErrorCollectors = [:]
   }
 
   public func reset(cardId: DivCardID) {
@@ -244,6 +245,7 @@ public final class DivKitComponents {
     timerStorage.reset(cardId: cardId)
     idToPath.reset(cardId: cardId)
     animatorController.reset(cardId: cardId)
+    debugErrorCollectors[cardId] = nil
   }
 
   /// When using DivView, use DivData.resolve to avoid adding variables twice.
@@ -313,6 +315,7 @@ public final class DivKitComponents {
       ? DivStateManager()
       : stateManagement.getStateManagerForCard(cardId: cardId)
 
+    let errorsStorage = DivErrorsStorage(errors: [])
     return DivBlockModelingContext(
       viewId: viewId,
       cardLogId: nil,
@@ -337,7 +340,12 @@ public final class DivKitComponents {
       debugParams: debugParams,
       scheduler: nil,
       parentScrollView: parentScrollView,
-      errorsStorage: nil,
+      errorsStorage: errorsStorage,
+      debugErrorCollector: debugErrorCollector(
+        for: cardId,
+        debugParams: debugParams,
+        errorsStorage: errorsStorage
+      ),
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
@@ -379,6 +387,28 @@ public final class DivKitComponents {
     updateAggregator.forceUpdate()
   }
 
+  @_spi(Internal)
+  public func renderingDelegate(for cardId: DivCardID) -> RenderingDelegate {
+    ErrorsReportingRenderingDelegate(
+      wrappedRenderingDelegate: tooltipManager,
+      cardId: cardId,
+      divReporter: debugErrorCollectors[cardId]
+    )
+  }
+
+  private func debugErrorCollector(
+    for cardId: DivCardID,
+    debugParams: DebugParams,
+    errorsStorage: DivErrorsStorage
+  ) -> DebugErrorCollector? {
+    guard debugParams.isDebugInfoEnabled else { return nil }
+    let collector = debugErrorCollectors.getOrCreate(cardId, factory: {
+      DebugErrorCollector(wrappedDivReporter: reporter, errorStorage: errorsStorage)
+    })
+    collector.errorStorage = errorsStorage
+    return collector
+  }
+
   private func onVariablesChanged(event: DivVariablesStorage.ChangeEvent) {
     switch event.kind {
     case let .global(variables):
@@ -397,3 +427,46 @@ let defaultPlayerFactory: PlayerFactory? = DefaultPlayerFactory()
 #else
 let defaultPlayerFactory: PlayerFactory? = nil
 #endif
+
+private final class ErrorsReportingRenderingDelegate: RenderingDelegate {
+  private let wrappedRenderingDelegate: RenderingDelegate
+  private let cardId: DivCardID
+  private let divReporter: DivReporter?
+
+  init(
+    wrappedRenderingDelegate: RenderingDelegate,
+    cardId: DivCardID,
+    divReporter: DivReporter?
+  ) {
+    self.wrappedRenderingDelegate = wrappedRenderingDelegate
+    self.cardId = cardId
+    self.divReporter = divReporter
+  }
+
+  func reportRenderingError(message: String, isWarning: Bool, path: UIElementPath) {
+    wrappedRenderingDelegate.reportRenderingError(
+      message: message,
+      isWarning: isWarning,
+      path: path
+    )
+    guard let divReporter else { return }
+    let error: DivError = if isWarning {
+      DivLayoutWarning(message, path: path)
+    } else {
+      DivLayoutError(message, path: path)
+    }
+    divReporter.reportError(cardId: cardId, error: error)
+  }
+
+  func mapView(_ view: any LayoutKit.BlockView, to id: LayoutKit.BlockViewID) {
+    wrappedRenderingDelegate.mapView(view, to: id)
+  }
+
+  func tooltipAnchorViewAdded(anchorView: any LayoutKit.TooltipAnchorView) {
+    wrappedRenderingDelegate.tooltipAnchorViewAdded(anchorView: anchorView)
+  }
+
+  func tooltipAnchorViewRemoved(anchorView: any LayoutKit.TooltipAnchorView) {
+    wrappedRenderingDelegate.tooltipAnchorViewRemoved(anchorView: anchorView)
+  }
+}

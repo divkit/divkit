@@ -1,6 +1,5 @@
 @testable import DivKit
 @testable import LayoutKit
-
 import XCTest
 
 final class DivDataExtensionsTests: XCTestCase {

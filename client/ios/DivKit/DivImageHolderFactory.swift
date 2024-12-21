@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 /// Loads images for `DivKit` views.

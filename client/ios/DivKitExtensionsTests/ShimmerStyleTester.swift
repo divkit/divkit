@@ -1,7 +1,6 @@
-import XCTest
-
 import DivKit
 import DivKitTestsSupport
+import XCTest
 
 final class ShimmerStyleTester<Style: Equatable> {
   private let styleFactory: ([String: Any], DivBlockModelingContext) throws -> Style

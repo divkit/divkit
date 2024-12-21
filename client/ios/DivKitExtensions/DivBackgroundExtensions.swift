@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 
 extension DivBackground {
   func resolveImageURL(_ expressionResolver: ExpressionResolver) -> URL? {

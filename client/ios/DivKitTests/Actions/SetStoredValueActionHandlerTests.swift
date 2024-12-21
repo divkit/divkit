@@ -97,9 +97,9 @@ final class SetStoredValueActionHandlerTests: XCTestCase {
   func test_SetUrlValue() {
     handle(
       action(
-       name: "name",
-       value: .urlValue(UrlValue(value: .value(url("https://some.url"))))
-     )
+        name: "name",
+        value: .urlValue(UrlValue(value: .value(url("https://some.url"))))
+      )
     )
 
     XCTAssertEqual(persistentValuesStorage.get(name: "name"), url("https://some.url"))

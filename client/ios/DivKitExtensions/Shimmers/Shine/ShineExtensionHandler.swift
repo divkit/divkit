@@ -1,7 +1,6 @@
-import UIKit
-
 import DivKit
 import LayoutKit
+import UIKit
 
 public final class ShineExtensionHandler: DivExtensionHandler {
   public let id: String = extensionID

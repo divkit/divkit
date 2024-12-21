@@ -12,16 +12,24 @@
         "type": "wrap_content",
         "constrained": false
       },
-      "margins": {
-        "top": 5,
-        "bottom": 5
-      },
       "background": [
         {
           "color": "#AAAAAA",
           "type": "solid"
         }
-      ]
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
     }
   },
   "card": {
@@ -33,37 +41,33 @@
           "type": "pager",
           "width": {
             "type": "fixed",
-            "value": 80
+            "value": 200
           },
           "height": {
             "type": "fixed",
-            "value": 100
+            "value": 120
           },
           "layout_mode": {
-            "type": "fixed",
-            "neighbour_page_width": {
-              "type": "fixed",
-              "value": 0
+            "type": "percentage",
+            "page_width": {
+              "value": 90
             }
           },
           "orientation": "vertical",
           "paddings": {
             "left": 10,
-            "top": 10,
-            "right": 10,
-            "bottom": 10
+            "right": 10
           },
           "border": {
             "stroke": {
               "color": "#BBFF0000",
               "width": 1
-            },
-            "corner_radius": 10
+            }
           },
           "items": [
             {
               "type": "text_page",
-              "text": "For millions of years mankind lived just like animals"
+              "text": "Pager width = 200\nPage width = wrap_content,\nconstrained = false\nand is bigger than pager width.\nRight padding is ignored\nand right border is not drawn. Some long text"
             },
             {
               "type": "text_page",

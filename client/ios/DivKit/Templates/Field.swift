@@ -1,6 +1,5 @@
 import CoreFoundation
 import Foundation
-
 import Serialization
 import VGSL
 
@@ -240,11 +239,11 @@ extension Field {
   ) -> DeserializationResult<Array<U>.ResolvedValue> where Array<U> == T {
     switch self {
     case let .value(value):
-      return value
+      value
         .resolveParent(templates: context.templates)
         .resolveValue(context: context, validator: validator)
     case let .link(link):
-      return context.getArray(link, validator: validator, type: T.Element.self)
+      context.getArray(link, validator: validator, type: T.Element.self)
     }
   }
 

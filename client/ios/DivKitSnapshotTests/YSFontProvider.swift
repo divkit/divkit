@@ -1,6 +1,5 @@
-import UIKit
-
 import DivKit
+import UIKit
 
 final class YSFontProvider: DivFontProvider {
   func font(family _: String, weight: DivFontWeight, size: CGFloat) -> UIFont {

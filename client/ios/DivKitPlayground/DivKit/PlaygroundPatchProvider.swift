@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 import VGSL
 
 struct PlaygroundPatchProvider: DivPatchProvider {

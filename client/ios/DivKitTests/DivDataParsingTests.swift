@@ -1,6 +1,5 @@
-import XCTest
-
 import DivKit
+import XCTest
 
 final class DivDataParsingTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {

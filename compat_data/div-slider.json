@@ -13,5 +13,13 @@
                 "version_added": "30.7.0"
             }
         }
+    }, {
+        "id": "slider_is_enabled",
+        "name": "Slider <code>is_enabled</code> property",
+        "compat": {
+            "android": {
+                "version_added": "30.31.0"
+            }
+        }
     }]
 }

@@ -1,4 +1,4 @@
-struct JsonFile {
+struct JsonFile: CustomStringConvertible {
   let absolutePath: String
   let relativePath: String
 
@@ -10,5 +10,9 @@ struct JsonFile {
   var name: String {
     let index = relativePath.lastIndex(of: "/")!
     return String(relativePath[relativePath.index(after: index)...])
+  }
+
+  var description: String {
+    relativePath
   }
 }

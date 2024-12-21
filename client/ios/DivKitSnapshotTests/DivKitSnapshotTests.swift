@@ -5,18 +5,11 @@ import DivKitMarkdownExtension
 import Testing
 import UIKit
 import VGSL
-import XCTest
-
-final class AllTests: XCTestCase {
-  func testAll() async {
-    await XCTestScaffold.runAllTests(hostedBy: self)
-  }
-}
 
 @MainActor
 @Suite
 struct DivKitSnapshotTests {
-  @Test(arguments: snapshotTestsFiles)
+  @Test("Snapshots", .serialized, arguments: snapshotTestsFiles)
   func snapshotTest(jsonFile: JsonFile) async throws {
     if exclusions.contains(where: { $0 == jsonFile.relativePath }) {
       try await doTestForDifferentStates(jsonFile)
@@ -25,12 +18,12 @@ struct DivKitSnapshotTests {
     try await doTest(jsonFile)
   }
 
-  @Test(arguments: interactiveSnapshotTestsFiles)
+  @Test("Interactive Snapshots", .serialized, arguments: interactiveSnapshotTestsFiles)
   func interactiveSnapshotTest(jsonFile: JsonFile) async throws {
     try await doTest(jsonFile)
   }
 
-  func doTest(_ file: JsonFile) async throws {
+  private func doTest(_ file: JsonFile) async throws {
     let test = SnapshotTestRunner(file: file)
 
     try await test.run(
@@ -40,7 +33,7 @@ struct DivKitSnapshotTests {
     )
   }
 
-  func doTestForDifferentStates(
+  private func doTestForDifferentStates(
     _ file: JsonFile
   ) async throws {
     for state in testPagerViewStates {

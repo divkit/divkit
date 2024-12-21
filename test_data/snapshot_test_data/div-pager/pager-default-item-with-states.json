@@ -170,6 +170,11 @@
             "value": 10
           },
           "restrict_parent_scroll": 1,
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
           "items": [
             {
               "type": "pager_item_content",

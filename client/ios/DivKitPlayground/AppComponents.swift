@@ -1,8 +1,7 @@
-import Foundation
-
 import DivKit
 import DivKitExtensions
 import DivKitMarkdownExtension
+import Foundation
 import LayoutKit
 import VGSL
 

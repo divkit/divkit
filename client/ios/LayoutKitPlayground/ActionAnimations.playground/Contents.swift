@@ -17,10 +17,10 @@ private func textStyle(
 
 private func createAnimatedTextBlock(
   _ text: String,
-  color: UIColor,
+  color _: UIColor,
   cornerRadius: CGFloat,
-  backgroundColor: UIColor,
-  duration: TimeInterval
+  backgroundColor _: UIColor,
+  duration _: TimeInterval
 ) throws -> Block {
   let keyframes = [0, 1, 2, 3, 4].map {
     CGAffineTransform(rotationAngle: $0 * .pi / 2)

@@ -20,6 +20,10 @@ internal fun assertActionApplied(context: BindingContext, target: View, actionUr
         actions = actionCaptor.capture(),
         longTapActions = anyOrNull(),
         doubleTapActions = anyOrNull(),
+        hoverStartActions = anyOrNull(),
+        hoverEndActions = anyOrNull(),
+        pressStartActions = anyOrNull(),
+        pressEndActions = anyOrNull(),
         actionAnimation = any(),
         accessibility = anyOrNull(),
     )

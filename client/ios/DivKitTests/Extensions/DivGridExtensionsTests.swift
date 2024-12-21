@@ -1,9 +1,7 @@
 @testable import DivKit
 @testable import LayoutKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class DivGridExtensionsTests: XCTestCase {
   func test_WhenGridHasHorizontalIncompatibleTraits_ThrowsError() throws {

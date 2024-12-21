@@ -1,8 +1,7 @@
 @testable import DivKit
+import enum DivKit.Expression
 import VGSL
 import XCTest
-
-import enum DivKit.Expression
 
 final class ExpressionTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {

@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 public final class SwitchableContainerBlock: Block {

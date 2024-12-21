@@ -1,7 +1,6 @@
-import Foundation
-
 import DivKit
 import DivKitExtensions
+import Foundation
 import LayoutKit
 import RiveRuntime
 import VGSL

@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 public final class AnimatingGradientView: UIView {

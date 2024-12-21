@@ -2,10 +2,11 @@ import Combine
 import DivKit
 import Foundation
 
-typealias JsonPublisher = AnyPublisher<[String: Any], Never>
+typealias JsonDictionary = [String: any Sendable]
+typealias JsonPublisher = AnyPublisher<JsonDictionary, Never>
 
 struct PlaygroundJsonProvider {
-  private let jsonSubject = PassthroughSubject<[String: Any], Never>()
+  private let jsonSubject = PassthroughSubject<JsonDictionary, Never>()
 
   var jsonPublisher: JsonPublisher {
     jsonSubject.eraseToAnyPublisher()
@@ -30,7 +31,7 @@ struct PlaygroundJsonProvider {
 }
 
 extension Data {
-  func asJsonDictionary() throws -> [String: Any] {
-    try JSONSerialization.jsonObject(with: self, options: []) as! [String: Any]
+  func asJsonDictionary() throws -> JsonDictionary {
+    try JSONSerialization.jsonObject(with: self, options: []) as! JsonDictionary
   }
 }

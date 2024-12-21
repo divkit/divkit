@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class DivAccessibilityExtentionsTests: XCTestCase {
   func test_resolve_Empty() {

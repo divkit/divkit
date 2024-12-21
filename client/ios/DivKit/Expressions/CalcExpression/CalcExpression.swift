@@ -32,7 +32,6 @@
 //
 
 import Foundation
-
 import VGSL
 
 struct CalcExpression {

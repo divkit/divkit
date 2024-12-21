@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import VGSL
 
 public struct BlockAlignment2D: Equatable {

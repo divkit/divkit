@@ -1,9 +1,8 @@
-import XCTest
-
 @testable import DivKit
 import LayoutKit
 import Serialization
 import VGSL
+import XCTest
 
 final class DivViewTests: XCTestCase {
   @MainActor

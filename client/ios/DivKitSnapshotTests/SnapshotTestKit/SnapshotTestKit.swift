@@ -3,7 +3,6 @@ import Foundation
 import Testing
 import UIKit
 import VGSL
-import XCTest
 
 enum TestMode {
   case update
@@ -13,62 +12,76 @@ enum TestMode {
 enum SnapshotTestKit {
   static func compareSnapshot(
     _ snapshot: UIImage,
-    referenceURL: URL,
-    mode: TestMode,
-    file: JsonFile
+    referenceFileUrl: URL,
+    resultFolderUrl: URL,
+    mode: TestMode
   ) throws {
     let deviceModel = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"]
       ?? UIDevice.current.systemModelName
 
     #expect(
       allowedDevices.contains(deviceModel),
-
       Comment(
-        rawValue: "Prohibited device: '\(deviceModel)'. " +
-          "Please, run snapshot tests on one of allowed device: '\(allowedDevices)'."
+        "Prohibited device: '\(deviceModel)'. Please, run snapshot tests on one of allowed device: '\(allowedDevices)'."
       )
     )
 
+    let fileName = referenceFileUrl.lastPathComponent
+    removeFile(path: resultFolderUrl, fileName: fileName)
+
     switch mode {
     case .update:
-      if let reference = try? UIImage.makeWith(url: referenceURL),
+      if let reference = try? UIImage.makeWith(url: referenceFileUrl),
          snapshot.compare(with: reference) {
         return
       }
 
-      let snapshotsDir = referenceURL.deletingLastPathComponent()
-      let fileManager = FileManager.default
-      if !fileManager.fileExists(atPath: snapshotsDir.path) {
-        try! fileManager.createDirectory(at: snapshotsDir, withIntermediateDirectories: true)
-      }
+      try! saveFile(
+        path: referenceFileUrl.deletingLastPathComponent(),
+        fileName: fileName,
+        image: snapshot
+      )
 
-      let pngData = try #require(snapshot.pngData())
-      try pngData.write(to: referenceURL)
-      Issue
-        .record(
-          Comment(
-            "Snapshot saved. Don't forget to change mode back to `verify`!. Testing file path: \(file.absolutePath)"
-          )
-        )
+      Issue.record(
+        Comment("Snapshot saved. Don't forget to change mode back to `verify`.")
+      )
     case .verify:
-      let reference = try! UIImage.makeWith(url: referenceURL)
+      let reference = try! UIImage.makeWith(url: referenceFileUrl)
       if snapshot.compare(with: reference) {
         return
       }
+
       let diff = snapshot.makeDiff(with: reference)
-      XCTContext.runActivity(named: "Diff of \(referenceURL.lastPathComponent)") {
-        $0.add(.init(image: snapshot, name: "result"))
-        $0.add(.init(image: reference, name: "reference"))
-        $0.add(.init(image: diff, name: "diff"))
-      }
-      Issue
-        .record(
-          Comment(
-            "View snapshot is not equal to reference. Diff is attached in test result. Testing file path: \(file.absolutePath)"
-          )
-        )
+      try! saveFile(path: resultFolderUrl, fileName: "result.png", image: snapshot)
+      try! saveFile(path: resultFolderUrl, fileName: "reference.png", image: reference)
+      try! saveFile(path: resultFolderUrl, fileName: "diff.png", image: diff)
+
+      Issue.record(
+        Comment("Actual snapshot is not equal to the reference. Diff is saved in Tests/results folder.")
+      )
     }
   }
+}
+
+private func removeFile(path: URL, fileName: String) {
+  let fileManager = FileManager.default
+  if !fileManager.fileExists(atPath: path.path) {
+    try? fileManager.removeItem(at: path.appendingPathComponent(fileName))
+  }
+}
+
+private func saveFile(
+  path: URL,
+  fileName: String,
+  image: UIImage
+) throws {
+  let fileManager = FileManager.default
+  if !fileManager.fileExists(atPath: path.path) {
+    try! fileManager.createDirectory(at: path, withIntermediateDirectories: true)
+  }
+
+  let pngData = try #require(image.pngData())
+  try pngData.write(to: path.appendingPathComponent(fileName))
 }
 
 extension UIImage {
@@ -83,10 +96,3 @@ private let allowedDevices: Set<String> = [
   "iPhone12,8",
   "iPhone14,7",
 ]
-
-extension XCTAttachment {
-  fileprivate convenience init(image: UIImage, name: String) {
-    self.init(image: image)
-    self.name = name
-  }
-}

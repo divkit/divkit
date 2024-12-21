@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 final class TabListSelectionDataSourceImpl: TabListSelectionDataSource {

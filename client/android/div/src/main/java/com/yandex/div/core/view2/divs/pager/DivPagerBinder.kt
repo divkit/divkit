@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.util.SparseArray
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -106,6 +105,7 @@ internal class DivPagerBinder @Inject constructor(
         view.addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
         view.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
         view.addSubscription(div.orientation.observeAndGet(resolver, reusableObserver))
+        view.addSubscription(observeWidthChange(view.viewPager, reusableObserver))
 
         when (val mode = div.layoutMode) {
             is DivPagerLayoutMode.NeighbourPageSize -> {
@@ -114,7 +114,6 @@ internal class DivPagerBinder @Inject constructor(
             }
             is DivPagerLayoutMode.PageSize -> {
                 view.addSubscription(mode.value.pageWidth.value.observe(resolver, reusableObserver))
-                view.addSubscription(observeWidthChange(view.viewPager, reusableObserver))
             }
         }
 
@@ -148,8 +147,6 @@ internal class DivPagerBinder @Inject constructor(
                 null
             }
         })
-
-        view.addInitialRelayout()
 
         view.bindItemBuilder(context, div)
         if (a11yEnabled) {
@@ -297,19 +294,6 @@ internal class DivPagerBinder @Inject constructor(
             pageTransformer?.onItemsCountChanged()
             pagerOnItemsCountChange?.onItemsUpdated()
             getRecyclerView()?.scrollToPosition(currentItem)
-        }
-    }
-
-    private fun DivPagerView.addInitialRelayout() {
-        if (isWrapContentAlongCrossAxis()) {
-            viewTreeObserver.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        requestLayout()
-                    }
-                }
-            )
         }
     }
 }

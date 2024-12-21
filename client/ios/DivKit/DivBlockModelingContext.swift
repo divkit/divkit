@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import LayoutKit
 import VGSL
 
@@ -30,6 +29,7 @@ public struct DivBlockModelingContext {
   let playerFactory: PlayerFactory?
   private(set) weak var parentScrollView: ScrollView?
   public private(set) var errorsStorage: DivErrorsStorage
+  let debugErrorCollector: DebugErrorCollector?
   private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
   let functionsStorage: DivFunctionsStorage?
@@ -102,6 +102,7 @@ public struct DivBlockModelingContext {
       scheduler: scheduler,
       parentScrollView: parentScrollView,
       errorsStorage: errorsStorage,
+      debugErrorCollector: nil,
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
@@ -136,6 +137,7 @@ public struct DivBlockModelingContext {
     scheduler: Scheduling?,
     parentScrollView: ScrollView?,
     errorsStorage: DivErrorsStorage?,
+    debugErrorCollector: DebugErrorCollector?,
     layoutDirection: UserInterfaceLayoutDirection,
     variableTracker: DivVariableTracker?,
     persistentValuesStorage: DivPersistentValuesStorage?,
@@ -165,6 +167,7 @@ public struct DivBlockModelingContext {
     self.scheduler = scheduler ?? TimerScheduler()
     self.parentScrollView = parentScrollView
     let errorsStorage = errorsStorage ?? DivErrorsStorage(errors: [])
+    self.debugErrorCollector = debugErrorCollector
     self.errorsStorage = errorsStorage
     self.layoutDirection = layoutDirection
     self.variableTracker = variableTracker

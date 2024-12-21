@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 import VGSL
 
 public struct ColorAndLocation: Equatable {

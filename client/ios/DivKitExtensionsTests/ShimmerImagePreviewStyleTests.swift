@@ -1,9 +1,7 @@
-import XCTest
-
-@testable import DivKitExtensions
-
 import DivKit
+@testable import DivKitExtensions
 import VGSL
+import XCTest
 
 final class ShimmerImagePreviewStyleTests: XCTestCase {
   let tester = ShimmerStyleTester { dict, context in

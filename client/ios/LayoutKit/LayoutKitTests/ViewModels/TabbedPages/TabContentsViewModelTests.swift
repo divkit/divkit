@@ -1,7 +1,6 @@
 import Foundation
-import XCTest
-
 @testable import LayoutKit
+import XCTest
 
 final class TabContentsViewModelTests: XCTestCase {
   private func makeMe(pages: [TabPageViewModel]) throws -> TabContentsViewModel {

@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Pager with match_parent width",
   "platforms": [
     "android",
     "ios",
@@ -10,14 +10,19 @@
       "type": "text",
       "height": {
         "type": "fixed",
-        "value": 50
+        "value": 80
       },
-      "background": [
-        {
-          "color": "#AAAAAA",
-          "type": "solid"
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF"
         }
-      ]
+      }
     }
   },
   "card": {
@@ -29,42 +34,35 @@
           "type": "container",
           "width": {
             "type": "fixed",
-            "value": 120
+            "value": 200
           },
-          "background": [
-            {
-              "color": "#FFFFFF",
-              "type": "solid"
+          "border": {
+            "stroke": {
+              "color": "#00FF00"
             }
-          ],
+          },
           "items": [
             {
               "type": "pager",
               "layout_mode": {
-                "type": "fixed",
-                "neighbour_page_width": {
-                  "type": "fixed",
-                  "value": 0
+                "type": "percentage",
+                "page_width": {
+                  "value": 90
                 }
               },
               "border": {
                 "stroke": {
                   "color": "#BBFF0000",
-                  "width": 1
-                },
-                "corner_radius": 10
+                  "width": 2
+                }
               },
               "width": {
                 "type": "match_parent"
               },
               "items": [
                 {
-                  "type": "image",
-                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
-                  "height": {
-                    "type": "fixed",
-                    "value": 50
-                  }
+                  "type": "text_page_fixed_height",
+                  "text": "Container width = 200\nPager width = match_parent"
                 },
                 {
                   "type": "text_page_fixed_height",

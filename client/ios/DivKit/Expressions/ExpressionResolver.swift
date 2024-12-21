@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import VGSL
 
@@ -36,8 +35,8 @@ public final class ExpressionResolver {
   public init(
     variableValueProvider: @escaping (String) -> Any?,
     customFunctionsStorageProvider: @escaping (String) -> DivFunctionsStorage? = { _ in nil },
-    persistentValuesStorage: DivPersistentValuesStorage,
-    errorTracker: @escaping ExpressionErrorTracker
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
+    errorTracker: @escaping ExpressionErrorTracker = { _ in }
   ) {
     self.functionsProvider = FunctionsProvider(
       persistentValuesStorage: persistentValuesStorage

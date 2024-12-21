@@ -72,7 +72,8 @@ extension Block {
       actionAnimation: actionsHolder.actionAnimation
         .resolveActionAnimation(context.expressionResolver),
       doubleTapActions: doubletapActions,
-      longTapActions: longtapActions
+      longTapActions: longtapActions,
+      path: context.parentPath
     )
   }
 }

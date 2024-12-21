@@ -152,13 +152,13 @@ final class SnapshotTestRunner {
 
     try SnapshotTestKit.compareSnapshot(
       image,
-      referenceURL: referenceFileURL(screen: screen, caseName: caseName, stepName: stepName),
-      mode: mode,
-      file: file
+      referenceFileUrl: referenceFileUrl(screen: screen, caseName: caseName, stepName: stepName),
+      resultFolderUrl: resultsFolderUrl(screen: screen, caseName: caseName, stepName: stepName),
+      mode: mode
     )
   }
 
-  private func referenceFileURL(
+  private func referenceFileUrl(
     screen: Screen,
     caseName: String,
     stepName: String?
@@ -167,11 +167,28 @@ final class SnapshotTestRunner {
     if let stepName {
       stepDescription = "_" + stepName
     }
-    return URL(fileURLWithPath: ReferenceSet.path, isDirectory: true)
+    return URL(fileURLWithPath: ReferenceSet.referenceSnapshotsPath, isDirectory: true)
       .appendingPathComponent(file.subdirectory)
       .appendingPathComponent(
         "\(caseName)_\(Int(screen.size.width))@\(Int(screen.scale))x\(stepDescription).png",
         isDirectory: false
+      )
+  }
+
+  private func resultsFolderUrl(
+    screen: Screen,
+    caseName: String,
+    stepName: String?
+  ) -> URL {
+    var stepDescription = ""
+    if let stepName {
+      stepDescription = "_" + stepName
+    }
+    return URL(fileURLWithPath: ReferenceSet.resultSnapshotsPath, isDirectory: true)
+      .appendingPathComponent(file.subdirectory)
+      .appendingPathComponent(
+        "\(caseName)_\(Int(screen.size.width))@\(Int(screen.scale))x\(stepDescription)",
+        isDirectory: true
       )
   }
 }

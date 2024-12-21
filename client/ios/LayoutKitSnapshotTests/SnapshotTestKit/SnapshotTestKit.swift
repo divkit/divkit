@@ -1,9 +1,8 @@
 import CoreGraphics
 import Foundation
 import UIKit
-import XCTest
-
 import VGSL
+import XCTest
 
 public enum TestMode {
   case update
