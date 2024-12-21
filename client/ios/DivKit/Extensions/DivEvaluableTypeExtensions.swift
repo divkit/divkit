@@ -12,7 +12,7 @@ extension DivEvaluableType {
     case .color: Color.self
     case .url: URL.self
     case .dict: DivDictionary.self
-    case .array: [AnyHashable].self
+    case .array: DivArray.self
     }
   }
 }

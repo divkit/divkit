@@ -306,7 +306,7 @@ final class CustomFunctionTests: XCTestCase {
 }
 
 private let variables: DivVariables = [
-  "array_var": .array(["value", [true, 123, 123.45] as [AnyHashable]]),
+  "array_var": .array(["value", [true, 123, 123.45] as DivArray]),
   "boolean_var": .bool(true),
   "color_var": .color(color("#AABBCC")),
   "dict_var": .dict(["boolean": true, "integer": 1, "number": 1.0, "string": "value"]),

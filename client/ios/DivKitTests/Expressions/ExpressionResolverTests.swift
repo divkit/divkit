@@ -8,7 +8,7 @@ final class ExpressionResolverTests: XCTestCase {
   private var error: String?
 
   private var variables: DivVariables = [
-    "array_var": .array(["value", [true, 123, 123.45] as [AnyHashable]]),
+    "array_var": .array(["value", [true, 123, 123.45] as DivArray]),
     "boolean_var": .bool(true),
     "color_var": .color(color("#AABBCC")),
     "dict_var": .dict(["boolean": true, "integer": 1, "number": 1.0, "string": "value"]),
@@ -271,8 +271,8 @@ final class ExpressionResolverTests: XCTestCase {
 
   func test_ResolveArray_WithVariable() throws {
     XCTAssertEqual(
-      expressionResolver.resolveArray(expression("@{array_var}")) as! [AnyHashable],
-      ["value", [true, 123, 123.45] as [AnyHashable]]
+      expressionResolver.resolveArray(expression("@{array_var}")) as? DivArray,
+      ["value", [true, 123, 123.45] as DivArray]
     )
   }
 

@@ -89,7 +89,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "two", "new value"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "two", "new value"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayInsertValueAction_InsertsValue() {
@@ -103,7 +103,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "new value", "two"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "new value", "two"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayInsertValueAction_WithIndexEqualLength_InsertsValue() {
@@ -131,7 +131,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "two"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "two"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayInsertValueAction_DoesNothingForNotArrayVar() {
@@ -157,7 +157,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayRemoveValueAction_DoesNothingForInvalidIndex() {
@@ -170,7 +170,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "two"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "two"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayRemoveValueAction_DoesNothingForNotArrayVar() {

@@ -51,7 +51,7 @@ extension [String: Function] {
   }
 }
 
-private let _getArray = FunctionVarBinary<DivDictionary, String, [AnyHashable]> {
+private let _getArray = FunctionVarBinary<DivDictionary, String, DivArray> {
   try $0.getArray(path: $1)
 }
 
@@ -87,7 +87,7 @@ private let _isEmpty = FunctionUnary<DivDictionary, Bool> {
   $0.isEmpty
 }
 
-private let _getOptArray = FunctionVarBinary<DivDictionary, String, [AnyHashable]> {
+private let _getOptArray = FunctionVarBinary<DivDictionary, String, DivArray> {
   (try? $0.getArray(path: $1)) ?? []
 }
 
@@ -140,9 +140,9 @@ private let _containsKey = FunctionBinary<DivDictionary, String, Bool> { dict, k
 }
 
 extension DivDictionary {
-  fileprivate func getArray(path: [String]) throws -> [AnyHashable] {
+  fileprivate func getArray(path: [String]) throws -> DivArray {
     let value = try getValue(path: path)
-    guard let dictValue = value as? [AnyHashable] else {
+    guard let dictValue = value as? DivArray else {
       throw ExpressionError.incorrectType("Array", value)
     }
     return dictValue

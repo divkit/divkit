@@ -65,11 +65,11 @@ final class ArrayActionsHandler {
 }
 
 extension DivActionHandlingContext {
-  fileprivate func getVariableValue(_ name: DivVariableName) -> [AnyHashable]? {
+  fileprivate func getVariableValue(_ name: DivVariableName) -> DivArray? {
     variablesStorage.getVariableValue(path: path, name: name)
   }
 
-  fileprivate func setVariableValue(_ name: DivVariableName, _ value: [AnyHashable]) {
+  fileprivate func setVariableValue(_ name: DivVariableName, _ value: DivArray) {
     variablesStorage.update(path: path, name: name, value: .array(value))
   }
 }

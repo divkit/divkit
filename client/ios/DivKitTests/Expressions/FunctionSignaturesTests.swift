@@ -134,7 +134,7 @@ extension ArgumentSignature: Swift.Equatable {
 private func parseType(_ type: String) -> Any.Type {
   switch type {
   case "array":
-    [AnyHashable].self
+    DivArray.self
   case "boolean":
     Bool.self
   case "color":
@@ -142,7 +142,7 @@ private func parseType(_ type: String) -> Any.Type {
   case "datetime":
     Date.self
   case "dict":
-    [String: AnyHashable].self
+    DivDictionary.self
   case "integer":
     Int.self
   case "number":
