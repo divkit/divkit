@@ -464,7 +464,8 @@
     {
       "title": "Disabled slider",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "Slider"

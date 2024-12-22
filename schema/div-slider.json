@@ -155,7 +155,8 @@
           "default_value": "true",
           "$description": "translations.json#/div_slider_is_enabled",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         }
       }
