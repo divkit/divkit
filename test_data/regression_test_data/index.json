@@ -1606,9 +1606,13 @@
     },
     {
       "title": "Variables in DivImage",
-      "automated": [
-        "web"
+      "platforms": [
+        "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-image/variables_div_image.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-image/variables_div_image.json"
+      },
       "tags": [
         "DivImage"
       ],
@@ -1967,13 +1971,6 @@
     {
       "title": "Tabs item actions",
       "file": "tabs-item-actions.json"
-    },
-    {
-      "title": "Grid layout",
-      "automated": [
-        "web"
-      ],
-      "file": "grid_layout.json"
     },
     {
       "title": "Image Shimmer Preview",
@@ -2679,6 +2676,13 @@
     },
     {
       "title": "Patch grid",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-grid/patch_grid.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-grid/patch_grid.json"
+      },
       "tags": [
         "patch"
       ],
@@ -2692,6 +2696,9 @@
     },
     {
       "title": "Patch grid internal items",
+      "automated": [
+        "android"
+      ],
       "tags": [
         "patch"
       ],
@@ -2705,6 +2712,13 @@
     },
     {
       "title": "Patch pager",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json"
+      },
       "tags": [
         "patch"
       ],
