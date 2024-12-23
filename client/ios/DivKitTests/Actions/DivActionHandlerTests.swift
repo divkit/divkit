@@ -337,20 +337,21 @@ final class DivActionHandlerTests: XCTestCase {
   }
 
   func test_SetVariableAction_SetsDictVariable() {
-    let nestedDict: [String: Any] = ["key_1": "value_1", "nested": ["key_2": "value_2"]]
     setVariableValue("dict_var", .dict([:]))
-
-    let dictVal = DictValue(value: nestedDict)
 
     handle(.divActionSetVariable(
       DivActionSetVariable(
-        value: .dictValue(dictVal),
+        value: .dictValue(DictValue(
+          value: ["key_1": "value_1", "nested": ["key_2": "value_2"]]
+        )),
         variableName: .value("dict_var")
       )
     ))
 
-    let result = getVariableValue("dict_var") as [String: Any]?
-    XCTAssertTrue(NSDictionary(dictionary: nestedDict).isEqual(to: result!))
+    XCTAssertEqual(
+      ["key_1": "value_1", "nested": ["key_2": "value_2"]] as DivDictionary,
+      getVariableValue("dict_var")
+    )
   }
 
   func test_SetVariableAction_SetsLocalVariable() {
