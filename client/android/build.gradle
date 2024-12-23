@@ -32,6 +32,7 @@ buildscript {
         classpath libs.kotlin.gradle.plugin
         classpath libs.kotlin.serialization.plugin
         classpath libs.kotlin.binaryCompatibilityValidator
+        classpath libs.unmock.plugin
     }
 }
 

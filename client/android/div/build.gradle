@@ -9,6 +9,7 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
+apply plugin: 'de.mobilej.unmock'
 apply plugin: 'kotlinx-serialization'
 
 def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
@@ -26,6 +27,10 @@ android {
 androidComponents.onVariants(androidComponents.selector().all()) {
     def versionName = divkitVersion.getVersionNameForBuildType(buildType)
     buildConfigFields.put("VERSION_NAME", new BuildConfigField("String", JsonOutput.toJson(versionName), null))
+}
+
+unMock {
+    keep "android.net.Uri"
 }
 
 dependencies {
