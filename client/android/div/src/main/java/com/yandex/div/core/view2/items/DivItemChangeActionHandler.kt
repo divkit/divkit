@@ -14,6 +14,7 @@ private const val AUTHORITY_SCROLL_TO_POSITION = "scroll_to_position"
 private const val AUTHORITY_SCROLL_TO_END = "scroll_to_end"
 private const val AUTHORITY_SCROLL_TO_START = "scroll_to_start"
 
+private const val PARAM_ANIMATED = "animated"
 private const val PARAM_ITEM = "item"
 private const val PARAM_ID = "id"
 private const val PARAM_STEP = "step"
@@ -35,6 +36,7 @@ internal object DivItemChangeActionHandler {
             AUTHORITY_SCROLL_TO_END,
             AUTHORITY_SCROLL_TO_POSITION,
             AUTHORITY_PREVIOUS_ITEM -> true
+
             else -> false
         }
     }
@@ -47,37 +49,28 @@ internal object DivItemChangeActionHandler {
             return false
         }
         val authority = uri.authority
-        val viewController = DivViewWithItemsController.create(id, view, resolver, direction(authority)) ?: return false
+        val viewController =
+            DivViewWithItemsController.create(id, view, resolver, direction(authority))
+                ?: return false
+        val animated = uri.getQueryParameter(PARAM_ANIMATED)?.toBoolean() ?: true
         return when (authority) {
-            AUTHORITY_SET_CURRENT_ITEM ->
-                handleSetCurrentItem(uri, viewController)
-
-            AUTHORITY_NEXT_ITEM ->
-                handleNextItem(uri, viewController)
-
-            AUTHORITY_PREVIOUS_ITEM ->
-                handlePreviousItem(uri, viewController)
-
-            AUTHORITY_SCROLL_BACKWARD ->
-                handleScrollBackward(uri, viewController)
-
-            AUTHORITY_SCROLL_FORWARD ->
-                handleScrollForward(uri, viewController)
-
-            AUTHORITY_SCROLL_TO_POSITION ->
-                handleScrollTo(uri, viewController)
-
-            AUTHORITY_SCROLL_TO_END ->
-                handleScrollToTheEnd(viewController)
-
-            AUTHORITY_SCROLL_TO_START ->
-                handleScrollToTheStart(viewController)
-
+            AUTHORITY_SET_CURRENT_ITEM -> handleSetCurrentItem(uri, animated, viewController)
+            AUTHORITY_NEXT_ITEM -> handleNextItem(uri, animated, viewController)
+            AUTHORITY_PREVIOUS_ITEM -> handlePreviousItem(uri, animated, viewController)
+            AUTHORITY_SCROLL_BACKWARD -> handleScrollBackward(uri, animated, viewController)
+            AUTHORITY_SCROLL_FORWARD -> handleScrollForward(uri, animated, viewController)
+            AUTHORITY_SCROLL_TO_POSITION -> handleScrollTo(uri, animated, viewController)
+            AUTHORITY_SCROLL_TO_END -> handleScrollToTheEnd(animated, viewController)
+            AUTHORITY_SCROLL_TO_START -> handleScrollToTheStart(animated, viewController)
             else -> false
         }
     }
 
-    private fun handleSetCurrentItem(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+    private fun handleSetCurrentItem(
+        uri: Uri,
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
         val rawItem = uri.getQueryParameter(PARAM_ITEM)
         if (rawItem == null) {
             KAssert.fail { "$PARAM_ITEM is required to set current item" }
@@ -89,43 +82,73 @@ internal object DivItemChangeActionHandler {
             KAssert.fail { "$rawItem is not a number" }
             return false
         }
-        viewController.setCurrentItem(item)
+        viewController.setCurrentItem(item, animated = animated)
         return true
     }
 
-    private fun handleNextItem(uri: Uri, viewController: DivViewWithItemsController): Boolean {
-        return withOverflowAndStep(uri, viewController::changeCurrentItemByStep)
-    }
-
-    private fun handlePreviousItem(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+    private fun handleNextItem(
+        uri: Uri,
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
         return withOverflowAndStep(uri) { overflow, step ->
-            viewController.changeCurrentItemByStep(overflow, -step)
+            viewController.changeCurrentItemByStep(overflow, step, animated = animated)
         }
     }
 
-    private fun handleScrollForward(uri: Uri, viewController: DivViewWithItemsController): Boolean {
-        return withOverflowAndStep(uri, viewController::scrollByOffset)
-    }
-
-    private fun handleScrollBackward(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+    private fun handlePreviousItem(
+        uri: Uri,
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
         return withOverflowAndStep(uri) { overflow, step ->
-            viewController.scrollByOffset(overflow, -step)
+            viewController.changeCurrentItemByStep(overflow, -step, animated = animated)
         }
     }
 
-    private fun handleScrollTo(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+    private fun handleScrollForward(
+        uri: Uri,
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
+        return withOverflowAndStep(uri) { overflow, offset ->
+            viewController.scrollByOffset(overflow, offset, animated = animated)
+        }
+    }
+
+    private fun handleScrollBackward(
+        uri: Uri,
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
+        return withOverflowAndStep(uri) { overflow, step ->
+            viewController.scrollByOffset(overflow, -step, animated = animated)
+        }
+    }
+
+    private fun handleScrollTo(
+        uri: Uri,
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
         val step = uri.getStepParam()
-        viewController.scrollTo(step)
+        viewController.scrollTo(step, animated = animated)
         return true
     }
 
-    private fun handleScrollToTheEnd(viewController: DivViewWithItemsController): Boolean {
-        viewController.scrollToEnd()
+    private fun handleScrollToTheEnd(
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
+        viewController.scrollToEnd(animated = animated)
         return true
     }
 
-    private fun handleScrollToTheStart(viewController: DivViewWithItemsController): Boolean {
-        viewController.scrollToStart()
+    private fun handleScrollToTheStart(
+        animated: Boolean,
+        viewController: DivViewWithItemsController
+    ): Boolean {
+        viewController.scrollToStart(animated = animated)
         return true
     }
 
