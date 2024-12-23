@@ -273,8 +273,7 @@ public final class DivKitComponents {
       templates: rawDivData.templates
     ).asCardResult(cardId: cardId)
     if let divData = result.value {
-      setVariablesAndTriggers(divData: divData, cardId: cardId)
-      setTimers(divData: divData, cardId: cardId)
+      setCardData(divData: divData, cardId: cardId)
     }
     return result
   }
@@ -357,6 +356,11 @@ public final class DivKitComponents {
       idToPath: idToPath,
       animatorController: animatorController
     )
+  }
+
+  public func setCardData(divData: DivData, cardId: DivCardID) {
+    setTimers(divData: divData, cardId: cardId)
+    setVariablesAndTriggers(divData: divData, cardId: cardId)
   }
 
   public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {
