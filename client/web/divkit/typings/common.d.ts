@@ -239,9 +239,15 @@ export interface ActionHideTooltip {
     id: string;
 }
 
+export interface ActionTimer {
+    type: 'timer';
+    id: string;
+    action: 'start' | 'stop' | 'pause' | 'resume' | 'cancel' | 'reset';
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
-    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip;
+    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer;
 
 export interface ActionBase {
     log_id: string;

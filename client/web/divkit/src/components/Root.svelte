@@ -1123,6 +1123,19 @@
                     callHideTooltip(actionTyped.id, componentContext);
                     break;
                 }
+                case 'timer': {
+                    if (timersController) {
+                        timersController.execTimerAction(actionTyped.id, actionTyped.action);
+                    } else {
+                        log(wrapError(new Error('Incorrect timer action'), {
+                            additional: {
+                                id: actionTyped.id,
+                                action: actionTyped.action
+                            }
+                        }));
+                    }
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {

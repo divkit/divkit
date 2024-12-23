@@ -2120,7 +2120,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
