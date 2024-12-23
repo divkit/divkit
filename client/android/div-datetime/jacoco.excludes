@@ -1,0 +1,7 @@
+#####################
+# Generated classes #
+#####################
+**/R.class
+**/R$*.class
+**/BuildConfig.*
+**/Manifest*.*
