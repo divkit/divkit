@@ -15,12 +15,14 @@ extension DivGalleryProtocol {
   func makeGalleryModel(
     context: DivBlockModelingContext,
     direction: ScrollDirection,
+    alignment: Alignment,
     spacing: CGFloat,
     crossSpacing: CGFloat,
-    defaultAlignment: Alignment,
+    defaultCrossAlignment: Alignment,
     scrollMode: GalleryViewModel.ScrollMode,
     columnCount: Int? = nil,
     infiniteScroll: Bool = false,
+    bufferSize: Int = 1,
     scrollbar: GalleryViewModel.Scrollbar = .none,
     transformation: ElementsTransformation? = nil
   ) throws -> GalleryViewModel {
@@ -33,7 +35,7 @@ extension DivGalleryProtocol {
             direction.isHorizontal
               ? div.value.resolveAlignmentVertical(expressionResolver)?.alignment
               : div.value.resolveAlignmentHorizontal(expressionResolver)?.alignment
-          ) ?? defaultAlignment,
+          ) ?? defaultCrossAlignment,
           content: block
         )
       }
@@ -52,10 +54,10 @@ extension DivGalleryProtocol {
       )
     }
 
-    if infiniteScroll,
-       let last = children.last,
-       let first = children.first {
-      children = [last] + children + [first]
+    if infiniteScroll, children.count > 2 {
+      let leadingBuffer = children[..<bufferSize]
+      let trailingBuffer = children[(children.count - bufferSize)...]
+      children = trailingBuffer + children + leadingBuffer
     }
 
     let metrics = try makeMetrics(
@@ -72,7 +74,9 @@ extension DivGalleryProtocol {
       metrics: metrics,
       scrollMode: scrollMode,
       path: context.parentPath,
+      alignment: alignment,
       direction: direction,
+      bufferSize: bufferSize,
       columnCount: columnCount ?? 1,
       infiniteScroll: infiniteScroll,
       scrollbar: scrollbar,
