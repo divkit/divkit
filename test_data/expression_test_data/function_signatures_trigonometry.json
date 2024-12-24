@@ -87,6 +87,20 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "function_name": "tan",
+      "doc": "Calculates the tan of an argument represented in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value representing radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

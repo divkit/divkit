@@ -222,6 +222,33 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "expression": "@{tan(toRadians(45.0))}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{tan(toRadians(tan_var))}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "variables": [
+        {
+          "name": "tan_var",
+          "type": "number",
+          "value": 180.0
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }
