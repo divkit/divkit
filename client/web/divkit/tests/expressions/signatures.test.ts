@@ -47,7 +47,7 @@ describe('signatures', () => {
             describe(name, () => {
                 for (const item of contents.signatures) {
                     if (item.platforms.includes('web')) {
-                        it(item.name || (`${item.function_name}(${item.arguments.map((it: {
+                        it(item.name || (`${item.function_name}(${(item.arguments || []).map((it: {
                             type: string;
                         }) => it.type).join(', ')})`), () => {
                             runCase(item);

@@ -6,7 +6,8 @@
       "result_type": "number",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -21,7 +22,8 @@
       "result_type": "number",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -36,7 +38,8 @@
       "result_type": "number",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -51,7 +54,8 @@
       "result_type": "number",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -65,7 +69,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -79,7 +84,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
