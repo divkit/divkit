@@ -252,9 +252,16 @@ export interface ActionDownload {
     on_success_actions?: Action[];
 }
 
+export interface ActionVideo {
+    type: 'video';
+    id: string;
+    action: 'start' | 'pause';
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
-    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload;
+    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
+    ActionVideo;
 
 export interface ActionBase {
     log_id: string;

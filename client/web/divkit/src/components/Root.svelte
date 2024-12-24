@@ -605,8 +605,8 @@
     }
 
     function callVideoAction(
-        id: string | null,
-        action: string | null,
+        id: string | null | undefined,
+        action: string | null | undefined,
         componentContext?: ComponentContext
     ): void {
         const log = (componentContext?.logError || logError);
@@ -1139,6 +1139,10 @@
                 }
                 case 'download': {
                     callDownloadAction(actionTyped.url, actionTyped, componentContext);
+                    break;
+                }
+                case 'video': {
+                    callVideoAction(actionTyped.id, actionTyped.action, componentContext);
                     break;
                 }
                 default: {

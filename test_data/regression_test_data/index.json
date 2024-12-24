@@ -2378,7 +2378,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "file": "video/typed_video_with_controls.json"
     },
