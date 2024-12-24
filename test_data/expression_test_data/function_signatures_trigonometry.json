@@ -87,6 +87,20 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "function_name": "asin",
+      "doc": "Calculates the arc sine of a number",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }
