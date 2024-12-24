@@ -110,5 +110,46 @@
                 "version_added": "30.21.0"
             }
         }
+    }, {
+        "id": "fn_pi",
+        "name": "<code>pi</code> function",
+        "compat": {
+            "android": {
+                "version_added": "30.32.0"
+            },
+            "ios": {
+                "version_added": "30.32.0"
+            }
+        }
+    }, {
+        "id": "fn_to_rad_to_deg",
+        "name": "<code>toRadians</code> and <code>toDegrees</code> functions",
+        "compat": {
+            "android": {
+                "version_added": "30.32.0"
+            },
+            "ios": {
+                "version_added": "30.32.0"
+            }
+        }
+    }, {
+        "id": "fn_sin",
+        "name": "<code>sin</code> function",
+        "compat": {
+            "android": {
+                "version_added": "30.32.0"
+            },
+            "ios": {
+                "version_added": "30.32.0"
+            }
+        }
+    }, {
+        "id": "fn_cos",
+        "name": "<code>cos</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "30.32.0"
+            }
+        }
     }]
 }

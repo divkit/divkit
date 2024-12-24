@@ -125,5 +125,13 @@
                 "version_added": "30.31.0"
             }
         }
+    }, {
+        "id": "text_range_baseline_offset",
+        "name": "<code>baseline_offset</code> property for the range of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.32.0"
+            }
+        }
     }]
 }

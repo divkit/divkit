@@ -172,6 +172,9 @@
         "compat": {
             "android": {
                 "version_added": "30.21.0"
+            },
+            "ios": {
+                "version_added": "30.32.0"
             }
         }
     }, {
@@ -180,6 +183,9 @@
         "compat": {
             "android": {
                 "version_added": "30.21.0"
+            },
+            "ios": {
+                "version_added": "30.32.0"
             }
         }
     }, {
@@ -188,6 +194,9 @@
         "compat": {
             "android": {
                 "version_added": "30.21.0"
+            },
+            "ios": {
+                "version_added": "30.32.0"
             }
         }
     }, {
