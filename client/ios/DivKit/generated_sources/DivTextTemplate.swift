@@ -248,9 +248,12 @@ public final class DivTextTemplate: TemplateValue {
       }
     }
 
+    public typealias IndexingDirection = DivText.Image.IndexingDirection
+
     public let accessibility: Field<AccessibilityTemplate>?
     public let alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? // default value: center
     public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
+    public let indexingDirection: Field<Expression<IndexingDirection>>? // default value: normal
     public let preloadRequired: Field<Expression<Bool>>? // default value: false
     public let start: Field<Expression<Int>>? // constraint: number >= 0
     public let tintColor: Field<Expression<Color>>?
@@ -263,6 +266,7 @@ public final class DivTextTemplate: TemplateValue {
         accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
         alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
         height: dictionary.getOptionalField("height", templateToType: templateToType),
+        indexingDirection: dictionary.getOptionalExpressionField("indexing_direction"),
         preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
         start: dictionary.getOptionalExpressionField("start"),
         tintColor: dictionary.getOptionalExpressionField("tint_color", transform: Color.color(withHexString:)),
@@ -276,6 +280,7 @@ public final class DivTextTemplate: TemplateValue {
       accessibility: Field<AccessibilityTemplate>? = nil,
       alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? = nil,
       height: Field<DivFixedSizeTemplate>? = nil,
+      indexingDirection: Field<Expression<IndexingDirection>>? = nil,
       preloadRequired: Field<Expression<Bool>>? = nil,
       start: Field<Expression<Int>>? = nil,
       tintColor: Field<Expression<Color>>? = nil,
@@ -286,6 +291,7 @@ public final class DivTextTemplate: TemplateValue {
       self.accessibility = accessibility
       self.alignmentVertical = alignmentVertical
       self.height = height
+      self.indexingDirection = indexingDirection
       self.preloadRequired = preloadRequired
       self.start = start
       self.tintColor = tintColor
@@ -298,6 +304,7 @@ public final class DivTextTemplate: TemplateValue {
       let accessibilityValue = { parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let alignmentVerticalValue = { parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
       let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+      let indexingDirectionValue = { parent?.indexingDirection?.resolveOptionalValue(context: context) ?? .noValue }()
       let preloadRequiredValue = { parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue }()
       let startValue = { parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue }()
       let tintColorValue = { parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
@@ -308,6 +315,7 @@ public final class DivTextTemplate: TemplateValue {
         accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        indexingDirectionValue.errorsOrWarnings?.map { .nestedObjectError(field: "indexing_direction", error: $0) },
         preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         tintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_color", error: $0) },
@@ -331,6 +339,7 @@ public final class DivTextTemplate: TemplateValue {
         accessibility: { accessibilityValue.value }(),
         alignmentVertical: { alignmentVerticalValue.value }(),
         height: { heightValue.value }(),
+        indexingDirection: { indexingDirectionValue.value }(),
         preloadRequired: { preloadRequiredValue.value }(),
         start: { startNonNil }(),
         tintColor: { tintColorValue.value }(),
@@ -348,6 +357,7 @@ public final class DivTextTemplate: TemplateValue {
       var accessibilityValue: DeserializationResult<DivText.Image.Accessibility> = .noValue
       var alignmentVerticalValue: DeserializationResult<Expression<DivTextAlignmentVertical>> = { parent?.alignmentVertical?.value() ?? .noValue }()
       var heightValue: DeserializationResult<DivFixedSize> = .noValue
+      var indexingDirectionValue: DeserializationResult<Expression<DivText.Image.IndexingDirection>> = { parent?.indexingDirection?.value() ?? .noValue }()
       var preloadRequiredValue: DeserializationResult<Expression<Bool>> = { parent?.preloadRequired?.value() ?? .noValue }()
       var startValue: DeserializationResult<Expression<Int>> = { parent?.start?.value() ?? .noValue }()
       var tintColorValue: DeserializationResult<Expression<Color>> = { parent?.tintColor?.value() ?? .noValue }()
@@ -372,6 +382,11 @@ public final class DivTextTemplate: TemplateValue {
           _ = {
             if key == "height" {
              heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: heightValue)
+            }
+          }()
+          _ = {
+            if key == "indexing_direction" {
+             indexingDirectionValue = deserialize(__dictValue).merged(with: indexingDirectionValue)
             }
           }()
           _ = {
@@ -420,6 +435,11 @@ public final class DivTextTemplate: TemplateValue {
             }
           }()
           _ = {
+           if key == parent?.indexingDirection?.link {
+             indexingDirectionValue = indexingDirectionValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
            if key == parent?.preloadRequired?.link {
              preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
             }
@@ -460,6 +480,7 @@ public final class DivTextTemplate: TemplateValue {
         accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        indexingDirectionValue.errorsOrWarnings?.map { .nestedObjectError(field: "indexing_direction", error: $0) },
         preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         tintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_color", error: $0) },
@@ -483,6 +504,7 @@ public final class DivTextTemplate: TemplateValue {
         accessibility: { accessibilityValue.value }(),
         alignmentVertical: { alignmentVerticalValue.value }(),
         height: { heightValue.value }(),
+        indexingDirection: { indexingDirectionValue.value }(),
         preloadRequired: { preloadRequiredValue.value }(),
         start: { startNonNil }(),
         tintColor: { tintColorValue.value }(),
@@ -504,6 +526,7 @@ public final class DivTextTemplate: TemplateValue {
         accessibility: merged.accessibility?.tryResolveParent(templates: templates),
         alignmentVertical: merged.alignmentVertical,
         height: merged.height?.tryResolveParent(templates: templates),
+        indexingDirection: merged.indexingDirection,
         preloadRequired: merged.preloadRequired,
         start: merged.start,
         tintColor: merged.tintColor,
@@ -518,6 +541,7 @@ public final class DivTextTemplate: TemplateValue {
     public let actions: Field<[DivActionTemplate]>?
     public let alignmentVertical: Field<Expression<DivTextAlignmentVertical>>?
     public let background: Field<DivTextRangeBackgroundTemplate>?
+    public let baselineOffset: Field<Expression<Double>>? // default value: 0
     public let border: Field<DivTextRangeBorderTemplate>?
     public let end: Field<Expression<Int>>? // constraint: number > 0
     public let fontFamily: Field<Expression<String>>?
@@ -528,6 +552,7 @@ public final class DivTextTemplate: TemplateValue {
     public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
     public let letterSpacing: Field<Expression<Double>>?
     public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
+    public let mask: Field<DivTextRangeMaskTemplate>?
     public let start: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
     public let strike: Field<Expression<DivLineStyle>>?
     public let textColor: Field<Expression<Color>>?
@@ -540,6 +565,7 @@ public final class DivTextTemplate: TemplateValue {
         actions: dictionary.getOptionalArray("actions", templateToType: templateToType),
         alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
         background: dictionary.getOptionalField("background", templateToType: templateToType),
+        baselineOffset: dictionary.getOptionalExpressionField("baseline_offset"),
         border: dictionary.getOptionalField("border", templateToType: templateToType),
         end: dictionary.getOptionalExpressionField("end"),
         fontFamily: dictionary.getOptionalExpressionField("font_family"),
@@ -550,6 +576,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
         letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
         lineHeight: dictionary.getOptionalExpressionField("line_height"),
+        mask: dictionary.getOptionalField("mask", templateToType: templateToType),
         start: dictionary.getOptionalExpressionField("start"),
         strike: dictionary.getOptionalExpressionField("strike"),
         textColor: dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:)),
@@ -563,6 +590,7 @@ public final class DivTextTemplate: TemplateValue {
       actions: Field<[DivActionTemplate]>? = nil,
       alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? = nil,
       background: Field<DivTextRangeBackgroundTemplate>? = nil,
+      baselineOffset: Field<Expression<Double>>? = nil,
       border: Field<DivTextRangeBorderTemplate>? = nil,
       end: Field<Expression<Int>>? = nil,
       fontFamily: Field<Expression<String>>? = nil,
@@ -573,6 +601,7 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValue: Field<Expression<Int>>? = nil,
       letterSpacing: Field<Expression<Double>>? = nil,
       lineHeight: Field<Expression<Int>>? = nil,
+      mask: Field<DivTextRangeMaskTemplate>? = nil,
       start: Field<Expression<Int>>? = nil,
       strike: Field<Expression<DivLineStyle>>? = nil,
       textColor: Field<Expression<Color>>? = nil,
@@ -583,6 +612,7 @@ public final class DivTextTemplate: TemplateValue {
       self.actions = actions
       self.alignmentVertical = alignmentVertical
       self.background = background
+      self.baselineOffset = baselineOffset
       self.border = border
       self.end = end
       self.fontFamily = fontFamily
@@ -593,6 +623,7 @@ public final class DivTextTemplate: TemplateValue {
       self.fontWeightValue = fontWeightValue
       self.letterSpacing = letterSpacing
       self.lineHeight = lineHeight
+      self.mask = mask
       self.start = start
       self.strike = strike
       self.textColor = textColor
@@ -605,6 +636,7 @@ public final class DivTextTemplate: TemplateValue {
       let actionsValue = { parent?.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let alignmentVerticalValue = { parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
       let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+      let baselineOffsetValue = { parent?.baselineOffset?.resolveOptionalValue(context: context) ?? .noValue }()
       let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let endValue = { parent?.end?.resolveOptionalValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue }()
       let fontFamilyValue = { parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -615,6 +647,7 @@ public final class DivTextTemplate: TemplateValue {
       let fontWeightValueValue = { parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue }()
       let letterSpacingValue = { parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue }()
       let lineHeightValue = { parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue }()
+      let maskValue = { parent?.mask?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let startValue = { parent?.start?.resolveOptionalValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue }()
       let strikeValue = { parent?.strike?.resolveOptionalValue(context: context) ?? .noValue }()
       let textColorValue = { parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
@@ -625,6 +658,7 @@ public final class DivTextTemplate: TemplateValue {
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+        baselineOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "baseline_offset", error: $0) },
         borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
         endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
         fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
@@ -635,6 +669,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
         letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
         lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
+        maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
@@ -646,6 +681,7 @@ public final class DivTextTemplate: TemplateValue {
         actions: { actionsValue.value }(),
         alignmentVertical: { alignmentVerticalValue.value }(),
         background: { backgroundValue.value }(),
+        baselineOffset: { baselineOffsetValue.value }(),
         border: { borderValue.value }(),
         end: { endValue.value }(),
         fontFamily: { fontFamilyValue.value }(),
@@ -656,6 +692,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue: { fontWeightValueValue.value }(),
         letterSpacing: { letterSpacingValue.value }(),
         lineHeight: { lineHeightValue.value }(),
+        mask: { maskValue.value }(),
         start: { startValue.value }(),
         strike: { strikeValue.value }(),
         textColor: { textColorValue.value }(),
@@ -673,6 +710,7 @@ public final class DivTextTemplate: TemplateValue {
       var actionsValue: DeserializationResult<[DivAction]> = .noValue
       var alignmentVerticalValue: DeserializationResult<Expression<DivTextAlignmentVertical>> = { parent?.alignmentVertical?.value() ?? .noValue }()
       var backgroundValue: DeserializationResult<DivTextRangeBackground> = .noValue
+      var baselineOffsetValue: DeserializationResult<Expression<Double>> = { parent?.baselineOffset?.value() ?? .noValue }()
       var borderValue: DeserializationResult<DivTextRangeBorder> = .noValue
       var endValue: DeserializationResult<Expression<Int>> = { parent?.end?.value() ?? .noValue }()
       var fontFamilyValue: DeserializationResult<Expression<String>> = { parent?.fontFamily?.value() ?? .noValue }()
@@ -683,6 +721,7 @@ public final class DivTextTemplate: TemplateValue {
       var fontWeightValueValue: DeserializationResult<Expression<Int>> = { parent?.fontWeightValue?.value() ?? .noValue }()
       var letterSpacingValue: DeserializationResult<Expression<Double>> = { parent?.letterSpacing?.value() ?? .noValue }()
       var lineHeightValue: DeserializationResult<Expression<Int>> = { parent?.lineHeight?.value() ?? .noValue }()
+      var maskValue: DeserializationResult<DivTextRangeMask> = .noValue
       var startValue: DeserializationResult<Expression<Int>> = { parent?.start?.value() ?? .noValue }()
       var strikeValue: DeserializationResult<Expression<DivLineStyle>> = { parent?.strike?.value() ?? .noValue }()
       var textColorValue: DeserializationResult<Expression<Color>> = { parent?.textColor?.value() ?? .noValue }()
@@ -707,6 +746,11 @@ public final class DivTextTemplate: TemplateValue {
           _ = {
             if key == "background" {
              backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextRangeBackgroundTemplate.self).merged(with: backgroundValue)
+            }
+          }()
+          _ = {
+            if key == "baseline_offset" {
+             baselineOffsetValue = deserialize(__dictValue).merged(with: baselineOffsetValue)
             }
           }()
           _ = {
@@ -760,6 +804,11 @@ public final class DivTextTemplate: TemplateValue {
             }
           }()
           _ = {
+            if key == "mask" {
+             maskValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextRangeMaskTemplate.self).merged(with: maskValue)
+            }
+          }()
+          _ = {
             if key == "start" {
              startValue = deserialize(__dictValue, validator: ResolvedValue.startValidator).merged(with: startValue)
             }
@@ -802,6 +851,11 @@ public final class DivTextTemplate: TemplateValue {
           _ = {
            if key == parent?.background?.link {
              backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextRangeBackgroundTemplate.self) })
+            }
+          }()
+          _ = {
+           if key == parent?.baselineOffset?.link {
+             baselineOffsetValue = baselineOffsetValue.merged(with: { deserialize(__dictValue) })
             }
           }()
           _ = {
@@ -855,6 +909,11 @@ public final class DivTextTemplate: TemplateValue {
             }
           }()
           _ = {
+           if key == parent?.mask?.link {
+             maskValue = maskValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextRangeMaskTemplate.self) })
+            }
+          }()
+          _ = {
            if key == parent?.start?.link {
              startValue = startValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startValidator) })
             }
@@ -890,12 +949,14 @@ public final class DivTextTemplate: TemplateValue {
         _ = { actionsValue = actionsValue.merged(with: { parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
         _ = { backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
         _ = { borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+        _ = { maskValue = maskValue.merged(with: { parent.mask?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
         _ = { textShadowValue = textShadowValue.merged(with: { parent.textShadow?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       }
       let errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+        baselineOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "baseline_offset", error: $0) },
         borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
         endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
         fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
@@ -906,6 +967,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
         letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
         lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
+        maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
@@ -917,6 +979,7 @@ public final class DivTextTemplate: TemplateValue {
         actions: { actionsValue.value }(),
         alignmentVertical: { alignmentVerticalValue.value }(),
         background: { backgroundValue.value }(),
+        baselineOffset: { baselineOffsetValue.value }(),
         border: { borderValue.value }(),
         end: { endValue.value }(),
         fontFamily: { fontFamilyValue.value }(),
@@ -927,6 +990,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue: { fontWeightValueValue.value }(),
         letterSpacing: { letterSpacingValue.value }(),
         lineHeight: { lineHeightValue.value }(),
+        mask: { maskValue.value }(),
         start: { startValue.value }(),
         strike: { strikeValue.value }(),
         textColor: { textColorValue.value }(),
@@ -948,6 +1012,7 @@ public final class DivTextTemplate: TemplateValue {
         actions: merged.actions?.tryResolveParent(templates: templates),
         alignmentVertical: merged.alignmentVertical,
         background: merged.background?.tryResolveParent(templates: templates),
+        baselineOffset: merged.baselineOffset,
         border: merged.border?.tryResolveParent(templates: templates),
         end: merged.end,
         fontFamily: merged.fontFamily,
@@ -958,6 +1023,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue: merged.fontWeightValue,
         letterSpacing: merged.letterSpacing,
         lineHeight: merged.lineHeight,
+        mask: merged.mask?.tryResolveParent(templates: templates),
         start: merged.start,
         strike: merged.strike,
         textColor: merged.textColor,
@@ -996,6 +1062,8 @@ public final class DivTextTemplate: TemplateValue {
   public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
   public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
+  public let hoverEndActions: Field<[DivActionTemplate]>?
+  public let hoverStartActions: Field<[DivActionTemplate]>?
   public let id: Field<String>?
   public let images: Field<[ImageTemplate]>?
   public let layoutProvider: Field<DivLayoutProviderTemplate>?
@@ -1006,6 +1074,8 @@ public final class DivTextTemplate: TemplateValue {
   public let maxLines: Field<Expression<Int>>? // constraint: number >= 0
   public let minHiddenLines: Field<Expression<Int>>? // constraint: number >= 0
   public let paddings: Field<DivEdgeInsetsTemplate>?
+  public let pressEndActions: Field<[DivActionTemplate]>?
+  public let pressStartActions: Field<[DivActionTemplate]>?
   public let ranges: Field<[RangeTemplate]>?
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -1062,6 +1132,8 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
+      hoverEndActions: dictionary.getOptionalArray("hover_end_actions", templateToType: templateToType),
+      hoverStartActions: dictionary.getOptionalArray("hover_start_actions", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       images: dictionary.getOptionalArray("images", templateToType: templateToType),
       layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
@@ -1072,6 +1144,8 @@ public final class DivTextTemplate: TemplateValue {
       maxLines: dictionary.getOptionalExpressionField("max_lines"),
       minHiddenLines: dictionary.getOptionalExpressionField("min_hidden_lines"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      pressEndActions: dictionary.getOptionalArray("press_end_actions", templateToType: templateToType),
+      pressStartActions: dictionary.getOptionalArray("press_start_actions", templateToType: templateToType),
       ranges: dictionary.getOptionalArray("ranges", templateToType: templateToType),
       reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
@@ -1129,6 +1203,8 @@ public final class DivTextTemplate: TemplateValue {
     fontWeightValue: Field<Expression<Int>>? = nil,
     functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
+    hoverEndActions: Field<[DivActionTemplate]>? = nil,
+    hoverStartActions: Field<[DivActionTemplate]>? = nil,
     id: Field<String>? = nil,
     images: Field<[ImageTemplate]>? = nil,
     layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
@@ -1139,6 +1215,8 @@ public final class DivTextTemplate: TemplateValue {
     maxLines: Field<Expression<Int>>? = nil,
     minHiddenLines: Field<Expression<Int>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
+    pressEndActions: Field<[DivActionTemplate]>? = nil,
+    pressStartActions: Field<[DivActionTemplate]>? = nil,
     ranges: Field<[RangeTemplate]>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
@@ -1193,6 +1271,8 @@ public final class DivTextTemplate: TemplateValue {
     self.fontWeightValue = fontWeightValue
     self.functions = functions
     self.height = height
+    self.hoverEndActions = hoverEndActions
+    self.hoverStartActions = hoverStartActions
     self.id = id
     self.images = images
     self.layoutProvider = layoutProvider
@@ -1203,6 +1283,8 @@ public final class DivTextTemplate: TemplateValue {
     self.maxLines = maxLines
     self.minHiddenLines = minHiddenLines
     self.paddings = paddings
+    self.pressEndActions = pressEndActions
+    self.pressStartActions = pressStartActions
     self.ranges = ranges
     self.reuseId = reuseId
     self.rowSpan = rowSpan
@@ -1258,6 +1340,8 @@ public final class DivTextTemplate: TemplateValue {
     let fontWeightValueValue = { parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue }()
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let hoverEndActionsValue = { parent?.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let hoverStartActionsValue = { parent?.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
     let imagesValue = { parent?.images?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let layoutProviderValue = { parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -1268,6 +1352,8 @@ public final class DivTextTemplate: TemplateValue {
     let maxLinesValue = { parent?.maxLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxLinesValidator) ?? .noValue }()
     let minHiddenLinesValue = { parent?.minHiddenLines?.resolveOptionalValue(context: context, validator: ResolvedValue.minHiddenLinesValidator) ?? .noValue }()
     let paddingsValue = { parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let pressEndActionsValue = { parent?.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let pressStartActionsValue = { parent?.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let rangesValue = { parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
     let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
@@ -1321,6 +1407,8 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      hoverEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_end_actions", error: $0) },
+      hoverStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_start_actions", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
@@ -1331,6 +1419,8 @@ public final class DivTextTemplate: TemplateValue {
       maxLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_lines", error: $0) },
       minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_hidden_lines", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
+      pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -1393,6 +1483,8 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
+      hoverEndActions: { hoverEndActionsValue.value }(),
+      hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
       images: { imagesValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
@@ -1403,6 +1495,8 @@ public final class DivTextTemplate: TemplateValue {
       maxLines: { maxLinesValue.value }(),
       minHiddenLines: { minHiddenLinesValue.value }(),
       paddings: { paddingsValue.value }(),
+      pressEndActions: { pressEndActionsValue.value }(),
+      pressStartActions: { pressStartActionsValue.value }(),
       ranges: { rangesValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -1463,6 +1557,8 @@ public final class DivTextTemplate: TemplateValue {
     var fontWeightValueValue: DeserializationResult<Expression<Int>> = { parent?.fontWeightValue?.value() ?? .noValue }()
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
+    var hoverEndActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var hoverStartActionsValue: DeserializationResult<[DivAction]> = .noValue
     var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
     var imagesValue: DeserializationResult<[DivText.Image]> = .noValue
     var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
@@ -1473,6 +1569,8 @@ public final class DivTextTemplate: TemplateValue {
     var maxLinesValue: DeserializationResult<Expression<Int>> = { parent?.maxLines?.value() ?? .noValue }()
     var minHiddenLinesValue: DeserializationResult<Expression<Int>> = { parent?.minHiddenLines?.value() ?? .noValue }()
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var pressEndActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var pressStartActionsValue: DeserializationResult<[DivAction]> = .noValue
     var rangesValue: DeserializationResult<[DivText.Range]> = .noValue
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
@@ -1635,6 +1733,16 @@ public final class DivTextTemplate: TemplateValue {
           }
         }()
         _ = {
+          if key == "hover_end_actions" {
+           hoverEndActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: hoverEndActionsValue)
+          }
+        }()
+        _ = {
+          if key == "hover_start_actions" {
+           hoverStartActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: hoverStartActionsValue)
+          }
+        }()
+        _ = {
           if key == "id" {
            idValue = deserialize(__dictValue).merged(with: idValue)
           }
@@ -1682,6 +1790,16 @@ public final class DivTextTemplate: TemplateValue {
         _ = {
           if key == "paddings" {
            paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+          }
+        }()
+        _ = {
+          if key == "press_end_actions" {
+           pressEndActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pressEndActionsValue)
+          }
+        }()
+        _ = {
+          if key == "press_start_actions" {
+           pressStartActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pressStartActionsValue)
           }
         }()
         _ = {
@@ -1945,6 +2063,16 @@ public final class DivTextTemplate: TemplateValue {
           }
         }()
         _ = {
+         if key == parent?.hoverEndActions?.link {
+           hoverEndActionsValue = hoverEndActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.hoverStartActions?.link {
+           hoverStartActionsValue = hoverStartActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
          if key == parent?.id?.link {
            idValue = idValue.merged(with: { deserialize(__dictValue) })
           }
@@ -1992,6 +2120,16 @@ public final class DivTextTemplate: TemplateValue {
         _ = {
          if key == parent?.paddings?.link {
            paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.pressEndActions?.link {
+           pressEndActionsValue = pressEndActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.pressStartActions?.link {
+           pressStartActionsValue = pressStartActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
           }
         }()
         _ = {
@@ -2141,11 +2279,15 @@ public final class DivTextTemplate: TemplateValue {
       _ = { focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { hoverEndActionsValue = hoverEndActionsValue.merged(with: { parent.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { hoverStartActionsValue = hoverStartActionsValue.merged(with: { parent.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { imagesValue = imagesValue.merged(with: { parent.images?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { pressEndActionsValue = pressEndActionsValue.merged(with: { parent.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { pressStartActionsValue = pressStartActionsValue.merged(with: { parent.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { rangesValue = rangesValue.merged(with: { parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { textGradientValue = textGradientValue.merged(with: { parent.textGradient?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -2188,6 +2330,8 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      hoverEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_end_actions", error: $0) },
+      hoverStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_start_actions", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
@@ -2198,6 +2342,8 @@ public final class DivTextTemplate: TemplateValue {
       maxLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_lines", error: $0) },
       minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_hidden_lines", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
+      pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -2260,6 +2406,8 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
+      hoverEndActions: { hoverEndActionsValue.value }(),
+      hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
       images: { imagesValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
@@ -2270,6 +2418,8 @@ public final class DivTextTemplate: TemplateValue {
       maxLines: { maxLinesValue.value }(),
       minHiddenLines: { minHiddenLinesValue.value }(),
       paddings: { paddingsValue.value }(),
+      pressEndActions: { pressEndActionsValue.value }(),
+      pressStartActions: { pressStartActionsValue.value }(),
       ranges: { rangesValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -2335,6 +2485,8 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValue: fontWeightValue ?? mergedParent.fontWeightValue,
       functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
+      hoverEndActions: hoverEndActions ?? mergedParent.hoverEndActions,
+      hoverStartActions: hoverStartActions ?? mergedParent.hoverStartActions,
       id: id ?? mergedParent.id,
       images: images ?? mergedParent.images,
       layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
@@ -2345,6 +2497,8 @@ public final class DivTextTemplate: TemplateValue {
       maxLines: maxLines ?? mergedParent.maxLines,
       minHiddenLines: minHiddenLines ?? mergedParent.minHiddenLines,
       paddings: paddings ?? mergedParent.paddings,
+      pressEndActions: pressEndActions ?? mergedParent.pressEndActions,
+      pressStartActions: pressStartActions ?? mergedParent.pressStartActions,
       ranges: ranges ?? mergedParent.ranges,
       reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
@@ -2405,6 +2559,8 @@ public final class DivTextTemplate: TemplateValue {
       fontWeightValue: merged.fontWeightValue,
       functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
+      hoverEndActions: merged.hoverEndActions?.tryResolveParent(templates: templates),
+      hoverStartActions: merged.hoverStartActions?.tryResolveParent(templates: templates),
       id: merged.id,
       images: merged.images?.tryResolveParent(templates: templates),
       layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
@@ -2415,6 +2571,8 @@ public final class DivTextTemplate: TemplateValue {
       maxLines: merged.maxLines,
       minHiddenLines: merged.minHiddenLines,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
+      pressEndActions: merged.pressEndActions?.tryResolveParent(templates: templates),
+      pressStartActions: merged.pressStartActions?.tryResolveParent(templates: templates),
       ranges: merged.ranges?.tryResolveParent(templates: templates),
       reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,

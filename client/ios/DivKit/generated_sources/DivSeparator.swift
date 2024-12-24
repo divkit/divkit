@@ -51,11 +51,15 @@ public final class DivSeparator: DivBase {
   public let focus: DivFocus?
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
+  public let hoverEndActions: [DivAction]?
+  public let hoverStartActions: [DivAction]?
   public let id: String?
   public let layoutProvider: DivLayoutProvider?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
+  public let pressEndActions: [DivAction]?
+  public let pressStartActions: [DivAction]?
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
@@ -131,11 +135,15 @@ public final class DivSeparator: DivBase {
     focus: DivFocus? = nil,
     functions: [DivFunction]? = nil,
     height: DivSize? = nil,
+    hoverEndActions: [DivAction]? = nil,
+    hoverStartActions: [DivAction]? = nil,
     id: String? = nil,
     layoutProvider: DivLayoutProvider? = nil,
     longtapActions: [DivAction]? = nil,
     margins: DivEdgeInsets? = nil,
     paddings: DivEdgeInsets? = nil,
+    pressEndActions: [DivAction]? = nil,
+    pressStartActions: [DivAction]? = nil,
     reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     selectedActions: [DivAction]? = nil,
@@ -170,11 +178,15 @@ public final class DivSeparator: DivBase {
     self.focus = focus
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
+    self.hoverEndActions = hoverEndActions
+    self.hoverStartActions = hoverStartActions
     self.id = id
     self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
+    self.pressEndActions = pressEndActions
+    self.pressStartActions = pressStartActions
     self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
@@ -239,48 +251,56 @@ extension DivSeparator: Equatable {
       return false
     }
     guard
-      lhs.id == rhs.id,
+      lhs.hoverEndActions == rhs.hoverEndActions,
+      lhs.hoverStartActions == rhs.hoverStartActions,
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.longtapActions == rhs.longtapActions,
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
-      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId
+      lhs.pressEndActions == rhs.pressEndActions,
+      lhs.pressStartActions == rhs.pressStartActions
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -313,11 +333,15 @@ extension DivSeparator: Serializable {
     result["focus"] = focus?.toDictionary()
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
+    result["hover_end_actions"] = hoverEndActions?.map { $0.toDictionary() }
+    result["hover_start_actions"] = hoverStartActions?.map { $0.toDictionary() }
     result["id"] = id
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
+    result["press_end_actions"] = pressEndActions?.map { $0.toDictionary() }
+    result["press_start_actions"] = pressStartActions?.map { $0.toDictionary() }
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

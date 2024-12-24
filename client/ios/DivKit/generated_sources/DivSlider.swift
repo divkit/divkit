@@ -101,6 +101,7 @@ public final class DivSlider: DivBase {
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let isEnabled: Expression<Bool> // default value: true
   public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let maxValue: Expression<Int> // default value: 100
@@ -150,6 +151,10 @@ public final class DivSlider: DivBase {
     resolver.resolveNumeric(columnSpan)
   }
 
+  public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(isEnabled) ?? true
+  }
+
   public func resolveMaxValue(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumeric(maxValue) ?? 100
   }
@@ -197,6 +202,7 @@ public final class DivSlider: DivBase {
     functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     id: String? = nil,
+    isEnabled: Expression<Bool>? = nil,
     layoutProvider: DivLayoutProvider? = nil,
     margins: DivEdgeInsets? = nil,
     maxValue: Expression<Int>? = nil,
@@ -244,6 +250,7 @@ public final class DivSlider: DivBase {
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.isEnabled = isEnabled ?? .value(true)
     self.layoutProvider = layoutProvider
     self.margins = margins
     self.maxValue = maxValue ?? .value(100)
@@ -313,81 +320,82 @@ extension DivSlider: Equatable {
     guard
       lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.isEnabled == rhs.isEnabled
     else {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.maxValue == rhs.maxValue,
-      lhs.minValue == rhs.minValue
+      lhs.maxValue == rhs.maxValue
     else {
       return false
     }
     guard
+      lhs.minValue == rhs.minValue,
       lhs.paddings == rhs.paddings,
-      lhs.ranges == rhs.ranges,
-      lhs.reuseId == rhs.reuseId
+      lhs.ranges == rhs.ranges
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
-      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
-      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable
+      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle
     else {
       return false
     }
     guard
+      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
       lhs.thumbStyle == rhs.thumbStyle,
-      lhs.thumbTextStyle == rhs.thumbTextStyle,
-      lhs.thumbValueVariable == rhs.thumbValueVariable
+      lhs.thumbTextStyle == rhs.thumbTextStyle
     else {
       return false
     }
     guard
+      lhs.thumbValueVariable == rhs.thumbValueVariable,
       lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
-      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
-      lhs.tooltips == rhs.tooltips
+      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.trackActiveStyle == rhs.trackActiveStyle,
-      lhs.trackInactiveStyle == rhs.trackInactiveStyle,
-      lhs.transform == rhs.transform
+      lhs.trackInactiveStyle == rhs.trackInactiveStyle
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -415,6 +423,7 @@ extension DivSlider: Serializable {
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["is_enabled"] = isEnabled.toValidSerializationValue()
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["max_value"] = maxValue.toValidSerializationValue()

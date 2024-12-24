@@ -11,6 +11,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
 
   public let description: Field<Expression<String>>?
   public let hint: Field<Expression<String>>?
+  public let isChecked: Field<Expression<Bool>>?
   public let mode: Field<Expression<Mode>>? // default value: default
   public let muteAfterAction: Field<Expression<Bool>>? // default value: false
   public let stateDescription: Field<Expression<String>>?
@@ -20,6 +21,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
     self.init(
       description: dictionary.getOptionalExpressionField("description"),
       hint: dictionary.getOptionalExpressionField("hint"),
+      isChecked: dictionary.getOptionalExpressionField("is_checked"),
       mode: dictionary.getOptionalExpressionField("mode"),
       muteAfterAction: dictionary.getOptionalExpressionField("mute_after_action"),
       stateDescription: dictionary.getOptionalExpressionField("state_description"),
@@ -30,6 +32,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
   init(
     description: Field<Expression<String>>? = nil,
     hint: Field<Expression<String>>? = nil,
+    isChecked: Field<Expression<Bool>>? = nil,
     mode: Field<Expression<Mode>>? = nil,
     muteAfterAction: Field<Expression<Bool>>? = nil,
     stateDescription: Field<Expression<String>>? = nil,
@@ -37,6 +40,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
   ) {
     self.description = description
     self.hint = hint
+    self.isChecked = isChecked
     self.mode = mode
     self.muteAfterAction = muteAfterAction
     self.stateDescription = stateDescription
@@ -46,6 +50,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAccessibilityTemplate?) -> DeserializationResult<DivAccessibility> {
     let descriptionValue = { parent?.description?.resolveOptionalValue(context: context) ?? .noValue }()
     let hintValue = { parent?.hint?.resolveOptionalValue(context: context) ?? .noValue }()
+    let isCheckedValue = { parent?.isChecked?.resolveOptionalValue(context: context) ?? .noValue }()
     let modeValue = { parent?.mode?.resolveOptionalValue(context: context) ?? .noValue }()
     let muteAfterActionValue = { parent?.muteAfterAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let stateDescriptionValue = { parent?.stateDescription?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -53,6 +58,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
     let errors = mergeErrors(
       descriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "description", error: $0) },
       hintValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint", error: $0) },
+      isCheckedValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_checked", error: $0) },
       modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) },
       muteAfterActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "mute_after_action", error: $0) },
       stateDescriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "state_description", error: $0) },
@@ -61,6 +67,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
     let result = DivAccessibility(
       description: { descriptionValue.value }(),
       hint: { hintValue.value }(),
+      isChecked: { isCheckedValue.value }(),
       mode: { modeValue.value }(),
       muteAfterAction: { muteAfterActionValue.value }(),
       stateDescription: { stateDescriptionValue.value }(),
@@ -75,6 +82,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
     }
     var descriptionValue: DeserializationResult<Expression<String>> = { parent?.description?.value() ?? .noValue }()
     var hintValue: DeserializationResult<Expression<String>> = { parent?.hint?.value() ?? .noValue }()
+    var isCheckedValue: DeserializationResult<Expression<Bool>> = { parent?.isChecked?.value() ?? .noValue }()
     var modeValue: DeserializationResult<Expression<DivAccessibility.Mode>> = { parent?.mode?.value() ?? .noValue }()
     var muteAfterActionValue: DeserializationResult<Expression<Bool>> = { parent?.muteAfterAction?.value() ?? .noValue }()
     var stateDescriptionValue: DeserializationResult<Expression<String>> = { parent?.stateDescription?.value() ?? .noValue }()
@@ -92,6 +100,11 @@ public final class DivAccessibilityTemplate: TemplateValue {
         _ = {
           if key == "hint" {
            hintValue = deserialize(__dictValue).merged(with: hintValue)
+          }
+        }()
+        _ = {
+          if key == "is_checked" {
+           isCheckedValue = deserialize(__dictValue).merged(with: isCheckedValue)
           }
         }()
         _ = {
@@ -125,6 +138,11 @@ public final class DivAccessibilityTemplate: TemplateValue {
           }
         }()
         _ = {
+         if key == parent?.isChecked?.link {
+           isCheckedValue = isCheckedValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.mode?.link {
            modeValue = modeValue.merged(with: { deserialize(__dictValue) })
           }
@@ -149,6 +167,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
     let errors = mergeErrors(
       descriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "description", error: $0) },
       hintValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint", error: $0) },
+      isCheckedValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_checked", error: $0) },
       modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) },
       muteAfterActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "mute_after_action", error: $0) },
       stateDescriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "state_description", error: $0) },
@@ -157,6 +176,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
     let result = DivAccessibility(
       description: { descriptionValue.value }(),
       hint: { hintValue.value }(),
+      isChecked: { isCheckedValue.value }(),
       mode: { modeValue.value }(),
       muteAfterAction: { muteAfterActionValue.value }(),
       stateDescription: { stateDescriptionValue.value }(),

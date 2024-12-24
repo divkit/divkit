@@ -190,6 +190,7 @@ public final class DivStateTemplate: TemplateValue {
   public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
+  public let clipToBounds: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let defaultStateId: Field<Expression<String>>?
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
@@ -231,6 +232,7 @@ public final class DivStateTemplate: TemplateValue {
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
+      clipToBounds: dictionary.getOptionalExpressionField("clip_to_bounds"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       defaultStateId: dictionary.getOptionalExpressionField("default_state_id"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
@@ -273,6 +275,7 @@ public final class DivStateTemplate: TemplateValue {
     animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
+    clipToBounds: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     defaultStateId: Field<Expression<String>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
@@ -312,6 +315,7 @@ public final class DivStateTemplate: TemplateValue {
     self.animators = animators
     self.background = background
     self.border = border
+    self.clipToBounds = clipToBounds
     self.columnSpan = columnSpan
     self.defaultStateId = defaultStateId
     self.disappearActions = disappearActions
@@ -352,6 +356,7 @@ public final class DivStateTemplate: TemplateValue {
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let clipToBoundsValue = { parent?.clipToBounds?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let defaultStateIdValue = { parent?.defaultStateId?.resolveOptionalValue(context: context) ?? .noValue }()
     let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -390,6 +395,7 @@ public final class DivStateTemplate: TemplateValue {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      clipToBoundsValue.errorsOrWarnings?.map { .nestedObjectError(field: "clip_to_bounds", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultStateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_state_id", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
@@ -437,6 +443,7 @@ public final class DivStateTemplate: TemplateValue {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      clipToBounds: { clipToBoundsValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       defaultStateId: { defaultStateIdValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
@@ -482,6 +489,7 @@ public final class DivStateTemplate: TemplateValue {
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
+    var clipToBoundsValue: DeserializationResult<Expression<Bool>> = { parent?.clipToBounds?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var defaultStateIdValue: DeserializationResult<Expression<String>> = { parent?.defaultStateId?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
@@ -550,6 +558,11 @@ public final class DivStateTemplate: TemplateValue {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "clip_to_bounds" {
+           clipToBoundsValue = deserialize(__dictValue).merged(with: clipToBoundsValue)
           }
         }()
         _ = {
@@ -738,6 +751,11 @@ public final class DivStateTemplate: TemplateValue {
           }
         }()
         _ = {
+         if key == parent?.clipToBounds?.link {
+           clipToBoundsValue = clipToBoundsValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.columnSpan?.link {
            columnSpanValue = columnSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator) })
           }
@@ -923,6 +941,7 @@ public final class DivStateTemplate: TemplateValue {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      clipToBoundsValue.errorsOrWarnings?.map { .nestedObjectError(field: "clip_to_bounds", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultStateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_state_id", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
@@ -970,6 +989,7 @@ public final class DivStateTemplate: TemplateValue {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      clipToBounds: { clipToBoundsValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       defaultStateId: { defaultStateIdValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
@@ -1020,6 +1040,7 @@ public final class DivStateTemplate: TemplateValue {
       animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
+      clipToBounds: clipToBounds ?? mergedParent.clipToBounds,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       defaultStateId: defaultStateId ?? mergedParent.defaultStateId,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
@@ -1065,6 +1086,7 @@ public final class DivStateTemplate: TemplateValue {
       animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
+      clipToBounds: merged.clipToBounds,
       columnSpan: merged.columnSpan,
       defaultStateId: merged.defaultStateId,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
