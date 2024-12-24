@@ -245,9 +245,16 @@ export interface ActionTimer {
     action: 'start' | 'stop' | 'pause' | 'resume' | 'cancel' | 'reset';
 }
 
+export interface ActionDownload {
+    type: 'download';
+    url: string;
+    on_fail_actions?: Action[];
+    on_success_actions?: Action[];
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
-    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer;
+    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload;
 
 export interface ActionBase {
     log_id: string;

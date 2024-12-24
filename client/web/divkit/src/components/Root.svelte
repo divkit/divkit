@@ -43,7 +43,8 @@
         DivVariable,
         Direction,
         ActionMenuItem,
-        VariableTrigger
+        VariableTrigger,
+        DownloadCallbacks
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
@@ -644,8 +645,8 @@
     }
 
     function callDownloadAction(
-        url: string | null,
-        action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
+        url: string | null | undefined,
+        callbacks: MaybeMissing<DownloadCallbacks | undefined>,
         componentContext?: ComponentContext
     ): void {
         const log = (componentContext?.logError || logError);
@@ -699,7 +700,7 @@
                                 }
                             }));
                             execAnyActions(json.patch?.on_failed_actions);
-                            execAnyActions(action.download_callbacks?.on_fail_actions);
+                            execAnyActions(callbacks?.on_fail_actions);
                             return;
                         }
                     }
@@ -710,7 +711,7 @@
                         }
                     });
                     execAnyActions(json.patch?.on_applied_actions);
-                    execAnyActions(action.download_callbacks?.on_success_actions);
+                    execAnyActions(callbacks?.on_success_actions);
                 }
             }).catch(err => {
                 log(wrapError(new Error('Failed to download the patch'), {
@@ -719,7 +720,7 @@
                         originalError: err
                     }
                 }));
-                execAnyActions(action.download_callbacks?.on_fail_actions);
+                execAnyActions(callbacks?.on_fail_actions);
             });
         } else {
             log(wrapError(new Error('Missing url in download action'), {
@@ -936,7 +937,7 @@
                         callVideoAction(params.get('id'), params.get('action'), componentContext);
                         break;
                     case 'download':
-                        callDownloadAction(params.get('url'), action, componentContext);
+                        callDownloadAction(params.get('url'), action.download_callbacks, componentContext);
                         break;
                     case 'show_tooltip':
                         callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
@@ -1134,6 +1135,10 @@
                             }
                         }));
                     }
+                    break;
+                }
+                case 'download': {
+                    callDownloadAction(actionTyped.url, actionTyped, componentContext);
                     break;
                 }
                 default: {

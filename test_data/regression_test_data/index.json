@@ -2595,7 +2595,8 @@
     {
       "title": "Patch container typed action",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "patch",
@@ -2634,7 +2635,8 @@
     {
       "title": "Patch gallery with typed action",
       "platforms":  [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "TypedActions",
