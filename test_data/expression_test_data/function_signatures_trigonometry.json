@@ -87,6 +87,20 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "function_name": "ctan",
+      "doc": "Calculates the ctan of an argument represented in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }
