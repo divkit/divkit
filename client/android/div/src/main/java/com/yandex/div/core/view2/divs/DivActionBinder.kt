@@ -594,7 +594,7 @@ private fun View.observe(
     callback: (Any) -> Unit
 ) {
     if (this !is ExpressionSubscriber) return
-    actions?.forEach { it.isEnabled.observe(resolver, callback) }
+    actions?.forEach { addSubscription(it.isEnabled.observe(resolver, callback)) }
 }
 
 private fun List<DivAction>?.onlyEnabled(
