@@ -71,15 +71,7 @@ Supported components (may contain unavailable features for more info look at doc
     );
     ```
 
-    P.s. The process of building a DTO is quite expensive, so it is better to create it outside the widget in order to avoid frame loss.
-
-    Build and preload data to ensure instant rendering:
-    ```dart
-    await data.build(); 
-    // Or sync variant for small layouts
-    // data.buildSync();
-    await data.preload();  // Provide the storage built into DivKitView
-    ```
+    P.s. The process of building a DTO is quite expensive, so it is better to call `data.build()` outside the widget in order to avoid frame loss.
 
 4. Use DivKitView inside your widget tree with layout passed by param "data":
     ```dart

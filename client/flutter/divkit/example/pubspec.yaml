@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  shared_preferences: ^2.0.0
   flutter_riverpod: ^2.0.0
   equatable: ^2.0.5
 

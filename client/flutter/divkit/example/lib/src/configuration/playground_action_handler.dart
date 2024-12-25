@@ -57,38 +57,17 @@ class PlaygroundActionHandler implements DivActionHandler {
     return await handleUrlAction(context, uri);
   }
 
-  Future<String?> fetch(Uri uri) async {
-    try {
-      final client = HttpClient();
-
-      final request = await client.getUrl(uri);
-      final response = await request.close();
-
-      if (response.statusCode == HttpStatus.ok) {
-        return response.transform(utf8.decoder).join();
-      } else {
-        showSnackBar('HTTP request failed, status: ${response.statusCode}');
-      }
-    } catch (e) {
-      showSnackBar('Error fetching data: $e');
-    }
-    return null;
-  }
-
   Future<bool> handleUrlAction(DivContext context, Uri uri) async {
     if (uri.scheme != _schemeDivAction || uri.host != _demoActivity) {
       return false;
     }
     switch (uri.queryParameters[_paramAction]) {
       case _activityShowResult:
-        final value = context.variables.current[demoInputVariable];
+        final value = context.variables.current[inputVariable];
         try {
           final url = Uri.tryParse(value);
-          final data = jsonDecode(url != null ? await fetch(url) : value);
-
-          if (data is! Map<String, dynamic>) {
-            throw Exception('Not a map object');
-          }
+          ShowModel data =
+              url != null ? UrlShow(url) : ObjShow(jsonDecode(value));
           _navigationManager.push(
             MaterialPageRoute(builder: (_) => ShowPage(data)),
           );
@@ -102,7 +81,7 @@ class PlaygroundActionHandler implements DivActionHandler {
         if (text == null) {
           showSnackBar('Clipboard is empty');
         }
-        context.variableManager.updateVariable(demoInputVariable, text);
+        context.variableManager.updateVariable(inputVariable, text);
         break;
       case _activityOpenQr:
         // TODO: support scanning QR-code

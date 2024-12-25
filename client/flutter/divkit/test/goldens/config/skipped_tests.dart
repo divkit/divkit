@@ -42,6 +42,8 @@ final skippedTests = [
     'test_data/snapshot_test_data/div-background/nine-patch-rhombs-vertical-insets.json',
     'test_data/snapshot_test_data/div-background/nine-patch-rhombs.json',
     'test_data/snapshot_test_data/div-background/nine-patch-shape.json',
+    'test_data/snapshot_test_data/div-background/blur.json',
+    'test_data/snapshot_test_data/div-background/scale_stretch.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -77,7 +79,7 @@ final skippedTests = [
     (e) => _SkipTest(
       e,
       _Reason.divNotSupported,
-      'Separators are not supported yet',
+      'Not supported yet',
     ),
   ),
 
@@ -103,6 +105,7 @@ final skippedTests = [
     'test_data/snapshot_test_data/div-text/border-with-stoke.json',
     'test_data/snapshot_test_data/div-container/wrap/horizontal-orientation-child-alignments.json',
     'test_data/snapshot_test_data/div-container/wrap/vertical-orientation-child-alignments.json',
+    'test_data/snapshot_test_data/div-container/size_provider.json',
   ].map(
     (e) => _SkipTest(
       e,
@@ -718,6 +721,12 @@ final skippedTests = [
 
   const _SkipTest(
     'test_data/snapshot_test_data/div-text/hyphenation.json',
+    _Reason.unknown,
+    'Not supported by platform',
+  ),
+
+  const _SkipTest(
+    'test_data/snapshot_test_data/div-text/text_range_baseline_offset.json',
     _Reason.unknown,
     'Not supported by platform',
   ),

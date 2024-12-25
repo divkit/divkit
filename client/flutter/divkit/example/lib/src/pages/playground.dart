@@ -1,28 +1,40 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:divkit/divkit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../configuration/playground_action_handler.dart';
 import '../state.dart';
 
-class PlaygroundPage extends StatefulWidget {
+class PlaygroundPage extends ConsumerStatefulWidget {
   const PlaygroundPage({super.key});
 
   @override
-  State<PlaygroundPage> createState() => _PlaygroundPage();
+  ConsumerState<PlaygroundPage> createState() => _PlaygroundPage();
 }
 
-class _PlaygroundPage extends State<PlaygroundPage> {
+class _PlaygroundPage extends ConsumerState<PlaygroundPage> {
   var showInfo = true;
 
   final variableStorage = DefaultDivVariableStorage();
+  StreamSubscription? sub;
 
   @override
   void initState() {
     super.initState();
-    variableStorage.put(DivVariableModel(name: demoInputVariable, value: ''));
+    variableStorage.put(DivVariableModel(
+      name: inputVariable,
+      value: ref.read(prefsProvider).getString(inputVariable) ?? '',
+    ));
+    sub = variableStorage.stream.listen((event) {
+      ref.read(prefsProvider).setString(
+            inputVariable,
+            event[inputVariable]?.value ?? '',
+          );
+    });
   }
 
   Future<DivKitData> load() async {
@@ -56,8 +68,10 @@ class _PlaygroundPage extends State<PlaygroundPage> {
           IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () {
-              variableStorage
-                  .update(DivVariableModel(name: demoInputVariable, value: ''));
+              variableStorage.update(DivVariableModel(
+                name: inputVariable,
+                value: '',
+              ));
             },
           ),
         ],
@@ -70,7 +84,10 @@ class _PlaygroundPage extends State<PlaygroundPage> {
               padding: EdgeInsets.all(16),
               child: Text(
                 'Enter link or JSON or scan QR-code to see your result!',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           Expanded(
@@ -123,5 +140,12 @@ class _PlaygroundPage extends State<PlaygroundPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    sub?.cancel();
+    sub = null;
+    super.dispose();
   }
 }
