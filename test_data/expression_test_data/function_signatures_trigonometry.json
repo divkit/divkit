@@ -44,11 +44,11 @@
     },
     {
       "function_name": "sin",
-      "doc": "Calculates the sine of an argument represented in radians",
+      "doc": "Calculates the sine of the given angle in radians",
       "arguments": [
         {
           "type": "number",
-          "doc": "Number value."
+          "doc": "Angle in radians."
         }
       ],
       "result_type": "number",
@@ -60,11 +60,11 @@
     },
     {
       "function_name": "cos",
-      "doc": "Calculates the cos of an argument represented in radians",
+      "doc": "Calculates the cosine of the given angle in radians",
       "arguments": [
         {
           "type": "number",
-          "doc": "Number value representing radians."
+          "doc": "Angle in radians."
         }
       ],
       "result_type": "number",
@@ -74,12 +74,54 @@
       ]
     },
     {
+      "function_name": "tan",
+      "doc": "Calculates the tangent of the given angle in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Angle in radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "function_name": "asin",
+      "doc": "Calculates the angle in radians of the given sine value",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Sine value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "function_name": "acos",
+      "doc": "Calculates the angle in radians of the given cosine value",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Cosine value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "function_name": "atan",
       "doc": "Calculates the angle in radians for a given tangent value",
       "arguments": [
         {
           "type": "number",
-          "doc": "Number value representing the tangent."
+          "doc": "Tangent value."
         }
       ],
       "result_type": "number",
