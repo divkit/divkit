@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Horizontal pager with custom neighbour page width with paddings",
   "platforms": [
     "android",
     "ios",
@@ -10,14 +10,126 @@
       "type": "text",
       "height": {
         "type": "fixed",
-        "value": 50
+        "value": 90
       },
       "background": [
         {
           "color": "#AAAAAA",
           "type": "solid"
         }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "layout_mode": {
+        "type": "fixed",
+        "neighbour_page_width": {
+          "value": 10
+        }
+      },
+      "paddings": {
+        "left": 40,
+        "right": 40
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "items": [
+        {
+          "type": "text_page_fixed_height",
+          "text": "First page\nneighbour_page_width = 10\npaddings = 40\nLeft padding = 40\nNeighbour page is not shown"
+        },
+        {
+          "type": "text_page_fixed_height",
+          "text": "Middle page\nneighbour_page_width = 10\npaddings = 40\nNeighbour pages visible part = 20"
+        },
+        {
+          "type": "text_page_fixed_height",
+          "text": "Last page\nneighbour_page_width = 10\npaddings = 40\nRight padding = 40\nNeighbour page is not shown"
+        }
       ]
+    },
+    "scale": {
+      "type": "slider",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "height": {
+        "type": "fixed",
+        "value": 20
+      },
+      "variables": [
+        {
+          "name": "scale",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "thumb_value_variable": "scale",
+      "thumb_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_width": {
+            "value": 0
+          }
+        },
+        "color": "#00000000"
+      },
+      "track_inactive_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "value": 2
+          }
+        },
+        "color": "#AAAAAA"
+      },
+      "track_active_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle"
+        },
+        "color": "#0000ff"
+      },
+      "max_value": 32,
+      "tick_mark_inactive_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "value": 6
+          },
+          "item_width": {
+            "value": 1
+          }
+        },
+        "color": "#000000"
+      }
     }
   },
   "card": {
@@ -26,43 +138,24 @@
       {
         "state_id": 0,
         "div": {
-          "type": "pager",
-          "layout_mode": {
-            "type": "fixed",
-            "neighbour_page_width": {
-              "type": "fixed",
-              "value": 10
-            }
-          },
-          "item_spacing": {
-            "type": "fixed",
-            "value": 10
-          },
-          "paddings": {
-            "left": 20,
-            "top": 8,
-            "right": 20,
-            "bottom": 8
-          },
-          "border": {
-            "stroke": {
-              "color": "#BBFF0000",
-              "width": 1
-            },
-            "corner_radius": 10
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
           },
           "items": [
             {
-              "type": "text_page_fixed_height",
-              "text": "For millions of years mankind lived just like animals"
+              "type": "test_pager"
             },
             {
-              "type": "text_page_fixed_height",
-              "text": "Then something happened which unleashed the power of our imagination"
+              "type": "test_pager",
+              "default_item": 1
             },
             {
-              "type": "text_page_fixed_height",
-              "text": "We learned to talk"
+              "type": "test_pager",
+              "default_item": 2
+            },
+            {
+              "type": "scale"
             }
           ]
         }

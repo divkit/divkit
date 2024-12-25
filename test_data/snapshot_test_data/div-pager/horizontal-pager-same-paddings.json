@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Horizontal pager with paddings",
   "platforms": [
     "android",
     "ios",
@@ -10,14 +10,26 @@
       "type": "text",
       "height": {
         "type": "fixed",
-        "value": 50
+        "value": 80
       },
       "background": [
         {
           "color": "#AAAAAA",
           "type": "solid"
         }
-      ]
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
     }
   },
   "card": {
@@ -34,7 +46,6 @@
               "layout_mode": {
                 "type": "fixed",
                 "neighbour_page_width": {
-                  "type": "fixed",
                   "value": 10
                 }
               },
@@ -48,10 +59,16 @@
                 "right": 20,
                 "bottom": 0
               },
+              "border": {
+                "stroke": {
+                  "color": "#FF0000",
+                  "width": 1
+                }
+              },
               "items": [
                 {
                   "type": "text_page_fixed_height",
-                  "text": "For millions of years mankind lived just like animalsFor millions of years mankind"
+                  "text": "neighbour_page_size = 10\nitem_spacing = 10\npaddings = 20\nPage width is equal to view below pager."
                 },
                 {
                   "type": "text_page_fixed_height",
