@@ -1,20 +1,24 @@
-import DivKit
 import UIKit
+import DivKit
+import LayoutKit
 import VGSL
 
 public struct ShimmerImagePreviewStyle: Equatable {
   public let colorsAndLocations: [ColorAndLocation]
   public let angle: CGFloat
   public let duration: CGFloat
+  public let cornerRadius: CornerRadii?
 
   public init(
     colorsAndLocations: [ColorAndLocation],
     angle: CGFloat,
-    duration: CGFloat
+    duration: CGFloat,
+    cornerRadius: CornerRadii? = nil
   ) {
     self.colorsAndLocations = colorsAndLocations
     self.angle = angle
     self.duration = duration
+    self.cornerRadius = cornerRadius
   }
 }
 
@@ -43,6 +47,11 @@ extension ShimmerImagePreviewStyle {
       locationsKey: "locations",
       expressionResolver: expressionResolver
     ) ?? defaultColorsAndLocations
+
+    self.cornerRadius = try dictionary.getOptionalCornerRadius(
+      "corner_radius",
+      expressionResolver: expressionResolver
+    )
   }
 }
 

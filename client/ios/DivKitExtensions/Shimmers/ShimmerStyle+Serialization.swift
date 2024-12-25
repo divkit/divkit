@@ -1,5 +1,6 @@
-import DivKit
 import Foundation
+import DivKit
+import LayoutKit
 import VGSL
 
 public struct ColorAndLocation: Equatable {
@@ -118,6 +119,53 @@ extension Dictionary where Key == String {
       throw ShimmerSerializationError.invalidColorsAndLocationsCount
     }
     return zip(colors, locations).map(ColorAndLocation.init)
+  }
+
+  func getOptionalCornerRadius(
+    _ key: Key,
+    expressionResolver: ExpressionResolver
+  ) throws -> CornerRadii? {
+    return try? getOptionalField(key) { (obj: Any) in
+      if let corners = obj as? [String: Any] {
+        let topLeft: Int? = try? getOptionalIntFromDict(
+          dict: corners, "top-left",
+          resolver: expressionResolver
+        )
+        let topRight: Int? = try? getOptionalIntFromDict(
+          dict: corners, "top-right",
+          resolver: expressionResolver
+        )
+        let bottomLeft: Int? = try? getOptionalIntFromDict(
+          dict: corners, "bottom-left",
+          resolver: expressionResolver
+        )
+        let bottomRight: Int? = try? getOptionalIntFromDict(
+          dict: corners, "bottom-right",
+          resolver: expressionResolver
+        )
+
+        return CornerRadii(
+          topLeft: CGFloat(topLeft ?? 0),
+          topRight: CGFloat(topRight ?? 0),
+          bottomLeft: CGFloat(bottomLeft ?? 0),
+          bottomRight: CGFloat(bottomRight ?? 0)
+        )
+      }
+      return nil
+    }
+  }
+
+  private func getOptionalIntFromDict(
+    dict: [String: Any],
+    _ key: Key,
+    resolver: ExpressionResolver
+  ) throws -> Int? {
+    if let value = dict[key] as? Int {
+      return value
+    } else if let expression: String = try dict.getOptionalField(key) {
+      return resolver.resolveNumeric(expression)
+    }
+    return nil
   }
 }
 
