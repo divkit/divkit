@@ -1453,9 +1453,13 @@
     },
     {
       "title": "Visibility actions in DivState",
-      "automated": [
-        "web"
+      "platforms": [
+        "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/visibility_actions_states.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/visibility_actions_states.json"
+      },
       "tags": [
         "DivState",
         "visibility_actions"
@@ -2456,21 +2460,6 @@
       "file": "video/video_aspect.json"
     },
     {
-      "title": "state_id_variable",
-      "tags": [
-        "DivState"
-      ],
-      "steps": [
-        "Open example",
-        "Click buttons to change between 2nd and 3rd states"
-      ],
-      "expected_results": [
-        "Second state should be shown",
-        "All buttons should change variable value, also buttons with the 'by variable' text should perform the same as `by action` buttons"
-      ],
-      "file": "state/state_variable.json"
-    },
-    {
       "title": "Tooltips with typed actions",
       "platforms": [
         "android",
@@ -2748,6 +2737,13 @@
     },
     {
       "title": "Patch state partial",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_partial.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_partial.json"
+      },
       "tags": [
         "patch"
       ],
@@ -2763,6 +2759,13 @@
     },
     {
       "title": "Patch state transactional broken",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json"
+      },
       "tags": [
         "patch"
       ],
@@ -2777,6 +2780,13 @@
     },
     {
       "title": "Patch state transactional success",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_success.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_success.json"
+      },
       "tags": [
         "patch"
       ],

@@ -1,0 +1,152 @@
+{
+  "description": "Patch state partial",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "alert_card": {
+        "type": "container",
+        "height": {
+          "type": "fixed",
+          "unit": "sp",
+          "value": 76
+        },
+        "width": {
+          "type": "match_parent"
+        },
+        "background": [
+          {
+            "color": "#FFFFFF",
+            "type": "solid"
+          }
+        ],
+        "border": {
+          "corner_radius": 6,
+          "stroke": {
+            "color": "#E5E5E5"
+          }
+        },
+        "orientation": "vertical",
+        "items": [
+          {
+            "type": "text",
+            "font_size": 14,
+            "text": "original text:"
+          },
+          {
+            "type": "text",
+            "max_lines": 3,
+            "font_size": 14,
+            "line_height": 18,
+            "margins": {
+              "top": 9,
+              "left": 8
+            },
+            "font_weight": "medium",
+            "$text": "alert_text"
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "alerts_gallery",
+      "variables": [
+        {
+          "name": "state_id",
+          "type": "string",
+          "value": "default"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Current state_id: @{state_id}",
+                "text_size": 24
+              },
+              {
+                "type": "state",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                },
+                "height": {
+                  "type": "fixed",
+                  "unit": "sp",
+                  "value": 76
+                },
+                "id": "state_container",
+                "state_id_variable": "state_id",
+                "states": [
+                  {
+                    "state_id": "default",
+                    "div": {
+                      "id": "state1",
+                      "type": "text",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "height": {
+                        "type": "match_parent"
+                      },
+                      "text_alignment_vertical": "center",
+                      "text_alignment_horizontal": "center",
+                      "text": "First state"
+                    }
+                  },
+                  {
+                    "state_id": "not_default",
+                    "div": {
+                      "id": "state2",
+                      "type": "text",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "height": {
+                        "type": "match_parent"
+                      },
+                      "text_alignment_vertical": "center",
+                      "text_alignment_horizontal": "center",
+                      "text": "Second state"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "download patch",
+          "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fstate-patch-partial.json"
+        }
+      ],
+      "delay": 2000,
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "toggle state",
+          "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    }
+  ]
+}
+
