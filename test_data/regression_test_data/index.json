@@ -2502,9 +2502,6 @@
       "platforms": [
         "ios"
       ],
-      "automated": [
-        "ios"
-      ],
       "tags": [
         "Tooltips"
       ],

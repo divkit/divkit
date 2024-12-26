@@ -4,9 +4,12 @@ import VGSL
 extension BlockTooltip {
   public func calculateFrame(
     targeting targetRect: CGRect,
-    constrainedBy bounds: CGRect
+    constrainedBy bounds: CGRect,
+    useLegacyWidth: Bool = true
   ) -> CGRect {
-    let size = block.intrinsicSize
+    let size = useLegacyWidth
+      ? block.intrinsicSize
+      : block.size(forResizableBlockSize: bounds.size)
     var result = CGRect(
       coordinate: targetRect.coordinate(of: position),
       ofPosition: position.opposite,
@@ -15,10 +18,10 @@ extension BlockTooltip {
 
     if result.intersection(bounds) == result {
       return result
-    } else {
-      result.move(to: bounds)
-      return result
     }
+
+    result.move(to: bounds)
+    return result
   }
 }
 

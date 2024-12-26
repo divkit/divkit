@@ -100,7 +100,7 @@ public class DefaultTooltipManager: TooltipManager {
     let windowBounds = tooltipWindow.bounds.inset(by: tooltipWindow.safeAreaInsets)
     guard !showingTooltips.keys.contains(info.id),
           let tooltip = existingAnchorViews.compactMap({
-            $0?.makeTooltip(id: info.id, in: windowBounds)
+            $0?.makeTooltip(id: info.id, windowBounds: windowBounds)
           }).first
     else { return }
 
@@ -183,7 +183,7 @@ public class DefaultTooltipManager: TooltipManager {
 extension TooltipAnchorView {
   fileprivate func makeTooltip(
     id: String,
-    in constraint: CGRect
+    windowBounds: CGRect
   ) -> DefaultTooltipManager.Tooltip? {
     tooltips
       .first { $0.id == id }
@@ -200,7 +200,8 @@ extension TooltipAnchorView {
             let tooltipView = tooltip.tooltipViewFactory?.value ?? tooltip.block.makeBlockView()
             tooltipView.frame = tooltip.calculateFrame(
               targeting: targetRect,
-              constrainedBy: constraint
+              constrainedBy: windowBounds,
+              useLegacyWidth: tooltip.useLegacyWidth
             )
             return tooltipView
           }()

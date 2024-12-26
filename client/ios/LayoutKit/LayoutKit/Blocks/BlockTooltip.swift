@@ -25,6 +25,7 @@ public struct BlockTooltip: Equatable {
   public let duration: Duration
   public let offset: CGPoint
   public let position: Position
+  public let useLegacyWidth: Bool
   public let tooltipViewFactory: TooltipViewFactory?
 
   public init(
@@ -33,6 +34,7 @@ public struct BlockTooltip: Equatable {
     duration: Duration,
     offset: CGPoint,
     position: BlockTooltip.Position,
+    useLegacyWidth: Bool = true,
     tooltipViewFactory: TooltipViewFactory? = nil
   ) {
     self.id = id
@@ -40,6 +42,7 @@ public struct BlockTooltip: Equatable {
     self.duration = duration
     self.offset = offset
     self.position = position
+    self.useLegacyWidth = useLegacyWidth
     self.tooltipViewFactory = tooltipViewFactory
   }
 
@@ -48,6 +51,7 @@ public struct BlockTooltip: Equatable {
       lhs.duration == rhs.duration &&
       lhs.offset == rhs.offset &&
       lhs.position == rhs.position &&
+      lhs.useLegacyWidth == rhs.useLegacyWidth &&
       lhs.block.equals(rhs.block)
   }
 }

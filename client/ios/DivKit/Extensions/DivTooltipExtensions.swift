@@ -24,6 +24,7 @@ extension DivTooltip {
       duration: Duration(milliseconds: resolveDuration(expressionResolver)),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
+      useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
       tooltipViewFactory: tooltipViewFactory
     )
   }

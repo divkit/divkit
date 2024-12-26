@@ -13,15 +13,26 @@ public struct DivFlagsInfo {
   public let imageBlurPreferMetal: Bool
   public let imageTintPreferMetal: Bool
 
+  /// Indicates if legacy (pre 31.0) behavior should be applied to measure the tooltip width.
+  ///
+  /// `true` - `match_parent` width is interpreted as `wrap_content`. No way to achieve
+  /// `match_parent` behavior.
+  ///
+  /// `false` - tooltips with `match_parent` width (default value for `DivBase.width`) will be
+  /// streched to the full width of the window.
+  public let useTooltipLegacyWidth: Bool
+
   /// Creates an instance of `DivFlagsInfo`.
   public init(
     imageLoadingOptimizationEnabled: Bool = true,
     imageBlurPreferMetal: Bool = true,
-    imageTintPreferMetal: Bool = true
+    imageTintPreferMetal: Bool = true,
+    useTooltipLegacyWidth: Bool = true
   ) {
     self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
     self.imageBlurPreferMetal = imageBlurPreferMetal
     self.imageTintPreferMetal = imageTintPreferMetal
+    self.useTooltipLegacyWidth = useTooltipLegacyWidth
   }
 
   /// The default instance of `DivFlagsInfo`.

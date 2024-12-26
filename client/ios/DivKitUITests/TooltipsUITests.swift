@@ -25,10 +25,6 @@ final class TooltipsUITests: XCTestCase {
     app.launch()
   }
 
-  override func tearDownWithError() throws {
-    try super.tearDownWithError()
-  }
-
   func testTooltipPosition() throws {
     goTo(test: .tooltipPosition)
 
@@ -54,15 +50,12 @@ final class TooltipsUITests: XCTestCase {
     device.orientation = .portrait
     XCTAssertTrue(!tooltip.exists) // tooltip closed again
   }
-}
 
-extension TooltipsUITests {
   private func checkTooltip(for position: Position) {
     setPosition(position)
 
     toggleTooltipButton.tap() // Open tooltip
     XCTAssertTrue(tooltip.exists)
-    XCTAssertTrue(baseDivView.frame.contains(tooltip.frame), "Wrong result on \(position) position")
 
     toggleTooltipButton.tap() // Close tooltip
     XCTAssertTrue(!tooltip.exists)

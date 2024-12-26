@@ -15,10 +15,6 @@ public protocol DivViewMetaProviding: AnyObject {
   func subview(with id: BlockViewID) -> BlockView?
 }
 
-public protocol TooltipAnchorView: ViewType {
-  var tooltips: [BlockTooltip] { get }
-}
-
 extension RenderingDelegate {
   public func reportRenderingError(message _: String, isWarning _: Bool, path _: UIElementPath) {}
 }
