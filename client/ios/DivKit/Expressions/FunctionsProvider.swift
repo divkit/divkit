@@ -43,7 +43,7 @@ final class FunctionsProvider {
             }
             throw ExpressionError("Variable '\(name)' is missing.")
           }
-        case .infix, .prefix:
+        case .infix, .prefix, .ternary:
           return operators[symbol]
         case let .function(name):
           guard let self else {
@@ -58,8 +58,6 @@ final class FunctionsProvider {
           )
         case let .method(name):
           return FunctionEvaluator(symbol, functions: FunctionsProvider.methods)
-        case .postfix:
-          return nil
         }
       }
     }

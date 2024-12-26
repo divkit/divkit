@@ -10,11 +10,11 @@ final class ExpressionTests: XCTestCase {
 }
 
 private func makeTestCases() -> [(String, ExpressionTestCase)] {
-  try! Bundle(for: DivKitTests.self)
+  Bundle(for: DivKitTests.self)
     .urls(forResourcesWithExtension: "json", subdirectory: "expression_test_data")!
     .flatMap { url in
       let fileName = url.lastPathComponent
-      let testCases = try JSONDecoder()
+      let testCases = try! JSONDecoder()
         .decode(TestCases.self, from: Data(contentsOf: url))
         .cases ?? []
       return testCases

@@ -89,7 +89,6 @@
       ]
     },
     {
-      "name": "false ? (3 + 1) * -2 : false || (true && false) => false",
       "expression": "@{false ? (3 + 1) * -2 : false || (true && false)}",
       "expected": {
         "type": "boolean",
@@ -159,6 +158,68 @@
         "android",
         "web",
         "ios"
+      ]
+    },
+    {
+      "expression": "@{var == 'L1' ? var == 'L2' ? 'L2-true' : 'L2-false' : var == 'L' + '3' ? 'L3-true' : var == 'L4' ? 'L4-true' : 'L4-false'}",
+      "expected": {
+        "type": "string",
+        "value": "L3-true"
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "string",
+          "value": "L3"
+        }
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{var=='L1'?'L1-true':var=='L'+'2'?'L2-true':var=='L3'?'L3-true':'L3-false'}",
+      "expected": {
+        "type": "string",
+        "value": "L2-true"
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "string",
+          "value": "L2"
+        }
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{false ? (true ? 'P1-true' : 'P1-false') + ' ' + (true ? 'P2-true' : 'P2-false') : (true ? 'P3-true' : 'P3-false') + ' ' + (false ? 'P4-true' : 'P4-false')}",
+      "expected": {
+        "type": "string",
+        "value": "P3-true P4-false"
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{true ? 'value'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
       ]
     }
   ]

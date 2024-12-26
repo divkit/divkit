@@ -14,7 +14,7 @@ extension [CalcExpression.Symbol: Function] {
 
     self[.infix("&&")] = andOperator
     self[.infix("||")] = orOperator
-    self[.infix("?:")] = ternaryOperator
+    self[.ternary] = ternaryOperator
   }
 }
 
