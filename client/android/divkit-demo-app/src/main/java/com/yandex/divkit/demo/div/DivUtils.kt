@@ -11,6 +11,7 @@ import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.datetime.DivDateTimeExtensionHandler
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
@@ -86,6 +87,7 @@ fun divConfiguration(
         .extension(DivSizeProviderExtensionHandler())
         .extension(createDivSwipeGestureExtensionHandler())
         .extension(createMarkdownExtension(activity))
+        .extension(createDateTimePickerExtension())
         .divPlayerFactory(ExoDivPlayerFactory(activity))
         .divPlayerPreloader(ExoPlayerVideoPreloader(activity))
 }
@@ -217,6 +219,10 @@ private fun createMarkdownExtension(context: Activity): DivMarkdownExtensionHand
         }
     }
     return DivMarkdownExtensionHandler(context, listOf(plugin))
+}
+
+private fun createDateTimePickerExtension(): DivDateTimeExtensionHandler {
+    return DivDateTimeExtensionHandler()
 }
 
 internal fun ParsingEnvironment.createDivDataWithHistograms(data: JSONObject, componentName: String? = null): DivData {
