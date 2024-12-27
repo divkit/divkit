@@ -41,7 +41,7 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
       )
     }
 
-    applyAccessibility(accessibilityElement)
+    applyAccessibilityFromScratch(accessibilityElement)
   }
 
   public override func layoutSubviews() {

@@ -385,7 +385,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     updateContentBackgroundColor(animated: false)
     updateContentAlpha(animated: false)
 
-    applyAccessibility(model.accessibility)
+    applyAccessibilityFromScratch(model.accessibility)
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
 

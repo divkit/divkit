@@ -70,7 +70,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
       }
       textBlockView.model = model
       isUserInteractionEnabled = model.isUserInteractionEnabled
-      applyAccessibility(model.accessibility)
+      applyAccessibilityFromScratch(model.accessibility)
     }
   }
 

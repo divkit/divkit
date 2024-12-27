@@ -17,7 +17,7 @@ extension AnimatableImageBlock {
     }
     animatableImageView.imageContentMode = contentMode
     animatableImageView.isUserInteractionEnabled = false
-    animatableImageView.applyAccessibility(accessibilityElement)
+    animatableImageView.applyAccessibilityFromScratch(accessibilityElement)
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
