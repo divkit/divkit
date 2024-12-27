@@ -30,5 +30,10 @@ final class DivViewProvider {
     .onAppear { [weak self] in
       self?.jsonProvider.load(url: url)
     }
+    .onDisappear { [weak self] in
+      self?.divKitComponents.reset(cardId: cardId)
+    }
   }
 }
+
+let cardId: DivCardID = "DivViewCard"
