@@ -146,6 +146,20 @@ final class DivActionIntentTests: XCTestCase {
     }
   }
 
+  func test_SetStoredValue_Bool() {
+    switch makeIntent(
+      "div-action://set_stored_value?name=var&value=true&type=bool&lifetime=100"
+    ) {
+    case let .setStoredValue(value):
+      XCTAssertEqual("var", value.name)
+      XCTAssertEqual("true", value.value)
+      XCTAssertEqual(.bool, value.type)
+      XCTAssertEqual(100, value.lifetimeInSec)
+    default:
+      XCTFail("Invalid intent")
+    }
+  }
+
   func test_SetStoredValue_WithoutValueReturnsNil() {
     XCTAssertNil(
       makeIntent("div-action://set_stored_value?name=var&type=string&lifetime=100")

@@ -22,9 +22,7 @@ final class FunctionsProvider {
   lazy var functions: [String: Function] =
     lock.withLock {
       var functions = staticFunctions
-      for item in GetStoredValueFunctions.allCases {
-        functions[item.rawValue] = item.getFunction(persistentValuesStorage.get)
-      }
+      functions.addGetStoredValueFunctions(persistentValuesStorage.get)
       return functions
     }
 

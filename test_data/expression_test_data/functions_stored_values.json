@@ -117,7 +117,8 @@
         "value": "Failed to evaluate [getStoredArrayValue('unknown_var')]. Missing value."
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -127,7 +128,8 @@
         "value": "Failed to evaluate [getStoredDictValue('unknown_var')]. Missing value."
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

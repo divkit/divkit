@@ -119,6 +119,20 @@ extension DivStoredValue {
       } else {
         nil
       }
+    case .array:
+      if let rawValue = try? JSONSerialization.jsonObject(jsonString: value) as? [Any],
+         let array = DivArray.fromAny(rawValue) {
+        .array(array)
+      } else {
+        nil
+      }
+    case .dict:
+      if let rawValue = try? JSONSerialization.jsonObject(jsonString: value) as? [String: Any],
+         let dict = DivDictionary.fromAny(rawValue) {
+        .dict(dict)
+      } else {
+        nil
+      }
     }
   }
 

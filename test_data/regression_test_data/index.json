@@ -2541,7 +2541,8 @@
         "TypedActions"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "steps": [
         "Press 'Store string value for 10 seconds'",

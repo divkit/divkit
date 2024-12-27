@@ -1269,7 +1269,8 @@
       ],
       "result_type": "array",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -1284,7 +1285,8 @@
       ],
       "result_type": "dict",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

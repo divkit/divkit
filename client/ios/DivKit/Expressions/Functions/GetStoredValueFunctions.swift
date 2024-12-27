@@ -1,55 +1,26 @@
 import Foundation
 import VGSL
 
-enum GetStoredValueFunctions: String, CaseIterable {
-  case getStoredIntegerValue
-  case getStoredNumberValue
-  case getStoredStringValue
-  case getStoredUrlValue
-  case getStoredColorValue
-  case getStoredBooleanValue
-
-  func getFunction(
+extension [String: Function] {
+  mutating func addGetStoredValueFunctions(
     _ valueProvider: @escaping (String) -> Any?
-  ) -> Function {
-    switch self {
-    case .getStoredIntegerValue:
-      return makeFunction(valueProvider) as FunctionBinary<String, Int, Int>
-    case .getStoredNumberValue:
-      return makeFunction(valueProvider) as FunctionBinary<String, Double, Double>
-    case .getStoredStringValue:
-      return makeFunction(valueProvider) as FunctionBinary<String, String, String>
-    case .getStoredUrlValue:
-      let fromUrlFunction: FunctionBinary<String, URL, URL> = makeFunction(valueProvider)
-      let fromStringFunction: FunctionBinary<String, String, URL> =
-        makeFunction(valueProvider) {
-          guard let url = URL(string: $0) else {
-            throw ExpressionError(
-              "Failed to get URL from (\($0)). Unable to convert value to URL."
-            )
-          }
-          return url
-        }
-      return OverloadedFunction(functions: [fromUrlFunction, fromStringFunction])
-    case .getStoredColorValue:
-      let fromColorFunction: FunctionBinary<String, Color, Color> = makeFunction(valueProvider)
-      let fromStringFunction: FunctionBinary<String, String, Color> =
-        makeFunction(valueProvider) {
-          guard let color = Color.color(withHexString: $0) else {
-            throw ExpressionError(
-              "Failed to get Color from (\($0)). Unable to convert value to Color."
-            )
-          }
-          return color
-        }
-      return OverloadedFunction(functions: [fromColorFunction, fromStringFunction])
-    case .getStoredBooleanValue:
-      return makeFunction(valueProvider) as FunctionBinary<String, Bool, Bool>
-    }
+  ) {
+    addFunction("getStoredBooleanValue", makeFunction(Bool.self, valueProvider))
+    addFunction("getStoredIntegerValue", makeFunction(Int.self, valueProvider))
+    addFunction("getStoredNumberValue", makeFunction(Double.self, valueProvider))
+    addFunction("getStoredStringValue", makeFunction(String.self, valueProvider))
+    addFunction("getStoredColorValue", makeColorFunction(valueProvider))
+    addFunction("getStoredUrlValue", makeUrlFunction(valueProvider))
+    addFunction("getStoredArrayValue", makeFunctionWithoutFallback(DivArray.self, valueProvider))
+    addFunction(
+      "getStoredDictValue",
+      makeFunctionWithoutFallback(DivDictionary.self, valueProvider)
+    )
   }
 }
 
 private func makeFunction<T>(
+  _: T.Type,
   _ valueProvider: @escaping (String) -> Any?
 ) -> FunctionBinary<String, T, T> {
   makeFunction(valueProvider) { $0 }
@@ -65,4 +36,44 @@ private func makeFunction<T, U>(
     }
     return value
   }
+}
+
+private func makeFunctionWithoutFallback<T>(
+  _: T.Type,
+  _ valueProvider: @escaping (String) -> Any?
+) -> FunctionUnary<String, T> {
+  FunctionUnary {
+    if let value = valueProvider($0) as? T {
+      return value
+    }
+    throw ExpressionError("Missing value.")
+  }
+}
+
+private func makeColorFunction(_ valueProvider: @escaping (String) -> Any?) -> Function {
+  let fromColorFunction = makeFunction(Color.self, valueProvider)
+  let fromStringFunction: FunctionBinary<String, String, Color> =
+    makeFunction(valueProvider) {
+      guard let color = Color.color(withHexString: $0) else {
+        throw ExpressionError(
+          "Failed to get Color from (\($0)). Unable to convert value to Color."
+        )
+      }
+      return color
+    }
+  return OverloadedFunction(functions: [fromColorFunction, fromStringFunction])
+}
+
+private func makeUrlFunction(_ valueProvider: @escaping (String) -> Any?) -> Function {
+  let fromUrlFunction = makeFunction(URL.self, valueProvider)
+  let fromStringFunction: FunctionBinary<String, String, URL> =
+    makeFunction(valueProvider) {
+      guard let url = URL(string: $0) else {
+        throw ExpressionError(
+          "Failed to get URL from (\($0)). Unable to convert value to URL."
+        )
+      }
+      return url
+    }
+  return OverloadedFunction(functions: [fromUrlFunction, fromStringFunction])
 }
