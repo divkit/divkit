@@ -148,6 +148,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   private var contextMenuDelegate: NSObjectProtocol?
 
+  private var animationStartTime: Date?
+  private let animationMinimalDuration: TimeInterval = 0.125
+
   private var visibilityActionPerformers: VisibilityActionPerformers?
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
   var effectiveBackgroundColor: UIColor? { backgroundColor }
@@ -423,7 +426,26 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       return updateContentAlpha(animated: animated)
     }
 
-    perform(actionAnimation, animated: animated)
+    let startAnimation = DispatchWorkItem { [weak self] in
+      self?.perform(actionAnimation, animated: animated) {
+        self?.animationStartTime = nil
+      }
+      self?.animationStartTime = Date()
+    }
+
+    if let animationStartTime {
+      let remainingTime: TimeInterval = max(
+        0.0, animationMinimalDuration - Date().timeIntervalSince(animationStartTime)
+      )
+
+      DispatchQueue.main.asyncAfter(
+        deadline: DispatchTime.now() + remainingTime,
+        execute: startAnimation
+      )
+
+    } else {
+      startAnimation.perform()
+    }
   }
 
   private func updateContentAlpha(animated: Bool) {
