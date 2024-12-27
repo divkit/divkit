@@ -20,6 +20,7 @@ extension DivTooltip {
 
     return try BlockTooltip(
       id: id,
+      // Legacy behavior. Views should be created with tooltipViewFactory.
       block: div.value.makeBlock(context: context),
       duration: Duration(milliseconds: resolveDuration(expressionResolver)),
       offset: offset?.resolve(expressionResolver) ?? .zero,
@@ -50,11 +51,22 @@ extension [DivTooltip]? {
   func makeTooltips(
     context: DivBlockModelingContext
   ) throws -> [BlockTooltip] {
-    try self?.iterativeFlatMap { div, index in
+    let items = self ?? []
+    if items.isEmpty, context.viewId.isTooltip {
+      context.errorsStorage.add(
+        DivBlockModelingError(
+          "Tooltip can not host another tooltips",
+          path: context.parentPath
+        )
+      )
+      return []
+    }
+
+    return try items.iterativeFlatMap { div, index in
       let tooltipContext = context.modifying(
         parentPath: context.parentPath + "tooltip" + index
       )
       return try div.makeTooltip(context: tooltipContext)
-    } ?? []
+    }
   }
 }
