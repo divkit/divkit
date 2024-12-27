@@ -10,7 +10,7 @@ enum AppComponents {
 
   static func makeDivKitComponents(
     layoutDirection: UserInterfaceLayoutDirection = .system,
-    reporter: DivReporter? = nil,
+    reporter: DivReporter = PlaygroundReporter(),
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
     variableStorage: DivVariableStorage? = nil
   ) -> DivKitComponents {
@@ -45,12 +45,6 @@ enum AppComponents {
       layoutDirection: layoutDirection,
       patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),
       reporter: reporter,
-      trackVisibility: { logId, cardId in
-        AppLogger.info("Visibility: cardId = \(cardId), logId = \(logId)")
-      },
-      trackDisappear: { logId, cardId in
-        AppLogger.info("Disappear: cardId = \(cardId), logId = \(logId)")
-      },
       playerFactory: playerFactory,
       urlHandler: urlHandler,
       variablesStorage: variablesStorage

@@ -175,7 +175,7 @@
 		8C2BFA5628C10F2200A16E9B /* RegressionTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */; };
 		8C2BFA5828C10F5B00A16E9B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5728C10F5B00A16E9B /* TestData.swift */; };
 		8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */; };
-		8C38262B2AB46BB700264C17 /* DivReporterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */; };
+		8C38262B2AB46BB700264C17 /* PlaygroundReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */; };
 		8C38262D2AB46BF400264C17 /* PlaygroundPatchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */; };
 		8C40BA022ABB3B5C008405AD /* DivActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */; };
 		8C440A042864C55400EF4175 /* DivKitPlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4409FD2864C55400EF4175 /* DivKitPlaygroundApp.swift */; };
@@ -520,7 +520,7 @@
 		8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegressionTestView.swift; sourceTree = "<group>"; };
 		8C2BFA5728C10F5B00A16E9B /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverAnyTests.swift; sourceTree = "<group>"; };
-		8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivReporterDelegate.swift; sourceTree = "<group>"; };
+		8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundReporter.swift; sourceTree = "<group>"; };
 		8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundPatchProvider.swift; sourceTree = "<group>"; };
 		8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionHandlerTests.swift; sourceTree = "<group>"; };
 		8C4409ED2864C4D200EF4175 /* DivKit Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DivKit Playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1054,15 +1054,15 @@
 		8C7B187B2864CA1F0036EF4C /* DivKit */ = {
 			isa = PBXGroup;
 			children = (
-				8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */,
+				9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */,
 				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
 				762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */,
 				8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */,
+				8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */,
 				8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */,
 				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
 				76FD0507294208F70002A1F9 /* RiveContainerView.swift */,
 				76FD0505294208890002A1F9 /* RiveDivCustomData.swift */,
-				9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */,
 			);
 			path = DivKit;
 			sourceTree = "<group>";
@@ -1954,7 +1954,7 @@
 				8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */,
 				8C1A375228B4189E00A047C8 /* ScannerView.swift in Sources */,
 				8C1A375128B4189E00A047C8 /* ScannerViewController.swift in Sources */,
-				8C38262B2AB46BB700264C17 /* DivReporterDelegate.swift in Sources */,
+				8C38262B2AB46BB700264C17 /* PlaygroundReporter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

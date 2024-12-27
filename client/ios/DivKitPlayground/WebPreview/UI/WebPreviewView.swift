@@ -51,7 +51,7 @@ private final class WebPreviewModel {
     self.payloadFactory = payloadFactory
 
     divKitComponents = AppComponents.makeDivKitComponents(
-      reporter: DivReporterDelegate {
+      reporter: PlaygroundReporter {
         payloadFactory.addError($0)
       }
     )
