@@ -228,10 +228,12 @@
         ownerNode: HTMLElement;
         desc: MaybeMissing<Tooltip>;
         timeoutId: number | null;
+        componentContext: ComponentContext | undefined;
     }[] = [];
     let menu: {
         items: MaybeMissing<ActionMenuItem>[];
         node: HTMLElement;
+        componentContext: ComponentContext | undefined;
     } | undefined;
 
     const timeouts: number[] = [];
@@ -759,7 +761,8 @@
             internalId: ++tooltipCounter,
             ownerNode: item.onwerNode,
             desc: item.tooltip,
-            timeoutId: 0
+            timeoutId: 0,
+            componentContext
         };
         tooltips = [...tooltips, info];
 
@@ -1204,7 +1207,8 @@
             } else if (opts.node && Array.isArray(action.menu_items) && action.menu_items.length) {
                 menu = {
                     items: action.menu_items,
-                    node: opts.node
+                    node: opts.node,
+                    componentContext: opts.componentContext
                 };
             }
         }
@@ -2113,7 +2117,7 @@
                     ownerNode={item.ownerNode}
                     data={item.desc}
                     internalId={item.internalId}
-                    parentComponentContext={rootStateComponentContext}
+                    parentComponentContext={item.componentContext || rootStateComponentContext}
                 />
             {/each}
         {/if}
@@ -2122,7 +2126,7 @@
             <Menu
                 ownerNode={menu.node}
                 items={menu.items}
-                parentComponentContext={rootStateComponentContext}
+                parentComponentContext={menu.componentContext || rootStateComponentContext}
                 on:close={() => menu = undefined}
             />
         {/if}
