@@ -126,8 +126,9 @@ extension Grid {
   fileprivate func calculateItemIndexToCoord() -> [Int: (row: Int, column: Int)] {
     var itemIndexToCoord: [Int: (row: Int, column: Int)] = [:]
     forEachCell {
-      let idx = itemsIndices[$0]
-      itemIndexToCoord[idx] = itemIndexToCoord[idx] ?? $0
+      if let idx = itemsIndices[$0] {
+        itemIndexToCoord[idx] = itemIndexToCoord[idx] ?? $0
+      }
     }
     return itemIndexToCoord
   }
@@ -293,7 +294,7 @@ private func calculateWeights(
     direction.selectDimension(from: (row: grid.rowCount, column: grid.columnCount))
   var result = [LayoutTrait.Weight?](repeating: nil, times: try! UInt(value: resultCount))
   grid.forEachCell { coord in
-    if let item = weightedItems[grid.itemsIndices[coord]] {
+    if let index = grid.itemsIndices[coord], let item = weightedItems[index] {
       let resultIndex = direction.selectDimension(from: coord)
       let weightPerSpan = item.weight.rawValue / CGFloat(item.span)
       result[resultIndex] = LayoutTrait.Weight(
@@ -367,10 +368,10 @@ private func calculateWeightToIntrinsicSize(
   )
 
   grid.forEachCell { coord in
-    let idx = grid.itemsIndices[coord]
-    guard !checkedItems.contains(idx) else {
+    guard let idx = grid.itemsIndices[coord], !checkedItems.contains(idx) else {
       return
     }
+
     checkedItems.insert(idx)
     if let item = nonResizableItems[idx] {
       let dimension = direction.selectDimension(from: coord)

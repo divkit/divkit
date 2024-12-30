@@ -30,20 +30,13 @@ final class DivGridExtensionsTests: XCTestCase {
     let makeError: (String) -> DivBlockModelingError = {
       DivBlockModelingError($0, path: gridPath)
     }
-    let makeEmptyCellError: (_ row: Int, _ column: Int) -> DivBlockModelingError = {
-      makeError("Grid block error: empty cell at (\($0), \($1))")
-    }
     let makeNoSpaceError: (_ item: Int) -> DivBlockModelingError = {
       makeError("Grid block error: no space for item at index \($0)")
     }
 
     let fileToError = [
-      "invalid-row-span1": makeEmptyCellError(1, 0),
-      "invalid-row-span2": makeEmptyCellError(1, 1),
-      "invalid-row-span3": makeEmptyCellError(1, 1),
       "invalid-column-span1": makeNoSpaceError(0),
       "invalid-column-span2": makeNoSpaceError(1),
-      "invalid-column-span3": makeEmptyCellError(1, 1),
     ]
 
     try fileToError.forEach {
