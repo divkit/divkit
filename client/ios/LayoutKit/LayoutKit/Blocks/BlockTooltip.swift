@@ -2,9 +2,9 @@ import CoreGraphics
 import VGSL
 
 #if os(iOS)
-public typealias TooltipViewFactory = Variable<VisibleBoundsTrackingView?>
+public typealias TooltipViewFactory = () async -> VisibleBoundsTrackingView?
 #else
-public typealias TooltipViewFactory = Variable<ViewType?>
+public typealias TooltipViewFactory = () async -> ViewType?
 #endif
 
 public struct BlockTooltip: Equatable {

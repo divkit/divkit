@@ -148,8 +148,7 @@ public struct DivBlockModelingContext {
   ) {
     self.viewId = viewId
     self.cardLogId = cardLogId
-    let cardId = viewId.cardId
-    let parentPath = parentPath ?? UIElementPath(cardId.rawValue)
+    let parentPath = parentPath ?? makeParentPath(viewId: viewId)
     self.parentPath = parentPath
     self.parentDivStatePath = parentDivStatePath
     self.stateManager = stateManager
@@ -334,6 +333,15 @@ private func makeExpressionResolver(
       errorsStorage.add(DivExpressionError(error, path: path))
     }
   )
+}
+
+private func makeParentPath(viewId: DivViewId) -> UIElementPath {
+  let cardIdPath = UIElementPath(viewId.cardId.rawValue)
+  return if let additionalId = viewId.additionalId {
+    cardIdPath + additionalId
+  } else {
+    cardIdPath
+  }
 }
 
 extension [DivExtensionHandler] {

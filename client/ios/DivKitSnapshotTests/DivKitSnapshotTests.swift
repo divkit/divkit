@@ -18,7 +18,7 @@ struct DivKitSnapshotTests {
     try await doTest(jsonFile)
   }
 
-  @Test("Interactive Snapshots", .serialized, arguments: interactiveSnapshotTestsFiles)
+  @Test("Interactive Snapshots", .serialized, .timeLimit(.minutes(1)), arguments: interactiveSnapshotTestsFiles)
   func interactiveSnapshotTest(jsonFile: JsonFile) async throws {
     try await doTest(jsonFile)
   }

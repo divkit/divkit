@@ -11,11 +11,11 @@ extension DivTooltip {
       return nil
     }
 
-    let tooltipViewFactory: TooltipViewFactory = Variable { [weak self] in
+    let tooltipViewFactory: TooltipViewFactory = { [weak self] in
       guard let self, let tooltipViewFactory = context.tooltipViewFactory else {
         return nil
       }
-      return tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
+      return await tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
     }
 
     return try BlockTooltip(

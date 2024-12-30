@@ -82,9 +82,16 @@ final class SnapshotTestRunner {
     manager: DefaultTooltipManager,
     check: CheckAction
   ) async throws {
-    guard let tooltipView = manager.tooltipWindow?.subviews.first else {
-      try check(nil)
-      return
+    guard let tooltipWindow = manager.tooltipWindow else {
+      return try check(nil)
+    }
+
+    while !tooltipWindow.isKeyWindow {
+      await Task.yield()
+    }
+
+    guard let tooltipView = tooltipWindow.subviews.first else {
+      return try check(nil)
     }
 
     tooltipView.forceLayout()
