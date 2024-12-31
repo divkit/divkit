@@ -76,7 +76,7 @@
 		8C01499E287329D700BA5402 /* expression_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C01499D287329D700BA5402 /* expression_test_data */; };
 		8C03519A288EC5AB0016A747 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C035199288EC5AB0016A747 /* Images.xcassets */; };
 		8C0662302D09A43500B30CE3 /* SetStoredValueActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C06622F2D09A42800B30CE3 /* SetStoredValueActionHandlerTests.swift */; };
-		8C0688652B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0688642B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift */; };
+		8C0688652B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0688642B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift */; };
 		8C09E9D82B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C09E9D72B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift */; };
 		8C0C0767288FE8F30052C4A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C0766288FE8F30052C4A9 /* Main.storyboard */; };
 		8C0DC7122865CA1100286F6B /* DivKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0DC7112865CA1100286F6B /* DivKitTests.swift */; };
@@ -219,6 +219,7 @@
 		8C7EE1D128B777AE008A48E6 /* YSText-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CD28B777AE008A48E6 /* YSText-Medium.ttf */; };
 		8C7EE1D228B777AE008A48E6 /* YSText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */; };
 		8C7EE1D628B7786E008A48E6 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */; };
+		8C80DB312D22C64F0029C683 /* DivTooltipExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */; };
 		8C8354542C296710004EF2AE /* UIElementPathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8354532C296710004EF2AE /* UIElementPathTests.swift */; };
 		8C84C2232D0870F400A574AC /* ScrollActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */; };
 		8C88636128AB802C00D04928 /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C88636028AB802C00D04928 /* ReferenceSet.swift */; };
@@ -420,7 +421,7 @@
 		8C01499D287329D700BA5402 /* expression_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = expression_test_data; path = ../../../test_data/expression_test_data; sourceTree = "<group>"; };
 		8C035199288EC5AB0016A747 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8C06622F2D09A42800B30CE3 /* SetStoredValueActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetStoredValueActionHandlerTests.swift; sourceTree = "<group>"; };
-		8C0688642B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivAccessibilityExtentionsTests.swift; sourceTree = "<group>"; };
+		8C0688642B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivAccessibilityExtensionsTests.swift; sourceTree = "<group>"; };
 		8C09E9D72B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivContainerAccessibilityDescriptionTests.swift; sourceTree = "<group>"; };
 		8C0C0766288FE8F30052C4A9 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8C0DC7112865CA1100286F6B /* DivKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivKitTests.swift; sourceTree = "<group>"; };
@@ -568,6 +569,7 @@
 		8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Regular.ttf"; sourceTree = "<group>"; };
 		8C7EE1D328B777B9008A48E6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
+		8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTooltipExtensionsTests.swift; sourceTree = "<group>"; };
 		8C8354532C296710004EF2AE /* UIElementPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElementPathTests.swift; sourceTree = "<group>"; };
 		8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollActionHandlerTests.swift; sourceTree = "<group>"; };
 		8C84C2242D08730A00A574AC /* MockDivActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivActionHandler.swift; sourceTree = "<group>"; };
@@ -1142,8 +1144,9 @@
 		8C7B1B242865C01C0036EF4C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8C0688642B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift */,
+				8C0688642B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift */,
 				8C7B1B2E2865C01C0036EF4C /* DivActionExtensionsTests.swift */,
+				7EE2ED6D2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift */,
 				52CD80662A7122AA00B828B0 /* DivBaseExtensionsTests.swift */,
 				8C09E9D72B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift */,
 				8C7B1B292865C01C0036EF4C /* DivContainerExtensionsTests.swift */,
@@ -1158,9 +1161,9 @@
 				52CD80682A7159C200B828B0 /* DivStateExtensionsTests.swift */,
 				8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */,
 				8C7B1B282865C01C0036EF4C /* DivTextExtensionsTests.swift */,
+				8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */,
 				8CC357F82BFE24B4001C2CFE /* FontFeatureSettingsParserTests.swift */,
 				52CD806A2A7172B400B828B0 /* XCTestCase+ViewVisibilityCallCount.swift */,
-				7EE2ED6D2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1979,6 +1982,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C23F42229DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift in Sources */,
+				8C80DB312D22C64F0029C683 /* DivTooltipExtensionsTests.swift in Sources */,
 				8C23F41329DDB3810069F3F7 /* EntityWithArray.swift in Sources */,
 				8C23F42829DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift in Sources */,
 				8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */,
@@ -2074,7 +2078,7 @@
 				8C1DEBCE2A2F8277009237F1 /* DivStateManagementTests.swift in Sources */,
 				8C7B1BFA2865C01C0036EF4C /* DivDataExtensionsTests.swift in Sources */,
 				8C23F41429DDB3810069F3F7 /* EntityWithArrayOfEnums.swift in Sources */,
-				8C0688652B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift in Sources */,
+				8C0688652B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift in Sources */,
 				8C23F42429DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift in Sources */,
 				8C23F42129DDB3810069F3F7 /* EntityWithEntityProperty.swift in Sources */,
 				8C23F41129DDB3810069F3F7 /* Entity.swift in Sources */,

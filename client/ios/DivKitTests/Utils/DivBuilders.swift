@@ -99,6 +99,7 @@ func divText(
   paddings: DivEdgeInsets? = nil,
   text: String = "",
   textExpression: String? = nil,
+  tooltips: [DivTooltip]? = nil,
   width: DivSize? = nil,
   variables: [DivVariable]? = nil,
   visibility: Expression<DivVisibility>? = nil,
@@ -119,6 +120,7 @@ func divText(
     margins: margins,
     paddings: paddings,
     text: textValue,
+    tooltips: tooltips,
     variables: variables,
     visibility: visibility,
     visibilityActions: visibilityActions,
@@ -136,6 +138,7 @@ func divSeparator(
   id: String? = nil,
   margins: DivEdgeInsets? = nil,
   paddings: DivEdgeInsets? = nil,
+  tooltips: [DivTooltip]? = nil,
   transitionIn: DivAppearanceTransition? = nil,
   transitionTriggers: [DivTransitionTrigger]? = nil,
   visibility: Expression<DivVisibility>? = nil
@@ -150,6 +153,7 @@ func divSeparator(
     id: id,
     margins: margins,
     paddings: paddings,
+    tooltips: tooltips,
     transitionIn: transitionIn,
     transitionTriggers: transitionTriggers,
     visibility: visibility
@@ -503,6 +507,13 @@ func matchParentSize() -> DivSize {
 
 func wrapContentSize() -> DivSize {
   .divWrapContentSize(DivWrapContentSize())
+}
+
+func point(x: Double, y: Double) -> DivPoint {
+  DivPoint(
+    x: DivDimension(value: .value(x)),
+    y: DivDimension(value: .value(y))
+  )
 }
 
 func variable(_ name: String, _ value: String) -> DivVariable {

@@ -7,14 +7,17 @@ extension DivBlockModelingContext {
   public static let `default` = DivBlockModelingContext()
 
   public init(
+    cardId: DivCardID = testCardId,
+    additionalId: String? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     extensionHandlers: [DivExtensionHandler] = [],
     scheduler: Scheduling? = nil,
     variableStorage: DivVariableStorage? = nil
   ) {
     self.init(
-      cardId: Self.testCardId,
-      cardLogId: Self.testCardId.rawValue,
+      cardId: cardId,
+      additionalId: additionalId,
+      cardLogId: cardId.rawValue,
       stateManager: DivStateManager(),
       blockStateStorage: blockStateStorage,
       imageHolderFactory: FakeImageHolderFactory(),

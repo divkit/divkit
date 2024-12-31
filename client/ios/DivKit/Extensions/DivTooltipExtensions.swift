@@ -52,7 +52,7 @@ extension [DivTooltip]? {
     context: DivBlockModelingContext
   ) throws -> [BlockTooltip] {
     let items = self ?? []
-    if items.isEmpty, context.viewId.isTooltip {
+    if !items.isEmpty, context.viewId.isTooltip {
       context.errorsStorage.add(
         DivBlockModelingError(
           "Tooltip can not host another tooltips",
@@ -62,11 +62,9 @@ extension [DivTooltip]? {
       return []
     }
 
-    return try items.iterativeFlatMap { div, index in
-      let tooltipContext = context.modifying(
-        parentPath: context.parentPath + "tooltip" + index
-      )
-      return try div.makeTooltip(context: tooltipContext)
+    return try items.compactMap {
+      let tooltipContext = context.cloneForTooltip(tooltipId: $0.id)
+      return try $0.makeTooltip(context: tooltipContext)
     }
   }
 }

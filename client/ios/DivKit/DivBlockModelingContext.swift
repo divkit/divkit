@@ -9,7 +9,7 @@ import AppKit
 #endif
 
 public struct DivBlockModelingContext {
-  let viewId: DivViewId
+  private(set) var viewId: DivViewId
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
@@ -296,6 +296,14 @@ public struct DivBlockModelingContext {
       errorsStorage: context.errorsStorage
     )
 
+    return context
+  }
+
+  func cloneForTooltip(tooltipId: String) -> Self {
+    var context = self
+    let viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
+    context.viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
+    context.parentPath = makeParentPath(viewId: viewId)
     return context
   }
 }
