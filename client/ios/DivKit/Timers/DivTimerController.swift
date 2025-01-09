@@ -56,6 +56,10 @@ final class DivTimerController {
     self.reporter = reporter
   }
 
+  deinit {
+    cancel()
+  }
+
   func start() {
     if state != .stopped {
       DivKitLogger.error("Timer '\(divTimer.id)' can't start because it has state '\(state)'.")
