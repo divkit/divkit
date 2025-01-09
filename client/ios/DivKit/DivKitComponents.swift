@@ -391,6 +391,7 @@ public final class DivKitComponents {
     updateAggregator.forceUpdate()
   }
 
+  #if os(iOS)
   @_spi(Internal)
   public func renderingDelegate(for cardId: DivCardID) -> RenderingDelegate {
     ErrorsReportingRenderingDelegate(
@@ -399,6 +400,7 @@ public final class DivKitComponents {
       divReporter: debugErrorCollectors[cardId]
     )
   }
+  #endif
 
   private func debugErrorCollector(
     for cardId: DivCardID,
@@ -432,6 +434,7 @@ let defaultPlayerFactory: PlayerFactory? = DefaultPlayerFactory()
 let defaultPlayerFactory: PlayerFactory? = nil
 #endif
 
+#if os(iOS)
 private final class ErrorsReportingRenderingDelegate: RenderingDelegate {
   private let wrappedRenderingDelegate: RenderingDelegate
   private let cardId: DivCardID
@@ -474,3 +477,4 @@ private final class ErrorsReportingRenderingDelegate: RenderingDelegate {
     wrappedRenderingDelegate.tooltipAnchorViewRemoved(anchorView: anchorView)
   }
 }
+#endif
