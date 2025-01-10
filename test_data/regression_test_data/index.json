@@ -3359,6 +3359,26 @@
         "There is no 4th animation cycle and the counter equals 3"
       ],
       "file": "shine.json"
+    },
+    {
+      "title": "Date and time input (extension)",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivInput",
+        "extensions"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Choose date",
+        "Choose time"
+      ],
+      "expected_results": [
+        "Date picker dialog should be displayed",
+        "Selected date and time should be displayed in input field and text field below"
+      ],
+      "file": "datetime.json"
     }
   ]
 }
