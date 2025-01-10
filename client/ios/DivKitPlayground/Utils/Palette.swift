@@ -2,9 +2,9 @@ import DivKit
 import VGSL
 
 struct Palette {
-  private let json: [String: Any]
+  private let json: [String: any Sendable]
 
-  init(json: [String: Any]) {
+  init(json: [String: any Sendable]) {
     self.json = json
   }
 
