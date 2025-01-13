@@ -27,6 +27,9 @@ import com.yandex.div.markdown.DivMarkdownExtensionHandler
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.gesture.DivGestureExtensionHandler
 import com.yandex.div.gesture.ParsingErrorLoggerFactory
+import com.yandex.div.shimmer.DivShimmerExtensionHandler
+import com.yandex.div.shine.DivShineExtensionHandler
+import com.yandex.div.shine.DivShineLogger
 import com.yandex.div.video.ExoDivPlayerFactory
 import com.yandex.div.video.ExoPlayerVideoPreloader
 import com.yandex.div2.DivAction
@@ -41,6 +44,7 @@ import com.yandex.divkit.regression.ScenarioLogDelegate
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import org.json.JSONObject
+import java.lang.Exception
 
 fun divConfiguration(
     activity: Activity,
@@ -86,6 +90,8 @@ fun divConfiguration(
         .extension(DivSizeProviderExtensionHandler())
         .extension(createDivSwipeGestureExtensionHandler())
         .extension(createMarkdownExtension(activity))
+        .extension(DivShimmerExtensionHandler())
+        .extension(createDivShineExtensionHandler())
         .divPlayerFactory(ExoDivPlayerFactory(activity))
         .divPlayerPreloader(ExoPlayerVideoPreloader(activity))
 }
@@ -94,6 +100,14 @@ fun createDivSwipeGestureExtensionHandler(): DivGestureExtensionHandler {
     return DivGestureExtensionHandler(
         parsingErrorLoggerFactory = object : ParsingErrorLoggerFactory {
             override fun create(key: String) = ParsingErrorLogger.ASSERT
+        }
+    )
+}
+
+fun createDivShineExtensionHandler(): DivShineExtensionHandler {
+    return DivShineExtensionHandler(
+        logger = object : DivShineLogger {
+            override fun logError(e: Exception) = ParsingErrorLogger.ASSERT.logError(e)
         }
     )
 }

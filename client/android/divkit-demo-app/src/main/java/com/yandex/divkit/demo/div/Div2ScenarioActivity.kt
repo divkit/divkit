@@ -29,7 +29,6 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.lottie.DivLottieExtensionHandler
-import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivAction
@@ -113,7 +112,6 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             )
             .actionHandler(actionHandler)
             .extension(DivLottieExtensionHandler())
-            .extension(DivShimmerExtensionHandler())
             .extension(CheckBoundsExtensionHandler())
             .divStateChangeListener(transitionScheduler)
             .divDataChangeListener(transitionScheduler)

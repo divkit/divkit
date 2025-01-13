@@ -3341,6 +3341,7 @@
     {
       "title": "Shine (extension)",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [
