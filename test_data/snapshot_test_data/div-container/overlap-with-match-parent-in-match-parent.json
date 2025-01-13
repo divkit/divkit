@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
     "block": {

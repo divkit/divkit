@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
     "text_white_bg_50x50": {
@@ -37,8 +38,14 @@
     },
     "overlap_fixed_170x170_container_black": {
       "type": "overlap_container_black",
-      "width": { "type": "fixed", "value": 170 },
-      "height": { "type": "fixed", "value": 170 }
+      "width": {
+        "type": "fixed",
+        "value": 170
+      },
+      "height": {
+        "type": "fixed",
+        "value": 170
+      }
     },
     "overlap_orientation_alignments_testcase": {
       "type": "overlap_fixed_170x170_container_black",

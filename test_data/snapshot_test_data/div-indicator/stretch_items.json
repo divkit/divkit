@@ -40,11 +40,11 @@
                   "value": 2
                 }
               },
-              "items_placement" : {
-                  "type": "stretch",
-                  "item_spacing": {
-                    "type": "fixed",
-                    "value": 20
+              "items_placement": {
+                "type": "stretch",
+                "item_spacing": {
+                  "type": "fixed",
+                  "value": 20
                 }
               }
             },

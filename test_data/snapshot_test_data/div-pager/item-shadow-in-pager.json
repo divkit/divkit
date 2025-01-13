@@ -2,7 +2,8 @@
   "description": "Shadow on items in pager are cropped by page by default.",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "coupons_card",

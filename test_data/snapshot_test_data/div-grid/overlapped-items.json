@@ -1,91 +1,91 @@
 {
-    "description": "The elements that overlap each other must be moved to an empty space",
-    "platforms": [
-        "android",
-        "web"
-    ],
-    "templates": {
-        "grid_item": {
-            "type": "separator",
-            "width": {
-                "type": "fixed",
-                "value": 80
-            },
-            "height": {
-                "type": "fixed",
-                "value": 80
-            },
-            "margins": {
-                "left": 4,
-                "top": 4,
-                "right": 4,
-                "bottom": 4
-            },
-            "background": [
-                {
-                    "type": "solid",
-                    "color": "#1ABC9C"
-                }
-            ],
-            "border": {
-                "corner_radius": 8
-            },
-            "delimiter_style": {
-                "color": "#00000000"
-            }
+  "description": "The elements that overlap each other must be moved to an empty space",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "grid_item": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "margins": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
         }
-    },
-    "card": {
-        "log_id": "empty_grid",
-        "states": [
-            {
-                "state_id": 0,
-                "div": {
-                    "type": "grid",
-                    "column_count": 2,
-                    "width": {
-                        "type": "wrap_content"
-                    },
-                    "height": {
-                        "type": "wrap_content"
-                    },
-                    "paddings": {
-                        "top": 4,
-                        "bottom": 4,
-                        "left": 4,
-                        "right": 4
-                    },
-                    "background": [
-                        {
-                            "type": "solid",
-                            "color": "#ECF0F1"
-                        }
-                    ],
-                    "items": [
-                        {
-                            "type": "grid_item"
-                        },
-                        {
-                            "type": "grid_item",
-                            "height": {
-                                "type": "fixed",
-                                "value": 168
-                            },
-                            "row_span": 2
-                        },
-                        {
-                            "type": "grid_item",
-                            "column_span": 2,
-                            "width": {
-                                "type": "match_parent"
-                            }
-                        },
-                        {
-                            "type": "grid_item"
-                        }
-                    ]
-                }
-            }
-        ]
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      }
     }
+  },
+  "card": {
+    "log_id": "empty_grid",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 2,
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 4,
+            "bottom": 4,
+            "left": 4,
+            "right": 4
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ECF0F1"
+            }
+          ],
+          "items": [
+            {
+              "type": "grid_item"
+            },
+            {
+              "type": "grid_item",
+              "height": {
+                "type": "fixed",
+                "value": 168
+              },
+              "row_span": 2
+            },
+            {
+              "type": "grid_item",
+              "column_span": 2,
+              "width": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "grid_item"
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

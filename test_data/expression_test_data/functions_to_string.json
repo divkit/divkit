@@ -9,7 +9,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -21,7 +22,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -33,7 +35,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -45,7 +48,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -55,7 +59,8 @@
         "value": "1.0E23"
       },
       "platforms": [
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -72,9 +77,10 @@
         }
       ],
       "platforms": [
-        "web",
         "android",
-        "ios"
+        "ios",
+        "web",
+        "flutter"
       ]
     },
     {
@@ -86,7 +92,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -98,7 +105,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -117,7 +125,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -137,7 +146,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -156,7 +166,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -175,7 +186,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -192,9 +204,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -220,7 +233,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -246,19 +260,21 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
       "expression": "@{toString('abc')}",
       "expected": {
         "type": "string",
-        "value":  "abc"
+        "value": "abc"
       },
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -270,7 +286,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -282,7 +299,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     }
   ]

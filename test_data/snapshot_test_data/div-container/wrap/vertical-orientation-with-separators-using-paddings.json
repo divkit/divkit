@@ -1,9 +1,9 @@
 {
   "description": "Vertical wrap container with separators.",
   "platforms": [
+    "android",
     "ios",
-    "web",
-    "android"
+    "web"
   ],
   "templates": {
     "item_text": {

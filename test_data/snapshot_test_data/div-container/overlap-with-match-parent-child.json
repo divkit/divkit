@@ -1,8 +1,9 @@
 {
   "platforms": [
     "android",
+    "ios",
     "web",
-    "ios"
+    "flutter"
   ],
   "description": "match_parent inside container with orientation: overlap should not affect total size",
   "card": {

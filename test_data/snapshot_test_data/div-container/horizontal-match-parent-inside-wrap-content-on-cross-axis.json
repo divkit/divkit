@@ -2,7 +2,8 @@
   "description": "match_parent inside wrap_content on cross-axis of a horizontal container without known size should transform into the wrap_content with constrained",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
     "my-card": {

@@ -11,7 +11,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "getColorAlpha(color) number",
@@ -24,7 +29,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "getColorRed(string) number",
@@ -37,7 +47,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "getColorRed(color) number",
@@ -50,7 +65,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "getColorGreen(string) number",
@@ -63,7 +83,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "getColorGreen(color) number",
@@ -76,7 +101,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "getColorBlue(string) number",
@@ -89,7 +119,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "getColorBlue(color) number",
@@ -102,7 +137,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "setColorAlpha(string, number) color",
@@ -119,7 +159,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "ios", "web"]
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "name": "setColorAlpha(color, number) color",
@@ -136,7 +180,12 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "setColorRed(string, number) color",
@@ -153,7 +202,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "ios", "web"]
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "name": "setColorRed(color, number) color",
@@ -170,7 +223,12 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android","web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "setColorGreen(string, number) color",
@@ -187,7 +245,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "ios", "web"]
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "name": "setColorGreen(color, number) color",
@@ -204,7 +266,12 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "setColorBlue(string, number) color",
@@ -221,7 +288,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "ios", "web"]
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "name": "setColorBlue(color, number) color",
@@ -238,7 +309,12 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "argb(number, number, number, number) color",
@@ -263,7 +339,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "ios", "web"]
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "name": "rgb(number, number, number) color",
@@ -284,7 +364,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android", "ios", "web"]
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     }
   ]
 }

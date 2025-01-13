@@ -1,129 +1,130 @@
 {
-    "description": "Container aligned right-to-left. Start/end text blocks should be aligned according to the alignment (right-to-left), left/right must stay unchanged.",
-    "platforms": [
-        "android",
-        "ios",
-        "web"
-    ],
-    "configuration": {
-        "layout_direction": "rtl"
-    },
-    "templates": {
-        "text_block": {
-            "type": "text",
-            "font_size": 12,
-            "line_height": 15,
-            "text_alignment_horizontal": "center",
-            "text_alignment_vertical": "center",
-            "text_color": "#ffffff",
-            "width": {
-                "type": "fixed",
-                "value": 80
-            },
-            "paddings": {
-                "top": 13,
-                "bottom": 13,
-                "left": 8,
-                "right": 8
-            },
-            "background": [
-                {
-                    "type": "solid",
-                    "color": "#808080"
-                }
-            ],
-            "border": {
-                "corner_radius": 16
-            }
+  "description": "Container aligned right-to-left. Start/end text blocks should be aligned according to the alignment (right-to-left), left/right must stay unchanged.",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#ffffff",
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "paddings": {
+        "top": 13,
+        "bottom": 13,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#808080"
         }
-    },
-    "card": {
-        "log_id": "sample_card",
-        "states": [
-            {
-                "state_id": 0,
-                "div": {
-                    "type": "container",
-                    "orientation": "vertical",
-                    "items": [
-                        {
-                            "type": "container",
-                            "content_alignment_horizontal": "left",
-                            "orientation": "horizontal",
-                            "items": [
-                                {
-                                    "type": "text_block",
-                                    "text": "left"
-                                },
-                                {
-                                    "type": "text_block",
-                                    "text": "left"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "container",
-                            "content_alignment_horizontal": "right",
-                            "orientation": "horizontal",
-                            "items": [
-                                {
-                                    "type": "text_block",
-                                    "text": "right"
-                                },
-                                {
-                                    "type": "text_block",
-                                    "text": "right"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "container",
-                            "content_alignment_horizontal": "start",
-                            "orientation": "horizontal",
-                            "items": [
-                                {
-                                    "type": "text_block",
-                                    "text": "start"
-                                },
-                                {
-                                    "type": "text_block",
-                                    "text": "start"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "container",
-                            "content_alignment_horizontal": "end",
-                            "orientation": "horizontal",
-                            "items": [
-                                {
-                                    "type": "text_block",
-                                    "text": "end"
-                                },
-                                {
-                                    "type": "text_block",
-                                    "text": "end"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "container",
-                            "content_alignment_horizontal": "center",
-                            "orientation": "horizontal",
-                            "items": [
-                                {
-                                    "type": "text_block",
-                                    "text": "center"
-                                },
-                                {
-                                    "type": "text_block",
-                                    "text": "center"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        ]
+      ],
+      "border": {
+        "corner_radius": 16
+      }
     }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "container",
+              "content_alignment_horizontal": "left",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "left"
+                },
+                {
+                  "type": "text_block",
+                  "text": "left"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "right",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "right"
+                },
+                {
+                  "type": "text_block",
+                  "text": "right"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "start",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "start"
+                },
+                {
+                  "type": "text_block",
+                  "text": "start"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "end",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "end"
+                },
+                {
+                  "type": "text_block",
+                  "text": "end"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "content_alignment_horizontal": "center",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "center"
+                },
+                {
+                  "type": "text_block",
+                  "text": "center"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

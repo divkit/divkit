@@ -1,78 +1,78 @@
 {
-    "description": "Blocks with margins (space between each other) right-to-left",
-    "platforms": [
-        "android",
-        "ios",
-        "web"
-    ],
-    "templates": {
-        "text_block": {
-            "type": "text",
-            "font_size": 12,
-            "line_height": 15,
-            "height": {
-                "type": "match_parent"
-            },
-            "text_alignment_horizontal": "center",
-            "text_alignment_vertical": "center",
-            "alignment_horizontal": "center",
-            "text_color": "#ffffff",
-            "paddings": {
-                "top": 16,
-                "bottom": 16,
-                "left": 8,
-                "right": 8
-            },
-            "background": [
-                {
-                    "type": "solid",
-                    "color": "#808080"
-                }
-            ]
+  "description": "Blocks with margins (space between each other) right-to-left",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "height": {
+        "type": "match_parent"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#ffffff",
+      "paddings": {
+        "top": 16,
+        "bottom": 16,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#808080"
         }
-    },
-    "card": {
-        "log_id": "sample_card",
-        "states": [
-            {
-                "state_id": 0,
-                "div": {
-                    "type": "container",
-                    "orientation": "horizontal",
-                    "height": {
-                        "type": "fixed",
-                        "value": 60
-                    },
-                    "items": [
-                        {
-                            "type": "text_block",
-                            "text": "1",
-                            "margins": {
-                                "end": 2
-                            }
-                        },
-                        {
-                            "type": "text_block",
-                            "text": "2",
-                            "margins": {
-                                "end": 2
-                            }
-                        },
-                        {
-                            "type": "text_block",
-                            "text": "3"
-                        },
-                        {
-                            "type": "text_block",
-                            "text": "4",
-                            "margins": {
-                                "start": 2
-                            }
-                        }
-                    ]
-
-                }
-            }
-        ]
+      ]
     }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "height": {
+            "type": "fixed",
+            "value": 60
+          },
+          "items": [
+            {
+              "type": "text_block",
+              "text": "1",
+              "margins": {
+                "end": 2
+              }
+            },
+            {
+              "type": "text_block",
+              "text": "2",
+              "margins": {
+                "end": 2
+              }
+            },
+            {
+              "type": "text_block",
+              "text": "3"
+            },
+            {
+              "type": "text_block",
+              "text": "4",
+              "margins": {
+                "start": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

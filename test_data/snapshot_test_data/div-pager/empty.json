@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "empty_container",
@@ -16,7 +17,7 @@
             "type": "fixed",
             "value": 50
           },
-          "layout_mode":{
+          "layout_mode": {
             "type": "percentage",
             "page_width": {
               "type": "percentage",

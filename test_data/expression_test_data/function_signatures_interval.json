@@ -13,8 +13,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -30,8 +31,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -47,8 +49,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -64,8 +67,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -81,8 +85,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -98,8 +103,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -115,8 +121,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -132,8 +139,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     }
   ]

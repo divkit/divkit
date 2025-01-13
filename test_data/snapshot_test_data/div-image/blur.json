@@ -2,7 +2,8 @@
   "description": "Images of different size with blur",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
     "chess_card": {
@@ -27,13 +28,12 @@
     "states": [
       {
         "state_id": 0,
-        "div":
-        {
+        "div": {
           "type": "container",
           "orientation": "vertical",
           "items": [
             {
-             "type": "chess_card",
+              "type": "chess_card",
               "height": {
                 "type": "fixed",
                 "value": 50
@@ -44,7 +44,7 @@
               }
             },
             {
-             "type": "chess_card",
+              "type": "chess_card",
               "height": {
                 "type": "fixed",
                 "value": 100
@@ -55,7 +55,7 @@
               }
             },
             {
-             "type": "chess_card",
+              "type": "chess_card",
               "height": {
                 "type": "fixed",
                 "value": 100

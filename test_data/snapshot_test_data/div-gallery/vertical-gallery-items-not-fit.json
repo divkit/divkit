@@ -2,7 +2,8 @@
   "description": "Vertical gallery with paddings and elements which don't fit in it",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
     "item": {

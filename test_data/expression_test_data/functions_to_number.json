@@ -9,7 +9,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -21,7 +22,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -33,7 +35,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -45,7 +48,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -57,7 +61,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -69,7 +74,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -81,7 +87,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -93,7 +100,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -105,7 +113,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -117,7 +126,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -129,7 +139,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -141,7 +152,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -153,7 +165,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -165,7 +178,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -177,7 +191,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -189,7 +204,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -201,7 +217,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -213,7 +230,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -225,7 +243,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -237,67 +256,73 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
       "expression": "@{toNumber('')}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber('')]. Unable to convert value to Number."
+        "value": "Failed to evaluate [toNumber('')]. Unable to convert value to Number."
       },
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
       "expression": "@{toNumber('hello')}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber('hello')]. Unable to convert value to Number."
+        "value": "Failed to evaluate [toNumber('hello')]. Unable to convert value to Number."
       },
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
       "expression": "@{toNumber(true)}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber(true)]. Function has no matching overload for given argument types: Boolean."
+        "value": "Failed to evaluate [toNumber(true)]. Function has no matching overload for given argument types: Boolean."
       },
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
       "expression": "@{toNumber(false)}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber(false)]. Function has no matching overload for given argument types: Boolean."
+        "value": "Failed to evaluate [toNumber(false)]. Function has no matching overload for given argument types: Boolean."
       },
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
       "expression": "@{toNumber(1.0)}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber(1.0)]. Function has no matching overload for given argument types: Number."
+        "value": "Failed to evaluate [toNumber(1.0)]. Function has no matching overload for given argument types: Number."
       },
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -309,7 +334,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -321,7 +347,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     }
   ]

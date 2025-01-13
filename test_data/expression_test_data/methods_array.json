@@ -23,9 +23,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -45,9 +46,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -67,9 +69,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -95,9 +98,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -117,9 +121,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -139,9 +144,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -161,9 +167,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -183,9 +190,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -204,9 +212,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -225,9 +234,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -247,9 +257,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -269,9 +280,9 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
-        "web",
-        "android"
+        "web"
       ]
     },
     {
@@ -288,9 +299,9 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
-        "web",
-        "android"
+        "web"
       ]
     }
   ]

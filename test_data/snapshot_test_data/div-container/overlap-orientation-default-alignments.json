@@ -51,8 +51,14 @@
     },
     "overlap_orientation_default_alignment_testcase": {
       "type": "overlap_container_black",
-      "width": { "type": "fixed", "value": 70 },
-      "height": { "type": "fixed", "value": 40 },
+      "width": {
+        "type": "fixed",
+        "value": 70
+      },
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
       "items": [
         {
           "type": "text_white_bg_50x30",
