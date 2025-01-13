@@ -31,10 +31,9 @@ internal class SvgDivImageLoader : DivImageLoader {
 
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                val response = runCatching {
-                    call.execute()
+                val bytes = runCatching {
+                    call.execute().body?.bytes()
                 }.getOrNull() ?: return@withContext null
-                val bytes = response.body?.bytes() ?: return@withContext null
                 val drawable = svgDecoder.decode(bytes.inputStream()) ?: return@withContext null
                 svgCacheManager.set(imageUrl, drawable)
 
@@ -54,10 +53,9 @@ internal class SvgDivImageLoader : DivImageLoader {
 
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                val response = runCatching {
-                    call.execute()
+                val bytes = runCatching {
+                    call.execute().body?.bytes()
                 }.getOrNull() ?: return@withContext null
-                val bytes = response.body?.bytes() ?: return@withContext null
                 svgDecoder.decode(bytes.inputStream())
             }?.let {
                 imageView.setImageDrawable(it)
