@@ -572,7 +572,6 @@
 		8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTooltipExtensionsTests.swift; sourceTree = "<group>"; };
 		8C8354532C296710004EF2AE /* UIElementPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElementPathTests.swift; sourceTree = "<group>"; };
 		8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollActionHandlerTests.swift; sourceTree = "<group>"; };
-		8C84C2242D08730A00A574AC /* MockDivActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivActionHandler.swift; sourceTree = "<group>"; };
 		8C87CF1B28AD059600D262E1 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		8C87CF1D28AD05BC00D262E1 /* Default.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
@@ -1085,13 +1084,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		8C7B1B112865BF4C0036EF4C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		8C7B1B1B2865BFF10036EF4C /* DivKitTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1282,20 +1274,18 @@
 			isa = PBXGroup;
 			children = (
 				8C87CF1E28AD05DE00D262E1 /* Configurations */,
+				52DED04229F733E100D64519 /* DivKitExtensionsTests */,
 				8C4409EE2864C4D200EF4175 /* DivKitPlayground */,
 				8C9284C6288ACCBA00BEA1FA /* DivKitSnapshotTests */,
-				9FE7D2D12CF74BDE00BAF071 /* DivKitTestsSupport */,
 				8C7B1B1B2865BFF10036EF4C /* DivKitTests */,
-				52DED04229F733E100D64519 /* DivKitExtensionsTests */,
+				9FE7D2D12CF74BDE00BAF071 /* DivKitTestsSupport */,
+				986F57982CD68E8400990A2A /* DivKitUITests */,
 				7E3B99872C6E4FB100FC633E /* LayoutKitPlayground */,
 				8C6E40B228AAA47B0038E107 /* LayoutKitSnapshotTests */,
 				8CF329252875D534003F799A /* LayoutKitTests */,
-				8C9284F8288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
-				986F57982CD68E8400990A2A /* DivKitUITests */,
-				8C7B1B112865BF4C0036EF4C /* Frameworks */,
 				8C6DEA3D2866120A009956A1 /* Packages */,
 				8C4409D22864C3A900EF4175 /* Products */,
-				8CF91B002D0AE2D30082FDC1 /* Recovered References */,
+				8C9284F8288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1409,14 +1399,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		8CF91B002D0AE2D30082FDC1 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				8C84C2242D08730A00A574AC /* MockDivActionHandler.swift */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		986F57982CD68E8400990A2A /* DivKitUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1429,8 +1411,8 @@
 		9FE7D2D12CF74BDE00BAF071 /* DivKitTestsSupport */ = {
 			isa = PBXGroup;
 			children = (
-				9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */,
 				9FE7D31B2CF7535700BAF071 /* FakeImageHolder.swift */,
+				9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */,
 			);
 			path = DivKitTestsSupport;
 			sourceTree = "<group>";
