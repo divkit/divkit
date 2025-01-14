@@ -206,7 +206,7 @@ private final class StateBlockView: BlockView {
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    childView?.frame = bounds
+    childView?.setNonTransformedFrame(bounds)
   }
 
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
