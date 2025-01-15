@@ -729,7 +729,7 @@ data class Text internal constructor(
              */
             val actions: Property<List<Action>>?,
             /**
-             * Vertical text alignment within the row. Ignored when a baseline offset is specified.
+             * Vertical text alignment within the row.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
@@ -2952,7 +2952,7 @@ fun Text.Image.asList() = listOf(this)
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3025,7 +3025,7 @@ fun DivScope.textRange(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3096,7 +3096,7 @@ fun DivScope.textRangeProps(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3167,7 +3167,7 @@ fun TemplateScope.textRangeRefs(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3240,7 +3240,7 @@ fun Text.Range.override(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3312,7 +3312,7 @@ fun Text.Range.defer(
 )
 
 /**
- * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>

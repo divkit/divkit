@@ -1,3 +1,3 @@
 public enum DivKitInfo {
-  public static let version = "30.32.0"
+  public static let version = "30.33.0"
 }
