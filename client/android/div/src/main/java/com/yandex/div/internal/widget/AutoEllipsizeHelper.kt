@@ -1,6 +1,7 @@
 package com.yandex.div.internal.widget
 
 import android.view.ViewTreeObserver
+import com.yandex.div.internal.KLog
 
 /**
  * Helper to calculate and update max lines for given [textView].
@@ -43,7 +44,8 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
                 val lastVisibleLine = lineAt(textHeight)
                 if (textHeight >= textHeight(lastVisibleLine + 1)) lastVisibleLine + 1 else lastVisibleLine
             }
-            if (visibleLineCount < textView.lineCount) {
+            if (visibleLineCount > 0 && visibleLineCount < textView.lineCount) {
+                KLog.d(TAG) { "Trying to set new max lines $visibleLineCount. Current drawing pass is canceled. " }
                 textView.maxLines = visibleLineCount
                 false
             } else {
@@ -59,5 +61,9 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
             textView.viewTreeObserver.removeOnPreDrawListener(preDrawListener)
             preDrawListener = null
         }
+    }
+
+    private companion object {
+        const val TAG = "AutoEllipsizeHelper"
     }
 }
