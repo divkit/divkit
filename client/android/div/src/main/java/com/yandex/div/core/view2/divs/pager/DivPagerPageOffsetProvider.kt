@@ -1,9 +1,12 @@
 package com.yandex.div.core.view2.divs.pager
 
+import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.max
 
 internal class DivPagerPageOffsetProvider(
     private val parent: DivPagerView,
@@ -16,18 +19,44 @@ internal class DivPagerPageOffsetProvider(
 ) {
 
     init {
-        setOnScreenPages()
+        setOffScreenPages()
     }
 
-    private fun setOnScreenPages() {
+    private fun setOffScreenPages() {
         if (pageSizeProvider.itemSize == 0f) return
+
         val pager = parent.viewPager
         val onScreenPages = parentSize / (pageSizeProvider.itemSize + itemSpacing)
         parent.getRecyclerView()?.setItemViewCacheSize(ceil(onScreenPages).toInt() + 2)
 
-        if (pageSizeProvider.hasOffScreenPages && pager.offscreenPageLimit != 1) {
-            pager.offscreenPageLimit = 1
+        if (pageSizeProvider.hasOffScreenPages) {
+            pager.offscreenPageLimit = max(ceil(onScreenPages - 1).toInt(), 1)
+            return
         }
+
+        if (neighbourSize > itemSpacing) {
+            pager.offscreenPageLimit = 1
+            return
+        }
+
+        val showNeighbourForSidePages =
+            !infiniteScroll && (paddings.start < neighbourSize || paddings.end < neighbourSize)
+
+        if (!showNeighbourForSidePages) {
+            pager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
+            return
+        }
+
+        val setOffScreenPages = { position: Int ->
+            parent.viewPager.offscreenPageLimit =
+                if (position == 0 || position == adapter.itemCount - 1) 1 else OFFSCREEN_PAGE_LIMIT_DEFAULT
+        }
+
+        setOffScreenPages(pager.currentItem)
+
+        pager.registerOnPageChangeCallback(object: OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) = setOffScreenPages(position)
+        })
     }
 
     private val neighbourSize get() = pageSizeProvider.neighbourSize

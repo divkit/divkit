@@ -81,6 +81,7 @@ internal class DivPagerPageTransformer(
 
     private fun View.applyOffset(position: Float, overlap: Boolean = false) {
         val pagePosition = recyclerView.getChildAdapterPosition(this)
+        if (pagePosition == RecyclerView.NO_POSITION) return
 
         /**
          * This initial values is used to stick edge items to the edges of the pager.

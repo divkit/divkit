@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.util.SparseArray
 import android.view.View
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -60,9 +61,11 @@ internal class DivPagerBinder @Inject constructor(
         val resolver = context.expressionResolver
         val oldDiv = view.div
         if (div === oldDiv) {
-            val adapter = view.viewPager.adapter as? DivPagerAdapter ?: return
+            val pager = view.viewPager
+            val adapter = pager.adapter as? DivPagerAdapter ?: return
             if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, context)) {
                 view.pagerOnItemsCountChange?.onItemsUpdated()
+                pager.doOnNextLayout { pager.requestTransform() }
             }
             view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
             return
@@ -193,12 +196,22 @@ internal class DivPagerBinder @Inject constructor(
         val metrics = resources.displayMetrics
         val parentSize = if (isHorizontal) viewPager.width else viewPager.height
         val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
+        val infiniteScroll = div.infiniteScroll.evaluate(resolver)
         val paddings = DivPagerPaddingsHolder(div.paddings, resolver, this, metrics, isHorizontal)
 
         val sizeProvider = when (val layoutMode = div.layoutMode) {
             is DivPagerLayoutMode.PageSize -> PercentagePageSizeProvider(layoutMode.value, resolver, parentSize)
-            is DivPagerLayoutMode.NeighbourPageSize ->
-                NeighbourPageSizeProvider(layoutMode.value, resolver, metrics, parentSize, itemSpacing, paddings)
+            is DivPagerLayoutMode.NeighbourPageSize -> {
+                NeighbourPageSizeProvider(
+                    layoutMode.value,
+                    resolver,
+                    metrics,
+                    parentSize,
+                    itemSpacing,
+                    infiniteScroll,
+                    paddings
+                )
+            }
             else -> return
         }
 
@@ -210,7 +223,7 @@ internal class DivPagerBinder @Inject constructor(
             itemSpacing,
             sizeProvider,
             paddings,
-            div.infiniteScroll.evaluate(resolver),
+            infiniteScroll,
             adapter
         )
         pageTransformer = DivPagerPageTransformer(
@@ -269,6 +282,7 @@ internal class DivPagerBinder @Inject constructor(
             (viewPager.adapter as DivPagerAdapter?)?.setItems(builder.build(context.expressionResolver))
             pagerOnItemsCountChange?.onItemsUpdated()
             getRecyclerView()?.scrollToPosition(currentItem)
+            viewPager.doOnNextLayout { viewPager.requestTransform() }
         }
     }
 }

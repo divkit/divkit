@@ -12,12 +12,17 @@ internal class NeighbourPageSizeProvider(
     metrics: DisplayMetrics,
     parentSize: Int,
     itemSpacing: Float,
+    infiniteScroll: Boolean,
     paddings: DivPagerPaddingsHolder,
 ) : DivPagerPageSizeProvider {
 
     private val neighbourPageWidth = mode.neighbourPageWidth.toPxF(metrics, resolver)
 
-    override val neighbourSize = max(neighbourPageWidth + itemSpacing, max(paddings.start, paddings.end) / 2)
+    override val neighbourSize = if (infiniteScroll) {
+        neighbourPageWidth + itemSpacing
+    } else {
+        max(neighbourPageWidth + itemSpacing, max(paddings.start, paddings.end) / 2)
+    }
 
     override val itemSize = parentSize - neighbourSize * 2
 
