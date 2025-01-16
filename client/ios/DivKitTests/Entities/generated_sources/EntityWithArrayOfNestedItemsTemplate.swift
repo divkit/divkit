@@ -7,8 +7,8 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
-  public final class ItemTemplate: TemplateValue {
+public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Sendable {
+  public final class ItemTemplate: TemplateValue, Sendable {
     public let entity: Field<EntityTemplate>?
     public let property: Field<Expression<String>>?
 

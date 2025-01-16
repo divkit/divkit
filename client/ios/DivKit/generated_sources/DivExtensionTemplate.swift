@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivExtensionTemplate: TemplateValue {
+public final class DivExtensionTemplate: TemplateValue, @unchecked Sendable {
   public let id: Field<String>?
   public let params: Field<[String: Any]>?
 

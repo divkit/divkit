@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPageContentSizeTemplate: TemplateValue {
+public final class DivPageContentSizeTemplate: TemplateValue, Sendable {
   public static let type: String = "wrap_content"
   public let parent: String?
 

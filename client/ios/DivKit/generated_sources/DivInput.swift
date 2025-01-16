@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInput: DivBase {
+public final class DivInput: DivBase, Sendable {
   @frozen
-  public enum Autocapitalization: String, CaseIterable {
+  public enum Autocapitalization: String, CaseIterable, Sendable {
     case auto = "auto"
     case none = "none"
     case words = "words"
@@ -15,7 +15,7 @@ public final class DivInput: DivBase {
   }
 
   @frozen
-  public enum EnterKeyType: String, CaseIterable {
+  public enum EnterKeyType: String, CaseIterable, Sendable {
     case `default` = "default"
     case go = "go"
     case search = "search"
@@ -24,7 +24,7 @@ public final class DivInput: DivBase {
   }
 
   @frozen
-  public enum KeyboardType: String, CaseIterable {
+  public enum KeyboardType: String, CaseIterable, Sendable {
     case singleLineText = "single_line_text"
     case multiLineText = "multi_line_text"
     case phone = "phone"
@@ -34,7 +34,7 @@ public final class DivInput: DivBase {
     case password = "password"
   }
 
-  public final class NativeInterface {
+  public final class NativeInterface: Sendable {
     public let color: Expression<Color>
 
     public func resolveColor(_ resolver: ExpressionResolver) -> Color? {

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivEdgeInsets {
+public final class DivEdgeInsets: Sendable {
   public let bottom: Expression<Int> // constraint: number >= 0; default value: 0
   public let end: Expression<Int>? // constraint: number >= 0
   public let left: Expression<Int> // constraint: number >= 0; default value: 0

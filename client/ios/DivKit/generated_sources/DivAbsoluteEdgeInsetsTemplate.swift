@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
+public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue, Sendable {
   public let bottom: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let left: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let right: Field<Expression<Int>>? // constraint: number >= 0; default value: 0

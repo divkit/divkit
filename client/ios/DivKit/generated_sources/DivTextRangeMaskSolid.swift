@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeMaskSolid {
+public final class DivTextRangeMaskSolid: Sendable {
   public static let type: String = "solid"
   public let color: Expression<Color>
   public let isEnabled: Expression<Bool> // default value: true

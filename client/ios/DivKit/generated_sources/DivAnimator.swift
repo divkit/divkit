@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivAnimator {
+public enum DivAnimator: Sendable {
   case divColorAnimator(DivColorAnimator)
   case divNumberAnimator(DivNumberAnimator)
 

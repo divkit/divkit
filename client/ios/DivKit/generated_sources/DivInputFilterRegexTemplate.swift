@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputFilterRegexTemplate: TemplateValue {
+public final class DivInputFilterRegexTemplate: TemplateValue, Sendable {
   public static let type: String = "regex"
   public let parent: String?
   public let pattern: Field<Expression<String>>?

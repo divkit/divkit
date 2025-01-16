@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionScrollBy {
+public final class DivActionScrollBy: Sendable {
   @frozen
-  public enum Overflow: String, CaseIterable {
+  public enum Overflow: String, CaseIterable, Sendable {
     case clamp = "clamp"
     case ring = "ring"
   }

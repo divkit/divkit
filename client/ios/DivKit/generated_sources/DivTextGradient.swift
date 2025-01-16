@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivTextGradient {
+public enum DivTextGradient: Sendable {
   case divLinearGradient(DivLinearGradient)
   case divRadialGradient(DivRadialGradient)
 

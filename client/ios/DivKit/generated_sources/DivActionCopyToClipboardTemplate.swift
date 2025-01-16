@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionCopyToClipboardTemplate: TemplateValue {
+public final class DivActionCopyToClipboardTemplate: TemplateValue, Sendable {
   public static let type: String = "copy_to_clipboard"
   public let parent: String?
   public let content: Field<DivActionCopyToClipboardContentTemplate>?

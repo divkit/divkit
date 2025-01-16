@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class EndDestinationTemplate: TemplateValue {
+public final class EndDestinationTemplate: TemplateValue, Sendable {
   public static let type: String = "end"
   public let parent: String?
 

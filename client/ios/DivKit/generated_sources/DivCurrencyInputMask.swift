@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCurrencyInputMask: DivInputMaskBase {
+public final class DivCurrencyInputMask: DivInputMaskBase, Sendable {
   public static let type: String = "currency"
   public let locale: Expression<String>?
   public let rawTextVariable: String

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionScrollByTemplate: TemplateValue {
+public final class DivActionScrollByTemplate: TemplateValue, Sendable {
   public typealias Overflow = DivActionScrollBy.Overflow
 
   public static let type: String = "scroll_by"

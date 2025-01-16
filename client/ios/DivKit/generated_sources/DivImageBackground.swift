@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivImageBackground {
+public final class DivImageBackground: Sendable {
   public static let type: String = "image"
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: center

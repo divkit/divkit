@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSlider: DivBase {
-  public final class Range {
+public final class DivSlider: DivBase, Sendable {
+  public final class Range: Sendable {
     public let end: Expression<Int>?
     public let margins: DivEdgeInsets?
     public let start: Expression<Int>?
@@ -35,7 +35,7 @@ public final class DivSlider: DivBase {
     }
   }
 
-  public final class TextStyle {
+  public final class TextStyle: Sendable {
     public let fontSize: Expression<Int> // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight> // default value: regular

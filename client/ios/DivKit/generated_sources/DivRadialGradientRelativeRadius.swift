@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRadialGradientRelativeRadius {
+public final class DivRadialGradientRelativeRadius: Sendable {
   @frozen
-  public enum Value: String, CaseIterable {
+  public enum Value: String, CaseIterable, Sendable {
     case nearestCorner = "nearest_corner"
     case farthestCorner = "farthest_corner"
     case nearestSide = "nearest_side"

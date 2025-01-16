@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeBorderTemplate: TemplateValue {
+public final class DivTextRangeBorderTemplate: TemplateValue, Sendable {
   public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
   public let stroke: Field<DivStrokeTemplate>?
 

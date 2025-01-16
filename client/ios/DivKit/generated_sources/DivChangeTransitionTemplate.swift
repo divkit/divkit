@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivChangeTransitionTemplate: TemplateValue {
+public enum DivChangeTransitionTemplate: TemplateValue, Sendable {
   case divChangeSetTransitionTemplate(DivChangeSetTransitionTemplate)
   case divChangeBoundsTransitionTemplate(DivChangeBoundsTransitionTemplate)
 

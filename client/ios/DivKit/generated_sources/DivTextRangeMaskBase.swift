@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeMaskBase {
+public final class DivTextRangeMaskBase: Sendable {
   public let isEnabled: Expression<Bool> // default value: true
 
   public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {

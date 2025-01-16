@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivText: DivBase {
-  public final class Ellipsis {
+public final class DivText: DivBase, Sendable {
+  public final class Ellipsis: Sendable {
     public let actions: [DivAction]?
     public let images: [Image]?
     public let ranges: [Range]?
@@ -28,16 +28,16 @@ public final class DivText: DivBase {
     }
   }
 
-  public final class Image {
+  public final class Image: Sendable {
     @frozen
-    public enum IndexingDirection: String, CaseIterable {
+    public enum IndexingDirection: String, CaseIterable, Sendable {
       case normal = "normal"
       case reversed = "reversed"
     }
 
-    public final class Accessibility {
+    public final class Accessibility: Sendable {
       @frozen
-      public enum Kind: String, CaseIterable {
+      public enum Kind: String, CaseIterable, Sendable {
         case none = "none"
         case button = "button"
         case image = "image"
@@ -128,7 +128,7 @@ public final class DivText: DivBase {
     }
   }
 
-  public final class Range {
+  public final class Range: Sendable {
     public let actions: [DivAction]?
     public let alignmentVertical: Expression<DivTextAlignmentVertical>?
     public let background: DivTextRangeBackground?

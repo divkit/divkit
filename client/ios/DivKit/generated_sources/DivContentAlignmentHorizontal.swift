@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivContentAlignmentHorizontal: String, CaseIterable {
+public enum DivContentAlignmentHorizontal: String, CaseIterable, Sendable {
   case left = "left"
   case center = "center"
   case right = "right"

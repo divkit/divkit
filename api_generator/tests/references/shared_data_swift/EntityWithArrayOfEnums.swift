@@ -4,9 +4,9 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithArrayOfEnums {
+public final class EntityWithArrayOfEnums: Sendable {
   @frozen
-  public enum Item: String, CaseIterable {
+  public enum Item: String, CaseIterable, Sendable {
     case first = "first"
     case second = "second"
   }

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAspectTemplate: TemplateValue {
+public final class DivAspectTemplate: TemplateValue, Sendable {
   public let ratio: Field<Expression<Double>>? // constraint: number > 0
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

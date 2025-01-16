@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivBackgroundTemplate: TemplateValue {
+public enum DivBackgroundTemplate: TemplateValue, Sendable {
   case divLinearGradientTemplate(DivLinearGradientTemplate)
   case divRadialGradientTemplate(DivRadialGradientTemplate)
   case divImageBackgroundTemplate(DivImageBackgroundTemplate)

@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
+public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue, Sendable {
   public typealias Property = EntityWithOptionalStringEnumProperty.Property
 
   public static let type: String = "entity_with_optional_string_enum_property"

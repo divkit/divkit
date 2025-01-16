@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ColorVariableTemplate: TemplateValue {
+public final class ColorVariableTemplate: TemplateValue, Sendable {
   public static let type: String = "color"
   public let parent: String?
   public let name: Field<String>?

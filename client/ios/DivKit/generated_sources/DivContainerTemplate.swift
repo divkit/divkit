@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivContainerTemplate: TemplateValue {
-  public final class SeparatorTemplate: TemplateValue {
+public final class DivContainerTemplate: TemplateValue, Sendable {
+  public final class SeparatorTemplate: TemplateValue, Sendable {
     public let margins: Field<DivEdgeInsetsTemplate>?
     public let showAtEnd: Field<Expression<Bool>>? // default value: false
     public let showAtStart: Field<Expression<Bool>>? // default value: false

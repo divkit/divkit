@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFocus {
-  public final class NextFocusIds {
+public final class DivFocus: Sendable {
+  public final class NextFocusIds: Sendable {
     public let down: Expression<String>?
     public let forward: Expression<String>?
     public let left: Expression<String>?

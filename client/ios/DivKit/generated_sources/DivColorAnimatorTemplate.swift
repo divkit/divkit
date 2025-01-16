@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivColorAnimatorTemplate: TemplateValue {
+public final class DivColorAnimatorTemplate: TemplateValue, Sendable {
   public static let type: String = "color_animator"
   public let parent: String?
   public let cancelActions: Field<[DivActionTemplate]>?

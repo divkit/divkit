@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivTextRangeMaskTemplate: TemplateValue {
+public enum DivTextRangeMaskTemplate: TemplateValue, Sendable {
   case divTextRangeMaskParticlesTemplate(DivTextRangeMaskParticlesTemplate)
   case divTextRangeMaskSolidTemplate(DivTextRangeMaskSolidTemplate)
 

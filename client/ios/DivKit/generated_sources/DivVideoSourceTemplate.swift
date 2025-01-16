@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivVideoSourceTemplate: TemplateValue {
-  public final class ResolutionTemplate: TemplateValue {
+public final class DivVideoSourceTemplate: TemplateValue, Sendable {
+  public final class ResolutionTemplate: TemplateValue, Sendable {
     public static let type: String = "resolution"
     public let parent: String?
     public let height: Field<Expression<Int>>? // constraint: number > 0

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeMaskSolidTemplate: TemplateValue {
+public final class DivTextRangeMaskSolidTemplate: TemplateValue, Sendable {
   public static let type: String = "solid"
   public let parent: String?
   public let color: Field<Expression<Color>>?

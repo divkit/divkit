@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFilterRtlMirrorTemplate: TemplateValue {
+public final class DivFilterRtlMirrorTemplate: TemplateValue, Sendable {
   public static let type: String = "rtl_mirror"
   public let parent: String?
 

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionDictSetValueTemplate: TemplateValue {
+public final class DivActionDictSetValueTemplate: TemplateValue, Sendable {
   public static let type: String = "dict_set_value"
   public let parent: String?
   public let key: Field<Expression<String>>?

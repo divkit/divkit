@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivNeighbourPageSizeTemplate: TemplateValue {
+public final class DivNeighbourPageSizeTemplate: TemplateValue, Sendable {
   public static let type: String = "fixed"
   public let parent: String?
   public let neighbourPageWidth: Field<DivFixedSizeTemplate>?

@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSeparatorTemplate: TemplateValue {
-  public final class DelimiterStyleTemplate: TemplateValue {
+public final class DivSeparatorTemplate: TemplateValue, Sendable {
+  public final class DelimiterStyleTemplate: TemplateValue, Sendable {
     public typealias Orientation = DivSeparator.DelimiterStyle.Orientation
 
     public let color: Field<Expression<Color>>? // default value: #14000000

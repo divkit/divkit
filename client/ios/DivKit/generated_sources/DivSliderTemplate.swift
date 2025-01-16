@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSliderTemplate: TemplateValue {
-  public final class RangeTemplate: TemplateValue {
+public final class DivSliderTemplate: TemplateValue, Sendable {
+  public final class RangeTemplate: TemplateValue, Sendable {
     public let end: Field<Expression<Int>>?
     public let margins: Field<DivEdgeInsetsTemplate>?
     public let start: Field<Expression<Int>>?
@@ -164,7 +164,7 @@ public final class DivSliderTemplate: TemplateValue {
     }
   }
 
-  public final class TextStyleTemplate: TemplateValue {
+  public final class TextStyleTemplate: TemplateValue, Sendable {
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular

@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class WithoutDefault {
+public final class WithoutDefault: Sendable {
   public static let type: String = "non_default"
 
   init() {}

@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithEntityPropertyTemplate: TemplateValue {
+public final class EntityWithEntityPropertyTemplate: TemplateValue, Sendable {
   public static let type: String = "entity_with_entity_property"
   public let parent: String?
   public let entity: Field<EntityTemplate>? // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))

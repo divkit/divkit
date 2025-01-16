@@ -4,7 +4,7 @@ import Serialization
 import VGSL
 
 @frozen
-public indirect enum Field<T> {
+public indirect enum Field<T: Sendable>: Sendable {
   case value(T)
   case link(String)
 }

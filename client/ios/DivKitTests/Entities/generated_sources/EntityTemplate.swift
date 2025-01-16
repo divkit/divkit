@@ -8,7 +8,7 @@ import VGSL
 import enum DivKit.Expression
 
 @frozen
-public enum EntityTemplate: TemplateValue {
+public enum EntityTemplate: TemplateValue, Sendable {
   case entityWithArrayTemplate(EntityWithArrayTemplate)
   case entityWithArrayOfEnumsTemplate(EntityWithArrayOfEnumsTemplate)
   case entityWithArrayOfExpressionsTemplate(EntityWithArrayOfExpressionsTemplate)

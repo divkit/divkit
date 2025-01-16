@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionClearFocus {
+public final class DivActionClearFocus: Sendable {
   public static let type: String = "clear_focus"
 
   init() {}

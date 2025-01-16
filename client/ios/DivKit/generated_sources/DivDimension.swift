@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDimension {
+public final class DivDimension: Sendable {
   public let unit: Expression<DivSizeUnit> // default value: dp
   public let value: Expression<Double>
 

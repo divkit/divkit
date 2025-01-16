@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextTemplate: TemplateValue {
-  public final class EllipsisTemplate: TemplateValue {
+public final class DivTextTemplate: TemplateValue, Sendable {
+  public final class EllipsisTemplate: TemplateValue, Sendable {
     public let actions: Field<[DivActionTemplate]>?
     public let images: Field<[ImageTemplate]>?
     public let ranges: Field<[RangeTemplate]>?
@@ -159,8 +159,8 @@ public final class DivTextTemplate: TemplateValue {
     }
   }
 
-  public final class ImageTemplate: TemplateValue {
-    public final class AccessibilityTemplate: TemplateValue {
+  public final class ImageTemplate: TemplateValue, Sendable {
+    public final class AccessibilityTemplate: TemplateValue, Sendable {
       public typealias Kind = DivText.Image.Accessibility.Kind
 
       public let description: Field<Expression<String>>?
@@ -537,7 +537,7 @@ public final class DivTextTemplate: TemplateValue {
     }
   }
 
-  public final class RangeTemplate: TemplateValue {
+  public final class RangeTemplate: TemplateValue, Sendable {
     public let actions: Field<[DivActionTemplate]>?
     public let alignmentVertical: Field<Expression<DivTextAlignmentVertical>>?
     public let background: Field<DivTextRangeBackgroundTemplate>?

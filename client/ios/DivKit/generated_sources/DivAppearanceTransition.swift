@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivAppearanceTransition {
+public enum DivAppearanceTransition: Sendable {
   case divAppearanceSetTransition(DivAppearanceSetTransition)
   case divFadeTransition(DivFadeTransition)
   case divScaleTransition(DivScaleTransition)

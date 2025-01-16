@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ContentUrlTemplate: TemplateValue {
+public final class ContentUrlTemplate: TemplateValue, Sendable {
   public static let type: String = "url"
   public let parent: String?
   public let value: Field<Expression<URL>>?

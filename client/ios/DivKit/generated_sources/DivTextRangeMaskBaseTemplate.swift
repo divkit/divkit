@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeMaskBaseTemplate: TemplateValue {
+public final class DivTextRangeMaskBaseTemplate: TemplateValue, Sendable {
   public let isEnabled: Field<Expression<Bool>>? // default value: true
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

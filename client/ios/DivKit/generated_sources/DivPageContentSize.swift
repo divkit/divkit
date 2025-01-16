@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPageContentSize {
+public final class DivPageContentSize: Sendable {
   public static let type: String = "wrap_content"
 
   init() {}

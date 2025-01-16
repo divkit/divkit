@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputFilterRegex {
+public final class DivInputFilterRegex: Sendable {
   public static let type: String = "regex"
   public let pattern: Expression<String>
 

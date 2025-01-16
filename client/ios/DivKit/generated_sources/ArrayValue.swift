@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ArrayValue {
+public final class ArrayValue: @unchecked Sendable {
   public static let type: String = "array"
   public let value: Expression<[Any]>
 

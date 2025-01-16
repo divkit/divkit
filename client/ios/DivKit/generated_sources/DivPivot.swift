@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivPivot {
+public enum DivPivot: Sendable {
   case divPivotFixed(DivPivotFixed)
   case divPivotPercentage(DivPivotPercentage)
 

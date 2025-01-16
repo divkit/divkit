@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ColorVariable {
+public final class ColorVariable: Sendable {
   public static let type: String = "color"
   public let name: String
   public let value: Color

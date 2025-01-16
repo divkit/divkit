@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithSimpleProperties: EntityProtocol {
+public final class EntityWithSimpleProperties: EntityProtocol, Sendable {
   public static let type: String = "entity_with_simple_properties"
   public let boolean: Expression<Bool>?
   public let booleanInt: Expression<Bool>?

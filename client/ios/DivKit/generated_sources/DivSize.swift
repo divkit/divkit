@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivSize {
+public enum DivSize: Sendable {
   case divFixedSize(DivFixedSize)
   case divMatchParentSize(DivMatchParentSize)
   case divWrapContentSize(DivWrapContentSize)

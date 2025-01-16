@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSolidBackgroundTemplate: TemplateValue {
+public final class DivSolidBackgroundTemplate: TemplateValue, Sendable {
   public static let type: String = "solid"
   public let parent: String?
   public let color: Field<Expression<Color>>?

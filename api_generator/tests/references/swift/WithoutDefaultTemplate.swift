@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class WithoutDefaultTemplate: TemplateValue {
+public final class WithoutDefaultTemplate: TemplateValue, Sendable {
   public static let type: String = "non_default"
   public let parent: String?
 

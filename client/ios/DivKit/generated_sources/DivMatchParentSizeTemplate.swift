@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivMatchParentSizeTemplate: TemplateValue {
+public final class DivMatchParentSizeTemplate: TemplateValue, Sendable {
   public static let type: String = "match_parent"
   public let parent: String?
   public let weight: Field<Expression<Double>>? // constraint: number > 0

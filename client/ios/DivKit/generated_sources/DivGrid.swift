@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivGrid: DivBase {
+public final class DivGrid: DivBase, Sendable {
   public static let type: String = "grid"
   public let accessibility: DivAccessibility?
   public let action: DivAction?

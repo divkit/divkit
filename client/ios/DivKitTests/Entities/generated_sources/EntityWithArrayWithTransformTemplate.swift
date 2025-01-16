@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithArrayWithTransformTemplate: TemplateValue {
+public final class EntityWithArrayWithTransformTemplate: TemplateValue, Sendable {
   public static let type: String = "entity_with_array_with_transform"
   public let parent: String?
   public let array: Field<[Expression<Color>]>? // at least 1 elements

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivGifImageTemplate: TemplateValue {
+public final class DivGifImageTemplate: TemplateValue, Sendable {
   public static let type: String = "gif"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?

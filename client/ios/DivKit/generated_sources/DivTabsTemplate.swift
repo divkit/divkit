@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTabsTemplate: TemplateValue {
-  public final class ItemTemplate: TemplateValue {
+public final class DivTabsTemplate: TemplateValue, Sendable {
+  public final class ItemTemplate: TemplateValue, Sendable {
     public let div: Field<DivTemplate>?
     public let title: Field<Expression<String>>?
     public let titleClickAction: Field<DivActionTemplate>?
@@ -145,7 +145,7 @@ public final class DivTabsTemplate: TemplateValue {
     }
   }
 
-  public final class TabTitleDelimiterTemplate: TemplateValue {
+  public final class TabTitleDelimiterTemplate: TemplateValue, Sendable {
     public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(12))
     public let imageUrl: Field<Expression<URL>>?
     public let width: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(12))
@@ -277,7 +277,7 @@ public final class DivTabsTemplate: TemplateValue {
     }
   }
 
-  public final class TabTitleStyleTemplate: TemplateValue {
+  public final class TabTitleStyleTemplate: TemplateValue, Sendable {
     public typealias AnimationType = DivTabs.TabTitleStyle.AnimationType
 
     public let activeBackgroundColor: Field<Expression<Color>>? // default value: #FFFFDC60

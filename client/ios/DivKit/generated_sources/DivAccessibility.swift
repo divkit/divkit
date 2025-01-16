@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAccessibility {
+public final class DivAccessibility: Sendable {
   @frozen
-  public enum Kind: String, CaseIterable {
+  public enum Kind: String, CaseIterable, Sendable {
     case none = "none"
     case button = "button"
     case image = "image"
@@ -22,7 +22,7 @@ public final class DivAccessibility {
   }
 
   @frozen
-  public enum Mode: String, CaseIterable {
+  public enum Mode: String, CaseIterable, Sendable {
     case `default` = "default"
     case merge = "merge"
     case exclude = "exclude"

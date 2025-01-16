@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue {
+public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, Sendable {
   public static let type: String = "stretch"
   public let parent: String?
   public let itemSpacing: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(5))

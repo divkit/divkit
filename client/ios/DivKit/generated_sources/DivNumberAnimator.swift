@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivNumberAnimator: DivAnimatorBase {
+public final class DivNumberAnimator: DivAnimatorBase, Sendable {
   public static let type: String = "number_animator"
   public let cancelActions: [DivAction]?
   public let direction: Expression<DivAnimationDirection> // default value: normal

@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAction {
-  public final class MenuItem {
+public final class DivAction: @unchecked Sendable {
+  public final class MenuItem: Sendable {
     public let action: DivAction?
     public let actions: [DivAction]?
     public let text: Expression<String>

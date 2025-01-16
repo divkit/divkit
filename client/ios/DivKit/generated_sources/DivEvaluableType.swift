@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivEvaluableType: String, CaseIterable {
+public enum DivEvaluableType: String, CaseIterable, Sendable {
   case string = "string"
   case integer = "integer"
   case number = "number"

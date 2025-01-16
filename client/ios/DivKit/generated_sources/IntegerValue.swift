@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class IntegerValue {
+public final class IntegerValue: Sendable {
   public static let type: String = "integer"
   public let value: Expression<Int>
 

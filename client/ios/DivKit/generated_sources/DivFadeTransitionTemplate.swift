@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFadeTransitionTemplate: TemplateValue {
+public final class DivFadeTransitionTemplate: TemplateValue, Sendable {
   public static let type: String = "fade"
   public let parent: String?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 0.0

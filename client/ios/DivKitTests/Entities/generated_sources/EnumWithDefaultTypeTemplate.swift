@@ -8,7 +8,7 @@ import VGSL
 import enum DivKit.Expression
 
 @frozen
-public enum EnumWithDefaultTypeTemplate: TemplateValue {
+public enum EnumWithDefaultTypeTemplate: TemplateValue, Sendable {
   case withDefaultTemplate(WithDefaultTemplate)
   case withoutDefaultTemplate(WithoutDefaultTemplate)
 

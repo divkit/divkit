@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivFilterTemplate: TemplateValue {
+public enum DivFilterTemplate: TemplateValue, Sendable {
   case divBlurTemplate(DivBlurTemplate)
   case divFilterRtlMirrorTemplate(DivFilterRtlMirrorTemplate)
 

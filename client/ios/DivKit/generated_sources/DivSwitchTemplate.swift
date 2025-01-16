@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSwitchTemplate: TemplateValue {
+public final class DivSwitchTemplate: TemplateValue, Sendable {
   public static let type: String = "switch"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?

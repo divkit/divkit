@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRadialGradientFixedCenterTemplate: TemplateValue {
+public final class DivRadialGradientFixedCenterTemplate: TemplateValue, Sendable {
   public static let type: String = "fixed"
   public let parent: String?
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp

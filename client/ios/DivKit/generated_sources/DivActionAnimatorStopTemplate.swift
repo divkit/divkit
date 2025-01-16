@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionAnimatorStopTemplate: TemplateValue {
+public final class DivActionAnimatorStopTemplate: TemplateValue, Sendable {
   public static let type: String = "animator_stop"
   public let parent: String?
   public let animatorId: Field<String>?

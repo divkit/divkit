@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeMaskParticles {
+public final class DivTextRangeMaskParticles: Sendable {
   public static let type: String = "particles"
   public let color: Expression<Color>
   public let density: Expression<Double> // default value: 0.8

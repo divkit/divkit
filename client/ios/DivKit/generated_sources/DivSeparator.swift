@@ -4,10 +4,10 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSeparator: DivBase {
-  public final class DelimiterStyle {
+public final class DivSeparator: DivBase, Sendable {
+  public final class DelimiterStyle: Sendable {
     @frozen
-    public enum Orientation: String, CaseIterable {
+    public enum Orientation: String, CaseIterable, Sendable {
       case vertical = "vertical"
       case horizontal = "horizontal"
     }

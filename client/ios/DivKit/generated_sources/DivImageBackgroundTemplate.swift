@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivImageBackgroundTemplate: TemplateValue {
+public final class DivImageBackgroundTemplate: TemplateValue, Sendable {
   public static let type: String = "image"
   public let parent: String?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0

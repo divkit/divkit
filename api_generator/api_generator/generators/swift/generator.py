@@ -13,13 +13,14 @@ from .swift_entities import (
 from ..base import Generator, declaration_comment
 from ... import utils
 from ...schema.modeling.entities import (
-    StringEnumeration,
+    Declarable,
+    Dictionary,
     EntityEnumeration,
     Entity,
-    Declarable,
     Property,
+    RawArray,
     String,
-    RawArray
+    StringEnumeration
 )
 from ...schema.modeling.text import Text, EMPTY
 from ...config import Config, GenerationMode, GeneratedLanguage
@@ -285,8 +286,14 @@ class SwiftGenerator(Generator):
         return result
 
     def __main_declaration_header(self, entity: SwiftEntity) -> str:
-        protocols = list(filter(None, [entity.protocol_plus_super_entities()]))
-        conformance = '' if not protocols else f': {", ".join(protocols)}'
+        sendable_conformance = 'Sendable'
+        properties_to_declare = entity.properties_to_declare_swift
+        if properties_to_declare:
+            for prop in properties_to_declare:
+                if isinstance(prop.property_type, Dictionary) or isinstance(prop.property_type, RawArray):
+                    sendable_conformance = '@unchecked Sendable'
+        protocols = list(filter(None, [entity.protocol_plus_super_entities(), sendable_conformance]))
+        conformance = f': {", ".join(protocols)}'
         access_modifier = self._access_level.value
         return f'{access_modifier}final class {utils.capitalize_camel_case(entity.name)}{conformance} {{'
 
@@ -295,9 +302,9 @@ class SwiftGenerator(Generator):
         entity_enumeration.__class__ = SwiftEntityEnumeration
         access_modifier = self._access_level.value
         name = utils.capitalize_camel_case(entity_enumeration.name)
-        protocol = ''
+        protocol = ': Sendable'
         if entity_enumeration.mode.is_template:
-            protocol = ': TemplateValue'
+            protocol = ': TemplateValue, Sendable'
         header = f'@frozen\n{access_modifier}enum {name}{protocol} {{'
         result = Text(header)
 
@@ -347,7 +354,7 @@ class SwiftGenerator(Generator):
         if string_enumeration.parent is not None and string_enumeration.parent.generation_mode.is_template:
             prefix = string_enumeration.resolved_declaration_prefix
             return Text(f'{access_modifier}typealias {formatted_name} = {prefix}{formatted_name}')
-        result = Text(f'@frozen\n{access_modifier}enum {formatted_name}: String, CaseIterable {{')
+        result = Text(f'@frozen\n{access_modifier}enum {formatted_name}: String, CaseIterable, Sendable {{')
         for case in string_enumeration.cases:
             case_name = swift_utils.fixing_keywords(utils.fixing_first_digit(utils.lower_camel_case(case[0])))
             result += f'  case {case_name} = "{case[1]}"'

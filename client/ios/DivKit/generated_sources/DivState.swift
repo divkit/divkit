@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivState: DivBase {
-  public final class State {
+public final class DivState: DivBase, Sendable {
+  public final class State: Sendable {
     public let animationIn: DivAnimation?
     public let animationOut: DivAnimation?
     public let div: Div?

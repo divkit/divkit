@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCloudBackground {
+public final class DivCloudBackground: Sendable {
   public static let type: String = "cloud"
   public let color: Expression<Color>
   public let cornerRadius: Expression<Int> // constraint: number >= 0

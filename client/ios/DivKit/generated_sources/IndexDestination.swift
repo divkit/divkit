@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class IndexDestination {
+public final class IndexDestination: Sendable {
   public static let type: String = "index"
   public let value: Expression<Int> // constraint: number >= 0
 

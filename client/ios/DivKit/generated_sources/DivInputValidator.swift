@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivInputValidator {
+public enum DivInputValidator: Sendable {
   case divInputValidatorRegex(DivInputValidatorRegex)
   case divInputValidatorExpression(DivInputValidatorExpression)
 

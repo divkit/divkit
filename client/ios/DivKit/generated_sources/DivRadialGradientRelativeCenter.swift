@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRadialGradientRelativeCenter {
+public final class DivRadialGradientRelativeCenter: Sendable {
   public static let type: String = "relative"
   public let value: Expression<Double>
 

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivShapeTemplate: TemplateValue {
+public enum DivShapeTemplate: TemplateValue, Sendable {
   case divRoundedRectangleShapeTemplate(DivRoundedRectangleShapeTemplate)
   case divCircleShapeTemplate(DivCircleShapeTemplate)
 

@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionVideo {
+public final class DivActionVideo: Sendable {
   @frozen
-  public enum Action: String, CaseIterable {
+  public enum Action: String, CaseIterable, Sendable {
     case start = "start"
     case pause = "pause"
   }

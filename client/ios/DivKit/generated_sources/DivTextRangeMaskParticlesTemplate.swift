@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeMaskParticlesTemplate: TemplateValue {
+public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
   public static let type: String = "particles"
   public let parent: String?
   public let color: Field<Expression<Color>>?

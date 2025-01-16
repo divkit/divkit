@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivShapeDrawableTemplate: TemplateValue {
+public final class DivShapeDrawableTemplate: TemplateValue, Sendable {
   public static let type: String = "shape_drawable"
   public let parent: String?
   public let color: Field<Expression<Color>>?

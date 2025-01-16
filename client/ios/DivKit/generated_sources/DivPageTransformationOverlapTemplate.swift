@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPageTransformationOverlapTemplate: TemplateValue {
+public final class DivPageTransformationOverlapTemplate: TemplateValue, Sendable {
   public static let type: String = "overlap"
   public let parent: String?
   public let interpolator: Field<Expression<DivAnimationInterpolator>>? // default value: ease_in_out

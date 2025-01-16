@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithRequiredPropertyTemplate: TemplateValue {
+public final class EntityWithRequiredPropertyTemplate: TemplateValue, Sendable {
   public static let type: String = "entity_with_required_property"
   public let parent: String?
   public let property: Field<Expression<String>>? // at least 1 char

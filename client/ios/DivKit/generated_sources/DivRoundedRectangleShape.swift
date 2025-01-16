@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRoundedRectangleShape {
+public final class DivRoundedRectangleShape: Sendable {
   public static let type: String = "rounded_rectangle"
   public let backgroundColor: Expression<Color>?
   public let cornerRadius: DivFixedSize // default value: DivFixedSize(value: .value(5))

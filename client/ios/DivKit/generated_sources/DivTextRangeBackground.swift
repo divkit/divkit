@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivTextRangeBackground {
+public enum DivTextRangeBackground: Sendable {
   case divSolidBackground(DivSolidBackground)
   case divCloudBackground(DivCloudBackground)
 

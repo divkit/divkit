@@ -4,15 +4,15 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPager: DivBase {
+public final class DivPager: DivBase, Sendable {
   @frozen
-  public enum Orientation: String, CaseIterable {
+  public enum Orientation: String, CaseIterable, Sendable {
     case horizontal = "horizontal"
     case vertical = "vertical"
   }
 
   @frozen
-  public enum ScrollAxisAlignment: String, CaseIterable {
+  public enum ScrollAxisAlignment: String, CaseIterable, Sendable {
     case start = "start"
     case center = "center"
     case end = "end"

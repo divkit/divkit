@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 
 @frozen
-public enum EnumWithDefaultType {
+public enum EnumWithDefaultType: Sendable {
   case withDefault(WithDefault)
   case withoutDefault(WithoutDefault)
 

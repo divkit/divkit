@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFadeTransition: DivTransitionBase {
+public final class DivFadeTransition: DivTransitionBase, Sendable {
   public static let type: String = "fade"
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 0.0
   public let duration: Expression<Int> // constraint: number >= 0; default value: 200

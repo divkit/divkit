@@ -4,21 +4,21 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivContainer: DivBase {
+public final class DivContainer: DivBase, Sendable {
   @frozen
-  public enum LayoutMode: String, CaseIterable {
+  public enum LayoutMode: String, CaseIterable, Sendable {
     case noWrap = "no_wrap"
     case wrap = "wrap"
   }
 
   @frozen
-  public enum Orientation: String, CaseIterable {
+  public enum Orientation: String, CaseIterable, Sendable {
     case vertical = "vertical"
     case horizontal = "horizontal"
     case overlap = "overlap"
   }
 
-  public final class Separator {
+  public final class Separator: Sendable {
     public let margins: DivEdgeInsets?
     public let showAtEnd: Expression<Bool> // default value: false
     public let showAtStart: Expression<Bool> // default value: false

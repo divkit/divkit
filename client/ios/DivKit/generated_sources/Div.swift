@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum Div {
+public enum Div: Sendable {
   case divImage(DivImage)
   case divGifImage(DivGifImage)
   case divText(DivText)

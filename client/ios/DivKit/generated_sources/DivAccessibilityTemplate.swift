@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAccessibilityTemplate: TemplateValue {
+public final class DivAccessibilityTemplate: TemplateValue, Sendable {
   public typealias Kind = DivAccessibility.Kind
 
   public typealias Mode = DivAccessibility.Mode

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivSizeTemplate: TemplateValue {
+public enum DivSizeTemplate: TemplateValue, Sendable {
   case divFixedSizeTemplate(DivFixedSizeTemplate)
   case divMatchParentSizeTemplate(DivMatchParentSizeTemplate)
   case divWrapContentSizeTemplate(DivWrapContentSizeTemplate)

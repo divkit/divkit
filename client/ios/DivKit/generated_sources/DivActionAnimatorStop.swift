@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionAnimatorStop {
+public final class DivActionAnimatorStop: Sendable {
   public static let type: String = "animator_stop"
   public let animatorId: String
 

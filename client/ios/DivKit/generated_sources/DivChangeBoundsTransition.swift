@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivChangeBoundsTransition: DivTransitionBase {
+public final class DivChangeBoundsTransition: DivTransitionBase, Sendable {
   public static let type: String = "change_bounds"
   public let duration: Expression<Int> // constraint: number >= 0; default value: 200
   public let interpolator: Expression<DivAnimationInterpolator> // default value: ease_in_out

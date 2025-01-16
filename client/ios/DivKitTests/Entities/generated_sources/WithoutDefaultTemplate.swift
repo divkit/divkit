@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class WithoutDefaultTemplate: TemplateValue {
+public final class WithoutDefaultTemplate: TemplateValue, Sendable {
   public static let type: String = "non_default"
   public let parent: String?
 

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class BooleanVariable {
+public final class BooleanVariable: Sendable {
   public static let type: String = "boolean"
   public let name: String
   public let value: Bool

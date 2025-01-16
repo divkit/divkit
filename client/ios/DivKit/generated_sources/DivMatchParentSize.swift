@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivMatchParentSize {
+public final class DivMatchParentSize: Sendable {
   public static let type: String = "match_parent"
   public let weight: Expression<Double>? // constraint: number > 0
 

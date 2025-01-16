@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFixedCount {
+public final class DivFixedCount: Sendable {
   public static let type: String = "fixed"
   public let value: Expression<Int> // constraint: number >= 0
 

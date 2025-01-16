@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivBlur {
+public final class DivBlur: Sendable {
   public static let type: String = "blur"
   public let radius: Expression<Int> // constraint: number >= 0
 

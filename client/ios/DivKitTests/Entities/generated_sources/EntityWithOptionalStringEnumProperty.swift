@@ -7,9 +7,9 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithOptionalStringEnumProperty {
+public final class EntityWithOptionalStringEnumProperty: Sendable {
   @frozen
-  public enum Property: String, CaseIterable {
+  public enum Property: String, CaseIterable, Sendable {
     case first = "first"
     case second = "second"
   }

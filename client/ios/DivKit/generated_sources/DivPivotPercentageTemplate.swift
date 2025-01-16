@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPivotPercentageTemplate: TemplateValue {
+public final class DivPivotPercentageTemplate: TemplateValue, Sendable {
   public static let type: String = "pivot-percentage"
   public let parent: String?
   public let value: Field<Expression<Double>>?

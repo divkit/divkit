@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputValidatorBase {
+public final class DivInputValidatorBase: Sendable {
   public let allowEmpty: Expression<Bool> // default value: false
   public let labelId: Expression<String>?
   public let variable: String?

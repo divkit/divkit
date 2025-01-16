@@ -8,7 +8,7 @@ import VGSL
 import enum DivKit.Expression
 
 @frozen
-public enum EnumWithDefaultType {
+public enum EnumWithDefaultType: Sendable {
   case withDefault(WithDefault)
   case withoutDefault(WithoutDefault)
 

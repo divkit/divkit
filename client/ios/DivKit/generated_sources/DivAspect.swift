@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAspect {
+public final class DivAspect: Sendable {
   public let ratio: Expression<Double> // constraint: number > 0
 
   public func resolveRatio(_ resolver: ExpressionResolver) -> Double? {

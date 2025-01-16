@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivGridTemplate: TemplateValue {
+public final class DivGridTemplate: TemplateValue, Sendable {
   public static let type: String = "grid"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?

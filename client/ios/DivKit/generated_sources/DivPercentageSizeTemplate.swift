@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPercentageSizeTemplate: TemplateValue {
+public final class DivPercentageSizeTemplate: TemplateValue, Sendable {
   public static let type: String = "percentage"
   public let parent: String?
   public let value: Field<Expression<Double>>? // constraint: number > 0

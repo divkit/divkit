@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivImage: DivBase {
+public final class DivImage: DivBase, Sendable {
   public static let type: String = "image"
   public let accessibility: DivAccessibility?
   public let action: DivAction?

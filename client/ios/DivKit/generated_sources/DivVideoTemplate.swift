@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivVideoTemplate: TemplateValue {
+public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "video"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?
