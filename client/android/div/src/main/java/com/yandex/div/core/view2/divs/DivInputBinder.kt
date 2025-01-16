@@ -284,7 +284,7 @@ internal class DivInputBinder @Inject constructor(
     ) {
         val callback = { _: Any ->
             val enterKeyType = div.enterKeyType.evaluate(resolver)
-            this.imeOptions = getImeAction(enterKeyType)
+            this.imeOptions += getImeAction(enterKeyType)
 
             val actions = div.enterKeyActions
             if (!actions.isNullOrEmpty()) {
@@ -304,7 +304,7 @@ internal class DivInputBinder @Inject constructor(
 
     private fun getImeAction(type: DivInput.EnterKeyType): Int {
         return when (type) {
-            DivInput.EnterKeyType.DEFAULT -> EditorInfo.IME_NULL
+            DivInput.EnterKeyType.DEFAULT -> EditorInfo.IME_ACTION_UNSPECIFIED
             DivInput.EnterKeyType.SEND -> EditorInfo.IME_ACTION_SEND
             DivInput.EnterKeyType.DONE -> EditorInfo.IME_ACTION_DONE
             DivInput.EnterKeyType.SEARCH -> EditorInfo.IME_ACTION_SEARCH

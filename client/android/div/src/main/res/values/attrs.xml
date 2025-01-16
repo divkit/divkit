@@ -4,6 +4,7 @@
 
     <attr name="divTextStyle" format="reference"/>
     <attr name="divImageStyle" format="reference"/>
+    <attr name="divInputStyle" format="reference"/>
     <attr name="divTabIndicatorLayoutStyle" format="reference"/>
 
     <declare-styleable name="EllipsizedTextView">
