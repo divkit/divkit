@@ -28,12 +28,12 @@ extension [UserInterfaceAction] {
   public func perform(sendingFrom sender: UserInterfaceAction.ResponderType) {
     #if os(iOS)
     forEach {
-      AnalyticsTouchEvent(touchType: .click, path: $0.path)
-        .sendFrom(sender)
+      AnalyticsTouchEvent(touchType: .click, path: $0.path).sendFrom(sender)
     }
 
-    map { UIActionEvent(uiAction: $0, originalSender: sender) }
-      .sendFrom(sender)
+    forEach {
+      UIActionEvent(uiAction: $0, originalSender: sender).sendFrom(sender)
+    }
     #endif
   }
 }
