@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 import LayoutKit
 import Serialization
 import VGSL

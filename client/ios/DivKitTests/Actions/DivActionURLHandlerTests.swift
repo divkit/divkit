@@ -11,7 +11,7 @@ final class DivActionURLHandlerTests: XCTestCase {
       stateUpdater: DefaultDivStateManagement(),
       blockStateStorage: blockStateStorage,
       patchProvider: MockPatchProvider(),
-      variableUpdater: DivVariablesStorage(),
+      variablesStorage: DivVariablesStorage(),
       updateCard: { _ in },
       showTooltip: nil,
       tooltipActionPerformer: nil,
@@ -265,7 +265,17 @@ final class DivActionURLHandlerTests: XCTestCase {
     mode: SetItemAction.Mode
   ) {
     blockStateStorage.setState(id: elementId, cardId: cardId, state: beforeState)
-    let _ = actionHandler.handleURL(SetItemAction.makeURL(mode: mode), cardId: cardId)
+    let url = SetItemAction.makeURL(mode: mode)
+    let info = DivActionInfo(
+      path: cardId.path,
+      logId: cardId.rawValue,
+      url: url,
+      logUrl: nil,
+      referer: nil,
+      source: .tap,
+      payload: nil
+    )
+    let _ = actionHandler.handleURL(url, info: info)
     XCTAssertEqual(blockStateStorage.getState(elementId, cardId: cardId), afterState)
   }
 }

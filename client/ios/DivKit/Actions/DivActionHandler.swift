@@ -35,7 +35,8 @@ public final class DivActionHandler {
   private let timerActionHandler: TimerActionHandler
   private let videoActionHandler = VideoActionHandler()
 
-  /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
+  /// Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
+  @_spi(Legacy)
   public convenience init(
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
@@ -100,7 +101,7 @@ public final class DivActionHandler {
       stateUpdater: stateUpdater,
       blockStateStorage: blockStateStorage,
       patchProvider: patchProvider,
-      variableUpdater: variablesStorage,
+      variablesStorage: variablesStorage,
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: tooltipActionPerformer,
@@ -163,11 +164,6 @@ public final class DivActionHandler {
       localValues: params.localValues,
       sender: sender
     )
-  }
-
-  /// Deprecated. This method is intended for backward compatibility only. Do not use it.
-  public func handleDivActionUrl(_ url: URL, cardId: DivCardID) -> Bool {
-    divActionURLHandler.handleURL(url, cardId: cardId)
   }
 
   @_spi(Internal)

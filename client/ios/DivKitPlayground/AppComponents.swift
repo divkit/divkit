@@ -1,7 +1,7 @@
-import DivKit
-import DivKitExtensions
-import DivKitMarkdownExtension
 import Foundation
+import DivKit
+@_spi(Legacy) import DivKitExtensions
+import DivKitMarkdownExtension
 import LayoutKit
 import VGSL
 

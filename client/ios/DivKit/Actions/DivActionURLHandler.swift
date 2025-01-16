@@ -5,8 +5,11 @@ import VGSL
 
 /// Deprecated. Use `DivActionHandler`.
 public final class DivActionURLHandler {
+  @_spi(Internal)
   public typealias UpdateCardAction = (UpdateReason) -> Void
+
   public typealias ShowTooltipAction = (TooltipInfo) -> Void
+
   public typealias PerformTimerAction = (
     _ cardId: DivCardID,
     _ timerId: String,
@@ -25,7 +28,7 @@ public final class DivActionURLHandler {
   private let stateUpdater: DivStateUpdater
   private let blockStateStorage: DivBlockStateStorage
   private let patchProvider: DivPatchProvider
-  private let variableUpdater: DivVariableUpdater
+  private let variablesStorage: DivVariablesStorage
   private let updateCard: UpdateCardAction
   private let showTooltip: ShowTooltipAction?
   private let tooltipActionPerformer: TooltipActionPerformer?
@@ -33,11 +36,11 @@ public final class DivActionURLHandler {
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let scrollActionHandler: ScrollActionHandler
 
-  public init(
+  init(
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage,
     patchProvider: DivPatchProvider,
-    variableUpdater: DivVariableUpdater,
+    variablesStorage: DivVariablesStorage,
     updateCard: @escaping UpdateCardAction,
     showTooltip: ShowTooltipAction?,
     tooltipActionPerformer: TooltipActionPerformer?,
@@ -47,7 +50,7 @@ public final class DivActionURLHandler {
     self.stateUpdater = stateUpdater
     self.blockStateStorage = blockStateStorage
     self.patchProvider = patchProvider
-    self.variableUpdater = variableUpdater
+    self.variablesStorage = variablesStorage
     self.updateCard = updateCard
     self.showTooltip = showTooltip
     self.tooltipActionPerformer = tooltipActionPerformer
@@ -59,25 +62,8 @@ public final class DivActionURLHandler {
     )
   }
 
-  public func canHandleURL(_ url: URL) -> Bool {
+  func canHandleURL(_ url: URL) -> Bool {
     url.scheme == DivActionIntent.scheme
-  }
-
-  public func handleURL(
-    _ url: URL,
-    cardId: DivCardID,
-    completion: @escaping (Result<Void, Error>) -> Void = { _ in }
-  ) -> Bool {
-    let info = DivActionInfo(
-      path: cardId.path,
-      logId: cardId.rawValue,
-      url: url,
-      logUrl: nil,
-      referer: nil,
-      source: .tap,
-      payload: nil
-    )
-    return handleURL(url, info: info, completion: completion)
   }
 
   func handleURL(
@@ -119,7 +105,7 @@ public final class DivActionURLHandler {
       )
       updateCard(.state(cardId))
     case let .setVariable(name, value):
-      variableUpdater.update(
+      variablesStorage.update(
         path: info.path,
         name: DivVariableName(rawValue: name),
         value: value

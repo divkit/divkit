@@ -1,9 +1,10 @@
-import DivKit
+@_spi(Internal) import DivKit
 import LayoutKit
 import Serialization
 import VGSL
 
-/// Deprecated. Use `div-base.layout_provider`.
+/// Use `div-base.layout_provider`.
+@_spi(Legacy)
 public final class SizeProviderExtensionHandler: DivExtensionHandler {
   public let id = "size_provider"
 

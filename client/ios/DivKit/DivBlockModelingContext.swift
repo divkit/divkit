@@ -15,7 +15,7 @@ public struct DivBlockModelingContext {
   let stateManager: DivStateManager
   public let actionHandler: DivActionHandler?
   public let blockStateStorage: DivBlockStateStorage
-  let visibilityCounter: DivVisibilityCounting
+  let visibilityCounter: DivVisibilityCounter
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
   public let imageHolderFactory: DivImageHolderFactory
   let highPriorityImageHolderFactory: DivImageHolderFactory?
@@ -47,6 +47,7 @@ public struct DivBlockModelingContext {
   let animatorController: DivAnimatorController?
   private(set) var accessibilityElementsStorage = DivAccessibilityElementsStorage()
 
+  @_spi(Internal)
   public init(
     cardId: DivCardID,
     additionalId: String? = nil,
@@ -56,7 +57,7 @@ public struct DivBlockModelingContext {
     stateManager: DivStateManager,
     actionHandler: DivActionHandler? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
-    visibilityCounter: DivVisibilityCounting? = nil,
+    visibilityCounter: DivVisibilityCounter? = nil,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
     imageHolderFactory: DivImageHolderFactory,
     highPriorityImageHolderFactory: DivImageHolderFactory? = nil,
@@ -121,7 +122,7 @@ public struct DivBlockModelingContext {
     stateManager: DivStateManager,
     actionHandler: DivActionHandler?,
     blockStateStorage: DivBlockStateStorage,
-    visibilityCounter: DivVisibilityCounting?,
+    visibilityCounter: DivVisibilityCounter?,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache?,
     imageHolderFactory: DivImageHolderFactory,
     highPriorityImageHolderFactory: DivImageHolderFactory?,

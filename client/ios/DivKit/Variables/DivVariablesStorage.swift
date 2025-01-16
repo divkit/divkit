@@ -235,7 +235,7 @@ public final class DivVariablesStorage {
   }
 }
 
-extension DivVariablesStorage: DivVariableUpdater {
+extension DivVariablesStorage {
   public func update(
     cardId: DivCardID,
     name: DivVariableName,

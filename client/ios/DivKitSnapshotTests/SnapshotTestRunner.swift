@@ -27,13 +27,13 @@ final class SnapshotTestRunner {
     blocksState: [IdAndCardId: ElementState] = [:],
     extensions: [DivExtensionHandler] = []
   ) async throws {
-    let jsonDict = try #require(makeJsonDict(from: file.absolutePath))
+    let jsonDict = try #require(readJson(path: file.absolutePath))
 
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
       fontProvider: YSFontProvider(),
       imageHolderFactory: TestImageHolderFactory(),
-      layoutDirection: getLayoutDirection(from: jsonDict)
+      layoutDirection: getLayoutDirection(jsonDict)
     )
     for (id, state) in blocksState {
       divKitComponents.blockStateStorage.setState(id: id.id, cardId: id.cardId, state: state)
@@ -104,8 +104,10 @@ final class SnapshotTestRunner {
     try check(tooltipView)
   }
 
-  private func getLayoutDirection(from jsonDict: [String: Any]) -> UserInterfaceLayoutDirection {
-    let configuration = try? jsonDict.getField("configuration") as [String: Any]
+  private func getLayoutDirection(
+    _ json: [String: any Sendable]
+  ) -> UserInterfaceLayoutDirection {
+    let configuration = try? json.getField("configuration") as [String: any Sendable]
     guard configuration?["layout_direction"] as? String == "rtl" else {
       return .leftToRight
     }
@@ -200,11 +202,11 @@ final class SnapshotTestRunner {
   }
 }
 
-private func makeJsonDict(from path: String) -> [String: Any]? {
+private func readJson(path: String) -> [String: any Sendable]? {
   guard let data = FileManager.default.contents(atPath: path) else {
     return nil
   }
-  return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+  return (try? JSONSerialization.jsonObject(with: data)) as? [String: any Sendable]
 }
 
 private final class TestImageHolderFactory: DivImageHolderFactory {

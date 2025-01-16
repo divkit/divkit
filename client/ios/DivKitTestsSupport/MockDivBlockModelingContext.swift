@@ -1,4 +1,4 @@
-import DivKit
+@_spi(Internal) import DivKit
 import VGSL
 
 extension DivBlockModelingContext {
@@ -7,7 +7,7 @@ extension DivBlockModelingContext {
   public static let `default` = DivBlockModelingContext()
 
   public init(
-    cardId: DivCardID = testCardId,
+    cardId: DivCardID = Self.testCardId,
     additionalId: String? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     extensionHandlers: [DivExtensionHandler] = [],

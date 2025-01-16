@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 import LayoutKit
 import XCTest
 
@@ -19,7 +19,7 @@ final class DivTriggerTests: XCTestCase {
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
     functionsStorage: DivFunctionsStorage(),
-    stateUpdates: blockStateStorage.stateUpdates,
+    blockStateStorage: blockStateStorage,
     actionHandler: actionHandler,
     persistentValuesStorage: persistentValuesStorage
   )

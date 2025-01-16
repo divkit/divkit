@@ -2,23 +2,23 @@ import Foundation
 import LayoutKit
 import VGSL
 
-public struct IdAndCardId: Hashable {
+struct IdAndCardId: Hashable {
   let id: String
   let cardId: DivCardID
 
-  public init(id: String, cardId: DivCardID) {
+  init(id: String, cardId: DivCardID) {
     self.id = id
     self.cardId = cardId
   }
 
-  public init(path: UIElementPath) {
+  init(path: UIElementPath) {
     id = path.leaf
     cardId = path.cardId
   }
 }
 
 public final class DivBlockStateStorage {
-  public struct ChangeEvent {
+  struct ChangeEvent {
     public let id: IdAndCardId
     public let state: ElementState
   }
@@ -91,7 +91,7 @@ public final class DivBlockStateStorage {
     stateUpdatesPipe.send(ChangeEvent(id: id, state: state))
   }
 
-  public func setFocused(isFocused: Bool, element: IdAndCardId) {
+  func setFocused(isFocused: Bool, element: IdAndCardId) {
     lock.withLock {
       focusedElement = isFocused ? .idFocused(element) : removeFocus(from: element)
     }
@@ -112,7 +112,7 @@ public final class DivBlockStateStorage {
     }
   }
 
-  public func isFocused(element: IdAndCardId) -> Bool {
+  func isFocused(element: IdAndCardId) -> Bool {
     lock.withLock {
       isFocusedInternal(checkedElement: .idFocused(element))
     }
@@ -147,7 +147,7 @@ public final class DivBlockStateStorage {
     isFocusedInternal(checkedElement: FocusedElement.idFocused(element)) ? .none : focusedElement
   }
 
-  public func getFocusedElement() -> IdAndCardId? {
+  func getFocusedElement() -> IdAndCardId? {
     switch focusedElement {
     case .none:
       nil
