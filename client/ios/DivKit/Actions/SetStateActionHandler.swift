@@ -13,14 +13,9 @@ final class SetStateActionHandler {
       return
     }
 
-    guard let statePath = DivStatePath.makeDivStatePath(from: stateId) else {
-      DivKitLogger.error("Invalid state id: \(stateId)")
-      return
-    }
-
     let cardId = context.path.cardId
     stateUpdater.set(
-      path: statePath,
+      path: DivStatePath.makeDivStatePath(from: stateId),
       cardId: cardId,
       lifetime: .short
     )

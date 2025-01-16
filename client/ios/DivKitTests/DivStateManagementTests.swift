@@ -33,7 +33,7 @@ final class DivStateManagementTests: XCTestCase {
 
   func test_set_UpdatesStateManager() {
     stateManagement.set(
-      path: DivStatePath.makeDivStatePath(from: "0/DivId/State1")!,
+      path: DivStatePath.makeDivStatePath(from: "0/DivId/State1"),
       cardId: cardId,
       lifetime: .short
     )
@@ -52,7 +52,7 @@ final class DivStateManagementTests: XCTestCase {
 
   func test_set_StoresPersistentState() {
     stateManagement.set(
-      path: DivStatePath.makeDivStatePath(from: "0/DivId/State1")!,
+      path: DivStatePath.makeDivStatePath(from: "0/DivId/State1"),
       cardId: cardId,
       lifetime: .long
     )
@@ -73,7 +73,7 @@ final class DivStateManagementTests: XCTestCase {
 
   func test_StoredStateExpires() {
     stateManagement.set(
-      path: DivStatePath.makeDivStatePath(from: "0/Div1/State1")!,
+      path: DivStatePath.makeDivStatePath(from: "0/Div1/State1"),
       cardId: cardId,
       lifetime: .long
     )
@@ -81,7 +81,7 @@ final class DivStateManagementTests: XCTestCase {
     shiftTime(days: 1.5)
 
     stateManagement.set(
-      path: DivStatePath.makeDivStatePath(from: "0/Div2/State1")!,
+      path: DivStatePath.makeDivStatePath(from: "0/Div2/State1"),
       cardId: cardId,
       lifetime: .long
     )

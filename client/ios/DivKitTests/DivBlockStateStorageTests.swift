@@ -181,5 +181,5 @@ private func path(cardId: String, path: String) -> UIElementPath {
 }
 
 private func divStatePath(_ path: String) -> UIElementPath {
-  DivStatePath.makeDivStatePath(from: path)!.rawValue
+  DivStatePath.makeDivStatePath(from: path).rawValue
 }
