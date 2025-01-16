@@ -49,6 +49,21 @@ public final class ExpressionResolver {
     self.errorTracker = reporter.asExpressionErrorTracker(cardId: path.cardId)
   }
 
+  @_spi(Legacy)
+  public convenience init(
+    variableValueProvider: @escaping (String) -> Any?,
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
+    errorTracker: ExpressionErrorTracker? = nil
+  ) {
+    self.init(
+      functionsProvider: FunctionsProvider(
+        persistentValuesStorage: persistentValuesStorage
+      ),
+      variableValueProvider: variableValueProvider,
+      errorTracker: { errorTracker?($0) }
+    )
+  }
+
   public func resolve(_ expression: String) -> Any? {
     if let link: ExpressionLink<Any> = makeLink(expression) {
       return resolveAnyLink(link)
