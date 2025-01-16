@@ -1,3 +1,46 @@
+## 30.33.0
+
+# Android Client:
+* Add `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
+* Added `ImageTransformer` for `LoadableImageView`.
+* Added `shine` extension.
+* Added support for `press_start_actions`, `press_end_actions`, `hover_start_actions` and `hover_end_actions`.
+* Save Disposable in DivActionBinder to prevent subscription leak.
+* Deprecated `externalImage` in `LoadableImageView` use `ImageTransformer` instead.
+* Fixed crash during svg image loading.
+* Fixed end padding applying along the scroll axis in `pager`.
+* Fixed offscreen pages drawing in `pager`.
+* Lighten R8 rules.
+
+# iOS Client:
+* Added `atan` function.
+* Added `getStoredArrayValue`, `getStoredDictValue` functions.
+* Added `match_parent` width support for tooltips.
+* Added `tan`, `asin`, `acos` functions.
+* Added arrays and dictionaries support for `set_stored_value` action.
+* Added reporting of "Touchable view is too small" warnings from DecoratingBlock's view.
+* AnimatableView and AnimatableViewFactory are deprecated. Use AsyncSourceAnimatableView and AsyncSourceAnimatableViewFactory instead. The new protocols allow you to process an animation source asynchronously.
+* Fixed animation of stateview subviews.
+* Fixed ternary operator parsing.
+* Made `showTooltip(info:)` method in `DefaultTooltipManager` present a tooltip view asynchronously, which fixes the issues with its visibility-actions.
+* Pager infinite scroll logic was changed, some bugs were fixed.
+* Set minimum animation time.
+* Supported corner_radius param in shimmer extension.
+* Supported empty cells in a row in `div-grid`.
+
+# Web Client:
+* Added `download` typed action support.
+* Added `is_enabled` property support for the `slider`.
+* Added new functions: `pi`, `toRadians`, `toDegrees`, `sin`, `cos` and `atan`.
+* Added support for the `baseline_offset` property in `text` component.
+* Added support for the typed `timer` action.
+* Added support for the typed `video` action.
+* Disabled extra crop on `transition_in` / `transition_out` / `transition_change` animations.
+* Fixed a bug where the `tooltip` and `menu` used the global context instead of the component context (invoking actions, variable references, etc.).
+* Fixed the `pager` layout with `item_spacing` = 0.
+* The layout of the `pager` elements with overflow has been fixed.
+
+
 ## 30.32.0
 
 # Android Client:
