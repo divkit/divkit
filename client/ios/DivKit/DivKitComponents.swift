@@ -318,7 +318,6 @@ public final class DivKitComponents {
       lastVisibleBoundsCache: lastVisibleBoundsCache,
       imageHolderFactory: imageHolderFactory
         .withCache(cachedImageHolders),
-      highPriorityImageHolderFactory: nil,
       divCustomBlockFactory: divCustomBlockFactory,
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,

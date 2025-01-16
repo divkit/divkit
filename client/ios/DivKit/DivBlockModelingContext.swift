@@ -18,7 +18,6 @@ public struct DivBlockModelingContext {
   let visibilityCounter: DivVisibilityCounter
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
   public let imageHolderFactory: DivImageHolderFactory
-  let highPriorityImageHolderFactory: DivImageHolderFactory?
   let divCustomBlockFactory: DivCustomBlockFactory
   public let fontProvider: DivFontProvider
   let flagsInfo: DivFlagsInfo
@@ -60,7 +59,6 @@ public struct DivBlockModelingContext {
     visibilityCounter: DivVisibilityCounter? = nil,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
     imageHolderFactory: DivImageHolderFactory,
-    highPriorityImageHolderFactory: DivImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory? = nil,
     fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,
@@ -90,7 +88,6 @@ public struct DivBlockModelingContext {
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
       imageHolderFactory: imageHolderFactory,
-      highPriorityImageHolderFactory: highPriorityImageHolderFactory,
       divCustomBlockFactory: divCustomBlockFactory,
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
@@ -125,7 +122,6 @@ public struct DivBlockModelingContext {
     visibilityCounter: DivVisibilityCounter?,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache?,
     imageHolderFactory: DivImageHolderFactory,
-    highPriorityImageHolderFactory: DivImageHolderFactory?,
     divCustomBlockFactory: DivCustomBlockFactory?,
     fontProvider: DivFontProvider?,
     flagsInfo: DivFlagsInfo,
@@ -158,7 +154,6 @@ public struct DivBlockModelingContext {
     self.visibilityCounter = visibilityCounter ?? DivVisibilityCounter()
     self.lastVisibleBoundsCache = lastVisibleBoundsCache ?? DivLastVisibleBoundsCache()
     self.imageHolderFactory = imageHolderFactory
-    self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.flagsInfo = flagsInfo
     self.fontProvider = fontProvider ?? DefaultFontProvider()
