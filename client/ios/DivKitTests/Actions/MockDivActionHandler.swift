@@ -7,7 +7,6 @@ extension DivActionHandler {
   convenience init(
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     idToPath: IdToPath = IdToPath(),
-    logger: DivActionLogger = EmptyDivActionLogger(),
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
     updateCard: @escaping DivActionURLHandler.UpdateCardAction = { _ in },
@@ -24,7 +23,6 @@ extension DivActionHandler {
       updateCard: updateCard,
       showTooltip: nil,
       tooltipActionPerformer: nil,
-      logger: logger,
       trackVisibility: { _, _ in },
       trackDisappear: { _, _ in },
       performTimerAction: { _, _, _ in },

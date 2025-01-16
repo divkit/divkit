@@ -161,7 +161,6 @@ public final class DivKitComponents {
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: self.tooltipManager,
-      logger: EmptyDivActionLogger(),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },

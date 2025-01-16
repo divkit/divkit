@@ -4,7 +4,6 @@ import XCTest
 
 final class DivActionHandlerTests: XCTestCase {
   private var actionHandler: DivActionHandler!
-  private let logger = MockActionLogger()
   private let reporter = MockReporter()
   private let variablesStorage = DivVariablesStorage()
 
@@ -15,7 +14,6 @@ final class DivActionHandlerTests: XCTestCase {
     idToPath[cardId.path + "element_id"] = cardId.path + "element_id"
     actionHandler = DivActionHandler(
       idToPath: idToPath,
-      logger: logger,
       reporter: reporter,
       urlHandler: DivUrlHandlerDelegate { url, _ in
         self.handledUrl = url
@@ -408,22 +406,6 @@ final class DivActionHandlerTests: XCTestCase {
     )
   }
 
-  func test_LoggerIsCalled() {
-    handle(
-      DivAction(
-        logId: .value("test_log_id"),
-        logUrl: .value(url("https://some.log.url")),
-        payload: ["key": "value"],
-        referer: .value(url("https://some.referer.url")),
-        url: .value(url("https://some.url"))
-      )
-    )
-
-    XCTAssertEqual(url("https://some.log.url"), logger.lastUrl)
-    XCTAssertEqual(url("https://some.referer.url"), logger.lastReferer)
-    XCTAssertEqual(["key": "value"], logger.lastPayload as! [String: AnyHashable])
-  }
-
   func test_ActionIsReported() {
     handle(
       DivAction(
@@ -478,18 +460,6 @@ private func stringValue(_ value: String) -> DivTypedValue {
 }
 
 private let cardId: DivCardID = "test_card"
-
-private final class MockActionLogger: DivActionLogger {
-  private(set) var lastUrl: URL?
-  private(set) var lastReferer: URL?
-  private(set) var lastPayload: [String: Any]?
-
-  func log(url: URL, referer: URL?, payload: [String: Any]?) {
-    lastUrl = url
-    lastReferer = referer
-    lastPayload = payload
-  }
-}
 
 private final class MockReporter: DivReporter {
   private(set) var lastCardId: DivCardID?

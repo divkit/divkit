@@ -8,7 +8,6 @@ public final class DivActionHandler {
 
   private let divActionURLHandler: DivActionURLHandler
   private let urlHandler: DivUrlHandler
-  private let logger: DivActionLogger
   private let trackVisibility: TrackVisibility
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
@@ -47,7 +46,6 @@ public final class DivActionHandler {
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
-    logger: DivActionLogger? = nil,
     trackVisibility: @escaping TrackVisibility = { _, _ in },
     trackDisappear: @escaping TrackVisibility = { _, _ in },
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in },
@@ -65,7 +63,6 @@ public final class DivActionHandler {
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: tooltipActionPerformer,
-      logger: logger ?? EmptyDivActionLogger(),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: performTimerAction,
@@ -87,7 +84,6 @@ public final class DivActionHandler {
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction?,
     tooltipActionPerformer: TooltipActionPerformer?,
-    logger: DivActionLogger,
     trackVisibility: @escaping TrackVisibility,
     trackDisappear: @escaping TrackVisibility,
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction,
@@ -109,7 +105,6 @@ public final class DivActionHandler {
       persistentValuesStorage: persistentValuesStorage
     )
     self.urlHandler = urlHandler
-    self.logger = logger
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
@@ -269,10 +264,6 @@ public final class DivActionHandler {
       handleUrl(action, info: divActionInfo, sender: sender)
     }
 
-    if let logUrl {
-      logger.log(url: logUrl, referer: referer, payload: action.payload)
-    }
-
     reporter.reportAction(
       cardId: cardId,
       info: divActionInfo
@@ -322,8 +313,7 @@ public final class DivActionHandler {
       switch info.source {
       case .visibility, .disappear:
         // For visibility actions url is treated as logUrl.
-        let referer = info.referer
-        logger.log(url: url, referer: referer, payload: action.payload)
+        break;
       default:
         urlHandler.handle(
           url,
