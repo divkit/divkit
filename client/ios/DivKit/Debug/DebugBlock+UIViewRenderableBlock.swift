@@ -82,7 +82,9 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   private func updateCountLabel() {
     let errorsCount = errorCollector?.totalErrorCount ?? 0
-    errorsLabel.isHidden = errorsCount == 0
+    let isHidden = errorsCount == 0
+    isUserInteractionEnabled = !isHidden
+    errorsLabel.isHidden = isHidden
     errorsLabel.text = "\(min(maxCount, errorsCount))"
   }
 
