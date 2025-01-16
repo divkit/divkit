@@ -17,9 +17,6 @@ public struct DivFlagsInfo {
   /// Default value is `false` for the backward compatibility reasons.
   public let useUrlHandlerForVisibilityActions: Bool
 
-  /// Enable experimental image loading optimization
-  public let imageLoadingOptimizationEnabled: Bool
-
   /// Experimental tint/blur effect renderer
   public let imageBlurPreferMetal: Bool
   public let imageTintPreferMetal: Bool
@@ -36,13 +33,11 @@ public struct DivFlagsInfo {
   /// Creates an instance of `DivFlagsInfo`.
   public init(
     useUrlHandlerForVisibilityActions: Bool = false,
-    imageLoadingOptimizationEnabled: Bool = true,
     imageBlurPreferMetal: Bool = true,
     imageTintPreferMetal: Bool = true,
     useTooltipLegacyWidth: Bool = false
   ) {
     self.useUrlHandlerForVisibilityActions = useUrlHandlerForVisibilityActions
-    self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
     self.imageBlurPreferMetal = imageBlurPreferMetal
     self.imageTintPreferMetal = imageTintPreferMetal
     self.useTooltipLegacyWidth = useTooltipLegacyWidth

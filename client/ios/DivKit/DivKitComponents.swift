@@ -134,11 +134,7 @@ public final class DivKitComponents {
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
     self.imageHolderFactory = (
-      imageHolderFactory
-        ?? DefaultImageHolderFactory(
-          requestPerformer: requestPerformer,
-          imageLoadingOptimizationEnabled: flagsInfo.imageLoadingOptimizationEnabled
-        )
+      imageHolderFactory ?? DefaultImageHolderFactory(requestPerformer: requestPerformer)
     ).withAssets()
 
     self.submitter = submitter
