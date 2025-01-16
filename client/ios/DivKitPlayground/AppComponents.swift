@@ -38,9 +38,6 @@ enum AppComponents {
         MarkdownExtensionHandler(),
         ShineExtensionHandler(),
       ],
-      flagsInfo: DivFlagsInfo(
-        useTooltipLegacyWidth: false
-      ),
       fontProvider: fontProvider,
       layoutDirection: layoutDirection,
       patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),

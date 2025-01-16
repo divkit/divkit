@@ -27,7 +27,7 @@ public struct DivFlagsInfo {
     imageLoadingOptimizationEnabled: Bool = true,
     imageBlurPreferMetal: Bool = true,
     imageTintPreferMetal: Bool = true,
-    useTooltipLegacyWidth: Bool = true
+    useTooltipLegacyWidth: Bool = false
   ) {
     self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
     self.imageBlurPreferMetal = imageBlurPreferMetal
