@@ -6,6 +6,7 @@ import XCTest
 extension DivActionHandler {
   convenience init(
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
+    flags: DivFlagsInfo = .default,
     idToPath: IdToPath = IdToPath(),
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
@@ -30,7 +31,8 @@ extension DivActionHandler {
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,
       idToPath: idToPath,
-      animatorController: DivAnimatorController()
+      animatorController: DivAnimatorController(),
+      flags: flags
     )
   }
 }

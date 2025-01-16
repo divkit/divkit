@@ -17,6 +17,7 @@ public final class DivActionHandler {
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
   private let idToPath: IdToPath
+  private let flags: DivFlagsInfo
 
   private let animatorActionHandler: AnimatorActionHandler
   private let arrayActionsHandler = ArrayActionsHandler()
@@ -70,7 +71,8 @@ public final class DivActionHandler {
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter ?? DefaultDivReporter(),
       idToPath: IdToPath(),
-      animatorController: DivAnimatorController()
+      animatorController: DivAnimatorController(),
+      flags: .default
     )
   }
 
@@ -91,7 +93,8 @@ public final class DivActionHandler {
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter,
     idToPath: IdToPath,
-    animatorController: DivAnimatorController
+    animatorController: DivAnimatorController,
+    flags: DivFlagsInfo
   ) {
     self.divActionURLHandler = DivActionURLHandler(
       stateUpdater: stateUpdater,
@@ -114,6 +117,7 @@ public final class DivActionHandler {
     self.updateCard = updateCard
     self.reporter = reporter
     self.idToPath = idToPath
+    self.flags = flags
 
     animatorActionHandler = AnimatorActionHandler(animatorController: animatorController)
     hideTooltipActionHandler = HideTooltipActionHandler(
@@ -309,19 +313,16 @@ public final class DivActionHandler {
       }
     )
 
-    if !isDivActionURLHandled {
-      switch info.source {
-      case .visibility, .disappear:
-        // For visibility actions url is treated as logUrl.
-        break;
-      default:
-        urlHandler.handle(
-          url,
-          info: info,
-          sender: sender
-        )
-      }
+    if isDivActionURLHandled {
+      return
     }
+
+    if !flags.useUrlHandlerForVisibilityActions,
+       (info.source == .visibility || info.source == .disappear) {
+      return
+    }
+
+    urlHandler.handle(url, info: info, sender: sender)
   }
 
   private func parseAction<T: TemplateValue>(

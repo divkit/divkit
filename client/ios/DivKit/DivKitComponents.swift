@@ -168,7 +168,8 @@ public final class DivKitComponents {
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,
       idToPath: idToPath,
-      animatorController: animatorController
+      animatorController: animatorController,
+      flags: .default
     )
 
     triggersStorage = DivTriggersStorage(

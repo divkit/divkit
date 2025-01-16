@@ -3,16 +3,15 @@ import LayoutKit
 import XCTest
 
 final class DivActionHandlerTests: XCTestCase {
-  private var actionHandler: DivActionHandler!
+  private var flags: DivFlagsInfo = .default
   private let reporter = MockReporter()
   private let variablesStorage = DivVariablesStorage()
 
-  private var handledUrl: URL?
-
-  override func setUp() {
+  private lazy var actionHandler: DivActionHandler! = {
     let idToPath = IdToPath()
     idToPath[cardId.path + "element_id"] = cardId.path + "element_id"
-    actionHandler = DivActionHandler(
+    return DivActionHandler(
+      flags: flags,
       idToPath: idToPath,
       reporter: reporter,
       urlHandler: DivUrlHandlerDelegate { url, _ in
@@ -20,7 +19,9 @@ final class DivActionHandlerTests: XCTestCase {
       },
       variablesStorage: variablesStorage
     )
-  }
+  }()
+
+  private var handledUrl: URL?
 
   func test_UrlPassedToUrlHandler() {
     handle(
@@ -28,6 +29,44 @@ final class DivActionHandlerTests: XCTestCase {
         logId: "test_log_id",
         url: "https://some.url"
       )
+    )
+
+    XCTAssertEqual(url("https://some.url"), handledUrl)
+  }
+
+  func test_UrlNotPassedToUrlHandler_VisibilityAction() {
+    handle(
+      divAction(
+        logId: "test_log_id",
+        url: "https://some.url"
+      ),
+      source: .visibility
+    )
+
+    XCTAssertNil(handledUrl)
+  }
+
+  func test_UrlNotPassedToUrlHandler_DisappearAction() {
+    handle(
+      divAction(
+        logId: "test_log_id",
+        url: "https://some.url"
+      ),
+      source: .disappear
+    )
+
+    XCTAssertNil(handledUrl)
+  }
+
+  func test_UrlPassedToUrlHandler_VisibilityAction_UseUrlHandlerFlagEnabled() {
+    flags = DivFlagsInfo(useUrlHandlerForVisibilityActions: true)
+
+    handle(
+      divAction(
+        logId: "test_log_id",
+        url: "https://some.url"
+      ),
+      source: .visibility
     )
 
     XCTAssertEqual(url("https://some.url"), handledUrl)
@@ -426,12 +465,13 @@ final class DivActionHandlerTests: XCTestCase {
 
   private func handle(
     _ action: DivActionBase,
+    source: UserInterfaceAction.DivActionSource = .tap,
     localValues: [String: AnyHashable] = [:]
   ) {
     actionHandler.handle(
       action,
       path: cardId.path,
-      source: .tap,
+      source: source,
       localValues: localValues,
       sender: nil
     )
