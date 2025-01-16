@@ -30,7 +30,8 @@ public final class DivKitComponents {
   public let triggersStorage: DivTriggersStorage
   public let urlHandler: DivUrlHandler
   public let variablesStorage: DivVariablesStorage
-  let visibilityCounter = DivVisibilityCounter()
+  @_spi(Internal)
+  public let visibilityCounter = DivVisibilityCounter()
 
   public var updateCardSignal: Signal<[DivActionURLHandler.UpdateReason]> {
     updateCardPipe.signal

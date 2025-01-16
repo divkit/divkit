@@ -14,11 +14,11 @@ public final class DivVisibilityCounter {
     storage[path] = visibilityCount(for: path) + 1
   }
 
-  func reset() {
+  public func reset() {
     storage.removeAll()
   }
 
-  func reset(cardId: DivCardID) {
+  public func reset(cardId: DivCardID) {
     storage = storage.filter { $0.key.root != cardId.rawValue }
   }
 }
