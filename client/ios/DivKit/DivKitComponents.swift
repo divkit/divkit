@@ -10,8 +10,6 @@ import AppKit
 #endif
 
 public final class DivKitComponents {
-  public typealias UpdateCardAction = (NonEmptyArray<DivActionURLHandler.UpdateReason>) -> Void
-
   public let actionHandler: DivActionHandler
   public let blockStateStorage = DivBlockStateStorage()
   public let divCustomBlockFactory: DivCustomBlockFactory
@@ -130,9 +128,7 @@ public final class DivKitComponents {
 
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
-    updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: {
-      updateCardPipe.send($0.asArray())
-    })
+    updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardPipe.send)
     updateCard = updateAggregator.aggregate(_:)
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)

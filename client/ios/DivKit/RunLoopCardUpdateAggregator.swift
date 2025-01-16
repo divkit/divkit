@@ -4,11 +4,11 @@ import VGSL
 final class RunLoopCardUpdateAggregator {
   private var enabled: Bool = true
   private var batch: [DivActionURLHandler.UpdateReason] = []
-  private let updateCardAction: DivKitComponents.UpdateCardAction
+  private let updateCardAction: ([DivActionURLHandler.UpdateReason]) -> Void
   private let mainThreadAsyncRunner: MainThreadAsyncRunner
 
   init(
-    updateCardAction: @escaping DivKitComponents.UpdateCardAction,
+    updateCardAction: @escaping ([DivActionURLHandler.UpdateReason]) -> Void,
     mainThreadAsyncRunner: @escaping MainThreadAsyncRunner = onMainThreadAsync
   ) {
     self.updateCardAction = updateCardAction
@@ -35,9 +35,7 @@ final class RunLoopCardUpdateAggregator {
   }
 
   func flushUpdateActions() {
-    guard let reasons = NonEmptyArray(self.batch.merge()) else {
-      return
-    }
+    let reasons = batch.merge()
     batch = []
     updateCardAction(reasons)
   }
