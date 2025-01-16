@@ -85,8 +85,6 @@ public final class DivKitComponents {
   /// ``reporter`` instead.
   ///   - trackDisappear: A closure that tracks the disappearance of elements. Deprecated. Use
   /// ``reporter`` instead.
-  ///   - updateCardAction: Deprecated. This parameter is deprecated, use ``updateCardSignal``
-  /// instead.
   ///   - playerFactory: An optional `PlayerFactory` object responsible for creating custom video
   /// players.
   ///   - urlHandler: An optional ``DivUrlHandler`` object that allows you to implement custom
@@ -109,7 +107,6 @@ public final class DivKitComponents {
     tooltipManager: TooltipManager? = nil,
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
-    updateCardAction: UpdateCardAction? = nil,
     playerFactory: PlayerFactory? = nil,
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _ in },
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
@@ -127,16 +124,15 @@ public final class DivKitComponents {
     self.urlHandler = urlHandler
     self.variablesStorage = variablesStorage
 
-    let updateCardActionSignalPipe = SignalPipe<[DivActionURLHandler.UpdateReason]>()
-    self.updateCardPipe = updateCardActionSignalPipe
+    let updateCardPipe = SignalPipe<[DivActionURLHandler.UpdateReason]>()
+    self.updateCardPipe = updateCardPipe
 
     layoutProviderHandler = DivLayoutProviderHandler(variablesStorage: variablesStorage)
 
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
     updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: {
-      updateCardAction?($0)
-      updateCardActionSignalPipe.send($0.asArray())
+      updateCardPipe.send($0.asArray())
     })
     updateCard = updateAggregator.aggregate(_:)
 
