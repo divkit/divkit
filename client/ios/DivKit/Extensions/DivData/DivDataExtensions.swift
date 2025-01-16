@@ -22,7 +22,7 @@ extension DivData: DivBlockModeling {
     let div = state.div
 
     let divContext = context.modifying(
-      cardLogId: context.cardLogId ?? logId,
+      cardLogId: logId,
       parentPath: context.parentPath + stateId,
       parentDivStatePath: statePath
     )

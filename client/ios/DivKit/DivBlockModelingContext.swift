@@ -50,62 +50,39 @@ public struct DivBlockModelingContext {
   public init(
     cardId: DivCardID,
     additionalId: String? = nil,
-    cardLogId: String? = nil,
-    parentPath: UIElementPath? = nil,
-    parentDivStatePath: DivStatePath? = nil,
-    stateManager: DivStateManager,
-    actionHandler: DivActionHandler? = nil,
+    stateManager: DivStateManager = DivStateManager(),
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
-    visibilityCounter: DivVisibilityCounter? = nil,
-    lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
     imageHolderFactory: DivImageHolderFactory,
-    divCustomBlockFactory: DivCustomBlockFactory? = nil,
-    fontProvider: DivFontProvider? = nil,
-    flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
-    functionsStorage: DivFunctionsStorage? = nil,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
-    triggersStorage: DivTriggersStorage? = nil,
-    playerFactory: PlayerFactory? = nil,
-    debugParams: DebugParams = DebugParams(),
-    scheduler: Scheduling? = nil,
-    parentScrollView: ScrollView? = nil,
-    errorsStorage: DivErrorsStorage? = nil,
-    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
-    variableTracker: DivVariableTracker? = nil,
-    persistentValuesStorage: DivPersistentValuesStorage? = nil,
-    tooltipViewFactory: DivTooltipViewFactory? = nil,
-    layoutProviderHandler: DivLayoutProviderHandler? = nil
+    scheduler: Scheduling? = nil
   ) {
     self.init(
       viewId: DivViewId(cardId: cardId, additionalId: additionalId),
-      cardLogId: cardLogId,
-      parentPath: parentPath,
-      parentDivStatePath: parentDivStatePath,
       stateManager: stateManager,
-      actionHandler: actionHandler,
+      actionHandler: nil,
       blockStateStorage: blockStateStorage,
-      visibilityCounter: visibilityCounter,
-      lastVisibleBoundsCache: lastVisibleBoundsCache,
+      visibilityCounter: nil,
+      lastVisibleBoundsCache: nil,
       imageHolderFactory: imageHolderFactory,
-      divCustomBlockFactory: divCustomBlockFactory,
-      fontProvider: fontProvider,
-      flagsInfo: flagsInfo,
+      divCustomBlockFactory: nil,
+      fontProvider: nil,
+      flagsInfo: .default,
       extensionHandlers: extensionHandlers.dictionary,
-      functionsStorage: functionsStorage,
+      functionsStorage: nil,
       variablesStorage: variablesStorage,
-      triggersStorage: triggersStorage,
-      playerFactory: playerFactory,
-      debugParams: debugParams,
+      triggersStorage: nil,
+      playerFactory: nil,
+      debugParams: DebugParams(),
       scheduler: scheduler,
-      parentScrollView: parentScrollView,
-      errorsStorage: errorsStorage,
+      parentScrollView: nil,
+      errorsStorage: nil,
       debugErrorCollector: nil,
-      layoutDirection: layoutDirection,
-      variableTracker: variableTracker,
-      persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: tooltipViewFactory,
-      layoutProviderHandler: layoutProviderHandler,
+      layoutDirection: .leftToRight,
+      variableTracker: nil,
+      persistentValuesStorage: nil,
+      tooltipViewFactory: nil,
+      layoutProviderHandler: nil,
       idToPath: nil,
       animatorController: nil
     )
@@ -113,9 +90,6 @@ public struct DivBlockModelingContext {
 
   init(
     viewId: DivViewId,
-    cardLogId: String?,
-    parentPath: UIElementPath?,
-    parentDivStatePath: DivStatePath?,
     stateManager: DivStateManager,
     actionHandler: DivActionHandler?,
     blockStateStorage: DivBlockStateStorage,
@@ -144,10 +118,8 @@ public struct DivBlockModelingContext {
     animatorController: DivAnimatorController?
   ) {
     self.viewId = viewId
-    self.cardLogId = cardLogId
-    let parentPath = parentPath ?? makeParentPath(viewId: viewId)
+    let parentPath = makeParentPath(viewId: viewId)
     self.parentPath = parentPath
-    self.parentDivStatePath = parentDivStatePath
     self.stateManager = stateManager
     self.actionHandler = actionHandler
     self.blockStateStorage = blockStateStorage

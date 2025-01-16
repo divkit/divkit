@@ -40,35 +40,18 @@ final class DivDataExtensionsTests: XCTestCase {
     XCTAssertTrue(block == expectedBlock)
   }
 
-  func test_ActionPathContainsCardId() throws {
+  func test_ActionPathContainsCardLogId() throws {
     let block = try divData(
       divText(
         actions: [divAction(logId: "action_log_id")],
         text: "0"
-      )
+      ),
+      logId: "card_log_id"
     )
     .makeBlock(context: .default)
     .withoutStateBlock() as? DecoratingBlock
 
-    XCTAssertEqual(block?.actions?.first.path, UIElementPath.root + "action_log_id")
-  }
-
-  func test_ActionPathContainsExternalCardLogId() throws {
-    let context = DivBlockModelingContext()
-      .modifying(cardLogId: "external_card_log_id")
-    let block = try divData(
-      divText(
-        actions: [divAction(logId: "action_log_id")],
-        text: "0"
-      )
-    )
-    .makeBlock(context: context)
-    .withoutStateBlock() as? DecoratingBlock
-
-    XCTAssertEqual(
-      block?.actions?.first.path,
-      UIElementPath("external_card_log_id") + "action_log_id"
-    )
+    XCTAssertEqual(block?.actions?.first.path, UIElementPath("card_log_id") + "action_log_id")
   }
 
   func test_GalleryPathContainsRoot() throws {

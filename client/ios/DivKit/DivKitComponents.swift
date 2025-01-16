@@ -308,9 +308,6 @@ public final class DivKitComponents {
     let errorsStorage = DivErrorsStorage(errors: [])
     return DivBlockModelingContext(
       viewId: viewId,
-      cardLogId: nil,
-      parentPath: nil,
-      parentDivStatePath: nil,
       stateManager: stateManager,
       actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,

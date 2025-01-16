@@ -2,6 +2,7 @@
 import enum DivKit.Expression
 import DivKitTestsSupport
 import Foundation
+import LayoutKit
 import VGSL
 
 func divAction(
@@ -44,8 +45,9 @@ func divData(
   )
 }
 
-func divData(_ div: Div) -> DivData {
+func divData(_ div: Div, logId: String = UIElementPath.root.description) -> DivData {
   divData(
+    logId: logId,
     states: [.init(div: div, stateId: 0)]
   )
 }
