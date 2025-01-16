@@ -5,9 +5,6 @@ import VGSL
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
 public final class ExpressionResolver {
-  /// Depreacated.
-  public typealias VariableTracker = (Set<DivVariableName>) -> Void
-
   private let customFunctionsStorageProvider: (String) -> DivFunctionsStorage?
   private let functionsProvider: FunctionsProvider
   private let variableValueProvider: (String) -> Any?
@@ -30,39 +27,6 @@ public final class ExpressionResolver {
     self.customFunctionsStorageProvider = customFunctionsStorageProvider
     self.variableValueProvider = variableValueProvider
     self.errorTracker = errorTracker
-  }
-
-  public init(
-    variableValueProvider: @escaping (String) -> Any?,
-    customFunctionsStorageProvider: @escaping (String) -> DivFunctionsStorage? = { _ in nil },
-    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
-    errorTracker: @escaping ExpressionErrorTracker = { _ in }
-  ) {
-    self.functionsProvider = FunctionsProvider(
-      persistentValuesStorage: persistentValuesStorage
-    )
-    self.customFunctionsStorageProvider = customFunctionsStorageProvider
-    self.variableValueProvider = variableValueProvider
-    self.errorTracker = errorTracker
-  }
-
-  /// Deprecated. Use another initailizer.
-  public init(
-    variables: DivVariables,
-    persistentValuesStorage: DivPersistentValuesStorage,
-    errorTracker: ExpressionErrorTracker? = nil,
-    variableTracker: @escaping VariableTracker = { _ in }
-  ) {
-    self.functionsProvider = FunctionsProvider(
-      persistentValuesStorage: persistentValuesStorage
-    )
-    self.customFunctionsStorageProvider = { _ in nil }
-    self.variableValueProvider = {
-      let variableName = DivVariableName(rawValue: $0)
-      variableTracker([variableName])
-      return variables[variableName]?.typedValue()
-    }
-    self.errorTracker = { errorTracker?($0) }
   }
 
   init(
