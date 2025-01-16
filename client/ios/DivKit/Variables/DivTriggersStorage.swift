@@ -32,8 +32,7 @@ public final class DivTriggersStorage {
   private let reporter: DivReporter
   private let disposePool = AutodisposePool()
 
-  @_spi(Internal)
-  public init(
+  init(
     variablesStorage: DivVariablesStorage,
     functionsStorage: DivFunctionsStorage? = nil,
     blockStateStorage: DivBlockStateStorage,
