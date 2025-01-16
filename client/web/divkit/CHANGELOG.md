@@ -1,3 +1,17 @@
+## 30.33.0 (January 20, 2025)
+
+* Added `download` typed action support.
+* Added `is_enabled` property support for the `slider`.
+* Added new functions: `pi`, `toRadians`, `toDegrees`, `sin`, `cos` and `atan`.
+* Added support for the `baseline_offset` property in `text` component.
+* Added support for the typed `timer` action.
+* Added support for the typed `video` action.
+* Disabled extra crop on `transition_in` / `transition_out` / `transition_change` animations.
+* Fixed a bug where the `tooltip` and `menu` used the global context instead of the component context (invoking actions, variable references, etc.).
+* Fixed the `pager` layout with `item_spacing` = 0.
+* The layout of the `pager` elements with overflow has been fixed.
+
+
 ## 30.31.0 (December 16, 2024)
 
 * Added support for `accessibility` property in images of `text`.
