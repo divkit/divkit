@@ -31,9 +31,7 @@ extension [UserInterfaceAction] {
       AnalyticsTouchEvent(touchType: .click, path: $0.path).sendFrom(sender)
     }
 
-    forEach {
-      UIActionEvent(uiAction: $0, originalSender: sender).sendFrom(sender)
-    }
+    map { UIActionEvent(uiAction: $0, originalSender: sender) }.sendFrom(sender)
     #endif
   }
 }

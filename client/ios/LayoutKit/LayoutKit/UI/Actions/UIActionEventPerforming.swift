@@ -19,14 +19,18 @@ public final class UIActionEvent: AppActionEventProtocol {
     self.uiAction = uiAction
   }
 
+  public var payload: UserInterfaceAction.Payload {
+    uiAction.payload
+  }
+
   public func makeHandler(responder: UIResponder) -> Handler? {
     (responder as? UIActionEventPerforming)?.perform(uiActionEvent:from:)
   }
 }
 
-extension UIActionEvent {
-  public var payload: UserInterfaceAction.Payload {
-    uiAction.payload
+extension [UIActionEvent]: AppActionEventProtocol {
+  public func makeHandler(responder: UIResponder) -> Handler? {
+    (responder as? UIActionEventPerforming)?.perform(uiActionEvents:from:)
   }
 }
 
