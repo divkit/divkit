@@ -3360,6 +3360,25 @@
         "There is no 4th animation cycle and the counter equals 3"
       ],
       "file": "shine.json"
+    },
+    {
+      "title": "Input focus",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap in the middle of the input text",
+        "Tap the focus button"
+      ],
+      "expected_results": [
+        "Cursor is at the place you tapped",
+        "Cursor at the last position"
+      ],
+      "file": "input_focus.json"
     }
   ]
 }
