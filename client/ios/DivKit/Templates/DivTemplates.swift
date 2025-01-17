@@ -2,7 +2,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public struct DivTemplates: Deserializable {
+public struct DivTemplates: Deserializable, @unchecked Sendable {
   public let templates: [TemplateName: Any]
   public let templateToType: [TemplateName: String]
 
