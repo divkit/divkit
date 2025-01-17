@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { fontWeightToCss } from '../../src/utils/fontWeightToCss';
 
 describe('fontWeightToCss', () => {

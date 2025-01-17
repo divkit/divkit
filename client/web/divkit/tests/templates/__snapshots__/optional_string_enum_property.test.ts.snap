@@ -1,4 +1,79 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_not_templated 1`] = `
+{
+  "json": {
+    "property": "second",
+    "type": "entity_with_optional_string_enum_property",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_not_templated 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_with_link 1`] = `
+{
+  "json": {
+    "link": "second",
+    "property": "second",
+    "type": "entity_with_optional_string_enum_property",
+  },
+  "templateContext": {
+    "link": "second",
+  },
+}
+`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_with_link_missing_data 1`] = `
+{
+  "json": {
+    "type": "entity_with_optional_string_enum_property",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_with_link_missing_data 2`] = `[]`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_with_override 1`] = `
+{
+  "json": {
+    "property": "second",
+    "type": "entity_with_optional_string_enum_property",
+  },
+  "templateContext": {
+    "property": "second",
+  },
+}
+`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_with_override 2`] = `[]`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_without_link 1`] = `
+{
+  "json": {
+    "property": "second",
+    "type": "entity_with_optional_string_enum_property",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`optional_string_enum_property > test_optional_string_enum_property_without_link_missing_data 1`] = `
+{
+  "json": {
+    "type": "entity_with_optional_string_enum_property",
+  },
+  "templateContext": {},
+}
+`;
 
 exports[`optional_string_enum_property test_optional_string_enum_property_not_templated 1`] = `
 {

@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { lerp } from '../../src/utils/lerp';
 
 describe('lerp', () => {

@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { constStore } from '../../src/utils/constStore';
 
 describe('constStore', () => {

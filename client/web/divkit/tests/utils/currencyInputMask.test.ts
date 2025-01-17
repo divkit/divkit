@@ -1,9 +1,18 @@
+import {
+    describe,
+    expect,
+    test,
+    beforeEach,
+    vi,
+    type Mock
+} from 'vitest';
+
 // Replicate from Android: /client/android/div/src/test/java/com/yandex/div/core/util/mask/CurrencyMaskTest.kt
 
 import { CurrencyInputMask } from '../../src/utils/mask/currencyInputMask';
 
 describe('CurrencyInputMask', () => {
-    let logError: jest.Mock;
+    let logError: Mock;
     let currencyInputMask: CurrencyInputMask;
 
     function buildCurrencyMask(locale = 'en-EN'): void {
@@ -17,7 +26,7 @@ describe('CurrencyInputMask', () => {
     }
 
     beforeEach(() => {
-        logError = jest.fn();
+        logError = vi.fn();
     });
 
     test('insert one decimal to empty string', () => {

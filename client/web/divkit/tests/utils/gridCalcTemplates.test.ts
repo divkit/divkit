@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { gridCalcTemplates } from '../../src/utils/gridCalcTemplates';
 
 describe('fontWeightToCss', () => {

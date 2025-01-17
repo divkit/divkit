@@ -1,11 +1,20 @@
 // Replicate from Android: client/android/div/src/test/java/com/yandex/div/core/util/mask/MaskHelperTest.kt
 
+import {
+    describe,
+    expect,
+    test,
+    beforeEach,
+    vi,
+    type Mock
+} from 'vitest';
+
 import type { MaskData } from '../../src/utils/mask/baseInputMask';
 import { FixedLengthInputMask } from '../../src/utils/mask/fixedLengthInputMask';
 
 describe('FixedLengthInputMask', () => {
     const noisyString = '!a@9#b$8%c^7&d*';
-    let logError: jest.Mock;
+    let logError: Mock;
     let fixedInputMask: FixedLengthInputMask;
 
     function buildPhoneMask(alwaysVisible: boolean): void {
@@ -87,7 +96,7 @@ describe('FixedLengthInputMask', () => {
     }
 
     beforeEach(() => {
-        logError = jest.fn();
+        logError = vi.fn();
     });
 
     test('calculate multikey insertable string from center', () => {

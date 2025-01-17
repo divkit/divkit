@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctSliderTextStyle } from '../../src/utils/correctSliderTextStyle';
 
 describe('correctSliderTextStyle', () => {

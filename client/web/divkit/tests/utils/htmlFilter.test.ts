@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { htmlFilter } from '../../src/utils/htmlFilter';
 
 describe('htmlFilter', () => {

@@ -1,4 +1,94 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`array_with_transform > test_array_with_transform_invalid_items 1`] = `
+{
+  "json": {
+    "array": [
+      "",
+      "FF00",
+    ],
+    "link": [
+      "",
+      "FF00",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": {
+    "link": [
+      "",
+      "FF00",
+    ],
+  },
+}
+`;
+
+exports[`array_with_transform > test_array_with_transform_not_templated_invalid_items 1`] = `
+{
+  "json": {
+    "array": [
+      "FF00",
+      "",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_with_transform > test_array_with_transform_not_templated_invalid_items 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_with_transform > test_array_with_transform_not_templated_one_invalid_item 1`] = `
+{
+  "json": {
+    "array": [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`array_with_transform > test_array_with_transform_not_templated_one_invalid_item 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_with_transform > test_array_with_transform_one_invalid_item 1`] = `
+{
+  "json": {
+    "array": [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+    "link": [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": {
+    "link": [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+  },
+}
+`;
 
 exports[`array_with_transform test_array_with_transform_invalid_items 1`] = `
 {

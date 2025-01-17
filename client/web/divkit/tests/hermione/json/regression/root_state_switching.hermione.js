@@ -8,9 +8,10 @@ describe('regression', () => {
         });
 
         it('Tap on button', async function() {
-            const elem = await this.browser.$('span=Change state (temporary)');
+            let elem = await this.browser.$('span=Change state (temporary)');
             elem.click();
             await this.browser.assertView('Square', '#root');
+            elem = await this.browser.$('span=Change state (temporary)');
             elem.click();
             await this.browser.assertView('Circle', '#root');
 
@@ -20,9 +21,10 @@ describe('regression', () => {
         });
 
         it('Click on button', async function() {
-            const elem = await this.browser.$('span=Change state');
+            let elem = await this.browser.$('span=Change state');
             elem.click();
             await this.browser.assertView('Square', '#root');
+            elem = await this.browser.$('span=Change state');
             elem.click();
             await this.browser.assertView('Circle', '#root');
 

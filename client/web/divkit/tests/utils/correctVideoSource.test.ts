@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctVideoSource } from '../../src/utils/correctVideoSource';
 
 describe('correctVideoSource', () => {

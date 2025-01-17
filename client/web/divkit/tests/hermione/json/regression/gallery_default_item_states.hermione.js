@@ -10,11 +10,11 @@ describe('regression', () => {
         it('Gallery item change state', async function() {
             // Wait for visibility action logging
             await this.browser.pause(1000);
-            await this.browser.$('span=EXPAND').then(elem => elem.click());
-    
+            await this.browser.$('span:nth-child(5) [role=button]').then(elem => elem.click());
+
             await this.browser.assertView('item_state_collapse', '#root');
 
-            await this.browser.$('span=COLLAPSE').then(elem => elem.click());
+            await this.browser.$('span:nth-child(5) [role=button]').then(elem => elem.click());
 
             await this.browser.assertView('item_state_expand', '#root');
 

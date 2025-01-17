@@ -9,9 +9,10 @@ describe('regression', () => {
 
         it('Tap on text', async function() {
             await this.browser.assertView('default', '#root');
-            const elem = await this.browser.$('span=Default state');
+            let elem = await this.browser.$('[role=button]');
             elem.click();
             await this.browser.assertView('nondefault_state_on', '#root');
+            elem = await this.browser.$('[role=button]');
             elem.click();
             await this.browser.assertView('default_state_on', '#root');
 

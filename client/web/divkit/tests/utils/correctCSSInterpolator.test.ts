@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctCSSInterpolator } from '../../src/utils/correctCSSInterpolator';
 
 describe('correctCSSInterpolator', () => {

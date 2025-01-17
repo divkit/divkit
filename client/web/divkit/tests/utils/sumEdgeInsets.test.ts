@@ -1,7 +1,13 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { sumEdgeInsets } from '../../src/utils/sumEdgeInsets';
 
 describe('sumEdgeInsets', () => {
-    it('simple', () => {
+    test('simple', () => {
         expect(sumEdgeInsets(null, null)).toEqual({});
 
         expect(sumEdgeInsets({

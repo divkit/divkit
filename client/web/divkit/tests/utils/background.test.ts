@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { getBackground } from '../../src/utils/background';
 
 describe('background', () => {

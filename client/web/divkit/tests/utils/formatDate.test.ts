@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 /* eslint-disable max-len */
 import { formatDate } from '../../src/utils/formatDate';
 
@@ -523,33 +529,33 @@ describe('formatDate', () => {
         const timestamp = date.getTime().toString();
         const secondsTimestamp = Math.trunc(date.getTime() / 1000).toString(); */
 
-        it('escapes characters between the single quote characters', () => {
+        test('escapes characters between the single quote characters', () => {
             const result = formatDate(date, "'yyyy-'MM-dd'THH:mm:ss.SSSX' yyyy-'MM-dd'");
             expect(result).toBe('yyyy-04-04THH:mm:ss.SSSX 1986-MM-dd');
         });
 
-        it('two single quote characters are transformed into a "real" single quote', () => {
+        test('two single quote characters are transformed into a "real" single quote', () => {
             const date = new Date(2014, 3, 4, 5);
             expect(formatDate(date, "''h 'o''clock'''")).toBe("'5 o'clock'");
         });
 
-        it('accepts new line charactor', () => {
+        test('accepts new line charactor', () => {
             const date = new Date(2014, 3, 4, 5);
             expect(formatDate(date, "yyyy-MM-dd'\n'HH:mm:ss")).toBe('2014-04-04\n05:00:00');
         });
 
-        it('alias formatDate has same behavior as format', () => {
+        test('alias formatDate has same behavior as format', () => {
             const date = new Date(2014, 3, 4, 5);
             expect(formatDate(date, "yyyy-MM-dd'\n'HH:mm:ss")).toBe(formatDate(date, "yyyy-MM-dd'\n'HH:mm:ss"));
         });
 
         /* xdescribe('ordinal numbers', () => {
-            it('ordinal day of an ordinal month', () => {
+            test('ordinal day of an ordinal month', () => {
                 const result = formatDate(date, "do 'day of the' Mo 'month of' yyyy");
                 expect(result).toBe('4th day of the 4th month of 1986');
             });
 
-            it('should return a correct ordinal number', () => {
+            test('should return a correct ordinal number', () => {
                 const result = [];
                 for (let i = 1; i <= 31; i++) {
                     result.push(formatDate(new Date(2015, 0, i), 'do'));
@@ -591,7 +597,7 @@ describe('formatDate', () => {
             });
         }); */
 
-        it('era', () => {
+        test('era', () => {
             const result = formatDate(date, 'G GG GGG GGGG GGGGG');
             expect(result).toBe('AD AD AD Anno Domini A');
 
@@ -603,16 +609,16 @@ describe('formatDate', () => {
 
         describe('year', () => {
             describe('regular year', () => {
-                /* it('works as expected', () => {
+                /* test('works as expected', () => {
                     const result = formatDate(date, 'y yo yy yyy yyyy yyyyy');
                     expect(result).toBe('1986 1986th 86 1986 1986 01986');
                 }); */
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'y yy yyy yyyy yyyyy');
                     expect(result).toBe('1986 86 1986 1986 01986');
                 });
 
-                it('1 BC formats as 1', () => {
+                test('1 BC formats as 1', () => {
                     const date = new Date(0);
                     date.setFullYear(0, 0 /* Jan */, 1);
                     date.setHours(0, 0, 0, 0);
@@ -620,7 +626,7 @@ describe('formatDate', () => {
                     expect(result).toBe('1');
                 });
 
-                it('2 BC formats as 2', () => {
+                test('2 BC formats as 2', () => {
                     const date = new Date(0);
                     date.setFullYear(-1, 0 /* Jan */, 1);
                     date.setHours(0, 0, 0, 0);
@@ -635,7 +641,7 @@ describe('formatDate', () => {
                     const result = formatDate(date, 'yo');
                     expect(result).toBe('2nd');
                 }); */
-                it('2 BC formats as 2nd', () => {
+                test('2 BC formats as 2nd', () => {
                     const date = new Date();
                     date.setFullYear(-1, 0 /* Jan */, 1);
                     date.setHours(0, 0, 0, 0);
@@ -651,12 +657,12 @@ describe('formatDate', () => {
                     });
                     expect(result).toBe('1986 1986th 86 1986 1986 01986');
                 }); */
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'Y YY YYY YYYY YYYYY');
                     expect(result).toBe('1986 86 1986 1986 01986');
                 });
 
-                it('the first week of the next year', () => {
+                test('the first week of the next year', () => {
                     const result = formatDate(new Date(2013, 11 /* Dec */, 29), 'YYYY');
                     expect(result).toBe('2014');
                 });
@@ -670,12 +676,12 @@ describe('formatDate', () => {
                     expect(result).toBe('2013');
                 }); */
 
-                it('the first week of year', () => {
+                test('the first week of year', () => {
                     const result = formatDate(new Date(2016, 0 /* Jan */, 1), 'YYYY');
                     expect(result).toBe('2016');
                 });
 
-                it('1 BC formats as 1', () => {
+                test('1 BC formats as 1', () => {
                     const date = new Date(0);
                     date.setFullYear(0, 6 /* Jul */, 2);
                     date.setHours(0, 0, 0, 0);
@@ -683,7 +689,7 @@ describe('formatDate', () => {
                     expect(result).toBe('1');
                 });
 
-                it('2 BC formats as 2', () => {
+                test('2 BC formats as 2', () => {
                     const date = new Date(0);
                     date.setFullYear(-1, 6 /* Jul */, 2);
                     date.setHours(0, 0, 0, 0);
@@ -693,22 +699,22 @@ describe('formatDate', () => {
             });
 
             /* xdescribe('ISO week-numbering year', () => {
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'R RR RRR RRRR RRRRR');
                     expect(result).toBe('1986 1986 1986 1986 01986');
                 });
 
-                it('the first week of the next year', () => {
+                test('the first week of the next year', () => {
                     const result = formatDate(new Date(2013, 11 /* Dec *\/, 30), 'RRRR');
                     expect(result).toBe('2014');
                 });
 
-                it('the last week of the previous year', () => {
+                test('the last week of the previous year', () => {
                     const result = formatDate(new Date(2016, 0 /* Jan *\/, 1), 'RRRR');
                     expect(result).toBe('2015');
                 });
 
-                it('1 BC formats as 0', () => {
+                test('1 BC formats as 0', () => {
                     const date = new Date(0);
                     date.setFullYear(0, 6 /* Jul *\/, 2);
                     date.setHours(0, 0, 0, 0);
@@ -716,7 +722,7 @@ describe('formatDate', () => {
                     expect(result).toBe('0');
                 });
 
-                it('2 BC formats as -1', () => {
+                test('2 BC formats as -1', () => {
                     const date = new Date(0);
                     date.setFullYear(-1, 6 /* Jul *\/, 2);
                     date.setHours(0, 0, 0, 0);
@@ -726,12 +732,12 @@ describe('formatDate', () => {
             }); */
 
             describe('extended year', () => {
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'u uu uuu uuuu uuuuu');
                     expect(result).toBe('1986 1986 1986 1986 01986');
                 });
 
-                it('1 BC formats as 0', () => {
+                test('1 BC formats as 0', () => {
                     const date = new Date(0);
                     date.setFullYear(0, 0, 1);
                     date.setHours(0, 0, 0, 0);
@@ -739,7 +745,7 @@ describe('formatDate', () => {
                     expect(result).toBe('0');
                 });
 
-                it('2 BC formats as -1', () => {
+                test('2 BC formats as -1', () => {
                     const date = new Date(0);
                     date.setFullYear(-1, 0, 1);
                     date.setHours(0, 0, 0, 0);
@@ -750,17 +756,17 @@ describe('formatDate', () => {
         });
 
         /* xdescribe('quarter', () => {
-            it('formatting quarter', () => {
+            test('formatting quarter', () => {
                 const result = formatDate(date, 'Q Qo QQ QQQ QQQQ QQQQQ');
                 expect(result).toBe('2 2nd 02 Q2 2nd quarter 2');
             });
 
-            it('stand-alone quarter', () => {
+            test('stand-alone quarter', () => {
                 const result = formatDate(date, 'q qo qq qqq qqqq qqqqq');
                 expect(result).toBe('2 2nd 02 Q2 2nd quarter 2');
             });
 
-            it('returns a correct quarter for each month', () => {
+            test('returns a correct quarter for each month', () => {
                 const result = [];
                 for (let i = 0; i <= 11; i++) {
                     result.push(formatDate(new Date(1986, i, 1), 'Q'));
@@ -784,16 +790,16 @@ describe('formatDate', () => {
         }); */
 
         describe('month', () => {
-            /* it('formatting month', () => {
+            /* test('formatting month', () => {
                 const result = formatDate(date, 'M Mo MM MMM MMMM MMMMM');
                 expect(result).toBe('4 4th 04 Apr April A');
             }); */
-            it('formatting month', () => {
+            test('formatting month', () => {
                 const result = formatDate(date, 'M MM MMM MMMM MMMMM');
                 expect(result).toBe('4 04 Apr April A');
             });
 
-            /* it('stand-alone month', () => {
+            /* test('stand-alone month', () => {
                 const result = formatDate(date, 'L Lo LL LLL LLLL LLLLL');
                 expect(result).toBe('4 4th 04 Apr April A');
             }); */
@@ -801,18 +807,18 @@ describe('formatDate', () => {
 
         describe('week', () => {
             describe('local week of year', () => {
-                /* it('works as expected', () => {
+                /* test('works as expected', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 6);
                     const result = formatDate(date, 'w wo ww');
                     expect(result).toBe('15 15th 15');
                 }); */
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const date = new Date(1986, 3 /* Apr */, 6);
                     const result = formatDate(date, 'w ww');
                     expect(result).toBe('15 15');
                 });
 
-                /* it('allows to specify `weekStartsOn` and `firstWeekContainsDate` in options', () => {
+                /* test('allows to specify `weekStartsOn` and `firstWeekContainsDate` in options', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 6);
                     const result = formatDate(date, 'w wo ww', {
                         weekStartsOn: 1,
@@ -834,7 +840,7 @@ describe('formatDate', () => {
                 const result = formatDate(date, 'd do dd');
                 expect(result).toBe('4 4th 04');
             }); */
-            it('date', () => {
+            test('date', () => {
                 const result = formatDate(date, 'd dd');
                 expect(result).toBe('4 04');
             });
@@ -846,12 +852,12 @@ describe('formatDate', () => {
                     });
                     expect(result).toBe('94 94th 94 094 00094');
                 }); */
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'D DD DDD DDDDD');
                     expect(result).toBe('94 94 094 00094');
                 });
 
-                it('returns a correct day number for the last day of a leap year', () => {
+                test('returns a correct day number for the last day of a leap year', () => {
                     const result = formatDate(
                         new Date(1992, 11 /* Dec */, 31, 23, 59, 59, 999),
                         'D'
@@ -863,23 +869,23 @@ describe('formatDate', () => {
 
         describe('week day', () => {
             describe('day of week', () => {
-                /* it('works as expected', () => {
+                /* test('works as expected', () => {
                     const result = formatDate(date, 'E EE EEE EEEE EEEEE EEEEEE');
                     expect(result).toBe('Fri Fri Fri Friday F Fr');
                 }); */
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'E EE EEE EEEE EEEEE');
                     expect(result).toBe('Fri Fri Fri Friday F');
                 });
             });
 
             /* xdescribe('ISO day of week', () => {
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'i io ii iii iiii iiiii iiiiii');
                     expect(result).toBe('5 5th 05 Fri Friday F Fr');
                 });
 
-                it('returns a correct day of an ISO week', () => {
+                test('returns a correct day of an ISO week', () => {
                     const result = [];
                     for (let i = 1; i <= 7; i++) {
                         result.push(formatDate(new Date(1986, 8 /* Sep *\/, i), 'i'));
@@ -894,12 +900,12 @@ describe('formatDate', () => {
                     const result = formatDate(date, 'e eo ee eee eeee eeeee eeeeee');
                     expect(result).toBe('6 6th 06 Fri Friday F Fr');
                 }); */
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'e ee eee eeee eeeee');
                     expect(result).toBe('6 06 Fri Friday F');
                 });
 
-                it('by default, 1 is Sunday, 2 is Monday, ...', () => {
+                test('by default, 1 is Sunday, 2 is Monday, ...', () => {
                     const result = [];
                     for (let i = 7; i <= 13; i++) {
                         result.push(formatDate(new Date(1986, 8 /* Sep */, i), 'e'));
@@ -908,7 +914,7 @@ describe('formatDate', () => {
                     expect(result).toEqual(expected);
                 });
 
-                it('allows to specify which day is the first day of the week', () => {
+                test('allows to specify which day is the first day of the week', () => {
                     const result = [];
                     for (let i = 1; i <= 7; i++) {
                         result.push(
@@ -921,12 +927,12 @@ describe('formatDate', () => {
             });
 
             /* xdescribe('stand-alone day of week', () => {
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'c co cc ccc cccc ccccc cccccc');
                     expect(result).toBe('6 6th 06 Fri Friday F Fr');
                 });
 
-                it('by default, 1 is Sunday, 2 is Monday, ...', () => {
+                test('by default, 1 is Sunday, 2 is Monday, ...', () => {
                     const result = [];
                     for (let i = 7; i <= 13; i++) {
                         result.push(formatDate(new Date(1986, 8 /* Sep *\/, i), 'c'));
@@ -935,7 +941,7 @@ describe('formatDate', () => {
                     expect(result).toEqual(expected);
                 });
 
-                it('allows to specify which day is the first day of the week', () => {
+                test('allows to specify which day is the first day of the week', () => {
                     const result = [];
                     for (let i = 1; i <= 7; i++) {
                         result.push(
@@ -956,7 +962,7 @@ describe('formatDate', () => {
                 );
                 expect(result).toBe('12 12th 12');
             }); */
-            it('hour [1-12]', () => {
+            test('hour [1-12]', () => {
                 const result = formatDate(
                     new Date(2018, 0 /* Jan */, 1, 0, 0, 0, 0),
                     'h hh',
@@ -971,7 +977,7 @@ describe('formatDate', () => {
                 );
                 expect(result).toBe('0 0th 00');
             }); */
-            it('hour [0-23]', () => {
+            test('hour [0-23]', () => {
                 const result = formatDate(
                     new Date(2018, 0 /* Jan */, 1, 0, 0, 0, 0),
                     'H HH',
@@ -986,7 +992,7 @@ describe('formatDate', () => {
                 );
                 expect(result).toBe('0 0th 00');
             }); */
-            it('hour [0-11]', () => {
+            test('hour [0-11]', () => {
                 const result = formatDate(
                     new Date(2018, 0 /* Jan */, 1, 0, 0, 0, 0),
                     'K KK',
@@ -1001,7 +1007,7 @@ describe('formatDate', () => {
                 );
                 expect(result).toBe('24 24th 24');
             }); */
-            it('hour [1-24]', () => {
+            test('hour [1-24]', () => {
                 const result = formatDate(
                     new Date(2018, 0 /* Jan */, 1, 0, 0, 0, 0),
                     'k kk',
@@ -1017,7 +1023,7 @@ describe('formatDate', () => {
                     );
                     expect(result).toBe('AM AM am a.m. a');
                 }); */
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(
                         new Date(2018, 0 /* Jan */, 1, 0, 0, 0, 0),
                         'a aa aaa aaaa aaaaa',
@@ -1025,19 +1031,19 @@ describe('formatDate', () => {
                     expect(result).toBe('AM AM AM AM AM');
                 });
 
-                it('12 PM', () => {
+                test('12 PM', () => {
                     const date = new Date(1986, 3 /* Apr */, 4, 12, 0, 0, 900);
                     expect(formatDate(date, 'h H K k a')).toBe('12 12 0 12 PM');
                 });
 
-                it('12 AM', () => {
+                test('12 AM', () => {
                     const date = new Date(1986, 3 /* Apr */, 6, 0, 0, 0, 900);
                     expect(formatDate(date, 'h H K k a')).toBe('12 0 0 24 AM');
                 });
             });
 
             /* xdescribe('AM, PM, noon, midnight', () => {
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(
                         new Date(1986, 3 /* Apr *\/, 6, 2, 0, 0, 900),
                         'b bb bbb bbbb bbbbb',
@@ -1051,41 +1057,41 @@ describe('formatDate', () => {
                     expect(pmResult).toBe('PM PM pm p.m. p');
                 });
 
-                it('12 PM', () => {
+                test('12 PM', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 4, 12, 0, 0, 900);
                     expect(formatDate(date, 'b bb bbb bbbb bbbbb')).toBe('noon noon noon noon n');
                 });
 
-                it('12 AM', () => {
+                test('12 AM', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 6, 0, 0, 0, 900);
                     expect(formatDate(date, 'b bb bbb bbbb bbbbb')).toBe('midnight midnight midnight midnight mi');
                 });
             }); */
 
             /* xdescribe('flexible day periods', () => {
-                it('works as expected', () => {
+                test('works as expected', () => {
                     const result = formatDate(date, 'B, BB, BBB, BBBB, BBBBB');
                     expect(result).toBe(
                         'in the morning, in the morning, in the morning, in the morning, in the morning'
                     );
                 });
 
-                it('12 PM', () => {
+                test('12 PM', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 4, 12, 0, 0, 900);
                     expect(formatDate(date, 'h B')).toBe('12 in the afternoon');
                 });
 
-                it('5 PM', () => {
+                test('5 PM', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 6, 17, 0, 0, 900);
                     expect(formatDate(date, 'h B')).toBe('5 in the evening');
                 });
 
-                it('12 AM', () => {
+                test('12 AM', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 6, 0, 0, 0, 900);
                     expect(formatDate(date, 'h B')).toBe('12 at night');
                 });
 
-                it('4 AM', () => {
+                test('4 AM', () => {
                     const date = new Date(1986, 3 /* Apr *\/, 6, 4, 0, 0, 900);
                     expect(formatDate(date, 'h B')).toBe('4 in the morning');
                 });
@@ -1096,7 +1102,7 @@ describe('formatDate', () => {
             const result = formatDate(date, 'm mo mm');
             expect(result).toBe('32 32nd 32');
         }); */
-        it('minute', () => {
+        test('minute', () => {
             const result = formatDate(date, 'm mm');
             expect(result).toBe('32 32');
         });
@@ -1106,19 +1112,19 @@ describe('formatDate', () => {
                 const result = formatDate(date, 's so ss');
                 expect(result).toBe('55 55th 55');
             }); */
-            it('second', () => {
+            test('second', () => {
                 const result = formatDate(date, 's ss');
                 expect(result).toBe('55 55');
             });
 
-            it('fractional seconds', () => {
+            test('fractional seconds', () => {
                 const result = formatDate(date, 'S SS SSS SSSS');
                 expect(result).toBe('1 12 123 1230');
             });
         });
 
         /* xdescribe('time zone', () => {
-            it('ISO-8601 with Z', () => {
+            test('ISO-8601 with Z', () => {
                 const result = formatDate(date, 'X XX XXX XXXX XXXXX');
                 const expectedResult = [
                     timezoneWithOptionalMinutesAndZShort,
@@ -1148,7 +1154,7 @@ describe('formatDate', () => {
                 getTimezoneOffsetStub.restore();
             });
 
-            it('ISO-8601 without Z', () => {
+            test('ISO-8601 without Z', () => {
                 const result = formatDate(date, 'x xx xxx xxxx xxxxx');
                 const expectedResult = [
                     timezoneWithOptionalMinutesShort,
@@ -1160,7 +1166,7 @@ describe('formatDate', () => {
                 expect(result).toBe(expectedResult);
             });
 
-            it('GMT', () => {
+            test('GMT', () => {
                 const result = formatDate(date, 'O OO OOO OOOO');
                 const expectedResult = [
                     timezoneGMTShort,
@@ -1185,7 +1191,7 @@ describe('formatDate', () => {
                 getTimezoneOffsetStub.restore();
             });
 
-            it('Specific non-location', () => {
+            test('Specific non-location', () => {
                 const result = formatDate(date, 'z zz zzz zzzz');
                 const expectedResult = [
                     timezoneGMTShort,
@@ -1198,95 +1204,95 @@ describe('formatDate', () => {
         }); */
 
         /* xdescribe('timestamp', () => {
-            it('seconds timestamp', () => {
+            test('seconds timestamp', () => {
                 const result = formatDate(date, 't');
                 expect(result).toBe(secondsTimestamp);
             });
 
-            it('milliseconds timestamp', () => {
+            test('milliseconds timestamp', () => {
                 const result = formatDate(date, 'T');
                 expect(result).toBe(timestamp);
             });
 
-            it('seconds timestamp handles negative numbers', () => {
+            test('seconds timestamp handles negative numbers', () => {
                 expect(formatDate(new Date(1001), 't')).toBe('1');
                 expect(formatDate(new Date(-1001), 't')).toBe('-1');
             });
         }); */
 
         /* xdescribe('long format', () => {
-            it('short date', () => {
+            test('short date', () => {
                 const result = formatDate(date, 'P');
                 expect(result).toBe('04/04/1986');
             });
 
-            it('medium date', () => {
+            test('medium date', () => {
                 const result = formatDate(date, 'PP');
                 expect(result).toBe('Apr 4, 1986');
             });
 
-            it('long date', () => {
+            test('long date', () => {
                 const result = formatDate(date, 'PPP');
                 expect(result).toBe('April 4th, 1986');
             });
 
-            it('full date', () => {
+            test('full date', () => {
                 const result = formatDate(date, 'PPPP');
                 expect(result).toBe('Friday, April 4th, 1986');
             });
 
-            it('short time', () => {
+            test('short time', () => {
                 const result = formatDate(date, 'p');
                 expect(result).toBe('10:32 AM');
             });
 
-            it('medium time', () => {
+            test('medium time', () => {
                 const result = formatDate(date, 'pp');
                 expect(result).toBe('10:32:55 AM');
             });
 
-            it('long time', () => {
+            test('long time', () => {
                 const result = formatDate(date, 'ppp');
                 expect(result).toBe('10:32:55 AM ' + timezoneGMTShort);
             });
 
-            it('full time', () => {
+            test('full time', () => {
                 const result = formatDate(date, 'pppp');
                 expect(result).toBe('10:32:55 AM ' + timezoneGMT);
             });
 
-            it('short date + time', () => {
+            test('short date + time', () => {
                 const result = formatDate(date, 'Pp');
                 expect(result).toBe('04/04/1986, 10:32 AM');
             });
 
-            it('medium date + time', () => {
+            test('medium date + time', () => {
                 const result = formatDate(date, 'PPpp');
                 expect(result).toBe('Apr 4, 1986, 10:32:55 AM');
             });
 
-            it('long date + time', () => {
+            test('long date + time', () => {
                 const result = formatDate(date, 'PPPppp');
                 expect(result).toBe('April 4th, 1986 at 10:32:55 AM ' + timezoneGMTShort);
             });
 
-            it('full date + time', () => {
+            test('full date + time', () => {
                 const result = formatDate(date, 'PPPPpppp');
                 expect(result).toBe('Friday, April 4th, 1986 at 10:32:55 AM ' + timezoneGMT);
             });
 
-            it('allows arbitrary combination of date and time', () => {
+            test('allows arbitrary combination of date and time', () => {
                 const result = formatDate(date, 'Ppppp');
                 expect(result).toBe('04/04/1986, 10:32:55 AM ' + timezoneGMT);
             });
         }); */
 
         /* xdescribe('edge cases', () => {
-            it('throws RangeError if the time value is invalid', () => {
+            test('throws RangeError if the time value is invalid', () => {
                 expect(format.bind(null, new Date(NaN), 'MMMM d, yyyy')).toThrow(RangeError);
             });
 
-            it('handles dates before 100 AD', () => {
+            test('handles dates before 100 AD', () => {
                 const initialDate = new Date(0);
                 initialDate.setFullYear(7, 11 /* Dec *\/, 31);
                 initialDate.setHours(0, 0, 0, 0);
@@ -1295,7 +1301,7 @@ describe('formatDate', () => {
         }); */
 
         /* xdescribe('locale features', () => {
-            it('allows to pass a custom locale', () => {
+            test('allows to pass a custom locale', () => {
                 const customLocale = {
                     localize: {
                         month: () => {
@@ -1315,7 +1321,7 @@ describe('formatDate', () => {
                 expect(result).toBe('It works!');
             });
 
-            it('allows a localize preprocessor', () => {
+            test('allows a localize preprocessor', () => {
                 const customLocale = {
                     localize: {
                         month: (v: number) => ['janvier'][v],
@@ -1357,7 +1363,7 @@ describe('formatDate', () => {
                 expect(() => formatDate(date, 'yyyy-MM-D')).toThrow('Use `d` instead of `D`');
             }); */
 
-            it('allows D token if useAdditionalDayOfYearTokens is set to true', () => {
+            test('allows D token if useAdditionalDayOfYearTokens is set to true', () => {
                 const result = formatDate(date, 'yyyy-MM-D');
                 expect(result).toEqual('1986-04-94');
             });
@@ -1368,7 +1374,7 @@ describe('formatDate', () => {
                 );
             }); */
 
-            it('allows DD token if useAdditionalDayOfYearTokens is set to true', () => {
+            test('allows DD token if useAdditionalDayOfYearTokens is set to true', () => {
                 const result = formatDate(date, 'yyyy-MM-DD');
                 expect(result).toEqual('1986-04-94');
             });
@@ -1379,7 +1385,7 @@ describe('formatDate', () => {
                 );
             }); */
 
-            it('allows YY token if useAdditionalWeekYearTokens is set to true', () => {
+            test('allows YY token if useAdditionalWeekYearTokens is set to true', () => {
                 const result = formatDate(date, 'YY-MM-dd');
                 expect(result).toEqual('86-04-04');
             });
@@ -1390,7 +1396,7 @@ describe('formatDate', () => {
                 );
             }); */
 
-            it('allows YYYY token if useAdditionalWeekYearTokens is set to true', () => {
+            test('allows YYYY token if useAdditionalWeekYearTokens is set to true', () => {
                 const result = formatDate(date, 'YYYY-MM-dd');
                 expect(result).toEqual('1986-04-04');
             });
@@ -1406,7 +1412,7 @@ describe('formatDate', () => {
                     warn.mockRestore();
                 });
 
-                it('warns if "D" token is used', () => {
+                test('warns if "D" token is used', () => {
                     try {
                         formatDate(date, 'yyyy-MM-D');
                     } catch (_) {
@@ -1419,7 +1425,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "DD" token is used', () => {
+                test('warns if "DD" token is used', () => {
                     try {
                         formatDate(date, 'yyyy-MM-DD');
                     } catch (_) {
@@ -1432,7 +1438,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "DDD" token is used', () => {
+                test('warns if "DDD" token is used', () => {
                     try {
                         formatDate(date, 'yyyy-MM-DDD');
                     } catch (_) {
@@ -1445,7 +1451,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "DDDD" token is used', () => {
+                test('warns if "DDDD" token is used', () => {
                     try {
                         formatDate(date, 'yyyy-MM-DDDD');
                     } catch (_) {
@@ -1458,7 +1464,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "DDDDD" token is used', () => {
+                test('warns if "DDDDD" token is used', () => {
                     try {
                         formatDate(date, 'yyyy-MM-DDDDD');
                     } catch (_) {
@@ -1471,7 +1477,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "Y" token is used', () => {
+                test('warns if "Y" token is used', () => {
                     try {
                         formatDate(date, 'Y-MM-dd');
                     } catch (_) {
@@ -1484,7 +1490,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "YY" token is used', () => {
+                test('warns if "YY" token is used', () => {
                     try {
                         formatDate(date, 'YY-MM-dd');
                     } catch (_) {
@@ -1497,7 +1503,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "YYY" token is used', () => {
+                test('warns if "YYY" token is used', () => {
                     try {
                         formatDate(date, 'YYY-MM-dd');
                     } catch (_) {
@@ -1510,7 +1516,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "YYYY" token is used', () => {
+                test('warns if "YYYY" token is used', () => {
                     try {
                         formatDate(date, 'YYYY-MM-dd');
                     } catch (_) {
@@ -1523,7 +1529,7 @@ describe('formatDate', () => {
                     );
                 });
 
-                it('warns if "YYYYY" token is used', () => {
+                test('warns if "YYYYY" token is used', () => {
                     try {
                         formatDate(date, 'YYYYY-MM-dd');
                     } catch (_) {

@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctDrawableStyle } from '../../src/utils/correctDrawableStyles';
 
 describe('correctDrawableStyle', () => {

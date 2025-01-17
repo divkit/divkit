@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { joinTemplateSizes } from '../../src/utils/joinTemplateSizes';
 
 describe('joinTemplateSizes', () => {

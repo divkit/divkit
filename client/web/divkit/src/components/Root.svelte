@@ -504,10 +504,6 @@
     }
 
     async function setState(stateId: string | null): Promise<void> {
-        if (!process.env.ENABLE_COMPONENT_STATE && process.env.ENABLE_COMPONENT_STATE !== undefined) {
-            throw new Error('State is not supported');
-        }
-
         if (!stateId) {
             throw new Error('Missing state id');
         }
@@ -1510,7 +1506,7 @@
     function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
             variables: mergeMaps(variables, componentContext.variables),
-            processExpressions<T>(t: T) {
+            processExpressions: function<T>(t: T) {
                 return getJsonWithVars(
                     logError,
                     t
@@ -1518,7 +1514,7 @@
             },
             execAction,
             logError,
-            getComponentProperty<T>(property: string): T {
+            getComponentProperty: function<T>(property: string): T {
                 return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
             },
             direction
@@ -2014,25 +2010,20 @@
     const rootComponentContext = produceComponentContext();
     let rootStateComponentContext: ComponentContext | undefined;
     $: if (states && !hasError && !hsaIdError) {
-        const rootStateDiv = (
-            process.env.ENABLE_COMPONENT_STATE ||
-            process.env.ENABLE_COMPONENT_STATE === undefined
-        ) ?
-            {
-                type: 'state',
-                id: 'root',
-                width: {
-                    type: 'match_parent',
-                },
-                height: {
-                    type: 'match_parent',
-                },
-                states: states.map(state => ({
-                    state_id: state.state_id.toString(),
-                    div: state.div
-                }))
-            } :
-            states[0].div;
+        const rootStateDiv: DivBaseData = {
+            type: 'state',
+            id: 'root',
+            width: {
+                type: 'match_parent',
+            },
+            height: {
+                type: 'match_parent',
+            },
+            states: states.map(state => ({
+                state_id: state.state_id.toString(),
+                div: state.div
+            }))
+        } as DivBaseData;
 
         rootStateComponentContext = rootComponentContext.produceChildContext(rootStateDiv, {
             isRootState: true

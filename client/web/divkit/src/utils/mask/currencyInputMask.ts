@@ -154,7 +154,7 @@ export class CurrencyInputMask extends BaseInputMask {
             replaceCharInDiff = diff.start;
         }
 
-        const maxSeparatorOffset = this.currencyFormatter.resolvedOptions().maximumFractionDigits;
+        const maxSeparatorOffset = this.currencyFormatter.resolvedOptions().maximumFractionDigits || 0;
         let leftToInsert = maxSeparatorOffset;
 
         if (separatorOutOfDiffIndex !== -1) {

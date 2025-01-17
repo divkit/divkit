@@ -104,7 +104,7 @@
     let description = '';
     let isEnabled = true;
     let maxLength = Infinity;
-    let autocapitalization = 'off';
+    let autocapitalization: 'characters' | 'off' | 'on' | 'none' | 'sentences' | 'words' = 'off';
     let enterKeyType: InputEnterKeyType = 'default';
     let describedBy = '';
     let mounted = false;

@@ -87,7 +87,7 @@ The package contains both of them.
 
 Node.js will automatically use the appropriate version.
 
-Webpack will use ES modules version.
+Webpack or other bundles will use ES modules version.
 
 For the direct CommonJS usage, this files can be used:
 
@@ -105,7 +105,7 @@ dist/esm/client-hydratable.mjs
 dist/esm/server.mjs
 ```
 
-ES modules can be used in the browser directly without any build:
+ES modules can be used in the browser directly without any build, but build is strongly encouraged.:
 
 ```html
 <script type="module">
