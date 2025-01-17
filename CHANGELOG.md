@@ -6,6 +6,7 @@
 * Added `shine` extension.
 * Added support for `press_start_actions`, `press_end_actions`, `hover_start_actions` and `hover_end_actions`.
 * Deprecated `externalImage` in `LoadableImageView` use `ImageTransformer` instead.
+* Fixed NPE at transition animation end.
 * Fixed crash during svg image loading.
 * Fixed end padding applying along the scroll axis in `pager`.
 * Fixed issue when `Div2View` skips drawing if layout contains text with autoellipsize enabled.
