@@ -1032,11 +1032,11 @@ class Div2View private constructor(
     }
 
     override fun handleUri(uri: Uri) {
-        if (actionHandler?.handleUri(uri, this) == true) {
+        if (actionHandler?.handleActionUrl(uri, this) == true) {
             return
         }
 
-        div2Component.actionHandler.handleUri(uri, this)
+        div2Component.actionHandler.handleActionUrl(uri, this)
     }
 
     override fun setConfig(viewConfig: DivViewConfig) {

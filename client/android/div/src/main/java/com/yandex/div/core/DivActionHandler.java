@@ -77,20 +77,6 @@ public class DivActionHandler {
     }
 
     /**
-     * Handles the given URI.
-     * Call super implementation to automatically handle internal div schemes when overriding.
-     *
-     * @param uri  URI to handle
-     * @param view calling DivView
-     * @return TRUE if uri was handled
-     */
-    @CallSuper
-    @Deprecated
-    public boolean handleUri(@NonNull Uri uri, @NonNull DivViewFacade view) {
-        return handleActionUrl(uri, view, view.getExpressionResolver());
-    }
-
-    /**
      * Handles the given div action.
      * Call super implementation to automatically handle internal div schemes when overriding.
      *
@@ -325,7 +311,7 @@ public class DivActionHandler {
      * @param view calling DivView
      * @return TRUE if uri was handled
      */
-    public final boolean handleActionUrl(@Nullable Uri uri, @NonNull DivViewFacade view) {
+    public boolean handleActionUrl(@Nullable Uri uri, @NonNull DivViewFacade view) {
         return handleActionUrl(uri, view, view.getExpressionResolver());
     }
 

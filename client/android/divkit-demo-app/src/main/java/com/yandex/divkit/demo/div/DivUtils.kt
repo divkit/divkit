@@ -75,7 +75,7 @@ fun divConfiguration(
         .enablePermanentDebugPanel(
             flagPreferenceProvider.getExperimentFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
         )
-        .tooltipRestrictor { _, _ -> true }
+        .tooltipRestrictor { _, _, _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
         .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(activity)))
@@ -134,18 +134,22 @@ fun divContext(
 }
 
 open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandler) : DivActionHandler() {
-    override fun handleUri(uri: Uri, view: DivViewFacade): Boolean {
-        if (super.handleUri(uri, view)) {
+    override fun handleActionUrl(uri: Uri?, view: DivViewFacade): Boolean {
+        if (super.handleActionUrl(uri, view)) {
             return true
         }
 
         KLog.d(TAG) { "layoutId=${view.divTag.id}" }
-        return uriHandlerDivkit.handleUri(uri)
+        return if (uri == null) {
+            false
+        } else {
+            uriHandlerDivkit.handleUri(uri)
+        }
     }
 
     override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
         return super.handleAction(action, view, resolver) || action.url != null &&
-                handleUri(action.url!!.evaluate(resolver), view)
+            handleActionUrl(action.url?.evaluate(resolver), view)
     }
 
     private companion object {
