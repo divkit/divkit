@@ -1,6 +1,3 @@
-/* Force import order */
-@value outer from "../utilities/Outer.module.css";
-
 .container {
     display: flex;
 }

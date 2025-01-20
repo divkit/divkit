@@ -1,4 +1,4 @@
-@value text-range from "./TextRange.module.css";
+@value text-range from "../Cls.module.css";
 
 .text {
     display: flex;

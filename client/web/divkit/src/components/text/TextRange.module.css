@@ -1,3 +1,5 @@
+@value text-range from "../Cls.module.css";
+
 .text-range {
     white-space: pre-wrap;
     color: inherit;

@@ -1,5 +1,4 @@
-@value outer from "../utilities/Outer.module.css";
-@value root__clickable, root__clickable-no-transition, root__selectable from "../Root.module.css";
+@value outer, root__clickable, root__clickable-no-transition, root__selectable from "../Cls.module.css";
 
 .tooltip {
     position: absolute;

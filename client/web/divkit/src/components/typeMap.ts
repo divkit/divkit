@@ -1,4 +1,6 @@
 import type { ComponentType } from 'svelte';
+// FOrce import order
+import './utilities/Outer.svelte';
 import Text from './text/Text.svelte';
 import Container from './container/Container.svelte';
 import Separator from './separator/Separator.svelte';
