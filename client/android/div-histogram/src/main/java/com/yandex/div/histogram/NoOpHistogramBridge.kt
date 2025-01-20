@@ -18,7 +18,7 @@ class NoOpHistogramBridge : HistogramBridge {
         min: Long,
         max: Long,
         unit: TimeUnit,
-        bucketCount: Long
+        bucketCount: Int
     ) = Unit
 
     override fun recordSparseSlowlyHistogram(name: String, sample: Int) = Unit
