@@ -2542,7 +2542,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "steps": [
         "Press 'Store string value for 10 seconds'",

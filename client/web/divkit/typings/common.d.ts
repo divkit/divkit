@@ -258,10 +258,17 @@ export interface ActionVideo {
     action: 'start' | 'pause';
 }
 
+export interface ActionStore {
+    type: 'set_stored_value';
+    name: string;
+    value: TypedValue;
+    lifetime: number;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
-    ActionVideo;
+    ActionVideo | ActionStore;
 
 export interface ActionBase {
     log_id: string;

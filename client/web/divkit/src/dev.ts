@@ -62,7 +62,7 @@ window.root = new Root({
             }]
         ]),
         store: {
-            getValue(name, type) {
+            get(name, type) {
                 try {
                     const json = localStorage.getItem('divkit:' + name);
                     if (json) {
@@ -75,7 +75,7 @@ window.root = new Root({
                     //
                 }
             },
-            setValue(name, type, value, lifetime) {
+            set(name, type, value, lifetime) {
                 try {
                     localStorage.setItem('divkit:' + name, JSON.stringify({ value, type, lifetime: Date.now() + lifetime * 1000 }));
                 } catch (err) {

@@ -127,7 +127,8 @@
       "platforms": [
         "android",
         "ios",
-        "flutter"
+        "flutter",
+        "web"
       ]
     },
     {
@@ -139,7 +140,8 @@
       "platforms": [
         "android",
         "ios",
-        "flutter"
+        "flutter",
+        "web"
       ]
     }
   ]

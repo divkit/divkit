@@ -1,11 +1,14 @@
 import type { EvalContext, EvalValue, StringValue } from '../eval';
 import { registerFunc } from './funcs';
-import { BOOLEAN, COLOR, INTEGER, NUMBER, STRING, URL } from '../const';
+import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import { convertJsValueToDivKit } from '../utils';
 
-export function getStored(evalType: 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url') {
-    return (ctx: EvalContext, name: StringValue, fallback: EvalValue): EvalValue => {
+export function getStored(evalType: 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'array' | 'dict') {
+    return (ctx: EvalContext, name: StringValue, fallback?: EvalValue): EvalValue => {
         if (!ctx.store) {
+            if (!fallback) {
+                throw new Error('Missing value.');
+            }
             return {
                 type: evalType,
                 value: fallback.value
@@ -19,9 +22,17 @@ export function getStored(evalType: 'string' | 'number' | 'integer' | 'boolean' 
         } else {
             expectedType = 'string';
         }
-        const val = ctx.store.getValue(name.value, expectedType);
+        let val;
+        if (ctx.store.get) {
+            val = ctx.store.get(name.value, evalType);
+        } else if (ctx.store.getValue) {
+            val = ctx.store.getValue(name.value, expectedType);
+        }
 
         if (val === undefined) {
+            if (!fallback) {
+                throw new Error('Missing value.');
+            }
             return {
                 type: evalType,
                 value: fallback.value
@@ -41,4 +52,6 @@ export function registerStored(): void {
     registerFunc('getStoredColorValue', [STRING, COLOR], getStored(COLOR));
     registerFunc('getStoredColorValue', [STRING, STRING], getStored(COLOR));
     registerFunc('getStoredBooleanValue', [STRING, BOOLEAN], getStored(BOOLEAN));
+    registerFunc('getStoredArrayValue', [STRING], getStored(ARRAY));
+    registerFunc('getStoredDictValue', [STRING], getStored(DICT));
 }
