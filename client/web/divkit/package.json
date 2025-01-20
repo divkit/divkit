@@ -87,9 +87,9 @@
     },
     "browserslist": {
         "production": [
-            "chrome >= 58",
-            "safari >= 11",
-            "firefox >= 67"
+            "chrome >= 67",
+            "safari >= 14",
+            "firefox >= 68"
         ],
         "ssr": [
             "node >= 8"

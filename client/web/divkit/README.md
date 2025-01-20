@@ -158,16 +158,16 @@ All modules have typescript definitions (client, client-hydratable and server), 
 
 Browser support
 ```
-chrome >= 58
-safari >= 11
-firefox >= 67
+chrome >= 67
+safari >= 14
+firefox >= 68
 ```
 
 However, some rare features require more modern browsers, for example, `aspect` for a `container` requires `aspect-ratio` support in css. Such requirements are described in the documentation.
 
 Node.js
 ```
-Node.js >= 8
+Node.js >= 10.4
 ```
 
 ### API: render

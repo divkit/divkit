@@ -7,12 +7,16 @@ import { bigIntZero, toBigInt } from './bigint';
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 export type VariableValue = string | number | bigint | boolean | null | undefined | object | unknown[];
 
-export abstract class Variable<ValueType = any, TypeName = VariableType> {
+export abstract class Variable<
+    ValueType extends ConvertedSetValue = any,
+    TypeName = VariableType,
+    ConvertedSetValue = ValueType
+> {
     protected name: string;
     protected value: ValueType;
     protected store?: Writable<ValueType>;
 
-    constructor(name: string, value: ValueType) {
+    constructor(name: string, value: ConvertedSetValue) {
         const val = this.convertValue(value);
 
         this.name = name;
@@ -41,7 +45,7 @@ export abstract class Variable<ValueType = any, TypeName = VariableType> {
 
     protected abstract fromString(val: string): ValueType;
 
-    setValue(val: ValueType): void {
+    setValue(val: ConvertedSetValue): void {
         const converted = this.convertValue(val);
 
         this.value = converted;
@@ -75,7 +79,7 @@ export class StringVariable extends Variable<string, 'string'> {
     }
 }
 
-export class IntegerVariable extends Variable<number | bigint, 'integer'> {
+export class IntegerVariable extends Variable<bigint, 'integer', bigint | number> {
     protected convertValue(value: unknown) {
         if (typeof value !== 'bigint' && typeof value !== 'number') {
             throw new Error('Incorrect variable value');

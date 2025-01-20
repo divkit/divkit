@@ -9,8 +9,7 @@ function divInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValue): E
         throw new Error('Division by zero is not supported.');
     }
 
-    // bigint | number actually
-    let res: number | bigint = (arg0.value as bigint) / (arg1.value as bigint);
+    let res = arg0.value / arg1.value;
     res = roundInteger(ctx, res);
     checkIntegerOverflow(ctx, res);
 
@@ -38,8 +37,7 @@ function modInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValue): E
         throw new Error('Division by zero is not supported.');
     }
 
-    // bigint | number actually
-    let res: number | bigint = (arg0.value as bigint) % (arg1.value as bigint);
+    let res = arg0.value % arg1.value;
     res = roundInteger(ctx, res);
     checkIntegerOverflow(ctx, res);
 
@@ -63,11 +61,10 @@ function modNumber(_ctx: EvalContext, arg0: NumberValue, arg1: NumberValue): Eva
 }
 
 function mulInteger(ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
-    // number | bigint actually
-    let res: bigint = (args.length ? args[0].value : bigIntZero) as bigint;
+    let res = args.length ? args[0].value : bigIntZero;
     for (let i = 1; i < args.length; ++i) {
-        res *= args[i].value as bigint;
-        res = roundInteger(ctx, res) as bigint;
+        res *= args[i].value;
+        res = roundInteger(ctx, res);
         checkIntegerOverflow(ctx, res);
     }
 
@@ -90,11 +87,10 @@ function mulNumber(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
 }
 
 function subInteger(ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
-    // number | bigint actually
-    let res: bigint = (args.length ? args[0].value : bigIntZero) as bigint;
+    let res = args.length ? args[0].value : bigIntZero;
     for (let i = 1; i < args.length; ++i) {
-        res -= args[i].value as bigint;
-        res = roundInteger(ctx, res) as bigint;
+        res -= args[i].value;
+        res = roundInteger(ctx, res);
         checkIntegerOverflow(ctx, res);
     }
 
@@ -117,11 +113,10 @@ function subNumber(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
 }
 
 function sumInteger(ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
-    // number | bigint actually
-    let res = bigIntZero as bigint;
+    let res = bigIntZero;
     for (let i = 0; i < args.length; ++i) {
-        res += args[i].value as bigint;
-        res = roundInteger(ctx, res) as bigint;
+        res += args[i].value;
+        res = roundInteger(ctx, res);
         checkIntegerOverflow(ctx, res);
     }
 
@@ -292,7 +287,7 @@ function signumNumber(_ctx: EvalContext, arg: NumberValue): EvalValue {
 }
 
 function copySignInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValue): EvalValue {
-    let res: number | bigint;
+    let res: bigint;
 
     if (arg1.value === bigIntZero) {
         res = arg0.value;
@@ -301,8 +296,7 @@ function copySignInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValu
     } else {
         const sign = signBigInt(arg1.value);
 
-        // number | bigint actually
-        res = (absBigInt(arg0.value) as bigint) * (sign as bigint);
+        res = absBigInt(arg0.value) * sign;
     }
 
     checkIntegerOverflow(ctx, res);

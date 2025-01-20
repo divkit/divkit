@@ -1,40 +1,31 @@
-export const hasBigInt = typeof BigInt === 'function';
-
-export function toBigIntNoCheck(val: number | bigint | string): number | bigint {
-    if (hasBigInt) {
-        return BigInt(val);
-    }
-    return Number(val);
+export function toBigIntNoCheck(val: number | bigint | string): bigint {
+    return BigInt(val);
 }
 
 export const MAX_INT = toBigIntNoCheck('9223372036854775807');
 export const MIN_INT = toBigIntNoCheck('-9223372036854775808');
 
-export function toBigInt(val: number | bigint | string): number | bigint {
+export function toBigInt(val: number | bigint | string): bigint {
     const res = toBigIntNoCheck(val);
     if (res > MAX_INT || res < MIN_INT) {
         throw new Error('Integer overflow.');
-    }
-    if (typeof res === 'number' && (
-        Number.isNaN(res) ||
-        res !== Math.round(res)
-    )) {
-        throw new Error('Incorrect integer value.');
     }
     return res;
 }
 
 export const bigIntZero = toBigInt(0);
 
-export function absBigInt(val: number | bigint): number | bigint {
+export function absBigInt(val: bigint): bigint {
     let res = val;
+
     if (res < 0) {
         res = -res;
     }
+
     return res;
 }
 
-export function signBigInt(val: number | bigint): number | bigint {
+export function signBigInt(val: bigint): bigint {
     let res = 0;
 
     if (val > 0) {
