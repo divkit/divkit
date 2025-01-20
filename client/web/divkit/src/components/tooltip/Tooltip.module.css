@@ -1,3 +1,6 @@
+@value outer from "../utilities/Outer.module.css";
+@value root__clickable, root__clickable-no-transition, root__selectable from "../Root.module.css";
+
 .tooltip {
     position: absolute;
     top: 0;
@@ -9,4 +12,8 @@
 .tooltip_visible {
     visibility: visible;
     pointer-events: auto;
+}
+
+.tooltip > .outer:not(.root__clickable):not(.root__clickable-no-transition):not(.root__selectable) {
+    pointer-events: none;
 }

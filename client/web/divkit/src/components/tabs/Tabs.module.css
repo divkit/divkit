@@ -69,6 +69,7 @@
     transition-property: transform;
     transition-timing-function: ease-out;
     transition-duration: 0s;
+    pointer-events: auto;
 }
 
 .tabs__swiper_animated {
@@ -83,6 +84,7 @@
 
 .tabs__panel {
     display: none;
+    pointer-events: none;
 }
 
 .tabs__panel_visible {

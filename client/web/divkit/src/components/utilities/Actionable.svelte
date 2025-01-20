@@ -60,6 +60,7 @@
     let startCoords: Coords | null = null;
     let isChanged = false;
     let hasJSAction = false;
+    let hasAnyActions = false;
     let longtapTimer: number;
     let role: string | undefined;
     let isChecked: boolean | undefined;
@@ -173,6 +174,17 @@
         } else {
             node.removeEventListener('pointerleave', onPointerLeave);
         }
+
+        hasAnyActions = Boolean(
+            href ||
+            hasJSAction ||
+            doubleTapActions?.length ||
+            longTapActions?.length ||
+            pressStartActions?.length ||
+            pressEndActions?.length ||
+            hoverStartActions?.length ||
+            hoverEndActions?.length
+        );
     }
 
     async function onClick(event: MouseEvent): Promise<void> {
@@ -362,7 +374,7 @@
         {style}
         {role}
         aria-checked={isChecked}
-        class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
+        class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''} {hasAnyActions ? rootCss['root__any-actions'] : ''}"
         on:click
         on:keydown={onKeydown}
         on:focus
@@ -376,7 +388,7 @@
     <span
         bind:this={node}
         use:use
-        class="{cls}{hasJSAction ? ` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
+        class="{cls}{hasJSAction ? ` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}  {hasAnyActions ? rootCss['root__any-actions'] : ''}"
         {style}
         {role}
         aria-checked={isChecked}

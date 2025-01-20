@@ -470,7 +470,7 @@
 </script>
 
 <Outer
-    cls="{genClassName('text', css, mods)} {selectable ? '' : rootCss.root__unselectable}"
+    cls="{genClassName('text', css, mods)} {selectable ? rootCss.root__selectable : rootCss.root__unselectable}"
     {componentContext}
     {layoutParams}
 >

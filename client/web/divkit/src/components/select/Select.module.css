@@ -22,6 +22,7 @@
     height: 100%;
     opacity: 0;
     font: inherit;
+    pointer-events: auto;
 }
 
 .select__select_has-custom-focused:focus,
