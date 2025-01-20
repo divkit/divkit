@@ -2,6 +2,7 @@
   "description": "Ranges with text baseline offset",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {
@@ -66,7 +67,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -88,7 +89,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -110,7 +111,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -133,7 +134,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -151,12 +152,36 @@
               "margins": {
                 "bottom": 4
               },
+              "text": "Text with line height, range with baseline offset and line height"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "line_height": 32,
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "baseline_offset": 8,
+                  "line_height": 24
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
               "text": "Range with baseline offset and font size"
             },
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -179,7 +204,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -203,7 +228,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -230,7 +255,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -262,7 +287,7 @@
             {
               "type": "test_text",
               "margins": {
-                "bottom": 16
+                "bottom": 12
               },
               "background_color": "#FFFFFF",
               "text": "Lorem ipsum dolor sit amet",
@@ -286,6 +311,38 @@
                   "start": 12,
                   "end": 21,
                   "alignment_vertical": "top"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Multiline text with baseline offsets"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "baseline_offset": 8
+                },
+                {
+                  "start": 72,
+                  "end": 75,
+                  "baseline_offset": 8
+                },
+                {
+                  "start": 99,
+                  "end": 102,
+                  "baseline_offset": -8
                 }
               ]
             }
