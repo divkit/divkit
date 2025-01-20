@@ -15,6 +15,7 @@
     import { getContext, onDestroy, onMount, setContext } from 'svelte';
 
     import rootCss from '../Root.module.css';
+    import css from './Actionable.module.css';
 
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
@@ -383,7 +384,7 @@
         {style}
         {role}
         aria-checked={isChecked}
-        class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''} {hasAnyActions ? rootCss['root__any-actions'] : ''}"
+        class="{cls} {rootCss['root__any-actions']} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
         on:click
         on:keydown={onKeydown}
         on:focus
@@ -392,16 +393,31 @@
     >
         <slot />
     </a>
-{:else}
-    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <span
+{:else if hasJSAction}
+    <button
         bind:this={node}
         use:use
-        class="{cls}{hasJSAction ? ` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}  {hasAnyActions ? rootCss['root__any-actions'] : ''}"
+        class="{cls} {css.actionable__button} {rootCss['root__any-actions']}{` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` } {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
         {style}
         {role}
         aria-checked={isChecked}
-        tabindex={hasJSAction ? 0 : null}
+        type="button"
+        on:click
+        on:keydown={onKeydown}
+        on:focus
+        on:blur
+        {...attrs}
+    >
+        <slot />
+    </button>
+{:else}
+    <span
+        bind:this={node}
+        use:use
+        class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {rootCss.root__unselectable} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''} {hasAnyActions ? rootCss['root__any-actions'] : ''}"
+        {style}
+        {role}
+        aria-checked={isChecked}
         on:click
         on:keydown={onKeydown}
         on:focus

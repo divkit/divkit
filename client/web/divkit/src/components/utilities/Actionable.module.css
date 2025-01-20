@@ -1,0 +1,10 @@
+.actionable__button {
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    border: none;
+    border-radius: 0;
+    background: none;
+    appearance: none;
+}
