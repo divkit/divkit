@@ -230,6 +230,7 @@
         timeoutId: number | null;
         componentContext: ComponentContext | undefined;
     }[] = [];
+    const shownTooltips = new Set<string>();
     let menu: {
         items: MaybeMissing<ActionMenuItem>[];
         node: HTMLElement;
@@ -749,9 +750,10 @@
             }));
             return;
         }
-        if ((multiple !== 'true' && multiple !== true) && tooltips.some(it => it.desc.id === id)) {
+        if ((multiple !== 'true' && multiple !== true) && shownTooltips.has(id)) {
             return;
         }
+        shownTooltips.add(id);
 
         const info = {
             internalId: ++tooltipCounter,
