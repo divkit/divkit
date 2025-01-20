@@ -1,21 +1,14 @@
-@testable import DivKit
-@testable import LayoutKit
+@testable @_spi(Internal) import DivKit
+import LayoutKit
 import XCTest
 
 final class DivActionURLHandlerTests: XCTestCase {
-  private var actionHandler: DivActionURLHandler!
+  private var actionHandler: DivActionHandler!
   private let blockStateStorage = DivBlockStateStorage()
 
   override func setUp() {
-    actionHandler = DivActionURLHandler(
-      stateUpdater: DefaultDivStateManagement(),
-      blockStateStorage: blockStateStorage,
-      patchProvider: MockPatchProvider(),
-      variablesStorage: DivVariablesStorage(),
-      updateCard: { _ in },
-      showTooltip: nil,
-      tooltipActionPerformer: nil,
-      persistentValuesStorage: DivPersistentValuesStorage()
+    actionHandler = DivActionHandler(
+      blockStateStorage: blockStateStorage
     )
   }
 
@@ -265,17 +258,12 @@ final class DivActionURLHandlerTests: XCTestCase {
     mode: SetItemAction.Mode
   ) {
     blockStateStorage.setState(id: elementId, cardId: cardId, state: beforeState)
-    let url = SetItemAction.makeURL(mode: mode)
-    let info = DivActionInfo(
+    actionHandler.handle(
+      divAction(logId: "test", url: SetItemAction.makeURL(mode: mode)),
       path: cardId.path,
-      logId: cardId.rawValue,
-      url: url,
-      logUrl: nil,
-      referer: nil,
       source: .tap,
-      payload: nil
+      sender: nil
     )
-    let _ = actionHandler.handleURL(url, info: info)
     XCTAssertEqual(blockStateStorage.getState(elementId, cardId: cardId), afterState)
   }
 }
@@ -364,36 +352,32 @@ private enum SetItemAction {
     ),
   ]
 
-  static func makeURL(mode: Mode) -> URL {
+  static func makeURL(mode: Mode) -> String {
     switch mode {
     case let .next(step, overflow):
-      var urlString = "div-action://set_next_item?id=\(elementId)&overflow=\(overflow)"
+      let url = "div-action://set_next_item?id=\(elementId)&overflow=\(overflow)"
       if let step {
-        urlString = urlString + "&step=\(step)"
+        return url + "&step=\(step)"
       }
-      return url(urlString)
+      return url
     case let .previous(step, overflow):
-      var urlString = "div-action://set_previous_item?id=\(elementId)&overflow=\(overflow)"
+      let url = "div-action://set_previous_item?id=\(elementId)&overflow=\(overflow)"
       if let step {
-        urlString = urlString + "&step=\(step)"
+        return url + "&step=\(step)"
       }
-      return url(urlString)
+      return url
     case let .current(item):
-      return url("div-action://set_current_item?id=\(elementId)&item=\(item)")
+      return "div-action://set_current_item?id=\(elementId)&item=\(item)"
     case let .forward(step, overflow):
-      return url(
-        "div-action://scroll_forward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
-      )
+      return "div-action://scroll_forward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
     case let .backward(step, overflow):
-      return url(
-        "div-action://scroll_backward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
-      )
+      return "div-action://scroll_backward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
     case let .position(step):
-      return url("div-action://scroll_to_position?id=\(elementId)&step=\(Int(step))")
+      return "div-action://scroll_to_position?id=\(elementId)&step=\(Int(step))"
     case .start:
-      return url("div-action://scroll_to_start?id=\(elementId)")
+      return "div-action://scroll_to_start?id=\(elementId)"
     case .end:
-      return url("div-action://scroll_to_end?id=\(elementId)")
+      return "div-action://scroll_to_end?id=\(elementId)"
     }
   }
 }

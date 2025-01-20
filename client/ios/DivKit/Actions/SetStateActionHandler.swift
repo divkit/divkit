@@ -13,13 +13,24 @@ final class SetStateActionHandler {
       return
     }
 
+    handle(
+      divStatePath: DivStatePath.makeDivStatePath(from: stateId),
+      lifetime: .short,
+      context: context
+    )
+  }
+
+  func handle(
+    divStatePath: DivStatePath,
+    lifetime: DivStateLifetime,
+    context: DivActionHandlingContext
+  ) {
     let cardId = context.path.cardId
     stateUpdater.set(
-      path: DivStatePath.makeDivStatePath(from: stateId),
+      path: divStatePath,
       cardId: cardId,
-      lifetime: .short
+      lifetime: lifetime
     )
-
     context.updateCard(.state(cardId))
   }
 }

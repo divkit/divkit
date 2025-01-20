@@ -3,9 +3,9 @@ import LayoutKit
 import VGSL
 
 final class TimerActionHandler {
-  private let performer: DivActionURLHandler.PerformTimerAction
+  private let performer: DivActionHandler.PerformTimerAction
 
-  init(performer: @escaping DivActionURLHandler.PerformTimerAction) {
+  init(performer: @escaping DivActionHandler.PerformTimerAction) {
     self.performer = performer
   }
 
@@ -14,13 +14,16 @@ final class TimerActionHandler {
     context: DivActionHandlingContext
   ) {
     let expressionResolver = context.expressionResolver
-
     guard let id = action.resolveId(expressionResolver),
           let command = action.resolveAction(expressionResolver) else {
       return
     }
 
-    performer(context.path.cardId, id, command.toDivTimerAction())
+    handle(cardId: context.path.cardId, timerId: id, action: command.toDivTimerAction())
+  }
+
+  func handle(cardId: DivCardID, timerId: String, action: DivTimerAction) {
+    performer(cardId, timerId, action)
   }
 }
 
