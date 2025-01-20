@@ -61,8 +61,21 @@ export interface DivUrlVariable {
     value: string;
 }
 
+export interface DivDictVariable {
+    type: 'dict';
+    name: string;
+    value: object;
+}
+
+export interface DivArrayVariable {
+    type: 'array';
+    name: string;
+    value: unknown[];
+}
+
 export type DivVariable = DivStrVariable | DivIntVariable | DivNumberVariable |
-    DivBooleanVariable | DivColorVariable | DivUrlVariable;
+    DivBooleanVariable | DivColorVariable | DivUrlVariable | DivDictVariable |
+    DivArrayVariable;
 
 export interface VariableTrigger {
     mode?: 'on_condition' | 'on_variable';
