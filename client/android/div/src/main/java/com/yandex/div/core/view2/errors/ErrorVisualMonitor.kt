@@ -194,9 +194,6 @@ internal class ErrorModel(
         div2View.div2Component.divVariableController.captureAllVariables().forEach {
             result.put(it.writeToJSON())
         }
-        div2View.div2Component.globalVariableController.captureAllVariables().forEach {
-            result.put(it.writeToJSON())
-        }
         return result
     }
 

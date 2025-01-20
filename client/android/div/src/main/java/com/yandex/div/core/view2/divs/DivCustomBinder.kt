@@ -6,8 +6,6 @@ import androidx.core.view.get
 import androidx.core.view.isNotEmpty
 import com.yandex.div.R
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter
-import com.yandex.div.core.DivCustomViewFactory
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -23,8 +21,6 @@ import javax.inject.Provider
 
 internal class DivCustomBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
-    private val divCustomViewFactory: DivCustomViewFactory,
-    private val divCustomViewAdapter: DivCustomViewAdapter,
     private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter,
     private val extensionController: DivExtensionController,
     private val divBinder: Provider<DivBinder>,
@@ -55,13 +51,6 @@ internal class DivCustomBinder @Inject constructor(
                 { divCustomContainerViewAdapter.createView(div, divView, resolver, path) },
                 { divCustomContainerViewAdapter.bindView(it, div, divView, resolver, path) }
             )
-        } else if (divCustomViewAdapter.isCustomTypeSupported(div.customType)) {
-            bind(view, customView, oldDiv, div, context,
-                { divCustomViewAdapter.createView(div, divView) },
-                { divCustomViewAdapter.bindView(it, div, divView) }
-            )
-        } else {
-            oldBind(div, divView, context, view, customView)
         }
     }
 
@@ -94,23 +83,6 @@ internal class DivCustomBinder @Inject constructor(
         baseBinder.bindId(divView, customView, div.id)
 
         extensionController.bindView(divView, context.expressionResolver, customView, div)
-    }
-
-    @Deprecated(message = "for backward compat only", replaceWith = ReplaceWith("DivCustomViewAdapter.newBind"))
-    private fun oldBind(
-        div: DivCustom,
-        divView: Div2View,
-        context: BindingContext,
-        previousViewGroup: ViewGroup,
-        previousCustomView: View?
-    ) {
-        divCustomViewFactory.create(div, divView) { newCustomView ->
-            baseBinder.bindId(divView, newCustomView, div.id)
-            if (newCustomView != previousCustomView) {
-                replaceInParent(previousViewGroup, newCustomView, divView)
-                extensionController.bindView(divView, context.expressionResolver, newCustomView, div)
-            }
-        }
     }
 
     private fun replaceInParent(

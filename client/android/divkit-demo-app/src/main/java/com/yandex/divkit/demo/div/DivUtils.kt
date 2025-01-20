@@ -14,6 +14,8 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.gesture.DivGestureExtensionHandler
+import com.yandex.div.gesture.ParsingErrorLoggerFactory
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
@@ -25,8 +27,6 @@ import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.markdown.DivMarkdownExtensionHandler
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
-import com.yandex.div.gesture.DivGestureExtensionHandler
-import com.yandex.div.gesture.ParsingErrorLoggerFactory
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.shine.DivShineExtensionHandler
 import com.yandex.div.shine.DivShineLogger
@@ -54,7 +54,6 @@ fun divConfiguration(
     val flagPreferenceProvider = Container.flagPreferenceProvider
     return DivConfiguration.Builder(Container.imageLoader)
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
-        .divCustomViewFactory(DemoDivCustomViewFactory())
         .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()

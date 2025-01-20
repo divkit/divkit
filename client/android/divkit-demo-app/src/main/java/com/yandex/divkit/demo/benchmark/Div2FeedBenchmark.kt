@@ -62,7 +62,7 @@ internal class Div2FeedBenchmark(
 
     private suspend fun warmUp() {
         viewController.showMessage("Warming up…")
-        divContext.warmUp2()
+        divContext.warmUp()
         Container.parsingHistogramReporter
         delay(1_000L)
     }

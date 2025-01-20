@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs
 import androidx.transition.TransitionSet
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.extension.DivExtensionController
@@ -57,8 +56,8 @@ open class DivBinderTest {
     private val divExtensionController = DivExtensionController(emptyList())
 
     internal val visitor: ReleaseViewVisitor = spy(
-        ReleaseViewVisitor(divView,
-            DivCustomViewAdapter.STUB,
+        ReleaseViewVisitor(
+            divView,
             DivCustomContainerViewAdapter.STUB,
             divExtensionController,
         )
