@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
     const MIN_SWIPE_PX = 8;
     const MIN_LONG_TAP_DURATION = 400;
+    const MAX_DOUBLE_TAP_DURATION = 400;
 
     const SUPPORTED_ACCESSIBILITY_TYPES = new Set([
         'button',
@@ -24,7 +25,7 @@
     import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
     import { wrapError } from '../../utils/wrapError';
     import { getUrlSchema, isBuiltinSchema } from '../../utils/url';
-    import { type Coords, getTouchCoords } from '../../utils/getTouchCoords';
+    import type { Coords } from '../../utils/getTouchCoords';
 
     export let componentContext: ComponentContext;
     export let id = '';
@@ -57,14 +58,15 @@
     let href = '';
     let target: string | undefined = undefined;
     let startTs = -1;
+    let clickTs = -1;
     let startCoords: Coords | null = null;
     let isChanged = false;
     let hasJSAction = false;
     let hasAnyActions = false;
     let longtapTimer: number;
+    let clickTimer: number;
     let role: string | undefined;
     let isChecked: boolean | undefined;
-    let pointerdown = false;
 
     $: {
         if (Array.isArray(actions) && actions?.length) {
@@ -123,45 +125,34 @@
     }
 
     $: if (node) {
-        if (href || hasJSAction) {
+        if (href || hasJSAction || doubleTapActions?.length) {
             node.addEventListener('click', onClick);
         } else {
             node.removeEventListener('click', onClick);
         }
 
-        if (doubleTapActions?.length) {
-            node.addEventListener('dblclick', onDoubleClick);
-        } else {
-            node.removeEventListener('dblclick', onDoubleClick);
-        }
-
-        if (longTapActions?.length) {
-            node.addEventListener('touchstart', onTouchStart, {
+        if (
+            doubleTapActions?.length ||
+            longTapActions?.length ||
+            pressStartActions?.length ||
+            pressEndActions?.length
+        ) {
+            node.addEventListener('pointerdown', onPointerDown, {
                 passive: true
             });
-            node.addEventListener('touchmove', onTouchMove, {
+            window.addEventListener('pointermove', onPointerMove, {
                 passive: true
             });
-            node.addEventListener('touchend', onTouchEnd, {
+            window.addEventListener('pointerup', onPointerUp, {
                 passive: true
             });
-            node.addEventListener('touchcancel', onTouchEnd, {
+            window.addEventListener('pointercancel', onPointerUp, {
                 passive: true
             });
-        } else {
-            node.removeEventListener('touchstart', onTouchStart);
-            node.removeEventListener('touchmove', onTouchMove);
-            node.removeEventListener('touchend', onTouchEnd);
-            node.removeEventListener('touchcancel', onTouchEnd);
-        }
-
-        if (pressStartActions?.length || pressEndActions?.length) {
-            node.addEventListener('pointerdown', onPointerDown);
-            window.addEventListener('pointerup', onPointerUp);
-            window.addEventListener('pointercancel', onPointerUp);
         } else {
             node.removeEventListener('pointerdown', onPointerDown);
             window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointermove', onPointerMove);
             window.removeEventListener('pointercancel', onPointerUp);
         }
         if (hoverStartActions?.length) {
@@ -187,6 +178,35 @@
         );
     }
 
+    function hasCustomAction(): boolean {
+        return actions?.some(action => {
+            if (action?.typed) {
+                return true;
+            }
+
+            const url = action?.url;
+            if (!url) {
+                return false;
+            }
+
+            const schema = getUrlSchema(url);
+
+            return schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols());
+        }) || false;
+    }
+
+    async function processClick(event: MouseEvent | undefined, processUrls: boolean): Promise<void> {
+        if (actions) {
+            if (event && hasCustomAction()) {
+                event.preventDefault();
+            }
+            componentContext.execAnyActions(actions, {
+                node,
+                processUrls
+            });
+        }
+    }
+
     async function onClick(event: MouseEvent): Promise<void> {
         if (actionCtx.hasAction()) {
             return;
@@ -196,9 +216,31 @@
             return;
         }
 
-        if (startTs > 0 && Date.now() > startTs + MIN_LONG_TAP_DURATION) {
+        const now = Date.now();
+
+        if (startTs > 0 && now > startTs + MIN_LONG_TAP_DURATION) {
             // Long tap action
             event.preventDefault();
+            return;
+        }
+
+        if (doubleTapActions?.length && clickTs > 0 && now - clickTs < MAX_DOUBLE_TAP_DURATION) {
+            event.preventDefault();
+            componentContext.execAnyActions(doubleTapActions, { processUrls: true, node });
+            clickTs = -1;
+            return;
+        }
+
+        clickTs = now;
+
+        if (doubleTapActions?.length && startTs > 0 && now < startTs + MAX_DOUBLE_TAP_DURATION) {
+            // Disable clicks and wait for double clicks
+            event.preventDefault();
+
+            clearTimeout(clickTimer);
+            clickTimer = window.setTimeout(() => {
+                processClick(undefined, true);
+            }, MAX_DOUBLE_TAP_DURATION);
             return;
         }
 
@@ -206,72 +248,51 @@
 
         if (cancelled) {
             event.preventDefault();
-        } else if (actions) {
-            const hasCustomAction = actions.some(action => {
-                if (action?.typed) {
-                    return true;
-                }
-
-                const url = action?.url;
-                if (!url) {
-                    return false;
-                }
-
-                const schema = getUrlSchema(url);
-
-                return schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols());
-            });
-            if (hasCustomAction) {
-                event.preventDefault();
-            }
-            componentContext.execAnyActions(actions, { node });
+        } else {
+            processClick(event, false);
         }
     }
 
-    function onDoubleClick(event: MouseEvent): void {
+    function onPointerDown(event: PointerEvent): void {
         if (actionCtx.hasAction()) {
             return;
         }
 
-        if (event.button !== undefined && event.button !== 0) {
-            return;
-        }
-
-        componentContext.execAnyActions(doubleTapActions, { processUrls: true, node });
-    }
-
-    function onTouchStart(event: TouchEvent): void {
-        if (event.touches.length > 1) {
-            return;
-        }
-
-        startCoords = getTouchCoords(event);
+        startCoords = {
+            x: event.clientX,
+            y: event.clientY
+        };
         isChanged = false;
         startTs = Date.now();
         if (longtapTimer) {
             clearTimeout(longtapTimer);
         }
+
+        clearTimeout(clickTimer);
+
+        componentContext.execAnyActions(pressStartActions, { node });
     }
 
-    function onTouchMove(event: TouchEvent): void {
+    function onPointerMove(event: PointerEvent): void {
         if (!startCoords) {
             return;
         }
 
-        const coords = getTouchCoords(event);
-
-        if (Math.abs(startCoords.x - coords.x) > MIN_SWIPE_PX || Math.abs(startCoords.y - coords.y) > MIN_SWIPE_PX) {
+        if (
+            Math.abs(startCoords.x - event.clientX) > MIN_SWIPE_PX ||
+            Math.abs(startCoords.y - event.clientY) > MIN_SWIPE_PX
+        ) {
             isChanged = true;
         }
     }
 
-    function onTouchEnd(event: TouchEvent): void {
-        if (!startCoords || startTs < 0) {
+    function onPointerUp(event: PointerEvent): void {
+        if (actionCtx.hasAction() || !startCoords || startTs < 0) {
             return;
         }
 
         if (!isChanged && (Date.now() - startTs) >= MIN_LONG_TAP_DURATION) {
-            event.stopPropagation();
+            event.stopImmediatePropagation();
             componentContext.execAnyActions(longTapActions, { processUrls: true, node });
         }
 
@@ -282,23 +303,7 @@
             startCoords = null;
             startTs = -1;
         }, 100);
-    }
 
-    function onPointerDown(): void {
-        if (actionCtx.hasAction()) {
-            return;
-        }
-
-        pointerdown = true;
-        componentContext.execAnyActions(pressStartActions, { node });
-    }
-
-    function onPointerUp(): void {
-        if (actionCtx.hasAction() || !pointerdown) {
-            return;
-        }
-
-        pointerdown = false;
         componentContext.execAnyActions(pressEndActions, { node });
     }
 
@@ -352,6 +357,7 @@
 
     onDestroy(() => {
         if (typeof window !== 'undefined') {
+            window.removeEventListener('pointermove', onPointerMove);
             window.removeEventListener('pointerup', onPointerUp);
             window.removeEventListener('pointercancel', onPointerUp);
         }
@@ -361,6 +367,9 @@
         }
         if (longtapTimer) {
             clearTimeout(longtapTimer);
+        }
+        if (clickTimer) {
+            clearTimeout(clickTimer);
         }
     });
 </script>
