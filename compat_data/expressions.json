@@ -108,6 +108,9 @@
         "compat": {
             "android": {
                 "version_added": "30.21.0"
+            },
+            "ios": {
+                "version_added": "30.33.0"
             }
         }
     }, {
@@ -119,6 +122,9 @@
             },
             "ios": {
                 "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "30.33.0"
             }
         }
     }, {
@@ -130,6 +136,9 @@
             },
             "ios": {
                 "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "30.33.0"
             }
         }
     }, {
@@ -141,6 +150,9 @@
             },
             "ios": {
                 "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "30.33.0"
             }
         }
     }, {
@@ -149,6 +161,44 @@
         "compat": {
             "ios": {
                 "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "30.33.0"
+            }
+        }
+    }, {
+        "id": "fn_atan",
+        "name": "<code>atan</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "30.33.0"
+            }
+        }
+    }, {
+        "id": "fn_tan",
+        "name": "<code>tan</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "30.33.0"
+            }
+        }
+    }, {
+        "id": "fn_asin",
+        "name": "<code>asin</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "30.33.0"
+            }
+        }
+    }, {
+        "id": "fn_acos",
+        "name": "<code>acos</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "30.33.0"
             }
         }
     }]

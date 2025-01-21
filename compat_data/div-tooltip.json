@@ -1,0 +1,21 @@
+{
+    "features": [{
+        "id": "tooltip_match_parent",
+        "name": "Tooltip <code>match_parent</code> width",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": [{
+                "version_added": "27.4.0",
+                "partial_implementation": true,
+                "notes": "match_parent works as the width of the parent element, not as the width of the screen"
+            }, {
+                "version_added": "30.28.0"
+            }],
+            "ios": {
+                "version_added": "30.33.0"
+            }
+        }
+    }]
+}
