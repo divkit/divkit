@@ -505,7 +505,7 @@
         return '';
     }
 
-    async function setState(stateId: string | null): Promise<void> {
+    async function setState(stateId: string | null | undefined): Promise<void> {
         if (!stateId) {
             throw new Error('Missing state id');
         }
@@ -1168,6 +1168,10 @@
                         actionTyped.value?.type,
                         actionTyped.lifetime
                     );
+                    break;
+                }
+                case 'set_state': {
+                    await setState(actionTyped.state_id);
                     break;
                 }
                 default: {

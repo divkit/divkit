@@ -278,10 +278,16 @@ export interface ActionStore {
     lifetime: number;
 }
 
+export interface ActionSetState {
+    type: 'set_state';
+    state_id: string;
+    // temporary
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
-    ActionVideo | ActionStore;
+    ActionVideo | ActionStore | ActionSetState;
 
 export interface ActionBase {
     log_id: string;

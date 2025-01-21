@@ -15,12 +15,17 @@
     "temporary": {
       "$description": "translations.json#/div_action_set_state_temporary",
       "type": "boolean",
-      "default_value": "true"
+      "default_value": "true",
+      "platforms": [
+        "android",
+        "ios"
+      ]
     }
   },
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "required": [
     "type",
