@@ -12,7 +12,7 @@ import com.yandex.div.evaluable.FunctionProvider
         "com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider"
     )
 )
-object BuiltinFunctionProvider : FunctionProvider {
+internal object BuiltinFunctionProvider : FunctionProvider {
 
     private val registry = FunctionRegistry()
 
