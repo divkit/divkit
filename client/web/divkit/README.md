@@ -130,7 +130,7 @@ ES modules can be used in the browser directly without any build, but build is s
 ```html
 <script src="./node_modules/@divkitframework/divkit/dist/browser/client.js"></script>
 <script>
-    window.Ya.Divkit.render({
+    window.Ya.DivKit.render({
         id: 'smth',
         target: document.querySelector('#root'),
         json: {
@@ -143,6 +143,9 @@ ES modules can be used in the browser directly without any build, but build is s
     });
 </script>
 ```
+
+> [!IMPORTANT]
+> Older versions of DivKit uses the syntax `Ya.Divkit`. It is now deprecated and should not be used.
 
 ### Usage with React
 

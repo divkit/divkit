@@ -2,7 +2,7 @@
 
 /// <reference types="vitest" />
 
-import { defineConfig, type LibraryFormats } from 'vite';
+import { defineConfig, type LibraryFormats, type Plugin, type PluginOption } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import pkg from './package.json';
 
@@ -12,16 +12,55 @@ const FORMAT = (process.env.FORMAT || 'cjs') as LibraryFormats;
 
 const banner = `/*!
     DivKit v${pkg.version}
-	https://github.com/divkit/divkit
-	@licence Apache-2.0
+    https://github.com/divkit/divkit
+    @licence Apache-2.0
 */`;
+
+const BANNER_RE = /\/\*\!(?:.|\n)+?\*\//;
+
+const moveEsbuildHelpersPlugin = (): Plugin => {
+    return {
+        name: 'move-esbuild-helpers-plugin',
+        enforce: 'post',
+        generateBundle(_, bundle) {
+            // Dirty Vite fix
+            // Vite produces correct iife code in lib mode,
+            // only if exports are used and the lib.name doesn't contain a "."
+            // This is almost the same code, as the original Vite code:
+            // https://github.com/vitejs/vite/blob/a0ed4057c90a1135aa58d06305f446e232f63e2a/packages/vite/src/node/plugins/esbuild.ts#L347-L375
+            for (const key in bundle) {
+                const item = bundle[key];
+                if (!key.endsWith('.js') || item.type !== 'chunk') {
+                    continue;
+                }
+                const code = item.code;
+                const contentIndex = code.search(/\(function\s*\(\)\s*{\s*['"]use strict['"];/);
+                if (contentIndex >= 0) {
+                    const helpers = code.slice(0, contentIndex);
+                    const banner = (code.match(BANNER_RE) || [])[0] || '';
+                    item.code = banner + code
+                        .slice(contentIndex)
+                        .replace('"use strict";', () => '"use strict";' + helpers)
+                        .replace(BANNER_RE, '');
+                }
+            }
+        }
+    };
+};
 
 export default defineConfig(({ isSsrBuild, mode }) => {
     const isProd = mode === 'production';
     const outputSubDir = FORMAT === 'iife' ? 'browser/' : (FORMAT === 'es' ? 'esm/' : '');
 
+    const plugins: PluginOption[] = [svelte()];
+    if (FORMAT === 'iife') {
+        plugins.push(
+            moveEsbuildHelpersPlugin()
+        );
+    }
+
     return {
-        plugins: [svelte()],
+        plugins,
         define: {
             'process.env.DEVTOOL': JSON.stringify(DEVTOOL),
             'process.env.IS_PROD': JSON.stringify(isProd),
@@ -43,9 +82,9 @@ export default defineConfig(({ isSsrBuild, mode }) => {
                 entry: 'src/server.ts',
                 formats: [FORMAT]
             } : {
-                entry: DEVTOOL ? 'src/client-devtool' : 'src/client.ts',
+                entry: `src/client${DEVTOOL ? '-devtool' : ''}${FORMAT === 'iife' ? '-globals' : ''}`,
                 formats: [FORMAT],
-                name: 'Ya.Divkit'
+                name: 'unused'
             },
             minify: FORMAT === 'iife',
             rollupOptions: {
