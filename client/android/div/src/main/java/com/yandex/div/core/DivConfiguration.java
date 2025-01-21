@@ -443,7 +443,7 @@ public class DivConfiguration {
         private boolean mShouldIgnoreMenuItemsInActions = Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED.getDefaultValue();
         private boolean mSupportHyphenation = Experiment.HYPHENATION_SUPPORT_ENABLED.getDefaultValue();
         private boolean mVisualErrors = Experiment.VISUAL_ERRORS_ENABLED.getDefaultValue();
-        private boolean mAcccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
+        private boolean mAccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
         private boolean mViewPoolEnabled = Experiment.VIEW_POOL_ENABLED.getDefaultValue();
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
         private boolean mViewPoolOptimizationDebug = Experiment.VIEW_POOL_OPTIMIZATION_DEBUG.getDefaultValue();
@@ -616,9 +616,8 @@ public class DivConfiguration {
         }
 
         @NonNull
-        @Deprecated
         public Builder enableAccessibility(boolean enable) {
-            mAcccessibilityEnabled = enable;
+            mAccessibilityEnabled = enable;
             return this;
         }
 
@@ -719,7 +718,7 @@ public class DivConfiguration {
                     mShouldIgnoreMenuItemsInActions,
                     mVisualErrors,
                     mSupportHyphenation,
-                    mAcccessibilityEnabled,
+                    mAccessibilityEnabled,
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
                     mViewPoolOptimizationDebug,
