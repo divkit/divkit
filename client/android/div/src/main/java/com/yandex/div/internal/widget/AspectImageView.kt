@@ -8,7 +8,6 @@ import android.view.Gravity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
-import com.yandex.div.R
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.AspectView.Companion.aspectRatioProperty
@@ -36,17 +35,6 @@ open class AspectImageView @JvmOverloads constructor(
 
     init {
         super.setScaleType(ScaleType.MATRIX)
-
-        if (isInEditMode) {
-            val array = context.obtainStyledAttributes(attrs, R.styleable.AspectImageView, defStyleAttr, 0)
-            try {
-                gravity = array.getInt(R.styleable.AspectImageView_android_gravity, Gravity.NO_GRAVITY)
-                aspectRatio = array.getFloat(R.styleable.AspectImageView_aspectRatio, DEFAULT_ASPECT_RATIO)
-                imageScale = Scale.values()[array.getInteger(R.styleable.AspectImageView_imageScale, 0)]
-            } finally {
-                array.recycle()
-            }
-        }
     }
 
     override fun setScaleType(scaleType: ScaleType?) = Unit
