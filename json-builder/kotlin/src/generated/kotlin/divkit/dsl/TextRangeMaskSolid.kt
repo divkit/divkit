@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * A mask to hide text (spoiler) that looks like a rectangle filled with color specified by `color` parameter.
+ * A mask to hide text (spoiler). Looks like a rectangle filled with the color specified in the `color` parameter, same as in Telegram.
  * 
  * Can be created using the method [textRangeMaskSolid].
  * 
@@ -47,7 +47,7 @@ data class TextRangeMaskSolid internal constructor(
          */
         val color: Property<Color>?,
         /**
-         * Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+         * Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
          * Default value: `true`.
          */
         val isEnabled: Property<Boolean>?,
@@ -64,7 +64,7 @@ data class TextRangeMaskSolid internal constructor(
 
 /**
  * @param color Color.
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun DivScope.textRangeMaskSolid(
@@ -80,7 +80,7 @@ fun DivScope.textRangeMaskSolid(
 
 /**
  * @param color Color.
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun DivScope.textRangeMaskSolidProps(
@@ -94,7 +94,7 @@ fun DivScope.textRangeMaskSolidProps(
 
 /**
  * @param color Color.
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TemplateScope.textRangeMaskSolidRefs(
@@ -108,7 +108,7 @@ fun TemplateScope.textRangeMaskSolidRefs(
 
 /**
  * @param color Color.
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskSolid.override(
@@ -124,7 +124,7 @@ fun TextRangeMaskSolid.override(
 
 /**
  * @param color Color.
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskSolid.defer(
@@ -140,7 +140,7 @@ fun TextRangeMaskSolid.defer(
 
 /**
  * @param color Color.
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskSolid.evaluate(
