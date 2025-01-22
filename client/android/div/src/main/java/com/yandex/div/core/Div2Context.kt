@@ -63,6 +63,7 @@ class Div2Context @MainThread private constructor(
 
     private var inflater: LayoutInflater? = null
 
+    @JvmOverloads
     constructor(
         baseContext: ContextThemeWrapper,
         configuration: DivConfiguration,
