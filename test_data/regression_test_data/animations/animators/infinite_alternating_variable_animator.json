@@ -34,7 +34,7 @@
         "type": "fixed",
         "value": 48
       },
-      "image_url": "https://s3.mds.yandex.net/div-storage/test/images/spinner.png",
+      "image_url": "https://yastatic.net/s3/home/divkit/spinner.png",
       "tint_color": "@{tint_color}",
       "transform": {
         "rotation": "@{rotation_angle}"
