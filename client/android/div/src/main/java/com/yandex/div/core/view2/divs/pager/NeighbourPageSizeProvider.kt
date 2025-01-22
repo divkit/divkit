@@ -14,7 +14,7 @@ internal class NeighbourPageSizeProvider(
     itemSpacing: Float,
     infiniteScroll: Boolean,
     paddings: DivPagerPaddingsHolder,
-) : DivPagerPageSizeProvider {
+) : DivPagerPageSizeProvider, FixedPageSizeProvider {
 
     private val neighbourPageWidth = mode.neighbourPageWidth.toPxF(metrics, resolver)
 
@@ -27,4 +27,6 @@ internal class NeighbourPageSizeProvider(
     override val itemSize = parentSize - neighbourSize * 2
 
     override val hasOffScreenPages = neighbourPageWidth > 0
+
+    override fun getItemSize(position: Int) = itemSize
 }

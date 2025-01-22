@@ -1,15 +1,11 @@
 package com.yandex.div.core.view2.divs.pager
 
-import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlin.math.max
+import kotlin.math.sign
 
 internal class DivPagerPageOffsetProvider(
-    private val parent: DivPagerView,
     private val parentSize: Int,
     private val itemSpacing: Float,
     private val pageSizeProvider: DivPagerPageSizeProvider,
@@ -18,51 +14,23 @@ internal class DivPagerPageOffsetProvider(
     private val adapter: DivPagerAdapter,
 ) {
 
-    init {
-        setOffScreenPages()
-    }
-
-    private fun setOffScreenPages() {
-        if (pageSizeProvider.itemSize == 0f) return
-
-        val pager = parent.viewPager
-        val onScreenPages = parentSize / (pageSizeProvider.itemSize + itemSpacing)
-        parent.getRecyclerView()?.setItemViewCacheSize(ceil(onScreenPages).toInt() + 2)
-
-        if (pageSizeProvider.hasOffScreenPages) {
-            pager.offscreenPageLimit = max(ceil(onScreenPages - 1).toInt(), 1)
-            return
-        }
-
-        if (neighbourSize > itemSpacing) {
-            pager.offscreenPageLimit = 1
-            return
-        }
-
-        val showNeighbourForSidePages =
-            !infiniteScroll && (paddings.start < neighbourSize || paddings.end < neighbourSize)
-
-        if (!showNeighbourForSidePages) {
-            pager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
-            return
-        }
-
-        val setOffScreenPages = { position: Int ->
-            parent.viewPager.offscreenPageLimit =
-                if (position == 0 || position == adapter.itemCount - 1) 1 else OFFSCREEN_PAGE_LIMIT_DEFAULT
-        }
-
-        setOffScreenPages(pager.currentItem)
-
-        pager.registerOnPageChangeCallback(object: OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) = setOffScreenPages(position)
-        })
-    }
-
-    private val neighbourSize get() = pageSizeProvider.neighbourSize
-
     fun getPageOffset(position: Float, pagePosition: Int, isOverlap: Boolean) =
-        position * (neighbourSize * 2 - itemSpacing) - getInitialOffset(position, pagePosition, isOverlap)
+        getOffset(position, pagePosition) - getInitialOffset(position, pagePosition, isOverlap)
+
+    private fun getOffset(position: Float, pagePosition: Int): Float {
+        var pagePos = pagePosition
+        var size = 0f
+        val sign = position.sign.toInt()
+        val getOnePositionOffset = { pos: Int ->
+            sign * (parentSize - itemSpacing -
+                (pageSizeProvider.getItemSize(pos) + pageSizeProvider.getItemSize(pos - sign)) / 2f)
+        }
+        for (i in 1 .. abs(position).toInt()) {
+            size += getOnePositionOffset(pagePos)
+            pagePos -= sign
+        }
+        return size + position.frac * getOnePositionOffset(pagePos)
+    }
 
     private fun getInitialOffset(position: Float, pagePosition: Int, isOverlap: Boolean): Float {
         if (isOverlap) return 0f
@@ -73,16 +41,16 @@ internal class DivPagerPageOffsetProvider(
     }
 
     private fun getStartOffset(position: Float, pagePosition: Int): Float {
-        val startOffset = neighbourSize - paddings.start
+        val startOffset = getNeighbourSize(0) - paddings.start
         if (startOffset == 0f) return 0f
 
         val activePage = pagePosition - ceil(position).toInt()
         val part = if (position <= 0) position.frac else position.fracInverted
-        var prevItemsSize = pageSizeProvider.itemSize * part
+        var prevItemsSize = pageSizeProvider.getItemSize(activePage) * part
         if (prevItemsSize.biggerThan(startOffset)) return 0f
 
         for (i in activePage - 1 downTo 0) {
-            prevItemsSize += pageSizeProvider.itemSize + itemSpacing
+            prevItemsSize += pageSizeProvider.getItemSize(i) + itemSpacing
             if (prevItemsSize.biggerThan(startOffset)) return 0f
         }
 
@@ -90,21 +58,23 @@ internal class DivPagerPageOffsetProvider(
     }
 
     private fun getEndOffset(position: Float, pagePosition: Int): Float {
-        val endOffset = neighbourSize - paddings.end
+        val endOffset = getNeighbourSize(adapter.itemCount - 1) - paddings.end
         if (endOffset == 0f) return 0f
 
         val activePage = pagePosition - floor(position).toInt()
         val part = if (position > 0) position.frac else position.fracInverted
-        var nextItemsSize = pageSizeProvider.itemSize * part
+        var nextItemsSize = pageSizeProvider.getItemSize(activePage) * part
         if (nextItemsSize.biggerThan(endOffset)) return 0f
 
         for (i in activePage + 1 until adapter.itemCount) {
-            nextItemsSize += pageSizeProvider.itemSize + itemSpacing
+            nextItemsSize += pageSizeProvider.getItemSize(i) + itemSpacing
             if (nextItemsSize.biggerThan(endOffset)) return 0f
         }
 
         return endOffset - nextItemsSize
     }
+
+    private fun getNeighbourSize(position: Int) = (parentSize - pageSizeProvider.getItemSize(position)) / 2f
 
     private val Float.frac get() = abs(this).let { it - floor(it) }
 

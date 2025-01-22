@@ -1,6 +1,7 @@
 {
   "description": "Horizontal pager with wrap_content layout mode and children with different widths.",
   "platforms": [
+    "android",
     "ios",
     "flutter"
   ],

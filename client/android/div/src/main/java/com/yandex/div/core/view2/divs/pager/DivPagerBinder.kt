@@ -109,9 +109,9 @@ internal class DivPagerBinder @Inject constructor(
                 view.addSubscription(mode.value.neighbourPageWidth.value.observe(resolver, reusableObserver))
                 view.addSubscription(mode.value.neighbourPageWidth.unit.observe(resolver, reusableObserver))
             }
-            is DivPagerLayoutMode.PageSize -> {
+            is DivPagerLayoutMode.PageSize ->
                 view.addSubscription(mode.value.pageWidth.value.observe(resolver, reusableObserver))
-            }
+            is DivPagerLayoutMode.PageContentSize -> Unit
         }
 
         view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
@@ -191,6 +191,8 @@ internal class DivPagerBinder @Inject constructor(
         val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
         orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
 
+        changePageCallbackForOffScreenPages = null
+
         if (!isActuallyLaidOut) return
 
         val metrics = resources.displayMetrics
@@ -212,13 +214,35 @@ internal class DivPagerBinder @Inject constructor(
                     paddings
                 )
             }
-            else -> return
+            is DivPagerLayoutMode.PageContentSize -> WrapContentPageSizeProvider(recyclerView, isHorizontal)
         }
 
-        viewPager.setItemDecoration(PageItemDecoration(paddings, sizeProvider, isHorizontal))
+        val decoration = if (sizeProvider is FixedPageSizeProvider) {
+            FixedPageSizeOffScreenPagesController(
+                this,
+                parentSize,
+                itemSpacing,
+                sizeProvider,
+                paddings,
+                infiniteScroll,
+                adapter
+            )
+            FixedPageSizeItemDecoration(paddings, sizeProvider, isHorizontal)
+        } else {
+            WrapContentPageSizeOffScreenPagesController(
+                this,
+                parentSize,
+                itemSpacing,
+                sizeProvider,
+                paddings,
+                adapter
+            )
+            WrapContentPageSizeItemDecoration(parentSize, paddings, isHorizontal)
+        }
+
+        viewPager.setItemDecoration(decoration)
 
         val offsetProvider = DivPagerPageOffsetProvider(
-            this,
             parentSize,
             itemSpacing,
             sizeProvider,
