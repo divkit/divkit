@@ -2,37 +2,39 @@ import Foundation
 import LayoutKit
 import VGSL
 
-final class DebugBlock: BlockWithTraits, LayoutCachingDefaultImpl {
-  let widthTrait = LayoutTrait.fixed(buttonSize)
-  let heightTrait = LayoutTrait.fixed(buttonSize)
-
-  var intrinsicContentWidth: CGFloat {
-    widthTrait.fixedValue ?? 0.0
-  }
-
-  func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
-    heightTrait.fixedValue ?? 0.0
-  }
+final class DebugBlock: WrapperBlock, LayoutCachingDefaultImpl {
+  
+  let child: Block
 
   let errorCollector: DebugErrorCollector
   let showDebugInfo: (ViewType) -> Void
 
   init(
+    child: Block,
     errorCollector: DebugErrorCollector,
     showDebugInfo: @escaping (ViewType) -> Void
   ) {
+    self.child = child
     self.errorCollector = errorCollector
     self.showDebugInfo = showDebugInfo
   }
 
+  func makeCopy(wrapping block: Block) -> DebugBlock {
+    DebugBlock(
+      child: block,
+      errorCollector: errorCollector,
+      showDebugInfo: showDebugInfo
+    )
+  }
+  
   func equals(_ other: any LayoutKit.Block) -> Bool {
     if self === other { return true }
     guard let other = other as? DebugBlock else { return false }
-    return errorCollector === other.errorCollector
+    return errorCollector === other.errorCollector && child.equals(other.child)
   }
 
   var debugDescription: String {
-    "DebugBlock errors: \(errorCollector.debugDescription))"
+    "DebugBlock errors: \(errorCollector.debugDescription). Child: \(child)"
   }
 
   func getImageHolders() -> [any VGSLUI.ImageHolder] {
@@ -43,5 +45,3 @@ final class DebugBlock: BlockWithTraits, LayoutCachingDefaultImpl {
     self
   }
 }
-
-private let buttonSize = 50.0

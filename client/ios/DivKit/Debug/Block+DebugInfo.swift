@@ -11,18 +11,10 @@ extension Block {
       return self
     }
 
-    let debugBlock = DebugBlock(
+    return DebugBlock(
+      child: self,
       errorCollector: debugErrorCollector,
       showDebugInfo: debugParams.showDebugInfo
     )
-
-    let block = LayeredBlock(
-      widthTrait: calculatedWidthTrait,
-      heightTrait: calculatedHeightTrait,
-      verticalChildrenAlignment: .center,
-      children: [self, debugBlock]
-    )
-
-    return block
   }
 }
