@@ -5,6 +5,7 @@ import android.os.Build
 import android.text.Layout
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div.core.view2.spannable.SpannedTextBuilder
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivText
 import org.junit.Assert
@@ -21,6 +22,7 @@ import org.robolectric.annotation.Config
 class DivTextBinderTest : DivBinderTest() {
 
     private val typefaceResolver = mock<DivTypefaceResolver>()
+    private val spannedTextBuilder = mock<SpannedTextBuilder>()
     private val binder = createBinder()
 
     @Before
@@ -112,7 +114,7 @@ class DivTextBinderTest : DivBinderTest() {
     }
 
     private fun createBinder(isHyphenationEnabled: Boolean = true) = DivTextBinder(
-        baseBinder, typefaceResolver, imageLoader, isHyphenationEnabled = isHyphenationEnabled
+        baseBinder, typefaceResolver, spannedTextBuilder, isHyphenationEnabled = isHyphenationEnabled
     )
 
     companion object {

@@ -3,6 +3,7 @@ package com.yandex.div.internal.widget
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Bundle
 import android.text.SpannableString
 import android.util.AttributeSet
@@ -12,15 +13,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.customview.widget.ExploreByTouchHelper
 import com.yandex.div.core.util.AccessibilityStateProvider
-import com.yandex.div.internal.spannable.BitmapImageSpan
+import com.yandex.div.core.view2.spannable.ImageSpan
 
 internal open class TextViewWithAccessibleSpans(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ): EllipsizedTextView(context, attrs, defStyleAttr) {
-    private val accessibleImageSpans = mutableListOf<BitmapImageSpan>()
-    private val imageSpans = mutableListOf<BitmapImageSpan>()
+
+    private val accessibleImageSpans = mutableListOf<ImageSpan>()
+    private val imageSpans = mutableListOf<ImageSpan>()
     private val spanHelper: SpanHelper?
     private var _contentDescription: String? = null
 
@@ -35,10 +37,10 @@ internal open class TextViewWithAccessibleSpans(
         }
     }
 
-    internal fun addImageSpan(span: BitmapImageSpan) {
+    internal fun addImageSpan(span: ImageSpan) {
         if (AccessibilityStateProvider.touchModeEnabled == true) {
             imageSpans.add(span)
-            if (span.accessibilityDescription != null || span.onClickAccessibilityAction != null) {
+            if (span.accessibility?.contentDescription != null || span.accessibility?.onClickAction != null) {
                 accessibleImageSpans.add(span)
             }
 
@@ -111,9 +113,11 @@ internal open class TextViewWithAccessibleSpans(
 
     private inner class SpanHelper : ExploreByTouchHelper(this@TextViewWithAccessibleSpans) {
         override fun getVirtualViewAt(x: Float, y: Float): Int {
+            val bounds = RectF()
             accessibleImageSpans.forEachIndexed { index, child ->
-                if (child.drawnTop <= y && child.drawnBottom >= y
-                    && child.drawnLeft <= x && child.drawnRight >= x) {
+                child.getBoundsInText(bounds)
+                    .offset(paddingLeft.toFloat(), paddingTop.toFloat())
+                if (bounds.contains(x, y)) {
                     return index
                 }
             }
@@ -132,19 +136,15 @@ internal open class TextViewWithAccessibleSpans(
         ) {
             val span = getSpanForId(virtualViewId) ?: return
 
-            node.className = span.accessibilityType
+            node.className = span.accessibility?.accessibilityType ?: ""
             node.packageName = context.packageName
 
-            val bounds = with(span) {
-                Rect(
-                    /* left = */ drawnLeft.toInt() + paddingTop,
-                    /* top = */ drawnTop.toInt(),
-                    /* right = */ drawnRight.toInt() + paddingLeft,
-                    /* bottom = */ drawnBottom.toInt())
+            val bounds = span.getBoundsInText(Rect()).apply {
+                offset(paddingLeft, paddingTop)
             }
-            node.contentDescription = span.accessibilityDescription
+            node.contentDescription = span.accessibility?.contentDescription
 
-            if (span.onClickAccessibilityAction == null) {
+            if (span.accessibility?.onClickAction == null) {
                 node.isClickable = false
             } else {
                 node.isClickable = true
@@ -154,7 +154,7 @@ internal open class TextViewWithAccessibleSpans(
         }
 
         override fun onPerformActionForVirtualView(virtualViewId: Int, action: Int, arguments: Bundle?): Boolean {
-            val clickAction = getSpanForId(virtualViewId)?.onClickAccessibilityAction ?: return false
+            val clickAction = getSpanForId(virtualViewId)?.accessibility?.onClickAction ?: return false
 
             when (action) {
                 AccessibilityNodeInfoCompat.ACTION_CLICK -> clickAction.perform()
@@ -163,7 +163,7 @@ internal open class TextViewWithAccessibleSpans(
             return true
         }
 
-        private fun getSpanForId(id: Int): BitmapImageSpan? {
+        private fun getSpanForId(id: Int): ImageSpan? {
             return when {
                 id == HOST_ID -> null
                 accessibleImageSpans.size == 0 -> null

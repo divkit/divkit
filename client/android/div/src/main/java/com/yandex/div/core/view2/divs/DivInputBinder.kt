@@ -34,6 +34,7 @@ import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTE
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver

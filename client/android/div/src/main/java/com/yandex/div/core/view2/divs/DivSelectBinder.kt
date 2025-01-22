@@ -12,6 +12,7 @@ import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSelect
 import javax.inject.Inject

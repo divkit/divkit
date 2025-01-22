@@ -15,7 +15,9 @@ private const val NOT_SET = Int.MAX_VALUE
 internal class LineHeightWithTopOffsetSpan(
     @field:Px private val topOffset: Int,
     @field:Px private val lineHeight: Int,
-    @field:Px private val textLineHeight: Int = 0
+    @field:Px private val textLineHeight: Int = 0,
+    private val topOffsetStart: Int,
+    private val topOffsetEnd: Int,
 ) : LineHeightSpan {
 
     private var fontMetricsSaved = false
@@ -35,6 +37,7 @@ internal class LineHeightWithTopOffsetSpan(
         val spanned = text as? Spanned ?: return
         val spanStart = spanned.getSpanStart(this)
         val spanEnd = spanned.getSpanEnd(this)
+
         if (fontMetricsSaved) {
             restoreFontMetrics(fm)
         } else if (start >= spanStart) {
@@ -48,7 +51,7 @@ internal class LineHeightWithTopOffsetSpan(
                 applyLineHeight(fm)
             }
         }
-        if (spanStart in start..end) {
+        if (topOffsetStart == spanStart && topOffsetStart in start..end) {
             applyTopOffset(fm)
         }
         if (text.substring(start, end).contains("\n")) {

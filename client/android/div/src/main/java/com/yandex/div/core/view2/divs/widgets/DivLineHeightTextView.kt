@@ -7,10 +7,12 @@ import android.util.AttributeSet
 import androidx.core.graphics.withTranslation
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.widget.TextViewWithAccessibleSpans
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivText
 
 @Mockable
@@ -62,4 +64,18 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
         }
         super.onDraw(canvas)
     }
+}
+
+internal fun DivLineHeightTextView.hasBackgroundSpan(
+    text: CharSequence,
+    backgroundSpan: DivBackgroundSpan,
+    start: Int,
+    end: Int,
+    resolver: ExpressionResolver
+): Boolean {
+    if (textRoundedBgHelper == null) {
+        textRoundedBgHelper = DivTextRangesBackgroundHelper(this, resolver)
+        return false
+    }
+    return textRoundedBgHelper!!.hasSameSpan(text, backgroundSpan, start, end)
 }
