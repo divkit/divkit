@@ -2517,6 +2517,26 @@
       "file": "tooltips/tooltip-positions.json"
     },
     {
+      "title": "Switching state in the tooltip",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap 'Show tooltip' button",
+        "Tap 'Set root state 2' button on the tooltip",
+        "Tap 'Set tooltip state 2' button on the tooltip"
+      ],
+      "expected_results": [
+        "Tooltip is shown",
+        "State in the root view is changed to 'State 2'",
+        "State in the tooltip is changed to 'State 2'"
+      ],
+      "file": "tooltips/tooltip-with-states.json"
+    },
+    {
       "title": "Persistent values storage",
       "platforms": [
         "ios",

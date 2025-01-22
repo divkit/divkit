@@ -296,15 +296,10 @@ public final class DivKitComponents {
     let viewId = DivViewId(cardId: cardId, additionalId: additionalId)
     variableTracker.onModelingStarted(id: viewId)
 
-    // for now tooltip state management is broken
-    let stateManager = viewId.isTooltip
-      ? DivStateManager()
-      : stateManagement.getStateManagerForCard(cardId: cardId)
-
     let errorsStorage = DivErrorsStorage(errors: [])
     return DivBlockModelingContext(
       viewId: viewId,
-      stateManager: stateManager,
+      stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
       actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,

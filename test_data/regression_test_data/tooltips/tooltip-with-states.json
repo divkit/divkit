@@ -1,0 +1,181 @@
+{
+  "templates": {
+    "label": {
+      "type": "text",
+      "font_size": 18
+    },
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 10,
+        "right": 10,
+        "top": 12,
+        "bottom": 12
+      },
+      "margins": {
+        "bottom": 10
+      },
+      "border": {
+        "corner_radius": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "variables": [
+      {
+        "name": "card_var",
+        "type": "string",
+        "value": "old value"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "button",
+              "text": "Show tooltip",
+              "action": {
+                "log_id": "show_tooltip",
+                "url": "div-action://show_tooltip?id=tooltip1"
+              },
+              "tooltips": [
+                {
+                  "id": "tooltip1",
+                  "position": "bottom",
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 80
+                    }
+                  },
+                  "div": {
+                    "type": "container",
+                    "width": {
+                      "type": "fixed",
+                      "value": 300
+                    },
+                    "items": [
+                      {
+                        "type": "button",
+                        "text": "Set root state 2",
+                        "action": {
+                          "log_id": "set_state",
+                          "url": "div-action://set_state?state_id=0/state/state2"
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "text": "Set tooltip state 2",
+                        "action": {
+                          "log_id": "set_state",
+                          "url": "div-action://set_state?state_id=state/state2"
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "text": "Set card_var = new value",
+                        "action": {
+                          "log_id": "set_value",
+                          "url": "div-action://set_variable?name=card_var&value=new value"
+                        }
+                      },
+                      {
+                        "type": "state",
+                        "id": "state",
+                        "states": [
+                          {
+                            "state_id": "state1",
+                            "div": {
+                              "type": "label",
+                              "text": "State 1"
+                            }
+                          },
+                          {
+                            "state_id": "state2",
+                            "div": {
+                              "type": "label",
+                              "text": "State 2"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "label",
+                        "text": "card_var = @{card_var}"
+                      }
+                    ],
+                    "paddings": {
+                      "left": 10,
+                      "right": 10,
+                      "top": 10,
+                      "bottom": 10
+                    },
+                    "border": {
+                      "stroke": {
+                        "width": 1,
+                        "color": "#A0A0A0"
+                      }
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#F6F6F6"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "state",
+              "states": [
+                {
+                  "state_id": "state1",
+                  "div": {
+                    "type": "label",
+                    "text": "State 1"
+                  }
+                },
+                {
+                  "state_id": "state2",
+                  "div": {
+                    "type": "label",
+                    "text": "State 2"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "label",
+              "text": "card_var = @{card_var}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

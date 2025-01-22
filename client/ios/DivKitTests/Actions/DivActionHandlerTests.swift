@@ -5,6 +5,7 @@ import XCTest
 final class DivActionHandlerTests: XCTestCase {
   private var flags: DivFlagsInfo = .default
   private let reporter = MockReporter()
+  private let stateManagement = DefaultDivStateManagement()
   private let variablesStorage = DivVariablesStorage()
 
   private lazy var actionHandler: DivActionHandler! = {
@@ -14,6 +15,7 @@ final class DivActionHandlerTests: XCTestCase {
       flags: flags,
       idToPath: idToPath,
       reporter: reporter,
+      stateManagement: stateManagement,
       urlHandler: DivUrlHandlerDelegate { url, _ in
         self.handledUrl = url
       },
@@ -300,7 +302,7 @@ final class DivActionHandlerTests: XCTestCase {
       variables: ["dict_var": .dict(["key": "value"])]
     )
 
-    actionHandler.handle(
+    handle(
       divAction(
         logId: "log_id",
         typed: .divActionDictSetValue(DivActionDictSetValue(
@@ -309,9 +311,7 @@ final class DivActionHandlerTests: XCTestCase {
           variableName: .value("dict_var")
         ))
       ),
-      path: parentPath + "element_id",
-      source: .tap,
-      sender: nil
+      path: parentPath + "element_id"
     )
 
     XCTAssertEqual(
@@ -345,6 +345,56 @@ final class DivActionHandlerTests: XCTestCase {
     ))
 
     XCTAssertEqual(["one", "two"], getVariableValue("array_var"))
+  }
+
+  func test_SetStateAction_SetsState() {
+    handle(
+      divAction(
+        logId: "log_id",
+        typed: .divActionSetState(DivActionSetState(
+          stateId: .value("0/div_state/state1")
+        ))
+      )
+    )
+
+    let item = stateManagement
+      .getStateManagerForCard(cardId: cardId)
+      .get(stateBlockPath: .makeDivStatePath(from: "0/div_state"))
+    XCTAssertEqual("state1", item?.currentStateID)
+  }
+
+  func test_SetStateAction_InTooltip_SetsMainCardState() {
+    handle(
+      divAction(
+        logId: "log_id",
+        typed: .divActionSetState(DivActionSetState(
+          stateId: .value("0/div_state/state1")
+        ))
+      ),
+      path: cardId.path + "tooltip" + "element_id"
+    )
+
+    let item = stateManagement
+      .getStateManagerForCard(cardId: cardId)
+      .get(stateBlockPath: .makeDivStatePath(from: "0/div_state"))
+    XCTAssertEqual("state1", item?.currentStateID)
+  }
+
+  func test_SetStateAction_InTooltip_SetsTooltipState() {
+    handle(
+      divAction(
+        logId: "log_id",
+        typed: .divActionSetState(DivActionSetState(
+          stateId: .value("div_state_in_tooltip/state1")
+        ))
+      ),
+      path: cardId.path + "tooltip" + "element_id"
+    )
+
+    let item = stateManagement
+      .getStateManagerForCard(cardId: cardId)
+      .get(stateBlockPath: .makeDivStatePath(from: "tooltip/0/div_state_in_tooltip"))
+    XCTAssertEqual("state1", item?.currentStateID)
   }
 
   func test_SetVariableAction_SetsStringVariable() {
@@ -398,7 +448,7 @@ final class DivActionHandlerTests: XCTestCase {
       variables: ["local_var": .string("value")]
     )
 
-    actionHandler.handle(
+    handle(
       divAction(
         logId: "log_id",
         typed: .divActionSetVariable(DivActionSetVariable(
@@ -406,9 +456,7 @@ final class DivActionHandlerTests: XCTestCase {
           variableName: .value("local_var")
         ))
       ),
-      path: path,
-      source: .tap,
-      sender: nil
+      path: path
     )
 
     XCTAssertEqual(
@@ -418,14 +466,13 @@ final class DivActionHandlerTests: XCTestCase {
   }
 
   func test_ActionWithScopeId() {
-    let actionPath = cardId.path + "element_with_action_id"
     let path = cardId.path + "element_id"
     variablesStorage.initializeIfNeeded(
       path: path,
       variables: ["local_var": .string("value")]
     )
 
-    actionHandler.handle(
+    handle(
       divAction(
         logId: "log_id",
         scopeId: "element_id",
@@ -434,9 +481,7 @@ final class DivActionHandlerTests: XCTestCase {
           variableName: .value("local_var")
         ))
       ),
-      path: actionPath,
-      source: .tap,
-      sender: nil
+      path: cardId.path + "element_with_action_id"
     )
 
     XCTAssertEqual(
@@ -465,12 +510,13 @@ final class DivActionHandlerTests: XCTestCase {
 
   private func handle(
     _ action: DivActionBase,
+    path: UIElementPath = cardId.path,
     source: UserInterfaceAction.DivActionSource = .tap,
     localValues: [String: AnyHashable] = [:]
   ) {
     actionHandler.handle(
       action,
-      path: cardId.path,
+      path: path,
       source: source,
       localValues: localValues,
       sender: nil

@@ -10,12 +10,13 @@ extension DivActionHandler {
     idToPath: IdToPath = IdToPath(),
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
+    stateManagement: DivStateManagement = DefaultDivStateManagement(),
     updateCard: @escaping DivActionURLHandler.UpdateCardAction = { _ in },
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
     self.init(
-      stateUpdater: DefaultDivStateManagement(),
+      stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
       patchProvider: MockPatchProvider(),
       submitter: MockSubmitter(),
