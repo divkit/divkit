@@ -102,6 +102,7 @@
       ],
       "result_type": "number",
       "platforms": [
+        "android",
         "ios"
       ]
     },
