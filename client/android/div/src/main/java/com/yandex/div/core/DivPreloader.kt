@@ -28,6 +28,13 @@ class DivPreloader internal constructor(
     private val videoPreloader: DivPlayerPreloader,
 ) {
 
+    constructor(configuration: DivConfiguration) : this(
+        imagePreloader = DivImagePreloader(configuration.imageLoader),
+        customContainerViewAdapter = configuration.divCustomContainerViewAdapter,
+        extensionController = DivExtensionController(configuration.extensionHandlers),
+        videoPreloader = configuration.divPlayerPreloader
+    )
+
     constructor(context: Div2Context) : this(
         imagePreloader = context.div2Component.imagePreloader,
         customContainerViewAdapter = context.div2Component.divCustomContainerViewAdapter,
