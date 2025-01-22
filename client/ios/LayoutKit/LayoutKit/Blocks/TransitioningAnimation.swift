@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 public struct TransitioningAnimation: Equatable {
@@ -13,8 +14,8 @@ public struct TransitioningAnimation: Equatable {
   public let kind: Kind
   public let start: Double
   public let end: Double
-  public let duration: Duration
-  public let delay: Delay
+  public let duration: TimeInterval
+  public let delay: TimeInterval
   public let timingFunction: TimingFunction
 
   public static let empty = Self(
@@ -33,8 +34,8 @@ public struct TransitioningAnimation: Equatable {
     kind: Kind,
     start: Double,
     end: Double,
-    duration: Duration,
-    delay: Delay,
+    duration: TimeInterval,
+    delay: TimeInterval,
     timingFunction: TimingFunction
   ) {
     self.kind = kind
@@ -57,13 +58,13 @@ extension [TransitioningAnimation] {
         start: $0.start,
         end: $0.end,
         duration: $0.duration,
-        delay: Delay($0.delay.value + delay),
+        delay: $0.delay + delay,
         timingFunction: $0.timingFunction
       )
     }
   }
 
   func sortedChronologically() -> Self {
-    stableSort { $0.delay.value <= $1.delay.value }
+    stableSort { $0.delay <= $1.delay }
   }
 }

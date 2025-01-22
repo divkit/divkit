@@ -22,7 +22,7 @@ extension DivTooltip {
       id: id,
       // Legacy behavior. Views should be created with tooltipViewFactory.
       block: div.value.makeBlock(context: context),
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
+      duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,

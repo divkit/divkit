@@ -65,7 +65,7 @@ extension TooltipManager {
 public class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
     public let id: String
-    public let duration: Duration
+    public let duration: TimeInterval
     public let view: VisibleBoundsTrackingView
   }
 
@@ -126,8 +126,8 @@ public class DefaultTooltipManager: TooltipManager {
       tooltipWindow.makeKeyAndVisible()
       view.frame = tooltipWindow.bounds
       showingTooltips[info.id] = view
-      if !tooltip.duration.value.isZero {
-        try await Task.sleep(nanoseconds: UInt64(tooltip.duration.value.nanoseconds))
+      if !tooltip.duration.isZero {
+        try await Task.sleep(nanoseconds: UInt64(tooltip.duration.nanoseconds))
         hideTooltip(id: tooltip.id)
       }
     }

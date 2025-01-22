@@ -1,3 +1,4 @@
+import Foundation
 import LayoutKit
 import VGSL
 
@@ -49,8 +50,8 @@ extension DivAppearanceTransition {
       kind: kind,
       start: type == .appearing ? value1 : value2,
       end: type == .appearing ? value2 : value1,
-      duration: Duration(milliseconds: transition.resolveDuration(expressionResolver)),
-      delay: Delay(milliseconds: transition.resolveStartDelay(expressionResolver)),
+      duration: TimeInterval(milliseconds: transition.resolveDuration(expressionResolver)),
+      delay: TimeInterval(milliseconds: transition.resolveStartDelay(expressionResolver)),
       timingFunction: transition.resolveInterpolator(expressionResolver).asTimingFunction()
     )
 

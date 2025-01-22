@@ -79,7 +79,7 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
 
     let animationOut = model.block.animationOut?.sortedChronologically() ?? []
     var animationIn = model.block.animationIn?.sortedChronologically() ?? []
-    let animationInDelay = animationIn.first?.delay.value ?? 0
+    let animationInDelay = animationIn.first?.delay ?? 0
     animationIn = animationIn.withDelay(-animationInDelay)
 
     fromView = model.block.from?.reuse(

@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 #if os(iOS)
@@ -22,7 +23,7 @@ public struct BlockTooltip: Equatable {
 
   public let id: String
   public let block: Block
-  public let duration: Duration
+  public let duration: TimeInterval
   public let offset: CGPoint
   public let position: Position
   public let useLegacyWidth: Bool
@@ -31,7 +32,7 @@ public struct BlockTooltip: Equatable {
   public init(
     id: String,
     block: Block,
-    duration: Duration,
+    duration: TimeInterval,
     offset: CGPoint,
     position: BlockTooltip.Position,
     useLegacyWidth: Bool = true,

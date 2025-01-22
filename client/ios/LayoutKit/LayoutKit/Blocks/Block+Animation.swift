@@ -14,13 +14,13 @@ public func ==(lhs: CATransform3D, rhs: CATransform3D) -> Bool {
 public struct BlockAnimation: Equatable {
   public let changes: AnimationChanges
   public let keyTimes: [KeyTime]
-  public let duration: Duration
+  public let duration: TimeInterval
   public let timingFunction: TimingFunction
 
   public init(
     changes: AnimationChanges,
     keyTimes: [KeyTime],
-    duration: Duration,
+    duration: TimeInterval,
     timingFunction: TimingFunction = .linear
   ) {
     switch changes {
@@ -57,7 +57,7 @@ public struct BlockAnimation: Equatable {
 }
 
 extension BlockAnimation {
-  public static func makeLoopedRotation(duration: Duration) -> BlockAnimation {
+  public static func makeLoopedRotation(duration: TimeInterval) -> BlockAnimation {
     let keyframes = [
       CGAffineTransform(rotationAngle: 0),
       CGAffineTransform(rotationAngle: CGFloat.pi / 2),

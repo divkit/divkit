@@ -1,3 +1,4 @@
+import Foundation
 import LayoutKit
 import VGSL
 
@@ -41,8 +42,8 @@ extension DivAnimation {
       kind: kind,
       start: startValue ?? kind.defaultStartValue(for: type),
       end: endValue ?? kind.defaultEndValue(for: type),
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
-      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)),
+      duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
+      delay: TimeInterval(milliseconds: resolveStartDelay(expressionResolver)),
       timingFunction: resolveInterpolator(expressionResolver).asTimingFunction()
     )
 

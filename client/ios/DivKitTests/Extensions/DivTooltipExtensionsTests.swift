@@ -34,7 +34,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
               ),
               accessibilityElement: .default
             ),
-            duration: Duration(milliseconds: 1000),
+            duration: TimeInterval(milliseconds: 1000),
             offset: CGPoint(x: 10, y: 20),
             position: .center,
             useLegacyWidth: false
@@ -87,7 +87,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
               ),
               accessibilityElement: .default
             ),
-            duration: Duration(milliseconds: 5000),
+            duration: TimeInterval(milliseconds: 5000),
             offset: CGPoint(x: 0, y: 0),
             position: .center,
             useLegacyWidth: false
