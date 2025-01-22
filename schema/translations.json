@@ -2384,7 +2384,7 @@
     "ru": "Фон для диапазона символов."
   },
   "div_text_range_baseline_offset": {
-    "en": "Character baseline vertial offset. If set, vertical alignment is ignored.",
+    "en": "Vertical baseline offset in a character range. If set, vertical alignment is ignored.",
     "ru": "Вертикальное смещение базовой линии в диапазоне символов. Если параметр задан, то вертикальное выравнивание игнорируется."
   },
   "div_text_range_border": {
