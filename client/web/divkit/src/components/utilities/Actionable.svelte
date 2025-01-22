@@ -414,7 +414,7 @@
     <span
         bind:this={node}
         use:use
-        class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {rootCss.root__unselectable} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''} {hasAnyActions ? rootCss['root__any-actions'] : ''}"
+        class="{cls} {rootCss.root__unselectable} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''} {hasAnyActions ? rootCss['root__any-actions'] : ''}"
         {style}
         {role}
         aria-checked={isChecked}
