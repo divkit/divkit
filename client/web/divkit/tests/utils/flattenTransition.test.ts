@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { flattenTransition } from '../../src/utils/flattenTransition';
 
 describe('flattenTransition', () => {

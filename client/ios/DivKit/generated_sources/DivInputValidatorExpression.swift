@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputValidatorExpression {
+public final class DivInputValidatorExpression: Sendable {
   public static let type: String = "expression"
   public let allowEmpty: Expression<Bool> // default value: false
   public let condition: Expression<Bool>

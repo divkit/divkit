@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { edgeInsertsToCss } from '../../src/utils/edgeInsertsToCss';
 
 describe('edgeInsertsToCss', () => {

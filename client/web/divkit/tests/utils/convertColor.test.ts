@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctColor } from '../../src/utils/correctColor';
 
 describe('correctColor', () => {

@@ -40,8 +40,10 @@ extension DivTypedValue {
       .string
     case .urlValue:
       .url
-    case .arrayValue, .dictValue:
-      nil
+    case .arrayValue:
+      .array
+    case .dictValue:
+      .dict
     }
   }
 }

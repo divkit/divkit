@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 public final class RemoteAnimationHolder: AnimationHolder {

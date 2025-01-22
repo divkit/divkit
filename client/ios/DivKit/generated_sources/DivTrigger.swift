@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTrigger {
+public final class DivTrigger: Sendable {
   @frozen
-  public enum Mode: String, CaseIterable {
+  public enum Mode: String, CaseIterable, Sendable {
     case onCondition = "on_condition"
     case onVariable = "on_variable"
   }

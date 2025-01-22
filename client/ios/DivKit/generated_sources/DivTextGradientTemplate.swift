@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivTextGradientTemplate: TemplateValue {
+public enum DivTextGradientTemplate: TemplateValue, Sendable {
   case divLinearGradientTemplate(DivLinearGradientTemplate)
   case divRadialGradientTemplate(DivRadialGradientTemplate)
 

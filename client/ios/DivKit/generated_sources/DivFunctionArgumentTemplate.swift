@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFunctionArgumentTemplate: TemplateValue {
+public final class DivFunctionArgumentTemplate: TemplateValue, Sendable {
   public let name: Field<String>?
   public let type: Field<DivEvaluableType>?
 

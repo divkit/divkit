@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { propToString } from '../../src/utils/propToString';
 
 describe('expressions', () => {

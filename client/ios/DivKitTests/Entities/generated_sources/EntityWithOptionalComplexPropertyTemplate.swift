@@ -7,8 +7,8 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
-  public final class PropertyTemplate: TemplateValue {
+public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sendable {
+  public final class PropertyTemplate: TemplateValue, Sendable {
     public let value: Field<Expression<URL>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

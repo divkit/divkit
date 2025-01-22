@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivActionScrollDestination {
+public enum DivActionScrollDestination: Sendable {
   case offsetDestination(OffsetDestination)
   case indexDestination(IndexDestination)
   case startDestination(StartDestination)

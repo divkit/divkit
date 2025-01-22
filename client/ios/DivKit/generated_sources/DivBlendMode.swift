@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivBlendMode: String, CaseIterable {
+public enum DivBlendMode: String, CaseIterable, Sendable {
   case sourceIn = "source_in"
   case sourceAtop = "source_atop"
   case darken = "darken"

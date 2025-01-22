@@ -54,7 +54,7 @@ internal object Parser {
         if (state.isNotAtEnd() && state.currentToken() is Token.Operator.TernaryIf) {
             state.forward()
             val second = expression(state)
-            if (state.currentToken() !is Token.Operator.TernaryElse) {
+            if (state.isAtEnd() || state.currentToken() !is Token.Operator.TernaryElse) {
                 throw EvaluableException("':' expected in ternary-if-else expression")
             }
             state.forward()

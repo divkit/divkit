@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFixedSizeTemplate: TemplateValue {
+public final class DivFixedSizeTemplate: TemplateValue, Sendable {
   public static let type: String = "fixed"
   public let parent: String?
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp

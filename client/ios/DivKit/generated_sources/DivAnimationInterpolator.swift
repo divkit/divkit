@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivAnimationInterpolator: String, CaseIterable {
+public enum DivAnimationInterpolator: String, CaseIterable, Sendable {
   case linear = "linear"
   case ease = "ease"
   case easeIn = "ease_in"

@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 extension TextFieldBlock {
@@ -144,7 +143,7 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   var accessibility: AccessibilityElement? {
     didSet {
-      textField.applyAccessibility(accessibility)
+      textField.applyAccessibilityFromScratch(accessibility)
     }
   }
 
@@ -163,7 +162,7 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
         )
         .makeBlockView()
         controlView.frame = CGRect(origin: .zero, size: control.image.size)
-        controlView.applyAccessibility(control.accessibilityElement)
+        controlView.applyAccessibilityFromScratch(control.accessibilityElement)
         textField.rightView = controlView
         textField.rightViewMode = .always
       } else {

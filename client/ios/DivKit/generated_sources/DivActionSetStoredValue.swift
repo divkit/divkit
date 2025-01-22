@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionSetStoredValue {
+public final class DivActionSetStoredValue: Sendable {
   public static let type: String = "set_stored_value"
   public let lifetime: Expression<Int>
   public let name: Expression<String>

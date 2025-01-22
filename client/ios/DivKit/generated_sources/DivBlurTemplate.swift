@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivBlurTemplate: TemplateValue {
+public final class DivBlurTemplate: TemplateValue, Sendable {
   public static let type: String = "blur"
   public let parent: String?
   public let radius: Field<Expression<Int>>? // constraint: number >= 0

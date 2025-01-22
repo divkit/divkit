@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivCount {
+public enum DivCount: Sendable {
   case divInfinityCount(DivInfinityCount)
   case divFixedCount(DivFixedCount)
 

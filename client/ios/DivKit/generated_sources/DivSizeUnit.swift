@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivSizeUnit: String, CaseIterable {
+public enum DivSizeUnit: String, CaseIterable, Sendable {
   case dp = "dp"
   case sp = "sp"
   case px = "px"

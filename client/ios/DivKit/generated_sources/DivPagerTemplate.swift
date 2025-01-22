@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPagerTemplate: TemplateValue {
+public final class DivPagerTemplate: TemplateValue, Sendable {
   public typealias Orientation = DivPager.Orientation
 
   public typealias ScrollAxisAlignment = DivPager.ScrollAxisAlignment

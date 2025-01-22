@@ -35,6 +35,7 @@
     import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
     import { debounce } from '../../utils/debounce';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivSliderData>;
@@ -63,6 +64,7 @@
     let textSecondaryStyle: TransformedSliderTextStyle | undefined = textStyle;
     let description = '';
     let secondaryDescription = '';
+    let isEnabled = true;
     let hasError = false;
 
     $: origJson = componentContext.origJson;
@@ -77,6 +79,7 @@
         textStyle = undefined;
         textSecondaryStyle = undefined;
         description = '';
+        isEnabled = true;
         secondaryDescription = '';
     }
 
@@ -104,6 +107,7 @@
     $: jsonSecondaryAccessibility = componentContext.getDerivedFromVars(
         componentContext.json.secondary_value_accessibility
     );
+    $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
 
     $: {
         minValue = correctNumber($jsonMinValue, minValue);
@@ -211,6 +215,10 @@
         }));
     }
 
+    $: {
+        isEnabled = correctBooleanInt($jsonIsEnabled, isEnabled);
+    }
+
     $: if ($jsonSecondaryAccessibility?.description) {
         secondaryDescription = $jsonSecondaryAccessibility.description;
     } else if (secondVariable) {
@@ -294,6 +302,10 @@
     };
 
     function onSecondMousedown(event: MouseEvent | TouchEvent): void {
+        if (!isEnabled) {
+            return;
+        }
+
         const pageX = 'pageX' in event ? event.pageX : event.changedTouches?.[0]?.pageX;
         if (pageX === undefined) {
             return;
@@ -465,6 +477,7 @@
                     max={maxValue}
                     step="1"
                     value={switchedTracks ? value2 : value}
+                    disabled={!isEnabled}
                     aria-label={description}
                     on:input={event => onInputChange(event, 'first')}
                     on:focus={focusHandler}
@@ -479,6 +492,7 @@
                         max={maxValue}
                         step="1"
                         value={switchedTracks ? value : value2}
+                        disabled={!isEnabled}
                         aria-label={secondaryDescription}
                         on:input={event => onInputChange(event, 'second')}
                         on:mousedown={secondVariable ? onSecondMousedown : null}

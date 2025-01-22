@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionTemplate: TemplateValue {
-  public final class MenuItemTemplate: TemplateValue {
+public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
+  public final class MenuItemTemplate: TemplateValue, Sendable {
     public let action: Field<DivActionTemplate>?
     public let actions: Field<[DivActionTemplate]>?
     public let text: Field<Expression<String>>?

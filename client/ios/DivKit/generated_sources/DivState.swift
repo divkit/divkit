@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivState: DivBase {
-  public final class State {
+public final class DivState: DivBase, Sendable {
+  public final class State: Sendable {
     public let animationIn: DivAnimation?
     public let animationOut: DivAnimation?
     public let div: Div?
@@ -35,6 +35,7 @@ public final class DivState: DivBase {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
+  public let clipToBounds: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let defaultStateId: Expression<String>?
   public let disappearActions: [DivDisappearAction]?
@@ -76,6 +77,10 @@ public final class DivState: DivBase {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveClipToBounds(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(clipToBounds) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -125,6 +130,7 @@ public final class DivState: DivBase {
     animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
+    clipToBounds: Expression<Bool>?,
     columnSpan: Expression<Int>?,
     defaultStateId: Expression<String>?,
     disappearActions: [DivDisappearAction]?,
@@ -163,6 +169,7 @@ public final class DivState: DivBase {
     self.animators = animators
     self.background = background
     self.border = border
+    self.clipToBounds = clipToBounds ?? .value(true)
     self.columnSpan = columnSpan
     self.defaultStateId = defaultStateId
     self.disappearActions = disappearActions
@@ -215,75 +222,76 @@ extension DivState: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.defaultStateId == rhs.defaultStateId
+      lhs.clipToBounds == rhs.clipToBounds,
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.defaultStateId == rhs.defaultStateId,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.divId == rhs.divId,
-      lhs.extensions == rhs.extensions
+      lhs.divId == rhs.divId
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.functions == rhs.functions,
-      lhs.height == rhs.height
+      lhs.functions == rhs.functions
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.layoutProvider == rhs.layoutProvider,
-      lhs.margins == rhs.margins
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.stateIdVariable == rhs.stateIdVariable,
-      lhs.states == rhs.states
+      lhs.stateIdVariable == rhs.stateIdVariable
     else {
       return false
     }
     guard
+      lhs.states == rhs.states,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -304,6 +312,7 @@ extension DivState: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
+    result["clip_to_bounds"] = clipToBounds.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["default_state_id"] = defaultStateId?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }

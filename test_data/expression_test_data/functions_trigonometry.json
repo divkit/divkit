@@ -8,7 +8,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -19,10 +20,10 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
-
     {
       "expression": "@{toRadians(-90.0)}",
       "expected": {
@@ -31,7 +32,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -49,7 +51,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -60,10 +63,10 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
-
     {
       "expression": "@{toDegrees(-pi() / 2)}",
       "expected": {
@@ -72,7 +75,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -90,7 +94,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -101,7 +106,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -112,24 +118,103 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
-      "expression": "@{sin(sin_var)}",
+      "expression": "@{sin(var)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
       "variables": [
         {
-          "name": "sin_var",
+          "name": "var",
           "type": "number",
           "value": 1.5707963267948966
         }
       ],
       "platforms": [
         "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cos(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cos(-pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{cos(var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": 1.0471975512
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{tan(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{tan(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.55740772465
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{tan(var)}",
+      "expected": {
+        "type": "number",
+        "value": -1.55740772465
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": -1
+        }
+      ],
+      "platforms": [
         "ios"
       ]
     },
@@ -167,7 +252,118 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{asin(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.570796326795
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{asin(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": -0.523598775598
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{asin(2)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [asin(2)]. Arcsine is undefined for the given value."
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{acos(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.570796326795
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{acos(1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{acos(-0.5)}",
+      "expected": {
+        "type": "number",
+        "value": 2.094395102393
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{acos(2)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [acos(2)]. Arccosine is undefined for the given value."
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{atan(0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan(pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": 0.665773750028
+      },
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{atan(var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.5
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": 0.54630248984
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
       ]
     }
   ]

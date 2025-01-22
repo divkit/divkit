@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 
 @frozen
-public enum Entity {
+public enum Entity: Sendable {
   case entityWithArray(EntityWithArray)
   case entityWithArrayOfEnums(EntityWithArrayOfEnums)
   case entityWithArrayOfExpressions(EntityWithArrayOfExpressions)

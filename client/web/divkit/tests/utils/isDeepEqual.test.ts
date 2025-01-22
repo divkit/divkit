@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { isDeepEqual } from '../../src/utils/isDeepEqual';
 
 describe('isDeepEqual', () => {

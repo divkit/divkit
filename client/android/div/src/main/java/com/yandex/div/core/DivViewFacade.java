@@ -22,23 +22,11 @@ import com.yandex.div.json.expressions.ExpressionResolver;
 public interface DivViewFacade {
 
     /**
-     * Method for div builders to allow DivView to control image loads.
-     * @param loadReference not started image load reference
-     * @param targetView view, that loaded image. Used to link reference
-     * @deprecated Use {@link DivViewFacade#addLoadReference(LoadReference, View)}
-     */
-    @Deprecated()
-    default void addImageLoadReference(@NonNull LoadReference loadReference, @NonNull View targetView) {
-    }
-
-    /**
      * Method for loading. Now it used for images
      * @param loadReference not started image load reference
      * @param targetView view, that loaded. Used to link reference
      */
-    default void addLoadReference(@NonNull LoadReference loadReference, @NonNull View targetView) {
-        addImageLoadReference(loadReference, targetView);
-    }
+    void addLoadReference(@NonNull LoadReference loadReference, @NonNull View targetView);
 
     /**
      * @param config Setter for DivConfig

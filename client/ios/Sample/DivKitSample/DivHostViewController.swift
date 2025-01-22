@@ -1,7 +1,6 @@
-import UIKit
-
 import DivKit
 import DivKitExtensions
+import UIKit
 
 final class DivHostViewController: UIViewController {
   lazy var divKitComponents = makeDivKitComponents()

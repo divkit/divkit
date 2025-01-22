@@ -2,7 +2,8 @@
   "description": "Images aligned to the end in LTR context. Image must be on the right side",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "flutter"
   ],
   "templates": {
     "chess_card": {

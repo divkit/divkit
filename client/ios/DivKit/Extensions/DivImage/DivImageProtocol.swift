@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import VGSL
 
@@ -22,8 +21,7 @@ extension DivImageProtocol {
     _ expressionResolver: ExpressionResolver,
     highPriority: Bool = false
   ) -> ImagePlaceholder {
-    if
-      let base64 = resolvePreview(expressionResolver) {
+    if let base64 = resolvePreview(expressionResolver) {
       .imageData(ImageData(base64: base64, highPriority: highPriority))
     } else {
       .color(resolvePlaceholderColor(expressionResolver))

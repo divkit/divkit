@@ -16,8 +16,8 @@
     "ru": "Подсказка, что произойдет при взаимодействии. Если на iOS в настройках VoiceOver включен Speak Hints, то подсказка воспроизводится после `description`."
   },
   "div_accessibility_is_checked": {
-    "en": "Indicates the current state of the item. `true` is enabled, `false` is disabled.",
-    "ru": "Указывает текущее состояние элемента. `true` — включено, `false` — отключено."
+    "en": "Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.",
+    "ru": "Указывает текущее состояние чекбокса или переключателя. `true` — выбран, `false` — не выбран."
   },
   "div_accessibility_mode": {
     "en": "The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.",
@@ -1567,6 +1567,10 @@
     "en": "The page size is equal to the size of its content.",
     "ru": "Размер страницы равен размеру ее контента."
   },
+  "div_page_content_size_alignment": {
+    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
+    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
+  },
   "div_page_size": {
     "en": "Page width (%).",
     "ru": "Ширина страницы в процентах."
@@ -1594,10 +1598,6 @@
   "div_pager_items": {
     "en": "Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.",
     "ru": "Элементы пейджера. Варианты постраничного перехода можно осуществить с помощью:<li>`div-action://set_current_item?id=&item=` — задать текущую страницу с порядковым номером `item` внутри элемента, с заданным `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\\|ring}]` — перейти на следующую страницу внутри элемента, с заданным `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\\|ring}]` — перейти на предыдущую страницу внутри элемента, с заданным `id`.</li></p><p>Опциональный параметр `overflow` позволяет задать навигацию при достижении первого или последнего элемента:<li>`clamp` — переход остановится на пограничном элементе;</li><li>`ring` — переход в начало или конец, в зависимости от текущего элемента.</li></p><p>По умолчанию, `clamp`."
-  },
-  "div_pager_scroll_axis_alignment": {
-    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
-    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
   },
   "div_pager_layout_mode": {
     "en": "Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>",
@@ -1654,6 +1654,10 @@
   "div_pager_restrict_parent_scroll": {
     "en": "If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.",
     "ru": "При включенном параметре пейджер не будет передавать жест скролла родительскому элементу."
+  },
+  "div_pager_scroll_axis_alignment": {
+    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
+    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
   },
   "div_pager_short": {
     "en": "Pager.",
@@ -1956,7 +1960,7 @@
     "ru": "Слайдер для выбора значения в диапазоне."
   },
   "div_slider_is_enabled": {
-    "en": "Enables or disables value selecting by click/tap or swipe.",
+    "en": "Enables or disables toggling values by clicking or swiping.",
     "ru": "Включает или отключает возможность переключения значения нажатием или свайпом."
   },
   "div_slider_max_value": {
@@ -2320,8 +2324,8 @@
     "ru": "Высота изображения."
   },
   "div_text_image_indexing_direction": {
-    "en": "Defines direction in `start` parameter:\n`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.\n`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.",
-    "ru": "Определяет направление работы параметра `start`:\n`normal`: стандартная индексация строки ([0, 1, 2, ..., N]). Используйте, если необходимо вставить изображение по индексу относительно начала строки.\n`reversed`: индексация строки \"с конца\" ([N, ..., 2, 1, 0]). Используйте, если необходимо вставить изображение по индексу относительно конца строки."
+    "en": "Defines the direction in the `start` parameter:\n– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.\n– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.",
+    "ru": "Определяет направление работы параметра `start`:\n- `normal`: стандартная индексация строки ([0, 1, 2, ..., N]). Используйте, если необходимо вставить изображение по индексу относительно начала строки.\n- `reversed`: индексация строки от конца к началу ([N, ..., 2, 1, 0]). Используйте, если необходимо вставить изображение по индексу относительно конца строки."
   },
   "div_text_image_start": {
     "en": "A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.",
@@ -2373,7 +2377,7 @@
   },
   "div_text_range_alignment_vertical": {
     "en": "Vertical text alignment within the row. Ignored when a baseline offset is specified.",
-    "ru": "Вертикальное выравнивание текста внутри строки. Данный параметр игнорируется, если указано смещение базовой линии."
+    "ru": "Вертикальное выравнивание текста внутри строки. Параметр игнорируется, если указано смещение базовой линии."
   },
   "div_text_range_background": {
     "en": "Character range background.",
@@ -2381,7 +2385,7 @@
   },
   "div_text_range_baseline_offset": {
     "en": "Character baseline vertial offset. If set, vertical alignment is ignored.",
-    "ru": "Вертикальное смещение базовой линии в диапазоне символов. Если этот параметр задан, то вертикальное выравнивание игнорируется."
+    "ru": "Вертикальное смещение базовой линии в диапазоне символов. Если параметр задан, то вертикальное выравнивание игнорируется."
   },
   "div_text_range_border": {
     "en": "Character range border.",
@@ -2400,36 +2404,36 @@
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_text_range_mask": {
-    "en": "A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.",
-    "ru": "Маска, закрывающая участок текста, для показа скрытого текста маска может быть отключена через свойство `is_enabled`."
+    "en": "A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.",
+    "ru": "Маска, закрывающая участок текста. Для показа скрытого текста маску можно отключить через свойство `is_enabled`."
   },
   "div_text_range_mask_is_enabled": {
-    "en": "Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.",
-    "ru": "Управляет состоянием маски, при значении `true` указанная часть текста будет скрыта под маской, иначе текст будет показан."
+    "en": "Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.",
+    "ru": "Управляет состоянием маски. При значении `true` указанная часть текста будет скрыта под маской, иначе текст будет показан."
   },
   "div_text_range_mask_particles": {
-    "en": "A mask to hide text (spoiler) that looks like randomly distributed particles (telegram alike).",
-    "ru": "Маска для скрытия текста (спойлер) в виде случайно расположенных частиц, как в телеграмме."
+    "en": "A mask to hide text (spoiler). Looks like randomly distributed particles, same as in Telegram.",
+    "ru": "Маска для скрытия текста (спойлер) в виде случайно расположенных частиц, как в Telegram."
   },
   "div_text_range_mask_particles_animated": {
-    "en": "Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).",
-    "ru": "Определяет будут ли частички на маске анимироваться или нет. Анимация выглядит как плавное перемещение частиц по маске, как в телеграмме."
+    "en": "Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.",
+    "ru": "Включает анимацию частичек на маске. Анимация выглядит как плавное перемещение частиц по маске, как в Telegram."
   },
   "div_text_range_mask_particles_color": {
-    "en": "Color of particles on the mask.",
+    "en": "The color of particles on the mask.",
     "ru": "Цвет частиц на маске."
   },
   "div_text_range_mask_particles_density": {
-    "en": "Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.",
-    "ru": "Плотность частиц на маске, интерпретируется как вероятность частицы появиться в заданной точке маски."
+    "en": "The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.",
+    "ru": "Плотность частиц на маске. Интерпретируется как вероятность частицы появиться в заданной точке маски."
   },
   "div_text_range_mask_particles_size": {
-    "en": "Size of a single particle on a mask.",
+    "en": "The size of a single particle on the mask.",
     "ru": "Размер одной частицы на маске."
   },
   "div_text_range_mask_solid": {
-    "en": "A mask to hide text (spoiler) that looks like a rectangle filled with color specified by `color` parameter.",
-    "ru": "Маска для скрытия текста (спойлер) в виде прямоугольника, залитого указанным в параметре `color` цветом, как в телеграмме."
+    "en": "A mask to hide text (spoiler). Looks like a rectangle filled with the color specified in the `color` parameter, same as in Telegram.",
+    "ru": "Маска для скрытия текста (спойлер) в виде прямоугольника, залитого указанным в параметре `color` цветом, как в Telegram."
   },
   "div_text_range_shadow": {
     "en": "Parameters of the shadow applied to the character range.",

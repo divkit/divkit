@@ -16,9 +16,10 @@
       ],
       "result_type": "array",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -37,9 +38,10 @@
       ],
       "result_type": "boolean",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -58,9 +60,10 @@
       ],
       "result_type": "color",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -79,9 +82,10 @@
       ],
       "result_type": "dict",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -100,9 +104,10 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -121,9 +126,10 @@
       ],
       "result_type": "number",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -142,9 +148,10 @@
       ],
       "result_type": "string",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -163,9 +170,10 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -180,9 +188,10 @@
       ],
       "result_type": "boolean",
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     }
   ]

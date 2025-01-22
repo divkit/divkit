@@ -16,7 +16,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -35,7 +36,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -54,7 +56,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -73,7 +76,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -92,7 +96,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -111,7 +116,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -130,7 +136,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -149,7 +156,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -166,9 +174,10 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web",
-        "android"
+        "flutter"
       ]
     },
     {
@@ -180,7 +189,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     }
   ]

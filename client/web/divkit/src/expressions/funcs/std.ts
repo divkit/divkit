@@ -65,7 +65,7 @@ function toIntegerNumber(_ctx: EvalContext, arg: NumberValue): EvalValue {
 }
 
 function toIntegerString(_ctx: EvalContext, arg: StringValue): EvalValue {
-    let num: number | bigint;
+    let num: bigint;
 
     try {
         num = toBigInt(arg.value);

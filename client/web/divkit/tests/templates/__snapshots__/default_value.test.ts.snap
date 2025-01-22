@@ -1,4 +1,49 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`default_value > test_invalid_value_presented_directly 1`] = `
+{
+  "json": {
+    "int": -1,
+    "nested": {
+      "int": -1,
+      "non_optional": "Some text",
+      "url": "http://notsecure.yandex.ru",
+    },
+    "type": "entity_with_property_with_default_value",
+    "url": "http://notsecure.yandex.ru",
+  },
+  "templateContext": {},
+}
+`;
+
+exports[`default_value > test_invalid_value_presented_directly 2`] = `
+[
+  [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`default_value > test_invalid_value_referenced_by_link 1`] = `
+{
+  "json": {
+    "int": -1,
+    "int_value": -1,
+    "nested": {
+      "int": -1,
+      "non_optional": "Some text",
+      "url": "http://notsecure.yandex.ru",
+    },
+    "type": "entity_with_property_with_default_value",
+    "url": "http://notsecure.yandex.ru",
+    "url_value": "http://notsecure.yandex.ru",
+  },
+  "templateContext": {
+    "int_value": -1,
+    "url_value": "http://notsecure.yandex.ru",
+  },
+}
+`;
 
 exports[`default_value test_invalid_value_presented_directly 1`] = `
 {

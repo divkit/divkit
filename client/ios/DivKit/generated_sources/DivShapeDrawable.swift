@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivShapeDrawable {
+public final class DivShapeDrawable: Sendable {
   public static let type: String = "shape_drawable"
   public let color: Expression<Color>
   public let shape: DivShape

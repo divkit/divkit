@@ -1,110 +1,113 @@
 {
-    "description": "Test text_alignment property in single line Input",
-    "platforms": [
-        "android",
-        "ios",
-        "web"
-    ],
-    "templates": {
-        "input_block": {
-            "type": "input",
-            "width": {
-                "type": "match_parent"
-            },
-            "height": {
-                "type": "fixed",
-                "value": 50
-            },
-            "margins": {
-                "left": 10,
-                "right": 10,
-                "top": 10,
-                "bottom": 10
-            },
-            "background": [
-                {
-                    "type": "solid",
-                    "color": "#0e000000"
-                }
-            ],
-            "font_size": 14,
-            "font_weight": "medium",
-            "text_color": "#000000",
-            "text_variable": "my_edit_text",
-            "hint_text": "Hint",
-            "hint_color": "#888888",
-            "highlight_color": "#e0bae3",
-            "line_height": 22,
-            "keyboard_type": "single_line_text"
+  "description": "Test text_alignment property in single line Input",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "input_block": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "margins": {
+        "left": 10,
+        "right": 10,
+        "top": 10,
+        "bottom": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
         }
-    },
-    "card": {
-        "log_id": "input",
-        "variables": [
-            {
-                "name": "my_edit_text",
-                "type": "string",
-                "value": "Initial text"
-            }
-        ],
-        "states": [
-            {
-                "state_id": 0,
-                "div": {
-                    "type": "container",
-                    "width": {
-                        "type": "match_parent"
-                    },
-                    "height": {
-                        "type": "match_parent"
-                    },
-                    "items": [
-                        {
-                            "type": "input_block",
-                            "text_alignment_horizontal": "left",
-                            "text_alignment_vertical": "top"
-                        },
-                        {
-                            "type": "input_block",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "top"
-                        },
-                        {
-                            "type": "input_block",
-                            "text_alignment_horizontal": "right",
-                            "text_alignment_vertical": "top"
-                        },
-                        {
-                            "type": "input_block",
-                            "text_alignment_horizontal": "right",
-                            "text_alignment_vertical": "center"
-                        },
-                        {
-                            "type": "input_block",
-                            "text_alignment_horizontal": "right",
-                            "text_alignment_vertical": "bottom"
-                        },
-                        {
-                            "type": "container",
-                            "orientation": "horizontal",
-                            "content_alignment_vertical": "baseline",
-                            "items": [{
-                                "type": "text",
-                                "text": "baseline",
-                                "margins": {
-                                    "left": 10
-                                }
-                            }, {
-                                "type": "input_block",
-                                "text_alignment_vertical": "baseline"
-                            }]
-                        },
-                        {
-                            "type": "input_block"
-                        }
-                    ]
-                }
-            }
-        ]
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "text_variable": "my_edit_text",
+      "hint_text": "Hint",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22,
+      "keyboard_type": "single_line_text"
     }
+  },
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "my_edit_text",
+        "type": "string",
+        "value": "Initial text"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "input_block",
+              "text_alignment_horizontal": "left",
+              "text_alignment_vertical": "top"
+            },
+            {
+              "type": "input_block",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "top"
+            },
+            {
+              "type": "input_block",
+              "text_alignment_horizontal": "right",
+              "text_alignment_vertical": "top"
+            },
+            {
+              "type": "input_block",
+              "text_alignment_horizontal": "right",
+              "text_alignment_vertical": "center"
+            },
+            {
+              "type": "input_block",
+              "text_alignment_horizontal": "right",
+              "text_alignment_vertical": "bottom"
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_vertical": "baseline",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "baseline",
+                  "margins": {
+                    "left": 10
+                  }
+                },
+                {
+                  "type": "input_block",
+                  "text_alignment_vertical": "baseline"
+                }
+              ]
+            },
+            {
+              "type": "input_block"
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAnimation {
+public final class DivAnimation: Sendable {
   @frozen
-  public enum Name: String, CaseIterable {
+  public enum Name: String, CaseIterable, Sendable {
     case fade = "fade"
     case translate = "translate"
     case scale = "scale"

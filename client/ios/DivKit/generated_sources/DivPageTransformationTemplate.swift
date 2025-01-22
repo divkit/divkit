@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivPageTransformationTemplate: TemplateValue {
+public enum DivPageTransformationTemplate: TemplateValue, Sendable {
   case divPageTransformationSlideTemplate(DivPageTransformationSlideTemplate)
   case divPageTransformationOverlapTemplate(DivPageTransformationOverlapTemplate)
 

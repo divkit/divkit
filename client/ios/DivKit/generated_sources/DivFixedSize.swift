@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFixedSize {
+public final class DivFixedSize: Sendable {
   public static let type: String = "fixed"
   public let unit: Expression<DivSizeUnit> // default value: dp
   public let value: Expression<Int> // constraint: number >= 0

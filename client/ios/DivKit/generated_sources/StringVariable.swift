@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class StringVariable {
+public final class StringVariable: Sendable {
   public static let type: String = "string"
   public let name: String
   public let value: String

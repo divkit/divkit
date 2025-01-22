@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivCountTemplate: TemplateValue {
+public enum DivCountTemplate: TemplateValue, Sendable {
   case divInfinityCountTemplate(DivInfinityCountTemplate)
   case divFixedCountTemplate(DivFixedCountTemplate)
 

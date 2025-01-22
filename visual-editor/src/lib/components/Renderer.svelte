@@ -51,7 +51,8 @@
         state,
         setRendererApi,
         inplaceEditor,
-        file2Dialog
+        file2Dialog,
+        customFontFaces
     } = getContext<AppContext>(APP_CTX);
 
     const {
@@ -1176,6 +1177,9 @@
                     ['size_provider', SizeProvider],
                     ['lottie', Lottie],
                 ]),
+                typefaceProvider(fontFamily) {
+                    return customFontFaces.find(it => it.value === fontFamily)?.value || '';
+                },
                 onError(event) {
                     const additional = event.error.additional || {};
                     const leafId = (additional.fullpath as {

@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctAlignmentVertical } from '../../src/utils/correctAlignmentVertical';
 
 describe('correctAlignmentVertical', () => {

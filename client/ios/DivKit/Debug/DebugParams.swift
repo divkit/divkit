@@ -4,11 +4,10 @@ import UIKit
 import AppKit
 #endif
 
-import LayoutKit
 import VGSL
 
 public struct DebugParams {
-  public struct Measurements {
+  public struct Measurements: Sendable {
     public let divDataParsingTime: TimeMeasure
     public let renderTime: TimeMeasure
     public let templateParsingTime: TimeMeasure

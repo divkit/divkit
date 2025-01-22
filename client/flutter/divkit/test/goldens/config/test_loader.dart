@@ -6,7 +6,6 @@ import 'package:path/path.dart' as path_package;
 
 import '../models/snapshot_test_model.dart';
 import '../models/test_files.dart';
-import 'skipped_tests.dart';
 import 'test_data_paths.dart';
 
 Future<List<GoldenTestFile>> loadTestData(String path) async {
@@ -22,20 +21,26 @@ Future<List<GoldenTestFile>> loadTestData(String path) async {
 
   for (var entity in entities) {
     if (entity is File && entity.path.endsWith('.json')) {
-      if (skippedTestsMap.containsKey(entity.path)) {
-        if (kDebugMode) {
-          print('Skipping test for path ${entity.path}');
-        }
-      } else {
-        final testCaseData = jsonDecode(await entity.readAsString());
-        testCases.add(
-          GoldenTestCase(
-            path_package.withoutExtension(
-              entity.path.replaceAll('$testDataPathBaseDir/', ''),
+      final id = entity.path
+          .replaceAll('$testDataPathBaseDir/', '')
+          .replaceAll('.json', '');
+
+      try {
+        final rawData = jsonDecode(await entity.readAsString());
+        final testCase = SnapshotTestModel.fromJson(rawData);
+
+        if (!(testCase.availablePlatforms?.contains('flutter') ?? true)) {
+          print('Skipping test: $id');
+        } else {
+          testCases.add(
+            GoldenTestCase(
+              path_package.withoutExtension(id),
+              testCase,
             ),
-            SnapshotTestModel.fromJson(testCaseData),
-          ),
-        );
+          );
+        }
+      } catch (e) {
+        print('Failed loading $id: $e');
       }
     } else if (entity is Directory) {
       testCases.add(

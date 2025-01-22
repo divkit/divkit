@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFilterRtlMirror {
+public final class DivFilterRtlMirror: Sendable {
   public static let type: String = "rtl_mirror"
 
   init() {}

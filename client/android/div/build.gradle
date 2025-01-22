@@ -1,11 +1,15 @@
 import com.android.build.api.variant.BuildConfigField
 import groovy.json.JsonOutput
 
+plugins {
+    alias(libs.plugins.kotlin.ksp)
+}
+
 apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
-apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mobilej.unmock'
 apply plugin: 'kotlinx-serialization'
 
 def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
@@ -25,6 +29,10 @@ androidComponents.onVariants(androidComponents.selector().all()) {
     buildConfigFields.put("VERSION_NAME", new BuildConfigField("String", JsonOutput.toJson(versionName), null))
 }
 
+unMock {
+    keep "android.net.Uri"
+}
+
 dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div-json')
@@ -42,7 +50,7 @@ dependencies {
     api project(path: ':div-svg')
 
     implementation libs.yatagan.api.compiled
-    kapt libs.yatagan.processor.jap
+    ksp libs.yatagan.processor.ksp
 
     implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"

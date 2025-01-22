@@ -4,14 +4,14 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPatch {
+public final class DivPatch: Sendable {
   @frozen
-  public enum Mode: String, CaseIterable {
+  public enum Mode: String, CaseIterable, Sendable {
     case transactional = "transactional"
     case partial = "partial"
   }
 
-  public final class Change {
+  public final class Change: Sendable {
     public let id: String
     public let items: [Div]?
 

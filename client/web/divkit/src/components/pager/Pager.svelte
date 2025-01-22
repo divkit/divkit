@@ -97,7 +97,7 @@
     let hasLayoutModeError = false;
 
     let orientation: Orientation = 'horizontal';
-    let itemSpacing = '';
+    let itemSpacing = '0em';
     let padding = '';
     let sizeVal = '';
 
@@ -203,7 +203,7 @@
     $: {
         const val = $jsonItemSpacing?.value;
         if (val && isNonNegativeNumber(val)) {
-            itemSpacing = pxToEm(val || 0);
+            itemSpacing = pxToEmWithUnits(val || 0);
         }
     }
 

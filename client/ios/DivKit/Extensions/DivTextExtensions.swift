@@ -1,7 +1,6 @@
 import CoreFoundation
 import CoreGraphics
 import Foundation
-
 import LayoutKit
 import VGSL
 
@@ -196,8 +195,13 @@ extension DivText: DivBlockModeling {
       .map { Typo(strikethrough: $0.underlineStyle) }
     let underlineTypo = range.resolveUnderline(expressionResolver)
       .map { Typo(underline: $0.underlineStyle) }
-    let typos = [fontTypo, colorTypo, heightTypo, spacingTypo, strikethroughTypo, underlineTypo]
-      .compactMap { $0 }
+    let baselineOffsetTypo = Typo(
+      baselineOffset: range.resolveBaselineOffset(expressionResolver)
+    )
+    let typos = [
+      fontTypo, colorTypo, heightTypo, spacingTypo,
+      strikethroughTypo, underlineTypo, baselineOffsetTypo
+    ].compactMap { $0 }
     let actions = range.actions?.uiActions(context: context)
     if typos.isEmpty, actions == nil, range.background == nil, range.border == nil {
       return

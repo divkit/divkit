@@ -8,7 +8,6 @@ import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.toVariable
@@ -34,7 +33,6 @@ import javax.inject.Inject
 @Mockable
 internal class ExpressionsRuntimeProvider @Inject constructor(
     private val divVariableController: DivVariableController,
-    private val globalVariableController: GlobalVariableController,
     private val divActionBinder: DivActionBinder,
     private val errorCollectors: ErrorCollectors,
     private val logger: Div2Logger,
@@ -122,7 +120,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             }
 
             addSource(divVariableController.variableSource)
-            addSource(globalVariableController.variableSource)
         }
 
         val functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)

@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 import Foundation
 import LayoutKit
 import XCTest
@@ -6,8 +6,8 @@ import XCTest
 extension DivActionHandler {
   convenience init(
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
+    flags: DivFlagsInfo = .default,
     idToPath: IdToPath = IdToPath(),
-    logger: DivActionLogger = EmptyDivActionLogger(),
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
     updateCard: @escaping DivActionURLHandler.UpdateCardAction = { _ in },
@@ -24,7 +24,6 @@ extension DivActionHandler {
       updateCard: updateCard,
       showTooltip: nil,
       tooltipActionPerformer: nil,
-      logger: logger,
       trackVisibility: { _, _ in },
       trackDisappear: { _, _ in },
       performTimerAction: { _, _, _ in },
@@ -32,7 +31,8 @@ extension DivActionHandler {
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,
       idToPath: idToPath,
-      animatorController: DivAnimatorController()
+      animatorController: DivAnimatorController(),
+      flags: flags
     )
   }
 }

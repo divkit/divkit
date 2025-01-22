@@ -4,6 +4,8 @@
 --exclude DivKit/shared_data_generated_sources
 --exclude DivKitTests/Entities/generated_sources
 
+--enable blankLinesBetweenImports
+
 --disable redundantSelf
 --disable redundantFileprivate
 --disable wrapMultilineStatementBraces

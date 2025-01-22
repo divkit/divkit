@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithoutPropertiesTemplate: TemplateValue {
+public final class EntityWithoutPropertiesTemplate: TemplateValue, Sendable {
   public static let type: String = "entity_without_properties"
   public let parent: String?
 

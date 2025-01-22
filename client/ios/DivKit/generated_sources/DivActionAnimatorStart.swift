@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionAnimatorStart {
+public final class DivActionAnimatorStart: Sendable {
   public static let type: String = "animator_start"
   public let animatorId: String
   public let direction: Expression<DivAnimationDirection>?

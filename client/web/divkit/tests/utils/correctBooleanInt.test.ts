@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctBooleanInt } from '../../src/utils/correctBooleanInt';
 
 describe('correctBooleanInt', () => {

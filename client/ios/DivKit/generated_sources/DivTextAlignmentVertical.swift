@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivTextAlignmentVertical: String, CaseIterable {
+public enum DivTextAlignmentVertical: String, CaseIterable, Sendable {
   case top = "top"
   case center = "center"
   case bottom = "bottom"

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCurrencyInputMaskTemplate: TemplateValue {
+public final class DivCurrencyInputMaskTemplate: TemplateValue, Sendable {
   public static let type: String = "currency"
   public let parent: String?
   public let locale: Field<Expression<String>>?

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivLinearGradient {
+public final class DivLinearGradient: Sendable {
   public static let type: String = "gradient"
   public let angle: Expression<Int> // constraint: number >= 0 && number <= 360; default value: 0
   public let colors: [Expression<Color>] // at least 2 elements

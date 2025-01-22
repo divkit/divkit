@@ -1,6 +1,15 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
+
+import {
+    describe,
+    expect,
+    test,
+    beforeAll,
+    vi
+} from 'vitest';
 
 import { render } from '@divkitframework/divkit/client';
 
@@ -43,7 +52,7 @@ describe('test client bundle', () => {
     });
 
     test('should log error on empty id', () => {
-        const spy = jest.spyOn(console, 'error').mockImplementation(noop);
+        const spy = vi.spyOn(console, 'error').mockImplementation(noop);
 
         // @ts-expect-error "id" is required
         render({
@@ -56,7 +65,7 @@ describe('test client bundle', () => {
     });
 
     test('should log error on empty json', () => {
-        const spy = jest.spyOn(console, 'error').mockImplementation(noop);
+        const spy = vi.spyOn(console, 'error').mockImplementation(noop);
 
         // @ts-expect-error "json" is required
         render({

@@ -97,15 +97,15 @@ final class SetStoredValueActionHandlerTests: XCTestCase {
   func test_SetUrlValue() {
     handle(
       action(
-       name: "name",
-       value: .urlValue(UrlValue(value: .value(url("https://some.url"))))
-     )
+        name: "name",
+        value: .urlValue(UrlValue(value: .value(url("https://some.url"))))
+      )
     )
 
     XCTAssertEqual(persistentValuesStorage.get(name: "name"), url("https://some.url"))
   }
 
-  func test_SetArrayValue_DoesNothing() {
+  func test_SetArrayValue() {
     handle(
       action(
         name: "name",
@@ -113,10 +113,13 @@ final class SetStoredValueActionHandlerTests: XCTestCase {
       )
     )
 
-    XCTAssertNil(persistentValuesStorage.get(name: "name"))
+    XCTAssertEqual(
+      persistentValuesStorage.get(name: "name"),
+      ["some value", 123] as DivArray
+    )
   }
 
-  func test_SetDictValue_DoesNothing() {
+  func test_SetDictValue() {
     handle(
       action(
         name: "name",
@@ -124,7 +127,10 @@ final class SetStoredValueActionHandlerTests: XCTestCase {
       )
     )
 
-    XCTAssertNil(persistentValuesStorage.get(name: "name"))
+    XCTAssertEqual(
+      persistentValuesStorage.get(name: "name"),
+      ["key": "value"] as DivDictionary
+    )
   }
 
   private func handle(_ action: DivActionSetStoredValue) {

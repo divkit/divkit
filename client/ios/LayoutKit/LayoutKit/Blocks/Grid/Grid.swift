@@ -2,7 +2,7 @@ import VGSL
 
 struct Grid {
   typealias GridItem = GridBlock.Item
-  let itemsIndices: [[Int]]
+  let itemsIndices: [[Int?]]
 
   var rowCount: Int { itemsIndices.count }
   var columnCount: Int { itemsIndices[0].count }
@@ -60,14 +60,7 @@ struct Grid {
       }
     }
 
-    itemsIndices = try result.enumerated().map { rowIdx, row in
-      try row.enumerated().map { columnIdx, value in
-        if let result = value {
-          return result
-        }
-        throw BlockError("Grid block error: empty cell at (\(rowIdx), \(columnIdx))")
-      }
-    }
+    itemsIndices = result
   }
 }
 

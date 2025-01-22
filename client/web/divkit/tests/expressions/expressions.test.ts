@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { evalExpression, type EvalResult } from '../../src/expressions/eval';
 import { valToString } from '../../src/expressions/utils';
 import { parse } from '../../src/expressions/expressions';
@@ -59,6 +65,10 @@ function runCase(item: any) {
         weekStartDay: item.platform_specific?.web?.weekStartDay || 0
     });
     if (item.expected.value !== '' || res.result.type !== 'error') {
+        if (item.expected.type === 'integer') {
+            expect(res.result.value).toBeTypeOf('bigint');
+        }
+
         if (res.result.type === 'number' && item.expected.type === 'number') {
             expect(res.result.value).toBeCloseTo(item.expected.value);
         } else {
@@ -126,7 +136,7 @@ describe('expressions', () => {
 
                         name += ` : ${counter[name]++}`;
 
-                        it(name, () => {
+                        test(name, () => {
                             runCase(item);
                         });
                     } else {

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInfinityCountTemplate: TemplateValue {
+public final class DivInfinityCountTemplate: TemplateValue, Sendable {
   public static let type: String = "infinity"
   public let parent: String?
 

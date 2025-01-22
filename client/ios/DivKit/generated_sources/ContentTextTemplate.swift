@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ContentTextTemplate: TemplateValue {
+public final class ContentTextTemplate: TemplateValue, Sendable {
   public static let type: String = "text"
   public let parent: String?
   public let value: Field<Expression<String>>?

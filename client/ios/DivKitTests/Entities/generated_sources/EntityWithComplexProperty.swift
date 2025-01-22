@@ -7,8 +7,8 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithComplexProperty {
-  public final class Property {
+public final class EntityWithComplexProperty: Sendable {
+  public final class Property: Sendable {
     public let value: Expression<URL>
 
     public func resolveValue(_ resolver: ExpressionResolver) -> URL? {

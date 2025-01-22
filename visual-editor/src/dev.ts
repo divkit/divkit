@@ -49,7 +49,8 @@ const editor = window.editor = DivProEditor.init({
         text: {
             ru: 'Моноширинный',
             en: 'Monospace'
-        }
+        },
+        cssValue: 'monospace'
     }],
     card: {
         json: JSON.stringify({

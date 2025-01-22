@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivAnimatorTemplate: TemplateValue {
+public enum DivAnimatorTemplate: TemplateValue, Sendable {
   case divColorAnimatorTemplate(DivColorAnimatorTemplate)
   case divNumberAnimatorTemplate(DivNumberAnimatorTemplate)
 

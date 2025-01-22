@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { pxToEm } from '../../src/utils/pxToEm';
 
 describe('pxToEm', () => {

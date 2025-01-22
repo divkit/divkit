@@ -99,10 +99,11 @@ final class MarksLayer: CALayer {
 extension MarksConfiguration.RoundedRectangle {
   fileprivate func render(in ctx: CGContext, with origin: CGPoint = CGPoint(x: 0, y: 0)) {
     let rect = CGRect(origin: origin, size: size).insetBy(dx: borderWidth / 4, dy: borderWidth / 4)
+    let radius = min(cornerRadius, rect.height / 2, rect.width / 2)
     let path = CGPath(
       roundedRect: rect,
-      cornerWidth: min(cornerRadius, rect.height / 2),
-      cornerHeight: min(cornerRadius, rect.height / 2),
+      cornerWidth: radius,
+      cornerHeight: radius,
       transform: nil
     )
     ctx.addPath(path)

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTimer {
+public final class DivTimer: Sendable {
   public let duration: Expression<Int> // constraint: number >= 0; default value: 0
   public let endActions: [DivAction]?
   public let id: String

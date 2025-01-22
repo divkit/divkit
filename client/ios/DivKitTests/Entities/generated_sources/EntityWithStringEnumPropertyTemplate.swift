@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithStringEnumPropertyTemplate: TemplateValue {
+public final class EntityWithStringEnumPropertyTemplate: TemplateValue, Sendable {
   public typealias Property = EntityWithStringEnumProperty.Property
 
   public static let type: String = "entity_with_string_enum_property"

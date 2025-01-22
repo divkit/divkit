@@ -1,7 +1,6 @@
-import XCTest
-
 import LayoutKit
 import VGSL
+import XCTest
 
 final class ResizableBlockMeasureTests: XCTestCase {
   func test_FillsAvailableSpace() {

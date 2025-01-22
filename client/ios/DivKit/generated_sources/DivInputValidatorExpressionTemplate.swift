@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputValidatorExpressionTemplate: TemplateValue {
+public final class DivInputValidatorExpressionTemplate: TemplateValue, Sendable {
   public static let type: String = "expression"
   public let parent: String?
   public let allowEmpty: Field<Expression<Bool>>? // default value: false

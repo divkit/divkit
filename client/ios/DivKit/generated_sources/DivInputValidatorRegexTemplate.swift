@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputValidatorRegexTemplate: TemplateValue {
+public final class DivInputValidatorRegexTemplate: TemplateValue, Sendable {
   public static let type: String = "regex"
   public let parent: String?
   public let allowEmpty: Field<Expression<Bool>>? // default value: false

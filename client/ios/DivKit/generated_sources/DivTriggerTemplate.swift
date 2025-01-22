@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTriggerTemplate: TemplateValue {
+public final class DivTriggerTemplate: TemplateValue, Sendable {
   public typealias Mode = DivTrigger.Mode
 
   public let actions: Field<[DivActionTemplate]>? // at least 1 elements

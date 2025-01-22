@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { isNonNegativeNumber } from '../../src/utils/isNonNegativeNumber';
 
 describe('isNonNegativeNumber', () => {

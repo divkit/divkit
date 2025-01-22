@@ -28,7 +28,6 @@
 		43C1F9F12BA0ED2000134AD2 /* JsonFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C1F9F02BA0ED2000134AD2 /* JsonFile.swift */; };
 		43C1F9F32BA20B2500134AD2 /* DivKitSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C1F9F22BA20B2500134AD2 /* DivKitSnapshotTests.swift */; };
 		43D05A9C2BA336CD003290AD /* TestingFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D05A9B2BA336CD003290AD /* TestingFiles.swift */; };
-		43EA1B4F2B9F83D400350EC5 /* Testing in Frameworks */ = {isa = PBXBuildFile; productRef = 43EA1B4E2B9F83D400350EC5 /* Testing */; };
 		52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52184FD7296C68E400ECC0E9 /* DivKitExtensions */; };
 		5219194D297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */; };
 		52907F662A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52907F652A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift */; };
@@ -77,7 +76,7 @@
 		8C01499E287329D700BA5402 /* expression_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C01499D287329D700BA5402 /* expression_test_data */; };
 		8C03519A288EC5AB0016A747 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C035199288EC5AB0016A747 /* Images.xcassets */; };
 		8C0662302D09A43500B30CE3 /* SetStoredValueActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C06622F2D09A42800B30CE3 /* SetStoredValueActionHandlerTests.swift */; };
-		8C0688652B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0688642B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift */; };
+		8C0688652B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0688642B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift */; };
 		8C09E9D82B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C09E9D72B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift */; };
 		8C0C0767288FE8F30052C4A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C0766288FE8F30052C4A9 /* Main.storyboard */; };
 		8C0DC7122865CA1100286F6B /* DivKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0DC7112865CA1100286F6B /* DivKitTests.swift */; };
@@ -176,7 +175,7 @@
 		8C2BFA5628C10F2200A16E9B /* RegressionTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */; };
 		8C2BFA5828C10F5B00A16E9B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5728C10F5B00A16E9B /* TestData.swift */; };
 		8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */; };
-		8C38262B2AB46BB700264C17 /* DivReporterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */; };
+		8C38262B2AB46BB700264C17 /* PlaygroundReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */; };
 		8C38262D2AB46BF400264C17 /* PlaygroundPatchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */; };
 		8C40BA022ABB3B5C008405AD /* DivActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */; };
 		8C440A042864C55400EF4175 /* DivKitPlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4409FD2864C55400EF4175 /* DivKitPlaygroundApp.swift */; };
@@ -220,6 +219,7 @@
 		8C7EE1D128B777AE008A48E6 /* YSText-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CD28B777AE008A48E6 /* YSText-Medium.ttf */; };
 		8C7EE1D228B777AE008A48E6 /* YSText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */; };
 		8C7EE1D628B7786E008A48E6 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */; };
+		8C80DB312D22C64F0029C683 /* DivTooltipExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */; };
 		8C8354542C296710004EF2AE /* UIElementPathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8354532C296710004EF2AE /* UIElementPathTests.swift */; };
 		8C84C2232D0870F400A574AC /* ScrollActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */; };
 		8C88636128AB802C00D04928 /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C88636028AB802C00D04928 /* ReferenceSet.swift */; };
@@ -421,7 +421,7 @@
 		8C01499D287329D700BA5402 /* expression_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = expression_test_data; path = ../../../test_data/expression_test_data; sourceTree = "<group>"; };
 		8C035199288EC5AB0016A747 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8C06622F2D09A42800B30CE3 /* SetStoredValueActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetStoredValueActionHandlerTests.swift; sourceTree = "<group>"; };
-		8C0688642B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivAccessibilityExtentionsTests.swift; sourceTree = "<group>"; };
+		8C0688642B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivAccessibilityExtensionsTests.swift; sourceTree = "<group>"; };
 		8C09E9D72B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivContainerAccessibilityDescriptionTests.swift; sourceTree = "<group>"; };
 		8C0C0766288FE8F30052C4A9 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8C0DC7112865CA1100286F6B /* DivKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivKitTests.swift; sourceTree = "<group>"; };
@@ -521,7 +521,7 @@
 		8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegressionTestView.swift; sourceTree = "<group>"; };
 		8C2BFA5728C10F5B00A16E9B /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverAnyTests.swift; sourceTree = "<group>"; };
-		8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivReporterDelegate.swift; sourceTree = "<group>"; };
+		8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundReporter.swift; sourceTree = "<group>"; };
 		8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundPatchProvider.swift; sourceTree = "<group>"; };
 		8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionHandlerTests.swift; sourceTree = "<group>"; };
 		8C4409ED2864C4D200EF4175 /* DivKit Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DivKit Playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -569,9 +569,9 @@
 		8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Regular.ttf"; sourceTree = "<group>"; };
 		8C7EE1D328B777B9008A48E6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
+		8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTooltipExtensionsTests.swift; sourceTree = "<group>"; };
 		8C8354532C296710004EF2AE /* UIElementPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElementPathTests.swift; sourceTree = "<group>"; };
 		8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollActionHandlerTests.swift; sourceTree = "<group>"; };
-		8C84C2242D08730A00A574AC /* MockDivActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivActionHandler.swift; sourceTree = "<group>"; };
 		8C87CF1B28AD059600D262E1 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		8C87CF1D28AD05BC00D262E1 /* Default.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
@@ -717,7 +717,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43EA1B4F2B9F83D400350EC5 /* Testing in Frameworks */,
 				8C0E7371288AE219009BEB3C /* DivKit in Frameworks */,
 				E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */,
 				52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */,
@@ -1056,15 +1055,15 @@
 		8C7B187B2864CA1F0036EF4C /* DivKit */ = {
 			isa = PBXGroup;
 			children = (
-				8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */,
+				9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */,
 				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
 				762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */,
 				8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */,
+				8C38262A2AB46BB700264C17 /* PlaygroundReporter.swift */,
 				8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */,
 				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
 				76FD0507294208F70002A1F9 /* RiveContainerView.swift */,
 				76FD0505294208890002A1F9 /* RiveDivCustomData.swift */,
-				9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */,
 			);
 			path = DivKit;
 			sourceTree = "<group>";
@@ -1083,13 +1082,6 @@
 				8CF1296228B0021F00351F65 /* UserPreferences.swift */,
 			);
 			path = Utils;
-			sourceTree = "<group>";
-		};
-		8C7B1B112865BF4C0036EF4C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		8C7B1B1B2865BFF10036EF4C /* DivKitTests */ = {
@@ -1144,8 +1136,9 @@
 		8C7B1B242865C01C0036EF4C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8C0688642B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift */,
+				8C0688642B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift */,
 				8C7B1B2E2865C01C0036EF4C /* DivActionExtensionsTests.swift */,
+				7EE2ED6D2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift */,
 				52CD80662A7122AA00B828B0 /* DivBaseExtensionsTests.swift */,
 				8C09E9D72B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift */,
 				8C7B1B292865C01C0036EF4C /* DivContainerExtensionsTests.swift */,
@@ -1160,9 +1153,9 @@
 				52CD80682A7159C200B828B0 /* DivStateExtensionsTests.swift */,
 				8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */,
 				8C7B1B282865C01C0036EF4C /* DivTextExtensionsTests.swift */,
+				8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */,
 				8CC357F82BFE24B4001C2CFE /* FontFeatureSettingsParserTests.swift */,
 				52CD806A2A7172B400B828B0 /* XCTestCase+ViewVisibilityCallCount.swift */,
-				7EE2ED6D2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1215,15 +1208,15 @@
 			children = (
 				E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */,
 				8C0E7372288AE563009BEB3C /* snapshot_test_data */,
-				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
-				8C035199288EC5AB0016A747 /* Images.xcassets */,
 				43BF1CDC2BA063B400198EAF /* FilesPreprocessing */,
-				8C9284D6288ACCE400BEA1FA /* SnapshotTestRunner.swift */,
-				43C1F9F02BA0ED2000134AD2 /* JsonFile.swift */,
-				43D05A9B2BA336CD003290AD /* TestingFiles.swift */,
+				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
 				43C1F9F22BA20B2500134AD2 /* DivKitSnapshotTests.swift */,
+				43C1F9F02BA0ED2000134AD2 /* JsonFile.swift */,
 				8C9284D5288ACCE400BEA1FA /* ReferenceSet.swift */,
+				8C9284D6288ACCE400BEA1FA /* SnapshotTestRunner.swift */,
+				43D05A9B2BA336CD003290AD /* TestingFiles.swift */,
 				8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */,
+				8C035199288EC5AB0016A747 /* Images.xcassets */,
 			);
 			path = DivKitSnapshotTests;
 			sourceTree = "<group>";
@@ -1281,20 +1274,18 @@
 			isa = PBXGroup;
 			children = (
 				8C87CF1E28AD05DE00D262E1 /* Configurations */,
+				52DED04229F733E100D64519 /* DivKitExtensionsTests */,
 				8C4409EE2864C4D200EF4175 /* DivKitPlayground */,
 				8C9284C6288ACCBA00BEA1FA /* DivKitSnapshotTests */,
-				9FE7D2D12CF74BDE00BAF071 /* DivKitTestsSupport */,
 				8C7B1B1B2865BFF10036EF4C /* DivKitTests */,
-				52DED04229F733E100D64519 /* DivKitExtensionsTests */,
+				9FE7D2D12CF74BDE00BAF071 /* DivKitTestsSupport */,
+				986F57982CD68E8400990A2A /* DivKitUITests */,
 				7E3B99872C6E4FB100FC633E /* LayoutKitPlayground */,
 				8C6E40B228AAA47B0038E107 /* LayoutKitSnapshotTests */,
 				8CF329252875D534003F799A /* LayoutKitTests */,
-				8C9284F8288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
-				986F57982CD68E8400990A2A /* DivKitUITests */,
-				8C7B1B112865BF4C0036EF4C /* Frameworks */,
 				8C6DEA3D2866120A009956A1 /* Packages */,
 				8C4409D22864C3A900EF4175 /* Products */,
-				8CF91B002D0AE2D30082FDC1 /* Recovered References */,
+				8C9284F8288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1408,14 +1399,6 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		8CF91B002D0AE2D30082FDC1 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				8C84C2242D08730A00A574AC /* MockDivActionHandler.swift */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		986F57982CD68E8400990A2A /* DivKitUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1428,8 +1411,8 @@
 		9FE7D2D12CF74BDE00BAF071 /* DivKitTestsSupport */ = {
 			isa = PBXGroup;
 			children = (
-				9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */,
 				9FE7D31B2CF7535700BAF071 /* FakeImageHolder.swift */,
+				9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */,
 			);
 			path = DivKitTestsSupport;
 			sourceTree = "<group>";
@@ -1596,7 +1579,6 @@
 			packageProductDependencies = (
 				8C0E7370288AE219009BEB3C /* DivKit */,
 				52184FD7296C68E400ECC0E9 /* DivKitExtensions */,
-				43EA1B4E2B9F83D400350EC5 /* Testing */,
 				E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */,
 			);
 			productName = DivKitSnapshotTests;
@@ -1744,7 +1726,6 @@
 			packageReferences = (
 				0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */,
-				43EA1B4B2B9F833C00350EC5 /* XCRemoteSwiftPackageReference "swift-testing" */,
 				7E2DFA9F2C7C7F430095775C /* XCRemoteSwiftPackageReference "vgsl" */,
 				98C920F22C8F46EE00B2FFD8 /* XCRemoteSwiftPackageReference "LookinServer" */,
 			);
@@ -1958,7 +1939,7 @@
 				8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */,
 				8C1A375228B4189E00A047C8 /* ScannerView.swift in Sources */,
 				8C1A375128B4189E00A047C8 /* ScannerViewController.swift in Sources */,
-				8C38262B2AB46BB700264C17 /* DivReporterDelegate.swift in Sources */,
+				8C38262B2AB46BB700264C17 /* PlaygroundReporter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1983,6 +1964,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C23F42229DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift in Sources */,
+				8C80DB312D22C64F0029C683 /* DivTooltipExtensionsTests.swift in Sources */,
 				8C23F41329DDB3810069F3F7 /* EntityWithArray.swift in Sources */,
 				8C23F42829DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift in Sources */,
 				8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */,
@@ -2078,7 +2060,7 @@
 				8C1DEBCE2A2F8277009237F1 /* DivStateManagementTests.swift in Sources */,
 				8C7B1BFA2865C01C0036EF4C /* DivDataExtensionsTests.swift in Sources */,
 				8C23F41429DDB3810069F3F7 /* EntityWithArrayOfEnums.swift in Sources */,
-				8C0688652B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift in Sources */,
+				8C0688652B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift in Sources */,
 				8C23F42429DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift in Sources */,
 				8C23F42129DDB3810069F3F7 /* EntityWithEntityProperty.swift in Sources */,
 				8C23F41129DDB3810069F3F7 /* Entity.swift in Sources */,
@@ -2293,6 +2275,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2308,6 +2291,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -2505,6 +2489,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.playground;
 				PRODUCT_NAME = "DivKit Playground";
 				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 			};
 			name = Debug;
 		};
@@ -2526,6 +2511,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.playground;
 				PRODUCT_NAME = "DivKit Playground";
 				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 			};
 			name = Release;
 		};
@@ -2545,6 +2531,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
@@ -2566,6 +2553,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
@@ -2587,6 +2575,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2607,6 +2596,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -2616,6 +2606,7 @@
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2627,6 +2618,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
@@ -2637,6 +2629,7 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2648,6 +2641,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
@@ -2723,6 +2717,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2737,6 +2732,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -2809,6 +2805,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DivKitPlayground;
@@ -2875,6 +2872,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DivKitPlayground;
@@ -2947,6 +2945,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3009,6 +3008,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -3128,14 +3128,6 @@
 				version = 4.2.0;
 			};
 		};
-		43EA1B4B2B9F833C00350EC5 /* XCRemoteSwiftPackageReference "swift-testing" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-testing";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.1;
-			};
-		};
 		76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rive-app/rive-ios";
@@ -3167,11 +3159,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
-		};
-		43EA1B4E2B9F83D400350EC5 /* Testing */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43EA1B4B2B9F833C00350EC5 /* XCRemoteSwiftPackageReference "swift-testing" */;
-			productName = Testing;
 		};
 		52184FD7296C68E400ECC0E9 /* DivKitExtensions */ = {
 			isa = XCSwiftPackageProductDependency;

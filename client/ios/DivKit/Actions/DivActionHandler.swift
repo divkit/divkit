@@ -6,9 +6,14 @@ import VGSL
 public final class DivActionHandler {
   public typealias TrackVisibility = (_ logId: String, _ cardId: DivCardID) -> Void
 
+  typealias PerformTimerAction = (
+    _ cardId: DivCardID,
+    _ timerId: String,
+    _ action: DivTimerAction
+  ) -> Void
+
   private let divActionURLHandler: DivActionURLHandler
   private let urlHandler: DivUrlHandler
-  private let logger: DivActionLogger
   private let trackVisibility: TrackVisibility
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
@@ -18,6 +23,7 @@ public final class DivActionHandler {
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
   private let idToPath: IdToPath
+  private let flags: DivFlagsInfo
 
   private let animatorActionHandler: AnimatorActionHandler
   private let arrayActionsHandler = ArrayActionsHandler()
@@ -25,19 +31,19 @@ public final class DivActionHandler {
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
   private let dictSetValueActionHandler = DictSetValueActionHandler()
   private let focusElementActionHandler = FocusElementActionHandler()
-  private let hideTooltipActionHandler: HideTooltipActionHandler
   private let scrollActionHandler: ScrollActionHandler
   private let setStateActionHandler: SetStateActionHandler
   private let setStoredValueActionHandler: SetStoredValueActionHandler
   private let setVariableActionHandler = SetVariableActionHandler()
-  private let showTooltipActionHandler: ShowTooltipActionHandler
   private let submitActionHandler: SubmitActionHandler
   private let timerActionHandler: TimerActionHandler
+  private let tooltipActionHandler: TooltipActionHandler
   private let videoActionHandler = VideoActionHandler()
 
-  /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
+  /// Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
+  @_spi(Legacy)
   public convenience init(
-    stateUpdater: DivStateUpdater,
+    stateUpdater: DivStateUpdater = DefaultDivStateManagement(),
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
     submitter: DivSubmitter,
@@ -46,10 +52,8 @@ public final class DivActionHandler {
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
-    logger: DivActionLogger? = nil,
     trackVisibility: @escaping TrackVisibility = { _, _ in },
     trackDisappear: @escaping TrackVisibility = { _, _ in },
-    performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in },
     urlHandler: DivUrlHandler,
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter? = nil
@@ -64,15 +68,15 @@ public final class DivActionHandler {
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: tooltipActionPerformer,
-      logger: logger ?? EmptyDivActionLogger(),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
-      performTimerAction: performTimerAction,
+      performTimerAction: { _, _, _ in },
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter ?? DefaultDivReporter(),
       idToPath: IdToPath(),
-      animatorController: DivAnimatorController()
+      animatorController: DivAnimatorController(),
+      flags: .default
     )
   }
 
@@ -86,29 +90,44 @@ public final class DivActionHandler {
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction?,
     tooltipActionPerformer: TooltipActionPerformer?,
-    logger: DivActionLogger,
     trackVisibility: @escaping TrackVisibility,
     trackDisappear: @escaping TrackVisibility,
-    performTimerAction: @escaping DivActionURLHandler.PerformTimerAction,
+    performTimerAction: @escaping PerformTimerAction,
     urlHandler: DivUrlHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter,
     idToPath: IdToPath,
-    animatorController: DivAnimatorController
+    animatorController: DivAnimatorController,
+    flags: DivFlagsInfo
   ) {
-    self.divActionURLHandler = DivActionURLHandler(
-      stateUpdater: stateUpdater,
+    let scrollActionHandler = ScrollActionHandler(
       blockStateStorage: blockStateStorage,
+      updateCard: updateCard
+    )
+    self.scrollActionHandler = scrollActionHandler
+
+    let setStateActionHandler = SetStateActionHandler(stateUpdater: stateUpdater)
+    self.setStateActionHandler = setStateActionHandler
+
+    let timerActionHandler = TimerActionHandler(performer: performTimerAction)
+    self.timerActionHandler = timerActionHandler
+
+    let tooltipActionHandler = TooltipActionHandler(
+      performer: tooltipActionPerformer,
+      showTooltip: showTooltip
+    )
+    self.tooltipActionHandler = tooltipActionHandler
+
+    self.divActionURLHandler = DivActionURLHandler(
       patchProvider: patchProvider,
-      variableUpdater: variablesStorage,
       updateCard: updateCard,
-      showTooltip: showTooltip,
-      tooltipActionPerformer: tooltipActionPerformer,
-      performTimerAction: performTimerAction,
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      scrollActionHandler: scrollActionHandler,
+      setStateActionHandler: setStateActionHandler,
+      timerActionHandler: timerActionHandler,
+      tooltipActionHandler: tooltipActionHandler
     )
     self.urlHandler = urlHandler
-    self.logger = logger
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
@@ -118,26 +137,13 @@ public final class DivActionHandler {
     self.updateCard = updateCard
     self.reporter = reporter
     self.idToPath = idToPath
+    self.flags = flags
 
     animatorActionHandler = AnimatorActionHandler(animatorController: animatorController)
-    hideTooltipActionHandler = HideTooltipActionHandler(
-      performer: tooltipActionPerformer,
-      showTooltip: showTooltip
-    )
-    scrollActionHandler = ScrollActionHandler(
-      blockStateStorage: blockStateStorage,
-      updateCard: updateCard
-    )
-    setStateActionHandler = SetStateActionHandler(stateUpdater: stateUpdater)
     setStoredValueActionHandler = SetStoredValueActionHandler(
       persistentValuesStorage: persistentValuesStorage
     )
-    showTooltipActionHandler = ShowTooltipActionHandler(
-      performer: tooltipActionPerformer,
-      showTooltip: showTooltip
-    )
     submitActionHandler = SubmitActionHandler(submitter: submitter)
-    timerActionHandler = TimerActionHandler(performer: performTimerAction)
   }
 
   public func handle(
@@ -163,11 +169,6 @@ public final class DivActionHandler {
       localValues: params.localValues,
       sender: sender
     )
-  }
-
-  /// Deprecated. This method is intended for backward compatibility only. Do not use it.
-  public func handleDivActionUrl(_ url: URL, cardId: DivCardID) -> Bool {
-    divActionURLHandler.handleURL(url, cardId: cardId)
   }
 
   @_spi(Internal)
@@ -230,7 +231,7 @@ public final class DivActionHandler {
     case let .divActionFocusElement(action):
       focusElementActionHandler.handle(action, context: context)
     case let .divActionHideTooltip(action):
-      hideTooltipActionHandler.handle(action, context: context)
+      tooltipActionHandler.handle(action, context: context)
     case let .divActionScrollBy(action):
       scrollActionHandler.handle(action, context: context)
     case let .divActionScrollTo(action):
@@ -242,7 +243,7 @@ public final class DivActionHandler {
     case let .divActionSetStoredValue(action):
       setStoredValueActionHandler.handle(action, context: context)
     case let .divActionShowTooltip(action):
-      showTooltipActionHandler.handle(action, context: context)
+      tooltipActionHandler.handle(action, context: context)
     case let .divActionSubmit(action):
       submitActionHandler.handle(action, context: context)
     case let .divActionTimer(action):
@@ -270,11 +271,12 @@ public final class DivActionHandler {
     )
 
     if !isHandled {
-      handleUrl(action, info: divActionInfo, sender: sender)
-    }
-
-    if let logUrl {
-      logger.log(url: logUrl, referer: referer, payload: action.payload)
+      handleUrl(
+        action,
+        info: divActionInfo,
+        context: context,
+        sender: sender
+      )
     }
 
     reporter.reportAction(
@@ -292,6 +294,7 @@ public final class DivActionHandler {
   private func handleUrl(
     _ action: DivActionBase,
     info: DivActionInfo,
+    context: DivActionHandlingContext,
     sender: AnyObject?
   ) {
     guard let url = info.url else {
@@ -301,6 +304,7 @@ public final class DivActionHandler {
     let isDivActionURLHandled = divActionURLHandler.handleURL(
       url,
       info: info,
+      context: context,
       completion: { [weak self] result in
         guard let self else {
           return
@@ -322,20 +326,16 @@ public final class DivActionHandler {
       }
     )
 
-    if !isDivActionURLHandled {
-      switch info.source {
-      case .visibility, .disappear:
-        // For visibility actions url is treated as logUrl.
-        let referer = info.referer
-        logger.log(url: url, referer: referer, payload: action.payload)
-      default:
-        urlHandler.handle(
-          url,
-          info: info,
-          sender: sender
-        )
-      }
+    if isDivActionURLHandled {
+      return
     }
+
+    if !flags.useUrlHandlerForVisibilityActions,
+       (info.source == .visibility || info.source == .disappear) {
+      return
+    }
+
+    urlHandler.handle(url, info: info, sender: sender)
   }
 
   private func parseAction<T: TemplateValue>(

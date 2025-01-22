@@ -26,12 +26,4 @@ class YandexSansDivTypefaceProvider @Inject constructor(
     override fun getBold(): Typeface {
         return ResourcesCompat.getFont(context, R.font.ys_text_bold) ?: Typeface.DEFAULT
     }
-
-    override fun getRegularLegacy(): Typeface {
-        /**
-         *  |ya_regular| includes both regular and italic variant.
-         *  It is used in rich text in legacy divs.
-         */
-        return ResourcesCompat.getFont(context, R.font.ya_regular) ?: Typeface.DEFAULT
-    }
 }

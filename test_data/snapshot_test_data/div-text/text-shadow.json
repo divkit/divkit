@@ -2,7 +2,8 @@
   "description": "Text with shadow",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
     "text_block": {
@@ -97,7 +98,7 @@
             {
               "type": "text_block",
               "text": "Съешь ещё этих мягких французских булок, да выпей же чаю",
-              "width":{
+              "width": {
                 "type": "fixed",
                 "value": 150
               },

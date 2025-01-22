@@ -70,7 +70,7 @@ class LoggingHistogramBridge : HistogramBridge {
         min: Long,
         max: Long,
         unit: TimeUnit,
-        bucketCount: Long
+        bucketCount: Int
     ) {
         recordHistogram(name, unit.toMillis(duration))
         dispatcher?.dispatch(name)

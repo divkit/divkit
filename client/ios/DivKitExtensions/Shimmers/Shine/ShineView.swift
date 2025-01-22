@@ -1,6 +1,5 @@
-import UIKit
-
 import LayoutKit
+import UIKit
 import VGSL
 
 final class ShineView: UIView {
@@ -35,7 +34,7 @@ final class ShineView: UIView {
     childView.frame = bounds
     maskLayer.frame = bounds
     gradientLayer.frame =
-    ShimmerGradientGeometry.frameScaledToAspectFill(for: bounds)
+      ShimmerGradientGeometry.frameScaledToAspectFill(for: bounds)
   }
 
   override func didMoveToWindow() {

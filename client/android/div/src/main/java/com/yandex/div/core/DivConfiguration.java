@@ -2,13 +2,11 @@ package com.yandex.div.core;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.variables.DivVariableController;
-import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.image.DivImageLoaderWrapper;
@@ -54,15 +52,11 @@ public class DivConfiguration {
     @NonNull
     private final List<DivVisibilityChangeListener> mDivVisibilityChangeListeners;
     @NonNull
-    private final DivCustomViewFactory mDivCustomViewFactory;
-    @NonNull
-    private final DivCustomViewAdapter mDivCustomViewAdapter;
-    @NonNull
     private final DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
     @NonNull
     private final DivPlayerFactory mDivPlayerFactory;
-    @Nullable
-    private DivPlayerPreloader mDivPlayerPreloader;
+    @NonNull
+    private final DivPlayerPreloader mDivPlayerPreloader;
     @NonNull
     private final DivTooltipRestrictor mTooltipRestrictor;
     @NonNull
@@ -77,11 +71,6 @@ public class DivConfiguration {
     private final ViewPreCreationProfile mViewPreCreationProfile;
     @NonNull
     private final ViewPoolProfiler.Reporter mViewPoolReporter;
-
-    @NonNull
-    @Deprecated
-    private final GlobalVariableController mGlobalVariableController;
-
     @NonNull
     private final DivVariableController mDivVariableController;
 
@@ -114,8 +103,6 @@ public class DivConfiguration {
             @NonNull DivStateCache divStateCache,
             @NonNull Div2ImageStubProvider div2ImageStubProvider,
             @NonNull List<DivVisibilityChangeListener> divVisibilityChangeListeners,
-            @NonNull DivCustomViewFactory divCustomViewFactory,
-            @NonNull DivCustomViewAdapter divCustomViewAdapter,
             @NonNull DivCustomContainerViewAdapter divCustomContainerViewAdapter,
             @NonNull DivPlayerFactory divPlayerFactory,
             @NonNull DivPlayerPreloader divPlayerPreloader,
@@ -126,7 +113,6 @@ public class DivConfiguration {
             @NonNull Map<String, DivTypefaceProvider> typefaceProviders,
             @NonNull ViewPreCreationProfile viewPreCreationProfile,
             @NonNull ViewPoolProfiler.Reporter reporter,
-            @NonNull GlobalVariableController globalVariableController,
             @NonNull DivVariableController divVariableController,
             boolean tapBeaconsEnabled,
             boolean visibilityBeaconsEnabled,
@@ -155,8 +141,6 @@ public class DivConfiguration {
         mDivStateCache = divStateCache;
         mDiv2ImageStubProvider = div2ImageStubProvider;
         mDivVisibilityChangeListeners = divVisibilityChangeListeners;
-        mDivCustomViewFactory = divCustomViewFactory;
-        mDivCustomViewAdapter = divCustomViewAdapter;
         mDivCustomContainerViewAdapter = divCustomContainerViewAdapter;
         mDivPlayerFactory = divPlayerFactory;
         mDivPlayerPreloader = divPlayerPreloader;
@@ -183,7 +167,6 @@ public class DivConfiguration {
         mBindOnAttachEnabled = bindOnAttachEnabled;
         mComplexRebindEnabled = complexRebindEnabled;
         mPermanentDebugPanelEnabled = permanentDebugPanelEnabled;
-        mGlobalVariableController = globalVariableController;
         mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
         mPagerPageClipEnabled = pagerChildrenClipEnabled;
@@ -231,32 +214,10 @@ public class DivConfiguration {
         return mDiv2ImageStubProvider;
     }
 
-    @kotlin.Deprecated(message = "Use #getDivVisibilityChangeListeners instead")
-    @NonNull
-    public DivVisibilityChangeListener getDivVisibilityChangeListener() {
-        if (mDivVisibilityChangeListeners.isEmpty()) {
-            return DivVisibilityChangeListener.STUB;
-        } else {
-            return mDivVisibilityChangeListeners.get(0);
-        }
-    }
-
     @Provides
     @NonNull
     public List<? extends DivVisibilityChangeListener> getDivVisibilityChangeListeners() {
         return mDivVisibilityChangeListeners;
-    }
-
-    @Provides
-    @NonNull
-    public DivCustomViewFactory getDivCustomViewFactory() {
-        return mDivCustomViewFactory;
-    }
-
-    @Provides
-    @NonNull
-    public DivCustomViewAdapter getDivCustomViewAdapter() {
-        return mDivCustomViewAdapter;
     }
 
     @Provides
@@ -431,12 +392,6 @@ public class DivConfiguration {
     }
 
     @NonNull
-    @Deprecated
-    public GlobalVariableController getGlobalVariableController() {
-        return mGlobalVariableController;
-    }
-
-    @NonNull
     public DivVariableController getDivVariableController() {
         return mDivVariableController;
     }
@@ -460,10 +415,6 @@ public class DivConfiguration {
         @NonNull
         private final List<DivVisibilityChangeListener> mDivVisibilityChangeListeners = new ArrayList<>();
         @Nullable
-        private DivCustomViewFactory mDivCustomViewFactory;
-        @Nullable
-        private DivCustomViewAdapter mDivCustomViewAdapter;
-        @Nullable
         private DivPlayerFactory mDivPlayerFactory;
         @Nullable
         private DivPlayerPreloader mDivPlayerPreloader;
@@ -484,8 +435,6 @@ public class DivConfiguration {
         @Nullable
         private ViewPoolProfiler.Reporter mViewPoolReporter;
         @Nullable
-        private GlobalVariableController mGlobalVariableController;
-        @Nullable
         private DivVariableController mDivVariableController;
         private boolean mTapBeaconsEnabled = Experiment.TAP_BEACONS_ENABLED.getDefaultValue();
         private boolean mVisibilityBeaconsEnabled = Experiment.VISIBILITY_BEACONS_ENABLED.getDefaultValue();
@@ -494,7 +443,7 @@ public class DivConfiguration {
         private boolean mShouldIgnoreMenuItemsInActions = Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED.getDefaultValue();
         private boolean mSupportHyphenation = Experiment.HYPHENATION_SUPPORT_ENABLED.getDefaultValue();
         private boolean mVisualErrors = Experiment.VISUAL_ERRORS_ENABLED.getDefaultValue();
-        private boolean mAcccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
+        private boolean mAccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
         private boolean mViewPoolEnabled = Experiment.VIEW_POOL_ENABLED.getDefaultValue();
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
         private boolean mViewPoolOptimizationDebug = Experiment.VIEW_POOL_OPTIMIZATION_DEBUG.getDefaultValue();
@@ -508,24 +457,6 @@ public class DivConfiguration {
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
-        }
-
-        /**
-         * @deprecated backward compat call. To be deleted VERY soon
-         */
-        @Deprecated
-        @NonNull
-        public Builder autoLogger(Object literallyAnything) {
-            return this;
-        }
-
-        /**
-         * @deprecated backward compat call. To be deleted VERY soon
-         */
-        @Deprecated
-        @NonNull
-        public Builder divLogger(Object literallyAnything) {
-            return this;
         }
 
         @NonNull
@@ -567,26 +498,6 @@ public class DivConfiguration {
         @NonNull
         public Builder divVisibilityChangeListener(@NonNull DivVisibilityChangeListener listener) {
             mDivVisibilityChangeListeners.add(listener);
-            return this;
-        }
-
-        /**
-         * @deprecated use {@link #divCustomContainerViewAdapter}
-         */
-        @Deprecated
-        @NonNull
-        public Builder divCustomViewFactory(@NonNull DivCustomViewFactory divCustomViewFactory) {
-            mDivCustomViewFactory = divCustomViewFactory;
-            return this;
-        }
-
-        /**
-         * @deprecated use {@link #divCustomContainerViewAdapter}
-         */
-        @Deprecated
-        @NonNull
-        public Builder divCustomViewAdapter(@NonNull DivCustomViewAdapter divCustomViewAdapter) {
-            mDivCustomViewAdapter = divCustomViewAdapter;
             return this;
         }
 
@@ -633,7 +544,9 @@ public class DivConfiguration {
             return this;
         }
 
-        // Used for enable longtap actions in container child.
+        /**
+         * Used for enable longtap actions in container child.
+         */
         @NonNull
         public Builder enableLongtapActionsPassingToChild() {
             mLongtapActionsPassToChild = true;
@@ -703,9 +616,8 @@ public class DivConfiguration {
         }
 
         @NonNull
-        @Deprecated
         public Builder enableAccessibility(boolean enable) {
-            mAcccessibilityEnabled = enable;
+            mAccessibilityEnabled = enable;
             return this;
         }
 
@@ -764,13 +676,6 @@ public class DivConfiguration {
         }
 
         @NonNull
-        @Deprecated
-        public Builder globalVariableController(GlobalVariableController globalVariableController) {
-            mGlobalVariableController = globalVariableController;
-            return this;
-        }
-
-        @NonNull
         public Builder divVariableController(DivVariableController divVariableController) {
             mDivVariableController = divVariableController;
             return this;
@@ -794,8 +699,6 @@ public class DivConfiguration {
                     mDivStateCache == null ? new InMemoryDivStateCache() : mDivStateCache,
                     mDiv2ImageStubProvider == null ? Div2ImageStubProvider.STUB : mDiv2ImageStubProvider,
                     mDivVisibilityChangeListeners,
-                    mDivCustomViewFactory == null ? DivCustomViewFactory.STUB : mDivCustomViewFactory,
-                    mDivCustomViewAdapter == null ? DivCustomViewAdapter.STUB : mDivCustomViewAdapter,
                     mDivCustomContainerViewAdapter == null ? DivCustomContainerViewAdapter.STUB
                             : mDivCustomContainerViewAdapter,
                     mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory,
@@ -807,7 +710,6 @@ public class DivConfiguration {
                     mAdditionalTypefaceProviders == null ? new HashMap<>() : mAdditionalTypefaceProviders,
                     mViewPreCreationProfile == null ? new ViewPreCreationProfile() : mViewPreCreationProfile,
                     mViewPoolReporter == null ? ViewPoolProfiler.Reporter.NO_OP : mViewPoolReporter,
-                    mGlobalVariableController == null ? new GlobalVariableController() : mGlobalVariableController,
                     mDivVariableController == null ? new DivVariableController() : mDivVariableController,
                     mTapBeaconsEnabled,
                     mVisibilityBeaconsEnabled,
@@ -816,7 +718,7 @@ public class DivConfiguration {
                     mShouldIgnoreMenuItemsInActions,
                     mVisualErrors,
                     mSupportHyphenation,
-                    mAcccessibilityEnabled,
+                    mAccessibilityEnabled,
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
                     mViewPoolOptimizationDebug,

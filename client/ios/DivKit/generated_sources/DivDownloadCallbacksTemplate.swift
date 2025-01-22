@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDownloadCallbacksTemplate: TemplateValue {
+public final class DivDownloadCallbacksTemplate: TemplateValue, Sendable {
   public let onFailActions: Field<[DivActionTemplate]>?
   public let onSuccessActions: Field<[DivActionTemplate]>?
 

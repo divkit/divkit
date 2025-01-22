@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:divkit/divkit.dart';
 import 'package:example/src/pages/testing/data.dart';
 import 'package:example/src/pages/testing/scenario.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,8 +75,57 @@ class _TestingPage extends State<TestingPage> {
         future: loadList(),
         builder: (_, snapshot) {
           if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
+            return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                title: const Text("Testing"),
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      snapshot.error.toString(),
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                    const Text.rich(
+                      TextSpan(
+                        text: "To download assets, run ",
+                        style: TextStyle(color: Colors.black54),
+                        children: [
+                          TextSpan(
+                            text: "./tool/get_test_data.sh",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: " in project root",
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
           }
 
@@ -97,6 +147,15 @@ class _TestingPage extends State<TestingPage> {
               return Scaffold(
                 appBar: AppBar(
                   title: const Text("Testing"),
+                  leading: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                   actions: [
                     MenuAnchor(
                       controller: menuController,

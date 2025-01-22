@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivRadialGradientRadius {
+public enum DivRadialGradientRadius: Sendable {
   case divFixedSize(DivFixedSize)
   case divRadialGradientRelativeRadius(DivRadialGradientRelativeRadius)
 

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivIndicatorItemPlacement {
+public enum DivIndicatorItemPlacement: Sendable {
   case divDefaultIndicatorItemPlacement(DivDefaultIndicatorItemPlacement)
   case divStretchIndicatorItemPlacement(DivStretchIndicatorItemPlacement)
 

@@ -5,6 +5,7 @@
     height: 4.4em;
     margin-top: -2.2em;
     cursor: pointer;
+    pointer-events: auto;
 }
 
 .arrow::before {

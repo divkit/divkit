@@ -1,0 +1,25 @@
+{
+    "features": [{
+        "id": "actionable_hover_actions",
+        "name": "<code>hover_start_actions</code> and <code>hover_end_actions</code> properties for the actionable components",
+        "compat": {
+            "web": {
+                "version_added": "30.31.0"
+            },
+            "android": {
+                "version_added": "30.33.0"
+            }
+        }
+    }, {
+        "id": "actionable_pressed_actions",
+        "name": "<code>press_start_actions</code> and <code>press_end_actions</code> properties for the actionable components",
+        "compat": {
+            "web": {
+                "version_added": "30.31.0"
+            },
+            "android": {
+                "version_added": "30.33.0"
+            }
+        }
+    }]
+}

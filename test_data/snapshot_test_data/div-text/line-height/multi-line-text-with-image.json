@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "line_height_with_image",

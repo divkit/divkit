@@ -1,11 +1,9 @@
-import XCTest
-
+import DivKit
 @testable import DivKitExtensions
-
 import DivKitTestsSupport
 import LayoutKit
-import DivKit
 import VGSL
+import XCTest
 
 final class ShineExtensionParamsTests: XCTestCase {
   let tester = ShimmerStyleTester { dict, context in
@@ -44,7 +42,7 @@ private let expectedShineExtensionParams = ShineExtensionParams(
           action: [
             "is_enabled": .bool(true),
             "log_id": .string("some_log_id"),
-            "url": .string("div-action://test-action")
+            "url": .string("div-action://test-action"),
           ],
           path: .parse(DivBlockModelingContext.testCardId.rawValue),
           source: .tap,
@@ -52,7 +50,7 @@ private let expectedShineExtensionParams = ShineExtensionParams(
         )
       ),
       path: .parse("\(DivBlockModelingContext.testCardId)/some_log_id")
-    )
+    ),
   ]
 )
 private let exactValuesShineExtensionParams: [String: Any] = [
@@ -67,8 +65,8 @@ private let exactValuesShineExtensionParams: [String: Any] = [
   "on_cycle_start_actions": [
     [
       "log_id": "some_log_id",
-      "url": "div-action://test-action"
-    ]
+      "url": "div-action://test-action",
+    ],
   ],
 ]
 private let expressionValuesShineExtensionParams: [String: Any] = [
@@ -87,7 +85,7 @@ private let expressionValuesShineExtensionParams: [String: Any] = [
   "on_cycle_start_actions": [
     [
       "log_id": "some_log_id",
-      "url": "div-action://test-action"
-    ]
+      "url": "div-action://test-action",
+    ],
   ],
 ]

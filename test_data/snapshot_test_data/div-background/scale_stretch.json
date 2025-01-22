@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {},
   "card": {
@@ -23,12 +24,13 @@
             "type": "fixed",
             "value": 300
           },
-          "background": [{
-            "type": "image",
-            "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
-            "scale": "stretch"
-          }]
-
+          "background": [
+            {
+              "type": "image",
+              "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+              "scale": "stretch"
+            }
+          ]
         }
       }
     ]

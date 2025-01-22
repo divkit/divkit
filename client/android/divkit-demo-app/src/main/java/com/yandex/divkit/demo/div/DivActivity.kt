@@ -24,7 +24,6 @@ import com.yandex.div.internal.Log
 import com.yandex.div.internal.util.IOUtils
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.lottie.DivLottieLogger
-import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.R
@@ -105,7 +104,6 @@ open class DivActivity : AppCompatActivity() {
             .divStateChangeListener(stateChangeListener)
             .extension(DivPinchToZoomExtensionHandler(DivPinchToZoomConfiguration.Builder(this).build()))
             .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider, logger))
-            .extension(DivShimmerExtensionHandler())
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()

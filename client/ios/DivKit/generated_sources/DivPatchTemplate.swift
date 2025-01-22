@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPatchTemplate: TemplateValue {
-  public final class ChangeTemplate: TemplateValue {
+public final class DivPatchTemplate: TemplateValue, Sendable {
+  public final class ChangeTemplate: TemplateValue, Sendable {
     public let id: Field<String>?
     public let items: Field<[DivTemplate]>?
 

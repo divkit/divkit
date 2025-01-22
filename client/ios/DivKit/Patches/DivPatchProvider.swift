@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 /// The `DivPatchProvider` protocol is responsible for downloading DivKit patches.

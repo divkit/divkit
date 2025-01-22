@@ -1,0 +1,168 @@
+{
+  "description": "Fixed length input mask",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "ui_test_card",
+      "variables": [
+        {
+          "name": "input",
+          "type": "string",
+          "value": ""
+        },
+        {
+          "name": "raw_input",
+          "type": "string",
+          "value": ""
+        },
+        {
+          "name": "mask",
+          "type": "string",
+          "value": "$#### $####"
+        },
+        {
+          "name": "key_1",
+          "type": "string",
+          "value": "#"
+        },
+        {
+          "name": "filter_1",
+          "type": "string",
+          "value": "[a-z]"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "value": "_"
+        },
+        {
+          "name": "key_2",
+          "type": "string",
+          "value": "$"
+        },
+        {
+          "name": "filter_2",
+          "type": "string",
+          "value": "[A-Z]"
+        },
+        {
+          "name": "always_visible",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Value in input: '@{input}'"
+              },
+              {
+                "type": "input",
+                "text_variable": "input",
+                "paddings": {
+                  "start": 10,
+                  "end": 10,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "margins": {
+                  "start": 5,
+                  "end": 5,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#eeeeee"
+                  }
+                ],
+                "mask": {
+                  "type": "fixed_length",
+                  "pattern": "@{mask}",
+                  "raw_text_variable": "raw_input",
+                  "pattern_elements": [
+                    {
+                      "key": "@{key_1}",
+                      "regex": "@{filter_1}",
+                      "placeholder": "@{placeholder}"
+                    },
+                    {
+                      "key": "@{key_2}",
+                      "regex": "@{filter_2}",
+                      "placeholder": "@{placeholder}"
+                    }
+                  ],
+                  "always_visible": "@{always_visible}"
+                }
+              },
+              {
+                "type": "text",
+                "text": "mask: @{mask}; @{key_1}=@{filter_1}, @{key_2}=@{filter_2}"
+              },
+              {
+                "type": "text",
+                "text": "Show placeholders: @{always_visible}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=Test",
+          "log_id": "changing_text_to_capitalized"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "show_placeholders",
+          "url": "div-action://set_variable?name=always_visible&value=true"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "hide_placeholders",
+          "url": "div-action://set_variable?name=always_visible&value=false"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=ALotSymbolsToOverflow",
+          "log_id": "changing_text_to_overflow"
+        }
+      ],
+      "expected_screenshot": "step4.png"
+    }
+  ]
+}

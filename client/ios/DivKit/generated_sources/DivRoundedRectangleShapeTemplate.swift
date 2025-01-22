@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRoundedRectangleShapeTemplate: TemplateValue {
+public final class DivRoundedRectangleShapeTemplate: TemplateValue, Sendable {
   public static let type: String = "rounded_rectangle"
   public let parent: String?
   public let backgroundColor: Field<Expression<Color>>?

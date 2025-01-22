@@ -11,7 +11,7 @@ public enum DivBlockPathTag {}
 public typealias DivBlockPath = Tagged<DivBlockPathTag, UIElementPath>
 
 extension Tagged where Tag == DivStatePathTag, RawValue == UIElementPath {
-  public static func makeDivStatePath(from string: String) -> Self? {
+  public static func makeDivStatePath(from string: String) -> Self {
     DivStatePath(rawValue: UIElementPath.parse(string))
   }
 

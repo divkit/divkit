@@ -2,7 +2,8 @@
   "description": "Container with centered dark shadow",
   "platforms": [
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {},
   "card": {

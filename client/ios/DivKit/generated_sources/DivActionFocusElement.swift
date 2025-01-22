@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionFocusElement {
+public final class DivActionFocusElement: Sendable {
   public static let type: String = "focus_element"
   public let elementId: Expression<String>
 

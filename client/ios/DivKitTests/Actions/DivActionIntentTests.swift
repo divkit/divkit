@@ -1,5 +1,4 @@
 @testable import DivKit
-
 import XCTest
 
 final class DivActionIntentTests: XCTestCase {
@@ -141,6 +140,20 @@ final class DivActionIntentTests: XCTestCase {
       XCTAssertEqual("var", value.name)
       XCTAssertEqual("true", value.value)
       XCTAssertEqual(.boolean, value.type)
+      XCTAssertEqual(100, value.lifetimeInSec)
+    default:
+      XCTFail("Invalid intent")
+    }
+  }
+
+  func test_SetStoredValue_Bool() {
+    switch makeIntent(
+      "div-action://set_stored_value?name=var&value=true&type=bool&lifetime=100"
+    ) {
+    case let .setStoredValue(value):
+      XCTAssertEqual("var", value.name)
+      XCTAssertEqual("true", value.value)
+      XCTAssertEqual(.bool, value.type)
       XCTAssertEqual(100, value.lifetimeInSec)
     default:
       XCTFail("Invalid intent")

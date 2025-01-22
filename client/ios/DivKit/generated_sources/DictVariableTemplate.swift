@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DictVariableTemplate: TemplateValue {
+public final class DictVariableTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "dict"
   public let parent: String?
   public let name: Field<String>?

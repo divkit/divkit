@@ -1,0 +1,123 @@
+{
+  "description": "Grid layout",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "grid_element": {
+        "type": "separator",
+        "width": {
+          "type": "match_parent",
+          "weight": 1
+        },
+        "height": {
+          "type": "match_parent",
+          "weight": 1
+        },
+        "margins": {
+          "left": 8,
+          "top": 8,
+          "right": 8,
+          "bottom": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "$color": "background_color"
+          }
+        ],
+        "delimiter_style": {
+          "color": "#00000000"
+        }
+      }
+    },
+    "card": {
+      "log_id": "grid_layout",
+      "variables": [
+        {
+          "type": "integer",
+          "name": "row_span_left",
+          "value": 2
+        },
+        {
+          "type": "integer",
+          "name": "row_span_right",
+          "value": 1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "grid",
+            "width": {
+              "type": "fixed",
+              "value": 288
+            },
+            "height": {
+              "type": "fixed",
+              "value": 192
+            },
+            "alignment_horizontal": "center",
+            "column_count": 3,
+            "items": [
+              {
+                "type": "grid_element",
+                "row_span": "@{row_span_left}",
+                "background_color": "#D098D3"
+              },
+              {
+                "type": "grid_element",
+                "background_color": "#FFCC00"
+              },
+              {
+                "type": "grid_element",
+                "row_span": "@{row_span_right}",
+                "background_color": "#e1bae3"
+              },
+              {
+                "type": "grid_element",
+                "column_span": 2,
+                "background_color": "#ffe066"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "update_row_span_left",
+          "url": "div-action://set_variable?name=row_span_left&value=1"
+        },
+        {
+          "log_id": "update_row_span_right",
+          "url": "div-action://set_variable?name=row_span_right&value=2"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "update_row_span_left",
+          "url": "div-action://set_variable?name=row_span_left&value=2"
+        },
+        {
+          "log_id": "update_row_span_right",
+          "url": "div-action://set_variable?name=row_span_right&value=1"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

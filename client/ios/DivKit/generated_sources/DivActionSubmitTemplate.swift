@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionSubmitTemplate: TemplateValue {
-  public final class RequestTemplate: TemplateValue {
-    public final class HeaderTemplate: TemplateValue {
+public final class DivActionSubmitTemplate: TemplateValue, Sendable {
+  public final class RequestTemplate: TemplateValue, Sendable {
+    public final class HeaderTemplate: TemplateValue, Sendable {
       public let name: Field<Expression<String>>?
       public let value: Field<Expression<String>>?
 

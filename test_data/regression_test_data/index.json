@@ -35,10 +35,12 @@
     {
       "title": "Clear focus actions",
       "platforms": [
-        "android",
-        "web",
         "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json"
+      },
       "tags": [
         "DivAction"
       ],
@@ -104,6 +106,28 @@
         "longtap_actions logged"
       ],
       "file": "long_tap.json"
+    },
+    {
+      "title": "Hover and press",
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "Hover the top button with cursor or stylus",
+        "Move the cursor away from the top button",
+        "Press and hold the bottom button",
+        "Release the bottom button"
+      ],
+      "expected_results": [
+        "Button state changes to 'Hovered'",
+        "Button state changes to 'Not hovered'",
+        "Button state changes to 'Pressed'",
+        "Button state changes to 'Not pressed'"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "file": "actions/hover-and-press.json"
     },
     {
       "title": "Tab swipe",
@@ -440,7 +464,8 @@
     {
       "title": "Disabled slider",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "Slider"
@@ -1408,9 +1433,13 @@
     },
     {
       "title": "Visibility action in visible block",
-      "automated": [
-        "web"
+      "platforms": [
+        "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/visibility_actions_visible_block.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/visibility_actions_visible_block.json"
+      },
       "tags": [
         "visibility_actions"
       ],
@@ -1424,9 +1453,13 @@
     },
     {
       "title": "Visibility actions in DivState",
-      "automated": [
-        "web"
+      "platforms": [
+        "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/visibility_actions_states.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/visibility_actions_states.json"
+      },
       "tags": [
         "DivState",
         "visibility_actions"
@@ -1577,9 +1610,13 @@
     },
     {
       "title": "Variables in DivImage",
-      "automated": [
-        "web"
+      "platforms": [
+        "ios"
       ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-image/variables_div_image.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-image/variables_div_image.json"
+      },
       "tags": [
         "DivImage"
       ],
@@ -1940,13 +1977,6 @@
       "file": "tabs-item-actions.json"
     },
     {
-      "title": "Grid layout",
-      "automated": [
-        "web"
-      ],
-      "file": "grid_layout.json"
-    },
-    {
       "title": "Image Shimmer Preview",
       "file": "image_shimmer_preview.json",
       "platforms": [
@@ -2091,7 +2121,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
@@ -2351,7 +2382,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "file": "video/typed_video_with_controls.json"
     },
@@ -2428,21 +2460,6 @@
       "file": "video/video_aspect.json"
     },
     {
-      "title": "state_id_variable",
-      "tags": [
-        "DivState"
-      ],
-      "steps": [
-        "Open example",
-        "Click buttons to change between 2nd and 3rd states"
-      ],
-      "expected_results": [
-        "Second state should be shown",
-        "All buttons should change variable value, also buttons with the 'by variable' text should perform the same as `by action` buttons"
-      ],
-      "file": "state/state_variable.json"
-    },
-    {
       "title": "Tooltips with typed actions",
       "platforms": [
         "android",
@@ -2485,9 +2502,6 @@
       "platforms": [
         "ios"
       ],
-      "automated": [
-        "ios"
-      ],
       "tags": [
         "Tooltips"
       ],
@@ -2527,7 +2541,9 @@
         "TypedActions"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ],
       "steps": [
         "Press 'Store string value for 10 seconds'",
@@ -2550,6 +2566,13 @@
       "tags": [
         "patch"
       ],
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json"
+      },
       "steps": [
         "Wait 1 second"
       ],
@@ -2561,7 +2584,8 @@
     {
       "title": "Patch container typed action",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "patch",
@@ -2582,6 +2606,13 @@
       "tags": [
         "patch"
       ],
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json"
+      },
       "steps": [
         "Wait 1 second"
       ],
@@ -2593,7 +2624,8 @@
     {
       "title": "Patch gallery with typed action",
       "platforms":  [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "TypedActions",
@@ -2635,6 +2667,13 @@
     },
     {
       "title": "Patch grid",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-grid/patch_grid.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-grid/patch_grid.json"
+      },
       "tags": [
         "patch"
       ],
@@ -2648,6 +2687,9 @@
     },
     {
       "title": "Patch grid internal items",
+      "automated": [
+        "android"
+      ],
       "tags": [
         "patch"
       ],
@@ -2661,6 +2703,13 @@
     },
     {
       "title": "Patch pager",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json"
+      },
       "tags": [
         "patch"
       ],
@@ -2687,6 +2736,13 @@
     },
     {
       "title": "Patch state partial",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_partial.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_partial.json"
+      },
       "tags": [
         "patch"
       ],
@@ -2702,6 +2758,13 @@
     },
     {
       "title": "Patch state transactional broken",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json"
+      },
       "tags": [
         "patch"
       ],
@@ -2716,6 +2779,13 @@
     },
     {
       "title": "Patch state transactional success",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_success.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-state/patch_state_transactional_success.json"
+      },
       "tags": [
         "patch"
       ],
@@ -3272,6 +3342,7 @@
     {
       "title": "Shine (extension)",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -3290,6 +3361,25 @@
         "There is no 4th animation cycle and the counter equals 3"
       ],
       "file": "shine.json"
+    },
+    {
+      "title": "Input focus",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap in the middle of the input text",
+        "Tap the focus button"
+      ],
+      "expected_results": [
+        "Cursor is at the place you tapped",
+        "Cursor at the last position"
+      ],
+      "file": "input_focus.json"
     }
   ]
 }

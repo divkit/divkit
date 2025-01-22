@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class BooleanValueTemplate: TemplateValue {
+public final class BooleanValueTemplate: TemplateValue, Sendable {
   public static let type: String = "boolean"
   public let parent: String?
   public let value: Field<Expression<Bool>>?

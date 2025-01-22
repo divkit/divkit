@@ -6,7 +6,6 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.TestComponent
 import com.yandex.div.core.TestViewComponentBuilder
 import com.yandex.div.core.childrenToFlatList
@@ -41,7 +40,7 @@ class Div2ViewReleaseChildrenTest {
     )
     private val viewBinder = mock<DivBinder>()
     private val divExtensionController = DivExtensionController(emptyList())
-    private val releaseViewVisitor = spy(ReleaseViewVisitor(mock(), DivCustomViewAdapter.STUB, DivCustomContainerViewAdapter.STUB, divExtensionController))
+    private val releaseViewVisitor = spy(ReleaseViewVisitor(mock(), DivCustomContainerViewAdapter.STUB, divExtensionController))
     private val component: TestComponent = TestComponent(
         wrapped = backingContext.div2Component,
         divBinder = viewBinder,

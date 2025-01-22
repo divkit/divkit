@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCustomTemplate: TemplateValue {
+public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "custom"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?

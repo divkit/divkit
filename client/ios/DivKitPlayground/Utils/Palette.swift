@@ -2,9 +2,9 @@ import DivKit
 import VGSL
 
 struct Palette {
-  private let json: [String: Any]
+  private let json: [String: any Sendable]
 
-  init(json: [String: Any]) {
+  init(json: [String: any Sendable]) {
     self.json = json
   }
 
@@ -14,10 +14,10 @@ struct Palette {
     }
 
     var result: [String: Color] = [:]
-    palette.forEach {
-      guard let name = $0["name"],
-            let colorStr = $0["color"],
-            let color = Color.color(withHexString: colorStr) else { return }
+    for item in palette {
+      guard let name = item["name"],
+            let colorStr = item["color"],
+            let color = Color.color(withHexString: colorStr) else { continue }
       result[name] = color
     }
     return result.mapToDivVariables()

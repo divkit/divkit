@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-
 import VGSL
 
 extension SwitchBlock {
@@ -40,7 +39,7 @@ private final class SwitchBlockView: BlockView, VisibleBoundsTrackingLeaf {
       aSwitch.isOn = model.on.value
       aSwitch.isEnabled = model.enabled
       aSwitch.onTintColor = model.onTintColor?.systemColor
-      applyAccessibility(model.accessibility)
+      applyAccessibilityFromScratch(model.accessibility)
     }
   }
 

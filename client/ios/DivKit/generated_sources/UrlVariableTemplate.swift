@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class UrlVariableTemplate: TemplateValue {
+public final class UrlVariableTemplate: TemplateValue, Sendable {
   public static let type: String = "url"
   public let parent: String?
   public let name: Field<String>?

@@ -197,6 +197,10 @@
     on:resize={onWindowResize}
 />
 
+{#if visible}
+    <div class={css.tooltip__overlay}></div>
+{/if}
+
 <div
     bind:this={tooltipNode}
     class="{genClassName('tooltip', css, mods)} {$isDesktop ? rootCss.root_platform_desktop : ''}"

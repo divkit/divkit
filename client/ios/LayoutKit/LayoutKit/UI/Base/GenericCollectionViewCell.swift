@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-
 import VGSL
 
 open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackingContainer {
@@ -42,7 +41,7 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
       )
     }
 
-    applyAccessibility(accessibilityElement)
+    applyAccessibilityFromScratch(accessibilityElement)
   }
 
   public override func layoutSubviews() {

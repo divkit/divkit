@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivVariable {
+public enum DivVariable: Sendable {
   case stringVariable(StringVariable)
   case numberVariable(NumberVariable)
   case integerVariable(IntegerVariable)

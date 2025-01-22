@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivBackground {
+public enum DivBackground: Sendable {
   case divLinearGradient(DivLinearGradient)
   case divRadialGradient(DivRadialGradient)
   case divImageBackground(DivImageBackground)

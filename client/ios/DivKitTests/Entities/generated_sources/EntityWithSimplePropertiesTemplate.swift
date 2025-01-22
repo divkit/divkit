@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProtocol {
+public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProtocol, Sendable {
   public static let type: String = "entity_with_simple_properties"
   public let parent: String?
   public let boolean: Field<Expression<Bool>>?

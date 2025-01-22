@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTimerTemplate: TemplateValue {
+public final class DivTimerTemplate: TemplateValue, Sendable {
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let endActions: Field<[DivActionTemplate]>?
   public let id: Field<String>?

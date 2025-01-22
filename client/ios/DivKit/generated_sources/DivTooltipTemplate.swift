@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTooltipTemplate: TemplateValue {
+public final class DivTooltipTemplate: TemplateValue, Sendable {
   public typealias Position = DivTooltip.Position
 
   public let animationIn: Field<DivAnimationTemplate>?

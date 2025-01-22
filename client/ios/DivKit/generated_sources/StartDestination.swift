@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class StartDestination {
+public final class StartDestination: Sendable {
   public static let type: String = "start"
 
   init() {}

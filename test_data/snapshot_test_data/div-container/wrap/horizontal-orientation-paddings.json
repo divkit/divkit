@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
     "item": {
@@ -65,7 +66,6 @@
               "type": "item",
               "width": {
                 "type": "match_parent"
-
               },
               "text": "match_parent"
             },

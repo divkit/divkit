@@ -1,6 +1,7 @@
 import LayoutKit
 import VGSL
 
+@_spi(Internal)
 public final class DivLayoutProviderHandler {
   private let variablesStorage: DivVariablesStorage
   private let autodisposePool = AutodisposePool()

@@ -13,6 +13,7 @@
     }
 
     const AVAIL_SET_STORED_TYPES = new Set(['string', 'integer', 'number', 'url', 'color', 'boolean']);
+    const AVAIL_SET_STORED_ALL_TYPES = new Set(['string', 'integer', 'number', 'url', 'color', 'boolean', 'array', 'dict']);
 </script>
 
 <script lang="ts">
@@ -43,7 +44,8 @@
         DivVariable,
         Direction,
         ActionMenuItem,
-        VariableTrigger
+        VariableTrigger,
+        DownloadCallbacks
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
@@ -52,7 +54,7 @@
     import type { VideoElements } from '../types/video';
     import type { Patch } from '../types/patch';
     import type { ComponentContext } from '../types/componentContext';
-    import type { Store, StoreTypes } from '../../typings/store';
+    import type { Store, StoreAllTypes, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
@@ -227,10 +229,13 @@
         ownerNode: HTMLElement;
         desc: MaybeMissing<Tooltip>;
         timeoutId: number | null;
+        componentContext: ComponentContext | undefined;
     }[] = [];
+    const shownTooltips = new Set<string>();
     let menu: {
         items: MaybeMissing<ActionMenuItem>[];
         node: HTMLElement;
+        componentContext: ComponentContext | undefined;
     } | undefined;
 
     const timeouts: number[] = [];
@@ -500,11 +505,7 @@
         return '';
     }
 
-    async function setState(stateId: string | null): Promise<void> {
-        if (!process.env.ENABLE_COMPONENT_STATE && process.env.ENABLE_COMPONENT_STATE !== undefined) {
-            throw new Error('State is not supported');
-        }
-
+    async function setState(stateId: string | null | undefined): Promise<void> {
         if (!stateId) {
             throw new Error('Missing state id');
         }
@@ -604,8 +605,8 @@
     }
 
     function callVideoAction(
-        id: string | null,
-        action: string | null,
+        id: string | null | undefined,
+        action: string | null | undefined,
         componentContext?: ComponentContext
     ): void {
         const log = (componentContext?.logError || logError);
@@ -644,8 +645,8 @@
     }
 
     function callDownloadAction(
-        url: string | null,
-        action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
+        url: string | null | undefined,
+        callbacks: MaybeMissing<DownloadCallbacks | undefined>,
         componentContext?: ComponentContext
     ): void {
         const log = (componentContext?.logError || logError);
@@ -699,7 +700,7 @@
                                 }
                             }));
                             execAnyActions(json.patch?.on_failed_actions);
-                            execAnyActions(action.download_callbacks?.on_fail_actions);
+                            execAnyActions(callbacks?.on_fail_actions);
                             return;
                         }
                     }
@@ -710,7 +711,7 @@
                         }
                     });
                     execAnyActions(json.patch?.on_applied_actions);
-                    execAnyActions(action.download_callbacks?.on_success_actions);
+                    execAnyActions(callbacks?.on_success_actions);
                 }
             }).catch(err => {
                 log(wrapError(new Error('Failed to download the patch'), {
@@ -719,7 +720,7 @@
                         originalError: err
                     }
                 }));
-                execAnyActions(action.download_callbacks?.on_fail_actions);
+                execAnyActions(callbacks?.on_fail_actions);
             });
         } else {
             log(wrapError(new Error('Missing url in download action'), {
@@ -750,15 +751,17 @@
             }));
             return;
         }
-        if ((multiple !== 'true' && multiple !== true) && tooltips.some(it => it.desc.id === id)) {
+        if ((multiple !== 'true' && multiple !== true) && shownTooltips.has(id)) {
             return;
         }
+        shownTooltips.add(id);
 
         const info = {
             internalId: ++tooltipCounter,
             ownerNode: item.onwerNode,
             desc: item.tooltip,
-            timeoutId: 0
+            timeoutId: 0,
+            componentContext
         };
         tooltips = [...tooltips, info];
 
@@ -792,10 +795,10 @@
 
     function callSetStoredValue(
         componentContext: ComponentContext | undefined,
-        name: string | null,
-        value: string | null,
-        type: string | null,
-        lifetime: string | null
+        name: string | null | undefined,
+        value: object | string | bigint | number | boolean | null | undefined,
+        type: string | null | undefined,
+        lifetime: string | number | null | undefined
     ): void {
         const log = componentContext?.logError || logError;
         if (!store) {
@@ -803,24 +806,37 @@
             return;
         }
 
-        let val: string | number | boolean | null = value;
+        let val = value;
 
         if (!name || !val || !type || !lifetime) {
             log(wrapError(new Error('Missing required params for set_stored_value')));
             return;
         }
-        if (!AVAIL_SET_STORED_TYPES.has(type)) {
+        if (!AVAIL_SET_STORED_ALL_TYPES.has(type)) {
             log(wrapError(new Error('Incorrect stored type')));
             return;
         }
 
-        if (type === 'integer' || type === 'number') {
-            val = Number(val);
-        } else if (type === 'boolean') {
+        if (type === 'boolean') {
             val = val === 'true' || val === '1';
         }
 
-        store.setValue(name, type as StoreTypes, val, Number(lifetime));
+        if (store.set) {
+            store.set(name, type as StoreAllTypes, val, Number(lifetime));
+        } else if (store.setValue) {
+            if (!AVAIL_SET_STORED_TYPES.has(type)) {
+                log(wrapError(new Error('Incorrect stored type')));
+                return;
+            }
+            if (typeof val !== 'string' && typeof val !== 'number' && typeof val !== 'boolean') {
+                log(wrapError(new Error('Incorrect stored value')));
+                return;
+            }
+            if (type === 'integer' || type === 'number') {
+                val = Number(val);
+            }
+            store.setValue(name, type as StoreTypes, val, Number(lifetime));
+        }
     }
 
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
@@ -936,7 +952,7 @@
                         callVideoAction(params.get('id'), params.get('action'), componentContext);
                         break;
                     case 'download':
-                        callDownloadAction(params.get('url'), action, componentContext);
+                        callDownloadAction(params.get('url'), action.download_callbacks, componentContext);
                         break;
                     case 'show_tooltip':
                         callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
@@ -1123,6 +1139,41 @@
                     callHideTooltip(actionTyped.id, componentContext);
                     break;
                 }
+                case 'timer': {
+                    if (timersController) {
+                        timersController.execTimerAction(actionTyped.id, actionTyped.action);
+                    } else {
+                        log(wrapError(new Error('Incorrect timer action'), {
+                            additional: {
+                                id: actionTyped.id,
+                                action: actionTyped.action
+                            }
+                        }));
+                    }
+                    break;
+                }
+                case 'download': {
+                    callDownloadAction(actionTyped.url, actionTyped, componentContext);
+                    break;
+                }
+                case 'video': {
+                    callVideoAction(actionTyped.id, actionTyped.action, componentContext);
+                    break;
+                }
+                case 'set_stored_value': {
+                    callSetStoredValue(
+                        componentContext,
+                        actionTyped.name,
+                        actionTyped.value?.value,
+                        actionTyped.value?.type,
+                        actionTyped.lifetime
+                    );
+                    break;
+                }
+                case 'set_state': {
+                    await setState(actionTyped.state_id);
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {
@@ -1182,7 +1233,8 @@
             } else if (opts.node && Array.isArray(action.menu_items) && action.menu_items.length) {
                 menu = {
                     items: action.menu_items,
-                    node: opts.node
+                    node: opts.node,
+                    componentContext: opts.componentContext
                 };
             }
         }
@@ -1484,7 +1536,7 @@
     function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
             variables: mergeMaps(variables, componentContext.variables),
-            processExpressions<T>(t: T) {
+            processExpressions: function<T>(t: T) {
                 return getJsonWithVars(
                     logError,
                     t
@@ -1492,7 +1544,7 @@
             },
             execAction,
             logError,
-            getComponentProperty<T>(property: string): T {
+            getComponentProperty: function<T>(property: string): T {
                 return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
             },
             direction
@@ -1988,25 +2040,20 @@
     const rootComponentContext = produceComponentContext();
     let rootStateComponentContext: ComponentContext | undefined;
     $: if (states && !hasError && !hsaIdError) {
-        const rootStateDiv = (
-            process.env.ENABLE_COMPONENT_STATE ||
-            process.env.ENABLE_COMPONENT_STATE === undefined
-        ) ?
-            {
-                type: 'state',
-                id: 'root',
-                width: {
-                    type: 'match_parent',
-                },
-                height: {
-                    type: 'match_parent',
-                },
-                states: states.map(state => ({
-                    state_id: state.state_id.toString(),
-                    div: state.div
-                }))
-            } :
-            states[0].div;
+        const rootStateDiv: DivBaseData = {
+            type: 'state',
+            id: 'root',
+            width: {
+                type: 'match_parent',
+            },
+            height: {
+                type: 'match_parent',
+            },
+            states: states.map(state => ({
+                state_id: state.state_id.toString(),
+                div: state.div
+            }))
+        } as DivBaseData;
 
         rootStateComponentContext = rootComponentContext.produceChildContext(rootStateDiv, {
             isRootState: true
@@ -2091,7 +2138,7 @@
                     ownerNode={item.ownerNode}
                     data={item.desc}
                     internalId={item.internalId}
-                    parentComponentContext={rootStateComponentContext}
+                    parentComponentContext={item.componentContext || rootStateComponentContext}
                 />
             {/each}
         {/if}
@@ -2100,7 +2147,7 @@
             <Menu
                 ownerNode={menu.node}
                 items={menu.items}
-                parentComponentContext={rootStateComponentContext}
+                parentComponentContext={menu.componentContext || rootStateComponentContext}
                 on:close={() => menu = undefined}
             />
         {/if}

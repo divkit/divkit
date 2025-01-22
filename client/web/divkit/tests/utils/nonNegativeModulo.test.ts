@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { nonNegativeModulo } from '../../src/utils/nonNegativeModulo';
 
 describe('nonNegativeModulo', () => {

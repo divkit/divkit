@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivVideoSource {
-  public final class Resolution {
+public final class DivVideoSource: Sendable {
+  public final class Resolution: Sendable {
     public static let type: String = "resolution"
     public let height: Expression<Int> // constraint: number > 0
     public let width: Expression<Int> // constraint: number > 0

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivDrawable {
+public enum DivDrawable: Sendable {
   case divShapeDrawable(DivShapeDrawable)
 
   public var value: Serializable {

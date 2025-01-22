@@ -1,4 +1,9 @@
-## 0.6.0-rc.3
+## 0.6.1-rc.1
+
+* Add Playground preview updates via constant polling
+* Add permanent storage of input and settings
+
+## 0.6.0
 
 * Clean dependencies
 * Update generated schema

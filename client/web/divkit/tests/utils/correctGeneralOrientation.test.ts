@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctGeneralOrientation } from '../../src/utils/correctGeneralOrientation';
 
 describe('correctGeneralOrientation', () => {

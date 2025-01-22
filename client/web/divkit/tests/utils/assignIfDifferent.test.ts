@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { assignIfDifferent } from '../../src/utils/assignIfDifferent';
 
 describe('assignIfDifferent', () => {

@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithArrayOfEnumsTemplate: TemplateValue {
+public final class EntityWithArrayOfEnumsTemplate: TemplateValue, Sendable {
   public typealias Item = EntityWithArrayOfEnums.Item
 
   public static let type: String = "entity_with_array_of_enums"

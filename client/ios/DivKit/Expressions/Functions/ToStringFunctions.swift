@@ -1,11 +1,10 @@
 import Foundation
-
 import VGSL
 
 extension [String: Function] {
   mutating func addToStringFunctions() {
     self["toString"] = OverloadedFunction(functions: [
-      FunctionUnary<[AnyHashable], String> { ExpressionValueConverter.stringify($0) },
+      FunctionUnary<DivArray, String> { ExpressionValueConverter.stringify($0) },
       FunctionUnary<Bool, String> { $0.description },
       FunctionUnary<Color, String> { $0.argbString },
       FunctionUnary<DivDictionary, String> { ExpressionValueConverter.stringify($0) },

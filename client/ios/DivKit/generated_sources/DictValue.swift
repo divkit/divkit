@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DictValue {
+public final class DictValue: @unchecked Sendable {
   public static let type: String = "dict"
   public let value: [String: Any]
 

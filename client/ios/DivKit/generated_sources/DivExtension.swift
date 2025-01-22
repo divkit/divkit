@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivExtension {
+public final class DivExtension: @unchecked Sendable {
   public let id: String
   public let params: [String: Any]?
 

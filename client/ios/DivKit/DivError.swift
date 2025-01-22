@@ -13,6 +13,7 @@ public protocol DivError: CustomStringConvertible {
 public enum DivErrorKind: String {
   case deserialization
   case blockModeling = "divModeling"
+  case layout
   case expression
   case unknown
 }
@@ -97,6 +98,32 @@ struct DivBlockModelingWarning: DivError {
   public let message: String
   public let path: UIElementPath
   public let level: DivErrorLevel = .warning
+
+  init(_ message: String, path: UIElementPath) {
+    self.message = message
+    self.path = path
+    DivKitLogger.warning(description)
+  }
+}
+
+struct DivLayoutError: DivError {
+  public let kind = DivErrorKind.layout
+  public let level = DivErrorLevel.error
+  public let message: String
+  public let path: UIElementPath
+
+  init(_ message: String, path: UIElementPath) {
+    self.message = message
+    self.path = path
+    DivKitLogger.error(description)
+  }
+}
+
+struct DivLayoutWarning: DivError {
+  public let kind = DivErrorKind.layout
+  public let level = DivErrorLevel.warning
+  public let message: String
+  public let path: UIElementPath
 
   init(_ message: String, path: UIElementPath) {
     self.message = message

@@ -4,8 +4,8 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithArrayOfNestedItems {
-  public final class Item {
+public final class EntityWithArrayOfNestedItems: Sendable {
+  public final class Item: Sendable {
     public let entity: Entity
     public let property: Expression<String>
 

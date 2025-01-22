@@ -120,6 +120,34 @@ public interface Div2Logger {
     }
 
     /**
+     * Is called when element hover changed.
+     * @noinspection unused
+     */
+    default void logHoverChanged(
+            @NonNull Div2View divView,
+            @NonNull ExpressionResolver resolver,
+            @NonNull View view,
+            @NonNull DivAction action,
+            boolean hovered
+    ) {
+        // do nothing
+    }
+
+    /**
+     * Is called when element press changed.
+     * @noinspection unused
+     */
+    default void logPressChanged(
+            @NonNull Div2View divView,
+            @NonNull ExpressionResolver resolver,
+            @NonNull View view,
+            @NonNull DivAction action,
+            boolean isPressed
+    ) {
+        // do nothing
+    }
+
+    /**
      * Is called when selected page in tabs div is changed.
      */
     default void logTabPageChanged(Div2View divView, int selectedTab) {

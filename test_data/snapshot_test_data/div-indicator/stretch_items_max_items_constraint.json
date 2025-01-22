@@ -40,7 +40,7 @@
                   "value": 2
                 }
               },
-              "items_placement" : {
+              "items_placement": {
                 "type": "stretch",
                 "item_spacing": {
                   "type": "fixed",

@@ -6,13 +6,11 @@ import android.view.ViewGroup
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.lottie.DivLottieExtensionHandler
-import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.state.DivStateDatabase
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.DemoDivCustomViewAdapter
-import com.yandex.divkit.demo.div.DemoDivCustomViewFactory
 import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
 import com.yandex.divkit.demo.div.Div2Activity
 import com.yandex.divkit.demo.div.divConfiguration
@@ -50,10 +48,8 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                         DivPinchToZoomConfiguration.Builder(activity).build()
                     )
                 )
-                .extension(DivShimmerExtensionHandler())
-                .divCustomViewFactory(DemoDivCustomViewFactory())
-                .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
                 .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider))
+                .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
                 .divStateChangeListener(transitionScheduler)
                 .divDataChangeListener(transitionScheduler)
                 .divStateCache(divStateStorage.cache)

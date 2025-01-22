@@ -1,9 +1,9 @@
 @testable import DivKit
+import enum DivKit.Expression
 import DivKitTestsSupport
 import Foundation
+import LayoutKit
 import VGSL
-
-import enum DivKit.Expression
 
 func divAction(
   isEnabled: Bool = true,
@@ -45,8 +45,9 @@ func divData(
   )
 }
 
-func divData(_ div: Div) -> DivData {
+func divData(_ div: Div, logId: String = UIElementPath.root.description) -> DivData {
   divData(
+    logId: logId,
     states: [.init(div: div, stateId: 0)]
   )
 }
@@ -100,6 +101,7 @@ func divText(
   paddings: DivEdgeInsets? = nil,
   text: String = "",
   textExpression: String? = nil,
+  tooltips: [DivTooltip]? = nil,
   width: DivSize? = nil,
   variables: [DivVariable]? = nil,
   visibility: Expression<DivVisibility>? = nil,
@@ -120,6 +122,7 @@ func divText(
     margins: margins,
     paddings: paddings,
     text: textValue,
+    tooltips: tooltips,
     variables: variables,
     visibility: visibility,
     visibilityActions: visibilityActions,
@@ -137,6 +140,7 @@ func divSeparator(
   id: String? = nil,
   margins: DivEdgeInsets? = nil,
   paddings: DivEdgeInsets? = nil,
+  tooltips: [DivTooltip]? = nil,
   transitionIn: DivAppearanceTransition? = nil,
   transitionTriggers: [DivTransitionTrigger]? = nil,
   visibility: Expression<DivVisibility>? = nil
@@ -151,6 +155,7 @@ func divSeparator(
     id: id,
     margins: margins,
     paddings: paddings,
+    tooltips: tooltips,
     transitionIn: transitionIn,
     transitionTriggers: transitionTriggers,
     visibility: visibility
@@ -188,6 +193,8 @@ func divContainer(
     focus: nil,
     functions: nil,
     height: height,
+    hoverEndActions: nil,
+    hoverStartActions: nil,
     id: nil,
     itemBuilder: itemBuilder,
     items: items,
@@ -198,6 +205,8 @@ func divContainer(
     margins: nil,
     orientation: nil,
     paddings: nil,
+    pressEndActions: nil,
+    pressStartActions: nil,
     reuseId: nil,
     rowSpan: nil,
     selectedActions: nil,
@@ -292,12 +301,16 @@ func divGrid(
     focus: nil,
     functions: nil,
     height: nil,
+    hoverEndActions: nil,
+    hoverStartActions: nil,
     id: nil,
     items: items,
     layoutProvider: nil,
     longtapActions: nil,
     margins: nil,
     paddings: nil,
+    pressEndActions: nil,
+    pressStartActions: nil,
     reuseId: nil,
     rowSpan: nil,
     selectedActions: nil,
@@ -378,6 +391,7 @@ func divState(
     animators: nil,
     background: nil,
     border: nil,
+    clipToBounds: nil,
     columnSpan: nil,
     defaultStateId: nil,
     disappearActions: nil,
@@ -495,6 +509,13 @@ func matchParentSize() -> DivSize {
 
 func wrapContentSize() -> DivSize {
   .divWrapContentSize(DivWrapContentSize())
+}
+
+func point(x: Double, y: Double) -> DivPoint {
+  DivPoint(
+    x: DivDimension(value: .value(x)),
+    y: DivDimension(value: .value(y))
+  )
 }
 
 func variable(_ name: String, _ value: String) -> DivVariable {

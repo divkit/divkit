@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctTabDelimiterStyle } from '../../src/utils/correctTabDelimiterStyle';
 
 describe('correctTabDelimiterStyle', () => {

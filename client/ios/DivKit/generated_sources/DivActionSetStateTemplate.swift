@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionSetStateTemplate: TemplateValue {
+public final class DivActionSetStateTemplate: TemplateValue, Sendable {
   public static let type: String = "set_state"
   public let parent: String?
   public let stateId: Field<Expression<String>>?

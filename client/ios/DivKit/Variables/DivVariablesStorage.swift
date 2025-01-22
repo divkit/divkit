@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import VGSL
 
@@ -18,12 +17,8 @@ public final class DivVariablesStorage {
 
     public let kind: Kind
 
-    /// Deprecated. Use `DivVariablesStorage` directly to access the variable values.
-    public let newValues: Values
-
-    init(kind: Kind, newValues: Values) {
+    init(_ kind: Kind) {
       self.kind = kind
-      self.newValues = newValues
     }
 
     public var changedVariables: Set<DivVariableName> {
@@ -43,21 +38,6 @@ public final class DivVariablesStorage {
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
   public let changeEvents: Signal<ChangeEvent>
 
-  private var allValues: Values {
-    let localValues = lock.withLock {
-      localStorages
-        .filter { $0.key.parent == nil }
-        .map(
-          key: { DivCardID(rawValue: $0.leaf) },
-          value: { $0.values }
-        )
-    }
-    return Values(
-      global: globalStorage.allValues,
-      local: localValues
-    )
-  }
-
   public convenience init() {
     self.init(outerStorage: nil)
   }
@@ -65,19 +45,10 @@ public final class DivVariablesStorage {
   public init(outerStorage: DivVariableStorage?) {
     globalStorage = DivVariableStorage(outerStorage: outerStorage)
 
-    weak var weakSelf: DivVariablesStorage?
     let globalStorageEvents: Signal<ChangeEvent> = globalStorage.changeEvents.compactMap {
-      guard let self = weakSelf else {
-        return nil
-      }
-      return ChangeEvent(
-        kind: .global($0.changedVariables),
-        newValues: self.allValues
-      )
+      ChangeEvent(.global($0.changedVariables))
     }
     changeEvents = Signal.merge(globalStorageEvents, changeEventsPipe.signal)
-
-    weakSelf = self
   }
 
   func getVariables(cardId: DivCardID, elementId: String) -> DivVariables {
@@ -153,10 +124,7 @@ public final class DivVariablesStorage {
       return
     }
 
-    notify(ChangeEvent(
-      kind: .local(cardId, changedVariables),
-      newValues: allValues
-    ))
+    notify(ChangeEvent(.local(cardId, changedVariables)))
   }
 
   /// Adds new card variables.
@@ -192,6 +160,7 @@ public final class DivVariablesStorage {
   }
 
   /// Deprecated. Do not use this method.
+  @_spi(Legacy)
   public func makeVariables(for cardId: DivCardID) -> DivVariables {
     lock.withLock {
       localStorages[cardId.path]?.allValues ?? globalStorage.allValues
@@ -236,7 +205,7 @@ public final class DivVariablesStorage {
   }
 }
 
-extension DivVariablesStorage: DivVariableUpdater {
+extension DivVariablesStorage {
   public func update(
     cardId: DivCardID,
     name: DivVariableName,
@@ -274,10 +243,7 @@ extension DivVariablesStorage: DivVariableUpdater {
       getNearestStorage(path)
     }
     if storage.update(name: name, valueFactory: valueFactory), storage !== globalStorage {
-      notify(ChangeEvent(
-        kind: .local(path.cardId, [name]),
-        newValues: allValues
-      ))
+      notify(ChangeEvent(.local(path.cardId, [name])))
     }
   }
 }
@@ -371,7 +337,7 @@ extension Collection<DivVariable> {
       case let .dictVariable(dictVariable):
         let name = DivVariableName(rawValue: dictVariable.name)
         if variables.keys.contains(name) { return }
-        if let dictionary = DivDictionary.make(from: dictVariable.value) {
+        if let dictionary = DivDictionary.fromAny(dictVariable.value) {
           variables[name] = .dict(dictionary)
         } else {
           DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")
@@ -380,7 +346,7 @@ extension Collection<DivVariable> {
       case let .arrayVariable(arrayVariable):
         let name = DivVariableName(rawValue: arrayVariable.name)
         if variables.keys.contains(name) { return }
-        if let array = NSArray(array: arrayVariable.value) as? [AnyHashable] {
+        if let array = DivArray.fromAny(arrayVariable.value) {
           variables[name] = .array(array)
         } else {
           DivKitLogger.error("Incorrect value for array variable \(name): \(arrayVariable.value)")

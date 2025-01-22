@@ -1,10 +1,23 @@
 @testable import DivKit
-
+import LayoutKit
 import XCTest
 
-import LayoutKit
-
 final class DivBlockModelingContextTests: XCTestCase {
+  func test_parentPath_InitiallyEqualsToCardId() {
+    let context = DivBlockModelingContext(cardId: "card_id")
+
+    XCTAssertEqual("card_id", context.parentPath)
+  }
+
+  func test_parentPath_ContainsAdditionalId() {
+    let context = DivBlockModelingContext(
+      cardId: "card_id",
+      additionalId: "additional_id"
+    )
+
+    XCTAssertEqual(UIElementPath("card_id") + "additional_id", context.parentPath)
+  }
+
   func test_modifying_cardLogId() {
     let context = DivBlockModelingContext()
       .modifying(cardLogId: "new_card_log_id")
@@ -95,6 +108,23 @@ final class DivBlockModelingContextTests: XCTestCase {
     XCTAssertEqual(
       context.expressionResolver.resolveNumeric(expression("@{index}")),
       1
+    )
+  }
+
+  func test_cloneForTooltip() {
+    let context = DivBlockModelingContext(cardId: "card_id")
+      .modifying(parentPath: UIElementPath("card_id") + "0" + "element_id")
+
+    let tooltipContext = context.cloneForTooltip(tooltipId: "tooltip_id")
+
+    XCTAssertEqual(
+      DivViewId(cardId: "card_id", additionalId: "tooltip_id"),
+      tooltipContext.viewId
+    )
+
+    XCTAssertEqual(
+      UIElementPath("card_id") + "tooltip_id",
+      tooltipContext.parentPath
     )
   }
 

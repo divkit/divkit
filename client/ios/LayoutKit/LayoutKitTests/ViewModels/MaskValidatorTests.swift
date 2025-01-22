@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import LayoutKit
+import XCTest
 
 final class MaskValidatorTests: XCTestCase {
   func test_removingSymbol() {

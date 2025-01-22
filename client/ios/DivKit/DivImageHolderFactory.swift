@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 /// Loads images for `DivKit` views.
@@ -34,7 +33,6 @@ extension ImageHolderFactory: DivImageHolderFactory {}
 
 final class DefaultImageHolderFactory: DivImageHolderFactory {
   private let requester: URLResourceRequesting
-  private let imageLoadingOptimizationEnabled: Bool
 
   private let imageProcessingQueue = OperationQueue(
     name: "tech.divkit.image-processing",
@@ -42,11 +40,9 @@ final class DefaultImageHolderFactory: DivImageHolderFactory {
   )
 
   init(
-    requestPerformer: URLRequestPerforming,
-    imageLoadingOptimizationEnabled: Bool = true
+    requestPerformer: URLRequestPerforming
   ) {
     self.requester = NetworkURLResourceRequester(performer: requestPerformer)
-    self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
   }
 
   func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
@@ -57,8 +53,7 @@ final class DefaultImageHolderFactory: DivImageHolderFactory {
       url: url,
       placeholder: placeholder,
       requester: requester,
-      imageProcessingQueue: imageProcessingQueue,
-      imageLoadingOptimizationEnabled: imageLoadingOptimizationEnabled
+      imageProcessingQueue: imageProcessingQueue
     )
   }
 }

@@ -4,8 +4,8 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithOptionalComplexProperty {
-  public final class Property {
+public final class EntityWithOptionalComplexProperty: Sendable {
+  public final class Property: Sendable {
     public let value: Expression<URL>
 
     public func resolveValue(_ resolver: ExpressionResolver) -> URL? {

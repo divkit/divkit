@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { uniq } from '../../src/utils/uniq';
 
 describe('uniq', () => {

@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import VGSL
 
@@ -24,7 +23,7 @@ extension AnimatableViewFactory {
 
 public protocol AsyncSourceAnimatableView: ViewType {
   func play()
-  func setSourceAsync(_ source: AnimationSourceType) async
+  @MainActor func setSourceAsync(_ source: AnimationSourceType) async
 }
 
 /// This protocol is deprecated. Use AsyncSourceAnimatableView instead.
@@ -33,7 +32,7 @@ public protocol AnimatableView: AsyncSourceAnimatableView {
 }
 
 extension AnimatableView {
-  public func setSourceAsync(_ source: AnimationSourceType) async {
+  @MainActor public func setSourceAsync(_ source: AnimationSourceType) async {
     setSource(source)
   }
 }

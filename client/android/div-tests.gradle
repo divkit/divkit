@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    testImplementation project(path: ':unit-test-common')
     testImplementation libs.androidx.test.core
     testImplementation(libs.junit) {
         exclude group: "org.hamcrest", module: "hamcrest-core"

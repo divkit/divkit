@@ -1,5 +1,4 @@
 import Foundation
-
 import Serialization
 import VGSL
 

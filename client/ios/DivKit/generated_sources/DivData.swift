@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivData {
-  public final class State {
+public final class DivData: Sendable {
+  public final class State: Sendable {
     public let div: Div
     public let stateId: Int
 

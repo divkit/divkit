@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPageTransformationSlide {
+public final class DivPageTransformationSlide: Sendable {
   public static let type: String = "slide"
   public let interpolator: Expression<DivAnimationInterpolator> // default value: ease_in_out
   public let nextPageAlpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0

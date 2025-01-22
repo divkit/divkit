@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 enum ExpressionValueConverter {
@@ -56,7 +55,7 @@ enum ExpressionValueConverter {
       dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
       dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
       return dateFormatter.string(from: date)
-    case let array as [AnyHashable]:
+    case let array as DivArray:
       return "[\(array.map { formatValue($0) }.joined(separator: ","))]"
     case let dict as DivDictionary:
       let properties = dict
@@ -134,7 +133,7 @@ func formatTypeForError(_ type: Any.Type) -> String {
     "Color"
   case is Date.Type:
     "DateTime"
-  case is [AnyHashable].Type:
+  case is DivArray.Type:
     "Array"
   case is DivDictionary.Type, is [AnyHashable: AnyHashable].Type:
     "Dict"

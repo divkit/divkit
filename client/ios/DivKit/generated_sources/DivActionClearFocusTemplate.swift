@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionClearFocusTemplate: TemplateValue {
+public final class DivActionClearFocusTemplate: TemplateValue, Sendable {
   public static let type: String = "clear_focus"
   public let parent: String?
 

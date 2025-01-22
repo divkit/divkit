@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class OffsetDestination {
+public final class OffsetDestination: Sendable {
   public static let type: String = "offset"
   public let value: Expression<Int> // constraint: number >= 0
 

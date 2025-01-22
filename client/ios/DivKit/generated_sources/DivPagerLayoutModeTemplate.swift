@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivPagerLayoutModeTemplate: TemplateValue {
+public enum DivPagerLayoutModeTemplate: TemplateValue, Sendable {
   case divPageSizeTemplate(DivPageSizeTemplate)
   case divNeighbourPageSizeTemplate(DivNeighbourPageSizeTemplate)
   case divPageContentSizeTemplate(DivPageContentSizeTemplate)

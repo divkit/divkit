@@ -1,7 +1,6 @@
-import XCTest
-
 @testable import LayoutKit
 import VGSL
+import XCTest
 
 final class PhoneMaskFormatterTests: XCTestCase {
   func test_rawTextFormatting() {

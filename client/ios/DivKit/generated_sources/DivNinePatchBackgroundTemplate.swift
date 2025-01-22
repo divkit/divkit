@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivNinePatchBackgroundTemplate: TemplateValue {
+public final class DivNinePatchBackgroundTemplate: TemplateValue, Sendable {
   public static let type: String = "nine_patch_image"
   public let parent: String?
   public let imageUrl: Field<Expression<URL>>?

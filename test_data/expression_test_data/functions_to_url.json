@@ -8,8 +8,9 @@
       },
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     }
   ]

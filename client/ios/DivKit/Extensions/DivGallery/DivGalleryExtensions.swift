@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import LayoutKit
 import VGSL
 
@@ -23,9 +22,10 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     let model = try makeGalleryModel(
       context: context,
       direction: resolveOrientation(expressionResolver).direction,
+      alignment: .center,
       spacing: CGFloat(itemSpacing),
       crossSpacing: CGFloat(resolveCrossSpacing(expressionResolver) ?? itemSpacing),
-      defaultAlignment: resolveCrossContentAlignment(expressionResolver).blockAlignment,
+      defaultCrossAlignment: resolveCrossContentAlignment(expressionResolver).blockAlignment,
       scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
       columnCount: resolveColumnCount(expressionResolver),
       scrollbar: resolveScrollbar(expressionResolver).blockScrollbar

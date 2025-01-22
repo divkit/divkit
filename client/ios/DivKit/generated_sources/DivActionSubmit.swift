@@ -4,10 +4,10 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionSubmit {
-  public final class Request {
+public final class DivActionSubmit: Sendable {
+  public final class Request: Sendable {
     @frozen
-    public enum Method: String, CaseIterable {
+    public enum Method: String, CaseIterable, Sendable {
       case get = "get"
       case post = "post"
       case put = "put"
@@ -17,7 +17,7 @@ public final class DivActionSubmit {
       case options = "options"
     }
 
-    public final class Header {
+    public final class Header: Sendable {
       public let name: Expression<String>
       public let value: Expression<String>
 

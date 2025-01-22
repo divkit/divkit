@@ -1,7 +1,7 @@
 import CoreFoundation
 import Foundation
 
-public class AnyValueValidator<T> {
+public class AnyValueValidator<T: Sendable>: @unchecked Sendable {
   private let validate: (T) -> Bool
 
   public init(_ isValid: @escaping (T) -> Bool) {
@@ -13,7 +13,8 @@ public class AnyValueValidator<T> {
   }
 }
 
-public final class AnyArrayValueValidator<U>: AnyValueValidator<[U]> {}
+public final class AnyArrayValueValidator<T: Sendable>:
+  AnyValueValidator<[T]>, @unchecked Sendable {}
 
 public func makeCFStringValidator(minLength: Int) -> AnyValueValidator<CFString> {
   AnyValueValidator { CFStringGetLength($0) >= minLength }

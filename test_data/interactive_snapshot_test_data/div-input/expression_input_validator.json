@@ -1,0 +1,139 @@
+{
+  "description": "Expression input validator",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "ui_test_card",
+      "variables": [
+        {
+          "name": "input",
+          "type": "string",
+          "value": "0"
+        },
+        {
+          "name": "allow_empty",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "check_fail",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "minimum_value",
+          "type": "string",
+          "value": "100"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Condition: value >= @{minimum_value}"
+              },
+              {
+                "type": "text",
+                "text": "Allow empty: @{allow_empty}"
+              },
+              {
+                "id": "input",
+                "type": "input",
+                "text_variable": "input",
+                "paddings": {
+                  "start": 10,
+                  "end": 10,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "margins": {
+                  "start": 5,
+                  "end": 5,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#eeeeee"
+                  }
+                ],
+                "validators": [
+                  {
+                    "type": "expression",
+                    "condition": "@{(toNumber(input) !: 0) >= toNumber(minimum_value)}",
+                    "allow_empty": "@{allow_empty}",
+                    "label_id": "error_text",
+                    "variable": "check_fail"
+                  }
+                ]
+              },
+              {
+                "id": "error_text",
+                "type": "text",
+                "text": "Validation failed",
+                "text_color": "#ff0000",
+                "font_size": 14,
+                "visibility": "@{check_fail ? 'invisible' : 'visible'}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "bigger",
+          "url": "div-action://set_variable?name=input&value=200"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change minimum",
+          "url": "div-action://set_variable?name=minimum_value&value=300"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "empty",
+          "url": "div-action://set_variable?name=input&value="
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "allow empty",
+          "url": "div-action://set_variable?name=allow_empty&value=1"
+        }
+      ],
+      "expected_screenshot": "step4.png"
+    }
+  ]
+}

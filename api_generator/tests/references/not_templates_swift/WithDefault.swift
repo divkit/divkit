@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class WithDefault {
+public final class WithDefault: Sendable {
   public static let type: String = "default"
 
   public init(dictionary: [String: Any]) throws {}

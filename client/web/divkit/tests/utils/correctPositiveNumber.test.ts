@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctPositiveNumber } from '../../src/utils/correctPositiveNumber';
 
 describe('correctPositiveNumber', () => {

@@ -1,18 +1,14 @@
 import CoreGraphics
 import Foundation
-
 import LayoutKit
 import VGSL
 
 /// Deprecated. Use `DivActionHandler`.
 public final class DivActionURLHandler {
+  @_spi(Internal)
   public typealias UpdateCardAction = (UpdateReason) -> Void
+
   public typealias ShowTooltipAction = (TooltipInfo) -> Void
-  public typealias PerformTimerAction = (
-    _ cardId: DivCardID,
-    _ timerId: String,
-    _ action: DivTimerAction
-  ) -> Void
 
   @frozen
   public enum UpdateReason {
@@ -23,67 +19,36 @@ public final class DivActionURLHandler {
     case external
   }
 
-  private let stateUpdater: DivStateUpdater
-  private let blockStateStorage: DivBlockStateStorage
   private let patchProvider: DivPatchProvider
-  private let variableUpdater: DivVariableUpdater
   private let updateCard: UpdateCardAction
-  private let showTooltip: ShowTooltipAction?
-  private let tooltipActionPerformer: TooltipActionPerformer?
-  private let performTimerAction: PerformTimerAction
   private let persistentValuesStorage: DivPersistentValuesStorage
+  private let setStateActionHandler: SetStateActionHandler
   private let scrollActionHandler: ScrollActionHandler
+  private let timerActionHandler: TimerActionHandler
+  private let tooltipActionHandler: TooltipActionHandler
 
-  public init(
-    stateUpdater: DivStateUpdater,
-    blockStateStorage: DivBlockStateStorage,
+  init(
     patchProvider: DivPatchProvider,
-    variableUpdater: DivVariableUpdater,
     updateCard: @escaping UpdateCardAction,
-    showTooltip: ShowTooltipAction?,
-    tooltipActionPerformer: TooltipActionPerformer?,
-    performTimerAction: @escaping PerformTimerAction = { _, _, _ in },
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage,
+    scrollActionHandler: ScrollActionHandler,
+    setStateActionHandler: SetStateActionHandler,
+    timerActionHandler: TimerActionHandler,
+    tooltipActionHandler: TooltipActionHandler
   ) {
-    self.stateUpdater = stateUpdater
-    self.blockStateStorage = blockStateStorage
     self.patchProvider = patchProvider
-    self.variableUpdater = variableUpdater
     self.updateCard = updateCard
-    self.showTooltip = showTooltip
-    self.tooltipActionPerformer = tooltipActionPerformer
-    self.performTimerAction = performTimerAction
     self.persistentValuesStorage = persistentValuesStorage
-    self.scrollActionHandler = ScrollActionHandler(
-      blockStateStorage: blockStateStorage,
-      updateCard: updateCard
-    )
-  }
-
-  public func canHandleURL(_ url: URL) -> Bool {
-    url.scheme == DivActionIntent.scheme
-  }
-
-  public func handleURL(
-    _ url: URL,
-    cardId: DivCardID,
-    completion: @escaping (Result<Void, Error>) -> Void = { _ in }
-  ) -> Bool {
-    let info = DivActionInfo(
-      path: cardId.path,
-      logId: cardId.rawValue,
-      url: url,
-      logUrl: nil,
-      referer: nil,
-      source: .tap,
-      payload: nil
-    )
-    return handleURL(url, info: info, completion: completion)
+    self.setStateActionHandler = setStateActionHandler
+    self.scrollActionHandler = scrollActionHandler
+    self.timerActionHandler = timerActionHandler
+    self.tooltipActionHandler = tooltipActionHandler
   }
 
   func handleURL(
     _ url: URL,
     info: DivActionInfo,
+    context: DivActionHandlingContext,
     completion: @escaping (Result<Void, Error>) -> Void = { _ in }
   ) -> Bool {
     guard let intent = DivActionIntent(url: url) else {
@@ -94,16 +59,9 @@ public final class DivActionURLHandler {
     switch intent {
     case let .showTooltip(id, multiple):
       let tooltipInfo = TooltipInfo(id: id, showsOnStart: false, multiple: multiple)
-      guard showTooltip == nil else {
-        showTooltip?(tooltipInfo)
-        break
-      }
-      tooltipActionPerformer?.showTooltip(info: tooltipInfo)
+      tooltipActionHandler.showTooltip(tooltipInfo)
     case let .hideTooltip(id):
-      guard showTooltip == nil else {
-        break
-      }
-      tooltipActionPerformer?.hideTooltip(id: id)
+      tooltipActionHandler.hideTooltip(id: id)
     case let .download(patchUrl):
       patchProvider.getPatch(
         url: patchUrl,
@@ -113,14 +71,13 @@ public final class DivActionURLHandler {
         }
       )
     case let .setState(divStatePath, lifetime):
-      stateUpdater.set(
-        path: divStatePath,
-        cardId: cardId,
-        lifetime: lifetime
+      setStateActionHandler.handle(
+        divStatePath: divStatePath,
+        lifetime: lifetime,
+        context: context
       )
-      updateCard(.state(cardId))
     case let .setVariable(name, value):
-      variableUpdater.update(
+      context.variablesStorage.update(
         path: info.path,
         name: DivVariableName(rawValue: name),
         value: value
@@ -167,14 +124,14 @@ public final class DivActionURLHandler {
         scrollActionHandler.scrollToOffset(cardId: cardId, id: id, offset: position)
       }
     case let .video(id: id, action: action):
-      blockStateStorage.setState(
+      context.blockStateStorage.setState(
         id: id,
         cardId: cardId,
         state: VideoBlockViewState(state: action == .play ? .playing : .paused)
       )
-      updateCard(.state(cardId))
+      context.updateCard(.state(cardId))
     case let .timer(timerId, action):
-      performTimerAction(cardId, timerId, action)
+      timerActionHandler.handle(cardId: cardId, timerId: timerId, action: action)
     case let .setStoredValue(storedValue):
       persistentValuesStorage.set(value: storedValue)
     }

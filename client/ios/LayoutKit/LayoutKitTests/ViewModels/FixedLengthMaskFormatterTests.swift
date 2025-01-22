@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import LayoutKit
+import XCTest
 
 final class FixedLengthMaskFormatterTests: XCTestCase {
   func test_rawTextFormatting() {

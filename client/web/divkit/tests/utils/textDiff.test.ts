@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 // Replicate from Android: client/android/div/src/test/java/com/yandex/div/core/util/mask/TextDiffTest.kt
 
 import { textDiff } from '../../src/utils/textDiff';

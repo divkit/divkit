@@ -1,9 +1,10 @@
 {
   "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
   "platforms": [
+    "android",
     "ios",
     "web",
-    "android"
+    "flutter"
   ],
   "templates": {},
   "card": {

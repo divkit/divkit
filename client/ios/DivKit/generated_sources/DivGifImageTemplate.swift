@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivGifImageTemplate: TemplateValue {
+public final class DivGifImageTemplate: TemplateValue, Sendable {
   public static let type: String = "gif"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?
@@ -28,6 +28,8 @@ public final class DivGifImageTemplate: TemplateValue {
   public let functions: Field<[DivFunctionTemplate]>?
   public let gifUrl: Field<Expression<URL>>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
+  public let hoverEndActions: Field<[DivActionTemplate]>?
+  public let hoverStartActions: Field<[DivActionTemplate]>?
   public let id: Field<String>?
   public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let longtapActions: Field<[DivActionTemplate]>?
@@ -35,6 +37,8 @@ public final class DivGifImageTemplate: TemplateValue {
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let placeholderColor: Field<Expression<Color>>? // default value: #14000000
   public let preloadRequired: Field<Expression<Bool>>? // default value: false
+  public let pressEndActions: Field<[DivActionTemplate]>?
+  public let pressStartActions: Field<[DivActionTemplate]>?
   public let preview: Field<Expression<String>>?
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -77,6 +81,8 @@ public final class DivGifImageTemplate: TemplateValue {
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       gifUrl: dictionary.getOptionalExpressionField("gif_url", transform: URL.init(string:)),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
+      hoverEndActions: dictionary.getOptionalArray("hover_end_actions", templateToType: templateToType),
+      hoverStartActions: dictionary.getOptionalArray("hover_start_actions", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
@@ -84,6 +90,8 @@ public final class DivGifImageTemplate: TemplateValue {
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       placeholderColor: dictionary.getOptionalExpressionField("placeholder_color", transform: Color.color(withHexString:)),
       preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
+      pressEndActions: dictionary.getOptionalArray("press_end_actions", templateToType: templateToType),
+      pressStartActions: dictionary.getOptionalArray("press_start_actions", templateToType: templateToType),
       preview: dictionary.getOptionalExpressionField("preview"),
       reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
@@ -127,6 +135,8 @@ public final class DivGifImageTemplate: TemplateValue {
     functions: Field<[DivFunctionTemplate]>? = nil,
     gifUrl: Field<Expression<URL>>? = nil,
     height: Field<DivSizeTemplate>? = nil,
+    hoverEndActions: Field<[DivActionTemplate]>? = nil,
+    hoverStartActions: Field<[DivActionTemplate]>? = nil,
     id: Field<String>? = nil,
     layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
@@ -134,6 +144,8 @@ public final class DivGifImageTemplate: TemplateValue {
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     placeholderColor: Field<Expression<Color>>? = nil,
     preloadRequired: Field<Expression<Bool>>? = nil,
+    pressEndActions: Field<[DivActionTemplate]>? = nil,
+    pressStartActions: Field<[DivActionTemplate]>? = nil,
     preview: Field<Expression<String>>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
@@ -174,6 +186,8 @@ public final class DivGifImageTemplate: TemplateValue {
     self.functions = functions
     self.gifUrl = gifUrl
     self.height = height
+    self.hoverEndActions = hoverEndActions
+    self.hoverStartActions = hoverStartActions
     self.id = id
     self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
@@ -181,6 +195,8 @@ public final class DivGifImageTemplate: TemplateValue {
     self.paddings = paddings
     self.placeholderColor = placeholderColor
     self.preloadRequired = preloadRequired
+    self.pressEndActions = pressEndActions
+    self.pressStartActions = pressStartActions
     self.preview = preview
     self.reuseId = reuseId
     self.rowSpan = rowSpan
@@ -222,6 +238,8 @@ public final class DivGifImageTemplate: TemplateValue {
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let gifUrlValue = { parent?.gifUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let hoverEndActionsValue = { parent?.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let hoverStartActionsValue = { parent?.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
     let layoutProviderValue = { parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let longtapActionsValue = { parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -229,6 +247,8 @@ public final class DivGifImageTemplate: TemplateValue {
     let paddingsValue = { parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let placeholderColorValue = { parent?.placeholderColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
     let preloadRequiredValue = { parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue }()
+    let pressEndActionsValue = { parent?.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let pressStartActionsValue = { parent?.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let previewValue = { parent?.preview?.resolveOptionalValue(context: context) ?? .noValue }()
     let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
     let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
@@ -268,6 +288,8 @@ public final class DivGifImageTemplate: TemplateValue {
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       gifUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "gif_url", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      hoverEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_end_actions", error: $0) },
+      hoverStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_start_actions", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
@@ -275,6 +297,8 @@ public final class DivGifImageTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       placeholderColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "placeholder_color", error: $0) },
       preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
+      pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
+      pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -323,6 +347,8 @@ public final class DivGifImageTemplate: TemplateValue {
       functions: { functionsValue.value }(),
       gifUrl: { gifUrlNonNil }(),
       height: { heightValue.value }(),
+      hoverEndActions: { hoverEndActionsValue.value }(),
+      hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       longtapActions: { longtapActionsValue.value }(),
@@ -330,6 +356,8 @@ public final class DivGifImageTemplate: TemplateValue {
       paddings: { paddingsValue.value }(),
       placeholderColor: { placeholderColorValue.value }(),
       preloadRequired: { preloadRequiredValue.value }(),
+      pressEndActions: { pressEndActionsValue.value }(),
+      pressStartActions: { pressStartActionsValue.value }(),
       preview: { previewValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -376,6 +404,8 @@ public final class DivGifImageTemplate: TemplateValue {
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var gifUrlValue: DeserializationResult<Expression<URL>> = { parent?.gifUrl?.value() ?? .noValue }()
     var heightValue: DeserializationResult<DivSize> = .noValue
+    var hoverEndActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var hoverStartActionsValue: DeserializationResult<[DivAction]> = .noValue
     var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
     var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -383,6 +413,8 @@ public final class DivGifImageTemplate: TemplateValue {
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var placeholderColorValue: DeserializationResult<Expression<Color>> = { parent?.placeholderColor?.value() ?? .noValue }()
     var preloadRequiredValue: DeserializationResult<Expression<Bool>> = { parent?.preloadRequired?.value() ?? .noValue }()
+    var pressEndActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var pressStartActionsValue: DeserializationResult<[DivAction]> = .noValue
     var previewValue: DeserializationResult<Expression<String>> = { parent?.preview?.value() ?? .noValue }()
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
@@ -511,6 +543,16 @@ public final class DivGifImageTemplate: TemplateValue {
           }
         }()
         _ = {
+          if key == "hover_end_actions" {
+           hoverEndActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: hoverEndActionsValue)
+          }
+        }()
+        _ = {
+          if key == "hover_start_actions" {
+           hoverStartActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: hoverStartActionsValue)
+          }
+        }()
+        _ = {
           if key == "id" {
            idValue = deserialize(__dictValue).merged(with: idValue)
           }
@@ -543,6 +585,16 @@ public final class DivGifImageTemplate: TemplateValue {
         _ = {
           if key == "preload_required" {
            preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
+          }
+        }()
+        _ = {
+          if key == "press_end_actions" {
+           pressEndActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pressEndActionsValue)
+          }
+        }()
+        _ = {
+          if key == "press_start_actions" {
+           pressStartActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pressStartActionsValue)
           }
         }()
         _ = {
@@ -736,6 +788,16 @@ public final class DivGifImageTemplate: TemplateValue {
           }
         }()
         _ = {
+         if key == parent?.hoverEndActions?.link {
+           hoverEndActionsValue = hoverEndActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.hoverStartActions?.link {
+           hoverStartActionsValue = hoverStartActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
          if key == parent?.id?.link {
            idValue = idValue.merged(with: { deserialize(__dictValue) })
           }
@@ -768,6 +830,16 @@ public final class DivGifImageTemplate: TemplateValue {
         _ = {
          if key == parent?.preloadRequired?.link {
            preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.pressEndActions?.link {
+           pressEndActionsValue = pressEndActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.pressStartActions?.link {
+           pressStartActionsValue = pressStartActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
           }
         }()
         _ = {
@@ -872,10 +944,14 @@ public final class DivGifImageTemplate: TemplateValue {
       _ = { focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { hoverEndActionsValue = hoverEndActionsValue.merged(with: { parent.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { hoverStartActionsValue = hoverStartActionsValue.merged(with: { parent.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { pressEndActionsValue = pressEndActionsValue.merged(with: { parent.pressEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { pressStartActionsValue = pressStartActionsValue.merged(with: { parent.pressStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { tooltipsValue = tooltipsValue.merged(with: { parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { transformValue = transformValue.merged(with: { parent.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
@@ -910,6 +986,8 @@ public final class DivGifImageTemplate: TemplateValue {
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       gifUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "gif_url", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      hoverEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_end_actions", error: $0) },
+      hoverStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "hover_start_actions", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
@@ -917,6 +995,8 @@ public final class DivGifImageTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       placeholderColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "placeholder_color", error: $0) },
       preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
+      pressEndActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_end_actions", error: $0) },
+      pressStartActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "press_start_actions", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
       reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -965,6 +1045,8 @@ public final class DivGifImageTemplate: TemplateValue {
       functions: { functionsValue.value }(),
       gifUrl: { gifUrlNonNil }(),
       height: { heightValue.value }(),
+      hoverEndActions: { hoverEndActionsValue.value }(),
+      hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       longtapActions: { longtapActionsValue.value }(),
@@ -972,6 +1054,8 @@ public final class DivGifImageTemplate: TemplateValue {
       paddings: { paddingsValue.value }(),
       placeholderColor: { placeholderColorValue.value }(),
       preloadRequired: { preloadRequiredValue.value }(),
+      pressEndActions: { pressEndActionsValue.value }(),
+      pressStartActions: { pressStartActionsValue.value }(),
       preview: { previewValue.value }(),
       reuseId: { reuseIdValue.value }(),
       rowSpan: { rowSpanValue.value }(),
@@ -1023,6 +1107,8 @@ public final class DivGifImageTemplate: TemplateValue {
       functions: functions ?? mergedParent.functions,
       gifUrl: gifUrl ?? mergedParent.gifUrl,
       height: height ?? mergedParent.height,
+      hoverEndActions: hoverEndActions ?? mergedParent.hoverEndActions,
+      hoverStartActions: hoverStartActions ?? mergedParent.hoverStartActions,
       id: id ?? mergedParent.id,
       layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
@@ -1030,6 +1116,8 @@ public final class DivGifImageTemplate: TemplateValue {
       paddings: paddings ?? mergedParent.paddings,
       placeholderColor: placeholderColor ?? mergedParent.placeholderColor,
       preloadRequired: preloadRequired ?? mergedParent.preloadRequired,
+      pressEndActions: pressEndActions ?? mergedParent.pressEndActions,
+      pressStartActions: pressStartActions ?? mergedParent.pressStartActions,
       preview: preview ?? mergedParent.preview,
       reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
@@ -1076,6 +1164,8 @@ public final class DivGifImageTemplate: TemplateValue {
       functions: merged.functions?.tryResolveParent(templates: templates),
       gifUrl: merged.gifUrl,
       height: merged.height?.tryResolveParent(templates: templates),
+      hoverEndActions: merged.hoverEndActions?.tryResolveParent(templates: templates),
+      hoverStartActions: merged.hoverStartActions?.tryResolveParent(templates: templates),
       id: merged.id,
       layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
@@ -1083,6 +1173,8 @@ public final class DivGifImageTemplate: TemplateValue {
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       placeholderColor: merged.placeholderColor,
       preloadRequired: merged.preloadRequired,
+      pressEndActions: merged.pressEndActions?.tryResolveParent(templates: templates),
+      pressStartActions: merged.pressStartActions?.tryResolveParent(templates: templates),
       preview: merged.preview,
       reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,

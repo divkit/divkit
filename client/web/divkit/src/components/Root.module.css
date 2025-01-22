@@ -1,3 +1,5 @@
+@value root_platform_desktop, root__clickable, root__clickable-no-transition from "./Cls.module.css";
+
 .root {
     position: relative;
     display: grid;
@@ -8,6 +10,7 @@
     line-height: 1.25;
     word-wrap: break-word;
     word-break: break-word;
+    pointer-events: none;
     /*color: #000;
     background: #fff;*/
 }
@@ -21,6 +24,14 @@
 .root__clickable,
 .root__clickable-no-transition {
     cursor: pointer;
+}
+
+.root__any-actions {
+    pointer-events: auto;
+}
+
+.root__selectable {
+    pointer-events: auto;
 }
 
 .root__unselectable {

@@ -702,6 +702,7 @@ data class Text internal constructor(
                 actions = additive.actions ?: properties.actions,
                 alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
                 background = additive.background ?: properties.background,
+                baselineOffset = additive.baselineOffset ?: properties.baselineOffset,
                 border = additive.border ?: properties.border,
                 end = additive.end ?: properties.end,
                 fontFamily = additive.fontFamily ?: properties.fontFamily,
@@ -735,6 +736,11 @@ data class Text internal constructor(
              * Character range background.
              */
             val background: Property<TextRangeBackground>?,
+            /**
+             * Character baseline vertial offset. If set, vertical alignment is ignored.
+             * Default value: `0`.
+             */
+            val baselineOffset: Property<Double>?,
             /**
              * Character range border.
              */
@@ -812,6 +818,7 @@ data class Text internal constructor(
                 result.tryPutProperty("actions", actions)
                 result.tryPutProperty("alignment_vertical", alignmentVertical)
                 result.tryPutProperty("background", background)
+                result.tryPutProperty("baseline_offset", baselineOffset)
                 result.tryPutProperty("border", border)
                 result.tryPutProperty("end", end)
                 result.tryPutProperty("font_family", fontFamily)
@@ -2947,6 +2954,7 @@ fun Text.Image.asList() = listOf(this)
  * @param actions Action when clicking on text.
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -2971,6 +2979,7 @@ fun DivScope.textRange(
     actions: List<Action>? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
+    baselineOffset: Double? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
@@ -2993,6 +3002,7 @@ fun DivScope.textRange(
         actions = valueOrNull(actions),
         alignmentVertical = valueOrNull(alignmentVertical),
         background = valueOrNull(background),
+        baselineOffset = valueOrNull(baselineOffset),
         border = valueOrNull(border),
         end = valueOrNull(end),
         fontFamily = valueOrNull(fontFamily),
@@ -3017,6 +3027,7 @@ fun DivScope.textRange(
  * @param actions Action when clicking on text.
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3041,6 +3052,7 @@ fun DivScope.textRangeProps(
     actions: List<Action>? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
+    baselineOffset: Double? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
@@ -3062,6 +3074,7 @@ fun DivScope.textRangeProps(
     actions = valueOrNull(actions),
     alignmentVertical = valueOrNull(alignmentVertical),
     background = valueOrNull(background),
+    baselineOffset = valueOrNull(baselineOffset),
     border = valueOrNull(border),
     end = valueOrNull(end),
     fontFamily = valueOrNull(fontFamily),
@@ -3085,6 +3098,7 @@ fun DivScope.textRangeProps(
  * @param actions Action when clicking on text.
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3109,6 +3123,7 @@ fun TemplateScope.textRangeRefs(
     actions: ReferenceProperty<List<Action>>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
+    baselineOffset: ReferenceProperty<Double>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
     fontFamily: ReferenceProperty<String>? = null,
@@ -3130,6 +3145,7 @@ fun TemplateScope.textRangeRefs(
     actions = actions,
     alignmentVertical = alignmentVertical,
     background = background,
+    baselineOffset = baselineOffset,
     border = border,
     end = end,
     fontFamily = fontFamily,
@@ -3153,6 +3169,7 @@ fun TemplateScope.textRangeRefs(
  * @param actions Action when clicking on text.
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3177,6 +3194,7 @@ fun Text.Range.override(
     actions: List<Action>? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
+    baselineOffset: Double? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
@@ -3199,6 +3217,7 @@ fun Text.Range.override(
         actions = valueOrNull(actions) ?: properties.actions,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         background = valueOrNull(background) ?: properties.background,
+        baselineOffset = valueOrNull(baselineOffset) ?: properties.baselineOffset,
         border = valueOrNull(border) ?: properties.border,
         end = valueOrNull(end) ?: properties.end,
         fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
@@ -3223,6 +3242,7 @@ fun Text.Range.override(
  * @param actions Action when clicking on text.
  * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3247,6 +3267,7 @@ fun Text.Range.defer(
     actions: ReferenceProperty<List<Action>>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
+    baselineOffset: ReferenceProperty<Double>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
     fontFamily: ReferenceProperty<String>? = null,
@@ -3269,6 +3290,7 @@ fun Text.Range.defer(
         actions = actions ?: properties.actions,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = background ?: properties.background,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
         border = border ?: properties.border,
         end = end ?: properties.end,
         fontFamily = fontFamily ?: properties.fontFamily,
@@ -3291,6 +3313,7 @@ fun Text.Range.defer(
 
 /**
  * @param alignmentVertical Vertical text alignment within the row.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
@@ -3310,6 +3333,7 @@ fun Text.Range.defer(
 fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
+    baselineOffset: ExpressionProperty<Double>? = null,
     end: ExpressionProperty<Int>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontFeatureSettings: ExpressionProperty<String>? = null,
@@ -3329,6 +3353,7 @@ fun Text.Range.evaluate(
         actions = properties.actions,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = properties.background,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
         border = properties.border,
         end = end ?: properties.end,
         fontFamily = fontFamily ?: properties.fontFamily,

@@ -1,7 +1,6 @@
-import UIKit
-
 import LayoutKit
 import Serialization
+import UIKit
 import VGSL
 
 @MainActor
@@ -174,8 +173,7 @@ final class DivBlockProvider {
       return
     }
     if !id.isTooltip {
-      divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
-      divKitComponents.setTimers(divData: divData, cardId: cardId)
+      divKitComponents.setCardData(divData: divData, cardId: cardId)
     }
     self.divData = divData
   }

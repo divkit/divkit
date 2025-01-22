@@ -1,9 +1,7 @@
 @testable import DivKit
-import VGSL
-
-import XCTest
-
 import Serialization
+import VGSL
+import XCTest
 
 final class DivDeserializationErrorsTests: XCTestCase {
   func test_WhenRequiredFieldIsMissing_returnErrors() {

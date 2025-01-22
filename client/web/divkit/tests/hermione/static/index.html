@@ -139,6 +139,8 @@
             origScroll.call(this, options);
         };
 
+        window.divkitLogs = [];
+
         Promise.all([
             document.fonts.load('400 12px "YS Text"', 'test'),
             document.fonts.load('500 12px "YS Text"', 'test'),
@@ -154,10 +156,6 @@
                     platform: 'touch',
                     direction: json.configuration && json.configuration.layout_direction === 'rtl' ? 'rtl' : 'ltr',
                     onStat(arg) {
-                        if (!Array.isArray(window.divkitLogs)) {
-                            window.divkitLogs = [];
-                        }
-
                         window.divkitLogs.push(arg);
                     },
                     onError(err) {

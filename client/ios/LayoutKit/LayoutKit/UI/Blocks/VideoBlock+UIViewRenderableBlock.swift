@@ -1,7 +1,6 @@
 import CoreMedia
 import Foundation
 import UIKit
-
 import VGSL
 
 extension VideoBlock {

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivInputMaskTemplate: TemplateValue {
+public enum DivInputMaskTemplate: TemplateValue, Sendable {
   case divFixedLengthInputMaskTemplate(DivFixedLengthInputMaskTemplate)
   case divCurrencyInputMaskTemplate(DivCurrencyInputMaskTemplate)
   case divPhoneInputMaskTemplate(DivPhoneInputMaskTemplate)

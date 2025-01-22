@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithOptionalProperty {
+public final class EntityWithOptionalProperty: Sendable {
   public static let type: String = "entity_with_optional_property"
   public let property: Expression<String>?
 

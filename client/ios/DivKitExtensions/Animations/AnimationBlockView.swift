@@ -1,6 +1,5 @@
-import UIKit
-
 import LayoutKit
+import UIKit
 import VGSL
 
 final class AnimationBlockView: BlockView {

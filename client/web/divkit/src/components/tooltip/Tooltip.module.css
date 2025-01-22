@@ -1,3 +1,5 @@
+@value outer, root__clickable, root__clickable-no-transition, root__selectable from "../Cls.module.css";
+
 .tooltip {
     position: absolute;
     top: 0;
@@ -9,4 +11,17 @@
 .tooltip_visible {
     visibility: visible;
     pointer-events: auto;
+}
+
+.tooltip > .outer:not(.root__clickable):not(.root__clickable-no-transition):not(.root__selectable) {
+    pointer-events: none;
+}
+
+.tooltip__overlay {
+    position: fixed;
+    z-index: var(--divkit-tooltip-overlay-z-index);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

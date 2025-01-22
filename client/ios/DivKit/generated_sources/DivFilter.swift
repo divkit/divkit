@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivFilter {
+public enum DivFilter: Sendable {
   case divBlur(DivBlur)
   case divFilterRtlMirror(DivFilterRtlMirror)
 

@@ -1,5 +1,4 @@
 @testable import DivKit
-
 import XCTest
 
 final class DivVariableTrackerTests: XCTestCase {

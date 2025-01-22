@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPageSize {
+public final class DivPageSize: Sendable {
   public static let type: String = "percentage"
   public let pageWidth: DivPercentageSize
 

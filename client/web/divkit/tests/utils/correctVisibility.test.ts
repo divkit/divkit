@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctVisibility } from '../../src/utils/correctVisibility';
 
 describe('correctVisibility', () => {

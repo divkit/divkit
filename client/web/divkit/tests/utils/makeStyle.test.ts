@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { makeStyle } from '../../src/utils/makeStyle';
 
 describe('makeStyle', () => {

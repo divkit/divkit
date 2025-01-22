@@ -1,6 +1,5 @@
-import SwiftUI
-
 import DivKit
+import SwiftUI
 
 struct SettingsView: View {
   @Environment(\.presentationMode)

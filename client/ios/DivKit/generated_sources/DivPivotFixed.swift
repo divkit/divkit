@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPivotFixed {
+public final class DivPivotFixed: Sendable {
   public static let type: String = "pivot-fixed"
   public let unit: Expression<DivSizeUnit> // default value: dp
   public let value: Expression<Int>?

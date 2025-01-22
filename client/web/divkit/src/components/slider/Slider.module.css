@@ -19,6 +19,7 @@
     border: none;
     appearance: none;
     opacity: 0;
+    pointer-events: auto;
 }
 
 .slider__input + .slider__input {

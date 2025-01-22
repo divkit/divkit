@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivDrawableTemplate: TemplateValue {
+public enum DivDrawableTemplate: TemplateValue, Sendable {
   case divShapeDrawableTemplate(DivShapeDrawableTemplate)
 
   public var value: Any {

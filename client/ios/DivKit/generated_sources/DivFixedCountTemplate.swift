@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFixedCountTemplate: TemplateValue {
+public final class DivFixedCountTemplate: TemplateValue, Sendable {
   public static let type: String = "fixed"
   public let parent: String?
   public let value: Field<Expression<Int>>? // constraint: number >= 0

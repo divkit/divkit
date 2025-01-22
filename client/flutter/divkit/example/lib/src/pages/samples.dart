@@ -37,6 +37,10 @@ Future<List<DivKitData>> loadList() async {
     ));
   }
 
+  if (strings.isEmpty) {
+    throw 'Unable to download samples';
+  }
+
   return compute<Box, List<DivKitData>>(process, Box(strings));
 }
 
@@ -50,8 +54,57 @@ class SamplesPage extends StatelessWidget {
           future: loadList(),
           builder: (_, snapshot) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString()),
+              return Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  title: const Text("Samples"),
+                ),
+                body: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        snapshot.error.toString(),
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                      const Text.rich(
+                        TextSpan(
+                          text: "To download assets, run ",
+                          style: TextStyle(color: Colors.black54),
+                          children: [
+                            TextSpan(
+                              text: "./tool/get_test_data.sh",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: " in project root",
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             }
             if (snapshot.hasData) {
@@ -64,6 +117,15 @@ class SamplesPage extends StatelessWidget {
                       floating: false,
                       pinned: true,
                       expandedHeight: 220,
+                      leading: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
                       flexibleSpace: LayoutBuilder(
                         builder: (context, constraints) {
                           final percent =

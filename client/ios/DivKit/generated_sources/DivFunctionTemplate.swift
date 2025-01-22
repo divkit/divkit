@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFunctionTemplate: TemplateValue {
+public final class DivFunctionTemplate: TemplateValue, Sendable {
   public let arguments: Field<[DivFunctionArgumentTemplate]>?
   public let body: Field<String>?
   public let name: Field<String>? // regex: ^[a-zA-Z_][a-zA-Z0-9_]*$

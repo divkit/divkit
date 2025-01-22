@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSlideTransition: DivTransitionBase {
+public final class DivSlideTransition: DivTransitionBase, Sendable {
   @frozen
-  public enum Edge: String, CaseIterable {
+  public enum Edge: String, CaseIterable, Sendable {
     case left = "left"
     case top = "top"
     case right = "right"

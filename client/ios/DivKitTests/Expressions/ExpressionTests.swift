@@ -1,8 +1,7 @@
 @testable import DivKit
+import enum DivKit.Expression
 import VGSL
 import XCTest
-
-import enum DivKit.Expression
 
 final class ExpressionTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
@@ -11,11 +10,11 @@ final class ExpressionTests: XCTestCase {
 }
 
 private func makeTestCases() -> [(String, ExpressionTestCase)] {
-  try! Bundle(for: DivKitTests.self)
+  Bundle(for: DivKitTests.self)
     .urls(forResourcesWithExtension: "json", subdirectory: "expression_test_data")!
     .flatMap { url in
       let fileName = url.lastPathComponent
-      let testCases = try JSONDecoder()
+      let testCases = try! JSONDecoder()
         .decode(TestCases.self, from: Data(contentsOf: url))
         .cases ?? []
       return testCases
@@ -122,8 +121,8 @@ private struct ExpressionTestCase: Decodable {
     makeExpressionResolver().resolveColor(link(expression))
   }
 
-  func resolveArray() -> [AnyHashable]? {
-    makeExpressionResolver().resolveArray(link(expression)) as? [AnyHashable]
+  func resolveArray() -> DivArray? {
+    makeExpressionResolver().resolveArray(link(expression)) as? DivArray
   }
 
   func resolveDict() -> DivDictionary? {
@@ -161,7 +160,7 @@ private enum ExpectedValue: Decodable {
   case bool(Bool)
   case color(Color)
   case datetime(Date)
-  case array([AnyHashable])
+  case array(DivArray)
   case dict(DivDictionary)
   case error(String)
 
@@ -192,13 +191,15 @@ private enum ExpectedValue: Decodable {
       self = .datetime(value.toDate()!)
     case "array":
       let value = try JSONObject(from: decoder).makeDictionary()
-      guard let array = value?["value"] as? [AnyHashable] else {
+      guard let rawValue = value?["value"] as? [Any],
+            let array = DivArray.fromAny(rawValue) else {
         fallthrough
       }
       self = .array(array)
     case "dict":
       let value = try JSONObject(from: decoder).makeDictionary()
-      guard let dict = value?["value"] as? DivDictionary else {
+      guard let rawValue = value?["value"] as? [String: Any],
+            let dict = DivDictionary.fromAny(rawValue) else {
         fallthrough
       }
       self = .dict(dict)

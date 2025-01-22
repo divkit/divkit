@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionDictSetValue {
+public final class DivActionDictSetValue: Sendable {
   public static let type: String = "dict_set_value"
   public let key: Expression<String>
   public let value: DivTypedValue?

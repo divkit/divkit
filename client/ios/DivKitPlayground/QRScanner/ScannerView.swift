@@ -1,5 +1,4 @@
 import SwiftUI
-
 import VGSL
 
 struct ScannerView: UIViewControllerRepresentable {

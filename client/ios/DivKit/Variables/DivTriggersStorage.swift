@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import VGSL
 
@@ -33,10 +32,10 @@ public final class DivTriggersStorage {
   private let reporter: DivReporter
   private let disposePool = AutodisposePool()
 
-  public init(
+  init(
     variablesStorage: DivVariablesStorage,
     functionsStorage: DivFunctionsStorage? = nil,
-    stateUpdates: Signal<DivBlockStateStorage.ChangeEvent> = .empty,
+    blockStateStorage: DivBlockStateStorage,
     actionHandler: DivActionHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter? = nil
@@ -47,7 +46,7 @@ public final class DivTriggersStorage {
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter ?? DefaultDivReporter()
 
-    stateUpdates.addObserver { [weak self] stateEvent in
+    blockStateStorage.stateUpdates.addObserver { [weak self] stateEvent in
       self?.handleStateEvent(stateEvent)
     }.dispose(in: disposePool)
   }

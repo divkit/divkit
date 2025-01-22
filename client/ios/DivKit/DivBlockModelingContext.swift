@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import LayoutKit
 import VGSL
 
@@ -10,16 +9,15 @@ import AppKit
 #endif
 
 public struct DivBlockModelingContext {
-  let viewId: DivViewId
+  private(set) var viewId: DivViewId
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
   public let actionHandler: DivActionHandler?
   public let blockStateStorage: DivBlockStateStorage
-  let visibilityCounter: DivVisibilityCounting
+  let visibilityCounter: DivVisibilityCounter
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
   public let imageHolderFactory: DivImageHolderFactory
-  let highPriorityImageHolderFactory: DivImageHolderFactory?
   let divCustomBlockFactory: DivCustomBlockFactory
   public let fontProvider: DivFontProvider
   let flagsInfo: DivFlagsInfo
@@ -30,6 +28,7 @@ public struct DivBlockModelingContext {
   let playerFactory: PlayerFactory?
   private(set) weak var parentScrollView: ScrollView?
   public private(set) var errorsStorage: DivErrorsStorage
+  let debugErrorCollector: DebugErrorCollector?
   private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
   let functionsStorage: DivFunctionsStorage?
@@ -47,66 +46,43 @@ public struct DivBlockModelingContext {
   let animatorController: DivAnimatorController?
   private(set) var accessibilityElementsStorage = DivAccessibilityElementsStorage()
 
+  @_spi(Internal)
   public init(
     cardId: DivCardID,
     additionalId: String? = nil,
-    cardLogId: String? = nil,
-    parentPath: UIElementPath? = nil,
-    parentDivStatePath: DivStatePath? = nil,
-    stateManager: DivStateManager,
-    actionHandler: DivActionHandler? = nil,
+    stateManager: DivStateManager = DivStateManager(),
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
-    visibilityCounter: DivVisibilityCounting? = nil,
-    lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
     imageHolderFactory: DivImageHolderFactory,
-    highPriorityImageHolderFactory: DivImageHolderFactory? = nil,
-    divCustomBlockFactory: DivCustomBlockFactory? = nil,
-    fontProvider: DivFontProvider? = nil,
-    flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
-    functionsStorage: DivFunctionsStorage? = nil,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
-    triggersStorage: DivTriggersStorage? = nil,
-    playerFactory: PlayerFactory? = nil,
-    debugParams: DebugParams = DebugParams(),
-    scheduler: Scheduling? = nil,
-    parentScrollView: ScrollView? = nil,
-    errorsStorage: DivErrorsStorage? = nil,
-    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
-    variableTracker: DivVariableTracker? = nil,
-    persistentValuesStorage: DivPersistentValuesStorage? = nil,
-    tooltipViewFactory: DivTooltipViewFactory? = nil,
-    layoutProviderHandler: DivLayoutProviderHandler? = nil
+    scheduler: Scheduling? = nil
   ) {
     self.init(
       viewId: DivViewId(cardId: cardId, additionalId: additionalId),
-      cardLogId: cardLogId,
-      parentPath: parentPath,
-      parentDivStatePath: parentDivStatePath,
       stateManager: stateManager,
-      actionHandler: actionHandler,
+      actionHandler: nil,
       blockStateStorage: blockStateStorage,
-      visibilityCounter: visibilityCounter,
-      lastVisibleBoundsCache: lastVisibleBoundsCache,
+      visibilityCounter: nil,
+      lastVisibleBoundsCache: nil,
       imageHolderFactory: imageHolderFactory,
-      highPriorityImageHolderFactory: highPriorityImageHolderFactory,
-      divCustomBlockFactory: divCustomBlockFactory,
-      fontProvider: fontProvider,
-      flagsInfo: flagsInfo,
+      divCustomBlockFactory: nil,
+      fontProvider: nil,
+      flagsInfo: .default,
       extensionHandlers: extensionHandlers.dictionary,
-      functionsStorage: functionsStorage,
+      functionsStorage: nil,
       variablesStorage: variablesStorage,
-      triggersStorage: triggersStorage,
-      playerFactory: playerFactory,
-      debugParams: debugParams,
+      triggersStorage: nil,
+      playerFactory: nil,
+      debugParams: DebugParams(),
       scheduler: scheduler,
-      parentScrollView: parentScrollView,
-      errorsStorage: errorsStorage,
-      layoutDirection: layoutDirection,
-      variableTracker: variableTracker,
-      persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: tooltipViewFactory,
-      layoutProviderHandler: layoutProviderHandler,
+      parentScrollView: nil,
+      errorsStorage: nil,
+      debugErrorCollector: nil,
+      layoutDirection: .leftToRight,
+      variableTracker: nil,
+      persistentValuesStorage: nil,
+      tooltipViewFactory: nil,
+      layoutProviderHandler: nil,
       idToPath: nil,
       animatorController: nil
     )
@@ -114,16 +90,12 @@ public struct DivBlockModelingContext {
 
   init(
     viewId: DivViewId,
-    cardLogId: String?,
-    parentPath: UIElementPath?,
-    parentDivStatePath: DivStatePath?,
     stateManager: DivStateManager,
     actionHandler: DivActionHandler?,
     blockStateStorage: DivBlockStateStorage,
-    visibilityCounter: DivVisibilityCounting?,
+    visibilityCounter: DivVisibilityCounter?,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache?,
     imageHolderFactory: DivImageHolderFactory,
-    highPriorityImageHolderFactory: DivImageHolderFactory?,
     divCustomBlockFactory: DivCustomBlockFactory?,
     fontProvider: DivFontProvider?,
     flagsInfo: DivFlagsInfo,
@@ -136,6 +108,7 @@ public struct DivBlockModelingContext {
     scheduler: Scheduling?,
     parentScrollView: ScrollView?,
     errorsStorage: DivErrorsStorage?,
+    debugErrorCollector: DebugErrorCollector?,
     layoutDirection: UserInterfaceLayoutDirection,
     variableTracker: DivVariableTracker?,
     persistentValuesStorage: DivPersistentValuesStorage?,
@@ -145,18 +118,14 @@ public struct DivBlockModelingContext {
     animatorController: DivAnimatorController?
   ) {
     self.viewId = viewId
-    self.cardLogId = cardLogId
-    let cardId = viewId.cardId
-    let parentPath = parentPath ?? UIElementPath(cardId.rawValue)
+    let parentPath = makeParentPath(viewId: viewId)
     self.parentPath = parentPath
-    self.parentDivStatePath = parentDivStatePath
     self.stateManager = stateManager
     self.actionHandler = actionHandler
     self.blockStateStorage = blockStateStorage
     self.visibilityCounter = visibilityCounter ?? DivVisibilityCounter()
     self.lastVisibleBoundsCache = lastVisibleBoundsCache ?? DivLastVisibleBoundsCache()
     self.imageHolderFactory = imageHolderFactory
-    self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.flagsInfo = flagsInfo
     self.fontProvider = fontProvider ?? DefaultFontProvider()
@@ -165,6 +134,7 @@ public struct DivBlockModelingContext {
     self.scheduler = scheduler ?? TimerScheduler()
     self.parentScrollView = parentScrollView
     let errorsStorage = errorsStorage ?? DivErrorsStorage(errors: [])
+    self.debugErrorCollector = debugErrorCollector
     self.errorsStorage = errorsStorage
     self.layoutDirection = layoutDirection
     self.variableTracker = variableTracker
@@ -296,6 +266,14 @@ public struct DivBlockModelingContext {
 
     return context
   }
+
+  func cloneForTooltip(tooltipId: String) -> Self {
+    var context = self
+    let viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
+    context.viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
+    context.parentPath = makeParentPath(viewId: viewId)
+    return context
+  }
 }
 
 struct PrototypeParams {
@@ -331,6 +309,15 @@ private func makeExpressionResolver(
       errorsStorage.add(DivExpressionError(error, path: path))
     }
   )
+}
+
+private func makeParentPath(viewId: DivViewId) -> UIElementPath {
+  let cardIdPath = UIElementPath(viewId.cardId.rawValue)
+  return if let additionalId = viewId.additionalId {
+    cardIdPath + additionalId
+  } else {
+    cardIdPath
+  }
 }
 
 extension [DivExtensionHandler] {

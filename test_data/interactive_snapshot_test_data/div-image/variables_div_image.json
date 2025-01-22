@@ -1,0 +1,76 @@
+{
+  "description": "Variables in DivImage (image_url, tint_color)",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "variables": [
+        {
+          "name": "color_variable",
+          "type": "color",
+          "value": "#000000"
+        },
+        {
+          "name": "image_url",
+          "type": "string",
+          "value": "https://yastatic.net/s3/home/div/bottomsheet/bender/camera.2.png"
+        }
+      ],
+      "log_id": "snapshot_test_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "image",
+            "width": {
+              "type": "fixed",
+              "value": 100
+            },
+            "tint_color": "@{color_variable}",
+            "image_url": "@{image_url}",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#55ff00"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=color_variable&value=%23ffff0000",
+          "log_id": "to_red"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=image_url&value=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fpattern.png",
+          "log_id": "change_img_url"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=color_variable&value=%23ff0000ff",
+          "log_id": "to_blue"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    }
+  ]
+}

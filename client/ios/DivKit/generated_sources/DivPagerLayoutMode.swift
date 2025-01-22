@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivPagerLayoutMode {
+public enum DivPagerLayoutMode: Sendable {
   case divPageSize(DivPageSize)
   case divNeighbourPageSize(DivNeighbourPageSize)
   case divPageContentSize(DivPageContentSize)

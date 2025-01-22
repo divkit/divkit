@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCloudBackgroundTemplate: TemplateValue {
+public final class DivCloudBackgroundTemplate: TemplateValue, Sendable {
   public static let type: String = "cloud"
   public let parent: String?
   public let color: Field<Expression<Color>>?

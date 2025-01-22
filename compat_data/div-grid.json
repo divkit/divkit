@@ -8,6 +8,9 @@
             },
             "web": {
                 "version_added": "29.11.0"
+            },
+            "ios": {
+                "version_added": "30.33.0"
             }
         }
     }, {

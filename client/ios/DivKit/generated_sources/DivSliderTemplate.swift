@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSliderTemplate: TemplateValue {
-  public final class RangeTemplate: TemplateValue {
+public final class DivSliderTemplate: TemplateValue, Sendable {
+  public final class RangeTemplate: TemplateValue, Sendable {
     public let end: Field<Expression<Int>>?
     public let margins: Field<DivEdgeInsetsTemplate>?
     public let start: Field<Expression<Int>>?
@@ -164,7 +164,7 @@ public final class DivSliderTemplate: TemplateValue {
     }
   }
 
-  public final class TextStyleTemplate: TemplateValue {
+  public final class TextStyleTemplate: TemplateValue, Sendable {
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -374,6 +374,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let isEnabled: Field<Expression<Bool>>? // default value: true
   public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let maxValue: Field<Expression<Int>>? // default value: 100
@@ -424,6 +425,7 @@ public final class DivSliderTemplate: TemplateValue {
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
       layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       maxValue: dictionary.getOptionalExpressionField("max_value"),
@@ -475,6 +477,7 @@ public final class DivSliderTemplate: TemplateValue {
     functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    isEnabled: Field<Expression<Bool>>? = nil,
     layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     maxValue: Field<Expression<Int>>? = nil,
@@ -523,6 +526,7 @@ public final class DivSliderTemplate: TemplateValue {
     self.functions = functions
     self.height = height
     self.id = id
+    self.isEnabled = isEnabled
     self.layoutProvider = layoutProvider
     self.margins = margins
     self.maxValue = maxValue
@@ -572,6 +576,7 @@ public final class DivSliderTemplate: TemplateValue {
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
+    let isEnabledValue = { parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue }()
     let layoutProviderValue = { parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let marginsValue = { parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let maxValueValue = { parent?.maxValue?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -619,6 +624,7 @@ public final class DivSliderTemplate: TemplateValue {
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
@@ -683,6 +689,7 @@ public final class DivSliderTemplate: TemplateValue {
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
       id: { idValue.value }(),
+      isEnabled: { isEnabledValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       margins: { marginsValue.value }(),
       maxValue: { maxValueValue.value }(),
@@ -737,6 +744,7 @@ public final class DivSliderTemplate: TemplateValue {
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
+    var isEnabledValue: DeserializationResult<Expression<Bool>> = { parent?.isEnabled?.value() ?? .noValue }()
     var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var maxValueValue: DeserializationResult<Expression<Int>> = { parent?.maxValue?.value() ?? .noValue }()
@@ -842,6 +850,11 @@ public final class DivSliderTemplate: TemplateValue {
         _ = {
           if key == "id" {
            idValue = deserialize(__dictValue).merged(with: idValue)
+          }
+        }()
+        _ = {
+          if key == "is_enabled" {
+           isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
           }
         }()
         _ = {
@@ -1075,6 +1088,11 @@ public final class DivSliderTemplate: TemplateValue {
           }
         }()
         _ = {
+         if key == parent?.isEnabled?.link {
+           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.layoutProvider?.link {
            layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
           }
@@ -1286,6 +1304,7 @@ public final class DivSliderTemplate: TemplateValue {
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
@@ -1350,6 +1369,7 @@ public final class DivSliderTemplate: TemplateValue {
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
       id: { idValue.value }(),
+      isEnabled: { isEnabledValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       margins: { marginsValue.value }(),
       maxValue: { maxValueValue.value }(),
@@ -1409,6 +1429,7 @@ public final class DivSliderTemplate: TemplateValue {
       functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      isEnabled: isEnabled ?? mergedParent.isEnabled,
       layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       maxValue: maxValue ?? mergedParent.maxValue,
@@ -1463,6 +1484,7 @@ public final class DivSliderTemplate: TemplateValue {
       functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      isEnabled: merged.isEnabled,
       layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       maxValue: merged.maxValue,

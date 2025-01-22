@@ -1,3 +1,15 @@
+## 0.4.5
+
+* Fixed schema parsing for complex properties
+* Fixed showing the "too large file size" tooltip in text fields at all times (it should only be when the limit is exceeded)
+* Added showing the file size to the list of video sources
+* Added the ability to select a font for the component (must be configured outside the editor for the property to appear)
+* Added support for the `switch` component
+* Added actions to show a tooltip / hide a tooltip
+* Added the "generate preview for video and first frame of video" button
+* Fixed the behavior when changing the rounding in "complex properties" (which is corners_radius)
+* Fixed deletion of false value from json
+
 ## 0.4.4
 
 * Added variable selection for places where applicable

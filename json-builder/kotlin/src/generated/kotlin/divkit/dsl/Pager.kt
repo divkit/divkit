@@ -64,6 +64,7 @@ data class Pager internal constructor(
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
+            scrollAxisAlignment = additive.scrollAxisAlignment ?: properties.scrollAxisAlignment,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
@@ -201,6 +202,11 @@ data class Pager internal constructor(
          */
         val rowSpan: Property<Int>?,
         /**
+         * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+         * Default value: `center`.
+         */
+        val scrollAxisAlignment: Property<ScrollAxisAlignment>?,
+        /**
          * List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
          */
         val selectedActions: Property<List<Action>>?,
@@ -286,6 +292,7 @@ data class Pager internal constructor(
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
+            result.tryPutProperty("scroll_axis_alignment", scrollAxisAlignment)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
@@ -310,6 +317,14 @@ data class Pager internal constructor(
      */
     @Generated
     sealed interface Orientation
+
+    /**
+     * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+     * 
+     * Possible values: [start], [center], [end].
+     */
+    @Generated
+    sealed interface ScrollAxisAlignment
 }
 
 /**
@@ -341,6 +356,7 @@ data class Pager internal constructor(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -386,6 +402,7 @@ fun DivScope.pager(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -429,6 +446,7 @@ fun DivScope.pager(
         restrictParentScroll = valueOrNull(restrictParentScroll),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
+        scrollAxisAlignment = valueOrNull(scrollAxisAlignment),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -474,6 +492,7 @@ fun DivScope.pager(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -519,6 +538,7 @@ fun DivScope.pagerProps(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -561,6 +581,7 @@ fun DivScope.pagerProps(
     restrictParentScroll = valueOrNull(restrictParentScroll),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
+    scrollAxisAlignment = valueOrNull(scrollAxisAlignment),
     selectedActions = valueOrNull(selectedActions),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
@@ -605,6 +626,7 @@ fun DivScope.pagerProps(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -650,6 +672,7 @@ fun TemplateScope.pagerRefs(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scrollAxisAlignment: ReferenceProperty<Pager.ScrollAxisAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -692,6 +715,7 @@ fun TemplateScope.pagerRefs(
     restrictParentScroll = restrictParentScroll,
     reuseId = reuseId,
     rowSpan = rowSpan,
+    scrollAxisAlignment = scrollAxisAlignment,
     selectedActions = selectedActions,
     tooltips = tooltips,
     transform = transform,
@@ -736,6 +760,7 @@ fun TemplateScope.pagerRefs(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -781,6 +806,7 @@ fun Pager.override(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -824,6 +850,7 @@ fun Pager.override(
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
+        scrollAxisAlignment = valueOrNull(scrollAxisAlignment) ?: properties.scrollAxisAlignment,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
@@ -869,6 +896,7 @@ fun Pager.override(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -914,6 +942,7 @@ fun Pager.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scrollAxisAlignment: ReferenceProperty<Pager.ScrollAxisAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -957,6 +986,7 @@ fun Pager.defer(
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
+        scrollAxisAlignment = scrollAxisAlignment ?: properties.scrollAxisAlignment,
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
@@ -984,6 +1014,7 @@ fun Pager.defer(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param visibility Element visibility.
  */
 @Generated
@@ -999,6 +1030,7 @@ fun Pager.evaluate(
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scrollAxisAlignment: ExpressionProperty<Pager.ScrollAxisAlignment>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Pager = Pager(
     Pager.Properties(
@@ -1030,6 +1062,7 @@ fun Pager.evaluate(
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
+        scrollAxisAlignment = scrollAxisAlignment ?: properties.scrollAxisAlignment,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
         transform = properties.transform,
@@ -1075,6 +1108,7 @@ fun Pager.evaluate(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1120,6 +1154,7 @@ fun Component<Pager>.override(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
+    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -1164,6 +1199,7 @@ fun Component<Pager>.override(
         restrictParentScroll = valueOrNull(restrictParentScroll),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
+        scrollAxisAlignment = valueOrNull(scrollAxisAlignment),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -1209,6 +1245,7 @@ fun Component<Pager>.override(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1254,6 +1291,7 @@ fun Component<Pager>.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scrollAxisAlignment: ReferenceProperty<Pager.ScrollAxisAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1298,6 +1336,7 @@ fun Component<Pager>.defer(
         restrictParentScroll = restrictParentScroll,
         reuseId = reuseId,
         rowSpan = rowSpan,
+        scrollAxisAlignment = scrollAxisAlignment,
         selectedActions = selectedActions,
         tooltips = tooltips,
         transform = transform,
@@ -1325,6 +1364,7 @@ fun Component<Pager>.defer(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param visibility Element visibility.
  */
 @Generated
@@ -1340,6 +1380,7 @@ fun Component<Pager>.evaluate(
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scrollAxisAlignment: ExpressionProperty<Pager.ScrollAxisAlignment>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Pager> = Component(
     template = template,
@@ -1372,6 +1413,7 @@ fun Component<Pager>.evaluate(
         restrictParentScroll = restrictParentScroll,
         reuseId = reuseId,
         rowSpan = rowSpan,
+        scrollAxisAlignment = scrollAxisAlignment,
         selectedActions = null,
         tooltips = null,
         transform = null,
@@ -1399,3 +1441,6 @@ fun Pager.asList() = listOf(this)
 
 @Generated
 fun Pager.Orientation.asList() = listOf(this)
+
+@Generated
+fun Pager.ScrollAxisAlignment.asList() = listOf(this)

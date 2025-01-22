@@ -1,5 +1,4 @@
-@testable import DivKit
-
+@testable @_spi(Internal) import DivKit
 import Foundation
 import XCTest
 

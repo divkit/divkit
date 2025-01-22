@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctFontWeight } from '../../src/utils/correctFontWeight';
 
 describe('correctFontWeight', () => {

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputFilterExpression {
+public final class DivInputFilterExpression: Sendable {
   public static let type: String = "expression"
   public let condition: Expression<Bool>
 

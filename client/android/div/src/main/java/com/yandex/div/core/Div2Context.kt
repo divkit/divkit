@@ -1,6 +1,5 @@
 package com.yandex.div.core
 
-import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.SystemClock
@@ -18,7 +17,6 @@ import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
@@ -48,11 +46,6 @@ class Div2Context @MainThread private constructor(
     internal val lifecycleOwner: LifecycleOwner? = null
 ) : ContextWrapper(baseContext) {
 
-    @Deprecated("GlobalVariableController is deprecated and will be deleted",
-        ReplaceWith("div2Component#divVariableController"))
-    val globalVariableController: GlobalVariableController
-        get() = div2Component.globalVariableController
-
     val divVariableController: DivVariableController
         get() = div2Component.divVariableController
 
@@ -70,14 +63,6 @@ class Div2Context @MainThread private constructor(
 
     private var inflater: LayoutInflater? = null
 
-    @Deprecated("use Div2Context(ContextThemeWrapper, DivConfiguration, LifecycleOwner) instead")
-    @JvmOverloads
-    constructor(
-        baseContext: ContextThemeWrapper,
-        configuration: DivConfiguration,
-        @StyleRes themeId: Int = R.style.Div_Theme
-    ) : this(baseContext, configuration, themeId, null)
-
     constructor(
         baseContext: ContextThemeWrapper,
         configuration: DivConfiguration,
@@ -91,21 +76,9 @@ class Div2Context @MainThread private constructor(
             .configuration(configuration)
             .themeId(themeId)
             .divCreationTracker(DivCreationTracker(SystemClock.uptimeMillis()))
-            .globalVariableController(configuration.globalVariableController)
             .divVariableController(configuration.divVariableController)
             .build(),
         lifecycleOwner
-    )
-
-    @Deprecated("use Div2Context(ContextThemeWrapper, DivConfiguration, LifecycleOwner) instead")
-    constructor(
-        activity: Activity,
-        configuration: DivConfiguration
-    ) : this(
-        activity as ContextThemeWrapper,
-        configuration,
-        R.style.Div_Theme,
-        activity as? LifecycleOwner
     )
 
     init {
@@ -139,14 +112,6 @@ class Div2Context @MainThread private constructor(
 
     fun warmUp() {
         div2Component.div2Builder
-    }
-
-    @Deprecated("use warmUp() instead", ReplaceWith("warmUp()"))
-    fun warmUp2() = warmUp()
-
-    @Deprecated("use reset() instead", ReplaceWith("reset(flags = RESET_VISIBILITY_COUNTERS)", "com.yandex.div.core.Div2Context.Companion.RESET_VISIBILITY_COUNTERS"))
-    fun resetVisibilityCounters() {
-        reset(flags = RESET_VISIBILITY_COUNTERS)
     }
 
     fun reset(@ResetFlag flags: Int = RESET_NONE, tags: List<DivDataTag> = emptyList()) {

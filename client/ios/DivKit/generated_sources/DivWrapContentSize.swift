@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivWrapContentSize {
-  public final class ConstraintSize {
+public final class DivWrapContentSize: Sendable {
+  public final class ConstraintSize: Sendable {
     public let unit: Expression<DivSizeUnit> // default value: dp
     public let value: Expression<Int> // constraint: number >= 0
 

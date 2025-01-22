@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDisappearAction: DivSightAction {
+public final class DivDisappearAction: DivSightAction, @unchecked Sendable {
   public let disappearDuration: Expression<Int> // constraint: number >= 0; default value: 800
   public let downloadCallbacks: DivDownloadCallbacks?
   public let isEnabled: Expression<Bool> // default value: true

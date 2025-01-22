@@ -38,13 +38,17 @@ public class DivActionHandler {
         public static final String DOUBLE_CLICK = "double_click";
         public static final String EXTERNAL = "external";
         public static final String FOCUS = "focus";
+        public static final String HOVER = "hover";
         public static final String LONG_CLICK = "long_click";
         public static final String MENU = "menu";
         public static final String PATCH = "patch";
+        public static final String PRESS = "press";
+        public static final String RELEASE = "release";
         public static final String SELECTION = "selection";
         public static final String STATE_SWIPE_OUT = "state_swipe_out";
         public static final String TIMER = "timer";
         public static final String TRIGGER = "trigger";
+        public static final String UNHOVER = "unhover";
         public static final String VIDEO = "video";
         public static final String ANIMATION_END = "animation_end";
         public static final String ANIMATION_CANCEL = "animation_cancel";
@@ -70,20 +74,6 @@ public class DivActionHandler {
 
     public boolean getUseActionUid() {
         return false;
-    }
-
-    /**
-     * Handles the given URI.
-     * Call super implementation to automatically handle internal div schemes when overriding.
-     *
-     * @param uri  URI to handle
-     * @param view calling DivView
-     * @return TRUE if uri was handled
-     */
-    @CallSuper
-    @Deprecated
-    public boolean handleUri(@NonNull Uri uri, @NonNull DivViewFacade view) {
-        return handleActionUrl(uri, view, view.getExpressionResolver());
     }
 
     /**
@@ -321,7 +311,7 @@ public class DivActionHandler {
      * @param view calling DivView
      * @return TRUE if uri was handled
      */
-    public final boolean handleActionUrl(@Nullable Uri uri, @NonNull DivViewFacade view) {
+    public boolean handleActionUrl(@Nullable Uri uri, @NonNull DivViewFacade view) {
         return handleActionUrl(uri, view, view.getExpressionResolver());
     }
 

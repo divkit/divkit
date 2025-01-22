@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPageSizeTemplate: TemplateValue {
+public final class DivPageSizeTemplate: TemplateValue, Sendable {
   public static let type: String = "percentage"
   public let parent: String?
   public let pageWidth: Field<DivPercentageSizeTemplate>?

@@ -1,4 +1,4 @@
-import DivKit
+@_spi(Internal) @testable import DivKit
 import VGSL
 
 extension DivBlockModelingContext {
@@ -7,21 +7,23 @@ extension DivBlockModelingContext {
   public static let `default` = DivBlockModelingContext()
 
   public init(
+    cardId: DivCardID = Self.testCardId,
+    additionalId: String? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     extensionHandlers: [DivExtensionHandler] = [],
     scheduler: Scheduling? = nil,
     variableStorage: DivVariableStorage? = nil
   ) {
-    self.init(
-      cardId: Self.testCardId,
-      cardLogId: Self.testCardId.rawValue,
-      stateManager: DivStateManager(),
+    self = DivBlockModelingContext(
+      cardId: cardId,
+      additionalId: additionalId,
       blockStateStorage: blockStateStorage,
       imageHolderFactory: FakeImageHolderFactory(),
       extensionHandlers: extensionHandlers,
       variablesStorage: DivVariablesStorage(outerStorage: variableStorage),
-      scheduler: scheduler,
-      persistentValuesStorage: DivPersistentValuesStorage()
+      scheduler: scheduler
+    ).modifying(
+      cardLogId: cardId.rawValue
     )
   }
 }

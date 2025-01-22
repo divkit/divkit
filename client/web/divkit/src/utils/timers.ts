@@ -101,7 +101,7 @@ export class TimersController {
         });
     }
 
-    execTimerAction(id: string | null, action: string | null) {
+    execTimerAction(id: string | null | undefined, action: string | null | undefined) {
         if (!id || !action || !this.timers.has(id) || !AVAIL_ACTIONS.has(action)) {
             this.logError(wrapError(new Error('Incorrect timer action'), {
                 additional: {

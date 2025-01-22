@@ -3,6 +3,7 @@ import type { DivActionableData } from './actionable';
 import type { Dimension } from './sizes';
 import type { FontWeight } from './text';
 import type { Drawable } from './drawable';
+import type { BooleanInt } from '../../typings/common';
 
 export interface Point {
     x: Dimension;
@@ -34,4 +35,5 @@ export interface DivSliderData extends DivBaseData, DivActionableData {
     track_inactive_style: Drawable;
     tick_mark_inactive_style?: Drawable;
     secondary_value_accessibility?: Accessibility;
+    is_enabled?: BooleanInt;
 }

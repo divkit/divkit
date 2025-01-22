@@ -1,7 +1,7 @@
 import Foundation
 
 @frozen
-public enum Expression<T> {
+public enum Expression<T: Sendable>: Sendable {
   case value(T)
   case link(ExpressionLink<T>)
 }

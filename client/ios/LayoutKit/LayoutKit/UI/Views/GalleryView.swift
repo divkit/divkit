@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 private typealias CellType = GenericCollectionViewCell
@@ -308,9 +307,13 @@ extension GalleryView: ScrollDelegate {
     let contentPosition: GalleryViewState.Position
     if model.infiniteScroll, let newPosition = InfiniteScroll.getNewPosition(
       currentOffset: offset,
-      origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY }
+      origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY },
+      bufferSize: model.bufferSize,
+      boundsSize: model.direction.isHorizontal ? bounds.width : bounds.height,
+      alignment: model.alignment
     ) {
       offset = newPosition.offset
+      scrollStartOffset = offset
       contentPager.flatMap { compoundScrollDelegate.remove($0) }
       compoundScrollDelegate.remove(self)
       updateContentOffset(to: .offset(newPosition.offset), animated: false)

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDisappearActionTemplate: TemplateValue {
+public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendable {
   public let disappearDuration: Field<Expression<Int>>? // constraint: number >= 0; default value: 800
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
   public let isEnabled: Field<Expression<Bool>>? // default value: true

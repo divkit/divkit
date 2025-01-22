@@ -1,9 +1,10 @@
 {
   "description": "Overlap container alignmnet. Foreground text should be on the left and foreground, background text should be on the right and background.",
   "platforms": [
+    "android",
     "ios",
     "web",
-    "android"
+    "flutter"
   ],
   "templates": {
     "big_text": {

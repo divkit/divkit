@@ -2,11 +2,9 @@ package com.yandex.div.core.view2.divs
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.util.Base64
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +25,6 @@ import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
-import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoScale
@@ -224,18 +221,6 @@ fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
             bitrate = it.bitrate?.evaluate(resolver)
         )
     }
-}
-
-@Deprecated("Will be removed in future releases")
-fun DivVideo.createPreview(resolver: ExpressionResolver): Bitmap? {
-    val base64String = preview?.evaluate(resolver) ?: return null
-    val imageBytes = try {
-        Base64.decode(base64String, Base64.DEFAULT)
-    } catch (e: IllegalArgumentException) {
-        KLog.d("Div") { "Bad base-64 image preview" }
-        return null
-    }
-    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }
 
 private class PreviewImageView(context: Context) : AppCompatImageView(context) {

@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 
 extension DivSeparator: DivBlockModeling {

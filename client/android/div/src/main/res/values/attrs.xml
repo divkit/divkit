@@ -4,6 +4,7 @@
 
     <attr name="divTextStyle" format="reference"/>
     <attr name="divImageStyle" format="reference"/>
+    <attr name="divInputStyle" format="reference"/>
     <attr name="divTabIndicatorLayoutStyle" format="reference"/>
 
     <declare-styleable name="EllipsizedTextView">
@@ -118,17 +119,6 @@
 
     <declare-styleable name="ViewPagerFixedSizeLayout">
         <attr name="collapsiblePaddingBottom" format="dimension"/>
-    </declare-styleable>
-
-    <declare-styleable name="AspectImageView">
-        <attr name="android:gravity"/>
-        <attr name="aspectRatio" format="float"/>
-        <attr name="imageScale" format="enum">
-            <enum name="noScale" value="0"/>
-            <enum name="fit" value="1"/>
-            <enum name="fill" value="2"/>
-        </attr>
-        <attr name="aspectImageViewStyle" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="GridContainer">

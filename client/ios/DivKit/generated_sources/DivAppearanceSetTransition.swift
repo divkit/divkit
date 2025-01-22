@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAppearanceSetTransition {
+public final class DivAppearanceSetTransition: Sendable {
   public static let type: String = "set"
   public let items: [DivAppearanceTransition] // at least 1 elements
 

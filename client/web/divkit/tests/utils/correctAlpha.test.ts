@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctAlpha } from '../../src/utils/correctAlpha';
 
 describe('correctAlpha', () => {

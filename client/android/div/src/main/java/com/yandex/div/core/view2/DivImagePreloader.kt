@@ -24,14 +24,6 @@ class DivImagePreloader @Inject constructor(
     private val imageLoader: DivImageLoader
 ) {
 
-    @Deprecated("deprecated", replaceWith = ReplaceWith("DivPreloader.preloadImage"))
-    fun preload(div: Div, resolver: ExpressionResolver, callback: Callback = NO_CALLBACK): Ticket {
-        val downloadCallback = DivPreloader.DownloadCallback(callback.toPreloadCallback())
-        val ref = PreloadVisitor(downloadCallback, resolver).preload(div)
-        downloadCallback.onFullPreloadStarted()
-        return ref.asTicket()
-    }
-
     fun preloadImage(
         div: Div,
         resolver: ExpressionResolver,

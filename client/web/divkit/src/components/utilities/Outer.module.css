@@ -1,4 +1,5 @@
-@value root__clickable, root__clickable-no-transition from "../Root.module.css";
+@value outer from "../Cls.module.css";
+@value root__clickable, root__clickable-no-transition from "../Cls.module.css";
 
 .outer {
     position: relative;

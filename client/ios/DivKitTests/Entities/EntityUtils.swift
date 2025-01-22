@@ -1,7 +1,5 @@
 @testable import DivKit
-
 import Foundation
-
 import Serialization
 
 func readEntityWithResult(

@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-
 import VGSL
 
 extension ImageBlock {
@@ -32,7 +31,7 @@ extension ImageBlock {
       remoteImageViewContainer.imageHolder = imageHolder
     }
     remoteImageViewContainer.isUserInteractionEnabled = false
-    remoteImageViewContainer.applyAccessibility(accessibilityElement)
+    remoteImageViewContainer.applyAccessibilityFromScratch(accessibilityElement)
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {

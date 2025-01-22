@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivShape {
+public enum DivShape: Sendable {
   case divRoundedRectangleShape(DivRoundedRectangleShape)
   case divCircleShape(DivCircleShape)
 

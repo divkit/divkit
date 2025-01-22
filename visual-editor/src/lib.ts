@@ -43,6 +43,7 @@ export interface ActionDesc {
 export interface FontFaceDesc {
     value: string;
     text: Record<string, string>;
+    cssValue: string;
 }
 
 export type TankerMeta = Record<string, Record<string, string>>;

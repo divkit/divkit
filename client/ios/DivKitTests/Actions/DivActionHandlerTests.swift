@@ -3,26 +3,25 @@ import LayoutKit
 import XCTest
 
 final class DivActionHandlerTests: XCTestCase {
-  private var actionHandler: DivActionHandler!
-  private let logger = MockActionLogger()
+  private var flags: DivFlagsInfo = .default
   private let reporter = MockReporter()
   private let variablesStorage = DivVariablesStorage()
 
-  private var handledUrl: URL?
-
-  override func setUp() {
+  private lazy var actionHandler: DivActionHandler! = {
     let idToPath = IdToPath()
     idToPath[cardId.path + "element_id"] = cardId.path + "element_id"
-    actionHandler = DivActionHandler(
+    return DivActionHandler(
+      flags: flags,
       idToPath: idToPath,
-      logger: logger,
       reporter: reporter,
       urlHandler: DivUrlHandlerDelegate { url, _ in
         self.handledUrl = url
       },
       variablesStorage: variablesStorage
     )
-  }
+  }()
+
+  private var handledUrl: URL?
 
   func test_UrlPassedToUrlHandler() {
     handle(
@@ -30,6 +29,44 @@ final class DivActionHandlerTests: XCTestCase {
         logId: "test_log_id",
         url: "https://some.url"
       )
+    )
+
+    XCTAssertEqual(url("https://some.url"), handledUrl)
+  }
+
+  func test_UrlNotPassedToUrlHandler_VisibilityAction() {
+    handle(
+      divAction(
+        logId: "test_log_id",
+        url: "https://some.url"
+      ),
+      source: .visibility
+    )
+
+    XCTAssertNil(handledUrl)
+  }
+
+  func test_UrlNotPassedToUrlHandler_DisappearAction() {
+    handle(
+      divAction(
+        logId: "test_log_id",
+        url: "https://some.url"
+      ),
+      source: .disappear
+    )
+
+    XCTAssertNil(handledUrl)
+  }
+
+  func test_UrlPassedToUrlHandler_VisibilityAction_UseUrlHandlerFlagEnabled() {
+    flags = DivFlagsInfo(useUrlHandlerForVisibilityActions: true)
+
+    handle(
+      divAction(
+        logId: "test_log_id",
+        url: "https://some.url"
+      ),
+      source: .visibility
     )
 
     XCTAssertEqual(url("https://some.url"), handledUrl)
@@ -89,7 +126,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "two", "new value"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "two", "new value"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayInsertValueAction_InsertsValue() {
@@ -103,7 +140,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "new value", "two"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "new value", "two"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayInsertValueAction_WithIndexEqualLength_InsertsValue() {
@@ -131,7 +168,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "two"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "two"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayInsertValueAction_DoesNothingForNotArrayVar() {
@@ -157,7 +194,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayRemoveValueAction_DoesNothingForInvalidIndex() {
@@ -170,7 +207,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([1, "two"] as [AnyHashable], getVariableValue("array_var"))
+    XCTAssertEqual([1, "two"] as DivArray, getVariableValue("array_var"))
   }
 
   func test_ArrayRemoveValueAction_DoesNothingForNotArrayVar() {
@@ -337,20 +374,21 @@ final class DivActionHandlerTests: XCTestCase {
   }
 
   func test_SetVariableAction_SetsDictVariable() {
-    let nestedDict: [String: Any] = ["key_1": "value_1", "nested": ["key_2": "value_2"]]
     setVariableValue("dict_var", .dict([:]))
-
-    let dictVal = DictValue(value: nestedDict)
 
     handle(.divActionSetVariable(
       DivActionSetVariable(
-        value: .dictValue(dictVal),
+        value: .dictValue(DictValue(
+          value: ["key_1": "value_1", "nested": ["key_2": "value_2"]]
+        )),
         variableName: .value("dict_var")
       )
     ))
 
-    let result = getVariableValue("dict_var") as [String: Any]?
-    XCTAssertTrue(NSDictionary(dictionary: nestedDict).isEqual(to: result!))
+    XCTAssertEqual(
+      ["key_1": "value_1", "nested": ["key_2": "value_2"]] as DivDictionary,
+      getVariableValue("dict_var")
+    )
   }
 
   func test_SetVariableAction_SetsLocalVariable() {
@@ -407,22 +445,6 @@ final class DivActionHandlerTests: XCTestCase {
     )
   }
 
-  func test_LoggerIsCalled() {
-    handle(
-      DivAction(
-        logId: .value("test_log_id"),
-        logUrl: .value(url("https://some.log.url")),
-        payload: ["key": "value"],
-        referer: .value(url("https://some.referer.url")),
-        url: .value(url("https://some.url"))
-      )
-    )
-
-    XCTAssertEqual(url("https://some.log.url"), logger.lastUrl)
-    XCTAssertEqual(url("https://some.referer.url"), logger.lastReferer)
-    XCTAssertEqual(["key": "value"], logger.lastPayload as! [String: AnyHashable])
-  }
-
   func test_ActionIsReported() {
     handle(
       DivAction(
@@ -443,12 +465,13 @@ final class DivActionHandlerTests: XCTestCase {
 
   private func handle(
     _ action: DivActionBase,
+    source: UserInterfaceAction.DivActionSource = .tap,
     localValues: [String: AnyHashable] = [:]
   ) {
     actionHandler.handle(
       action,
       path: cardId.path,
-      source: .tap,
+      source: source,
       localValues: localValues,
       sender: nil
     )
@@ -477,18 +500,6 @@ private func stringValue(_ value: String) -> DivTypedValue {
 }
 
 private let cardId: DivCardID = "test_card"
-
-private final class MockActionLogger: DivActionLogger {
-  private(set) var lastUrl: URL?
-  private(set) var lastReferer: URL?
-  private(set) var lastPayload: [String: Any]?
-
-  func log(url: URL, referer: URL?, payload: [String: Any]?) {
-    lastUrl = url
-    lastReferer = referer
-    lastPayload = payload
-  }
-}
 
 private final class MockReporter: DivReporter {
   private(set) var lastCardId: DivCardID?

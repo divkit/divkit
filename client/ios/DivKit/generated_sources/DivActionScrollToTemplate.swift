@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionScrollToTemplate: TemplateValue {
+public final class DivActionScrollToTemplate: TemplateValue, Sendable {
   public static let type: String = "scroll_to"
   public let parent: String?
   public let animated: Field<Expression<Bool>>? // default value: true

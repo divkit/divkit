@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import LayoutKit
 import VGSL
 
@@ -27,14 +26,18 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     }
     let items = nonNilItems
     let scrollDirection = resolveOrientation(expressionResolver).direction
+    let alignment = resolveScrollAxisAlignment(expressionResolver).system
+    let layoutMode = layoutMode.resolve(expressionResolver)
     let gallery = try makeGalleryModel(
       context: context,
       direction: resolveOrientation(expressionResolver).direction,
+      alignment: alignment,
       spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
       crossSpacing: 0,
-      defaultAlignment: .center,
+      defaultCrossAlignment: .center,
       scrollMode: .autoPaging(inertionEnabled: false),
       infiniteScroll: resolveInfiniteScroll(expressionResolver),
+      bufferSize: layoutMode.bufferSize(itemsCount: items.count),
       transformation: pageTransformation?.resolve(
         expressionResolver,
         scrollDirection: scrollDirection
@@ -42,8 +45,8 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     )
     return try PagerBlock(
       pagerPath: pagerPath,
-      alignment: resolveScrollAxisAlignment(expressionResolver).system,
-      layoutMode: layoutMode.resolve(expressionResolver),
+      alignment: alignment,
+      layoutMode: layoutMode,
       gallery: gallery,
       selectedActions: items.map { $0.value.makeSelectedActions(context: context) },
       state: getState(context: context, path: context.parentPath, numberOfPages: items.count),
@@ -66,6 +69,19 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       numberOfPages: numberOfPages,
       currentPage: defaultItem
     )
+  }
+}
+
+extension PagerBlock.LayoutMode {
+  fileprivate func bufferSize(itemsCount: Int) -> Int {
+    switch self {
+    case let .pageSize(relativeValue):
+      Int(1 / relativeValue.rawValue) + 1
+    case .neighbourPageSize:
+      2
+    case .pageContentSize:
+      itemsCount
+    }
   }
 }
 

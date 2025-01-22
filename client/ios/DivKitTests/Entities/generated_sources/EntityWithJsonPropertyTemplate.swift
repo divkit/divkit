@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithJsonPropertyTemplate: TemplateValue {
+public final class EntityWithJsonPropertyTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "entity_with_json_property"
   public let parent: String?
   public let jsonProperty: Field<[String: Any]>? // default value: { "key": "value", "items": [ "value" ] }

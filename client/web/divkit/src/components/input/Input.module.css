@@ -39,6 +39,7 @@
     /*outline: none;*/
     outline-offset: -2px;
     white-space: pre-wrap;
+    pointer-events: auto;
 }
 
 .input__input::-webkit-inner-spin-button,

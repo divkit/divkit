@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "empty_container",

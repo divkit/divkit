@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { flattenAnimation } from '../../src/utils/flattenAnimation';
 
 describe('flattenAnimation', () => {

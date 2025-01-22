@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivIndicator: DivBase {
+public final class DivIndicator: DivBase, Sendable {
   @frozen
-  public enum Animation: String, CaseIterable {
+  public enum Animation: String, CaseIterable, Sendable {
     case scale = "scale"
     case worm = "worm"
     case slider = "slider"

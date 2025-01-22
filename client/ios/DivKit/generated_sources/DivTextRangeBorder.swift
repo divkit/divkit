@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTextRangeBorder {
+public final class DivTextRangeBorder: Sendable {
   public let cornerRadius: Expression<Int>? // constraint: number >= 0
   public let stroke: DivStroke?
 

@@ -4,9 +4,9 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithStringEnumPropertyWithDefaultValue {
+public final class EntityWithStringEnumPropertyWithDefaultValue: Sendable {
   @frozen
-  public enum Value: String, CaseIterable {
+  public enum Value: String, CaseIterable, Sendable {
     case first = "first"
     case second = "second"
     case third = "third"

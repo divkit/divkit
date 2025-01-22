@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 extension SettingProperty where T: Serializable & Deserializable {

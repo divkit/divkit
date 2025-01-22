@@ -1,20 +1,16 @@
 import LayoutKit
 
-public protocol DivVisibilityCounting {
-  func visibilityCount(for path: UIElementPath) -> UInt
-  func incrementCount(for path: UIElementPath)
-}
-
-public final class DivVisibilityCounter: DivVisibilityCounting {
+@_spi(Internal)
+public final class DivVisibilityCounter {
   private var storage: [UIElementPath: UInt] = [:]
 
-  public init() {}
+  init() {}
 
-  public func visibilityCount(for path: UIElementPath) -> UInt {
+  func visibilityCount(for path: UIElementPath) -> UInt {
     storage[path] ?? 0
   }
 
-  public func incrementCount(for path: UIElementPath) {
+  func incrementCount(for path: UIElementPath) {
     storage[path] = visibilityCount(for: path) + 1
   }
 
@@ -22,7 +18,7 @@ public final class DivVisibilityCounter: DivVisibilityCounting {
     storage.removeAll()
   }
 
-  func reset(cardId: DivCardID) {
+  public func reset(cardId: DivCardID) {
     storage = storage.filter { $0.key.root != cardId.rawValue }
   }
 }

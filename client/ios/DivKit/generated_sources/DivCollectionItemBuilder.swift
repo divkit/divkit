@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCollectionItemBuilder {
-  public final class Prototype {
+public final class DivCollectionItemBuilder: @unchecked Sendable {
+  public final class Prototype: Sendable {
     public let div: Div
     public let id: Expression<String>?
     public let selector: Expression<Bool> // default value: true

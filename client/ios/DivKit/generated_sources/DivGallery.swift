@@ -4,28 +4,28 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivGallery: DivBase {
+public final class DivGallery: DivBase, Sendable {
   @frozen
-  public enum CrossContentAlignment: String, CaseIterable {
+  public enum CrossContentAlignment: String, CaseIterable, Sendable {
     case start = "start"
     case center = "center"
     case end = "end"
   }
 
   @frozen
-  public enum Orientation: String, CaseIterable {
+  public enum Orientation: String, CaseIterable, Sendable {
     case horizontal = "horizontal"
     case vertical = "vertical"
   }
 
   @frozen
-  public enum ScrollMode: String, CaseIterable {
+  public enum ScrollMode: String, CaseIterable, Sendable {
     case paging = "paging"
     case `default` = "default"
   }
 
   @frozen
-  public enum Scrollbar: String, CaseIterable {
+  public enum Scrollbar: String, CaseIterable, Sendable {
     case none = "none"
     case auto = "auto"
   }

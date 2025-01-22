@@ -4,21 +4,21 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivContainer: DivBase {
+public final class DivContainer: DivBase, Sendable {
   @frozen
-  public enum LayoutMode: String, CaseIterable {
+  public enum LayoutMode: String, CaseIterable, Sendable {
     case noWrap = "no_wrap"
     case wrap = "wrap"
   }
 
   @frozen
-  public enum Orientation: String, CaseIterable {
+  public enum Orientation: String, CaseIterable, Sendable {
     case vertical = "vertical"
     case horizontal = "horizontal"
     case overlap = "overlap"
   }
 
-  public final class Separator {
+  public final class Separator: Sendable {
     public let margins: DivEdgeInsets?
     public let showAtEnd: Expression<Bool> // default value: false
     public let showAtStart: Expression<Bool> // default value: false
@@ -74,6 +74,8 @@ public final class DivContainer: DivBase {
   public let focus: DivFocus?
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
+  public let hoverEndActions: [DivAction]?
+  public let hoverStartActions: [DivAction]?
   public let id: String?
   public let itemBuilder: DivCollectionItemBuilder?
   public let items: [Div]?
@@ -84,6 +86,8 @@ public final class DivContainer: DivBase {
   public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: vertical
   public let paddings: DivEdgeInsets?
+  public let pressEndActions: [DivAction]?
+  public let pressStartActions: [DivAction]?
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
@@ -183,6 +187,8 @@ public final class DivContainer: DivBase {
     focus: DivFocus?,
     functions: [DivFunction]?,
     height: DivSize?,
+    hoverEndActions: [DivAction]?,
+    hoverStartActions: [DivAction]?,
     id: String?,
     itemBuilder: DivCollectionItemBuilder?,
     items: [Div]?,
@@ -193,6 +199,8 @@ public final class DivContainer: DivBase {
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
+    pressEndActions: [DivAction]?,
+    pressStartActions: [DivAction]?,
     reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
@@ -231,6 +239,8 @@ public final class DivContainer: DivBase {
     self.focus = focus
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
+    self.hoverEndActions = hoverEndActions
+    self.hoverStartActions = hoverStartActions
     self.id = id
     self.itemBuilder = itemBuilder
     self.items = items
@@ -241,6 +251,8 @@ public final class DivContainer: DivBase {
     self.margins = margins
     self.orientation = orientation ?? .value(.vertical)
     self.paddings = paddings
+    self.pressEndActions = pressEndActions
+    self.pressStartActions = pressStartActions
     self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
@@ -313,62 +325,70 @@ extension DivContainer: Equatable {
       return false
     }
     guard
-      lhs.id == rhs.id,
+      lhs.hoverEndActions == rhs.hoverEndActions,
+      lhs.hoverStartActions == rhs.hoverStartActions,
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
       lhs.itemBuilder == rhs.itemBuilder,
-      lhs.items == rhs.items
+      lhs.items == rhs.items,
+      lhs.layoutMode == rhs.layoutMode
     else {
       return false
     }
     guard
-      lhs.layoutMode == rhs.layoutMode,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.lineSeparator == rhs.lineSeparator
+      lhs.lineSeparator == rhs.lineSeparator,
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
-      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.orientation == rhs.orientation,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.pressEndActions == rhs.pressEndActions,
+      lhs.pressStartActions == rhs.pressStartActions,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.separator == rhs.separator,
-      lhs.tooltips == rhs.tooltips
+      lhs.separator == rhs.separator
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -404,6 +424,8 @@ extension DivContainer: Serializable {
     result["focus"] = focus?.toDictionary()
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
+    result["hover_end_actions"] = hoverEndActions?.map { $0.toDictionary() }
+    result["hover_start_actions"] = hoverStartActions?.map { $0.toDictionary() }
     result["id"] = id
     result["item_builder"] = itemBuilder?.toDictionary()
     result["items"] = items?.map { $0.toDictionary() }
@@ -414,6 +436,8 @@ extension DivContainer: Serializable {
     result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
+    result["press_end_actions"] = pressEndActions?.map { $0.toDictionary() }
+    result["press_start_actions"] = pressStartActions?.map { $0.toDictionary() }
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

@@ -54,6 +54,7 @@ export interface TextRange extends TextStyles {
     border?: TextRangeBorder;
     background?: RangeBackground;
     alignment_vertical?: TextVerticalAlignment;
+    baseline_offset?: number;
 }
 
 export type TextIndexingDirection = 'normal' | 'reversed';

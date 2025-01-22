@@ -1,11 +1,13 @@
 @testable import DivKit
 @testable import LayoutKit
-
+import Testing
+import UIKit
 import VGSL
-import XCTest
 
-private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTestCase {
-  func test_OrderedIds_WhenForwardIdExist() {
+@Suite()
+struct DivBaseExtensionsAndAccessibilityElementsStorageTests {
+  @Test
+  func getOrderedIds_WhenForwardIdExist() {
     let testData = divData(
       divGallery(
         items: [
@@ -17,13 +19,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    assertEqual(
-      getOrderedIds(divData: testData),
-      ["firstId"]
-    )
+    #expect(getOrderedIds(divData: testData) == ["firstId"])
   }
 
-  func test_OrderedIds_WhenForwardIdNotExist() {
+  @Test
+  func getOeredIds_WhenForwardIdNotExist() {
     let testData = divData(
       divGallery(
         items: [
@@ -35,13 +35,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    assertEqual(
-      getOrderedIds(divData: testData),
-      ["firstId", "secondId"]
-    )
+    #expect(getOrderedIds(divData: testData) == ["firstId", "secondId"])
   }
 
-  func test_OrderedIds_CycleOfTwoElements() {
+  @Test
+  func getOrderedIds_CycleOfTwoElements() {
     let testData = divData(
       divGallery(
         items: [
@@ -57,13 +55,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    assertEqual(
-      getOrderedIds(divData: testData),
-      ["firstId", "secondId"]
-    )
+    #expect(getOrderedIds(divData: testData) == ["firstId", "secondId"])
   }
 
-  func test_AccessibilityElemenents_WhenForwardIdExist() async {
+  @Test
+  func getAccessibilityElemenents_WhenForwardIdExist() async {
     let testData = divData(
       divGallery(
         items: [
@@ -75,13 +71,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    await assertEqual(
-      getAccessibilityIds(divData: testData),
-      ["firstId"]
-    )
+    #expect(await getAccessibilityIds(divData: testData) == ["firstId"])
   }
 
-  func test_AccessibilityElemenents_WhenForwardIdNotExist() async {
+  @Test
+  func getAccessibilityElemenents_WhenForwardIdNotExist() async {
     let testData = divData(
       divGallery(
         items: [
@@ -93,13 +87,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    await assertEqual(
-      getAccessibilityIds(divData: testData),
-      ["firstId"]
-    )
+    #expect(await getAccessibilityIds(divData: testData) == ["firstId"])
   }
 
-  func test_AccessibilityElemenents_CycleOfTwoElements() async {
+  @Test
+  func getAccessibilityElemenents_CycleOfTwoElements() async {
     let testData = divData(
       divContainer(
         items: [
@@ -115,13 +107,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    await assertEqual(
-      getAccessibilityIds(divData: testData),
-      ["firstId", "secondId"]
-    )
+    #expect(await getAccessibilityIds(divData: testData) == ["firstId", "secondId"])
   }
 
-  func test_AccessibilityElemenents_SecondElementDivVisibilityVisible() async {
+  @Test
+  func getAccessibilityElemenents_SecondElementDivVisibilityVisible() async {
     let testData = divData(
       divContainer(
         items: [
@@ -147,13 +137,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    await assertEqual(
-      getAccessibilityIds(divData: testData),
-      ["firstId", "secondId", "thirdId"]
-    )
+    #expect(await getAccessibilityIds(divData: testData) == ["firstId", "secondId", "thirdId"])
   }
 
-  func test_AccessibilityElemenents_SecondElementDivVisibilityGone() async {
+  @Test
+  func getAccessibilityElemenents_SecondElementDivVisibilityGone() async {
     let testData = divData(
       divContainer(
         items: [
@@ -179,13 +167,11 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    await assertEqual(
-      getAccessibilityIds(divData: testData),
-      ["firstId", "thirdId"]
-    )
+    #expect(await getAccessibilityIds(divData: testData) == ["firstId", "thirdId"])
   }
 
-  func test_AccessibilityElemenents_DivVisibilityInvisible() async {
+  @Test
+  func getAccessibilityElemenents_DivVisibilityInvisible() async {
     let testData = divData(
       divContainer(
         items: [
@@ -211,10 +197,7 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
       )
     )
 
-    await assertEqual(
-      getAccessibilityIds(divData: testData),
-      ["firstId", "thirdId"]
-    )
+    #expect(await getAccessibilityIds(divData: testData) == ["firstId", "thirdId"])
   }
 
   private func createDivTextWithNextFocusId(id: String, forwardId: String) -> Div {
@@ -244,7 +227,7 @@ private final class DivBaseExtensionsAndAccessibilityElementsStorageTests: XCTes
     divView.forceLayout()
 
     guard let elements = divView.accessibilityElements else {
-      XCTFail("accessibilityElements are not available or have the wrong type")
+      Issue.record("accessibilityElements are not available or have the wrong type")
       return nil
     }
 

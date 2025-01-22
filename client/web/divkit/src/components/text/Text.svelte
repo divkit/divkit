@@ -470,7 +470,7 @@
 </script>
 
 <Outer
-    cls="{genClassName('text', css, mods)} {selectable ? '' : rootCss.root__unselectable}"
+    cls="{genClassName('text', css, mods)} {selectable ? rootCss.root__selectable : rootCss.root__unselectable}"
     {componentContext}
     {layoutParams}
 >
@@ -529,6 +529,7 @@
                             textStyles={item.textStyles}
                             {singleline}
                             actions={item.actions}
+                            {customLineHeight}
                         />
                     {/if}
                 {:else if item.image}
@@ -560,6 +561,7 @@
                 rootFontSize={fontSize}
                 textStyles={$jsonRootTextStyles}
                 {singleline}
+                {customLineHeight}
             />
         {/if}
     </span>

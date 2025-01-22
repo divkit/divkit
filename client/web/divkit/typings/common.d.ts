@@ -61,8 +61,21 @@ export interface DivUrlVariable {
     value: string;
 }
 
+export interface DivDictVariable {
+    type: 'dict';
+    name: string;
+    value: object;
+}
+
+export interface DivArrayVariable {
+    type: 'array';
+    name: string;
+    value: unknown[];
+}
+
 export type DivVariable = DivStrVariable | DivIntVariable | DivNumberVariable |
-    DivBooleanVariable | DivColorVariable | DivUrlVariable;
+    DivBooleanVariable | DivColorVariable | DivUrlVariable | DivDictVariable |
+    DivArrayVariable;
 
 export interface VariableTrigger {
     mode?: 'on_condition' | 'on_variable';
@@ -239,9 +252,42 @@ export interface ActionHideTooltip {
     id: string;
 }
 
+export interface ActionTimer {
+    type: 'timer';
+    id: string;
+    action: 'start' | 'stop' | 'pause' | 'resume' | 'cancel' | 'reset';
+}
+
+export interface ActionDownload {
+    type: 'download';
+    url: string;
+    on_fail_actions?: Action[];
+    on_success_actions?: Action[];
+}
+
+export interface ActionVideo {
+    type: 'video';
+    id: string;
+    action: 'start' | 'pause';
+}
+
+export interface ActionStore {
+    type: 'set_stored_value';
+    name: string;
+    value: TypedValue;
+    lifetime: number;
+}
+
+export interface ActionSetState {
+    type: 'set_state';
+    state_id: string;
+    // temporary
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
-    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip;
+    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
+    ActionVideo | ActionStore | ActionSetState;
 
 export interface ActionBase {
     log_id: string;

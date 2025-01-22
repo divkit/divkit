@@ -1,24 +1,27 @@
 {
-    "description": "Tab title should support expressions",
-    "platforms": [
-      "android",
-      "ios",
-      "web"
-    ],
-    "templates": {},
-    "card": {
-      "log_id": "div2_sample_card",
-      "variables": [{
+  "description": "Tab title should support expressions",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "div2_sample_card",
+    "variables": [
+      {
         "name": "someVar",
         "type": "integer",
         "value": 123
-      }],
-      "states": [
-        {
-          "state_id": 0,
-          "div": {
-            "type": "tabs",
-            "items": [{
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "tabs",
+          "items": [
+            {
               "title": "Some @{someVar}",
               "div": {
                 "type": "text",
@@ -28,7 +31,8 @@
                   "url": "div-action://set_variable?name=someVar&value=@{someVar + 1}"
                 }
               }
-            }, {
+            },
+            {
               "title": "Other @{someVar}",
               "div": {
                 "type": "text",
@@ -38,9 +42,10 @@
                   "url": "div-action://set_variable?name=someVar&value=@{someVar + 1}"
                 }
               }
-            }]
-          }
+            }
+          ]
         }
-      ]
-    }
+      }
+    ]
   }
+}

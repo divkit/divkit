@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 final class FunctionsProvider {
@@ -23,9 +22,7 @@ final class FunctionsProvider {
   lazy var functions: [String: Function] =
     lock.withLock {
       var functions = staticFunctions
-      for item in GetStoredValueFunctions.allCases {
-        functions[item.rawValue] = item.getFunction(persistentValuesStorage.get)
-      }
+      functions.addGetStoredValueFunctions(persistentValuesStorage.get)
       return functions
     }
 
@@ -44,7 +41,7 @@ final class FunctionsProvider {
             }
             throw ExpressionError("Variable '\(name)' is missing.")
           }
-        case .infix, .prefix:
+        case .infix, .prefix, .ternary:
           return operators[symbol]
         case let .function(name):
           guard let self else {
@@ -59,8 +56,6 @@ final class FunctionsProvider {
           )
         case let .method(name):
           return FunctionEvaluator(symbol, functions: FunctionsProvider.methods)
-        case .postfix:
-          return nil
         }
       }
     }

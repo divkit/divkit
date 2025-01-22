@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivVisibilityAction: DivSightAction {
+public final class DivVisibilityAction: DivSightAction, @unchecked Sendable {
   public let downloadCallbacks: DivDownloadCallbacks?
   public let isEnabled: Expression<Bool> // default value: true
   public let logId: Expression<String>

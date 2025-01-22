@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivLayoutProviderTemplate: TemplateValue {
+public final class DivLayoutProviderTemplate: TemplateValue, Sendable {
   public let heightVariableName: Field<String>?
   public let widthVariableName: Field<String>?
 

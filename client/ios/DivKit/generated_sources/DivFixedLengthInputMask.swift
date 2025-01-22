@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFixedLengthInputMask: DivInputMaskBase {
-  public final class PatternElement {
+public final class DivFixedLengthInputMask: DivInputMaskBase, Sendable {
+  public final class PatternElement: Sendable {
     public let key: Expression<String> // at least 1 char
     public let placeholder: Expression<String> // at least 1 char; default value: _
     public let regex: Expression<String>?
