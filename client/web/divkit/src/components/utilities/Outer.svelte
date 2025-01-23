@@ -212,7 +212,7 @@
             [] :
             (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
         hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.id);
-        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.id);
+        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1);
 
         if (currentNode) {
             useAction(currentNode);
