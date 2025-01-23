@@ -564,6 +564,7 @@
                 focus() {
                     if (input) {
                         input.focus();
+                        setCursorPosition(value.length);
                     }
                 }
             });

@@ -3386,7 +3386,8 @@
       "title": "Input focus",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
