@@ -126,6 +126,7 @@
           "$description": "translations.json#/div_text_range_shadow",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },
@@ -486,6 +487,7 @@
           "$description": "translations.json#/div_text_shadow",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         }

@@ -404,15 +404,20 @@ extension DivBorder {
     guard resolveHasShadow(expressionResolver) else {
       return nil
     }
-
-    return BlockShadow(
-      cornerRadii: resolveCornerRadii(expressionResolver),
-      blurRadius: CGFloat(shadow?.resolveBlur(expressionResolver) ?? 2),
-      offset: shadow?.offset.resolve(expressionResolver) ?? .zero,
-      opacity: (shadow?.resolveAlpha(expressionResolver)).map(Float.init)
-        ?? BlockShadow.Defaults.opacity,
-      color: shadow?.resolveColor(expressionResolver) ?? BlockShadow.Defaults.color
-    )
+    
+    let cornerRadii = resolveCornerRadii(expressionResolver)
+    
+    guard let shadow else {
+      return BlockShadow(
+        cornerRadii: cornerRadii,
+        blurRadius: 2,
+        offset: .zero,
+        opacity: BlockShadow.Defaults.opacity,
+        color: BlockShadow.Defaults.color
+      )
+    }
+    
+    return shadow.resolve(expressionResolver, cornerRadii: cornerRadii)
   }
 
   fileprivate func resolveCornerRadii(_ expressionResolver: ExpressionResolver) -> CornerRadii {
