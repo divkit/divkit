@@ -155,10 +155,13 @@
         }
     }
 
-    function onWindowClick(event: Event): void {
+    function onOutClick(event: Event): void {
         if (Date.now() - creationTime < 100 || event.composedPath().includes(tooltipNode)) {
             return;
         }
+
+        event.stopPropagation();
+        event.preventDefault();
 
         rootCtx.onTooltipClose(internalId);
     }
@@ -193,12 +196,14 @@
 </script>
 
 <svelte:window
-    on:click={onWindowClick}
+    on:click={onOutClick}
     on:resize={onWindowResize}
 />
 
 {#if visible}
-    <div class={css.tooltip__overlay}></div>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class={css.tooltip__overlay} on:click={onOutClick}></div>
 {/if}
 
 <div
