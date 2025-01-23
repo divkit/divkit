@@ -284,6 +284,7 @@ extension DivPager {
       background: background,
       border: border,
       columnSpan: columnSpan,
+      crossAxisAlignment: crossAxisAlignment,
       defaultItem: defaultItem,
       disappearActions: disappearActions,
       extensions: extensions,

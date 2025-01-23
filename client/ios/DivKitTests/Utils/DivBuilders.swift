@@ -342,6 +342,7 @@ func divPager(
     background: nil,
     border: nil,
     columnSpan: nil,
+    crossAxisAlignment: nil,
     defaultItem: nil,
     disappearActions: nil,
     extensions: nil,

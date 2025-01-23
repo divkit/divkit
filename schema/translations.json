@@ -1583,6 +1583,10 @@
     "en": "Pager. It contains a horizontal set of cards that can be scrolled page by page. It shows the main page and the beginning of the next one.",
     "ru": "Пейджер. Содержит горизонтальный набор карточек, которые можно скроллить постранично. Показывает основную страницу и начало следующей."
   },
+  "div_pager_cross_axis_alignment": {
+    "en": "Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>",
+    "ru": "Выравнивание элементов в направлении, перпендикулярном направлению скролла. В горизонтальном  пейджере:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li></p><p>В вертикальном пейджере:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li>"
+  },
   "div_pager_default_item": {
     "en": "Ordinal number of the pager element that will be opened by default.",
     "ru": "Порядковый номер элемента пейджера, который будет открываться по умолчанию."
@@ -1656,8 +1660,8 @@
     "ru": "При включенном параметре пейджер не будет передавать жест скролла родительскому элементу."
   },
   "div_pager_scroll_axis_alignment": {
-    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
-    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
+    "en": "Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
+    "ru": "Выравнивание страниц пейджера по направлению скролла. В горизонтальном  пейджере:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li></p><p>В вертикальном пейджере:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li>. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
   },
   "div_pager_short": {
     "en": "Pager.",

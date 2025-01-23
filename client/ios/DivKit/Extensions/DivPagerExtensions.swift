@@ -112,7 +112,7 @@ extension DivPagerLayoutMode {
   }
 }
 
-extension DivPager.ScrollAxisAlignment {
+extension DivPager.ItemAlignment {
   fileprivate var system: Alignment {
     switch self {
     case .center: .center
