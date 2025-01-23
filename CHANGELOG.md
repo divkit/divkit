@@ -38,40 +38,41 @@
 * Supported `layout_mode` `wrap_content` in `pager`.
 
 # iOS Client:
-* Added Xcode 16.2 / iOS 18.2 compatibility.
-* Added `DivFlagsInfo.useUrlHandlerForVisibilityActions`.
+* Breaking change. From now the default tooltip width is `match_parent` (previously was `wrap_content` which did not match the default `div-base` behavior).
+* Removed `DivActionHandler.handleDivActionUrl` method.
+* Removed `DivActionLogger` protocol. Use `DivReporter` instead.
+* Removed `DivActionURLHandler` public initializer.
+* Removed `DivActionURLHandler.PerformTimerAction` typealias.
+* Removed `DivActionURLHandler.UpdateCardAction` typealias.
+* Removed `DivBlockModelingContext.showToolip` property.
+* Removed `DivFlagsInfo.imageLoadingOptimizationEnabled`. This feature is already enabled by default.
+* Removed `DivKitComponents.UpdateCardAction` typealias.
+* Removed `DivTriggersStorage` public initializer. This class in not intended to be constructed outside DivKit. Use `DivKitComponents.triggersStorage` instead.
+* Removed `DivVariableUpdater` protocol.
+* Removed `DivVariablesStorage.ChangeEvent.newValues` property. Use `DivVariablesStorage` to access new values directly.
+* Removed `DivVisibilityCounting` protocol.
+* Removed `ExpressionResolver` public initializers. This class is not intended to be constructed outside DivKit.
+* Removed `ExpressionResolver.VariableTracker` typealias.
+* Removed `UIActionEventPerforming.perform(uiActionEvents:from:)` protocol requirement.
+* Removed `updateCardAction` argument from `DivKitComponents` initializer. Observe `updateCardSignal` property instead.
+* Removed `UserInterfaceAction.DivActionParams` initializer with `cardId` argument. Use another initializer with `path` argument instead.
+* Removed `Delay` and `Duration` types.
 * Changed return type of `DivStatePath.makeDivStatePath` method to non-optional.
 * Class `DivLastVisibleBoundsCache` marked with `@_spi(Internal)`.
 * Class `DivLayoutProviderHandler` marked with `@_spi(Internal)`.
 * Class `DivVisibilityCounter` marked with `@_spi(Internal)`.
 * Class `SizeProviderExtensionHandler` marked with `@_spi(Legacy)`. Use `div-base.layout_provider` API instead.
-* Fixed `div-state` switching in tooltips.
-* From now the default tooltip width is `match_parent` (previously was `wrap_content` which did not match the default `div-base` behavior).
-* Method `DivVariablesStorage.makeVariables` marked with `@_spi(Legacy)`.
-* Removed `Delay` and `Duration` types.
-* Removed `DivActionHandler.handleDivActionUrl` method.
-* Removed `DivActionLogger` protocol. Use `DivReporter` instead.
-* Removed `DivActionURLHandler.PerformTimerAction` typealias.
-* Removed `DivBlockModelingContext.showToolip` property.
-* Removed `DivFlagsInfo.imageLoadingOptimizationEnabled`.
-* Removed `DivKitComponents.UpdateCardAction` typealias.
-* Removed `DivTriggersStorage` public initializer.
-* Removed `DivVariableUpdater` protocol.
-* Removed `DivVariablesStorage.ChangeEvent.newValues` property. Use `DivVariablesStorage` to access new values directly.
-* Removed `DivVisibilityCounting` protocol.
-* Removed `ExpressionResolver.VariableTracker` typealias.
-* Removed `ExpressionResolver` public initializers. This class is not intended to be constructed outside DivKit.
-* Removed `UIActionEventPerforming.perform(uiActionEvents:from:)` protocol requirement.
-* Removed `updatedCardAction` argument from `DivKitComponents` initializer. Observe `updateCardSignal` property instead.
-* Removed deprecated `UserInterfaceAction.DivActionParams` initializer with `cardId` argument. Use another initializer instead.
-* Struct `DivActionURLHandler` members become internal.
-* Struct `DivBlockStateStorage.ChangeEvent` becomes internal.
-* Struct `IdAndCardId` becomes internal.
-* Supported `baseline_offset` for `range` in `div-text`.
-* Typealias `DivActionURLHandler.UpdateCardAction` marked with `@_spi(Internal)`.
+* `ShowTooltipAction` typealias moved from `DivActionURLHandler` to `DivActionHandler`.
 * `DivActionHandler` initializer marked with `@_spi(Legacy)`.
 * `DivBlockModelingContext` initializer marked with `@_spi(Internal)`, removed some arguments. You should not create `DivBlockModelingContext` in your code. Use `DivKitComponents.makeContext` if you really need to.
+* Struct `DivBlockStateStorage.ChangeEvent` becomes internal.
+* Struct `IdAndCardId` becomes internal.
+* Method `DivVariablesStorage.makeVariables` marked with `@_spi(Legacy)`.
 * `DivData` marked as `Sendable`.
+* Added `DivFlagsInfo.useUrlHandlerForVisibilityActions`.
+* Added Xcode 16.2 / iOS 18.2 compatibility.
+* Supported `baseline_offset` for `range` in `div-text`.
+* Fixed `div-state` switching in tooltips.
 
 # Web Client:
 * Breaking change. Api `Ya.Divkit` in window is now deprecated, and the `Ya.DivKit` should be used (please note the big letter "K" instead of the small "K").
@@ -89,6 +90,9 @@
 * Added support for the `set_stored_value` typed action.
 * Changed `doubletap_actions` detect logic.
 * Fixed `array` and `dict` variable types in d.ts.
+
+# Schema
+* Changed `div-action-download.url` property type to `url`.
 
 
 ## 30.33.0
