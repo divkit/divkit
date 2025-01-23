@@ -11,7 +11,7 @@ extension DivActionHandler {
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction = { _ in },
+    updateCard: @escaping UpdateCardAction = { _ in },
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {

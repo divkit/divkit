@@ -44,7 +44,7 @@ public final class DivKitComponents {
   private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
-  private let updateCard: DivActionURLHandler.UpdateCardAction
+  private let updateCard: DivActionHandler.UpdateCardAction
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
   private let variableTracker = DivVariableTracker()
   private var debugErrorCollectors = [DivCardID: DebugErrorCollector]()
@@ -99,7 +99,7 @@ public final class DivKitComponents {
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     reporter: DivReporter? = nil,
-    showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
+    showTooltip: DivActionHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     submitter: DivSubmitter? = nil,
     tooltipManager: TooltipManager? = nil,

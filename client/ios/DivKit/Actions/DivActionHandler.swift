@@ -4,6 +4,7 @@ import Serialization
 import VGSL
 
 public final class DivActionHandler {
+  public typealias ShowTooltipAction = (TooltipInfo) -> Void
   public typealias TrackVisibility = (_ logId: String, _ cardId: DivCardID) -> Void
 
   typealias PerformTimerAction = (
@@ -11,6 +12,8 @@ public final class DivActionHandler {
     _ timerId: String,
     _ action: DivTimerAction
   ) -> Void
+
+  typealias UpdateCardAction = (DivActionURLHandler.UpdateReason) -> Void
 
   private let divActionURLHandler: DivActionURLHandler
   private let urlHandler: DivUrlHandler
@@ -20,7 +23,7 @@ public final class DivActionHandler {
   private let functionsStorage: DivFunctionsStorage?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let blockStateStorage: DivBlockStateStorage
-  private let updateCard: DivActionURLHandler.UpdateCardAction
+  private let updateCard: UpdateCardAction
   private let reporter: DivReporter
   private let idToPath: IdToPath
   private let flags: DivFlagsInfo
@@ -49,8 +52,8 @@ public final class DivActionHandler {
     submitter: DivSubmitter,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     functionsStorage: DivFunctionsStorage? = nil,
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
-    showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
+    updateCard: @escaping (DivActionURLHandler.UpdateReason) -> Void,
+    showTooltip: ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
     trackVisibility: @escaping TrackVisibility = { _, _ in },
     trackDisappear: @escaping TrackVisibility = { _, _ in },
@@ -87,8 +90,8 @@ public final class DivActionHandler {
     submitter: DivSubmitter,
     variablesStorage: DivVariablesStorage,
     functionsStorage: DivFunctionsStorage?,
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
-    showTooltip: DivActionURLHandler.ShowTooltipAction?,
+    updateCard: @escaping UpdateCardAction,
+    showTooltip: ShowTooltipAction?,
     tooltipActionPerformer: TooltipActionPerformer?,
     trackVisibility: @escaping TrackVisibility,
     trackDisappear: @escaping TrackVisibility,

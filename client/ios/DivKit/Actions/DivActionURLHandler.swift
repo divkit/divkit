@@ -5,11 +5,6 @@ import VGSL
 
 /// Deprecated. Use `DivActionHandler`.
 public final class DivActionURLHandler {
-  @_spi(Internal)
-  public typealias UpdateCardAction = (UpdateReason) -> Void
-
-  public typealias ShowTooltipAction = (TooltipInfo) -> Void
-
   @frozen
   public enum UpdateReason {
     case patch(DivCardID, DivPatch)
@@ -20,7 +15,7 @@ public final class DivActionURLHandler {
   }
 
   private let patchProvider: DivPatchProvider
-  private let updateCard: UpdateCardAction
+  private let updateCard: DivActionHandler.UpdateCardAction
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let setStateActionHandler: SetStateActionHandler
   private let scrollActionHandler: ScrollActionHandler
@@ -29,7 +24,7 @@ public final class DivActionURLHandler {
 
   init(
     patchProvider: DivPatchProvider,
-    updateCard: @escaping UpdateCardAction,
+    updateCard: @escaping DivActionHandler.UpdateCardAction,
     persistentValuesStorage: DivPersistentValuesStorage,
     scrollActionHandler: ScrollActionHandler,
     setStateActionHandler: SetStateActionHandler,

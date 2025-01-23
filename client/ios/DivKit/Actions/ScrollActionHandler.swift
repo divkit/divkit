@@ -4,11 +4,11 @@ import VGSL
 
 final class ScrollActionHandler {
   private let blockStateStorage: DivBlockStateStorage
-  private let updateCard: DivActionURLHandler.UpdateCardAction
+  private let updateCard: DivActionHandler.UpdateCardAction
 
   init(
     blockStateStorage: DivBlockStateStorage,
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction
+    updateCard: @escaping DivActionHandler.UpdateCardAction
   ) {
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
