@@ -6,5 +6,5 @@ struct DivActionHandlingContext {
   let variablesStorage: DivVariablesStorage
   let blockStateStorage: DivBlockStateStorage
   let actionHandler: DivActionHandler
-  let updateCard: DivActionURLHandler.UpdateCardAction
+  let updateCard: DivActionHandler.UpdateCardAction
 }
