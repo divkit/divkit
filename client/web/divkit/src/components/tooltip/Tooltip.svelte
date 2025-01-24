@@ -48,7 +48,9 @@
         if (componentContext) {
             componentContext.destroy();
         }
-        componentContext = parentComponentContext.produceChildContext(data.div || {});
+        componentContext = parentComponentContext.produceChildContext(data.div || {}, {
+            isTooltipRoot: true
+        });
     }
 
     $: position = parentComponentContext.getDerivedFromVars(data.position);

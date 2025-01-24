@@ -11,10 +11,6 @@ export interface StateInterface {
 }
 
 export interface StateCtxValue {
-    registerInstance(id: string, block: StateInterface): void;
-
-    unregisterInstance(id: string): void;
-
     registerChildWithTransitionIn(
         json: DivBaseData,
         componentContext: ComponentContext,

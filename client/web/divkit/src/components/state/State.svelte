@@ -11,7 +11,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
-    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../../context/state';
+    import { STATE_CTX, type StateCtxValue } from '../../context/state';
     import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';
@@ -24,7 +24,6 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
-    const stateCtx = getContext<StateCtxValue>(STATE_CTX);
 
     let hasError = false;
 
@@ -32,7 +31,6 @@
     let transitionChangeBoxes: Map<string, ChildTransitionChangeData> = new Map();
     let childrenIds = new Set<string>();
 
-    let childStateMap: Map<string, StateInterface> | null = null;
     let animationList: (AnimationItemWithMaxDuration | ChangeBoundsItem)[] = [];
     let childrenWithTransitionIn: ChildWithTransition[] = [];
     let childrenWithTransitionOut: ChildWithTransition[] = [];
@@ -221,9 +219,9 @@
         return null;
     }
 
-    async function setState(stateId: string) {
+    async function setState(stateId: string): Promise<ComponentContext | undefined> {
         if (selectedId === stateId) {
-            return;
+            return componentContext;
         }
 
         rootCtx.setRunning('stateChange', true);
@@ -344,55 +342,28 @@
         transitionChangeBoxes.clear();
 
         rootCtx.setRunning('stateChange', false);
-    }
 
-    function getChild(id: string): StateInterface | undefined {
-        if (childStateMap && childStateMap.has(id)) {
-            return childStateMap.get(id);
-        }
-
-        componentContext.logError(wrapError(new Error('Missing state block with id'), {
-            additional: {
-                id
-            }
-        }));
-        return undefined;
+        return componentContext;
     }
 
     $: if (componentContext.json) {
         if (prevStateId) {
-            stateCtx.unregisterInstance(prevStateId);
+            componentContext.unregisterState(stateId);
+            // stateCtx.unregisterInstance(prevStateId);
             prevStateId = undefined;
         }
 
         if (stateId && !componentContext?.fakeElement) {
             prevStateId = stateId;
-            stateCtx.registerInstance(stateId, {
+            componentContext.registerState(stateId, setState);
+            /* stateCtx.registerInstance(stateId, {
                 setState,
                 getChild
-            });
+            }); */
         }
     }
 
     setContext<StateCtxValue>(STATE_CTX, {
-        registerInstance(id: string, block: StateInterface) {
-            if (!childStateMap) {
-                childStateMap = new Map();
-            }
-
-            if (childStateMap.has(id)) {
-                componentContext.logError(wrapError(new Error('Duplicate state with id'), {
-                    additional: {
-                        id
-                    }
-                }));
-            } else {
-                childStateMap.set(id, block);
-            }
-        },
-        unregisterInstance(id: string) {
-            childStateMap?.delete(id);
-        },
         // eslint-disable-next-line max-params
         runVisibilityTransition(
             json: DivBaseData,
@@ -562,7 +533,7 @@
         }
 
         if (prevStateId) {
-            stateCtx.unregisterInstance(prevStateId);
+            componentContext.unregisterState(prevStateId);
         }
     });
 </script>

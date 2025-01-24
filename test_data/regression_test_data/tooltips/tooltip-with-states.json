@@ -57,7 +57,7 @@
               "text": "Show tooltip",
               "action": {
                 "log_id": "show_tooltip",
-                "url": "div-action://show_tooltip?id=tooltip1"
+                "url": "div-action://show_tooltip?id=tooltip1&multiple=true"
               },
               "tooltips": [
                 {
@@ -71,6 +71,7 @@
                       "value": 80
                     }
                   },
+                  "duration": 0,
                   "div": {
                     "type": "container",
                     "width": {

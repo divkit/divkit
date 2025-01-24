@@ -89,6 +89,7 @@
     import { filterEnabledActions } from '../utils/filterEnabledActions';
     import { ENABLED_CTX, type EnabledCtxValue } from '../context/enabled';
     import { createAnimator, type AnimatorInstance } from '../utils/animators';
+    import { getStateContext, getTooltipContext } from '../utils/componentUtils';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -505,27 +506,39 @@
         return '';
     }
 
-    async function setState(stateId: string | null | undefined): Promise<void> {
+    async function setState(
+        stateId: string | null | undefined,
+        componentContext: ComponentContext | undefined
+    ): Promise<void> {
         if (!stateId) {
             throw new Error('Missing state id');
         }
 
-        let state: StateInterface = stateInterface;
         let parts = stateId.split('/');
+        const tooltipCtx = parts.length % 2 === 0 && getTooltipContext(componentContext);
+        let ctx: ComponentContext | undefined = tooltipCtx || rootComponentContext;
 
-        parts = ['root', ...parts];
-        if (parts.length < 2 || parts.length % 2 !== 0) {
-            throw new Error('Incorrect state id format');
+        if (!tooltipCtx) {
+            if (ctx.states?.root) {
+                ctx = await ctx.states.root(parts[0]);
+                if (!ctx) {
+                    return;
+                }
+                parts = parts.slice(1);
+            } else {
+                return;
+            }
         }
 
         for (let i = 0; i < parts.length; i += 2) {
             const divId = parts[i];
             const selectedStateId = parts[i + 1];
 
-            let childState = state.getChild(divId);
-            if (childState) {
-                await childState.setState(selectedStateId);
-                state = childState;
+            if (ctx.states?.[divId]) {
+                ctx = await ctx.states?.[divId](selectedStateId);
+                if (!ctx) {
+                    return;
+                }
             } else {
                 return;
             }
@@ -885,7 +898,7 @@
 
                 switch (parts[1]) {
                     case 'set_state':
-                        await setState(params.get('state_id'));
+                        await setState(params.get('state_id'), componentContext);
                         break;
                     case 'set_current_item':
                     case 'set_previous_item':
@@ -1171,7 +1184,7 @@
                     break;
                 }
                 case 'set_state': {
-                    await setState(actionTyped.state_id);
+                    await setState(actionTyped.state_id, componentContext);
                     break;
                 }
                 default: {
@@ -1552,20 +1565,20 @@
     }
 
     function produceComponentContext(from?: ComponentContext | undefined): ComponentContext {
-        const res: ComponentContext = {
+        const ctx: ComponentContext = {
             id: '',
             json: {} as DivBaseData,
             path: [],
             templateContext: {},
             logError(error) {
                 error.additional = error.additional || {};
-                error.additional.path = res.path.join('/');
+                error.additional.path = ctx.path.join('/');
                 if (process.env.DEVTOOL) {
-                    error.additional.json = res.json;
-                    error.additional.origJson = res.origJson;
+                    error.additional.json = ctx.json;
+                    error.additional.origJson = ctx.origJson;
 
                     const fullpath: ComponentContext[] = [];
-                    let temp = res;
+                    let temp = ctx;
                     while (temp.parent) {
                         fullpath.push(temp);
                         temp = temp.parent;
@@ -1576,7 +1589,7 @@
             },
             execAnyActions(actions, opts = {}) {
                 return execAnyActions(actions, {
-                    componentContext: res,
+                    componentContext: ctx,
                     processUrls: opts.processUrls,
                     node: opts.node,
                     logType: opts.logType
@@ -1584,30 +1597,30 @@
             },
             getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
                 return getDerivedFromVars(
-                    res.logError,
+                    ctx.logError,
                     jsonProp,
-                    mergeMaps(res.variables, additionalVars),
+                    mergeMaps(ctx.variables, additionalVars),
                     keepComplex,
-                    res.customFunctions
+                    ctx.customFunctions
                 );
             },
             getJsonWithVars(jsonProp, additionalVars, keepComplex = false) {
                 return getJsonWithVars(
-                    res.logError,
+                    ctx.logError,
                     jsonProp,
-                    mergeMaps(res.variables, additionalVars),
+                    mergeMaps(ctx.variables, additionalVars),
                     keepComplex,
-                    res.customFunctions
+                    ctx.customFunctions
                 );
             },
             evalExpression(store, expr, opts) {
-                return evalExpression(mergeMaps(variables, res.variables), res.customFunctions, store, expr, opts);
+                return evalExpression(mergeMaps(variables, ctx.variables), ctx.customFunctions, store, expr, opts);
             },
             produceChildContext(div, opts = {}) {
-                const componentContext = produceComponentContext(res);
+                const componentContext = produceComponentContext(ctx);
 
                 let childJson: MaybeMissing<DivBaseData> = div;
-                let childContext: TemplateContext = res.templateContext;
+                let childContext: TemplateContext = ctx.templateContext;
 
                 const {
                     templateContext: childProcessedContext,
@@ -1635,6 +1648,9 @@
                 if (div.type && !opts.isRootState) {
                     componentContext.path.push(div.type);
                 }
+                if (opts.isTooltipRoot) {
+                    componentContext.isTooltipRoot = true;
+                }
 
                 let localVars: Map<string, Variable> | undefined;
 
@@ -1648,7 +1664,7 @@
                     });
                 }
                 componentContext.variables = mergeMaps(
-                    res.variables,
+                    ctx.variables,
                     mergeMaps(localVars, opts.variables)
                 );
 
@@ -1661,7 +1677,7 @@
                                 checkCustomFunction(desc);
                             } catch (err: unknown) {
                                 // Only Error thrown here
-                                res.logError(wrapError(err as Error));
+                                ctx.logError(wrapError(err as Error));
                                 return;
                             }
                             const fn = desc as DivFunction;
@@ -1671,10 +1687,10 @@
                         }
                     });
                 }
-                componentContext.customFunctions = mergeCustomFunctions(res.customFunctions, localCustomFunctions);
+                componentContext.customFunctions = mergeCustomFunctions(ctx.customFunctions, localCustomFunctions);
 
                 if (Array.isArray(childProcessedJson.animators)) {
-                    res.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
+                    ctx.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
                         (acc, item) => {
                             if (item.id) {
                                 acc[item.id] = item;
@@ -1695,13 +1711,13 @@
                 return componentContext;
             },
             getVariable(varName, type) {
-                const variable = res.variables?.get(varName) || variables.get(varName);
+                const variable = ctx.variables?.get(varName) || variables.get(varName);
 
                 if (variable) {
                     const foundType = variable.getType();
 
                     if (type && foundType !== type) {
-                        res.logError(wrapError(new Error(`Variable should have type "${type}"`), {
+                        ctx.logError(wrapError(new Error(`Variable should have type "${type}"`), {
                             additional: {
                                 name: varName,
                                 foundType
@@ -1714,34 +1730,49 @@
                 return variable;
             },
             getAnimator(name) {
-                return res.animators?.[name] || res.parent?.getAnimator(name) || undefined;
+                return ctx.animators?.[name] || ctx.parent?.getAnimator(name) || undefined;
+            },
+            registerState(stateId, setState) {
+                const stateCtx = getStateContext(ctx.parent);
+
+                if (stateCtx) {
+                    stateCtx.states = stateCtx.states || {};
+                    stateCtx.states[stateId] = setState;
+                }
+            },
+            unregisterState(stateId) {
+                const stateCtx = getStateContext(ctx.parent);
+
+                if (stateCtx?.states) {
+                    delete stateCtx.states[stateId];
+                }
             },
             destroy() {
-                const set = componentContextMap.get(res.id);
+                const set = componentContextMap.get(ctx.id);
                 if (set) {
-                    set.delete(res);
+                    set.delete(ctx);
                     if (!set.size) {
-                        componentContextMap.delete(res.id);
+                        componentContextMap.delete(ctx.id);
                     }
                 }
             },
         };
 
         if (from) {
-            res.parent = from;
-            res.path = from.path.slice();
+            ctx.parent = from;
+            ctx.path = from.path.slice();
 
             if (from.fakeElement) {
-                res.fakeElement = true;
+                ctx.fakeElement = true;
             }
         } else {
-            res.json = {
+            ctx.json = {
                 type: 'root'
             };
-            res.isRootState = true;
+            ctx.isRootState = true;
         }
 
-        return res;
+        return ctx;
     }
 
     function registerTimeout(timeout: number): void {
@@ -1797,45 +1828,7 @@
         }
     });
 
-    const stateInterface: StateInterface = {
-        setState(_stateId: string): Promise<void> {
-            throw new Error('Not implemented');
-        },
-        getChild(id: string): StateInterface | undefined {
-            if (childStateMap && childStateMap.has(id)) {
-                return childStateMap.get(id);
-            }
-
-            logError(wrapError(new Error('Missing state block with id'), {
-                additional: {
-                    id
-                }
-            }));
-
-            return undefined;
-        }
-    };
-
-    let childStateMap: Map<string, StateInterface> | null = null;
     setContext<StateCtxValue>(STATE_CTX, {
-        registerInstance(id: string, block: StateInterface) {
-            if (!childStateMap) {
-                childStateMap = new Map();
-            }
-
-            if (childStateMap.has(id)) {
-                logError(wrapError(new Error('Duplicate state with id'), {
-                    additional: {
-                        id
-                    }
-                }));
-            } else {
-                childStateMap.set(id, block);
-            }
-        },
-        unregisterInstance(id: string) {
-            childStateMap?.delete(id);
-        },
         runVisibilityTransition(
             _json: DivBaseData,
             _componentContext: ComponentContext,

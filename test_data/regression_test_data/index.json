@@ -2519,7 +2519,8 @@
     {
       "title": "Switching state in the tooltip",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Tooltips"
