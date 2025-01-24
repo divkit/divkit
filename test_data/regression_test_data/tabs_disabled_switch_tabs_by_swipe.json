@@ -4,8 +4,10 @@
       {
         "state_id": 1,
         "div": {
+          "type": "container",
           "items": [
             {
+              "type": "customTabs",
               "tabs": [
                 {
                   "title": "Tab 0",
@@ -13,27 +15,18 @@
                     "log_id": "tab title/click/0"
                   },
                   "div": {
+                    "type": "page",
                     "stories": [
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/0/item 0"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/0/item 1"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/0/item 2"
-                        }
+                        "type": "tabItem"
                       }
                     ],
-                    "type": "page",
                     "footerText": "Show more",
                     "footerAction": {
                       "log_id": "tabs/0/full list"
@@ -46,39 +39,24 @@
                     "log_id": "tab title/click/1"
                   },
                   "div": {
+                    "type": "page",
                     "stories": [
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/1/item 0"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/1/item 1"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/1/item 2"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/1/item 3"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/1/item 4"
-                        }
+                        "type": "tabItem"
                       }
                     ],
-                    "type": "page",
                     "footerText": "Show more",
                     "footerAction": {
                       "log_id": "tabs/1/full list"
@@ -91,45 +69,27 @@
                     "log_id": "tab title/click/2"
                   },
                   "div": {
+                    "type": "page",
                     "stories": [
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/2/item 0"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/2/item 1"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/2/item 2"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/2/item 3"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/2/item 4"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/2/item 5"
-                        }
+                        "type": "tabItem"
                       }
                     ],
-                    "type": "page",
                     "footerText": "Show more",
                     "footerAction": {
                       "log_id": "tabs/2/full list"
@@ -142,39 +102,24 @@
                     "log_id": "tab title/click/3"
                   },
                   "div": {
+                    "type": "page",
                     "stories": [
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/3/item 0"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/3/item 1"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/3/item 2"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/3/item 3"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/3/item 4"
-                        }
+                        "type": "tabItem"
                       }
                     ],
-                    "type": "page",
                     "footerText": "Show more",
                     "footerAction": {
                       "log_id": "tabs/3/full list"
@@ -187,33 +132,21 @@
                     "log_id": "tab title/click/4"
                   },
                   "div": {
+                    "type": "page",
                     "stories": [
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/4/item 0"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/4/item 1"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/4/item 2"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/4/item 3"
-                        }
+                        "type": "tabItem"
                       }
                     ],
-                    "type": "page",
                     "footerText": "Show more",
                     "footerAction": {
                       "log_id": "tabs/1/full list"
@@ -226,39 +159,24 @@
                     "log_id": "tab title/click/5"
                   },
                   "div": {
+                    "type": "page",
                     "stories": [
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/5/item 0"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/5/item 1"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/5/item 2"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/5/item 3"
-                        }
+                        "type": "tabItem"
                       },
                       {
-                        "type": "tabItem",
-                        "action": {
-                          "log_id": "tabs/5/item 4"
-                        }
+                        "type": "tabItem"
                       }
                     ],
-                    "type": "page",
                     "footerText": "Show more",
                     "footerAction": {
                       "log_id": "tabs/1/full list"
@@ -267,8 +185,7 @@
                 }
               ],
               "switch_tabs_by_content_swipe_enabled": 0,
-              "selected_tab": 0,
-              "type": "customTabs"
+              "selected_tab": 0
             }
           ],
           "background": [
@@ -277,7 +194,6 @@
               "color": "#FFF"
             }
           ],
-          "type": "container",
           "border": {
             "corner_radius": 24
           },
@@ -294,14 +210,13 @@
     "tabItem": {
       "type": "text",
       "margins": {
-        "right": 12,
-        "top": 10,
-        "bottom": 10,
-        "left": 12
+        "left": 10,
+        "right": 10,
+        "top": 5,
+        "bottom": 5
       },
-      "line_height": 20,
+      "line_height": 24,
       "font_size": 16,
-      "max_lines": 3,
       "background": [
         {
           "color": "#E0E2E6",
@@ -319,9 +234,18 @@
       },
       "items": [
         {
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "$items": "stories",
           "margins": {
-            "left": 4,
-            "right": 4
+            "left": 5,
+            "right": 5
+          },
+          "paddings": {
+            "top": 10,
+            "bottom": 10
           },
           "border": {
             "corner_radius": 20
@@ -331,24 +255,17 @@
               "color": "#F7F7F7",
               "type": "solid"
             }
-          ],
-          "type": "container",
-          "height": {
-            "type": "match_parent"
-          },
-          "$items": "stories"
+          ]
         },
         {
           "$text": "footerText",
           "type": "text",
           "$action": "footerAction",
-          "margins": {
-            "top": 16,
-            "left": 20,
+          "paddings": {
             "start": 20,
-            "bottom": 16
+            "top": 15,
+            "bottom": 15
           },
-          "line_height": 16,
           "font_size": 14,
           "font_weight": "medium"
         }

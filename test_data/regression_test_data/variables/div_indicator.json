@@ -572,7 +572,7 @@
               "type": "presets_button",
               "height": {
                 "type": "fixed",
-                "value": 40
+                "value": 44
               },
               "margins": {
                 "top": 4,

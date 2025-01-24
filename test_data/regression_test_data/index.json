@@ -2157,8 +2157,8 @@
         "ios"
       ],
       "unsupported_platforms": {
-              "android": "The bug is caused by the peculiarities of animation implementation on iOS",
-              "web": "The bug is caused by the peculiarities of animation implementation on iOS"
+        "android": "The bug is caused by the peculiarities of animation implementation on iOS",
+        "web": "The bug is caused by the peculiarities of animation implementation on iOS"
       },
       "tags": [
         "DivInput",
