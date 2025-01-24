@@ -79,7 +79,7 @@
 * Breaking change. Browsers/Node,js now require BigInt support (Chrome 58 -> 67, Safari 11 -> 14, Firefox 67 -> 68, Node.js 8 -> 10.4). Integer values in markup expressions now always use BigInt. `subscribe` and other methods for integer variables now always return BigInt values.
 * Breaking change. Components with actions (not links) are now rendered using a `button`. This may change the default tap animation in iOS and other minor updates.
 * Breaking change. Store methods `getValue` / `setValue` are now deprecated. Provide methods `get` / `set` instead.
-* Breaking change. The build was redone using Vite/Rollup. This changes the situation a bit: there is no longer a css map, and the CJS/ESM file versions are no longer minimized. Browser versions with global variables are still minimized.
+* Breaking change. The build was redone using Vite/Rollup. This changes the situation a bit: there is no longer a css map, and the ESM file versions are no longer minimized. Browser and CJS versions with global variables are still minimized.
 * Breaking change. The logic of the `multiple` parameter for `tooltips` has been brought into line with other platforms, now tooltips without `multiple` are shown no more than once, and with - as many as you like (but no more than one at a time).
 * Breaking change. Tooltips are modal by default.
 * Breaking change: `doubletap_actions` now prevents `actions` from being called (to match Android behaviour).
@@ -400,7 +400,7 @@
 
 # Android Client:
 * Added implementation for local `variable_trigger` field.
-* Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables. 
+* Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables.
 * Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts.
 * Added support of variable animators.
 * Added support of `scope_id` property for `set_variable` actions.
@@ -708,7 +708,7 @@
 * Remove focus from focused `input` if some clickable div were clicked.
 * Removed `z`/`Z` patterns restriction from datetime formatting functions.
 * Added `max_length` property support for `input`.
-* Fixed crash by `gallery` when count of `items` was less then `column_count`. 
+* Fixed crash by `gallery` when count of `items` was less then `column_count`.
 * Supported `font_feature_settings` property for `div-text`.
 
 # iOS Client:

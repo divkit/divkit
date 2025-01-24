@@ -72,7 +72,7 @@ export default defineConfig(({ isSsrBuild, mode }) => {
             }
         },
         ssr: {
-            noExternal: ['clsx']
+            noExternal: ['clsx'],
         },
         build: {
             target: ['chrome67', 'safari14', 'firefox68'],
@@ -86,7 +86,7 @@ export default defineConfig(({ isSsrBuild, mode }) => {
                 formats: [FORMAT],
                 name: 'unused'
             },
-            minify: FORMAT === 'iife',
+            minify: true,
             rollupOptions: {
                 external: [],
                 output: {
