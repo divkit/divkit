@@ -8,6 +8,7 @@ extension DivActionHandler {
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     flags: DivFlagsInfo = .default,
     idToPath: IdToPath = IdToPath(),
+    patchProvider: DivPatchProvider = MockPatchProvider(),
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
@@ -18,7 +19,7 @@ extension DivActionHandler {
     self.init(
       stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
-      patchProvider: MockPatchProvider(),
+      patchProvider: patchProvider,
       submitter: MockSubmitter(),
       variablesStorage: variablesStorage,
       functionsStorage: nil,
@@ -55,7 +56,17 @@ private final class MockSubmitter: DivSubmitter {
 }
 
 final class MockPatchProvider: DivPatchProvider {
-  func getPatch(url _: URL, completion _: @escaping DivPatchProviderCompletion) {}
+  private let delegate: (DivPatchProviderCompletion) -> Void
+
+  init(
+    delegate: @escaping (DivPatchProviderCompletion) -> Void = { _ in }
+  ) {
+    self.delegate = delegate
+  }
+
+  func getPatch(url _: URL, completion: @escaping DivPatchProviderCompletion) {
+    delegate(completion)
+  }
 
   func cancelRequests() {}
 }

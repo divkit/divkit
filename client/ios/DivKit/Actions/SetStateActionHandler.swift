@@ -26,7 +26,7 @@ final class SetStateActionHandler {
     lifetime: DivStateLifetime,
     context: DivActionHandlingContext
   ) {
-    let cardId = context.path.cardId
+    let cardId = context.cardId
     let fullStatePath: DivStatePath = if let tooltipId = context.path.tooltipId,
                                          divStatePath.isLocal {
       DivStatePath.makeDivStatePath(

@@ -26,7 +26,7 @@ final class ScrollActionHandler {
     }
 
     let itemCount = action.resolveItemCount(expressionResolver)
-    let cardId = context.path.cardId
+    let cardId = context.cardId
     if itemCount == 0 {
       let offset = action.resolveOffset(expressionResolver)
       scrollToOffset(
@@ -47,7 +47,7 @@ final class ScrollActionHandler {
       return
     }
 
-    let cardId = context.path.cardId
+    let cardId = context.cardId
     switch action.destination {
     case let .indexDestination(destination):
       if let index = destination.resolveValue(expressionResolver) {

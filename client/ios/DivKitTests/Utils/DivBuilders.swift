@@ -7,7 +7,7 @@ import VGSL
 
 func divAction(
   isEnabled: Bool = true,
-  logId: String,
+  logId: String = "test",
   payload: [String: Any]? = nil,
   scopeId: String? = nil,
   typed: DivActionTyped? = nil,
