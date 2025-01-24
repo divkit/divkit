@@ -2563,6 +2563,26 @@
     "en": "Tooltip ID. It is used to avoid re-showing. It must be unique for all element tooltips.",
     "ru": "Идентификатор подсказки. Используется, чтобы избежать повторного показа. Должен быть уникален для всех подсказок элемента."
   },
+  "div_tooltip_mode": {
+    "en": "Tooltip modes.",
+    "ru": "Режимы подсказки."
+  },
+  "div_tooltip_mode_non_modal": {
+    "en": "Non-modal mode. Clicks outside pass through to underlying elements. Does not restrict focus to the tooltip. Back button on Android and back gesture on iOS do not close the tooltip.",
+    "ru": "Немодальный режим. Клик за пределами обрабатывается элементами под подсказкой. Не ограничивает фокус в пределах подсказки. Кнопка назад на android и жест назад на ios не закрывают подсказку."
+  },
+  "div_tooltip_mode_modal": {
+    "en": "Modal mode. Clicks outside do not pass through to underlying elements. Restricts focus to the tooltip. Back button on Android and back gesture on iOS close the tooltip.",
+    "ru": "Модальный режим. Клик за пределами не проходит сквозь и не доступен элементам под подсказкой. Ограничивает фокус в пределах подсказки. Кнопка назад на android и жест назад на ios закрывают подсказку"
+  },
+  "div_tooltip_tap_outside_actions": {
+    "en": "Specifies actions triggered by tapping outside the tooltip.",
+    "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
+  },
+  "div_tooltip_close_by_tap_outside": {
+    "en": "Allows dismissing tooltip by tapping outside of it.",
+    "ru": "Позволяет закрывать подсказку при нажатии за её пределами."
+  },
   "div_tooltip_offset": {
     "en": "Shift relative to an anchor point.",
     "ru": "Сдвиг относительно якорной точки."
