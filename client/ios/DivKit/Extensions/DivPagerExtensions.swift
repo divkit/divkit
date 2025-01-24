@@ -27,6 +27,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     let items = nonNilItems
     let scrollDirection = resolveOrientation(expressionResolver).direction
     let alignment = resolveScrollAxisAlignment(expressionResolver).system
+    let crossAlignment = resolveCrossAxisAlignment(expressionResolver).system
     let layoutMode = layoutMode.resolve(expressionResolver)
     let gallery = try makeGalleryModel(
       context: context,
@@ -34,7 +35,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       alignment: alignment,
       spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
       crossSpacing: 0,
-      defaultCrossAlignment: .center,
+      defaultCrossAlignment: crossAlignment,
       scrollMode: .autoPaging(inertionEnabled: false),
       infiniteScroll: resolveInfiniteScroll(expressionResolver),
       bufferSize: layoutMode.bufferSize(itemsCount: items.count),

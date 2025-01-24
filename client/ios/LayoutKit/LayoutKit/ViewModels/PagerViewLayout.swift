@@ -254,7 +254,7 @@ extension GalleryViewModel {
 
       let frame = CGRect(
         x: x,
-        y: minY,
+        y: item.crossAlignment.origin(of: height, minimum: minY, maximum: minY + maxElementHeight),
         width: width,
         height: height
       )
@@ -292,7 +292,12 @@ extension GalleryViewModel {
         maxWidth :
         block.widthOfHorizontallyNonResizableBlock
 
-      let frame = CGRect(x: minX, y: y, width: width, height: height)
+      let frame = CGRect(
+        x: item.crossAlignment.origin(of: width, minimum: minX, maximum: minX + maxWidth),
+        y: y,
+        width: width,
+        height: height
+      )
 
       y = frame.maxY + gap
       return frame
