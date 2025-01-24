@@ -1,3 +1,5 @@
+@value outer from "../Cls.module.css";
+
 .tabs {
     display: flex;
     flex-direction: column;
@@ -69,7 +71,6 @@
     transition-property: transform;
     transition-timing-function: ease-out;
     transition-duration: 0s;
-    pointer-events: auto;
 }
 
 .tabs__swiper_animated {
@@ -84,6 +85,10 @@
 
 .tabs__panel {
     display: none;
+    pointer-events: auto;
+}
+
+.tabs__panel .outer {
     pointer-events: none;
 }
 
