@@ -2,9 +2,17 @@ import Foundation
 
 import VGSL
 
-protocol Function {
+protocol _SimpleFunctionsProvider {
+  var simpleFunctions: [SimpleFunction] { get }
+}
+
+protocol Function: _SimpleFunctionsProvider {
   func invoke(_ args: [Any], context: ExpressionContext) throws -> Any
   func invoke(args: [Subexpression], context: ExpressionContext) throws -> Any
+}
+
+extension Function {
+  var simpleFunctions: [SimpleFunction] { [] }
 }
 
 extension Function {
@@ -18,6 +26,10 @@ extension Function {
 
 protocol SimpleFunction: Function {
   var signature: FunctionSignature { get }
+}
+
+extension SimpleFunction {
+  var simpleFunctions: [SimpleFunction] { [self] }
 }
 
 struct NoMatchingSignatureError: Error {}
@@ -290,6 +302,10 @@ struct OverloadedFunction: Function {
   }
 }
 
+extension OverloadedFunction {
+  var simpleFunctions: [SimpleFunction] { functions }
+}
+
 struct ArgumentSignature {
   let type: Any.Type
   let vararg: Bool
@@ -314,8 +330,10 @@ struct FunctionSignature {
 
     let expectedArgs: [ArgumentSignature]
     if let last = arguments.last, last.vararg {
-      let extraArgs = [ArgumentSignature]
-        .init(repeating: last, times: UInt(args.count - arguments.count))
+      let extraArgs = [ArgumentSignature](
+        repeating: last,
+        times: UInt(args.count - arguments.count)
+      )
       expectedArgs = (arguments + extraArgs).map { ArgumentSignature(type: $0.type) }
     } else {
       expectedArgs = arguments

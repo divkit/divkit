@@ -19,6 +19,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.getCornerRadii
 import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ShadowCache
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.dpToPxF
@@ -26,7 +27,6 @@ import com.yandex.div.core.view2.divs.spToPxF
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.widget.isInTransientHierarchy
 import com.yandex.div.internal.widget.isTransient
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
@@ -39,6 +39,7 @@ import kotlin.math.min
 private const val STROKE_OFFSET_PERCENTAGE = 0.1f
 
 internal class DivBorderDrawer(
+    private val divView: Div2View,
     private val view: View
 ) : ExpressionSubscriber {
 
@@ -51,6 +52,7 @@ internal class DivBorderDrawer(
     private val clipParams = ClipParams()
     private val borderParams by lazy { BorderParams() }
     private val shadowParams by lazy { ShadowParams() }
+    private val outlineProvider = RoundedRectOutlineProvider()
 
     private var strokeWidth = DEFAULT_STROKE_WIDTH
     private var cornerRadii: FloatArray? = null
@@ -144,8 +146,7 @@ internal class DivBorderDrawer(
             shadowParams.set(border?.shadow, resolver)
         }
 
-        invalidatePaths()
-        invalidateOutline()
+        invalidateBorder()
 
         // Since drawShadow is called by a parent, we have to invalidate it.
         if (hasCustomShadow || hadCustomShadow) {
@@ -154,6 +155,10 @@ internal class DivBorderDrawer(
     }
 
     fun onBoundsChanged(width: Int, height: Int) {
+        invalidateBorder()
+    }
+
+    fun invalidateBorder() {
         invalidatePaths()
         invalidateOutline()
     }
@@ -194,32 +199,14 @@ internal class DivBorderDrawer(
             return
         }
 
-        view.outlineProvider = object : ViewOutlineProvider() {
-            override fun getOutline(view: View?, outline: Outline?) {
-                if (view == null || outline == null) return
-                outline.setRoundRect(
-                    0, 0, view.width, view.height,
-                    clampCornerRadius(cornerRadius, view.width.toFloat(), view.height.toFloat())
-                )
-            }
-        }
+        outlineProvider.cornerRadius = cornerRadius
+        view.outlineProvider = outlineProvider
         view.clipToOutline = needClipping
     }
 
     private fun shouldUseCanvasClipping(): Boolean {
-        return needClipping && (hasCustomShadow ||
-            (!hasShadow && (hasDifferentCornerRadii || hasBorder || view.isInTransientHierarchy())))
-    }
-
-    private fun clampCornerRadius(cornerRadius: Float, width: Float, height: Float) : Float {
-        if (height <= 0 || width <= 0)
-            return 0.0f
-
-        val maxCornerRadius = min(height, width) / 2
-        if (cornerRadius > maxCornerRadius ) {
-            KLog.e("Div") { "Div corner radius is too big $cornerRadius > $maxCornerRadius" }
-        }
-        return min(cornerRadius, maxCornerRadius)
+        return needClipping && (divView.forceCanvasClipping || hasCustomShadow ||
+            (!hasShadow && (hasDifferentCornerRadii || hasBorder) || view.isTransient()))
     }
 
     fun clipCorners(canvas: Canvas) {
@@ -328,6 +315,21 @@ internal class DivBorderDrawer(
         }
     }
 
+    private class RoundedRectOutlineProvider(
+        var cornerRadius: Float = DEFAULT_CORNER_RADIUS
+    ) : ViewOutlineProvider() {
+
+        override fun getOutline(view: View, outline: Outline) {
+            outline.setRoundRect(
+                /* left = */ 0,
+                /* top = */ 0,
+                /* right = */ view.width,
+                /* bottom = */ view.height,
+                /* radius = */ clampCornerRadius(cornerRadius, view.width.toFloat(), view.height.toFloat())
+            )
+        }
+    }
+
     companion object {
         const val NO_ELEVATION = 0f
         private const val DEFAULT_STROKE_WIDTH = 0.0f
@@ -336,6 +338,18 @@ internal class DivBorderDrawer(
         private const val DEFAULT_DY = 0.5f
         private const val DEFAULT_SHADOW_COLOR = Color.BLACK
         private const val DEFAULT_SHADOW_ALPHA = 0.14f
+
+        private fun clampCornerRadius(cornerRadius: Float, width: Float, height: Float) : Float {
+            if (height <= 0 || width <= 0) {
+                return 0.0f
+            }
+
+            val maxCornerRadius = min(height, width) / 2
+            if (cornerRadius > maxCornerRadius ) {
+                KLog.w("DivBorderDrawer") { "Corner radius $cornerRadius is greater than half of the smallest side $maxCornerRadius" }
+            }
+            return min(cornerRadius, maxCornerRadius)
+        }
     }
 }
 

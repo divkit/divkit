@@ -14,7 +14,6 @@ import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
-import ru.tinkoff.allure.step
 
 internal fun tabSwipe(f: DivTabSwipeTestSteps.() -> Unit) = f(DivTabSwipeTestSteps())
 

@@ -3,6 +3,8 @@ package com.yandex.div.core.state
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.state.DivStatePath.Companion.parse
 import java.lang.Math.min
+import java.util.ArrayList
+import kotlin.Comparator
 
 /**
  * Parsed path to switch states.
@@ -16,7 +18,8 @@ import java.lang.Math.min
  */
 data class DivStatePath @VisibleForTesting internal constructor(
     val topLevelStateId: Long,
-    private val states: MutableList<Pair<String, String>> = mutableListOf()
+    private val states: List<Pair<String, String>> = listOf(),
+    internal val path: List<String> = listOf(topLevelStateId.toString())
 ) {
 
     val lastStateId: String?
@@ -33,17 +36,36 @@ data class DivStatePath @VisibleForTesting internal constructor(
             DivStatePath(topLevelStateId, states.subList(0, states.size - 1)).toString() + "/" + states.last().divId
         }
 
-    override fun toString(): String {
-        return if (states.isNotEmpty()) {
+    internal val fullPath by lazy { path.joinToString("/") }
+    private val stringValue by lazy {
+        if (states.isNotEmpty()) {
             "$topLevelStateId/" + states.flatMap { listOf(it.divId, it.stateId) }.joinToString("/")
         } else {
             "$topLevelStateId"
         }
     }
 
+    override fun toString(): String = stringValue
+
     fun append(divId: String, stateId: String): DivStatePath {
-        val newStates = states.toMutableList().apply { add(divId to stateId) }
-        return DivStatePath(topLevelStateId, newStates)
+        val newStates = ArrayList<Pair<String, String>>(states.size + 1).apply {
+            addAll(states)
+            add(divId to stateId)
+        }
+        val newFullPath = ArrayList<String>(path.size + 2).apply {
+            addAll(path)
+            add(divId)
+            add(stateId)
+        }
+        return DivStatePath(topLevelStateId, newStates, newFullPath)
+    }
+
+    fun appendDiv(divId: String): DivStatePath {
+        val newFullPath = ArrayList<String>(path.size + 1).apply {
+            addAll(path)
+            add(divId)
+        }
+        return DivStatePath(topLevelStateId, states, newFullPath)
     }
 
     fun getStates(): List<Pair<String, String>> = states

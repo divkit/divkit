@@ -209,7 +209,7 @@ extension MaskValidator {
   }
 }
 
-extension String.Index: ExpressibleByIntegerLiteral {
+extension String.Index: Swift.ExpressibleByIntegerLiteral {
   public init(integerLiteral value: IntegerLiteralType) {
     self.init(utf16Offset: value, in: String(repeating: " ", count: value))
   }

@@ -1,22 +1,18 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 sealed class Entity : JSONSerializable, Hashable {
     class WithArray(val value: EntityWithArray) : Entity()
     class WithArrayOfEnums(val value: EntityWithArrayOfEnums) : Entity()
@@ -99,6 +95,31 @@ sealed class Entity : JSONSerializable, Hashable {
        return hash
     }
 
+    fun equals(other: Entity?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return when(this) {
+            is WithArray -> this.value.equals(other.value() as? EntityWithArray, resolver, otherResolver)
+            is WithArrayOfEnums -> this.value.equals(other.value() as? EntityWithArrayOfEnums, resolver, otherResolver)
+            is WithArrayOfExpressions -> this.value.equals(other.value() as? EntityWithArrayOfExpressions, resolver, otherResolver)
+            is WithArrayOfNestedItems -> this.value.equals(other.value() as? EntityWithArrayOfNestedItems, resolver, otherResolver)
+            is WithArrayWithTransform -> this.value.equals(other.value() as? EntityWithArrayWithTransform, resolver, otherResolver)
+            is WithComplexProperty -> this.value.equals(other.value() as? EntityWithComplexProperty, resolver, otherResolver)
+            is WithComplexPropertyWithDefaultValue -> this.value.equals(other.value() as? EntityWithComplexPropertyWithDefaultValue, resolver, otherResolver)
+            is WithEntityProperty -> this.value.equals(other.value() as? EntityWithEntityProperty, resolver, otherResolver)
+            is WithOptionalComplexProperty -> this.value.equals(other.value() as? EntityWithOptionalComplexProperty, resolver, otherResolver)
+            is WithOptionalProperty -> this.value.equals(other.value() as? EntityWithOptionalProperty, resolver, otherResolver)
+            is WithOptionalStringEnumProperty -> this.value.equals(other.value() as? EntityWithOptionalStringEnumProperty, resolver, otherResolver)
+            is WithPropertyWithDefaultValue -> this.value.equals(other.value() as? EntityWithPropertyWithDefaultValue, resolver, otherResolver)
+            is WithRawArray -> this.value.equals(other.value() as? EntityWithRawArray, resolver, otherResolver)
+            is WithRequiredProperty -> this.value.equals(other.value() as? EntityWithRequiredProperty, resolver, otherResolver)
+            is WithSimpleProperties -> this.value.equals(other.value() as? EntityWithSimpleProperties, resolver, otherResolver)
+            is WithStringArrayProperty -> this.value.equals(other.value() as? EntityWithStringArrayProperty, resolver, otherResolver)
+            is WithStringEnumProperty -> this.value.equals(other.value() as? EntityWithStringEnumProperty, resolver, otherResolver)
+            is WithStringEnumPropertyWithDefaultValue -> this.value.equals(other.value() as? EntityWithStringEnumPropertyWithDefaultValue, resolver, otherResolver)
+            is WithoutProperties -> this.value.equals(other.value() as? EntityWithoutProperties, resolver, otherResolver)
+        }
+    }
+
     fun value(): Any {
         return when (this) {
             is WithArray -> value
@@ -148,6 +169,7 @@ sealed class Entity : JSONSerializable, Hashable {
     }
 
     companion object {
+
         @Throws(ParsingException::class)
         @JvmStatic
         @JvmName("fromJson")
@@ -177,6 +199,7 @@ sealed class Entity : JSONSerializable, Hashable {
                 else -> throw typeMismatch(json = json, key = "type", value = type)
             }
         }
+
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Entity(env, json = it) }
     }
 }

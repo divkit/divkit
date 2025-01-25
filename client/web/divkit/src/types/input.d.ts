@@ -1,6 +1,6 @@
 import type { DivBaseData } from './base';
 import type { FontWeight } from './text';
-import type { BooleanInt } from '../../typings/common';
+import type { Action, BooleanInt } from '../../typings/common';
 import { AlignmentHorizontal, AlignmentVertical } from './alignment';
 
 export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri' | 'password';
@@ -29,6 +29,28 @@ export interface CurrencyInputMask extends MaskBase {
 
 export type InputMask = FixedLengthInputMask | CurrencyInputMask;
 
+export type InputAutocapitalization = 'auto' | 'none' | 'words' | 'sentences' | 'all_characters';
+
+export type InputEnterKeyType = 'default' | 'go' | 'search' | 'send' | 'done';
+
+export interface InputValidatorBase {
+    label_id: string;
+    allow_empty?: BooleanInt;
+    variable: string;
+}
+
+export interface InputValidatorRegex extends InputValidatorBase {
+    type: 'regex';
+    pattern: string;
+}
+
+export interface InputValidatorExpression extends InputValidatorBase {
+    type: 'expression';
+    condition: BooleanInt;
+}
+
+export type InputValidator = InputValidatorRegex | InputValidatorExpression;
+
 export interface DivInputData extends DivBaseData {
     type: 'input';
 
@@ -49,8 +71,12 @@ export interface DivInputData extends DivBaseData {
     hint_color?: string;
     highlight_color?: string;
     // native_interface
+    enter_key_actions?: Action[];
     keyboard_type?: KeyboardType;
     mask?: InputMask;
+    enter_key_type?: InputEnterKeyType;
     select_all_on_focus?: BooleanInt;
     is_enabled?: BooleanInt;
+    autocapitalization?: InputAutocapitalization;
+    validators?: InputValidator[];
 }

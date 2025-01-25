@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `prototypes, data`.
  */
 @Generated
-class CollectionItemBuilder internal constructor(
+data class CollectionItemBuilder internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -38,7 +38,7 @@ class CollectionItemBuilder internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Data that will be used to create collection elements.
          */
@@ -69,7 +69,7 @@ class CollectionItemBuilder internal constructor(
      * Required parameters: `div`.
      */
     @Generated
-    class Prototype internal constructor(
+    data class Prototype internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -84,13 +84,13 @@ class CollectionItemBuilder internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
              */
             val div: Property<Div>?,
             /**
-             * `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+             * `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
              */
             val id: Property<String>?,
             /**
@@ -223,7 +223,7 @@ fun CollectionItemBuilder.asList() = listOf(this)
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+ * @param id `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
@@ -242,7 +242,7 @@ fun DivScope.collectionItemBuilderPrototype(
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+ * @param id `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
@@ -259,7 +259,7 @@ fun DivScope.collectionItemBuilderPrototypeProps(
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+ * @param id `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
@@ -276,7 +276,7 @@ fun TemplateScope.collectionItemBuilderPrototypeRefs(
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+ * @param id `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
@@ -295,7 +295,7 @@ fun CollectionItemBuilder.Prototype.override(
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+ * @param id `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
@@ -313,7 +313,7 @@ fun CollectionItemBuilder.Prototype.defer(
 )
 
 /**
- * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+ * @param id `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated

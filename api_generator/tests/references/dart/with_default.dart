@@ -2,9 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class WithDefault with EquatableMixin {
+
+class WithDefault extends Resolvable with EquatableMixin  {
   const WithDefault();
 
   static const type = "default";
@@ -14,10 +15,12 @@ class WithDefault with EquatableMixin {
 
   WithDefault? copyWith() => this;
 
-  static WithDefault? fromJson(Map<String, dynamic>? json) {
+  static WithDefault? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     return const WithDefault();
   }
+
+  WithDefault resolve(DivVariableContext context) => this;
 }

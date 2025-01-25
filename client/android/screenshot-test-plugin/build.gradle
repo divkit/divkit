@@ -11,8 +11,6 @@ dependencies {
     implementation libs.agp.gradleApi
     implementation libs.agp.gradle
     implementation libs.gson
-    implementation libs.kotlinpoet
-    implementation libs.kotlin.reflect
     implementation libs.protobuf
     implementation libs.webp.imageio
 

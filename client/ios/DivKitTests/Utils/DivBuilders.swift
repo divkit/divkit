@@ -1,11 +1,15 @@
 @testable import DivKit
-
+import DivKitTestsSupport
 import Foundation
+import VGSL
+
+import enum DivKit.Expression
 
 func divAction(
   isEnabled: Bool = true,
   logId: String,
   payload: [String: Any]? = nil,
+  scopeId: String? = nil,
   typed: DivActionTyped? = nil,
   url: String? = nil,
   urlExpression: String? = nil
@@ -21,13 +25,14 @@ func divAction(
     isEnabled: .value(isEnabled),
     logId: .value(logId),
     payload: payload,
+    scopeId: scopeId,
     typed: typed,
     url: urlParam
   )
 }
 
 func divData(
-  logId: String = DivKitTests.cardId.rawValue,
+  logId: String = DivBlockModelingContext.testCardId.rawValue,
   states: [DivData.State]
 ) -> DivData {
   DivData(
@@ -87,6 +92,7 @@ func divImage(
 func divText(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  focus: DivFocus? = nil,
   fontSize: Int? = nil,
   fontWeight: DivFontWeight? = nil,
   id: String? = nil,
@@ -96,6 +102,7 @@ func divText(
   textExpression: String? = nil,
   width: DivSize? = nil,
   variables: [DivVariable]? = nil,
+  visibility: Expression<DivVisibility>? = nil,
   visibilityActions: [DivVisibilityAction]? = nil
 ) -> Div {
   let textValue: Expression<String> = if let textExpression {
@@ -106,6 +113,7 @@ func divText(
   return .divText(DivText(
     accessibility: accessibility,
     actions: actions,
+    focus: focus,
     fontSize: fontSize.map { .value($0) },
     fontWeight: fontWeight.map { .value($0) },
     id: id,
@@ -113,6 +121,7 @@ func divText(
     paddings: paddings,
     text: textValue,
     variables: variables,
+    visibility: visibility,
     visibilityActions: visibilityActions,
     width: width
   ))
@@ -121,6 +130,8 @@ func divText(
 func divSeparator(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  alpha: CGFloat? = nil,
+  background: DivBackground? = nil,
   border: DivBorder? = nil,
   delimiterStyle: DivSeparator.DelimiterStyle? = nil,
   id: String? = nil,
@@ -133,6 +144,8 @@ func divSeparator(
   .divSeparator(DivSeparator(
     accessibility: accessibility,
     actions: actions,
+    alpha: alpha.map { .value($0) },
+    background: background.map { [$0] },
     border: border,
     delimiterStyle: delimiterStyle,
     id: id,
@@ -161,6 +174,7 @@ func divContainer(
     alignmentHorizontal: nil,
     alignmentVertical: nil,
     alpha: nil,
+    animators: nil,
     aspect: nil,
     background: nil,
     border: nil,
@@ -172,6 +186,7 @@ func divContainer(
     doubletapActions: nil,
     extensions: nil,
     focus: nil,
+    functions: nil,
     height: height,
     id: nil,
     itemBuilder: itemBuilder,
@@ -193,6 +208,7 @@ func divContainer(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variableTriggers: nil,
     variables: nil,
     visibility: nil,
     visibilityAction: nil,
@@ -209,6 +225,7 @@ func divGallery(
     alignmentHorizontal: nil,
     alignmentVertical: nil,
     alpha: nil,
+    animators: nil,
     background: nil,
     border: nil,
     columnCount: nil,
@@ -219,6 +236,7 @@ func divGallery(
     disappearActions: nil,
     extensions: nil,
     focus: nil,
+    functions: nil,
     height: nil,
     id: nil,
     itemBuilder: nil,
@@ -240,6 +258,7 @@ func divGallery(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variableTriggers: nil,
     variables: nil,
     visibility: nil,
     visibilityAction: nil,
@@ -260,6 +279,7 @@ func divGrid(
     alignmentHorizontal: nil,
     alignmentVertical: nil,
     alpha: nil,
+    animators: nil,
     background: nil,
     border: nil,
     columnCount: .value(columnCount),
@@ -270,6 +290,7 @@ func divGrid(
     doubletapActions: nil,
     extensions: nil,
     focus: nil,
+    functions: nil,
     height: nil,
     id: nil,
     items: items,
@@ -286,6 +307,7 @@ func divGrid(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variableTriggers: nil,
     variables: nil,
     visibility: nil,
     visibilityAction: nil,
@@ -303,6 +325,7 @@ func divPager(
     alignmentHorizontal: nil,
     alignmentVertical: nil,
     alpha: nil,
+    animators: nil,
     background: nil,
     border: nil,
     columnSpan: nil,
@@ -310,6 +333,7 @@ func divPager(
     disappearActions: nil,
     extensions: nil,
     focus: nil,
+    functions: nil,
     height: nil,
     id: nil,
     infiniteScroll: nil,
@@ -332,6 +356,7 @@ func divPager(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variableTriggers: nil,
     variables: nil,
     visibility: nil,
     visibilityAction: nil,
@@ -349,6 +374,7 @@ func divState(
     alignmentHorizontal: nil,
     alignmentVertical: nil,
     alpha: nil,
+    animators: nil,
     background: nil,
     border: nil,
     columnSpan: nil,
@@ -357,6 +383,7 @@ func divState(
     divId: divId,
     extensions: nil,
     focus: nil,
+    functions: nil,
     height: nil,
     id: nil,
     layoutProvider: nil,
@@ -374,6 +401,7 @@ func divState(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variableTriggers: nil,
     variables: nil,
     visibility: nil,
     visibilityAction: nil,
@@ -403,6 +431,7 @@ func divTabs(
     alignmentHorizontal: nil,
     alignmentVertical: nil,
     alpha: nil,
+    animators: nil,
     background: nil,
     border: nil,
     columnSpan: nil,
@@ -410,6 +439,7 @@ func divTabs(
     dynamicHeight: nil,
     extensions: nil,
     focus: nil,
+    functions: nil,
     hasSeparator: nil,
     height: nil,
     id: nil,
@@ -434,6 +464,7 @@ func divTabs(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variableTriggers: nil,
     variables: nil,
     visibility: nil,
     visibilityAction: nil,
@@ -457,10 +488,18 @@ func fixedSize(_ value: Int) -> DivSize {
   .divFixedSize(DivFixedSize(value: .value(value)))
 }
 
+func matchParentSize() -> DivSize {
+  .divMatchParentSize(DivMatchParentSize())
+}
+
 func wrapContentSize() -> DivSize {
   .divWrapContentSize(DivWrapContentSize())
 }
 
 func variable(_ name: String, _ value: String) -> DivVariable {
   .stringVariable(StringVariable(name: name, value: value))
+}
+
+func solidBackground(_ color: RGBAColor) -> DivBackground {
+  .divSolidBackground(DivSolidBackground(color: .value(color)))
 }

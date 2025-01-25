@@ -80,6 +80,14 @@ public final class DivVariablesStorage {
     weakSelf = self
   }
 
+  func getVariables(cardId: DivCardID, elementId: String) -> DivVariables {
+    lock.withLock {
+      localStorages.first {
+        $0.key.leaf == elementId && $0.key.cardId == cardId
+      }?.value.values ?? [:]
+    }
+  }
+
   func getVariableValue<T>(
     path: UIElementPath,
     name: DivVariableName
@@ -138,7 +146,7 @@ public final class DivVariablesStorage {
     }
 
     let oldValues = localStorage.values
-    localStorage.replaceAll(variables, notifyObservers: false)
+    localStorage.replaceAll(variables, notifyObservers: true)
 
     let changedVariables = makeChangedVariables(old: oldValues, new: variables)
     if changedVariables.isEmpty {
@@ -209,7 +217,7 @@ public final class DivVariablesStorage {
     changeEvents.addObserver(action)
   }
 
-  private func getNearestStorage(_ path: UIElementPath?) -> DivVariableStorage {
+  func getNearestStorage(_ path: UIElementPath?) -> DivVariableStorage {
     var currentPath: UIElementPath? = path
     while let path = currentPath {
       let localStorage = localStorages[path]
@@ -363,7 +371,7 @@ extension Collection<DivVariable> {
       case let .dictVariable(dictVariable):
         let name = DivVariableName(rawValue: dictVariable.name)
         if variables.keys.contains(name) { return }
-        if let dictionary = NSDictionary(dictionary: dictVariable.value) as? DivDictionary {
+        if let dictionary = DivDictionary.make(from: dictVariable.value) {
           variables[name] = .dict(dictionary)
         } else {
           DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")

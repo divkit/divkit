@@ -1,4 +1,4 @@
-import { Visibility } from '../types/base';
+import type { Visibility } from '../types/base';
 
 export function correctVisibility(visibility: string | undefined, defaultVal: Visibility): Visibility {
     if (

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class Indicator internal constructor(
+data class Indicator internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -44,12 +44,14 @@ class Indicator internal constructor(
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
             animation = additive.animation ?: properties.animation,
+            animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             inactiveItemColor = additive.inactiveItemColor ?: properties.inactiveItemColor,
@@ -72,6 +74,7 @@ class Indicator internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -80,7 +83,7 @@ class Indicator internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -120,6 +123,10 @@ class Indicator internal constructor(
          */
         val animation: Property<Animation>?,
         /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
+        /**
          * Element background. It can contain multiple layers.
          */
         val background: Property<List<Background>>?,
@@ -143,6 +150,10 @@ class Indicator internal constructor(
          * Parameters when focusing on an element or losing focus.
          */
         val focus: Property<Focus>?,
+        /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
         /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
@@ -171,7 +182,7 @@ class Indicator internal constructor(
          */
         val itemsPlacement: Property<IndicatorItemPlacement>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -193,7 +204,7 @@ class Indicator internal constructor(
          */
         val pagerId: Property<String>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -241,7 +252,11 @@ class Indicator internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -274,12 +289,14 @@ class Indicator internal constructor(
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
             result.tryPutProperty("animation", animation)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("inactive_item_color", inactiveItemColor)
@@ -302,6 +319,7 @@ class Indicator internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -329,24 +347,26 @@ class Indicator internal constructor(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -357,7 +377,8 @@ class Indicator internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -374,12 +395,14 @@ fun DivScope.indicator(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     inactiveItemColor: Color? = null,
@@ -402,6 +425,7 @@ fun DivScope.indicator(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -417,12 +441,14 @@ fun DivScope.indicator(
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
         animation = valueOrNull(animation),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         inactiveItemColor = valueOrNull(inactiveItemColor),
@@ -445,6 +471,7 @@ fun DivScope.indicator(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -462,24 +489,26 @@ fun DivScope.indicator(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -490,7 +519,8 @@ fun DivScope.indicator(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -507,12 +537,14 @@ fun DivScope.indicatorProps(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     inactiveItemColor: Color? = null,
@@ -535,6 +567,7 @@ fun DivScope.indicatorProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -549,12 +582,14 @@ fun DivScope.indicatorProps(
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
     animation = valueOrNull(animation),
+    animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
     disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
     inactiveItemColor = valueOrNull(inactiveItemColor),
@@ -577,6 +612,7 @@ fun DivScope.indicatorProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -593,24 +629,26 @@ fun DivScope.indicatorProps(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -621,7 +659,8 @@ fun DivScope.indicatorProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -638,12 +677,14 @@ fun TemplateScope.indicatorRefs(
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animation: ReferenceProperty<Indicator.Animation>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     inactiveItemColor: ReferenceProperty<Color>? = null,
@@ -666,6 +707,7 @@ fun TemplateScope.indicatorRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -680,12 +722,14 @@ fun TemplateScope.indicatorRefs(
     alignmentVertical = alignmentVertical,
     alpha = alpha,
     animation = animation,
+    animators = animators,
     background = background,
     border = border,
     columnSpan = columnSpan,
     disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     inactiveItemColor = inactiveItemColor,
@@ -708,6 +752,7 @@ fun TemplateScope.indicatorRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -724,24 +769,26 @@ fun TemplateScope.indicatorRefs(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -752,7 +799,8 @@ fun TemplateScope.indicatorRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -769,12 +817,14 @@ fun Indicator.override(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     inactiveItemColor: Color? = null,
@@ -797,6 +847,7 @@ fun Indicator.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -812,12 +863,14 @@ fun Indicator.override(
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
         animation = valueOrNull(animation) ?: properties.animation,
+        animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         inactiveItemColor = valueOrNull(inactiveItemColor) ?: properties.inactiveItemColor,
@@ -840,6 +893,7 @@ fun Indicator.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -857,24 +911,26 @@ fun Indicator.override(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -885,7 +941,8 @@ fun Indicator.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -902,12 +959,14 @@ fun Indicator.defer(
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animation: ReferenceProperty<Indicator.Animation>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     inactiveItemColor: ReferenceProperty<Color>? = null,
@@ -930,6 +989,7 @@ fun Indicator.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -945,12 +1005,14 @@ fun Indicator.defer(
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         animation = animation ?: properties.animation,
+        animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
         inactiveItemColor = inactiveItemColor ?: properties.inactiveItemColor,
@@ -973,6 +1035,7 @@ fun Indicator.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -991,7 +1054,7 @@ fun Indicator.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1020,12 +1083,14 @@ fun Indicator.evaluate(
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         animation = animation ?: properties.animation,
+        animators = properties.animators,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
+        functions = properties.functions,
         height = properties.height,
         id = properties.id,
         inactiveItemColor = inactiveItemColor ?: properties.inactiveItemColor,
@@ -1048,6 +1113,7 @@ fun Indicator.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1065,24 +1131,26 @@ fun Indicator.evaluate(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -1093,7 +1161,8 @@ fun Indicator.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1110,12 +1179,14 @@ fun Component<Indicator>.override(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     inactiveItemColor: Color? = null,
@@ -1138,6 +1209,7 @@ fun Component<Indicator>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1154,12 +1226,14 @@ fun Component<Indicator>.override(
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
         animation = valueOrNull(animation),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         inactiveItemColor = valueOrNull(inactiveItemColor),
@@ -1182,6 +1256,7 @@ fun Component<Indicator>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1199,24 +1274,26 @@ fun Component<Indicator>.override(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -1227,7 +1304,8 @@ fun Component<Indicator>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1244,12 +1322,14 @@ fun Component<Indicator>.defer(
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animation: ReferenceProperty<Indicator.Animation>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     inactiveItemColor: ReferenceProperty<Color>? = null,
@@ -1272,6 +1352,7 @@ fun Component<Indicator>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1288,12 +1369,14 @@ fun Component<Indicator>.defer(
         alignmentVertical = alignmentVertical,
         alpha = alpha,
         animation = animation,
+        animators = animators,
         background = background,
         border = border,
         columnSpan = columnSpan,
         disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
+        functions = functions,
         height = height,
         id = id,
         inactiveItemColor = inactiveItemColor,
@@ -1316,6 +1399,7 @@ fun Component<Indicator>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1334,7 +1418,7 @@ fun Component<Indicator>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1364,12 +1448,14 @@ fun Component<Indicator>.evaluate(
         alignmentVertical = alignmentVertical,
         alpha = alpha,
         animation = animation,
+        animators = null,
         background = null,
         border = null,
         columnSpan = columnSpan,
         disappearActions = null,
         extensions = null,
         focus = null,
+        functions = null,
         height = null,
         id = null,
         inactiveItemColor = inactiveItemColor,
@@ -1392,6 +1478,7 @@ fun Component<Indicator>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,

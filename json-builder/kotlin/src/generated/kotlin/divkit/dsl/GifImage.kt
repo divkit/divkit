@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, gif_url`.
  */
 @Generated
-class GifImage internal constructor(
+data class GifImage internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -43,6 +43,7 @@ class GifImage internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             aspect = additive.aspect ?: properties.aspect,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
@@ -53,8 +54,11 @@ class GifImage internal constructor(
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             gifUrl = additive.gifUrl ?: properties.gifUrl,
             height = additive.height ?: properties.height,
+            hoverEndActions = additive.hoverEndActions ?: properties.hoverEndActions,
+            hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
@@ -62,6 +66,8 @@ class GifImage internal constructor(
             paddings = additive.paddings ?: properties.paddings,
             placeholderColor = additive.placeholderColor ?: properties.placeholderColor,
             preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
+            pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
+            pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             preview = additive.preview ?: properties.preview,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -73,6 +79,7 @@ class GifImage internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -81,7 +88,7 @@ class GifImage internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -112,6 +119,10 @@ class GifImage internal constructor(
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
          */
@@ -155,6 +166,10 @@ class GifImage internal constructor(
          */
         val focus: Property<Focus>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * Direct URL to a GIF image.
          */
         val gifUrl: Property<Url>?,
@@ -164,11 +179,19 @@ class GifImage internal constructor(
          */
         val height: Property<Size>?,
         /**
+         * Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverStartActions: Property<List<Action>>?,
+        /**
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -194,11 +217,19 @@ class GifImage internal constructor(
          */
         val preloadRequired: Property<Boolean>?,
         /**
+         * Actions performed when an element is released.
+         */
+        val pressEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when an element is pressed.
+         */
+        val pressStartActions: Property<List<Action>>?,
+        /**
          * Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
          */
         val preview: Property<String>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -239,7 +270,11 @@ class GifImage internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -271,6 +306,7 @@ class GifImage internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("aspect", aspect)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
@@ -281,8 +317,11 @@ class GifImage internal constructor(
             result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("gif_url", gifUrl)
             result.tryPutProperty("height", height)
+            result.tryPutProperty("hover_end_actions", hoverEndActions)
+            result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("longtap_actions", longtapActions)
@@ -290,6 +329,8 @@ class GifImage internal constructor(
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("placeholder_color", placeholderColor)
             result.tryPutProperty("preload_required", preloadRequired)
+            result.tryPutProperty("press_end_actions", pressEndActions)
+            result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("preview", preview)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
@@ -301,6 +342,7 @@ class GifImage internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -319,6 +361,7 @@ class GifImage internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -329,17 +372,22 @@ class GifImage internal constructor(
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -349,7 +397,8 @@ class GifImage internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -365,6 +414,7 @@ fun DivScope.gifImage(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -375,8 +425,11 @@ fun DivScope.gifImage(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     gifUrl: Url? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -384,6 +437,8 @@ fun DivScope.gifImage(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -395,6 +450,7 @@ fun DivScope.gifImage(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -409,6 +465,7 @@ fun DivScope.gifImage(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -419,8 +476,11 @@ fun DivScope.gifImage(
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         gifUrl = valueOrNull(gifUrl),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
@@ -428,6 +488,8 @@ fun DivScope.gifImage(
         paddings = valueOrNull(paddings),
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -439,6 +501,7 @@ fun DivScope.gifImage(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -455,6 +518,7 @@ fun DivScope.gifImage(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -465,17 +529,22 @@ fun DivScope.gifImage(
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -485,7 +554,8 @@ fun DivScope.gifImage(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -501,6 +571,7 @@ fun DivScope.gifImageProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -511,8 +582,11 @@ fun DivScope.gifImageProps(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     gifUrl: Url? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -520,6 +594,8 @@ fun DivScope.gifImageProps(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -531,6 +607,7 @@ fun DivScope.gifImageProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -544,6 +621,7 @@ fun DivScope.gifImageProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     aspect = valueOrNull(aspect),
     background = valueOrNull(background),
     border = valueOrNull(border),
@@ -554,8 +632,11 @@ fun DivScope.gifImageProps(
     doubletapActions = valueOrNull(doubletapActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     gifUrl = valueOrNull(gifUrl),
     height = valueOrNull(height),
+    hoverEndActions = valueOrNull(hoverEndActions),
+    hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
     layoutProvider = valueOrNull(layoutProvider),
     longtapActions = valueOrNull(longtapActions),
@@ -563,6 +644,8 @@ fun DivScope.gifImageProps(
     paddings = valueOrNull(paddings),
     placeholderColor = valueOrNull(placeholderColor),
     preloadRequired = valueOrNull(preloadRequired),
+    pressEndActions = valueOrNull(pressEndActions),
+    pressStartActions = valueOrNull(pressStartActions),
     preview = valueOrNull(preview),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
@@ -574,6 +657,7 @@ fun DivScope.gifImageProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -589,6 +673,7 @@ fun DivScope.gifImageProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -599,17 +684,22 @@ fun DivScope.gifImageProps(
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -619,7 +709,8 @@ fun DivScope.gifImageProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -635,6 +726,7 @@ fun TemplateScope.gifImageRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -645,8 +737,11 @@ fun TemplateScope.gifImageRefs(
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     gifUrl: ReferenceProperty<Url>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -654,6 +749,8 @@ fun TemplateScope.gifImageRefs(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -665,6 +762,7 @@ fun TemplateScope.gifImageRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -678,6 +776,7 @@ fun TemplateScope.gifImageRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     aspect = aspect,
     background = background,
     border = border,
@@ -688,8 +787,11 @@ fun TemplateScope.gifImageRefs(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     gifUrl = gifUrl,
     height = height,
+    hoverEndActions = hoverEndActions,
+    hoverStartActions = hoverStartActions,
     id = id,
     layoutProvider = layoutProvider,
     longtapActions = longtapActions,
@@ -697,6 +799,8 @@ fun TemplateScope.gifImageRefs(
     paddings = paddings,
     placeholderColor = placeholderColor,
     preloadRequired = preloadRequired,
+    pressEndActions = pressEndActions,
+    pressStartActions = pressStartActions,
     preview = preview,
     reuseId = reuseId,
     rowSpan = rowSpan,
@@ -708,6 +812,7 @@ fun TemplateScope.gifImageRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -723,6 +828,7 @@ fun TemplateScope.gifImageRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -733,17 +839,22 @@ fun TemplateScope.gifImageRefs(
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -753,7 +864,8 @@ fun TemplateScope.gifImageRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -769,6 +881,7 @@ fun GifImage.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -779,8 +892,11 @@ fun GifImage.override(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     gifUrl: Url? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -788,6 +904,8 @@ fun GifImage.override(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -799,6 +917,7 @@ fun GifImage.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -813,6 +932,7 @@ fun GifImage.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         aspect = valueOrNull(aspect) ?: properties.aspect,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
@@ -823,8 +943,11 @@ fun GifImage.override(
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         gifUrl = valueOrNull(gifUrl) ?: properties.gifUrl,
         height = valueOrNull(height) ?: properties.height,
+        hoverEndActions = valueOrNull(hoverEndActions) ?: properties.hoverEndActions,
+        hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
@@ -832,6 +955,8 @@ fun GifImage.override(
         paddings = valueOrNull(paddings) ?: properties.paddings,
         placeholderColor = valueOrNull(placeholderColor) ?: properties.placeholderColor,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
+        pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
+        pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         preview = valueOrNull(preview) ?: properties.preview,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -843,6 +968,7 @@ fun GifImage.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -859,6 +985,7 @@ fun GifImage.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -869,17 +996,22 @@ fun GifImage.override(
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -889,7 +1021,8 @@ fun GifImage.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -905,6 +1038,7 @@ fun GifImage.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -915,8 +1049,11 @@ fun GifImage.defer(
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     gifUrl: ReferenceProperty<Url>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -924,6 +1061,8 @@ fun GifImage.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -935,6 +1074,7 @@ fun GifImage.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -949,6 +1089,7 @@ fun GifImage.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         aspect = aspect ?: properties.aspect,
         background = background ?: properties.background,
         border = border ?: properties.border,
@@ -959,8 +1100,11 @@ fun GifImage.defer(
         doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         gifUrl = gifUrl ?: properties.gifUrl,
         height = height ?: properties.height,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         longtapActions = longtapActions ?: properties.longtapActions,
@@ -968,6 +1112,8 @@ fun GifImage.defer(
         paddings = paddings ?: properties.paddings,
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         preview = preview ?: properties.preview,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -979,6 +1125,7 @@ fun GifImage.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -998,7 +1145,7 @@ fun GifImage.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param visibility Element visibility.
@@ -1029,6 +1176,7 @@ fun GifImage.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         aspect = properties.aspect,
         background = properties.background,
         border = properties.border,
@@ -1039,8 +1187,11 @@ fun GifImage.evaluate(
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
+        functions = properties.functions,
         gifUrl = gifUrl ?: properties.gifUrl,
         height = properties.height,
+        hoverEndActions = properties.hoverEndActions,
+        hoverStartActions = properties.hoverStartActions,
         id = properties.id,
         layoutProvider = properties.layoutProvider,
         longtapActions = properties.longtapActions,
@@ -1048,6 +1199,8 @@ fun GifImage.evaluate(
         paddings = properties.paddings,
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
+        pressEndActions = properties.pressEndActions,
+        pressStartActions = properties.pressStartActions,
         preview = preview ?: properties.preview,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1059,6 +1212,7 @@ fun GifImage.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1075,6 +1229,7 @@ fun GifImage.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1085,17 +1240,22 @@ fun GifImage.evaluate(
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1105,7 +1265,8 @@ fun GifImage.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1121,6 +1282,7 @@ fun Component<GifImage>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1131,8 +1293,11 @@ fun Component<GifImage>.override(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     gifUrl: Url? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -1140,6 +1305,8 @@ fun Component<GifImage>.override(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1151,6 +1318,7 @@ fun Component<GifImage>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1166,6 +1334,7 @@ fun Component<GifImage>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -1176,8 +1345,11 @@ fun Component<GifImage>.override(
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         gifUrl = valueOrNull(gifUrl),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
@@ -1185,6 +1357,8 @@ fun Component<GifImage>.override(
         paddings = valueOrNull(paddings),
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -1196,6 +1370,7 @@ fun Component<GifImage>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1212,6 +1387,7 @@ fun Component<GifImage>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1222,17 +1398,22 @@ fun Component<GifImage>.override(
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1242,7 +1423,8 @@ fun Component<GifImage>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1258,6 +1440,7 @@ fun Component<GifImage>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1268,8 +1451,11 @@ fun Component<GifImage>.defer(
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     gifUrl: ReferenceProperty<Url>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1277,6 +1463,8 @@ fun Component<GifImage>.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1288,6 +1476,7 @@ fun Component<GifImage>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1303,6 +1492,7 @@ fun Component<GifImage>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         aspect = aspect,
         background = background,
         border = border,
@@ -1313,8 +1503,11 @@ fun Component<GifImage>.defer(
         doubletapActions = doubletapActions,
         extensions = extensions,
         focus = focus,
+        functions = functions,
         gifUrl = gifUrl,
         height = height,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
         id = id,
         layoutProvider = layoutProvider,
         longtapActions = longtapActions,
@@ -1322,6 +1515,8 @@ fun Component<GifImage>.defer(
         paddings = paddings,
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         preview = preview,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -1333,6 +1528,7 @@ fun Component<GifImage>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1352,7 +1548,7 @@ fun Component<GifImage>.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param visibility Element visibility.
@@ -1384,6 +1580,7 @@ fun Component<GifImage>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         aspect = null,
         background = null,
         border = null,
@@ -1394,8 +1591,11 @@ fun Component<GifImage>.evaluate(
         doubletapActions = null,
         extensions = null,
         focus = null,
+        functions = null,
         gifUrl = gifUrl,
         height = null,
+        hoverEndActions = null,
+        hoverStartActions = null,
         id = null,
         layoutProvider = null,
         longtapActions = null,
@@ -1403,6 +1603,8 @@ fun Component<GifImage>.evaluate(
         paddings = null,
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
+        pressEndActions = null,
+        pressStartActions = null,
         preview = preview,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -1414,6 +1616,7 @@ fun Component<GifImage>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,

@@ -1,11 +1,15 @@
 package com.yandex.div.core.view2.divs
 
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
+import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.toDivItemBuilderResult
+import com.yandex.div2.DivVisibility
 
 internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
     items: List<DivItemBuilderResult>,
@@ -26,7 +30,6 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
 
         val appliedToListPatchIds = mutableSetOf<String>()
         var index = 0
-        var visibleIndex = 0
 
         while (index < items.size) {
             val childItem = items[index]
@@ -36,25 +39,17 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
             }
 
             if (patchDivs != null) {
+                updateItemVisibility(index, DivVisibility.GONE)
                 items.removeAt(index)
-                if (childItem.isVisible) {
-                    notifyRawItemRemoved(visibleIndex)
-                }
 
-                items.addAll(index, patchDivs.toDivItemBuilderResult(bindingContext.expressionResolver))
-
-                val activeItemsInserted = patchDivs.count {
-                    it.value().visibility.evaluate(bindingContext.expressionResolver).isVisible
+                val patchItems = patchDivs.toDivItemBuilderResult(bindingContext.expressionResolver)
+                items.addAll(index, patchItems)
+                patchItems.indices.forEach {
+                    updateItemVisibility(index + it)
                 }
-                notifyRawItemRangeInserted(visibleIndex, activeItemsInserted)
 
                 index += patchDivs.size - 1
-                visibleIndex += activeItemsInserted - 1
                 appliedToListPatchIds.add(patchId)
-            }
-
-            if (childItem.isVisible) {
-                visibleIndex++
             }
 
             index++
@@ -70,20 +65,78 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
                     idToFind,
                     bindingContext.expressionResolver
                 )?.let { newDiv ->
+                    updateItemVisibility(i, DivVisibility.GONE)
                     items[i] = DivItemBuilderResult(newDiv, bindingContext.expressionResolver)
+                    updateItemVisibility(i)
                     return@forEach
                 }
             }
         }
 
-        updateVisibleItems()
-
         if (appliedToListPatchIds.isEmpty()) return false
 
-        closeAllSubscription()
         subscribeOnElements()
         return true
     }
 
-    fun setItems(newItems: List<DivItemBuilderResult>) = Unit
+    open fun setItems(newItems: List<DivItemBuilderResult>) {
+        val diffUtilCallback = DiffUtilCallback(items, newItems)
+        val updateCallback = UpdateCallBack(newItems)
+        DiffUtil.calculateDiff(diffUtilCallback).dispatchUpdatesTo(updateCallback)
+        subscribeOnElements()
+    }
+
+    private class DiffUtilCallback(
+        private val oldItems: List<DivItemBuilderResult>,
+        private val newItems: List<DivItemBuilderResult>,
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize() = oldItems.size
+
+        override fun getNewListSize() = newItems.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldItems.getOrNull(oldItemPosition)
+            val newItem = newItems.getOrNull(newItemPosition) ?: return oldItem == null
+            oldItem ?: return false
+
+            oldItem.suppressMissingVariableException(true)
+            newItem.suppressMissingVariableException(true)
+            return oldItem.div.equals(newItem.div, oldItem.expressionResolver, newItem.expressionResolver).also {
+                oldItem.suppressMissingVariableException(false)
+                newItem.suppressMissingVariableException(false)
+            }
+        }
+
+        private fun DivItemBuilderResult.suppressMissingVariableException(suppress: Boolean) {
+            (expressionResolver as? ExpressionResolverImpl)?.suppressMissingVariableException = suppress
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
+    }
+
+    private inner class UpdateCallBack(private val newItems: List<DivItemBuilderResult>) : ListUpdateCallback {
+
+        override fun onInserted(position: Int, count: Int) {
+            val newItemPosition = if (position + count > newItems.size) newItems.size - count else position
+            for (i in 0 until count) {
+                items.add(position + i, newItems[newItemPosition + i])
+                updateItemVisibility(position + i)
+            }
+        }
+
+        override fun onRemoved(position: Int, count: Int) {
+            for (i in 0 until count) {
+                updateItemVisibility(position, DivVisibility.GONE)
+                items.removeAt(position)
+            }
+        }
+
+        override fun onMoved(fromPosition: Int, toPosition: Int) {
+            onRemoved(fromPosition, 1)
+            onInserted(toPosition, 1)
+        }
+
+        override fun onChanged(position: Int, count: Int, payload: Any?) = Unit
+    }
 }

@@ -72,6 +72,16 @@ final class DivVariableStorageWithOuterStorageTest: XCTestCase {
 
     XCTAssertEqual(outerVariables, storage.allValues)
   }
+
+  func test_remove_DoesNotAffectOuterStorage() {
+    storage.put(variables)
+    outerStorage.put(outerVariables)
+
+    storage.remove(variableNames: Set(variables.keys))
+    storage.remove(variableNames: Set(outerVariables.keys))
+
+    XCTAssertEqual(outerVariables, storage.allValues)
+  }
 }
 
 private let variables: DivVariables = [

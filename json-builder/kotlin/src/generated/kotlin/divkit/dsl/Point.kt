@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `y, x`.
  */
 @Generated
-class Point internal constructor(
+data class Point internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -39,7 +39,7 @@ class Point internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * `X` coordinate.
          */

@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithStringEnumProperty(
-    @JvmField final val property: Expression<Property>,
+    @JvmField val property: Expression<Property>,
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -21,6 +22,11 @@ class EntityWithStringEnumProperty(
         return hash
     }
 
+    fun equals(other: EntityWithStringEnumProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property.evaluate(resolver) == other.property.evaluate(otherResolver)
+    }
+
     fun copy(
         property: Expression<Property> = this.property,
     ) = EntityWithStringEnumProperty(
@@ -31,31 +37,29 @@ class EntityWithStringEnumProperty(
         const val TYPE = "entity_with_string_enum_property"
     }
 
-
     enum class Property(private val value: String) {
         FIRST("first"),
         SECOND("second");
 
         companion object Converter {
+
             fun toString(obj: Property): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Property? {
-                return when (string) {
+            fun fromString(value: String): Property? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     else -> null
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    else -> null
-                }
-            }
+            @JvmField
+            val TO_STRING = { value: Property -> toString(value) }
+
+            @JvmField
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

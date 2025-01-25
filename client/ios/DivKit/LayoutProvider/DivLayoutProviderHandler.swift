@@ -90,12 +90,11 @@ extension DivLayoutProvider {
     guard let handler = context.layoutProviderHandler else {
       return block
     }
-    let expressionResolver = context.expressionResolver
     return handler.apply(
       block: block,
       path: context.parentPath,
-      widthVariableName: resolveWidthVariableName(expressionResolver)?.toVariableName(),
-      heightVariableName: resolveHeightVariableName(expressionResolver)?.toVariableName()
+      widthVariableName: widthVariableName?.toVariableName(),
+      heightVariableName: heightVariableName?.toVariableName()
     )
   }
 }

@@ -36,24 +36,32 @@ public enum DivFilterTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divBlurTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divBlur(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divBlur(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divFilterRtlMirrorTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divFilterRtlMirror(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divFilterRtlMirror(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivFilter>!
+      result = result ?? {
+        if case let .divBlurTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divBlur(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divBlur(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divFilterRtlMirrorTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divFilterRtlMirror(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divFilterRtlMirror(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivFilter> {
@@ -61,26 +69,28 @@ public enum DivFilterTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivBlur.type:
-      let result = DivBlurTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivFilter>?
+    result = result ?? { if type == DivBlur.type {
+      let result = { DivBlurTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divBlur(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divBlur(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivFilterRtlMirror.type:
-      let result = DivFilterRtlMirrorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivFilterRtlMirror.type {
+      let result = { DivFilterRtlMirrorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divFilterRtlMirror(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divFilterRtlMirror(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

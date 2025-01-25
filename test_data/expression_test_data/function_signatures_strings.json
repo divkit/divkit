@@ -369,6 +369,22 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "encodeRegex(str: string) string",
+      "function_name": "encodeRegex",
+      "doc": "Encodes a string for safe use in regular expressions.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "A string to encode."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web",
+        "android"
+      ]
     }
   ]
 }

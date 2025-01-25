@@ -1,7 +1,7 @@
 import Foundation
 
 @frozen
-public enum ScrollDirection: Equatable {
+public enum ScrollDirection: Equatable, CaseIterable {
   case horizontal
   case vertical
 

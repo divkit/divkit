@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.canBeReused
@@ -24,6 +23,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivCollectionHolder
+import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
@@ -49,24 +49,22 @@ import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
-import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import javax.inject.Inject
 import javax.inject.Provider
 
-private const val INCORRECT_CHILD_SIZE =
-    "Incorrect child size. Container with wrap_content size contains child with match_parent size."
-private const val INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE = "Incorrect child size. " +
-    "Container with wrap layout mode contains child%s with match_parent size along the cross axis."
-
-private const val NO_PATCH_SHIFT = -2
+private const val INCORRECT_CHILD_SIZE_MESSAGE = "Incorrect child size. " +
+    "Container with %s contains child%s with match_parent size along the %s axis."
+private const val WRAP_CONTENT_SIZE = "wrap_content size"
+private const val WRAP_LAYOUT_MODE = "wrap layout mode"
+private const val AXIS_MAIN = "main"
+private const val AXIS_CROSS = "cross"
 
 @DivScope
 internal class DivContainerBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val divViewCreator: Provider<DivViewCreator>,
     private val divPatchManager: DivPatchManager,
-    private val divPatchCache: DivPatchCache,
     private val divBinder: Provider<DivBinder>,
     private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivContainer, ViewGroup> {
@@ -164,20 +162,19 @@ internal class DivContainerBinder @Inject constructor(
         path: DivStatePath,
         errorCollector: ErrorCollector,
     ) {
-        (this as DivCollectionHolder).items = items
-
         val divView = context.divView
         tryRebindPlainContainerChildren(divView, items, divViewCreator)
 
         validateChildren(div, items, context.expressionResolver, errorCollector)
-        dispatchBinding(context, div, oldDiv, items, path)
+        val dispatchedItems = dispatchBinding(context, div, oldDiv, items, path)
 
-        items.forEachIndexed { i, item ->
+        dispatchedItems.forEachIndexed { i, item ->
             if (item.div.value().hasSightActions) {
                 divView.bindViewToDiv(getChildAt(i), item.div)
             }
         }
-        trackVisibilityActions(divView, items, oldItems)
+        (this as DivCollectionHolder).items = dispatchedItems
+        trackVisibilityActions(divView, dispatchedItems, oldItems)
     }
 
     private fun ViewGroup.validateChildren(
@@ -186,33 +183,13 @@ internal class DivContainerBinder @Inject constructor(
         resolver: ExpressionResolver,
         errorCollector: ErrorCollector
     ) {
-        var childrenWithIncorrectWidth = 0
-        var childrenWithIncorrectHeight = 0
-
+        if (this is DivFrameLayout) return
         items.forEach { item ->
             val childDivValue = item.div.value()
-
-            if (this is DivWrapLayout) {
-                div.checkCrossAxisSize(childDivValue, resolver, errorCollector)
-            } else {
-                if (div.hasIncorrectWidth(childDivValue)) childrenWithIncorrectWidth++
-                if (div.hasIncorrectHeight(childDivValue, resolver)) childrenWithIncorrectHeight++
+            when (this) {
+                is DivWrapLayout -> div.checkCrossAxisSize(childDivValue, resolver, errorCollector)
+                is DivLinearLayout -> div.checkMainAxisSize(childDivValue, resolver, errorCollector)
             }
-        }
-
-        val widthHasMatchParentChild = childrenWithIncorrectWidth > 0
-        val widthAllChildrenAreIncorrect = widthHasMatchParentChild && childrenWithIncorrectWidth == items.size
-        val heightHasMatchParentChild = childrenWithIncorrectHeight > 0
-        val heightAllChildrenAreIncorrect = heightHasMatchParentChild && childrenWithIncorrectHeight == items.size
-
-        val hasIncorrectSize = !div.isWrapContainer(resolver) && when {
-            div.isVertical(resolver) -> widthAllChildrenAreIncorrect || heightHasMatchParentChild
-            div.isHorizontal(resolver) -> heightAllChildrenAreIncorrect || widthHasMatchParentChild
-            else -> widthAllChildrenAreIncorrect || heightAllChildrenAreIncorrect
-        }
-
-        if (hasIncorrectSize) {
-            addIncorrectChildSizeWarning(errorCollector)
         }
     }
 
@@ -222,75 +199,77 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         items: List<DivItemBuilderResult>,
         path: DivStatePath,
-    ) {
+    ): List<DivItemBuilderResult> {
         val binder = divBinder.get()
         var shift = 0
         val subscriber = expressionSubscriber
-        items.forEachIndexed { index, item ->
-            val childView = getChildAt(index + shift)
-            val oldChildDiv = (childView as? DivHolderView<*>)?.div
 
-            val patchShift = newDiv.itemBuilder?.let { NO_PATCH_SHIFT } ?: applyPatchToChild(
+        val patchedItems = items.flatMapIndexed { index, item ->
+            newDiv.itemBuilder?.let { return@flatMapIndexed listOf(item) } ?: applyPatchToChild(
                 bindingContext,
-                newDiv,
-                oldDiv,
-                item.div.value(),
-                index + shift,
-                subscriber
-            )
+                item.div,
+                index + shift
+            ).map { div -> DivItemBuilderResult(div, item.expressionResolver) }.also { shift += it.size - 1 }
+        }
 
-            if (patchShift > NO_PATCH_SHIFT) {
-                shift += patchShift
-            } else {
-                val childBindingContext = bindingContext.getFor(item.expressionResolver)
-                binder.bind(childBindingContext, childView, item.div, path)
-                childView.bindChildAlignment(
-                    newDiv,
-                    oldDiv,
-                    item.div.value(),
-                    oldChildDiv,
-                    bindingContext.expressionResolver,
-                    item.expressionResolver,
-                    subscriber,
-                    bindingContext.divView
+        patchedItems.forEachIndexed { index, item ->
+            val childView = getChildAt(index)
+            val childDiv = item.div.value()
+            val oldChildDiv = (childView as? DivHolderView<*>)?.div
+            val childPath = childDiv.resolvePath(index, path)
+
+            if (bindingContext.expressionResolver != item.expressionResolver) {
+                resolveRuntime(
+                    runtimeStore = bindingContext.runtimeStore,
+                    div = childDiv,
+                    path = childPath.fullPath,
+                    resolver = item.expressionResolver,
+                    parentResolver = bindingContext.expressionResolver,
                 )
             }
+
+            val childContext = bindingContext.getFor(item.expressionResolver)
+            binder.bind(childContext, childView, item.div, childPath)
+            childView.bindChildAlignment(
+                newDiv,
+                oldDiv,
+                childDiv,
+                oldChildDiv,
+                bindingContext.expressionResolver,
+                item.expressionResolver,
+                subscriber,
+                bindingContext.divView
+            )
+            if (childDiv.hasSightActions) {
+                bindingContext.divView.bindViewToDiv(childView, item.div)
+            } else {
+                bindingContext.divView.unbindViewFromDiv(childView)
+            }
         }
+        return patchedItems
     }
 
     private fun ViewGroup.applyPatchToChild(
         bindingContext: BindingContext,
-        newDiv: DivContainer,
-        oldDiv: DivContainer?,
-        childDiv: DivBase,
-        childIndex: Int,
-        subscriber: ExpressionSubscriber
-    ): Int {
+        childDiv: Div,
+        childIndex: Int
+    ): List<Div> {
         val divView = bindingContext.divView
-        childDiv.id?.let { id ->
-            val patchViewsToAdd = divPatchManager.createViewsForId(bindingContext, id) ?: return NO_PATCH_SHIFT
-            val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, id) ?: return NO_PATCH_SHIFT
+        val childId = childDiv.value().id
+        if (childId != null) {
+            val patch = divPatchManager.createViewsForId(bindingContext, childId) ?: return listOf(childDiv)
             removeViewAt(childIndex)
-            patchViewsToAdd.forEachIndexed { patchIndex, patchView ->
-                val patchDivValue = patchDivs[patchIndex].value()
-                addView(patchView, childIndex + patchIndex)
-                patchView.bindChildAlignment(
-                    newDiv = newDiv,
-                    oldDiv = oldDiv,
-                    newChildDiv = patchDivValue,
-                    oldChildDiv = null,
-                    resolver = bindingContext.expressionResolver,
-                    childResolver = bindingContext.expressionResolver,
-                    subscriber = subscriber,
-                    divView = divView
-                )
-                if (patchDivValue.hasSightActions) {
-                    divView.bindViewToDiv(patchView, patchDivs[patchIndex])
+            var shift = 0
+            patch.forEach { (patchDiv, patchView) ->
+                addView(patchView, childIndex + shift++)
+                val patchDivBase = patchDiv.value()
+                if (patchDivBase.hasSightActions) {
+                    divView.bindViewToDiv(patchView, patchDiv)
                 }
             }
-            return patchViewsToAdd.size - 1
+            return patch.keys.toList()
         }
-        return NO_PATCH_SHIFT
+        return listOf(childDiv)
     }
 
     private fun ViewGroup.replaceWithReuse(
@@ -349,25 +328,7 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         resolver: ExpressionResolver
     ) where T : ViewGroup, T : DivHolderView<*> {
-        if (newDiv.clipToBounds.equalsToConstant(oldDiv?.clipToBounds)) {
-            return
-        }
-
-        applyClipChildren(newDiv.clipToBounds.evaluate(resolver))
-
-        if (newDiv.clipToBounds.isConstant()) {
-            return
-        }
-
-        addSubscription(newDiv.clipToBounds.observe(resolver) { clip -> applyClipChildren(clip) })
-    }
-
-    private fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
-        needClipping = clip
-        val parent = parent
-        if (!clip && parent is ViewGroup) {
-            parent.clipChildren = false
-        }
+        bindClipChildren(newDiv.clipToBounds, oldDiv?.clipToBounds, resolver)
     }
 
     private fun DivLinearLayout.bindProperties(
@@ -637,37 +598,42 @@ internal class DivContainerBinder @Inject constructor(
         childDiv: DivBase,
         resolver: ExpressionResolver,
         errorCollector: ErrorCollector
-    ) = if (isHorizontal(resolver)) {
-        childDiv.height.checkForCrossAxis(childDiv, errorCollector)
-    } else {
-        childDiv.width.checkForCrossAxis(childDiv, errorCollector)
-    }
-
-    private fun DivSize.checkForCrossAxis(childDiv: DivBase, errorCollector: ErrorCollector) {
-        if (value() is DivMatchParentSize) {
-            addIncorrectSizeALongCrossAxisWarning(errorCollector, childDiv.id)
+    ) {
+        if (isHorizontal(resolver)) {
+            childDiv.height.checkCrossAxisSize(childDiv, errorCollector)
+        } else {
+            childDiv.width.checkCrossAxisSize(childDiv, errorCollector)
         }
     }
 
-    private fun DivContainer.hasIncorrectWidth(childDiv: DivBase) =
-        width is DivSize.WrapContent && childDiv.width is DivSize.MatchParent
+    private fun DivSize.checkCrossAxisSize(childDiv: DivBase, errorCollector: ErrorCollector) =
+        checkSize(childDiv, errorCollector, WRAP_LAYOUT_MODE, AXIS_CROSS)
 
-    private fun DivContainer.hasIncorrectHeight(childDiv: DivBase, resolver: ExpressionResolver) =
-        height is DivSize.WrapContent
-            && aspect?.let { it.ratio.evaluate(resolver).toFloat() == AspectView.DEFAULT_ASPECT_RATIO } ?: true
-            && childDiv.height is DivSize.MatchParent
-
-    private fun addIncorrectChildSizeWarning(errorCollector: ErrorCollector) {
-        errorCollector.getWarnings().forEach {
-            if (it.message == INCORRECT_CHILD_SIZE) return
+    private fun DivContainer.checkMainAxisSize(
+        childDiv: DivBase,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector
+    ) {
+        when {
+            isHorizontal(resolver) -> {
+                if (width is DivSize.WrapContent) {
+                    childDiv.width.checkMainAxisSize(childDiv, errorCollector)
+                }
+            }
+            height !is DivSize.WrapContent -> Unit
+            aspect?.let { it.ratio.evaluate(resolver).toFloat() == AspectView.DEFAULT_ASPECT_RATIO } ?: true ->
+                childDiv.height.checkMainAxisSize(childDiv, errorCollector)
         }
-        errorCollector.logWarning(Throwable(INCORRECT_CHILD_SIZE))
     }
 
-    private fun addIncorrectSizeALongCrossAxisWarning(errorCollector: ErrorCollector, childId: String?) {
-        val withId = childId?.let { " with id='$it'" } ?: ""
-        errorCollector.logWarning(Throwable(
-            INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE.format(withId)))
+    private fun DivSize.checkMainAxisSize(childDiv: DivBase, errorCollector: ErrorCollector) =
+        checkSize(childDiv, errorCollector, WRAP_CONTENT_SIZE, AXIS_MAIN)
+
+    private fun DivSize.checkSize(childDiv: DivBase, errorCollector: ErrorCollector, mode: String, axis: String) {
+        if (this is DivSize.MatchParent) {
+            val withId = childDiv.id?.let { " with id='$it'" } ?: ""
+            errorCollector.logWarning(Throwable(INCORRECT_CHILD_SIZE_MESSAGE.format(mode, withId, axis)))
+        }
     }
 
     fun setDataWithoutBinding(bindingContext: BindingContext, view: ViewGroup, div: DivContainer) {

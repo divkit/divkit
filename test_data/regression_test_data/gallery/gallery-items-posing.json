@@ -41,6 +41,11 @@
   },
   "card": {
     "log_id": "gallery-paging",
+    "variables": [{
+        "name": "text_position",
+        "type": "string",
+        "value": "start"
+    }],
     "states": [
       {
         "state_id": 0,
@@ -85,21 +90,42 @@
                 {
                   "id": "block_1",
                   "type": "text_block",
-                  "text": "Item 0"
+                  "text": "Item 0",
+                  "visibility_action": {
+                    "log_id": "item0",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=start"
+                  }
+            
                 },
                 {
                   "id": "block_2",
                   "type": "text_block",
-                  "text": "Item 1"
+                  "text": "Item 1",
+                  "visibility_action": {
+                    "log_id": "item1",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=center"
+                  }
                 },
                 {
                   "id": "block_3",
                   "type": "text_block",
-                  "text": "Item 2"
+                  "text": "Item 2",
+                  "visibility_action": {
+                    "log_id": "item2",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=center"
+                  }
                 },
                 {
                   "type": "text_block",
-                  "text": "Item 3"
+                  "text": "Item 3",
+                  "visibility_action": {
+                    "log_id": "item3",
+                    "log_limit": 0,
+                    "url": "div-action://set_variable?name=text_position&value=center"
+                  }
                 }
               ]
             },
@@ -125,7 +151,7 @@
                   "bottom-left": 8
                 }
               },
-              "alignment_horizontal": "start",
+              "alignment_horizontal": "@{text_position}",
               "alignment_vertical": "center",
               "type": "text_14_18_regular",
               "paddings": {

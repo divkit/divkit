@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, states`.
  */
 @Generated
-class State internal constructor(
+data class State internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -40,14 +40,17 @@ class State internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            clipToBounds = additive.clipToBounds ?: properties.clipToBounds,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             defaultStateId = additive.defaultStateId ?: properties.defaultStateId,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
             divId = additive.divId ?: properties.divId,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
@@ -65,6 +68,7 @@ class State internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -73,7 +77,7 @@ class State internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -92,6 +96,10 @@ class State internal constructor(
          */
         val alpha: Property<Double>?,
         /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
+        /**
          * Element background. It can contain multiple layers.
          */
         val background: Property<List<Background>>?,
@@ -99,6 +107,11 @@ class State internal constructor(
          * Element stroke.
          */
         val border: Property<Border>?,
+        /**
+         * Enables the bounding of child elements by the parent's borders.
+         * Default value: `true`.
+         */
+        val clipToBounds: Property<Boolean>?,
         /**
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
@@ -125,6 +138,10 @@ class State internal constructor(
          */
         val focus: Property<Focus>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
@@ -134,7 +151,7 @@ class State internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -146,7 +163,7 @@ class State internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -196,7 +213,11 @@ class State internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -225,14 +246,17 @@ class State internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("clip_to_bounds", clipToBounds)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("default_state_id", defaultStateId)
             result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("div_id", divId)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("layout_provider", layoutProvider)
@@ -250,6 +274,7 @@ class State internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -265,7 +290,7 @@ class State internal constructor(
      * Required parameters: `state_id`.
      */
     @Generated
-    class Item internal constructor(
+    data class Item internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -282,7 +307,7 @@ class State internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * State appearance animation. Use `transition_in` instead.
              */
@@ -327,20 +352,23 @@ class State internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -352,7 +380,8 @@ class State internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -365,14 +394,17 @@ fun DivScope.state(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -390,6 +422,7 @@ fun DivScope.state(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -401,14 +434,17 @@ fun DivScope.state(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
         disappearActions = valueOrNull(disappearActions),
         divId = valueOrNull(divId),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
@@ -426,6 +462,7 @@ fun DivScope.state(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -439,20 +476,23 @@ fun DivScope.state(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -464,7 +504,8 @@ fun DivScope.state(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -477,14 +518,17 @@ fun DivScope.stateProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -502,6 +546,7 @@ fun DivScope.stateProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -512,14 +557,17 @@ fun DivScope.stateProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    clipToBounds = valueOrNull(clipToBounds),
     columnSpan = valueOrNull(columnSpan),
     defaultStateId = valueOrNull(defaultStateId),
     disappearActions = valueOrNull(disappearActions),
     divId = valueOrNull(divId),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
     layoutProvider = valueOrNull(layoutProvider),
@@ -537,6 +585,7 @@ fun DivScope.stateProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -549,20 +598,23 @@ fun DivScope.stateProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -574,7 +626,8 @@ fun DivScope.stateProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -587,14 +640,17 @@ fun TemplateScope.stateRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -612,6 +668,7 @@ fun TemplateScope.stateRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -622,14 +679,17 @@ fun TemplateScope.stateRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     defaultStateId = defaultStateId,
     disappearActions = disappearActions,
     divId = divId,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     layoutProvider = layoutProvider,
@@ -647,6 +707,7 @@ fun TemplateScope.stateRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -659,20 +720,23 @@ fun TemplateScope.stateRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -684,7 +748,8 @@ fun TemplateScope.stateRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -697,14 +762,17 @@ fun State.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -722,6 +790,7 @@ fun State.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -733,14 +802,17 @@ fun State.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        clipToBounds = valueOrNull(clipToBounds) ?: properties.clipToBounds,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         defaultStateId = valueOrNull(defaultStateId) ?: properties.defaultStateId,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         divId = valueOrNull(divId) ?: properties.divId,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
@@ -758,6 +830,7 @@ fun State.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -771,20 +844,23 @@ fun State.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -796,7 +872,8 @@ fun State.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -809,14 +886,17 @@ fun State.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -834,6 +914,7 @@ fun State.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -845,14 +926,17 @@ fun State.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
         disappearActions = disappearActions ?: properties.disappearActions,
         divId = divId ?: properties.divId,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
@@ -870,6 +954,7 @@ fun State.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -882,9 +967,10 @@ fun State.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param visibility Element visibility.
@@ -895,6 +981,7 @@ fun State.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -907,14 +994,17 @@ fun State.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         background = properties.background,
         border = properties.border,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
         disappearActions = properties.disappearActions,
         divId = properties.divId,
         extensions = properties.extensions,
         focus = properties.focus,
+        functions = properties.functions,
         height = properties.height,
         id = properties.id,
         layoutProvider = properties.layoutProvider,
@@ -932,6 +1022,7 @@ fun State.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -945,20 +1036,23 @@ fun State.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -970,7 +1064,8 @@ fun State.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -983,14 +1078,17 @@ fun Component<State>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -1008,6 +1106,7 @@ fun Component<State>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1020,14 +1119,17 @@ fun Component<State>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
         disappearActions = valueOrNull(disappearActions),
         divId = valueOrNull(divId),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
@@ -1045,6 +1147,7 @@ fun Component<State>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1058,20 +1161,23 @@ fun Component<State>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -1083,7 +1189,8 @@ fun Component<State>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1096,14 +1203,17 @@ fun Component<State>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -1121,6 +1231,7 @@ fun Component<State>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1133,14 +1244,17 @@ fun Component<State>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         background = background,
         border = border,
+        clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
         disappearActions = disappearActions,
         divId = divId,
         extensions = extensions,
         focus = focus,
+        functions = functions,
         height = height,
         id = id,
         layoutProvider = layoutProvider,
@@ -1158,6 +1272,7 @@ fun Component<State>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1170,9 +1285,10 @@ fun Component<State>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param visibility Element visibility.
@@ -1183,6 +1299,7 @@ fun Component<State>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -1196,14 +1313,17 @@ fun Component<State>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         background = null,
         border = null,
+        clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
         disappearActions = null,
         divId = null,
         extensions = null,
         focus = null,
+        functions = null,
         height = null,
         id = null,
         layoutProvider = null,
@@ -1221,6 +1341,7 @@ fun Component<State>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,

@@ -1,7 +1,8 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class WithDefault() : Hashable {
@@ -17,10 +18,13 @@ class WithDefault() : Hashable {
         return hash
     }
 
+    fun equals(other: WithDefault?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        return other != null
+    }
+
     fun copy() = WithDefault()
 
     companion object {
         const val TYPE = "default"
     }
-
 }

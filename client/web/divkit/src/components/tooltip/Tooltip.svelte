@@ -21,7 +21,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import Unknown from '../utilities/Unknown.svelte';
     import { genClassName } from '../../utils/genClassName';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { inOutAnimation } from '../../utils/inOutAnimation';
 
     export let ownerNode: HTMLElement;
@@ -42,8 +42,14 @@
     let tooltipWidth = '';
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
+    let componentContext: ComponentContext;
 
-    $: componentContext = parentComponentContext.produceChildContext(data.div);
+    $: {
+        if (componentContext) {
+            componentContext.destroy();
+        }
+        componentContext = parentComponentContext.produceChildContext(data.div || {});
+    }
 
     $: position = parentComponentContext.getDerivedFromVars(data.position);
     $: offsetX = parentComponentContext.getDerivedFromVars(data.offset?.x?.value);
@@ -90,14 +96,14 @@
         const jsonHeight = parentComponentContext.getJsonWithVars(data.div?.width);
 
         if (!jsonWidth || jsonWidth.type === 'match_parent') {
-            calcedWidth = width = ownerBbox.width;
+            calcedWidth = width = window.innerWidth;
         } else if (jsonWidth.type === 'fixed' && jsonWidth.value) {
             calcedWidth = width = jsonWidth.value;
         } else {
             calcedWidth = tooltipBbox.width;
         }
         if (jsonHeight?.type === 'match_parent') {
-            calcedHeight = height = ownerBbox.height;
+            calcedHeight = height = window.innerHeight;
         } else if (jsonHeight?.type === 'fixed' && jsonHeight.value) {
             calcedHeight = height = jsonHeight.value;
         } else {
@@ -178,6 +184,10 @@
     });
 
     onDestroy(() => {
+        if (componentContext) {
+            componentContext.destroy();
+        }
+
         resizeObserver?.disconnect();
     });
 </script>

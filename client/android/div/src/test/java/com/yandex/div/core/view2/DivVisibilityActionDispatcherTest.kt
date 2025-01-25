@@ -44,7 +44,7 @@ class DivVisibilityActionDispatcherTest {
 
     private val dispatcher = DivVisibilityActionDispatcher(
         logger = logger,
-        visibilityListener = mock(),
+        visibilityListeners = listOf(),
         divActionHandler = contextActionHandler,
         divActionBeaconSender = beaconSender
     )

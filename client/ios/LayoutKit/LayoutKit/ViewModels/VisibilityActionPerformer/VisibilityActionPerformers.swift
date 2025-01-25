@@ -39,6 +39,11 @@ final class VisibilityActionPerformers {
     } else {
       min(Int(to.area * 100 / bounds.area), 100)
     }
+
+    guard visibleAreaPercentageAfter != visibleAreaPercentageBefore else {
+      return
+    }
+
     visibilityParams.lastVisibleArea.value = visibleAreaPercentageAfter
 
     for performer in actionPerformers {

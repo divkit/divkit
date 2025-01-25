@@ -58,6 +58,7 @@ internal class PageItemDecoration @JvmOverloads constructor(
     private val DivPagerLayoutMode.pageOffset get() = when (this) {
         is DivPagerLayoutMode.NeighbourPageSize -> max(fixedWidth + itemSpacing, maxPadding / 2)
         is DivPagerLayoutMode.PageSize -> parentSize * (1 - percentageWidth / 100f) / 2
+        is DivPagerLayoutMode.PageContentSize -> throw NotImplementedError()
     }
 
     private val DivPagerLayoutMode.NeighbourPageSize.fixedWidth get() =

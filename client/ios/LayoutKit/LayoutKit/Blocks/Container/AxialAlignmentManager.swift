@@ -22,10 +22,11 @@ final class AxialAlignmentManager {
     forAvailableSpace availableSpace: CGFloat,
     contentSize: CGFloat = 0
   ) -> [CGRect] {
+    let framesCount = frames.filter { $0.size != CGSize.zero }.count
     let shift = makeShift(
       forAvailableSpace: availableSpace,
       contentSize: contentSize,
-      numberOfItems: frames.count
+      numberOfItems: framesCount
     )
     return frames.applyOffset(
       with: axialAlignment,

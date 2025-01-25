@@ -1,0 +1,46 @@
+@font-face {
+    font-family: "YS Text Variable";
+    src: url(https://yastatic.net/s3/home/fonts/ys/3/text-variable-full.woff2) format('woff2-variations');
+    font-display: optional;
+    font-weight: 400 700;
+}
+
+:root {
+    font-size: 16px;
+    font-family: 'YS Text Variable', system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    font-variant-numeric: proportional-nums;
+    font-feature-settings: 'liga', 'kern', 'pnum';
+    line-height: 1.25;
+    font-weight: 400;
+
+    color-scheme: light dark;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
+a {
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
+}
+
+a:hover {
+    color: #535bf2;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    min-width: 320px;
+    height: 100vh;
+}
+
+#app {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+}

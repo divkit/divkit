@@ -1,9 +1,10 @@
 import 'package:divkit/divkit.dart';
 import 'package:example/src/configuration/playground_custom_handler.dart';
+import 'package:example/src/configuration/playground_font_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../state.dart';
+import 'package:example/src/state.dart';
 
 class ShowPage extends ConsumerStatefulWidget {
   final Map<String, dynamic> data;
@@ -15,13 +16,14 @@ class ShowPage extends ConsumerStatefulWidget {
 }
 
 class _ShowPageState extends ConsumerState<ShowPage> {
-  late final DivKitData data;
-
-  @override
-  void initState() {
-    super.initState();
-
-    data = DefaultDivKitData.fromJson(widget.data);
+  Future<DivKitData> load() async {
+    final json = widget.data;
+    final data = DefaultDivKitData.fromScheme(
+      card: json.containsKey('card') ? json['card'] : json,
+      templates: json['templates'],
+    );
+    data.build();
+    return data;
   }
 
   @override
@@ -34,46 +36,50 @@ class _ShowPageState extends ConsumerState<ShowPage> {
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
-          child:
+          child: Row(
+            children: [
               Text("${mq.size.width.round()}x${mq.size.height.round() - 64}"),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FittedBox(
-              child: Row(
-                children: [
-                  ElevatedButton(
-                    child: const Text('reload'),
-                    onPressed: () {
-                      ref.read(reloadNProvider.notifier).state = reloadN + 1;
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    child: Text(isNightModeEnabled ? 'dark' : 'light'),
-                    onPressed: () {
-                      ref.read(nightModeProvider.notifier).state =
-                          !isNightModeEnabled;
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    child: Text(isRtlEnabled ? 'RTL' : 'LTR'),
-                    onPressed: () {
-                      ref.read(isRTLProvider.notifier).state = !isRtlEnabled;
-                    },
-                  ),
-                ],
+              const SizedBox(width: 32),
+              ElevatedButton(
+                child: const Text('reload'),
+                onPressed: () {
+                  ref.read(reloadNProvider.notifier).state = reloadN + 1;
+                },
               ),
-            ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                child: Text(isNightModeEnabled ? 'dark' : 'light'),
+                onPressed: () {
+                  ref.read(nightModeProvider.notifier).state =
+                      !isNightModeEnabled;
+                },
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                child: Text(isRtlEnabled ? 'RTL' : 'LTR'),
+                onPressed: () {
+                  ref.read(isRTLProvider.notifier).state = !isRtlEnabled;
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
-      body: DivKitView(
-        customHandler: PlaygroundAppCustomHandler(),
-        key: ObjectKey(reloadN),
-        data: data,
+      body: FutureBuilder<DivKitData>(
+        future: load(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return SingleChildScrollView(
+              child: DivKitView(
+                key: ObjectKey(reloadN),
+                data: snapshot.requireData,
+                customHandler: PlaygroundAppCustomHandler(),
+                fontProvider: PlaygroundDivFontProvider(),
+              ),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

@@ -2,6 +2,8 @@ package com.yandex.div.internal.widget
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.allViews
+import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 
 /**
  * An interface for [View] which may be in a transient state.
@@ -30,14 +32,21 @@ class TransientViewMixin: TransientView {
 
     override fun transitionStarted(view: View) {
         if (++transitionCount == 1) {
-            view.invalidate()
+            invalidateView(view)
         }
     }
 
     override fun transitionFinished(view: View) {
         if (transitionCount > 0 && --transitionCount == 0) {
-            view.invalidate()
+            invalidateView(view)
         }
+    }
+
+    private fun invalidateView(view: View) {
+        view.invalidate()
+        view.allViews
+            .filterIsInstance<DivBorderSupports>()
+            .forEach { it.invalidateBorder() }
     }
 
     override val isTransient: Boolean

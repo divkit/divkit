@@ -15,6 +15,7 @@ public protocol Block: AnyObject,
   ImageContaining,
   LayoutCaching,
   ElementStateUpdating,
+  ElementFocusUpdating,
   AccessibilityContaining {
   var isVerticallyResizable: Bool { get }
   var isHorizontallyResizable: Bool { get }

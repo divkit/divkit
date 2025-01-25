@@ -37,7 +37,6 @@
           "disappear_actions": [
             {
               "$log_id": "visibility_id",
-              "$url": "visibility_url",
               "log_limit": 0,
               "is_enabled": "@{is_enabled}",
               "disappear_duration": 0,

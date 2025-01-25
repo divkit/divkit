@@ -2,9 +2,8 @@ import CoreGraphics
 import Foundation
 import Testing
 import UIKit
-import XCTest
-
 import VGSL
+import XCTest
 
 enum TestMode {
   case update
@@ -89,11 +88,5 @@ extension XCTAttachment {
   fileprivate convenience init(image: UIImage, name: String) {
     self.init(image: image)
     self.name = name
-  }
-}
-
-extension String: LocalizedError {
-  public var errorDescription: String? {
-    self
   }
 }

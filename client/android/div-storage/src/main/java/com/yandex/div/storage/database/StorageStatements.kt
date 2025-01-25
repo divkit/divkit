@@ -1,40 +1,16 @@
 package com.yandex.div.storage.database
 
-import android.database.Cursor
 import android.database.SQLException
-import com.yandex.div.internal.KAssert
 import com.yandex.div.storage.RawDataAndMetadata
 import com.yandex.div.storage.rawjson.RawJson
 import com.yandex.div.storage.templates.Template
 import com.yandex.div.storage.util.bindNullableBlob
+import org.json.JSONObject
 
 /**
  * Repository of statements for [com.yandex.div.storage.StorageStatementExecutor.execute].
  */
 internal object StorageStatements {
-    private fun captureTemplateIds(readState: ReadState,
-                                   filter: (Cursor) -> Boolean = { true }): MutableList<String> {
-        val usedTemplates = mutableListOf<String>()
-        readState.use {
-            val cursor = it.cursor
-
-            if (!cursor.moveToFirst()) {
-                return usedTemplates
-            }
-            do {
-                if (!filter(cursor)) {
-                    continue
-                }
-                try {
-                    val templateId = cursor.getString(cursor.getColumnIndex(COLUMN_TEMPLATE_ID))
-                    usedTemplates.add(templateId)
-                } catch (e: SQLException) {
-                    KAssert.fail(e) { "Error getting templates" }
-                }
-            } while (cursor.moveToNext())
-        }
-        return usedTemplates
-    }
 
     fun writeTemplates(templates: List<Template>) = object : StorageStatement {
         override fun execute(compiler: SqlCompiler) {
@@ -100,16 +76,22 @@ internal object StorageStatements {
             val replaceCardStatement = compiler.compileStatement(REPLACE_CARD)
             cards.forEach { dataAndMetadata ->
                 val cardId = dataAndMetadata.id
-                val divData = dataAndMetadata.divData.toString().toByteArray()
-                val metaBlob = dataAndMetadata.metadata?.toString()?.toByteArray()
-                var c = 1
-                replaceCardStatement.bindString(c++, cardId)
-                replaceCardStatement.bindNullableBlob(c++, divData)
-                replaceCardStatement.bindNullableBlob(c++, metaBlob)
-                replaceCardStatement.bindString(c++, groupId)
-                val id = replaceCardStatement.executeInsert()
-                if (id < 0) {
+
+                val errorHandler = { e: Exception ->
                     failedTransactions.add(cardId)
+                    e.printStackTrace()
+                }
+
+                val divData = dataAndMetadata.divData.toByteArrayCatching(errorHandler) ?: return@forEach
+                val metaBlob = dataAndMetadata.metadata?.run { toByteArrayCatching(errorHandler) ?: return@forEach }
+
+                with(replaceCardStatement) {
+                    bindString(1, cardId)
+                    bindNullableBlob(2, divData)
+                    bindNullableBlob(3, metaBlob)
+                    bindString(4, groupId)
+
+                    executeInsert().takeIf { id -> id < 0 }?.let { failedTransactions.add(cardId) }
                 }
             }
 
@@ -120,6 +102,15 @@ internal object StorageStatements {
 
         override fun toString(): String {
             return "Replace cards ($cardIdsString)}"
+        }
+
+        private fun JSONObject.toByteArrayCatching(errorHandler: (e: Exception) -> Unit): ByteArray? {
+            return try {
+                toString().toByteArray()
+            } catch (e: ConcurrentModificationException) {
+                errorHandler.invoke(e)
+                null
+            }
         }
     }
 

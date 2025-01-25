@@ -1,6 +1,6 @@
 {
     "name": "@divkitframework/divkit",
-    "version": "30.11.0",
+    "version": "30.29.0",
     "description": "DivKit for the web",
     "keywords": [
         "server-driven-ui",
@@ -73,6 +73,7 @@
         "build:peggy": "peggy src/expressions/expressions.peggy --allowed-start-rules start,JsonStringContents --format es",
         "build:dev-prod": "npm run build:peggy && NODE_ENV=production webpack-cli --config webpack-dev.config.js",
         "build:prod": "npm run build:peggy && rm -rf dist/ && NODE_ENV=production npx webpack-cli --progress",
+        "perf:expressions": "npx vite-node tests/expressions/perf.ts",
         "prepublishOnly": "cp ../../../LICENSE ./"
     },
     "browserslist": {
@@ -113,6 +114,7 @@
         "jest-environment-jsdom": "29.6.2",
         "jest-html-reporter": "3.10.1",
         "lottie-web": "5.11.0",
+        "markdown-it": "14.1.0",
         "mini-css-extract-plugin": "2.7.5",
         "peggy": "3.0.2",
         "postcss": "8.4.31",

@@ -2,7 +2,7 @@
 
 import type { WrappedError } from '../wrapError';
 import { wrapError } from '../wrapError';
-import { TextDiff, textDiff } from '../textDiff';
+import { type TextDiff, textDiff } from '../textDiff';
 
 export interface MaskKey {
     key: string;

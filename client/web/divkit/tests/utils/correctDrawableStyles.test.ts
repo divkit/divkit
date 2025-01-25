@@ -396,7 +396,6 @@ describe('correctDrawableStyle', () => {
 
         const types = ['rounded_rectangle', 'circle'];
 
-        // @ts-expect-error Incorrect data
         expect(correctDrawableStyle({}, types, defaultVal)).toEqual(defaultVal);
 
         expect(correctDrawableStyle({
@@ -410,7 +409,6 @@ describe('correctDrawableStyle', () => {
             color: 123
         }, types, defaultVal)).toEqual(defaultVal);
 
-        // @ts-expect-error Incorrect data
         expect(correctDrawableStyle({
             type: 'shape_drawable',
             color: '#fc0',

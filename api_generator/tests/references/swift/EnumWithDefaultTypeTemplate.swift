@@ -36,50 +36,60 @@ public enum EnumWithDefaultTypeTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .withDefaultTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.withDefault(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.withDefault(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .withoutDefaultTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.withoutDefault(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.withoutDefault(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<EnumWithDefaultType>!
+      result = result ?? {
+        if case let .withDefaultTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.withDefault(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.withDefault(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .withoutDefaultTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.withoutDefault(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.withoutDefault(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<EnumWithDefaultType> {
     let type = (context.templateData["type"] as? String ?? WithDefault.type)
       .flatMap { context.templateToType[$0] ?? $0 } 
 
-    switch type {
-    case WithDefault.type:
-      let result = WithDefaultTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<EnumWithDefaultType>?
+    result = result ?? { if type == WithDefault.type {
+      let result = { WithDefaultTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.withDefault(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.withDefault(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case WithoutDefault.type:
-      let result = WithoutDefaultTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == WithoutDefault.type {
+      let result = { WithoutDefaultTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.withoutDefault(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.withoutDefault(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

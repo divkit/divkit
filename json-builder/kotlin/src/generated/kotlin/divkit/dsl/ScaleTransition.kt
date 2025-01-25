@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class ScaleTransition internal constructor(
+data class ScaleTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : AppearanceTransition {
@@ -45,7 +45,7 @@ class ScaleTransition internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Animation duration in milliseconds.
          * Default value: `200`.

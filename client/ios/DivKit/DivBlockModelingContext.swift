@@ -14,13 +14,14 @@ public struct DivBlockModelingContext {
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
+  public let actionHandler: DivActionHandler?
   public let blockStateStorage: DivBlockStateStorage
   let visibilityCounter: DivVisibilityCounting
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
   public let imageHolderFactory: DivImageHolderFactory
   let highPriorityImageHolderFactory: DivImageHolderFactory?
   let divCustomBlockFactory: DivCustomBlockFactory
-  let fontProvider: DivFontProvider
+  public let fontProvider: DivFontProvider
   let flagsInfo: DivFlagsInfo
   let extensionHandlers: [String: DivExtensionHandler]
   let layoutDirection: UserInterfaceLayoutDirection
@@ -31,7 +32,9 @@ public struct DivBlockModelingContext {
   public private(set) var errorsStorage: DivErrorsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
+  let functionsStorage: DivFunctionsStorage?
   public let variablesStorage: DivVariablesStorage
+  let triggersStorage: DivTriggersStorage?
   public private(set) var expressionResolver: ExpressionResolver
   private let functionsProvider: FunctionsProvider
   public let variableTracker: DivVariableTracker?
@@ -40,6 +43,9 @@ public struct DivBlockModelingContext {
   private(set) var sizeModifier: DivSizeModifier?
   private(set) var localValues = [String: AnyHashable]()
   let layoutProviderHandler: DivLayoutProviderHandler?
+  let idToPath: IdToPath
+  let animatorController: DivAnimatorController?
+  private(set) var accessibilityElementsStorage = DivAccessibilityElementsStorage()
 
   public init(
     cardId: DivCardID,
@@ -48,6 +54,7 @@ public struct DivBlockModelingContext {
     parentPath: UIElementPath? = nil,
     parentDivStatePath: DivStatePath? = nil,
     stateManager: DivStateManager,
+    actionHandler: DivActionHandler? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     visibilityCounter: DivVisibilityCounting? = nil,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
@@ -57,7 +64,9 @@ public struct DivBlockModelingContext {
     fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
+    functionsStorage: DivFunctionsStorage? = nil,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
+    triggersStorage: DivTriggersStorage? = nil,
     playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
     scheduler: Scheduling? = nil,
@@ -69,21 +78,13 @@ public struct DivBlockModelingContext {
     tooltipViewFactory: DivTooltipViewFactory? = nil,
     layoutProviderHandler: DivLayoutProviderHandler? = nil
   ) {
-    var extensionsHandlersDictionary = [String: DivExtensionHandler]()
-    for extensionHandler in extensionHandlers {
-      let id = extensionHandler.id
-      if extensionsHandlersDictionary[id] != nil {
-        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
-        continue
-      }
-      extensionsHandlersDictionary[id] = extensionHandler
-    }
     self.init(
       viewId: DivViewId(cardId: cardId, additionalId: additionalId),
       cardLogId: cardLogId,
       parentPath: parentPath,
       parentDivStatePath: parentDivStatePath,
       stateManager: stateManager,
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
@@ -92,8 +93,10 @@ public struct DivBlockModelingContext {
       divCustomBlockFactory: divCustomBlockFactory,
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
-      extensionHandlers: extensionsHandlersDictionary,
+      extensionHandlers: extensionHandlers.dictionary,
+      functionsStorage: functionsStorage,
       variablesStorage: variablesStorage,
+      triggersStorage: triggersStorage,
       playerFactory: playerFactory,
       debugParams: debugParams,
       scheduler: scheduler,
@@ -103,7 +106,9 @@ public struct DivBlockModelingContext {
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
       tooltipViewFactory: tooltipViewFactory,
-      layoutProviderHandler: layoutProviderHandler
+      layoutProviderHandler: layoutProviderHandler,
+      idToPath: nil,
+      animatorController: nil
     )
   }
 
@@ -113,6 +118,7 @@ public struct DivBlockModelingContext {
     parentPath: UIElementPath?,
     parentDivStatePath: DivStatePath?,
     stateManager: DivStateManager,
+    actionHandler: DivActionHandler?,
     blockStateStorage: DivBlockStateStorage,
     visibilityCounter: DivVisibilityCounting?,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache?,
@@ -122,7 +128,9 @@ public struct DivBlockModelingContext {
     fontProvider: DivFontProvider?,
     flagsInfo: DivFlagsInfo,
     extensionHandlers: [String: DivExtensionHandler],
+    functionsStorage: DivFunctionsStorage?,
     variablesStorage: DivVariablesStorage,
+    triggersStorage: DivTriggersStorage?,
     playerFactory: PlayerFactory?,
     debugParams: DebugParams,
     scheduler: Scheduling?,
@@ -132,7 +140,9 @@ public struct DivBlockModelingContext {
     variableTracker: DivVariableTracker?,
     persistentValuesStorage: DivPersistentValuesStorage?,
     tooltipViewFactory: DivTooltipViewFactory?,
-    layoutProviderHandler: DivLayoutProviderHandler?
+    layoutProviderHandler: DivLayoutProviderHandler?,
+    idToPath: IdToPath?,
+    animatorController: DivAnimatorController?
   ) {
     self.viewId = viewId
     self.cardLogId = cardLogId
@@ -141,6 +151,7 @@ public struct DivBlockModelingContext {
     self.parentPath = parentPath
     self.parentDivStatePath = parentDivStatePath
     self.stateManager = stateManager
+    self.actionHandler = actionHandler
     self.blockStateStorage = blockStateStorage
     self.visibilityCounter = visibilityCounter ?? DivVisibilityCounter()
     self.lastVisibleBoundsCache = lastVisibleBoundsCache ?? DivLastVisibleBoundsCache()
@@ -160,17 +171,22 @@ public struct DivBlockModelingContext {
     let persistentValuesStorage = persistentValuesStorage ?? DivPersistentValuesStorage()
     self.persistentValuesStorage = persistentValuesStorage
     self.tooltipViewFactory = tooltipViewFactory
+    self.functionsStorage = functionsStorage
     self.variablesStorage = variablesStorage
+    self.triggersStorage = triggersStorage
     self.extensionHandlers = extensionHandlers
     self.layoutProviderHandler = layoutProviderHandler
     self.functionsProvider = FunctionsProvider(
       persistentValuesStorage: persistentValuesStorage
     )
+    self.idToPath = idToPath ?? IdToPath()
+    self.animatorController = animatorController
     expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
       viewId: viewId,
       path: parentPath,
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       localValues: nil,
       variableTracker: variableTracker,
       errorsStorage: errorsStorage
@@ -272,6 +288,7 @@ public struct DivBlockModelingContext {
       viewId: viewId,
       path: context.parentPath,
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       localValues: context.localValues,
       variableTracker: variableTracker,
       errorsStorage: context.errorsStorage
@@ -292,12 +309,16 @@ private func makeExpressionResolver(
   viewId: DivViewId,
   path: UIElementPath,
   variablesStorage: DivVariablesStorage,
+  functionsStorage: DivFunctionsStorage?,
   localValues: [String: AnyHashable]?,
   variableTracker: DivVariableTracker?,
   errorsStorage: DivErrorsStorage
 ) -> ExpressionResolver {
   ExpressionResolver(
     functionsProvider: functionsProvider,
+    customFunctionsStorageProvider: {
+      functionsStorage?.getStorage(path: path, contains: $0)
+    },
     variableValueProvider: {
       if let value = localValues?[$0] {
         return value
@@ -310,4 +331,19 @@ private func makeExpressionResolver(
       errorsStorage.add(DivExpressionError(error, path: path))
     }
   )
+}
+
+extension [DivExtensionHandler] {
+  var dictionary: [String: DivExtensionHandler] {
+    var extensionsHandlersDictionary = [String: DivExtensionHandler]()
+    for extensionHandler in self {
+      let id = extensionHandler.id
+      if extensionsHandlersDictionary[id] != nil {
+        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
+        continue
+      }
+      extensionsHandlersDictionary[id] = extensionHandler
+    }
+    return extensionsHandlersDictionary
+  }
 }

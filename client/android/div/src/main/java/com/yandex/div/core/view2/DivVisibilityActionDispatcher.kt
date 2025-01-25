@@ -22,7 +22,7 @@ import javax.inject.Inject
 @Mockable
 internal class DivVisibilityActionDispatcher @Inject constructor(
     private val logger: Div2Logger,
-    private val visibilityListener: DivVisibilityChangeListener,
+    private val visibilityListeners: List<DivVisibilityChangeListener>,
     private val divActionHandler: DivActionHandler,
     private val divActionBeaconSender: DivActionBeaconSender
 ) {
@@ -40,7 +40,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
     fun dispatchAction(scope: Div2View, resolver: ExpressionResolver, view: View, action: DivSightAction) {
         val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(resolver))
         val counter = actionLogCounters.getOrPut(compositeLogId) { 0 }
-        KLog.d(TAG) { "visibility action dispatched: id=$compositeLogId, counter=$counter" }
+        KLog.i(TAG) { "visibility action dispatched: id=$compositeLogId, counter=$counter" }
 
         val logLimit = action.logLimit.evaluate(resolver)
         if (logLimit == LIMITLESS_LOG || counter < logLimit) {
@@ -61,7 +61,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
             }
 
             actionLogCounters[compositeLogId] = counter + 1
-            KLog.d(TAG) { "visibility action logged: $compositeLogId" }
+            KLog.i(TAG) { "visibility action logged: $compositeLogId" }
         }
     }
 
@@ -90,7 +90,9 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
     }
 
     fun dispatchVisibleViewsChanged(visibleViews: Map<View, Div>) {
-        visibilityListener.onViewsVisibilityChanged(visibleViews)
+        visibilityListeners.forEach {
+            it.onViewsVisibilityChanged(visibleViews)
+        }
     }
 
     fun reset(tags: List<DivDataTag>) {

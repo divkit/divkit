@@ -100,3 +100,9 @@
     margin: 0 1.2em;
     background: rgba(0, 0, 0, .08);
 }
+
+.tabs__delimitier {
+    flex: 0 0 auto;
+    align-self: center;
+    margin-left: var(--divkit-tabs-items-spacing, 0);
+}

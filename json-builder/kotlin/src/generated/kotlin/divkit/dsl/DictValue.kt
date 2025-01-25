@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class DictValue internal constructor(
+data class DictValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : TypedValue {
@@ -38,7 +38,7 @@ class DictValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val value: Property<Map<String, Any>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

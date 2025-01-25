@@ -12,6 +12,7 @@ public final class DivDisappearAction: DivSightAction {
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
+  public let scopeId: String?
   public let typed: DivActionTyped?
   public let url: Expression<URL>?
   public let visibilityPercentage: Expression<Int> // constraint: number >= 0 && number < 100; default value: 0
@@ -61,6 +62,7 @@ public final class DivDisappearAction: DivSightAction {
     logLimit: Expression<Int>? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
+    scopeId: String? = nil,
     typed: DivActionTyped? = nil,
     url: Expression<URL>? = nil,
     visibilityPercentage: Expression<Int>? = nil
@@ -72,6 +74,7 @@ public final class DivDisappearAction: DivSightAction {
     self.logLimit = logLimit ?? .value(1)
     self.payload = payload
     self.referer = referer
+    self.scopeId = scopeId
     self.typed = typed
     self.url = url
     self.visibilityPercentage = visibilityPercentage ?? .value(0)
@@ -97,8 +100,13 @@ extension DivDisappearAction: Equatable {
       return false
     }
     guard
+      lhs.scopeId == rhs.scopeId,
       lhs.typed == rhs.typed,
-      lhs.url == rhs.url,
+      lhs.url == rhs.url
+    else {
+      return false
+    }
+    guard
       lhs.visibilityPercentage == rhs.visibilityPercentage
     else {
       return false
@@ -118,6 +126,7 @@ extension DivDisappearAction: Serializable {
     result["log_limit"] = logLimit.toValidSerializationValue()
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()
+    result["scope_id"] = scopeId
     result["typed"] = typed?.toDictionary()
     result["url"] = url?.toValidSerializationValue()
     result["visibility_percentage"] = visibilityPercentage.toValidSerializationValue()

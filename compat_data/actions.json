@@ -98,6 +98,98 @@
             }
         }
     }, {
+        "id": "action_typed_show_tooltip",
+        "name": "Typed action <code>show_tooltip</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            },
+            "ios": {
+                "version_added": "30.24.0"
+            }
+        }
+    }, {
+        "id": "action_typed_timer",
+        "name": "Typed action <code>timer</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            },
+            "ios": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "action_typed_video",
+        "name": "Typed action <code>video</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            },
+            "ios": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "action_typed_download",
+        "name": "Typed action <code>download</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "action_typed_hide_tooltip",
+        "name": "Typed action <code>hide_tooltip</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            },
+            "ios": {
+                "version_added": "30.25.0"
+            }
+        }
+    }, {
+        "id": "action_typed_set_state",
+        "name": "Typed action <code>set_state</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "action_typed_scroll_by",
+        "name": "Typed action <code>scroll_by</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
+            }
+        }
+    }, {
+        "id": "action_typed_scroll_to",
+        "name": "Typed action <code>scroll_to</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
+            }
+        }
+    }, {
+        "id": "action_typed_set_stored_value",
+        "name": "Typed action <code>set_stored_value</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
+            }
+        }
+    }, {
+        "id": "action_typed_submit",
+        "name": "Typed action <code>submit</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.23.0"
+            }
+        }
+    }, {
         "id": "action_is_enabled",
         "name": "Action <code>is_enabled</code> property",
         "compat": {
@@ -123,6 +215,20 @@
             },
             "web": {
                 "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "action_set_variable_scope_id",
+        "name": "<code>scope_id</code> property for the <code>set_variable</code> action",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "ios": {
+                "version_added": "30.22.0"
+            },
+            "web": {
+                "version_added": "30.25.0"
             }
         }
     }]

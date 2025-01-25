@@ -13,10 +13,12 @@ public final class DivActionHandler {
   private let trackVisibility: TrackVisibility
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
+  private let functionsStorage: DivFunctionsStorage?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let blockStateStorage: DivBlockStateStorage
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
+  private let idToPath: IdToPath
 
   private let arrayActionsHandler = ArrayActionsHandler()
   private let dictSetValueActionHandler = DictSetValueActionHandler()
@@ -24,13 +26,21 @@ public final class DivActionHandler {
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
   private let focusElementActionHandler = FocusElementActionHandler()
   private let setVariableActionHandler = SetVariableActionHandler()
+  private let submitActionHandler: SubmitActionHandler
+  private let timerActionHandler: TimerActionHandler
+  private let videoActionHandler = VideoActionHandler()
+  private let animatorHandler: AnimatorActionHandler
+  private let showTooltipActionHandler: ShowTooltipActionHandler
+  private let hideTooltipActionHandler: HideTooltipActionHandler
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
-  public init(
+  public convenience init(
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
+    submitter: DivSubmitter,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
+    functionsStorage: DivFunctionsStorage? = nil,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
@@ -41,6 +51,48 @@ public final class DivActionHandler {
     urlHandler: DivUrlHandler,
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter? = nil
+  ) {
+    self.init(
+      stateUpdater: stateUpdater,
+      blockStateStorage: blockStateStorage,
+      patchProvider: patchProvider,
+      submitter: submitter,
+      variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
+      updateCard: updateCard,
+      showTooltip: showTooltip,
+      tooltipActionPerformer: tooltipActionPerformer,
+      logger: logger ?? EmptyDivActionLogger(),
+      trackVisibility: trackVisibility,
+      trackDisappear: trackDisappear,
+      performTimerAction: performTimerAction,
+      urlHandler: urlHandler,
+      persistentValuesStorage: persistentValuesStorage,
+      reporter: reporter ?? DefaultDivReporter(),
+      idToPath: IdToPath(),
+      animatorController: DivAnimatorController()
+    )
+  }
+
+  init(
+    stateUpdater: DivStateUpdater,
+    blockStateStorage: DivBlockStateStorage,
+    patchProvider: DivPatchProvider,
+    submitter: DivSubmitter,
+    variablesStorage: DivVariablesStorage,
+    functionsStorage: DivFunctionsStorage?,
+    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
+    showTooltip: DivActionURLHandler.ShowTooltipAction?,
+    tooltipActionPerformer: TooltipActionPerformer?,
+    logger: DivActionLogger,
+    trackVisibility: @escaping TrackVisibility,
+    trackDisappear: @escaping TrackVisibility,
+    performTimerAction: @escaping DivActionURLHandler.PerformTimerAction,
+    urlHandler: DivUrlHandler,
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter,
+    idToPath: IdToPath,
+    animatorController: DivAnimatorController
   ) {
     self.divActionURLHandler = DivActionURLHandler(
       stateUpdater: stateUpdater,
@@ -54,14 +106,27 @@ public final class DivActionHandler {
       persistentValuesStorage: persistentValuesStorage
     )
     self.urlHandler = urlHandler
-    self.logger = logger ?? EmptyDivActionLogger()
+    self.logger = logger
+    self.submitActionHandler = SubmitActionHandler(submitter: submitter)
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
+    self.functionsStorage = functionsStorage
     self.persistentValuesStorage = persistentValuesStorage
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
-    self.reporter = reporter ?? DefaultDivReporter()
+    self.reporter = reporter
+    self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
+    self.idToPath = idToPath
+    self.animatorHandler = AnimatorActionHandler(animatorController: animatorController)
+    self.showTooltipActionHandler = ShowTooltipActionHandler(
+      performer: tooltipActionPerformer,
+      showTooltip: showTooltip
+    )
+    self.hideTooltipActionHandler = HideTooltipActionHandler(
+      performer: tooltipActionPerformer,
+      showTooltip: showTooltip
+    )
   }
 
   public func handle(
@@ -91,7 +156,7 @@ public final class DivActionHandler {
 
   /// Deprecated. This method is intended for backward compatibility only. Do not use it.
   public func handleDivActionUrl(_ url: URL, cardId: DivCardID) -> Bool {
-    divActionURLHandler.handleURL(url, path: cardId.path)
+    divActionURLHandler.handleURL(url, cardId: cardId)
   }
 
   func handle(
@@ -106,6 +171,9 @@ public final class DivActionHandler {
       functionsProvider: FunctionsProvider(
         persistentValuesStorage: persistentValuesStorage
       ),
+      customFunctionsStorageProvider: { [weak functionsStorage] in
+        functionsStorage?.getStorage(path: path, contains: $0)
+      },
       variableValueProvider: { [unowned variablesStorage] in
         if let value = localValues[$0] {
           return value
@@ -115,11 +183,17 @@ public final class DivActionHandler {
       },
       errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
+    let path = if let scopeId = action.scopeId {
+      idToPath[path.cardId.path + scopeId] ?? path
+    } else {
+      path
+    }
     let context = DivActionHandlingContext(
       path: path,
       expressionResolver: expressionResolver,
       variablesStorage: variablesStorage,
       blockStateStorage: blockStateStorage,
+      actionHandler: self,
       updateCard: updateCard
     )
 
@@ -141,6 +215,23 @@ public final class DivActionHandler {
       focusElementActionHandler.handle(action, context: context)
     case let .divActionSetVariable(action):
       setVariableActionHandler.handle(action, context: context)
+    case let .divActionTimer(action):
+      timerActionHandler.handle(action, context: context)
+    case let .divActionVideo(action):
+      videoActionHandler.handle(action, context: context)
+    case let .divActionShowTooltip(action):
+      showTooltipActionHandler.handle(action, context: context)
+    case let .divActionSubmit(action):
+      submitActionHandler.handle(action, context: context)
+    case let .divActionAnimatorStart(action):
+      animatorHandler.handle(action, context: context)
+    case let .divActionAnimatorStop(action):
+      animatorHandler.handle(action, context: context)
+    case let .divActionHideTooltip(action):
+      hideTooltipActionHandler.handle(action, context: context)
+    case .divActionDownload, .divActionSetState,
+         .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
+      break
     case .none:
       isHandled = false
     }
@@ -190,7 +281,7 @@ public final class DivActionHandler {
 
     let isDivActionURLHandled = divActionURLHandler.handleURL(
       url,
-      path: info.path,
+      info: info,
       completion: { [weak self] result in
         guard let self else {
           return

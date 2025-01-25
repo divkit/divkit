@@ -308,7 +308,7 @@ class DivanEntity(Entity):
 
     def properties_class_declaration(self, translations: Dict[str, str]) -> Text:
         declaration = Text()
-        declaration += 'class Properties internal constructor('
+        declaration += 'data class Properties internal constructor('
         for prop in cast(List[DivanProperty], self.instance_properties):
             declaration += f'{prop.constructor_parameter_declaration(translations, self.remove_prefix).indented(indent_width=4)},'
         declaration += ') {'
@@ -571,7 +571,7 @@ class DivanStringEnumeration(StringEnumeration):
         if description_doc not in ['', 'None']:
             comment_lines.append(description_doc)
             comment_lines.append('')
-        cases = list(map(lambda case: f"[{utils.snake_case(case[1])}]", self.cases))
+        cases = list(map(lambda case: f"[{case[1] if case[1].isupper() else utils.snake_case(case[1])}]", self.cases))
         possible_values = translations['div_generator_possible_values'].format(', '.join(cases))
         comment_lines.append(possible_values)
         return comment(*comment_lines)

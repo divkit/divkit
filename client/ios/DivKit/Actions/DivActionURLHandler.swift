@@ -64,19 +64,28 @@ public final class DivActionURLHandler {
     cardId: DivCardID,
     completion: @escaping (Result<Void, Error>) -> Void = { _ in }
   ) -> Bool {
-    handleURL(url, path: cardId.path, completion: completion)
+    let info = DivActionInfo(
+      path: cardId.path,
+      logId: cardId.rawValue,
+      url: url,
+      logUrl: nil,
+      referer: nil,
+      source: .tap,
+      payload: nil
+    )
+    return handleURL(url, info: info, completion: completion)
   }
 
   func handleURL(
     _ url: URL,
-    path: UIElementPath,
+    info: DivActionInfo,
     completion: @escaping (Result<Void, Error>) -> Void = { _ in }
   ) -> Bool {
     guard let intent = DivActionIntent(url: url) else {
       return false
     }
 
-    let cardId = path.cardId
+    let cardId = info.path.cardId
     switch intent {
     case let .showTooltip(id, multiple):
       let tooltipInfo = TooltipInfo(id: id, showsOnStart: false, multiple: multiple)
@@ -93,6 +102,7 @@ public final class DivActionURLHandler {
     case let .download(patchUrl):
       patchProvider.getPatch(
         url: patchUrl,
+        info: info,
         completion: { [unowned self] in
           self.applyPatch(cardId: cardId, result: $0, completion: completion)
         }
@@ -106,7 +116,7 @@ public final class DivActionURLHandler {
       updateCard(.state(cardId))
     case let .setVariable(name, value):
       variableUpdater.update(
-        path: path,
+        path: info.path,
         name: DivVariableName(rawValue: name),
         value: value
       )
@@ -152,8 +162,13 @@ public final class DivActionURLHandler {
   }
 
   private func setContentOffset(id: String, cardId: DivCardID, mode: ScrollMode) {
-    let state: GalleryViewState? = blockStateStorage.getState(id, cardId: cardId)
-    if let state, let newOffset = getNewOffset(state: state, mode: mode) {
+    guard let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
+          case .offset = state.contentPosition else {
+      setEdgeItem(id: id, cardId: cardId, mode: mode)
+      return
+    }
+
+    if let newOffset = getNewOffset(state: state, mode: mode) {
       blockStateStorage.setState(
         id: id,
         cardId: cardId,
@@ -208,69 +223,70 @@ public final class DivActionURLHandler {
   }
 
   private func setCurrentItem(id: String, cardId: DivCardID, index: Int) {
-    switch blockStateStorage.getStateUntyped(id, cardId: cardId) {
-    case let galleryState as GalleryViewState:
-      setGalleryCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: index,
-        state: galleryState
-      )
-    case let pagerState as PagerViewState:
-      setPagerCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: index,
-        numberOfPages: pagerState.numberOfPages
-      )
-    case let tabsState as TabViewState:
-      setTabsCurrentItem(id: id, cardId: cardId, index: index, countOfPages: tabsState.countOfPages)
+    guard let state = blockStateStorage
+      .getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState else {
+      DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
+      return
+    }
+
+    let clampedIndex = clamp(index, min: 0, max: max(0, state.itemsCount - 1))
+    guard clampedIndex == index else {
+      return
+    }
+
+    let newState = state.makeState(clampedIndex)
+
+    blockStateStorage.setState(
+      id: id,
+      cardId: cardId,
+      state: newState
+    )
+  }
+
+  private func setEdgeItem(id: String, cardId: DivCardID, mode: ScrollMode) {
+    guard let state = blockStateStorage
+      .getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState else {
+      DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
+      return
+    }
+
+    let index: Int
+    switch mode {
+    case .start:
+      index = 0
+    case .end:
+      index = state.itemsCount - 1
     default:
       return
     }
+
+    setCurrentItem(
+      id: id,
+      cardId: cardId,
+      index: index
+    )
+
+    updateCard(.state(cardId))
   }
 
   private func setNextItem(id: String, cardId: DivCardID, overflow: OverflowMode) {
-    switch blockStateStorage.getStateUntyped(id, cardId: cardId) {
-    case let galleryState as GalleryViewState:
-      let index = getNextIndex(
-        current: galleryState.currentItemIndex,
-        count: galleryState.itemsCount,
-        overflow: overflow
-      )
-      setGalleryCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: index,
-        state: galleryState
-      )
-    case let pagerState as PagerViewState:
-      let nextIndex = getNextIndex(
-        current: Int(pagerState.currentPage),
-        count: pagerState.numberOfPages,
-        overflow: overflow
-      )
-      setPagerCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: nextIndex,
-        numberOfPages: pagerState.numberOfPages
-      )
-    case let tabsState as TabViewState:
-      let nextIndex = getNextIndex(
-        current: Int(tabsState.selectedPageIndex),
-        count: tabsState.countOfPages,
-        overflow: overflow
-      )
-      setTabsCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: nextIndex,
-        countOfPages: tabsState.countOfPages
-      )
-    default:
+    guard let state = blockStateStorage
+      .getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState else {
+      DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
       return
     }
+
+    let index = getNextIndex(
+      current: state.currentItemIndex,
+      count: state.itemsCount,
+      overflow: overflow
+    )
+
+    setCurrentItem(
+      id: id,
+      cardId: cardId,
+      index: index
+    )
   }
 
   private func getNextIndex(
@@ -290,46 +306,23 @@ public final class DivActionURLHandler {
   }
 
   private func setPreviousItem(id: String, cardId: DivCardID, overflow: OverflowMode) {
-    switch blockStateStorage.getStateUntyped(id, cardId: cardId) {
-    case let galleryState as GalleryViewState:
-      let index = getPreviousIndex(
-        current: galleryState.currentItemIndex,
-        count: galleryState.itemsCount,
-        overflow: overflow
-      )
-      setGalleryCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: index,
-        state: galleryState
-      )
-    case let pagerState as PagerViewState:
-      let prevIndex = getPreviousIndex(
-        current: Int(pagerState.currentPage),
-        count: pagerState.numberOfPages,
-        overflow: overflow
-      )
-      setPagerCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: prevIndex,
-        numberOfPages: pagerState.numberOfPages
-      )
-    case let tabsState as TabViewState:
-      let prevIndex = getPreviousIndex(
-        current: Int(tabsState.selectedPageIndex),
-        count: tabsState.countOfPages,
-        overflow: overflow
-      )
-      setTabsCurrentItem(
-        id: id,
-        cardId: cardId,
-        index: prevIndex,
-        countOfPages: tabsState.countOfPages
-      )
-    default:
+    guard let state = blockStateStorage
+      .getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState else {
+      DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
       return
     }
+
+    let index = getPreviousIndex(
+      current: state.currentItemIndex,
+      count: state.itemsCount,
+      overflow: overflow
+    )
+
+    setCurrentItem(
+      id: id,
+      cardId: cardId,
+      index: index
+    )
   }
 
   private func getPreviousIndex(
@@ -347,63 +340,17 @@ public final class DivActionURLHandler {
       return max(0, current - 1)
     }
   }
-
-  private func setGalleryCurrentItem(
-    id: String,
-    cardId: DivCardID,
-    index: Int,
-    state: GalleryViewState
-  ) {
-    let clampedIndex = clamp(index, min: 0, max: max(0, state.itemsCount - 1))
-    guard clampedIndex == index else {
-      return
-    }
-    blockStateStorage.setState(
-      id: id,
-      cardId: cardId,
-      state: GalleryViewState(
-        contentPosition: .paging(index: CGFloat(clampedIndex)),
-        itemsCount: state.itemsCount,
-        isScrolling: state.isScrolling,
-        scrollRange: state.scrollRange
-      )
-    )
-  }
-
-  private func setPagerCurrentItem(id: String, cardId: DivCardID, index: Int, numberOfPages: Int) {
-    let clampedIndex = clamp(index, min: 0, max: max(0, numberOfPages - 1))
-    guard clampedIndex == index else {
-      return
-    }
-
-    blockStateStorage.setState(
-      id: id,
-      cardId: cardId,
-      state: PagerViewState(
-        numberOfPages: numberOfPages,
-        currentPage: clampedIndex
-      )
-    )
-  }
-
-  private func setTabsCurrentItem(id: String, cardId: DivCardID, index: Int, countOfPages: Int) {
-    let clampedIndex = clamp(index, min: 0, max: max(0, countOfPages - 1))
-    guard clampedIndex == index else {
-      return
-    }
-    blockStateStorage.setState(
-      id: id,
-      cardId: cardId,
-      state: TabViewState(
-        selectedPageIndex: CGFloat(clampedIndex),
-        countOfPages: countOfPages
-      )
-    )
-  }
 }
 
-extension GalleryViewState {
-  fileprivate var currentItemIndex: Int {
+fileprivate protocol GalleryTypeViewState: ElementState {
+  var itemsCount: Int { get }
+  var currentItemIndex: Int { get }
+
+  var makeState: (_ clampedIndex: Int) -> Self { get }
+}
+
+extension GalleryViewState: GalleryTypeViewState {
+  var currentItemIndex: Int {
     switch contentPosition {
     case let .offset(_, firstVisibleItemsIndex):
       firstVisibleItemsIndex
@@ -412,7 +359,7 @@ extension GalleryViewState {
     }
   }
 
-  fileprivate var currentOffset: CGFloat {
+  var currentOffset: CGFloat {
     switch contentPosition {
     case let .offset(value, _):
       return value
@@ -421,6 +368,55 @@ extension GalleryViewState {
         return 0
       }
       return scrollRange / CGFloat(itemsCount - 1) * index
+    }
+  }
+
+  var makeState: (_ clampedIndex: Int) -> GalleryViewState {
+    { clampedIndex in
+      GalleryViewState(
+        contentPosition: .paging(index: CGFloat(clampedIndex)),
+        itemsCount: itemsCount,
+        isScrolling: isScrolling,
+        scrollRange: scrollRange
+      )
+    }
+  }
+}
+
+extension PagerViewState: GalleryTypeViewState {
+  var itemsCount: Int {
+    numberOfPages
+  }
+
+  var currentItemIndex: Int {
+    Int(currentPage)
+  }
+
+  var makeState: (_ clampedIndex: Int) -> PagerViewState {
+    { clampedIndex in
+      PagerViewState(
+        numberOfPages: itemsCount,
+        currentPage: clampedIndex
+      )
+    }
+  }
+}
+
+extension TabViewState: GalleryTypeViewState {
+  var itemsCount: Int {
+    countOfPages
+  }
+
+  var currentItemIndex: Int {
+    Int(selectedPageIndex)
+  }
+
+  var makeState: (_ clampedIndex: Int) -> TabViewState {
+    { clampedIndex in
+      TabViewState(
+        selectedPageIndex: CGFloat(clampedIndex),
+        countOfPages: itemsCount
+      )
     }
   }
 }

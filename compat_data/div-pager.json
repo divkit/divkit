@@ -5,6 +5,9 @@
         "compat": {
             "web": {
                 "version_added": "29.10.0"
+            },
+            "android": {
+                "version_added": "29.8.0"
             }
         }
     }, {
@@ -13,6 +16,9 @@
         "compat": {
             "web": {
                 "version_added": "29.10.0"
+            },
+            "android": {
+                "version_added": "29.8.0"
             }
         }
     }, {
@@ -21,6 +27,9 @@
         "compat": {
             "android": {
                 "version_added": "30.5.0"
+            },
+            "ios": {
+                "version_added": "30.11.0"
             }
         }
     }, {
@@ -32,6 +41,31 @@
             },
             "ios": {
                 "version_added": "28.11.0"
+            }
+        }
+    }, {
+        "id": "pager_item_builder",
+        "name": "Pager property <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.12.0"
+            },
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "pager_default_item",
+        "name": "Pager property <code>default_item</code>",
+        "compat": {
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
             }
         }
     }]

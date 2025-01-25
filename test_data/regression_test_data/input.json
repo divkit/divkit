@@ -22,6 +22,19 @@
           "items": [
             {
               "type": "input",
+              "enter_key_type": "search",
+              "enter_key_actions": [
+                  {
+                    "log_id": "clear focus",
+                    "typed": {
+                      "type": "clear_focus"
+                    }
+                  },
+                  {
+                    "log_id": "change_button_1_state",
+                    "url": "div-action://set_variable?name=my_edit_text&value=Enter key tapped! 1"
+                  }
+              ],
               "width": {
                 "type": "match_parent"
               },

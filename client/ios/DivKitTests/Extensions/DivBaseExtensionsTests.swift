@@ -3,6 +3,7 @@
 
 import XCTest
 
+import DivKitTestsSupport
 import VGSL
 
 final class DivBaseExtensionsTests: XCTestCase {
@@ -134,7 +135,7 @@ final class DivBaseExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: []
         ),
-        actions: NonEmptyArray(actions.compactMap { $0.uiAction(path: .root + "0") }),
+        actions: NonEmptyArray(actions.compactMap { $0.uiAction(path: .root + "0" + "container") }),
         actionAnimation: .default,
         accessibilityElement: .default
       ),
@@ -287,6 +288,90 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WithAlpha() {
+    let block = makeBlock(
+      divSeparator(
+        alpha: 0.3
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: separatorBlock(),
+        childAlpha: 0.3,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithBackground() {
+    let block = makeBlock(
+      divSeparator(
+        background: solidBackground(RGBAColor.red)
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: separatorBlock(),
+        backgroundColor: RGBAColor.red,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithAlphaAndBackground() {
+    let block = makeBlock(
+      divSeparator(
+        alpha: 0.3,
+        background: solidBackground(RGBAColor.red)
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: DecoratingBlock(
+          child: separatorBlock(),
+          backgroundColor: RGBAColor.red,
+          accessibilityElement: .default
+        ),
+        childAlpha: 0.3
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithBackgroundAndActions() {
+    let action = divAction(logId: "action_log_id")
+    let block = makeBlock(
+      divSeparator(
+        actions: [action],
+        background: solidBackground(color("#112233"))
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: separatorBlock(),
+        backgroundColor: color("#112233"),
+        actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
+        actionAnimation: .default,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WithLocalVariables() {
     let block = makeBlock(
       divText(
@@ -399,7 +484,10 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   func test_WithLottieExtensionReuseId() throws {
-    let block = try makeBlock(fromFile: "div-reuse-id-lottie-wrapper", context: DivBlockModelingContext())
+    let block = try makeBlock(
+      fromFile: "div-reuse-id-lottie-wrapper",
+      context: DivBlockModelingContext()
+    )
 
     XCTAssertEqual(block.reuseId, testReuseId)
   }
@@ -442,7 +530,7 @@ private func makeBlock(
   fromFile filename: String,
   context: DivBlockModelingContext
 ) throws -> Block {
-  return try DivTextTemplate.makeBlock(fromFile: filename, context: context)
+  try DivTextTemplate.makeBlock(fromFile: filename, context: context)
 }
 
 extension TemplateValue where ResolvedValue: DivBlockModeling {
@@ -450,7 +538,7 @@ extension TemplateValue where ResolvedValue: DivBlockModeling {
     fromFile filename: String,
     context: DivBlockModelingContext
   ) throws -> Block {
-    return try Self.make(
+    try make(
       fromFile: filename,
       subdirectory: "div-base",
       context: context

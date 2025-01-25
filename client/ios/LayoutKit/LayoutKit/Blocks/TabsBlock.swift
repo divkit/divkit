@@ -127,4 +127,32 @@ extension TabsBlock: ElementStateUpdating {
   }
 }
 
+extension TabsBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> TabsBlock {
+    let newPages = try model.contentsModel.pages
+      .map { try $0.block.updated(path: path, isFocused: isFocused).makeTabPage(with: $0.path) }
+    let pagesAreNotEqual = zip(model.contentsModel.pages, newPages)
+      .contains(where: { $0.block !== $1.block })
+
+    let newModel = pagesAreNotEqual
+      ? try TabViewModel(
+        listModel: model.listModel,
+        contentsModel: modified(model.contentsModel) { $0.pages = newPages },
+        separatorStyle: model.separatorStyle
+      )
+      : model
+
+    if newModel !== model {
+      return try TabsBlock(
+        model: newModel,
+        state: state,
+        widthTrait: widthTrait,
+        heightTrait: heightTrait
+      )
+    }
+
+    return self
+  }
+}
+
 extension TabsBlock: LayoutCachingDefaultImpl {}

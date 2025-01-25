@@ -33,6 +33,9 @@
             },
             "web": {
                 "version_added": "29.15.0"
+            },
+            "android": {
+                "version_added": "30.14.0"
             }
         }
     }, {
@@ -89,6 +92,22 @@
             },
             "web": {
                 "version_added": "30.3.0"
+            }
+        }
+    }, {
+        "id": "fn_encode_regex",
+        "name": "<code>encodeRegex</code> function",
+        "compat": {
+            "web": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "fn_stored_array_dict",
+        "name": "<code>getStoredArrayValue</code> and <code>getStoredDictValue</code> functions",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
             }
         }
     }]

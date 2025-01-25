@@ -5,5 +5,6 @@ struct DivActionHandlingContext {
   let expressionResolver: ExpressionResolver
   let variablesStorage: DivVariablesStorage
   let blockStateStorage: DivBlockStateStorage
+  let actionHandler: DivActionHandler
   let updateCard: DivActionURLHandler.UpdateCardAction
 }

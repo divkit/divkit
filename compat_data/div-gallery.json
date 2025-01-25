@@ -41,5 +41,16 @@
                 "version_added": "29.10.0"
             }
         }
+    }, {
+        "id": "gallery_item_builder",
+        "name": "Gallery property <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.12.0"
+            },
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
     }]
 }

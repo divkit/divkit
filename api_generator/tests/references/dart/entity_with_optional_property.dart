@@ -2,15 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithOptionalProperty with EquatableMixin {
+
+class EntityWithOptionalProperty extends Resolvable with EquatableMixin  {
   const EntityWithOptionalProperty({
     this.property,
   });
 
   static const type = "entity_with_optional_property";
-
   final Expression<String>? property;
 
   @override
@@ -24,7 +24,7 @@ class EntityWithOptionalProperty with EquatableMixin {
       property: property != null ? property.call() : this.property,
     );
 
-  static EntityWithOptionalProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithOptionalProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -35,5 +35,10 @@ class EntityWithOptionalProperty with EquatableMixin {
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithOptionalProperty resolve(DivVariableContext context) {
+    property?.resolve(context);
+    return this;
   }
 }

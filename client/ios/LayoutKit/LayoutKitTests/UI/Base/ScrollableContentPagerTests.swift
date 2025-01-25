@@ -3,7 +3,7 @@ import XCTest
 import LayoutKit
 
 final class ScrollableContentPagerTests: XCTestCase {
-  private let pager = ScrollableContentPager()
+  private var pager = ScrollableContentPager()
   private var isHorizontal = true
 
   override func invokeTest() {

@@ -1,32 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithSimpleProperties(
-    @JvmField final val boolean: Expression<Boolean>? = null,
-    @JvmField final val booleanInt: Expression<Boolean>? = null,
-    @JvmField final val color: Expression<Int>? = null,
-    @JvmField final val double: Expression<Double>? = null,
-    @JvmField final val id: Long = ID_DEFAULT_VALUE, // default value: 0
-    @JvmField final val integer: Expression<Long> = INTEGER_DEFAULT_VALUE, // default value: 0
-    @JvmField final val positiveInteger: Expression<Long>? = null, // constraint: number > 0
-    @JvmField final val string: Expression<String>? = null,
-    @JvmField final val url: Expression<Uri>? = null,
+    @JvmField val boolean: Expression<Boolean>? = null,
+    @JvmField val booleanInt: Expression<Boolean>? = null,
+    @JvmField val color: Expression<Int>? = null,
+    @JvmField val double: Expression<Double>? = null,
+    @JvmField val id: Long = ID_DEFAULT_VALUE, // default value: 0
+    @JvmField val integer: Expression<Long> = INTEGER_DEFAULT_VALUE, // default value: 0
+    @JvmField val positiveInteger: Expression<Long>? = null, // constraint: number > 0
+    @JvmField val string: Expression<String>? = null,
+    @JvmField val url: Expression<Uri>? = null,
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -50,19 +46,17 @@ class EntityWithSimpleProperties(
         return hash
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.writeExpression(key = "boolean", value = boolean)
-        json.writeExpression(key = "boolean_int", value = booleanInt)
-        json.writeExpression(key = "color", value = color, converter = COLOR_INT_TO_STRING)
-        json.writeExpression(key = "double", value = double)
-        json.write(key = "id", value = id)
-        json.writeExpression(key = "integer", value = integer)
-        json.writeExpression(key = "positive_integer", value = positiveInteger)
-        json.writeExpression(key = "string", value = string)
-        json.write(key = "type", value = TYPE)
-        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
-        return json
+    fun equals(other: EntityWithSimpleProperties?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return boolean?.evaluate(resolver) == other.boolean?.evaluate(otherResolver) &&
+            booleanInt?.evaluate(resolver) == other.booleanInt?.evaluate(otherResolver) &&
+            color?.evaluate(resolver) == other.color?.evaluate(otherResolver) &&
+            double?.evaluate(resolver) == other.double?.evaluate(otherResolver) &&
+            id == other.id &&
+            integer.evaluate(resolver) == other.integer.evaluate(otherResolver) &&
+            positiveInteger?.evaluate(resolver) == other.positiveInteger?.evaluate(otherResolver) &&
+            string?.evaluate(resolver) == other.string?.evaluate(otherResolver) &&
+            url?.evaluate(resolver) == other.url?.evaluate(otherResolver)
     }
 
     fun copy(
@@ -87,6 +81,21 @@ class EntityWithSimpleProperties(
         url = url,
     )
 
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.writeExpression(key = "boolean", value = boolean)
+        json.writeExpression(key = "boolean_int", value = booleanInt)
+        json.writeExpression(key = "color", value = color, converter = COLOR_INT_TO_STRING)
+        json.writeExpression(key = "double", value = double)
+        json.write(key = "id", value = id)
+        json.writeExpression(key = "integer", value = integer)
+        json.writeExpression(key = "positive_integer", value = positiveInteger)
+        json.writeExpression(key = "string", value = string)
+        json.write(key = "type", value = TYPE)
+        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+        return json
+    }
+
     companion object {
         const val TYPE = "entity_with_simple_properties"
 
@@ -106,7 +115,7 @@ class EntityWithSimpleProperties(
                 integer = JsonParser.readOptionalExpression(json, "integer", NUMBER_TO_INT, logger, env, INTEGER_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INTEGER_DEFAULT_VALUE,
                 positiveInteger = JsonParser.readOptionalExpression(json, "positive_integer", NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, logger, env, TYPE_HELPER_INT),
                 string = JsonParser.readOptionalExpression(json, "string", logger, env, TYPE_HELPER_STRING),
-                url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+                url = JsonParser.readOptionalExpression(json, "url", ANY_TO_URI, logger, env, TYPE_HELPER_URI)
             )
         }
 
@@ -114,5 +123,4 @@ class EntityWithSimpleProperties(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithSimpleProperties(env, json = it) }
     }
-
 }

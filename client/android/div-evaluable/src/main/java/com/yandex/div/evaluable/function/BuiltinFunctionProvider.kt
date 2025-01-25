@@ -122,6 +122,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetIntervalSeconds)
 
         // String functions
+        registry.register(EncodeRegex)
         registry.register(StringLength)
         registry.register(StringContains)
         registry.register(StringSubstring)
@@ -157,12 +158,16 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(StringToString)
         registry.register(StringToColor)
         registry.register(StringToUrl)
+        registry.register(DictToString)
+        registry.register(ArrayToString)
         registry.registerMethod(IntegerToString)
         registry.registerMethod(NumberToString)
         registry.registerMethod(BooleanToString)
         registry.registerMethod(ColorToString)
         registry.registerMethod(UrlToString)
         registry.registerMethod(StringToString)
+        registry.registerMethod(DictToString)
+        registry.registerMethod(ArrayToString)
 
         // Variable functions
         registry.register(GetIntegerValue)
@@ -183,6 +188,8 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetStoredBooleanValue)
         registry.register(GetStoredUrlValueWithStringFallback)
         registry.register(GetStoredUrlValueWithUrlFallback)
+        registry.register(GetStoredArrayValue)
+        registry.register(GetStoredDictValue)
 
         // Dict functions legacy
         registry.register(GetDictInteger)
@@ -220,6 +227,15 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetOptUrlFromDictWithUrlFallback)
         registry.register(GetOptBooleanFromDict)
         registry.registerMethod(DictContainsKey)
+        registry.registerMethod(GetArray)
+        registry.registerMethod(GetBoolean)
+        registry.registerMethod(GetColor)
+        registry.registerMethod(GetDict)
+        registry.registerMethod(GetInteger)
+        registry.registerMethod(GetNumber)
+        registry.registerMethod(GetString)
+        registry.registerMethod(GetUrl)
+        registry.registerMethod(DictIsEmpty)
 
         // Array functions legacy
         registry.register(GetArrayInteger)
@@ -267,7 +283,10 @@ object BuiltinFunctionProvider : FunctionProvider {
         return registry.getMethod(name, args)
     }
 
-    internal fun ensureFunctionRegistered(name: String, args: List<FunctionArgument>, resultType: EvaluableType) {
-        registry.ensureRegistered(name, args, resultType)
+    internal fun ensureFunctionRegistered(name: String,
+                                          args: List<FunctionArgument>,
+                                          resultType: EvaluableType,
+                                          isMethod: Boolean,) {
+        registry.ensureRegistered(name, args, resultType, isMethod)
     }
 }

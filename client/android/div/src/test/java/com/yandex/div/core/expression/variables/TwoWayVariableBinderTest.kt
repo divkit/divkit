@@ -1,11 +1,19 @@
 package com.yandex.div.core.expression.variables
 
+import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.FunctionProviderDecorator
+import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.Evaluator
+import com.yandex.div2.DivData
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,14 +42,22 @@ class TwoWayVariableBinderTest {
     private val variableController = VariableControllerImpl().apply {
         declare(variable)
     }
-    private val expressionsRuntime = ExpressionsRuntime(mock(), variableController, mock())
+    private val path = DivStatePath(0)
+    private val store = RuntimeStore(mock(), mock(), mock(), mock())
+    private val evaluationContext = EvaluationContext(mock(), mock(), mock<FunctionProviderDecorator>(), mock())
+    private val evaluator = mock<Evaluator> {
+        on { evaluationContext } doReturn evaluationContext
+    }
+    private val expressionResolver = ExpressionResolverImpl(mock(), evaluator, mock(), mock())
+    private val expressionsRuntime = ExpressionsRuntime(expressionResolver, variableController, mock(), mock(), store)
     private val expressionsRuntimeProvider = mock<ExpressionsRuntimeProvider> {
         on { getOrCreate(any(), any(), any()) } doReturn expressionsRuntime
     }
 
     private val divView = mock<Div2View> {
         on { dataTag } doReturn mock()
-        on { divData } doReturn mock()
+        on { divData } doReturn DivData(logId = "test", states = emptyList())
+        on { runtimeStore } doReturn store
     }
     private val updateCaptor = argumentCaptor<(String) -> Unit>()
     private val callbacks = mock<TwoWayStringVariableBinder.Callbacks> {
@@ -49,8 +65,10 @@ class TwoWayVariableBinderTest {
     }
 
     init {
+        store.rootRuntime = expressionsRuntime
+        val bindingContext = BindingContext.createEmpty(divView).getFor(expressionResolver, store)
         TwoWayStringVariableBinder(errorCollectors, expressionsRuntimeProvider)
-            .bindVariable(divView, VARIABLE_NAME, callbacks)
+            .bindVariable(bindingContext, VARIABLE_NAME, callbacks, path)
     }
 
     @Test

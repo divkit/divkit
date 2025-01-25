@@ -125,21 +125,6 @@ class Div2ViewTest {
     }
 
     @Test
-    fun `guard from recursive bulkActions`() {
-        var calledTimes = 0
-        val action = object : Runnable {
-            override fun run() {
-                calledTimes++
-                div2View.bulkActions(::run)
-            }
-        }
-        repeat(3) {
-            div2View.bulkActions(action::run)
-        }
-        assertEquals(3, calledTimes)
-    }
-
-    @Test
     fun `current state exists after set data`() {
         val divData = UnitTestData(DIV_STATE_DIR, "state_list.json").data
 

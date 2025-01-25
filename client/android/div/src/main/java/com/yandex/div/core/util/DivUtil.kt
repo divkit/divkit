@@ -11,11 +11,15 @@ import com.yandex.div.core.animation.EaseInOutInterpolator
 import com.yandex.div.core.animation.EaseInterpolator
 import com.yandex.div.core.animation.EaseOutInterpolator
 import com.yandex.div.core.animation.SpringInterpolator
+import com.yandex.div.core.animation.reversed
+import com.yandex.div.core.expression.variables.toVariable
 import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.data.Variable
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivAnimationDirection
 import com.yandex.div2.DivAnimationInterpolator
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
@@ -31,8 +35,10 @@ import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
+import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVideo
 import java.util.Collections.min
 
@@ -55,6 +61,7 @@ internal val Div.type: String
             is Div.Tabs -> DivTabs.TYPE
             is Div.Custom -> DivCustom.TYPE
             is Div.Select -> DivSelect.TYPE
+            is Div.Switch -> DivSwitch.TYPE
         }
     }
 
@@ -80,6 +87,30 @@ internal val DivAnimationInterpolator.androidInterpolator: Interpolator
         DivAnimationInterpolator.EASE_OUT -> EaseOutInterpolator()
         DivAnimationInterpolator.EASE_IN_OUT -> EaseInOutInterpolator()
         DivAnimationInterpolator.SPRING -> SpringInterpolator()
+    }
+
+internal fun DivAnimationInterpolator.androidInterpolator(reverse: Boolean): Interpolator {
+    return if (reverse) {
+        androidInterpolator.reversed()
+    } else {
+        androidInterpolator
+    }
+}
+
+internal val DivAnimationDirection.isReversed: Boolean
+    get() {
+        return when (this) {
+            DivAnimationDirection.REVERSE, DivAnimationDirection.ALTERNATE_REVERSE -> true
+            else -> false
+        }
+    }
+
+internal val DivAnimationDirection.isAlternated: Boolean
+    get() {
+        return when (this) {
+            DivAnimationDirection.ALTERNATE, DivAnimationDirection.ALTERNATE_REVERSE -> true
+            else -> false
+        }
     }
 
 internal fun requestHierarchyLayout(v : View) {
@@ -147,6 +178,7 @@ internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Bo
         is Div.Slider -> false
         is Div.Video -> false
         is Div.Input -> false
+        is Div.Switch -> false
     }
 }
 
@@ -168,6 +200,7 @@ internal val Div.isBranch: Boolean
         is Div.Custom -> false
         is Div.Select -> false
         is Div.Video -> false
+        is Div.Switch -> false
         is Div.Container -> true
         is Div.Grid -> true
         is Div.Gallery -> true
@@ -178,3 +211,9 @@ internal val Div.isBranch: Boolean
 
 internal val Div.isLeaf: Boolean
     get() = !isBranch
+
+internal fun List<DivVariable>.toVariables(): List<Variable> {
+    return map {
+        it.toVariable()
+    }
+}

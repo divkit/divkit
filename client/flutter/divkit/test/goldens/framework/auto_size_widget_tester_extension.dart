@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -7,7 +6,6 @@ extension AutoSizeWidgetTesterExtension on WidgetTester {
   /// Pumps a widget and adjusts screen size to its size.
   Future<void> pumpAutoSizeWidgetBuilder({
     required ValueGetter<Widget> builder,
-    required AsyncCallback afterBuild,
     WidgetWrapper? wrapper,
     Device? device,
   }) async {
@@ -35,7 +33,17 @@ extension AutoSizeWidgetTesterExtension on WidgetTester {
           ),
         ),
       ),
-      wrapper: wrapper,
+      wrapper: (child) => Builder(
+        builder: (context) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            // A hack, until https://github.com/eBay/flutter_glove_box/pull/193 is merged
+            binding.window.devicePixelRatioTestValue =
+                device?.devicePixelRatio ?? 1;
+          });
+
+          return wrapper?.call(child) ?? materialAppWrapper()(child);
+        },
+      ),
     );
     await pumpAndSettle();
 
@@ -43,19 +51,14 @@ extension AutoSizeWidgetTesterExtension on WidgetTester {
       find.firstDescendant(of: find.byKey(childKey)),
     );
 
-    try {
-      await binding.setSurfaceSize(childSize);
-      binding.window.physicalSizeTestValue = childSize;
-      if (device != null) {
-        binding.window.devicePixelRatioTestValue = device.devicePixelRatio;
-      }
-
-      await afterBuild();
-    } finally {
+    addTearDown(() async {
       await binding.setSurfaceSize(null);
       binding.window.clearPhysicalSizeTestValue();
       binding.window.clearDevicePixelRatioTestValue();
-    }
+    });
+
+    await binding.setSurfaceSize(childSize);
+    binding.window.physicalSizeTestValue = childSize;
   }
 }
 

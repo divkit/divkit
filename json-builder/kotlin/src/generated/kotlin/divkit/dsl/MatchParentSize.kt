@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class MatchParentSize internal constructor(
+data class MatchParentSize internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Size {
@@ -40,7 +40,7 @@ class MatchParentSize internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Weight when distributing free space between elements with the size type `match_parent` inside an element. If the weight isn't specified, the elements will divide the place equally.
          */

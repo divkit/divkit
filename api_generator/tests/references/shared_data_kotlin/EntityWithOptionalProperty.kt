@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithOptionalProperty(
-    @JvmField final val property: Expression<String>? = null,
+    @JvmField val property: Expression<String>? = null,
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -21,6 +22,11 @@ class EntityWithOptionalProperty(
         return hash
     }
 
+    fun equals(other: EntityWithOptionalProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property?.evaluate(resolver) == other.property?.evaluate(otherResolver)
+    }
+
     fun copy(
         property: Expression<String>? = this.property,
     ) = EntityWithOptionalProperty(
@@ -30,5 +36,4 @@ class EntityWithOptionalProperty(
     companion object {
         const val TYPE = "entity_with_optional_property"
     }
-
 }

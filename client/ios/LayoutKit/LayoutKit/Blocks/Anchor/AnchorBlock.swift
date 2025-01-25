@@ -175,4 +175,16 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
       trailing: trailing?.updated(withStates: states)
     )
   }
+
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> Self {
+    try Self(
+      direction: direction,
+      widthTrait: widthTrait,
+      heightTrait: heightTrait,
+      crossAlignment: crossAlignment,
+      leading: leading?.updated(path: path, isFocused: isFocused),
+      center: center.updated(path: path, isFocused: isFocused),
+      trailing: trailing?.updated(path: path, isFocused: isFocused)
+    )
+  }
 }

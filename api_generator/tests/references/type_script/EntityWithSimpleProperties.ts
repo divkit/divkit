@@ -19,6 +19,8 @@ export class EntityWithSimpleProperties<T extends EntityWithSimplePropertiesProp
      * Boolean value in numeric format.
      *
      * @deprecated
+     *
+     * Platforms: android
      */
     boolean_int?: Type<IntBoolean | DivExpression>;
     /**
@@ -39,10 +41,14 @@ export class EntityWithSimpleProperties<T extends EntityWithSimplePropertiesProp
     integer?: Type<number | DivExpression>;
     /**
      * Positive integer.
+     *
+     * Platforms: not supported
      */
     positive_integer?: Type<number | DivExpression>;
     /**
      * String.
+     *
+     * Platforms: android, ios, web
      */
     string?: Type<string | DivExpression>;
     url?: Type<string | DivExpression>;
@@ -69,6 +75,8 @@ export interface EntityWithSimplePropertiesProps {
      * Boolean value in numeric format.
      *
      * @deprecated
+     *
+     * Platforms: android
      */
     boolean_int?: Type<IntBoolean | DivExpression>;
     /**
@@ -89,10 +97,14 @@ export interface EntityWithSimplePropertiesProps {
     integer?: Type<number | DivExpression>;
     /**
      * Positive integer.
+     *
+     * Platforms: not supported
      */
     positive_integer?: Type<number | DivExpression>;
     /**
      * String.
+     *
+     * Platforms: android, ios, web
      */
     string?: Type<string | DivExpression>;
     url?: Type<string | DivExpression>;

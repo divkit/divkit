@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, text_variable`.
  */
 @Generated
-class Input internal constructor(
+data class Input internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -40,17 +40,23 @@ class Input internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
+            autocapitalization = additive.autocapitalization ?: properties.autocapitalization,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
+            enterKeyActions = additive.enterKeyActions ?: properties.enterKeyActions,
+            enterKeyType = additive.enterKeyType ?: properties.enterKeyType,
             extensions = additive.extensions ?: properties.extensions,
+            filters = additive.filters ?: properties.filters,
             focus = additive.focus ?: properties.focus,
             fontFamily = additive.fontFamily ?: properties.fontFamily,
             fontSize = additive.fontSize ?: properties.fontSize,
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
             fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             highlightColor = additive.highlightColor ?: properties.highlightColor,
             hintColor = additive.hintColor ?: properties.hintColor,
@@ -82,6 +88,7 @@ class Input internal constructor(
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             validators = additive.validators ?: properties.validators,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -90,7 +97,7 @@ class Input internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -109,6 +116,15 @@ class Input internal constructor(
          */
         val alpha: Property<Double>?,
         /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
+        /**
+         * Text auto-capitalization type.
+         * Default value: `auto`.
+         */
+        val autocapitalization: Property<Autocapitalization>?,
+        /**
          * Element background. It can contain multiple layers.
          */
         val background: Property<List<Background>>?,
@@ -125,9 +141,22 @@ class Input internal constructor(
          */
         val disappearActions: Property<List<DisappearAction>>?,
         /**
+         * Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+         */
+        val enterKeyActions: Property<List<Action>>?,
+        /**
+         * 'Enter' key type.
+         * Default value: `default`.
+         */
+        val enterKeyType: Property<EnterKeyType>?,
+        /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
          */
         val extensions: Property<List<Extension>>?,
+        /**
+         * Filter that prevents users from entering text that doesn't satisfy the specified conditions.
+         */
+        val filters: Property<List<InputFilter>>?,
         /**
          * Parameters when focusing on an element or losing focus.
          */
@@ -156,6 +185,10 @@ class Input internal constructor(
          */
         val fontWeightValue: Property<Int>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
@@ -178,7 +211,7 @@ class Input internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Indicates if the text editing is enabled.
+         * Enables or disables text editing.
          * Default value: `true`.
          */
         val isEnabled: Property<Boolean>?,
@@ -188,7 +221,7 @@ class Input internal constructor(
          */
         val keyboardType: Property<KeyboardType>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -225,7 +258,7 @@ class Input internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -289,7 +322,11 @@ class Input internal constructor(
          */
         val validators: Property<List<InputValidator>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -318,17 +355,23 @@ class Input internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
+            result.tryPutProperty("autocapitalization", autocapitalization)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("disappear_actions", disappearActions)
+            result.tryPutProperty("enter_key_actions", enterKeyActions)
+            result.tryPutProperty("enter_key_type", enterKeyType)
             result.tryPutProperty("extensions", extensions)
+            result.tryPutProperty("filters", filters)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("font_family", fontFamily)
             result.tryPutProperty("font_size", fontSize)
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
             result.tryPutProperty("font_weight_value", fontWeightValue)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("highlight_color", highlightColor)
             result.tryPutProperty("hint_color", hintColor)
@@ -360,6 +403,7 @@ class Input internal constructor(
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("validators", validators)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -368,6 +412,22 @@ class Input internal constructor(
             return result
         }
     }
+
+    /**
+     * Text auto-capitalization type.
+     * 
+     * Possible values: [auto], [none], [words], [sentences], [all_characters].
+     */
+    @Generated
+    sealed interface Autocapitalization
+
+    /**
+     * 'Enter' key type.
+     * 
+     * Possible values: [default], [go], [search], [send], [done].
+     */
+    @Generated
+    sealed interface EnterKeyType
 
     /**
      * Keyboard type.
@@ -385,7 +445,7 @@ class Input internal constructor(
      * Required parameters: `color`.
      */
     @Generated
-    class NativeInterface internal constructor(
+    data class NativeInterface internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -398,7 +458,7 @@ class Input internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Text input line color.
              */
@@ -420,25 +480,31 @@ class Input internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -447,7 +513,7 @@ class Input internal constructor(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -462,7 +528,8 @@ class Input internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -475,17 +542,23 @@ fun DivScope.input(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -517,6 +590,7 @@ fun DivScope.input(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -528,17 +602,23 @@ fun DivScope.input(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
+        autocapitalization = valueOrNull(autocapitalization),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
+        enterKeyActions = valueOrNull(enterKeyActions),
+        enterKeyType = valueOrNull(enterKeyType),
         extensions = valueOrNull(extensions),
+        filters = valueOrNull(filters),
         focus = valueOrNull(focus),
         fontFamily = valueOrNull(fontFamily),
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         highlightColor = valueOrNull(highlightColor),
         hintColor = valueOrNull(hintColor),
@@ -570,6 +650,7 @@ fun DivScope.input(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -583,25 +664,31 @@ fun DivScope.input(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -610,7 +697,7 @@ fun DivScope.input(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -625,7 +712,8 @@ fun DivScope.input(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -638,17 +726,23 @@ fun DivScope.inputProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -680,6 +774,7 @@ fun DivScope.inputProps(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -690,17 +785,23 @@ fun DivScope.inputProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
+    autocapitalization = valueOrNull(autocapitalization),
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
     disappearActions = valueOrNull(disappearActions),
+    enterKeyActions = valueOrNull(enterKeyActions),
+    enterKeyType = valueOrNull(enterKeyType),
     extensions = valueOrNull(extensions),
+    filters = valueOrNull(filters),
     focus = valueOrNull(focus),
     fontFamily = valueOrNull(fontFamily),
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
     fontWeightValue = valueOrNull(fontWeightValue),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     highlightColor = valueOrNull(highlightColor),
     hintColor = valueOrNull(hintColor),
@@ -732,6 +833,7 @@ fun DivScope.inputProps(
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
     validators = valueOrNull(validators),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -744,25 +846,31 @@ fun DivScope.inputProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -771,7 +879,7 @@ fun DivScope.inputProps(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -786,7 +894,8 @@ fun DivScope.inputProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -799,17 +908,23 @@ fun TemplateScope.inputRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
+    autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    enterKeyActions: ReferenceProperty<List<Action>>? = null,
+    enterKeyType: ReferenceProperty<Input.EnterKeyType>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
@@ -841,6 +956,7 @@ fun TemplateScope.inputRefs(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -851,17 +967,23 @@ fun TemplateScope.inputRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
+    autocapitalization = autocapitalization,
     background = background,
     border = border,
     columnSpan = columnSpan,
     disappearActions = disappearActions,
+    enterKeyActions = enterKeyActions,
+    enterKeyType = enterKeyType,
     extensions = extensions,
+    filters = filters,
     focus = focus,
     fontFamily = fontFamily,
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
     fontWeightValue = fontWeightValue,
+    functions = functions,
     height = height,
     highlightColor = highlightColor,
     hintColor = hintColor,
@@ -893,6 +1015,7 @@ fun TemplateScope.inputRefs(
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
     validators = validators,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -905,25 +1028,31 @@ fun TemplateScope.inputRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -932,7 +1061,7 @@ fun TemplateScope.inputRefs(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -947,7 +1076,8 @@ fun TemplateScope.inputRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -960,17 +1090,23 @@ fun Input.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -1002,6 +1138,7 @@ fun Input.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1013,17 +1150,23 @@ fun Input.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
+        autocapitalization = valueOrNull(autocapitalization) ?: properties.autocapitalization,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
+        enterKeyActions = valueOrNull(enterKeyActions) ?: properties.enterKeyActions,
+        enterKeyType = valueOrNull(enterKeyType) ?: properties.enterKeyType,
         extensions = valueOrNull(extensions) ?: properties.extensions,
+        filters = valueOrNull(filters) ?: properties.filters,
         focus = valueOrNull(focus) ?: properties.focus,
         fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         highlightColor = valueOrNull(highlightColor) ?: properties.highlightColor,
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
@@ -1055,6 +1198,7 @@ fun Input.override(
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         validators = valueOrNull(validators) ?: properties.validators,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -1068,25 +1212,31 @@ fun Input.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1095,7 +1245,7 @@ fun Input.override(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1110,7 +1260,8 @@ fun Input.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1123,17 +1274,23 @@ fun Input.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
+    autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    enterKeyActions: ReferenceProperty<List<Action>>? = null,
+    enterKeyType: ReferenceProperty<Input.EnterKeyType>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
@@ -1165,6 +1322,7 @@ fun Input.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1176,17 +1334,23 @@ fun Input.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        autocapitalization = autocapitalization ?: properties.autocapitalization,
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = disappearActions ?: properties.disappearActions,
+        enterKeyActions = enterKeyActions ?: properties.enterKeyActions,
+        enterKeyType = enterKeyType ?: properties.enterKeyType,
         extensions = extensions ?: properties.extensions,
+        filters = filters ?: properties.filters,
         focus = focus ?: properties.focus,
         fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
@@ -1218,6 +1382,7 @@ fun Input.defer(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         validators = validators ?: properties.validators,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1230,7 +1395,9 @@ fun Input.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param enterKeyType 'Enter' key type.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
@@ -1239,13 +1406,13 @@ fun Input.defer(
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textAlignmentHorizontal Horizontal text alignment.
@@ -1259,7 +1426,9 @@ fun Input.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    autocapitalization: ExpressionProperty<Input.Autocapitalization>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    enterKeyType: ExpressionProperty<Input.EnterKeyType>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
@@ -1287,17 +1456,23 @@ fun Input.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
+        autocapitalization = autocapitalization ?: properties.autocapitalization,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = properties.disappearActions,
+        enterKeyActions = properties.enterKeyActions,
+        enterKeyType = enterKeyType ?: properties.enterKeyType,
         extensions = properties.extensions,
+        filters = properties.filters,
         focus = properties.focus,
         fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = properties.functions,
         height = properties.height,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
@@ -1329,6 +1504,7 @@ fun Input.evaluate(
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
         validators = properties.validators,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1342,25 +1518,31 @@ fun Input.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1369,7 +1551,7 @@ fun Input.evaluate(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1384,7 +1566,8 @@ fun Input.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1397,17 +1580,23 @@ fun Component<Input>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    enterKeyActions: List<Action>? = null,
+    enterKeyType: Input.EnterKeyType? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -1439,6 +1628,7 @@ fun Component<Input>.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1451,17 +1641,23 @@ fun Component<Input>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
+        autocapitalization = valueOrNull(autocapitalization),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
+        enterKeyActions = valueOrNull(enterKeyActions),
+        enterKeyType = valueOrNull(enterKeyType),
         extensions = valueOrNull(extensions),
+        filters = valueOrNull(filters),
         focus = valueOrNull(focus),
         fontFamily = valueOrNull(fontFamily),
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         highlightColor = valueOrNull(highlightColor),
         hintColor = valueOrNull(hintColor),
@@ -1493,6 +1689,7 @@ fun Component<Input>.override(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1506,25 +1703,31 @@ fun Component<Input>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1533,7 +1736,7 @@ fun Component<Input>.override(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1548,7 +1751,8 @@ fun Component<Input>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1561,17 +1765,23 @@ fun Component<Input>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
+    autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    enterKeyActions: ReferenceProperty<List<Action>>? = null,
+    enterKeyType: ReferenceProperty<Input.EnterKeyType>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
@@ -1603,6 +1813,7 @@ fun Component<Input>.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1615,17 +1826,23 @@ fun Component<Input>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
+        autocapitalization = autocapitalization,
         background = background,
         border = border,
         columnSpan = columnSpan,
         disappearActions = disappearActions,
+        enterKeyActions = enterKeyActions,
+        enterKeyType = enterKeyType,
         extensions = extensions,
+        filters = filters,
         focus = focus,
         fontFamily = fontFamily,
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = functions,
         height = height,
         highlightColor = highlightColor,
         hintColor = hintColor,
@@ -1657,6 +1874,7 @@ fun Component<Input>.defer(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         validators = validators,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1669,7 +1887,9 @@ fun Component<Input>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param enterKeyType 'Enter' key type.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
@@ -1678,13 +1898,13 @@ fun Component<Input>.defer(
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textAlignmentHorizontal Horizontal text alignment.
@@ -1698,7 +1918,9 @@ fun Component<Input>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    autocapitalization: ExpressionProperty<Input.Autocapitalization>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    enterKeyType: ExpressionProperty<Input.EnterKeyType>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
@@ -1727,17 +1949,23 @@ fun Component<Input>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
+        autocapitalization = autocapitalization,
         background = null,
         border = null,
         columnSpan = columnSpan,
         disappearActions = null,
+        enterKeyActions = null,
+        enterKeyType = enterKeyType,
         extensions = null,
+        filters = null,
         focus = null,
         fontFamily = fontFamily,
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = null,
         height = null,
         highlightColor = highlightColor,
         hintColor = hintColor,
@@ -1769,6 +1997,7 @@ fun Component<Input>.evaluate(
         transitionOut = null,
         transitionTriggers = null,
         validators = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,
@@ -1785,6 +2014,12 @@ operator fun Component<Input>.plus(additive: Input.Properties): Component<Input>
 
 @Generated
 fun Input.asList() = listOf(this)
+
+@Generated
+fun Input.Autocapitalization.asList() = listOf(this)
+
+@Generated
+fun Input.EnterKeyType.asList() = listOf(this)
 
 @Generated
 fun Input.KeyboardType.asList() = listOf(this)

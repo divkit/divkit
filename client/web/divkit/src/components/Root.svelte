@@ -42,10 +42,11 @@
         FetchInit,
         DivVariable,
         Direction,
-        ActionMenuItem
+        ActionMenuItem,
+        VariableTrigger
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
-    import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
+    import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
@@ -54,15 +55,16 @@
     import type { Store, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
-    import { FocusableMethods, ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
+    import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
-    import { type LogError, wrapError, WrappedError } from '../utils/wrapError';
+    import { type LogError, wrapError, type WrappedError } from '../utils/wrapError';
+    import { checkCustomFunction, customFunctionWrap, mergeCustomFunctions, type CustomFunctions } from '../expressions/funcs/customFuncs';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
-    import { ACTION_CTX, ActionCtxValue } from '../context/action';
-    import { STATE_CTX, StateCtxValue, StateInterface } from '../context/state';
+    import { ACTION_CTX, type ActionCtxValue } from '../context/action';
+    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../context/state';
     import { constStore } from '../utils/constStore';
     import {
-        MaybeMissing,
+        type MaybeMissing,
         prepareVars
     } from '../expressions/json';
     import { storesMap } from '../stores';
@@ -70,8 +72,9 @@
     import { parse } from '../expressions/expressions';
     import { gatherVarsFromAst } from '../expressions/utils';
     import { Truthy } from '../utils/truthy';
-    import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, VariableType } from '../expressions/variable';
+    import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, type VariableType } from '../expressions/variable';
     import {
+        cleanControllerStore,
         getControllerStore,
         getControllerVars,
         GlobalVariablesController
@@ -82,6 +85,8 @@
     import { dictSetValue } from '../actions/dict';
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
+    import { ENABLED_CTX, type EnabledCtxValue } from '../context/enabled';
+    import { createAnimator, type AnimatorInstance } from '../utils/animators';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -89,7 +94,7 @@
     export let json: Partial<DivJson> = {};
     export let platform: Platform = 'auto';
     export let theme: Theme = 'system';
-    export let globalVariablesController: GlobalVariablesController = new GlobalVariablesController();
+    export let globalVariablesController: GlobalVariablesController | undefined = undefined;
     export let mix = '';
     export let customization: Customization = {};
     export let builtinProtocols: string[] = ['http', 'https', 'tel', 'mailto', 'intent'];
@@ -199,17 +204,22 @@
         stateChange: false
     };
 
+    const variablesController = globalVariablesController || new GlobalVariablesController();
+
     // Will notify about new global variables
-    const globalVariablesStore = getControllerStore(globalVariablesController);
+    const globalVariablesStore = getControllerStore(variablesController);
     // Global variables only
-    const globalVariables = getControllerVars(globalVariablesController);
+    const globalVariables = getControllerVars(variablesController);
     // Local variables only
     const localVariables = new Map<string, Variable>();
     // Local and global variables combined, with local in precedence
     const variables = new Map<string, Variable>();
     // Stores for notify unset global variables
     const awaitingGlobalVariables = new Map<string, Writable<any>>();
+
     let timersController: TimersController | null = null;
+
+    const animators: Map<string, AnimatorInstance> = new Map();
 
     let tooltipCounter = 0;
     let tooltips: {
@@ -225,18 +235,18 @@
 
     const timeouts: number[] = [];
 
-    function mergeVars(
-        variables0: Map<string, Variable>,
-        variables1: Map<string, Variable> | undefined
-    ): Map<string, Variable>;
-    function mergeVars(
-        variables0: Map<string, Variable> | undefined,
-        variables1: Map<string, Variable> | undefined
-    ): Map<string, Variable> | undefined;
-    function mergeVars(
-        variables0: Map<string, Variable> | undefined,
-        variables1: Map<string, Variable> | undefined
-    ): Map<string, Variable> | undefined {
+    function mergeMaps<T>(
+        variables0: Map<string, T>,
+        variables1: Map<string, T> | undefined
+    ): Map<string, T>;
+    function mergeMaps<T>(
+        variables0: Map<string, T> | undefined,
+        variables1: Map<string, T> | undefined
+    ): Map<string, T> | undefined;
+    function mergeMaps<T>(
+        variables0: Map<string, T> | undefined,
+        variables1: Map<string, T> | undefined
+    ): Map<string, T> | undefined {
         if (variables0 && variables1) {
             return new Map([...variables0, ...variables1]);
         } else if (variables0) {
@@ -256,18 +266,19 @@
         logError: LogError,
         jsonProp: T,
         additionalVars?: Map<string, Variable>,
-        keepComplex = false
+        keepComplex = false,
+        customFunctions: CustomFunctions | undefined = undefined
     ): Readable<MaybeMissing<T>> {
         if (!jsonProp) {
             return constStore(jsonProp);
         }
 
-        const vars = mergeVars(variables, additionalVars);
+        const vars = mergeMaps(variables, additionalVars);
 
         const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
-                return constStore(prepared.applyVars(vars));
+                return constStore(prepared.applyVars(vars, customFunctions));
             }
             return constStore(jsonProp);
         }
@@ -275,14 +286,15 @@
             return vars.get(name) || awaitVariableChanges(name);
         }).filter(Truthy);
 
-        return derived(stores, () => prepared.applyVars(vars, keepComplex));
+        return derived(stores, () => prepared.applyVars(vars, customFunctions, keepComplex));
     }
 
     function getJsonWithVars<T>(
         logError: LogError,
         jsonProp: T,
         additionalVars?: Map<string, Variable>,
-        keepComplex = false
+        keepComplex = false,
+        customFunctions: CustomFunctions | undefined = undefined
     ): MaybeMissing<T> {
         const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
 
@@ -290,9 +302,9 @@
             return jsonProp;
         }
 
-        const vars = mergeVars(variables, additionalVars);
+        const vars = mergeMaps(variables, additionalVars);
 
-        return prepared.applyVars(vars, keepComplex);
+        return prepared.applyVars(vars, customFunctions, keepComplex);
     }
 
     function preparePrototypeVariables(
@@ -378,7 +390,7 @@
         templateContext
     }: {
         type: 'mount' | 'update' | 'destroy';
-        node: HTMLElement;
+        node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
@@ -445,6 +457,47 @@
                 return acc;
             }, {} as typeof svgFiltersMap);
         }
+    }
+
+    const idPrefix = genId('byid') + '-id-';
+    const nodeGettersById = new Map<string, NodeGetter>();
+    const nodeById = new Map<string, HTMLElement>();
+
+    function fullId(id: string): string {
+        return idPrefix + id;
+    }
+
+    function registerId(id: string, getter: NodeGetter): void {
+        nodeGettersById.set(id, getter);
+    }
+
+    function unregisterId(id: string): void {
+        nodeGettersById.delete(id);
+
+        const full = fullId(id);
+
+        if (nodeById.has(full)) {
+            nodeById.delete(full);
+        }
+    }
+
+    function getComponentId(id: string): string {
+        const node = nodeGettersById.get(id)?.();
+
+        if (node) {
+            const full = fullId(id);
+            const prev = nodeById.get(full);
+
+            if (prev && prev !== node) {
+                prev.removeAttribute('id');
+            }
+            node.setAttribute('id', full);
+            nodeById.set(full, node);
+
+            return full;
+        }
+
+        return '';
     }
 
     async function setState(stateId: string | null): Promise<void> {
@@ -645,6 +698,7 @@
                                     id: failed.id
                                 }
                             }));
+                            execAnyActions(json.patch?.on_failed_actions);
                             execAnyActions(action.download_callbacks?.on_fail_actions);
                             return;
                         }
@@ -655,6 +709,7 @@
                             methods.replaceWith(change.id, change.items);
                         }
                     });
+                    execAnyActions(json.patch?.on_applied_actions);
                     execAnyActions(action.download_callbacks?.on_success_actions);
                 }
             }).catch(err => {
@@ -758,7 +813,7 @@
         if (type === 'integer' || type === 'number') {
             val = Number(val);
         } else if (type === 'boolean') {
-            val = val === 'true';
+            val = val === 'true' || val === '1';
         }
 
         store.setValue(name, type as StoreTypes, val, Number(lifetime));
@@ -772,14 +827,32 @@
         action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
         componentContext?: ComponentContext
     ): Promise<void> {
+        const scopeId = action.scope_id;
+        const log = (componentContext?.logError || logError);
+
+        if (scopeId) {
+            const set = componentContextMap.get(scopeId);
+            if (set && set?.size > 1) {
+                log(wrapError(new Error(`Ambiguous scope id. There are ${set.size} divs with id '${scopeId}'`), {
+                    additional: {
+                        count: set.size,
+                        scopeId
+                    }
+                }));
+            } else if (set?.size === 1) {
+                const first = set.values().next().value;
+                if (first) {
+                    componentContext = first;
+                }
+            }
+        }
+
         const actionUrl = action.url ? String(action.url) : '';
         const actionTyped = action.typed;
 
         if (!filterEnabledActions(action)) {
             return;
         }
-
-        const log = (componentContext?.logError || logError);
 
         if (actionUrl) {
             try {
@@ -813,7 +886,7 @@
                         const value = params.get('value');
 
                         if (name && value !== null) {
-                            const variableInstance = variables.get(name);
+                            const variableInstance = componentContext?.getVariable(name) || variables.get(name);
                             if (variableInstance) {
                                 const type = variableInstance.getType();
                                 if (type === 'dict' || type === 'array') {
@@ -890,7 +963,7 @@
                 case 'set_variable': {
                     const { variable_name: name, value } = actionTyped;
                     if (name && value) {
-                        const variableInstance = variables.get(name);
+                        const variableInstance = componentContext?.getVariable(name) || variables.get(name);
                         if (variableInstance) {
                             const type = variableInstance.getType();
                             if (type === value.type) {
@@ -920,13 +993,13 @@
                     break;
                 }
                 case 'array_insert_value':
-                    arrayInsert(variables, log, actionTyped);
+                    arrayInsert(componentContext, variables, log, actionTyped);
                     break;
                 case 'array_remove_value':
-                    arrayRemove(variables, log, actionTyped);
+                    arrayRemove(componentContext, variables, log, actionTyped);
                     break;
                 case 'array_set_value':
-                    arraySet(variables, log, actionTyped);
+                    arraySet(componentContext, variables, log, actionTyped);
                     break;
                 case 'copy_to_clipboard':
                     copyToClipboard(log, actionTyped);
@@ -955,7 +1028,87 @@
                     break;
                 }
                 case 'dict_set_value': {
-                    dictSetValue(variables, log, actionTyped);
+                    dictSetValue(componentContext, variables, log, actionTyped);
+                    break;
+                }
+                case 'animator_start': {
+                    const animatorDef = actionTyped.animator_id &&
+                        componentContext?.getAnimator(actionTyped.animator_id);
+
+                    if (!animatorDef) {
+                        log(wrapError(new Error('Missing animator'), {
+                            additional: {
+                                animator_id: actionTyped.animator_id
+                            }
+                        }));
+
+                        return;
+                    }
+
+                    const {
+                        duration,
+                        start_delay,
+                        interpolator,
+                        direction,
+                        repeat_count,
+                        start_value: start_value_typed,
+                        end_value: end_value_typed
+                    } = actionTyped;
+
+                    const evalledDef = componentContext ?
+                        componentContext.getJsonWithVars(animatorDef) :
+                        getJsonWithVars(logError, animatorDef);
+
+                    const props = {
+                        ...evalledDef,
+                        end_actions: animatorDef.end_actions,
+                        cancel_actions: animatorDef.cancel_actions,
+                        duration: duration !== undefined ? duration : evalledDef.duration,
+                        start_delay: start_delay !== undefined ? start_delay : evalledDef.start_delay,
+                        interpolator: interpolator !== undefined ? interpolator : evalledDef.interpolator,
+                        direction: direction !== undefined ? direction : evalledDef.direction,
+                        repeat_count: repeat_count !== undefined ? repeat_count : evalledDef.repeat_count,
+                        start_value_typed,
+                        end_value_typed
+                    };
+
+                    const instance = animatorDef.variable_name &&
+                        (
+                            componentContext?.getVariable(animatorDef.variable_name) ||
+                            variables.get(animatorDef.variable_name)
+                        );
+                    if (!instance) {
+                        return;
+                    }
+
+                    const prevAnimator = animators.get(animatorDef.id as string);
+                    if (prevAnimator) {
+                        prevAnimator.stop();
+                    }
+
+                    const animator = createAnimator(props, instance, () => {
+                        animators.delete(animatorDef.id as string);
+                    }, (actions, opts) => {
+                        const fn = componentContext?.execAnyActions || execAnyActions;
+                        const evalled = componentContext ?
+                            componentContext.getJsonWithVars(actions) :
+                            getJsonWithVars(logError, actions);
+
+                        return fn(evalled, opts);
+                    });
+                    if (animator) {
+                        animators.set(animatorDef.id as string, animator);
+                    }
+
+                    break;
+                }
+                case 'animator_stop': {
+                    const animator = animators.get(actionTyped.animator_id as string);
+                    if (animator) {
+                        animator.stop();
+                        animators.delete(actionTyped.animator_id as string);
+                    }
+
                     break;
                 }
                 default: {
@@ -975,6 +1128,7 @@
             componentContext?: ComponentContext;
             processUrls?: boolean;
             node?: HTMLElement;
+            logType?: string;
         } = {}
     ): Promise<void> {
         if (!actions || !Array.isArray(actions)) {
@@ -1022,13 +1176,147 @@
         }
         filtered.forEach(action => {
             if (action.log_id) {
-                logStat('click', action as Action);
+                logStat(opts.logType || 'click', action as Action);
             }
         });
     }
 
     function execCustomAction(action: (Action | VisibilityAction) & { url: string }): void {
         onCustomAction?.(action);
+    }
+
+    function processVariableTriggers(
+        componentContext: ComponentContext | undefined,
+        variableTriggers: MaybeMissing<VariableTrigger>[] | undefined
+    ): (() => void) | undefined {
+        const log = componentContext?.logError || logError;
+
+        if (!Array.isArray(variableTriggers) || !variableTriggers.length) {
+            return;
+        }
+        if (!process.env.ENABLE_EXPRESSIONS) {
+            log(wrapError(new Error('variable_trigger is not supported')));
+            return;
+        }
+
+        const list: (() => void)[] = [];
+
+        variableTriggers.forEach(trigger => {
+            let prevConditionResult = false;
+
+            if (typeof trigger.condition !== 'string') {
+                log(wrapError(new Error('variable_trigger has a condition that is not a string'), {
+                    additional: {
+                        condition: trigger.condition
+                    }
+                }));
+                return;
+            }
+
+            if (!Array.isArray(trigger.actions)) {
+                log(wrapError(new Error('variable_trigger has no actions'), {
+                    additional: {
+                        condition: trigger.condition
+                    }
+                }));
+                return;
+            }
+
+            const mode = trigger.mode || 'on_condition';
+
+            if (mode !== 'on_variable' && mode !== 'on_condition') {
+                log(wrapError(new Error('variable_trigger has an unsupported mode'), {
+                    additional: {
+                        mode
+                    }
+                }));
+                return;
+            }
+
+            try {
+                const ast = parse(trigger.condition, {
+                    startRule: 'JsonStringContents'
+                });
+                const exprVars = gatherVarsFromAst(ast);
+                if (!exprVars.length) {
+                    log(wrapError(new Error('variable_trigger must have variables in the condition'), {
+                        additional: {
+                            condition: trigger.condition
+                        }
+                    }));
+                    return;
+                }
+
+                const stores = exprVars.map(name =>
+                    componentContext?.getVariable(name) ||
+                        variables.get(name) ||
+                        awaitVariableChanges(name)
+                );
+
+                const unsubscribe = derived(stores, () => {
+                    const res = componentContext ?
+                        componentContext.evalExpression(store, ast, {
+                            weekStartDay
+                        }) :
+                        evalExpression(variables, undefined, store, ast, {
+                            weekStartDay
+                        });
+
+                    res.warnings.forEach(logError);
+
+                    return res.result;
+                }).subscribe(async conditionResult => {
+                    if (conditionResult.type === 'error') {
+                        log(wrapError(new Error('variable_trigger condition execution error'), {
+                            additional: {
+                                message: conditionResult.value
+                            }
+                        }));
+                        return;
+                    }
+
+                    if (
+                        // if condition is truthy
+                        conditionResult.value &&
+                        // and trigger mode matches
+                        (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
+                    ) {
+                        prevConditionResult = Boolean(conditionResult.value);
+                        const actions = (trigger.actions as Action[]).map(action =>
+                            componentContext ?
+                                componentContext.getJsonWithVars(action) :
+                                getJsonWithVars(logError, action)
+                        );
+
+                        if (componentContext) {
+                            await componentContext.execAnyActions(actions, {
+                                logType: 'trigger'
+                            });
+                        } else {
+                            await execAnyActions(actions, {
+                                logType: 'trigger'
+                            });
+                        }
+                    } else {
+                        prevConditionResult = Boolean(conditionResult.value);
+                    }
+                });
+
+                list.push(unsubscribe);
+            } catch (err) {
+                log(wrapError(new Error('Unable to parse variable_trigger'), {
+                    additional: {
+                        condition: trigger.condition
+                    }
+                }));
+            }
+        });
+
+        return () => {
+            list.forEach(cb => {
+                cb();
+            });
+        };
     }
 
     function isRunning(type: Running): boolean {
@@ -1046,6 +1334,7 @@
         onwerNode: HTMLElement;
         tooltip: MaybeMissing<Tooltip>;
     }> = new Map();
+    const componentContextMap: Map<string, Set<ComponentContext>> = new Map();
     function registerInstance<T>(id: string, block: T) {
         if (instancesMap.has(id)) {
             logError(wrapError(new Error('Duplicate instance id'), {
@@ -1180,9 +1469,9 @@
         }
     }
 
-    function getExtensionContext(): DivExtensionContext {
+    function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
-            variables,
+            variables: mergeMaps(variables, componentContext.variables),
             processExpressions<T>(t: T) {
                 return getJsonWithVars(
                     logError,
@@ -1190,12 +1479,17 @@
                 ) as T;
             },
             execAction,
-            logError
+            logError,
+            getComponentProperty<T>(property: string): T {
+                return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
+            },
+            direction
         };
     }
 
     function produceComponentContext(from?: ComponentContext | undefined): ComponentContext {
         const res: ComponentContext = {
+            id: '',
             json: {} as DivBaseData,
             path: [],
             templateContext: {},
@@ -1220,24 +1514,30 @@
                 return execAnyActions(actions, {
                     componentContext: res,
                     processUrls: opts.processUrls,
-                    node: opts.node
+                    node: opts.node,
+                    logType: opts.logType
                 });
             },
             getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
                 return getDerivedFromVars(
                     res.logError,
                     jsonProp,
-                    mergeVars(res.variables, additionalVars),
-                    keepComplex
+                    mergeMaps(res.variables, additionalVars),
+                    keepComplex,
+                    res.customFunctions
                 );
             },
             getJsonWithVars(jsonProp, additionalVars, keepComplex = false) {
                 return getJsonWithVars(
                     res.logError,
                     jsonProp,
-                    mergeVars(res.variables, additionalVars),
-                    keepComplex
+                    mergeMaps(res.variables, additionalVars),
+                    keepComplex,
+                    res.customFunctions
                 );
+            },
+            evalExpression(store, expr, opts) {
+                return evalExpression(mergeMaps(variables, res.variables), res.customFunctions, store, expr, opts);
             },
             produceChildContext(div, opts = {}) {
                 const componentContext = produceComponentContext(res);
@@ -1253,6 +1553,17 @@
                 componentContext.json = childProcessedJson;
                 componentContext.templateContext = childProcessedContext;
                 componentContext.origJson = div;
+                componentContext.id = opts.id || childProcessedJson.id || '';
+
+                if (componentContext.id) {
+                    let set = componentContextMap.get(componentContext.id);
+                    if (!set) {
+                        set = new Set();
+                        componentContextMap.set(componentContext.id, set);
+                    }
+
+                    set.add(componentContext);
+                }
 
                 if (opts.path !== undefined/*  && !res.isRootState */) {
                     componentContext.path.push(String(opts.path));
@@ -1261,7 +1572,54 @@
                     componentContext.path.push(div.type);
                 }
 
-                componentContext.variables = mergeVars(res.variables, opts.variables);
+                let localVars: Map<string, Variable> | undefined;
+
+                if (Array.isArray(childProcessedJson.variables)) {
+                    localVars = new Map();
+                    childProcessedJson.variables.forEach(desc => {
+                        const varInstance = constructVariable(desc);
+                        if (varInstance && localVars) {
+                            localVars.set(varInstance.getName(), varInstance);
+                        }
+                    });
+                }
+                componentContext.variables = mergeMaps(
+                    res.variables,
+                    mergeMaps(localVars, opts.variables)
+                );
+
+                let localCustomFunctions: CustomFunctions | undefined;
+                if (Array.isArray(childProcessedJson.functions)) {
+                    localCustomFunctions = new Map();
+                    childProcessedJson.functions.forEach(desc => {
+                        if (localCustomFunctions) {
+                            try {
+                                checkCustomFunction(desc);
+                            } catch (err: unknown) {
+                                // Only Error thrown here
+                                res.logError(wrapError(err as Error));
+                                return;
+                            }
+                            const fn = desc as DivFunction;
+                            const list = localCustomFunctions.get(fn.name) || [];
+                            list.push(customFunctionWrap(fn));
+                            localCustomFunctions.set(fn.name, list);
+                        }
+                    });
+                }
+                componentContext.customFunctions = mergeCustomFunctions(res.customFunctions, localCustomFunctions);
+
+                if (Array.isArray(childProcessedJson.animators)) {
+                    res.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
+                        (acc, item) => {
+                            if (item.id) {
+                                acc[item.id] = item;
+                            }
+                            return acc;
+                        },
+                        {}
+                    );
+                }
 
                 if (opts.fake) {
                     componentContext.fakeElement = true;
@@ -1278,7 +1636,7 @@
                 if (variable) {
                     const foundType = variable.getType();
 
-                    if (foundType !== type) {
+                    if (type && foundType !== type) {
                         res.logError(wrapError(new Error(`Variable should have type "${type}"`), {
                             additional: {
                                 name: varName,
@@ -1290,6 +1648,18 @@
                 }
 
                 return variable;
+            },
+            getAnimator(name) {
+                return res.animators?.[name] || res.parent?.getAnimator(name) || undefined;
+            },
+            destroy() {
+                const set = componentContextMap.get(res.id);
+                if (set) {
+                    set.delete(res);
+                    if (!set.size) {
+                        componentContextMap.delete(res.id);
+                    }
+                }
             },
         };
 
@@ -1321,11 +1691,10 @@
     setContext<RootCtxValue>(ROOT_CTX, {
         logStat,
         hasTemplate,
-        processTemplate,
         genId,
         genClass,
-        execAction: execActionInternal,
         execCustomAction,
+        processVariableTriggers,
         isRunning,
         setRunning,
         registerInstance,
@@ -1340,6 +1709,9 @@
         unregisterFocusable,
         addSvgFilter,
         removeSvgFilter,
+        registerId,
+        unregisterId,
+        getComponentId,
         preparePrototypeVariables,
         getStore,
         getCustomization,
@@ -1444,6 +1816,10 @@
         }
     });
 
+    setContext<EnabledCtxValue>(ENABLED_CTX, {
+        isEnabled: constStore(true)
+    });
+
     function hasVariableWithType(name: string, type: VariableType): boolean {
         const instance = variables.get(name);
 
@@ -1463,8 +1839,8 @@
         }
     }
 
-    function declVariable(variable: DivVariable): void {
-        if (!(variable.type in TYPE_TO_CLASS)) {
+    function constructVariable(variable: MaybeMissing<DivVariable>): Variable | undefined {
+        if (!variable.type || !variable.name || !(variable.type in TYPE_TO_CLASS)) {
             // Skip unknown types (from the future versions maybe)
             return;
         }
@@ -1483,16 +1859,22 @@
         }
 
         try {
-            const varInstance = createVariable(variable.name, variable.type, variable.value);
-
-            localVariables.set(variable.name, varInstance);
-            variables.set(variable.name, varInstance);
+            return createVariable(variable.name, variable.type, variable.value);
         } catch (err: any) {
             logError(wrapError(err, {
                 additional: {
                     name: variable.name
                 }
             }));
+        }
+    }
+
+    function declVariable(variable: DivVariable): void {
+        const varInstance = constructVariable(variable);
+
+        if (varInstance) {
+            localVariables.set(variable.name, varInstance);
+            variables.set(variable.name, varInstance);
         }
     }
 
@@ -1575,100 +1957,7 @@
     });
 
     const initVariableTriggers = () => {
-        const variableTriggers = json?.card?.variable_triggers;
-        if (Array.isArray(variableTriggers)) {
-            if (process.env.ENABLE_EXPRESSIONS) {
-                variableTriggers.forEach(trigger => {
-                    let prevConditionResult = false;
-
-                    if (typeof trigger.condition !== 'string') {
-                        logError(wrapError(new Error('variable_trigger has a condition that is not a string'), {
-                            additional: {
-                                condition: trigger.condition
-                            }
-                        }));
-                        return;
-                    }
-
-                    const mode = trigger.mode || 'on_condition';
-
-                    if (mode !== 'on_variable' && mode !== 'on_condition') {
-                        logError(wrapError(new Error('variable_trigger has an unsupported mode'), {
-                            additional: {
-                                mode
-                            }
-                        }));
-                        return;
-                    }
-
-                    try {
-                        const ast = parse(trigger.condition, {
-                            startRule: 'JsonStringContents'
-                        });
-                        const exprVars = gatherVarsFromAst(ast);
-                        if (!exprVars.length) {
-                            logError(wrapError(new Error('variable_trigger must have variables in the condition'), {
-                                additional: {
-                                    condition: trigger.condition
-                                }
-                            }));
-                            return;
-                        }
-
-                        const stores = exprVars.map(name => variables.get(name) || awaitVariableChanges(name));
-
-                        derived(stores, () => {
-                            const res = evalExpression(variables, store, ast, {
-                                weekStartDay
-                            });
-
-                            res.warnings.forEach(logError);
-
-                            return res.result;
-                        }).subscribe(async conditionResult => {
-                            if (conditionResult.type === 'error') {
-                                logError(wrapError(new Error('variable_trigger condition execution error'), {
-                                    additional: {
-                                        message: conditionResult.value
-                                    }
-                                }));
-                                return;
-                            }
-
-                            if (
-                                // if condition is truthy
-                                conditionResult.value &&
-                                // and trigger mode matches
-                                (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
-                            ) {
-                                prevConditionResult = Boolean(conditionResult.value);
-                                const actionsToLog: Action[] = [];
-                                const actions = trigger.actions.map(action => getJsonWithVars(logError, action));
-                                for (const action of actions) {
-                                    if (action.log_id) {
-                                        await execActionInternal(action as Action);
-                                        actionsToLog.push(action as Action);
-                                    }
-                                }
-                                for (const action of actionsToLog) {
-                                    logStat('trigger', action);
-                                }
-                            } else {
-                                prevConditionResult = Boolean(conditionResult.value);
-                            }
-                        });
-                    } catch (err) {
-                        logError(wrapError(new Error('Unable to parse variable_trigger'), {
-                            additional: {
-                                condition: trigger.condition
-                            }
-                        }));
-                    }
-                });
-            } else {
-                logError(wrapError(new Error('variable_trigger is not supported')));
-            }
-        }
+        processVariableTriggers(undefined, json?.card?.variable_triggers);
     };
 
     const timers = json?.card?.timers;
@@ -1730,7 +2019,12 @@
             window.addEventListener('pointerdown', onWindowPointerDown);
         }
 
-        initVariableTriggers();
+        // delay for children components initialization
+        tick().then(() => {
+            if (isMounted) {
+                initVariableTriggers();
+            }
+        });
     });
 
     onDestroy(() => {
@@ -1740,6 +2034,10 @@
         if (!rootInstancesCount) {
             window.removeEventListener('keydown', onWindowKeyDown);
             window.removeEventListener('pointerdown', onWindowPointerDown);
+        }
+
+        for (const [_id, instance] of animators) {
+            instance.stop();
         }
 
         if (timersController) {
@@ -1756,6 +2054,10 @@
         timeouts.forEach(timeout => {
             clearTimeout(timeout);
         });
+
+        if (!globalVariablesController) {
+            cleanControllerStore(variablesController);
+        }
     });
 </script>
 

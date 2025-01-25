@@ -131,6 +131,32 @@ extension PagerBlock: ElementStateUpdating {
   }
 }
 
+extension PagerBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> PagerBlock {
+    let newBlocks = try gallery.items.map {
+      try $0.content.updated(path: path, isFocused: isFocused)
+    }
+    let blocksAreNotEqual = zip(gallery.items, newBlocks)
+      .contains { $0.content !== $1 }
+
+    guard blocksAreNotEqual else { return self }
+
+    let newModel: GalleryViewModel = modified(gallery) {
+      $0.items.apply(contents: newBlocks)
+    }
+
+    return try PagerBlock(
+      pagerPath: pagerPath,
+      layoutMode: layoutMode,
+      gallery: newModel,
+      selectedActions: selectedActions,
+      state: state,
+      widthTrait: widthTrait,
+      heightTrait: heightTrait
+    )
+  }
+}
+
 extension PagerBlock: LayoutCachingDefaultImpl {}
 
 extension [GalleryViewModel.Item] {

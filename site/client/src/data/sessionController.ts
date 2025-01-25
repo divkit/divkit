@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { initialValueStore, valueStore } from './valueStore';
-import { isDesign, isInitialLoading, isLoadError, isSamples, session } from './session';
+import { isDesign, isFeatures, isInitialLoading, isLoadError, isSamples, session } from './session';
 import { debounce } from '../utils/debounce';
 import { clientHostPath, serverHostPath } from '../utils/const';
 import { savedStore } from './savedStore';
@@ -38,8 +38,11 @@ async function init() {
 
     const design = params.get('design') === '1';
     const samples = params.get('samples') === '1';
+    const features = params.get('features') === '1' || location.pathname.startsWith('/features');
 
-    if (design) {
+    if (features) {
+        isFeatures.set(true);
+    } else if (design) {
         isDesign.set(true);
         valueStore.set(DEFAULT_EDITOR_VALUE);
     } else if (samples) {
@@ -56,7 +59,7 @@ async function init() {
         listenToDevices();
     }*/
 
-    if (uuid) {
+    if (uuid && !features) {
         isInitialLoading.set(true);
         const writeKey = getLs(`session_write_key_${uuid}`) || '';
 

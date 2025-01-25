@@ -1,0 +1,45 @@
+{
+  "allOf": [
+    {
+      "$ref": "div-action-scroll-base.json"
+    },
+    {
+      "type": "object",
+      "$description": "translations.json#/div_action_scroll_by",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "scroll_by"
+          ]
+        },
+        "overflow": {
+          "$description": "translations.json#/div_action_scroll_overflow",
+          "type": "string",
+          "enum": [
+            "clamp",
+            "ring"
+          ],
+          "default_value": "clamp"
+        },
+        "offset": {
+          "$description": "translations.json#/div_action_scroll_by_offset",
+          "type": "integer",
+          "default_value": "0"
+        },
+        "item_count": {
+          "$description": "translations.json#/div_action_scroll_by_item_count",
+          "type": "integer",
+          "default_value": "0"
+        }
+      },
+      "platforms": [
+        "android"
+      ],
+      "required": [
+        "type",
+        "id"
+      ]
+    }
+  ]
+}

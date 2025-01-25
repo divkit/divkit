@@ -2,7 +2,7 @@ import type { Writable, Subscriber, Unsubscriber } from 'svelte/store';
 import { writable } from 'svelte/store';
 import type { EvalValue } from './eval';
 import { parseColor } from '../utils/correctColor';
-import { bigIntZero, toBigInt, MAX_INT, MIN_INT } from './bigint';
+import { bigIntZero, toBigInt } from './bigint';
 
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 export type VariableValue = string | number | bigint | boolean | null | undefined | object | unknown[];
@@ -268,7 +268,35 @@ class ConstUrlVariable extends UrlVariable {}
 class ConstDictVariable extends DictVariable {}
 class ConstArrayVariable extends ArrayVariable {}
 
-export const CONST_TYPE_TO_CLASS: Record<VariableType, typeof Variable<VariableValue, VariableType>> = {
+class ConstDatetimeVariable extends Variable<Date, 'datetime'> {
+    protected convertValue(value: unknown) {
+        if (!(value instanceof Date)) {
+            throw new Error('Incorrect variable value');
+        }
+
+        return value;
+    }
+
+    protected fromString(): never {
+        throw new Error('Datetime variable does not support setter from string');
+    }
+
+    getType(): 'datetime' {
+        return 'datetime';
+    }
+}
+
+export const CONST_TYPE_TO_CLASS: {
+    string: typeof StringVariable;
+    number: typeof NumberVariable;
+    integer: typeof IntegerVariable;
+    boolean: typeof BooleanVariable;
+    color: typeof ColorVariable;
+    url: typeof UrlVariable;
+    dict: typeof DictVariable;
+    array: typeof ArrayVariable;
+    datetime: typeof ConstDatetimeVariable;
+} = {
     string: ConstStringVariable,
     number: ConstNumberVariable,
     integer: ConstIntegerVariable,
@@ -276,8 +304,9 @@ export const CONST_TYPE_TO_CLASS: Record<VariableType, typeof Variable<VariableV
     color: ConstColorVariable,
     url: ConstUrlVariable,
     dict: ConstDictVariable,
-    array: ConstArrayVariable
-};
+    array: ConstArrayVariable,
+    datetime: ConstDatetimeVariable
+} as any;
 
 for (const type in CONST_TYPE_TO_CLASS) {
     const Class = CONST_TYPE_TO_CLASS[type as keyof typeof CONST_TYPE_TO_CLASS];
@@ -287,11 +316,11 @@ for (const type in CONST_TYPE_TO_CLASS) {
     Class.prototype.setValue = constSetter;
 }
 
-export function createConstVariable(
+export function createConstVariable<T extends VariableType | 'datetime'>(
     name: string,
-    type: VariableType,
+    type: T,
     value: unknown
-): InstanceType<typeof CONST_TYPE_TO_CLASS[typeof type]> {
+): InstanceType<typeof CONST_TYPE_TO_CLASS[T]> {
     if (!(type in CONST_TYPE_TO_CLASS)) {
         throw new Error('Unsupported variable type');
     }

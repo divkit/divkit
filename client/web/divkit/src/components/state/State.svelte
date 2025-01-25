@@ -9,14 +9,15 @@
     import type { ChangeBoundsTransition } from '../../types/base';
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
-    import { STATE_CTX, StateCtxValue, StateInterface } from '../../context/state';
+    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../../context/state';
     import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivStateData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -27,7 +28,7 @@
     let hasError = false;
 
     let animationRoot: HTMLElement | undefined;
-    let transitionChangeBoxes: Map<string, DOMRect> = new Map();
+    let transitionChangeBoxes: Map<string, ChildTransitionChangeData> = new Map();
     let childrenIds = new Set<string>();
 
     let childStateMap: Map<string, StateInterface> | null = null;
@@ -37,7 +38,7 @@
     let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
     let prevStateId: string | undefined;
-    $: stateId = componentContext.json.div_id || componentContext.json.id;
+    $: stateId = componentContext.json.div_id || componentContext.id;
     let selectedId: string | undefined;
     let selectedComponentContext: ComponentContext | undefined;
     $: jsonDefaultStateId = componentContext.getJsonWithVars(componentContext.json.default_state_id);
@@ -70,7 +71,10 @@
 
     $: items = Array.isArray(componentContext.json.states) && componentContext.json.states || [];
     $: parentOfItems = items.map(it => {
-        return it.div;
+        return {
+            json: it.div,
+            id: it.div?.id
+        };
     });
 
     $: {
@@ -83,6 +87,9 @@
     }
 
     function selectState(selectedState: MaybeMissing<State> | null): void {
+        if (selectedComponentContext) {
+            selectedComponentContext.destroy();
+        }
         selectedComponentContext = selectedState?.div ? componentContext.produceChildContext(selectedState.div, {
             path: selectedState.state_id || '<unknown>'
         }) : undefined;
@@ -112,6 +119,7 @@
     }
 
     interface AnimationItem {
+        id: string;
         json: DivBaseData;
         componentContextCopy: ComponentContext;
         elementBbox: DOMRect;
@@ -130,6 +138,7 @@
         maxDuration: number;
     }
     interface ChangeBoundsItem {
+        id: string;
         json: DivBaseData;
         componentContextCopy: ComponentContext;
         rootBbox: DOMRect;
@@ -145,15 +154,21 @@
         parentComponentContext: ComponentContext;
         transitions: AppearanceTransition;
         node: HTMLElement;
+        bbox?: DOMRect;
         resolvePromise?: (val?: void) => void;
     }
     interface ChildWithTransitionChange {
         id: string;
         json: DivBaseData;
         parentComponentContext: ComponentContext;
-        transitions: TransitionChange;
+        transitions: TransitionChange | undefined;
         node: HTMLElement;
         resolvePromise?: (val?: void) => void;
+    }
+
+    interface ChildTransitionChangeData {
+        transitions: TransitionChange;
+        rect: DOMRect;
     }
 
     function haveFadeTransition(list: AnyTransition[]): boolean {
@@ -166,7 +181,7 @@
         transitions = componentContext.getJsonWithVars(transitions) as AppearanceTransition;
 
         const transitionsList: AnyTransition[] = flattenTransition(transitions);
-        const bbox = node.getBoundingClientRect();
+        const startBbox = child.bbox || node.getBoundingClientRect();
         const jsonCopy = {
             ...json,
             margins: undefined,
@@ -174,18 +189,19 @@
         };
 
         return {
+            id: parentComponentContext.id || '',
             json: jsonCopy,
             componentContextCopy: parentComponentContext.produceChildContext(jsonCopy, {
                 fake: true
             }),
-            elementBbox: bbox,
+            elementBbox: startBbox,
             rootBbox,
             transitions: transitionsList,
             alpha: json.alpha,
-            width: bbox.width,
-            height: bbox.height,
-            offsetTop: bbox.top - rootBbox.top,
-            offsetLeft: bbox.left - rootBbox.left,
+            width: startBbox.width,
+            height: startBbox.height,
+            offsetTop: startBbox.top - rootBbox.top,
+            offsetLeft: startBbox.left - rootBbox.left,
             direction,
             resolvePromise: child.resolvePromise,
             node: child.node
@@ -223,7 +239,12 @@
                 .map(it => getItemAnimation(rootBbox, it, 'out'));
         }
         childrenWithTransitionChange.forEach(child => {
-            transitionChangeBoxes.set(child.id, child.node.getBoundingClientRect());
+            if (child.transitions) {
+                transitionChangeBoxes.set(child.id, {
+                    transitions: child.transitions,
+                    rect: child.node.getBoundingClientRect()
+                });
+            }
         });
         childrenWithTransitionIn = [];
         childrenWithTransitionOut = [];
@@ -251,7 +272,7 @@
 
         let transitionsInToRun: AnimationItem[] =
             childrenWithTransitionIn.filter(it => {
-                if (it.json.id && !wasIds.has(it.json.id)) {
+                if (it.parentComponentContext.id && !wasIds.has(it.parentComponentContext.id)) {
                     return true;
                 }
                 it.resolvePromise?.();
@@ -260,7 +281,7 @@
                 .map(it => getItemAnimation(rootBbox, it, 'in'));
 
         transitionsOutToRun = transitionsOutToRun.filter(it => {
-            if (it.json.id && !childrenIds.has(it.json.id)) {
+            if (it.id && !childrenIds.has(it.id)) {
                 return true;
             }
             it.resolvePromise?.();
@@ -285,17 +306,20 @@
                     height: { type: 'match_parent' },
                 };
 
+                const saved = transitionChangeBoxes.get(child.id) as ChildTransitionChangeData;
+
                 const res: ChangeBoundsItem = {
+                    id: child.parentComponentContext.id || '',
                     json: jsonCopy,
                     componentContextCopy: child.parentComponentContext.produceChildContext(jsonCopy, {
                         fake: true
                     }),
                     rootBbox,
-                    beforeBbox: transitionChangeBoxes.get(child.id) as DOMRect,
+                    beforeBbox: saved.rect,
                     afterBbox: child.node.getBoundingClientRect(),
                     node: child.node,
                     transition: componentContext.getJsonWithVars(
-                        getTransitionChange(child.transitions)
+                        getTransitionChange(saved.transitions)
                     ) as ChangeBoundsTransition,
                     resolvePromise: child.resolvePromise
                 };
@@ -365,12 +389,14 @@
         unregisterInstance(id: string) {
             childStateMap?.delete(id);
         },
+        // eslint-disable-next-line max-params
         runVisibilityTransition(
             json: DivBaseData,
             parentComponentContext: ComponentContext,
             transitions: AppearanceTransition,
             node: HTMLElement,
-            direction: 'in' | 'out'
+            direction: 'in' | 'out',
+            bbox: DOMRect | undefined
         ) {
             if (!animationRoot) {
                 return Promise.resolve();
@@ -383,7 +409,8 @@
                     json,
                     parentComponentContext,
                     transitions,
-                    node
+                    node,
+                    bbox
                 },
                 direction
             );
@@ -441,10 +468,10 @@
         registerChildWithTransitionChange(
             json: DivBaseData,
             parentComponentContext: ComponentContext,
-            transitions: TransitionChange,
+            transitions: TransitionChange | undefined,
             node: HTMLElement
         ) {
-            const id = json.id;
+            const id = parentComponentContext.id;
 
             if (!id) {
                 return Promise.resolve();
@@ -522,6 +549,10 @@
     }
 
     onDestroy(() => {
+        if (selectedComponentContext) {
+            selectedComponentContext.destroy();
+        }
+
         if (prevStateId) {
             stateCtx.unregisterInstance(prevStateId);
         }
@@ -579,4 +610,8 @@
             {/each}
         </div>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

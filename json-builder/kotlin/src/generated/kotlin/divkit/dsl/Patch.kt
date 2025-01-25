@@ -25,14 +25,14 @@ import kotlin.collections.Map
  * Required parameters: `changes`.
  */
 @Generated
-class Patch internal constructor(
+data class Patch internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Element changes.
          */
@@ -42,12 +42,22 @@ class Patch internal constructor(
          * Default value: `partial`.
          */
         val mode: Property<Mode>?,
+        /**
+         * Actions to perform after changes are applied.
+         */
+        val onAppliedActions: Property<List<Action>>?,
+        /**
+         * Actions to perform if there’s an error when applying changes in transaction mode.
+         */
+        val onFailedActions: Property<List<Action>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("changes", changes)
             result.tryPutProperty("mode", mode)
+            result.tryPutProperty("on_applied_actions", onAppliedActions)
+            result.tryPutProperty("on_failed_actions", onFailedActions)
             return result
         }
     }
@@ -66,7 +76,7 @@ class Patch internal constructor(
      * Required parameters: `id`.
      */
     @Generated
-    class Change internal constructor(
+    data class Change internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -80,7 +90,7 @@ class Patch internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * ID of an element to be replaced or removed.
              */
@@ -105,76 +115,106 @@ class Patch internal constructor(
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun DivScope.patch(
     `use named arguments`: Guard = Guard.instance,
     changes: List<Patch.Change>,
     mode: Patch.Mode? = null,
+    onAppliedActions: List<Action>? = null,
+    onFailedActions: List<Action>? = null,
 ): Patch = Patch(
     Patch.Properties(
         changes = valueOrNull(changes),
         mode = valueOrNull(mode),
+        onAppliedActions = valueOrNull(onAppliedActions),
+        onFailedActions = valueOrNull(onFailedActions),
     )
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun DivScope.patchProps(
     `use named arguments`: Guard = Guard.instance,
     changes: List<Patch.Change>? = null,
     mode: Patch.Mode? = null,
+    onAppliedActions: List<Action>? = null,
+    onFailedActions: List<Action>? = null,
 ) = Patch.Properties(
     changes = valueOrNull(changes),
     mode = valueOrNull(mode),
+    onAppliedActions = valueOrNull(onAppliedActions),
+    onFailedActions = valueOrNull(onFailedActions),
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun TemplateScope.patchRefs(
     `use named arguments`: Guard = Guard.instance,
     changes: ReferenceProperty<List<Patch.Change>>? = null,
     mode: ReferenceProperty<Patch.Mode>? = null,
+    onAppliedActions: ReferenceProperty<List<Action>>? = null,
+    onFailedActions: ReferenceProperty<List<Action>>? = null,
 ) = Patch.Properties(
     changes = changes,
     mode = mode,
+    onAppliedActions = onAppliedActions,
+    onFailedActions = onFailedActions,
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun Patch.override(
     `use named arguments`: Guard = Guard.instance,
     changes: List<Patch.Change>? = null,
     mode: Patch.Mode? = null,
+    onAppliedActions: List<Action>? = null,
+    onFailedActions: List<Action>? = null,
 ): Patch = Patch(
     Patch.Properties(
         changes = valueOrNull(changes) ?: properties.changes,
         mode = valueOrNull(mode) ?: properties.mode,
+        onAppliedActions = valueOrNull(onAppliedActions) ?: properties.onAppliedActions,
+        onFailedActions = valueOrNull(onFailedActions) ?: properties.onFailedActions,
     )
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun Patch.defer(
     `use named arguments`: Guard = Guard.instance,
     changes: ReferenceProperty<List<Patch.Change>>? = null,
     mode: ReferenceProperty<Patch.Mode>? = null,
+    onAppliedActions: ReferenceProperty<List<Action>>? = null,
+    onFailedActions: ReferenceProperty<List<Action>>? = null,
 ): Patch = Patch(
     Patch.Properties(
         changes = changes ?: properties.changes,
         mode = mode ?: properties.mode,
+        onAppliedActions = onAppliedActions ?: properties.onAppliedActions,
+        onFailedActions = onFailedActions ?: properties.onFailedActions,
     )
 )
 
@@ -189,6 +229,8 @@ fun Patch.evaluate(
     Patch.Properties(
         changes = properties.changes,
         mode = mode ?: properties.mode,
+        onAppliedActions = properties.onAppliedActions,
+        onFailedActions = properties.onFailedActions,
     )
 )
 

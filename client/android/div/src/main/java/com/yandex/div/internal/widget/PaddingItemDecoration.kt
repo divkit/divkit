@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.Px
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.internal.KAssert
@@ -32,7 +33,8 @@ internal class PaddingItemDecoration @JvmOverloads constructor(
 
         if (spanCount == 1) {
             val itemCount = parent.adapter?.itemCount ?: return
-            val position = parent.layoutManager?.getPosition(view) ?: return
+            val position = parent.getChildAdapterPosition(view)
+            if (position == NO_POSITION) return
 
             var isFirst = position == 0
             var isLast = position == itemCount - 1

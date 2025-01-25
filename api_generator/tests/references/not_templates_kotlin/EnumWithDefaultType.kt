@@ -1,22 +1,18 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 sealed class EnumWithDefaultType : JSONSerializable, Hashable {
     class WithDefaultCase(val value: WithDefault) : EnumWithDefaultType()
     class WithoutDefaultCase(val value: WithoutDefault) : EnumWithDefaultType()
@@ -48,6 +44,14 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
        return hash
     }
 
+    fun equals(other: EnumWithDefaultType?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return when(this) {
+            is WithDefaultCase -> this.value.equals(other.value() as? WithDefault, resolver, otherResolver)
+            is WithoutDefaultCase -> this.value.equals(other.value() as? WithoutDefault, resolver, otherResolver)
+        }
+    }
+
     fun value(): Any {
         return when (this) {
             is WithDefaultCase -> value
@@ -63,6 +67,7 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
     }
 
     companion object {
+
         @Throws(ParsingException::class)
         @JvmStatic
         @JvmName("fromJson")
@@ -75,6 +80,7 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
                 else -> throw typeMismatch(json = json, key = "type", value = type)
             }
         }
+
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EnumWithDefaultType(env, json = it) }
     }
 }

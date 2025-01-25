@@ -2,7 +2,7 @@
 
 # Generate phase
 cd ../../../api_generator/ || exit
-python3 -m api_generator -c ../client/flutter/divkit/generator_config.json -s ../schema -o ../client/flutter/divkit/lib/src/generated_sources
+python3 -m api_generator -c ../client/flutter/divkit/generator_config.json -s ../schema -o ../client/flutter/divkit/lib/src/schema
 
 # Formatting phase
 cd ../client/flutter/divkit || exit

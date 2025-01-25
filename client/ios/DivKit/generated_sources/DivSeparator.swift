@@ -40,6 +40,7 @@ public final class DivSeparator: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
@@ -48,6 +49,7 @@ public final class DivSeparator: DivBase {
   public let doubletapActions: [DivAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let layoutProvider: DivLayoutProvider?
@@ -63,6 +65,7 @@ public final class DivSeparator: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
@@ -117,6 +120,7 @@ public final class DivSeparator: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    animators: [DivAnimator]? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
@@ -125,6 +129,7 @@ public final class DivSeparator: DivBase {
     doubletapActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
+    functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     id: String? = nil,
     layoutProvider: DivLayoutProvider? = nil,
@@ -140,6 +145,7 @@ public final class DivSeparator: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variableTriggers: [DivTrigger]? = nil,
     variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
@@ -153,6 +159,7 @@ public final class DivSeparator: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -161,6 +168,7 @@ public final class DivSeparator: DivBase {
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.layoutProvider = layoutProvider
@@ -176,6 +184,7 @@ public final class DivSeparator: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
@@ -203,57 +212,64 @@ extension DivSeparator: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.animators == rhs.animators,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.delimiterStyle == rhs.delimiterStyle,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.delimiterStyle == rhs.delimiterStyle
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
+      lhs.focus == rhs.focus,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height
+    else {
+      return false
+    }
+    guard
       lhs.id == rhs.id,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
-      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.paddings == rhs.paddings,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectedActions == rhs.selectedActions,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
@@ -286,6 +302,7 @@ extension DivSeparator: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
@@ -294,6 +311,7 @@ extension DivSeparator: Serializable {
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["layout_provider"] = layoutProvider?.toDictionary()
@@ -309,6 +327,7 @@ extension DivSeparator: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()

@@ -69,6 +69,9 @@ fun divConfiguration(
         .enableComplexRebind(
             flagPreferenceProvider.getExperimentFlag(Experiment.COMPLEX_REBIND_ENABLED)
         )
+        .enablePermanentDebugPanel(
+            flagPreferenceProvider.getExperimentFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
+        )
         .tooltipRestrictor { _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))

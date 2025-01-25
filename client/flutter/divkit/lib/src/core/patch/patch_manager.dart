@@ -1,34 +1,35 @@
 import 'package:collection/collection.dart';
-import 'package:divkit/src/core/patch/patch.dart';
-import 'package:divkit/src/core/protocol/div_data_provider.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
-import 'package:divkit/src/core/protocol/div_patch.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart'
-    hide DivPatch;
+import 'package:divkit/divkit.dart';
 import 'package:equatable/equatable.dart';
 
 class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
-  final DivDataProvider dataProvider;
+  final DivRootContext divContext;
 
-  const DefaultDivPatchManager(this.dataProvider);
+  const DefaultDivPatchManager(this.divContext);
 
   @override
   Future<bool> applyPatch(DivPatchModel patch) async {
-    final current = dataProvider.value;
-    final states = <DivDataState>[];
-    for (final state in current.states) {
-      try {
-        final result = _update(state.div, patch, true);
-        if (result != null) {
-          states.add(state.copyWith(div: result));
+    final dataProvider = divContext.dataProvider;
+    if (dataProvider != null) {
+      final current = dataProvider.value;
+      final states = <DivDataState>[];
+      for (final state in current.states) {
+        try {
+          final result = _update(state.div, patch, true);
+          if (result != null) {
+            states.add(state.copyWith(div: result));
+          }
+        } catch (e, st) {
+          logger.error("[div-patch]", error: e, stackTrace: st);
+          return false;
         }
-      } catch (e, st) {
-        logger.error("[div-patch]", error: e, stackTrace: st);
-        return false;
       }
+      dataProvider.update(current.copyWith(states: states));
+      return true;
+    } else {
+      logger.warning("The dataProvider was not found!");
+      return false;
     }
-    dataProvider.update(current.copyWith(states: states));
-    return true;
   }
 
   /// Apply [patch] changes to single [div], throws Exception if try change to multiple items.
@@ -71,6 +72,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
       _updateSingle(
         div.maybeMap(
           divContainer: (v) => Div.divContainer(_updateContainer(v, patch)),
+          divCustom: (v) => Div.divCustom(_updateCustom(v, patch)),
           divGallery: (v) => Div.divGallery(_updateGallery(v, patch)),
           divGrid: (v) => Div.divGrid(_updateGrid(v, patch)),
           divPager: (v) => Div.divPager(_updatePager(v, patch)),
@@ -84,6 +86,16 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
 
   DivContainer _updateContainer(DivContainer div, DivPatchModel patch) =>
       div.copyWith(
+        items: () =>
+            div.items
+                ?.map((e) => _updateMultiple(e, patch))
+                .whereNotNull()
+                .expand((e) => e)
+                .toList() ??
+            [],
+      );
+
+  DivCustom _updateCustom(DivCustom div, DivPatchModel patch) => div.copyWith(
         items: () =>
             div.items
                 ?.map((e) => _updateMultiple(e, patch))
@@ -141,5 +153,5 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
       );
 
   @override
-  List<Object?> get props => [dataProvider.value];
+  List<Object?> get props => [divContext.dataProvider?.value];
 }

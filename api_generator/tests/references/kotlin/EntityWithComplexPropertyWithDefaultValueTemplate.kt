@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue> {
-    @JvmField final val property: Field<PropertyTemplate> // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
+    @JvmField val property: Field<PropertyTemplate>
 
-    constructor (
+    constructor(
+        property: Field<PropertyTemplate>,
+    ) {
+        this.property = property
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithComplexPropertyWithDefaultValueTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, Json
         property = JsonTemplateParser.readOptionalField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexPropertyWithDefaultValue {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexPropertyWithDefaultValue {
         return EntityWithComplexPropertyWithDefaultValue(
-            property = property.resolveOptionalTemplate(env = env, key = "property", data = rawData, reader = PROPERTY_READER) ?: PROPERTY_DEFAULT_VALUE
+            property = this.property.resolveOptionalTemplate(env = env, key = "property", data = data, reader = PROPERTY_READER) ?: PROPERTY_DEFAULT_VALUE
         )
     }
 
@@ -54,12 +56,16 @@ class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, Json
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-
-    @Mockable
     class PropertyTemplate : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue.Property> {
-        @JvmField final val value: Field<Expression<String>>
+        @JvmField val value: Field<Expression<String>>
 
-        constructor (
+        constructor(
+            value: Field<Expression<String>>,
+        ) {
+            this.value = value
+        }
+
+        constructor(
             env: ParsingEnvironment,
             parent: PropertyTemplate? = null,
             topLevel: Boolean = false,
@@ -69,9 +75,9 @@ class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, Json
             value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, logger, env, TYPE_HELPER_STRING)
         }
 
-        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexPropertyWithDefaultValue.Property {
+        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexPropertyWithDefaultValue.Property {
             return EntityWithComplexPropertyWithDefaultValue.Property(
-                value = value.resolve(env = env, key = "value", data = rawData, reader = VALUE_READER)
+                value = this.value.resolve(env = env, key = "value", data = data, reader = VALUE_READER)
             )
         }
 
@@ -86,6 +92,5 @@ class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, Json
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> PropertyTemplate(env, json = it) }
         }
-
     }
 }

@@ -9,7 +9,6 @@ import com.yandex.div.view.scrollTo
 import com.yandex.div.view.swipeLeft
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
-import ru.tinkoff.allure.step as allureStep
 
 internal fun gallery(f: DivGallerySteps.() -> Unit) = f(DivGallerySteps())
 
@@ -18,7 +17,7 @@ class DivGallerySteps: DivTestAssetSteps() {
 
     private val gallery = onView(isAssignableFrom(RecyclerView::class.java))
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = step("Build container") {
         buildContainer(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 

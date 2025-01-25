@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, neighbour_page_width`.
  */
 @Generated
-class NeighbourPageSize internal constructor(
+data class NeighbourPageSize internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : PagerLayoutMode {
@@ -40,7 +40,7 @@ class NeighbourPageSize internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Width of the visible part of a neighbouring page.
          */

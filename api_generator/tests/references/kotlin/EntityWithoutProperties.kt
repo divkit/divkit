@@ -1,22 +1,18 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithoutProperties() : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -30,13 +26,17 @@ class EntityWithoutProperties() : JSONSerializable, Hashable {
         return hash
     }
 
+    fun equals(other: EntityWithoutProperties?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        return other != null
+    }
+
+    fun copy() = EntityWithoutProperties()
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy() = EntityWithoutProperties()
 
     companion object {
         const val TYPE = "entity_without_properties"
@@ -51,5 +51,4 @@ class EntityWithoutProperties() : JSONSerializable, Hashable {
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithoutProperties(env, json = it) }
     }
-
 }

@@ -1,5 +1,4 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/visibility/models/visibility_action.dart';
+import 'package:divkit/divkit.dart';
 
 abstract class DivVisibilityActionManager {
   /// Start tracking the execution of a new visibility action or update [divAction] of the old one

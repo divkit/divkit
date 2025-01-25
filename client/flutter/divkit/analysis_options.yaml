@@ -2,13 +2,12 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - lib/src/generated_sources/**
     - test/**
 
 linter:
   rules:
     - always_declare_return_types
     - always_use_package_imports
-    - prefer_expression_function_bodies
     - require_trailing_commas
     - prefer_const_constructors
+    - directives_ordering

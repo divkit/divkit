@@ -18,10 +18,9 @@
     import type { DivImageData, TintMode } from '../../types/image';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
     import type { ComponentContext } from '../../types/componentContext';
-    import Outer from '../utilities/Outer.svelte';
     import { makeStyle } from '../../utils/makeStyle';
     import { genClassName } from '../../utils/genClassName';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { imageSize } from '../../utils/background';
     import { correctImagePosition } from '../../utils/correctImagePosition';
@@ -32,6 +31,8 @@
     import { correctTintMode } from '../../utils/correctTintMode';
     import { getCssFilter } from '../../utils/filters';
     import { prepareBase64 } from '../../utils/prepareBase64';
+    import Outer from '../utilities/Outer.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivImageData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -237,8 +238,6 @@
     onDestroy(() => {
         rootCtx.removeSvgFilter(tintColor, tintMode);
     });
-
-    // Recreate image on svg filter change for the Safari
 </script>
 
 {#if !hasError}
@@ -248,6 +247,7 @@
         {layoutParams}
         customDescription={true}
     >
+        <!-- Safari does not redraw images when changing the svg filter, a complete reconstruction of the DOM is required -->
         {#key svgFilterId}
             {#if mods.aspect}
                 <span class={css['image__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
@@ -280,4 +280,8 @@
             {/if}
         {/key}
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

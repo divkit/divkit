@@ -12,6 +12,8 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.graphics.withSave
@@ -19,13 +21,17 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
+import com.yandex.div.core.expression.local.ChildPathUnitCache
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -35,6 +41,7 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.reuse.InputFocusTracker
+import com.yandex.div.core.view2.spannable.TextVerticalAlignment
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
@@ -52,6 +59,7 @@ import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
@@ -87,7 +95,9 @@ import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
+import com.yandex.div2.DivState
 import com.yandex.div2.DivStroke
+import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
@@ -500,6 +510,16 @@ internal fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.Alignme
     }
 }
 
+internal fun DivTextAlignmentVertical.toTextVerticalAlignment(): TextVerticalAlignment {
+    return when (this) {
+        DivTextAlignmentVertical.TOP -> TextVerticalAlignment.TOP
+        DivTextAlignmentVertical.CENTER -> TextVerticalAlignment.CENTER
+        DivTextAlignmentVertical.BASELINE -> TextVerticalAlignment.BASELINE
+        DivTextAlignmentVertical.BOTTOM -> TextVerticalAlignment.BOTTOM
+        else -> TextVerticalAlignment.BASELINE
+    }
+}
+
 internal fun DivBlendMode.toPorterDuffMode(): PorterDuff.Mode {
     return when (this) {
         DivBlendMode.SOURCE_IN -> PorterDuff.Mode.SRC_IN
@@ -598,6 +618,36 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
     applyHeight(div, resolver)
     applyAlignment(div.alignmentHorizontal?.evaluate(resolver),
         div.alignmentVertical?.evaluate(resolver))
+}
+
+internal fun getRuntimeFor(runtimeStore: RuntimeStore?, resolver: ExpressionResolver) =
+    runtimeStore?.getRuntimeWithOrNull(resolver)
+
+internal fun resolveRuntime(
+    runtimeStore: RuntimeStore?,
+    div: DivBase,
+    path: String,
+    resolver: ExpressionResolver,
+    parentResolver: ExpressionResolver,
+) = runtimeStore?.resolveRuntimeWith(
+    path = path,
+    variables = div.variables?.toVariables(),
+    triggers = div.variableTriggers,
+    functions = div.functions,
+    resolver = resolver,
+    parentResolver = parentResolver,
+)
+
+internal fun DivBase.getChildPathUnit(index: Int) = id ?: ChildPathUnitCache.getValue(index)
+
+internal fun DivBase.resolvePath(index: Int, parentPath: DivStatePath): DivStatePath {
+    return if (this is DivState) parentPath
+    else parentPath.appendDiv(getChildPathUnit(index))
+}
+
+internal fun DivBase.resolvePath(pathUnit: String, parentPath: DivStatePath): DivStatePath {
+    return if (this is DivState) parentPath
+    else parentPath.appendDiv(pathUnit)
 }
 
 /**
@@ -708,13 +758,15 @@ internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Floa
 internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
     children
         .filter { it.visibility == View.VISIBLE }
-        .forEach { child ->
-            canvas.withSave {
-                translate(child.x, child.y)
-                rotate(child.rotation, child.pivotX, child.pivotY)
-                (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
-            }
-        }
+        .forEach { child -> child.drawShadow(canvas) }
+}
+
+internal fun View.drawShadow(canvas: Canvas) {
+    canvas.withSave {
+        translate(x, y)
+        rotate(rotation, pivotX, pivotY)
+        (this@drawShadow as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
+    }
 }
 
 internal fun View.extractParentContentAlignmentVertical(
@@ -910,5 +962,50 @@ internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: Expres
     val itemResolver = builder.getItemResolver(resolver)
     builder.prototypes.forEach {
         it.selector.observe(itemResolver, callback)
+    }
+}
+
+internal fun View.gainAccessibilityFocus() {
+    performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
+    sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED)
+}
+
+internal fun sendAccessibilityEventUnchecked(
+    event: Int,
+    view: View?,
+    accessibilityStateProvider: AccessibilityStateProvider
+) {
+    view ?: return
+    if (accessibilityStateProvider.isAccessibilityEnabled(view.context)) {
+        view.sendAccessibilityEventUnchecked(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) AccessibilityEvent(event)
+            else AccessibilityEvent.obtain(event)
+        )
+    }
+}
+
+internal fun <T> T.bindClipChildren(
+    newClipToBounds: Expression<Boolean>,
+    oldClipToBounds: Expression<Boolean>?,
+    resolver: ExpressionResolver
+) where T : ViewGroup, T : DivHolderView<*> {
+    if (newClipToBounds.equalsToConstant(oldClipToBounds)) {
+        return
+    }
+
+    applyClipChildren(newClipToBounds.evaluate(resolver))
+
+    if (newClipToBounds.isConstant()) {
+        return
+    }
+
+    addSubscription(newClipToBounds.observe(resolver) { clip -> applyClipChildren(clip) })
+}
+
+internal fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
+    needClipping = clip
+    val parent = parent
+    if (parent is ViewGroup) {
+        parent.clipChildren = clip
     }
 }

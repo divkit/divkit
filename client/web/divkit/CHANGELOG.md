@@ -1,3 +1,101 @@
+## 30.29.0 (December 2, 2024)
+
+* Added support for local `functions` in all components.
+* Added support for the `item_builder` in the `pager` component.
+* Added support for the `switch` component.
+* Fixed an issue with the `pager` scrolling to an item in some situations.
+* Fixed an issue with the layout of nested `pager`s.
+
+
+## 30.28.0 (November 25, 2024)
+
+* Added support for the `default_item` property in `pager`.
+* Added support for the `enter_key_actions` property in the `input` component.
+* Added support for the `validators` property in `input` component.
+* Added support for the property `enter_key_type` in `input`.
+* Added support of variable `animators`.
+* Changed the size logic of the `match_parent` tooltips to calculate the size of the window instead of the parent element (to align with the logic of Android).
+* Fixed a bug with tracking changes to objects in methods. Also fixed an issue with `walk` api.
+* Fixed a rare markup issue with the `tab_title_delimiter` in `tabs` component.
+* In the `video` component, `aspect` is now more important than `height`.
+* Removed unintended support for numeric values (without expressions) inside the `text` property for the `text` component. This is done to align behavior across platforms.
+
+
+## 30.26.0 (November 11, 2024)
+
+* Incorrect caching of method calls has been fixed.
+
+
+## 30.25.0 (November 4, 2024)
+
+* Added `direction` property into extension context.
+* Added `isEmpty` method for the arrays.
+* Added `scope_id` action property support.
+* Fixed a bug with handling incorrect values of `border` -> `has_shadow`.
+* Fixed a bug with incorrect handling of visibility actions that were targeted at local variables.
+* Fixed several `pager` layout issues.
+* The `lottie` extension now uses the `scale`, `aspect`, `content_alignment_horizontal` and `content_alignment_vertical` properties from the original component.
+
+
+## 30.24.0 (October 28, 2024)
+
+* Added support for a `cloud` background for `range` in `text`.
+* Added support for the `tab_title_delimiter` property in the `tabs` component.
+* Fixed incorrect size of `corner_radius` and `width` of `stroke` in `range` for `text`.
+* Fixed margins of child elements with `visibility` `gone` inside `gallery`.
+* `variable_triggers` defined locally are now attached only when they are within an active `tabs` item.
+
+
+## 30.22.0 (October 14, 2024)
+
+* Added local `variable_triggers` property support.
+* Added support for `0` / `1` values in the `set_stored_value` action with the `boolean` type.
+* Added support for the `alignment_vertical` in `text`. Please note that the location of the images may change slightly.
+* Fixed an issue with calling custom action inside `variable_triggers`.
+* Fixed minor memory leaks.
+* Properties `start` and `end` of `div-text.range` are optional now.
+
+
+## 30.21.0 (October 7, 2024)
+
+* Supported `id` property for the prototypes in the `item_builder`.
+
+
+## 30.20.0 (October 01, 2024)
+
+* Added support for the `on_applied_actions` and `on_failed_actions` inside `patch`.
+* Added support for the `autocapitalization` property in the `input` fields.
+* Added `encodeRegex` function.
+* Added `isEmpty()` method to dict.
+* Changed behavior in case when all children in container with `wrap_content` size along the cross axis for horizontal and vertical orientation (with `layout_mode` `no_wrap`) or any axis for overlap orientation have `match_parent` size. Now container's size becomes equal to the biggest child's size (as earlier) and other children take the same size (instead of their content's size before).
+
+
+## 30.19.0 (September 23, 2024)
+
+* Added local `variables` support.
+* Fixed the behavior of `toNumber('')` to return an error.
+* Added `layout_provider` property support.
+* Fixed the `transition_out` animation when `visibility` became `gone`.
+* Fixed an issue with the `max_length` of `input` with the `keyboard_type` equal to `number`.
+* Fixed the first call of `variable_triggers` before full initialization of child components.
+* Fixed an issue with incorrect `corners_radius`.
+* Fixed an issue with incorrect `variable_triggers`.
+
+
+## 30.14.0 (August 19, 2024)
+
+* Added `markdownExtensionBuilder` function, which accepts the markdown processing function and produces a `markdown` extension.
+* Added `getComponentProperty` extension API.
+
+
+## 30.13.0 (August 12, 2024)
+
+* Updated the layout of the `grid`, in which elements are superimposed on each other to match the behavior of Android.
+* The logic of `transition_change` has been brought into line with other platforms: with this change, there is no need to contain the `transition_change` property in the final state. In addition, parameters from the previous state will be used, not from the new one.
+* Fixed the `auto_ellipsize` property in the presence of `max_lines` for the `text` component.
+* Performance optimizations.
+
+
 ## 30.9.0 (July 15, 2024)
 
 * Performance optimizations.

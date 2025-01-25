@@ -1,5 +1,4 @@
 {
-  "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_gallery",
   "codegen": {
     "swift": {
@@ -20,7 +19,6 @@
         },
         "cross_content_alignment": {
           "$description": "translations.json#/div_gallery_cross_content_alignment",
-          "version": "2.1",
           "type": "string",
           "enum": [
             "start",
@@ -77,6 +75,7 @@
           "$ref": "div-collection-item-builder.json",
           "$description": "translations.json#/div_collection_item_builder",
           "platforms": [
+            "android",
             "ios"
           ]
         },

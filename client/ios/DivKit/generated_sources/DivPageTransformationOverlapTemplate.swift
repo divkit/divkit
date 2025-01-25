@@ -45,12 +45,12 @@ public final class DivPageTransformationOverlapTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPageTransformationOverlapTemplate?) -> DeserializationResult<DivPageTransformationOverlap> {
-    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
-    let nextPageAlphaValue = parent?.nextPageAlpha?.resolveOptionalValue(context: context, validator: ResolvedValue.nextPageAlphaValidator) ?? .noValue
-    let nextPageScaleValue = parent?.nextPageScale?.resolveOptionalValue(context: context, validator: ResolvedValue.nextPageScaleValidator) ?? .noValue
-    let previousPageAlphaValue = parent?.previousPageAlpha?.resolveOptionalValue(context: context, validator: ResolvedValue.previousPageAlphaValidator) ?? .noValue
-    let previousPageScaleValue = parent?.previousPageScale?.resolveOptionalValue(context: context, validator: ResolvedValue.previousPageScaleValidator) ?? .noValue
-    let reversedStackingOrderValue = parent?.reversedStackingOrder?.resolveOptionalValue(context: context) ?? .noValue
+    let interpolatorValue = { parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue }()
+    let nextPageAlphaValue = { parent?.nextPageAlpha?.resolveOptionalValue(context: context, validator: ResolvedValue.nextPageAlphaValidator) ?? .noValue }()
+    let nextPageScaleValue = { parent?.nextPageScale?.resolveOptionalValue(context: context, validator: ResolvedValue.nextPageScaleValidator) ?? .noValue }()
+    let previousPageAlphaValue = { parent?.previousPageAlpha?.resolveOptionalValue(context: context, validator: ResolvedValue.previousPageAlphaValidator) ?? .noValue }()
+    let previousPageScaleValue = { parent?.previousPageScale?.resolveOptionalValue(context: context, validator: ResolvedValue.previousPageScaleValidator) ?? .noValue }()
+    let reversedStackingOrderValue = { parent?.reversedStackingOrder?.resolveOptionalValue(context: context) ?? .noValue }()
     let errors = mergeErrors(
       interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "interpolator", error: $0) },
       nextPageAlphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "next_page_alpha", error: $0) },
@@ -60,12 +60,12 @@ public final class DivPageTransformationOverlapTemplate: TemplateValue {
       reversedStackingOrderValue.errorsOrWarnings?.map { .nestedObjectError(field: "reversed_stacking_order", error: $0) }
     )
     let result = DivPageTransformationOverlap(
-      interpolator: interpolatorValue.value,
-      nextPageAlpha: nextPageAlphaValue.value,
-      nextPageScale: nextPageScaleValue.value,
-      previousPageAlpha: previousPageAlphaValue.value,
-      previousPageScale: previousPageScaleValue.value,
-      reversedStackingOrder: reversedStackingOrderValue.value
+      interpolator: { interpolatorValue.value }(),
+      nextPageAlpha: { nextPageAlphaValue.value }(),
+      nextPageScale: { nextPageScaleValue.value }(),
+      previousPageAlpha: { previousPageAlphaValue.value }(),
+      previousPageScale: { previousPageScaleValue.value }(),
+      reversedStackingOrder: { reversedStackingOrderValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -74,41 +74,79 @@ public final class DivPageTransformationOverlapTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = parent?.interpolator?.value() ?? .noValue
-    var nextPageAlphaValue: DeserializationResult<Expression<Double>> = parent?.nextPageAlpha?.value() ?? .noValue
-    var nextPageScaleValue: DeserializationResult<Expression<Double>> = parent?.nextPageScale?.value() ?? .noValue
-    var previousPageAlphaValue: DeserializationResult<Expression<Double>> = parent?.previousPageAlpha?.value() ?? .noValue
-    var previousPageScaleValue: DeserializationResult<Expression<Double>> = parent?.previousPageScale?.value() ?? .noValue
-    var reversedStackingOrderValue: DeserializationResult<Expression<Bool>> = parent?.reversedStackingOrder?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "interpolator":
-        interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
-      case "next_page_alpha":
-        nextPageAlphaValue = deserialize(__dictValue, validator: ResolvedValue.nextPageAlphaValidator).merged(with: nextPageAlphaValue)
-      case "next_page_scale":
-        nextPageScaleValue = deserialize(__dictValue, validator: ResolvedValue.nextPageScaleValidator).merged(with: nextPageScaleValue)
-      case "previous_page_alpha":
-        previousPageAlphaValue = deserialize(__dictValue, validator: ResolvedValue.previousPageAlphaValidator).merged(with: previousPageAlphaValue)
-      case "previous_page_scale":
-        previousPageScaleValue = deserialize(__dictValue, validator: ResolvedValue.previousPageScaleValidator).merged(with: previousPageScaleValue)
-      case "reversed_stacking_order":
-        reversedStackingOrderValue = deserialize(__dictValue).merged(with: reversedStackingOrderValue)
-      case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
-      case parent?.nextPageAlpha?.link:
-        nextPageAlphaValue = nextPageAlphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nextPageAlphaValidator) })
-      case parent?.nextPageScale?.link:
-        nextPageScaleValue = nextPageScaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nextPageScaleValidator) })
-      case parent?.previousPageAlpha?.link:
-        previousPageAlphaValue = previousPageAlphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.previousPageAlphaValidator) })
-      case parent?.previousPageScale?.link:
-        previousPageScaleValue = previousPageScaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.previousPageScaleValidator) })
-      case parent?.reversedStackingOrder?.link:
-        reversedStackingOrderValue = reversedStackingOrderValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = { parent?.interpolator?.value() ?? .noValue }()
+    var nextPageAlphaValue: DeserializationResult<Expression<Double>> = { parent?.nextPageAlpha?.value() ?? .noValue }()
+    var nextPageScaleValue: DeserializationResult<Expression<Double>> = { parent?.nextPageScale?.value() ?? .noValue }()
+    var previousPageAlphaValue: DeserializationResult<Expression<Double>> = { parent?.previousPageAlpha?.value() ?? .noValue }()
+    var previousPageScaleValue: DeserializationResult<Expression<Double>> = { parent?.previousPageScale?.value() ?? .noValue }()
+    var reversedStackingOrderValue: DeserializationResult<Expression<Bool>> = { parent?.reversedStackingOrder?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "interpolator" {
+           interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
+          }
+        }()
+        _ = {
+          if key == "next_page_alpha" {
+           nextPageAlphaValue = deserialize(__dictValue, validator: ResolvedValue.nextPageAlphaValidator).merged(with: nextPageAlphaValue)
+          }
+        }()
+        _ = {
+          if key == "next_page_scale" {
+           nextPageScaleValue = deserialize(__dictValue, validator: ResolvedValue.nextPageScaleValidator).merged(with: nextPageScaleValue)
+          }
+        }()
+        _ = {
+          if key == "previous_page_alpha" {
+           previousPageAlphaValue = deserialize(__dictValue, validator: ResolvedValue.previousPageAlphaValidator).merged(with: previousPageAlphaValue)
+          }
+        }()
+        _ = {
+          if key == "previous_page_scale" {
+           previousPageScaleValue = deserialize(__dictValue, validator: ResolvedValue.previousPageScaleValidator).merged(with: previousPageScaleValue)
+          }
+        }()
+        _ = {
+          if key == "reversed_stacking_order" {
+           reversedStackingOrderValue = deserialize(__dictValue).merged(with: reversedStackingOrderValue)
+          }
+        }()
+        _ = {
+         if key == parent?.interpolator?.link {
+           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.nextPageAlpha?.link {
+           nextPageAlphaValue = nextPageAlphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nextPageAlphaValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.nextPageScale?.link {
+           nextPageScaleValue = nextPageScaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nextPageScaleValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.previousPageAlpha?.link {
+           previousPageAlphaValue = previousPageAlphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.previousPageAlphaValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.previousPageScale?.link {
+           previousPageScaleValue = previousPageScaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.previousPageScaleValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.reversedStackingOrder?.link {
+           reversedStackingOrderValue = reversedStackingOrderValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "interpolator", error: $0) },
       nextPageAlphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "next_page_alpha", error: $0) },
@@ -118,12 +156,12 @@ public final class DivPageTransformationOverlapTemplate: TemplateValue {
       reversedStackingOrderValue.errorsOrWarnings?.map { .nestedObjectError(field: "reversed_stacking_order", error: $0) }
     )
     let result = DivPageTransformationOverlap(
-      interpolator: interpolatorValue.value,
-      nextPageAlpha: nextPageAlphaValue.value,
-      nextPageScale: nextPageScaleValue.value,
-      previousPageAlpha: previousPageAlphaValue.value,
-      previousPageScale: previousPageScaleValue.value,
-      reversedStackingOrder: reversedStackingOrderValue.value
+      interpolator: { interpolatorValue.value }(),
+      nextPageAlpha: { nextPageAlphaValue.value }(),
+      nextPageScale: { nextPageScaleValue.value }(),
+      previousPageAlpha: { previousPageAlphaValue.value }(),
+      previousPageScale: { previousPageScaleValue.value }(),
+      reversedStackingOrder: { reversedStackingOrderValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

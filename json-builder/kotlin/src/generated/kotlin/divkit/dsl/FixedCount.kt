@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class FixedCount internal constructor(
+data class FixedCount internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Count {
@@ -40,7 +40,7 @@ class FixedCount internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Number of repetitions.
          */

@@ -16,7 +16,6 @@ import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.junit.Assert
-import ru.tinkoff.allure.step as allureStep
 
 internal fun testClicks(f: ClickHandlingTestSteps.() -> Unit) = f(ClickHandlingTestSteps())
 
@@ -26,7 +25,7 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
         testAsset = "regression_test_data/button_actions.json"
     }
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = step("Build container") {
         buildContainer(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -34,22 +33,22 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
     }
 
     fun click(text: String): Unit =
-        allureStep("Click on view with text='$text'") {
+        step("Click on view with text='$text'") {
             findView(text).perform(click())
         }
 
     fun clickOnImage(): Unit =
-        allureStep("Click on image") {
+        step("Click on image") {
             onView(isAssignableFrom(AppCompatImageView::class.java)).perform(click())
         }
 
     fun doubleClick(text: String): Unit =
-        allureStep("Double click on view with text='$text'") {
+        step("Double click on view with text='$text'") {
             findView(text).perform(doubleClick())
         }
 
     fun longClick(text: String): Unit =
-        allureStep("Long click on view with text='$text'") {
+        step("Long click on view with text='$text'") {
             findView(text).perform(longClick())
         }
 

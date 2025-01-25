@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
-class Tabs internal constructor(
+data class Tabs internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -40,6 +40,7 @@ class Tabs internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
@@ -47,6 +48,7 @@ class Tabs internal constructor(
             dynamicHeight = additive.dynamicHeight ?: properties.dynamicHeight,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             hasSeparator = additive.hasSeparator ?: properties.hasSeparator,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
@@ -71,6 +73,7 @@ class Tabs internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -79,7 +82,7 @@ class Tabs internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -97,6 +100,10 @@ class Tabs internal constructor(
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Element background. It can contain multiple layers.
          */
@@ -127,6 +134,10 @@ class Tabs internal constructor(
          */
         val focus: Property<Focus>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * A separating line between tabs and contents.
          * Default value: `false`.
          */
@@ -145,7 +156,7 @@ class Tabs internal constructor(
          */
         val items: Property<List<Item>>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -162,7 +173,7 @@ class Tabs internal constructor(
          */
         val restrictParentScroll: Property<Boolean>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -194,7 +205,7 @@ class Tabs internal constructor(
          */
         val switchTabsByContentSwipeEnabled: Property<Boolean>?,
         /**
-         * Style of delimiters between tab titles.
+         * Design style of separators between tab titles.
          */
         val tabTitleDelimiter: Property<TabTitleDelimiter>?,
         /**
@@ -231,7 +242,11 @@ class Tabs internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -260,6 +275,7 @@ class Tabs internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
@@ -267,6 +283,7 @@ class Tabs internal constructor(
             result.tryPutProperty("dynamic_height", dynamicHeight)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("has_separator", hasSeparator)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
@@ -291,6 +308,7 @@ class Tabs internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -308,7 +326,7 @@ class Tabs internal constructor(
      * Required parameters: `title, div`.
      */
     @Generated
-    class Item internal constructor(
+    data class Item internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -323,7 +341,7 @@ class Tabs internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Tab contents.
              */
@@ -350,14 +368,14 @@ class Tabs internal constructor(
 
 
     /**
-     * Style of delimiters between tab titles.
+     * Design style of separators between tab titles.
      * 
      * Can be created using the method [tabsTabTitleDelimiter].
      * 
      * Required parameters: `image_url`.
      */
     @Generated
-    class TabTitleDelimiter internal constructor(
+    data class TabTitleDelimiter internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -372,7 +390,7 @@ class Tabs internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
              * Default value: `{"type": "fixed", "value": 12}`.
@@ -406,7 +424,7 @@ class Tabs internal constructor(
      * Can be created using the method [tabsTabTitleStyle].
      */
     @Generated
-    class TabTitleStyle internal constructor(
+    data class TabTitleStyle internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -436,7 +454,7 @@ class Tabs internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Background color of the active tab title.
              * Default value: `#FFFFDC60`.
@@ -563,6 +581,7 @@ class Tabs internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -570,22 +589,23 @@ class Tabs internal constructor(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param hasSeparator A separating line between tabs and contents.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
- * @param tabTitleDelimiter Style of delimiters between tab titles.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -594,7 +614,8 @@ class Tabs internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -607,6 +628,7 @@ fun DivScope.tabs(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -614,6 +636,7 @@ fun DivScope.tabs(
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     hasSeparator: Boolean? = null,
     height: Size? = null,
     id: String? = null,
@@ -638,6 +661,7 @@ fun DivScope.tabs(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -649,6 +673,7 @@ fun DivScope.tabs(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
@@ -656,6 +681,7 @@ fun DivScope.tabs(
         dynamicHeight = valueOrNull(dynamicHeight),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         hasSeparator = valueOrNull(hasSeparator),
         height = valueOrNull(height),
         id = valueOrNull(id),
@@ -680,6 +706,7 @@ fun DivScope.tabs(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -693,6 +720,7 @@ fun DivScope.tabs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -700,22 +728,23 @@ fun DivScope.tabs(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param hasSeparator A separating line between tabs and contents.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
- * @param tabTitleDelimiter Style of delimiters between tab titles.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -724,7 +753,8 @@ fun DivScope.tabs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -737,6 +767,7 @@ fun DivScope.tabsProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -744,6 +775,7 @@ fun DivScope.tabsProps(
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     hasSeparator: Boolean? = null,
     height: Size? = null,
     id: String? = null,
@@ -768,6 +800,7 @@ fun DivScope.tabsProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -778,6 +811,7 @@ fun DivScope.tabsProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
@@ -785,6 +819,7 @@ fun DivScope.tabsProps(
     dynamicHeight = valueOrNull(dynamicHeight),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     hasSeparator = valueOrNull(hasSeparator),
     height = valueOrNull(height),
     id = valueOrNull(id),
@@ -809,6 +844,7 @@ fun DivScope.tabsProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -821,6 +857,7 @@ fun DivScope.tabsProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -828,22 +865,23 @@ fun DivScope.tabsProps(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param hasSeparator A separating line between tabs and contents.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
- * @param tabTitleDelimiter Style of delimiters between tab titles.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -852,7 +890,8 @@ fun DivScope.tabsProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -865,6 +904,7 @@ fun TemplateScope.tabsRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -872,6 +912,7 @@ fun TemplateScope.tabsRefs(
     dynamicHeight: ReferenceProperty<Boolean>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     hasSeparator: ReferenceProperty<Boolean>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
@@ -896,6 +937,7 @@ fun TemplateScope.tabsRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -906,6 +948,7 @@ fun TemplateScope.tabsRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     background = background,
     border = border,
     columnSpan = columnSpan,
@@ -913,6 +956,7 @@ fun TemplateScope.tabsRefs(
     dynamicHeight = dynamicHeight,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     hasSeparator = hasSeparator,
     height = height,
     id = id,
@@ -937,6 +981,7 @@ fun TemplateScope.tabsRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -949,6 +994,7 @@ fun TemplateScope.tabsRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -956,22 +1002,23 @@ fun TemplateScope.tabsRefs(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param hasSeparator A separating line between tabs and contents.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
- * @param tabTitleDelimiter Style of delimiters between tab titles.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -980,7 +1027,8 @@ fun TemplateScope.tabsRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -993,6 +1041,7 @@ fun Tabs.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -1000,6 +1049,7 @@ fun Tabs.override(
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     hasSeparator: Boolean? = null,
     height: Size? = null,
     id: String? = null,
@@ -1024,6 +1074,7 @@ fun Tabs.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1035,6 +1086,7 @@ fun Tabs.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
@@ -1042,6 +1094,7 @@ fun Tabs.override(
         dynamicHeight = valueOrNull(dynamicHeight) ?: properties.dynamicHeight,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         hasSeparator = valueOrNull(hasSeparator) ?: properties.hasSeparator,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
@@ -1066,6 +1119,7 @@ fun Tabs.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -1079,6 +1133,7 @@ fun Tabs.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1086,22 +1141,23 @@ fun Tabs.override(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param hasSeparator A separating line between tabs and contents.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
- * @param tabTitleDelimiter Style of delimiters between tab titles.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1110,7 +1166,8 @@ fun Tabs.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1123,6 +1180,7 @@ fun Tabs.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -1130,6 +1188,7 @@ fun Tabs.defer(
     dynamicHeight: ReferenceProperty<Boolean>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     hasSeparator: ReferenceProperty<Boolean>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
@@ -1154,6 +1213,7 @@ fun Tabs.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1165,6 +1225,7 @@ fun Tabs.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
@@ -1172,6 +1233,7 @@ fun Tabs.defer(
         dynamicHeight = dynamicHeight ?: properties.dynamicHeight,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         hasSeparator = hasSeparator ?: properties.hasSeparator,
         height = height ?: properties.height,
         id = id ?: properties.id,
@@ -1196,6 +1258,7 @@ fun Tabs.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1212,7 +1275,7 @@ fun Tabs.defer(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
@@ -1241,6 +1304,7 @@ fun Tabs.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
@@ -1248,6 +1312,7 @@ fun Tabs.evaluate(
         dynamicHeight = dynamicHeight ?: properties.dynamicHeight,
         extensions = properties.extensions,
         focus = properties.focus,
+        functions = properties.functions,
         hasSeparator = hasSeparator ?: properties.hasSeparator,
         height = properties.height,
         id = properties.id,
@@ -1272,6 +1337,7 @@ fun Tabs.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1285,6 +1351,7 @@ fun Tabs.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1292,22 +1359,23 @@ fun Tabs.evaluate(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param hasSeparator A separating line between tabs and contents.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
- * @param tabTitleDelimiter Style of delimiters between tab titles.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1316,7 +1384,8 @@ fun Tabs.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1329,6 +1398,7 @@ fun Component<Tabs>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -1336,6 +1406,7 @@ fun Component<Tabs>.override(
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     hasSeparator: Boolean? = null,
     height: Size? = null,
     id: String? = null,
@@ -1360,6 +1431,7 @@ fun Component<Tabs>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1372,6 +1444,7 @@ fun Component<Tabs>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
@@ -1379,6 +1452,7 @@ fun Component<Tabs>.override(
         dynamicHeight = valueOrNull(dynamicHeight),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         hasSeparator = valueOrNull(hasSeparator),
         height = valueOrNull(height),
         id = valueOrNull(id),
@@ -1403,6 +1477,7 @@ fun Component<Tabs>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1416,6 +1491,7 @@ fun Component<Tabs>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1423,22 +1499,23 @@ fun Component<Tabs>.override(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param hasSeparator A separating line between tabs and contents.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
- * @param tabTitleDelimiter Style of delimiters between tab titles.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1447,7 +1524,8 @@ fun Component<Tabs>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1460,6 +1538,7 @@ fun Component<Tabs>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -1467,6 +1546,7 @@ fun Component<Tabs>.defer(
     dynamicHeight: ReferenceProperty<Boolean>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     hasSeparator: ReferenceProperty<Boolean>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
@@ -1491,6 +1571,7 @@ fun Component<Tabs>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1503,6 +1584,7 @@ fun Component<Tabs>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         background = background,
         border = border,
         columnSpan = columnSpan,
@@ -1510,6 +1592,7 @@ fun Component<Tabs>.defer(
         dynamicHeight = dynamicHeight,
         extensions = extensions,
         focus = focus,
+        functions = functions,
         hasSeparator = hasSeparator,
         height = height,
         id = id,
@@ -1534,6 +1617,7 @@ fun Component<Tabs>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1550,7 +1634,7 @@ fun Component<Tabs>.defer(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
@@ -1580,6 +1664,7 @@ fun Component<Tabs>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         background = null,
         border = null,
         columnSpan = columnSpan,
@@ -1587,6 +1672,7 @@ fun Component<Tabs>.evaluate(
         dynamicHeight = dynamicHeight,
         extensions = null,
         focus = null,
+        functions = null,
         hasSeparator = hasSeparator,
         height = null,
         id = null,
@@ -1611,6 +1697,7 @@ fun Component<Tabs>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,

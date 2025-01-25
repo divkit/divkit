@@ -1,12 +1,24 @@
 import 'package:divkit/divkit.dart';
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/core/patch/patch_manager.dart';
 import 'package:divkit/src/core/data/data_provider.dart';
+import 'package:divkit/src/core/patch/patch_manager.dart';
+import 'package:divkit/src/core/variable/variable_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() {
+Future<DivData> applyPatch(DivData original, DivPatchModel patch) async {
+  final divContext = DivRootContext()
+    ..variableManager = DefaultDivVariableManager(
+      storage: DefaultDivVariableStorage(),
+    )
+    ..dataProvider = DefaultDivDataProvider(original);
+  final manager = DefaultDivPatchManager(divContext);
+  await manager.applyPatch(patch);
+
+  return divContext.dataProvider!.value;
+}
+
+void main() async {
   group('Patching data test', () {
-    test('When no suitable changes does nothing', () {
+    test('When no suitable changes does nothing', () async {
       final original = data(
         container(
           [divWithId('some_div')],
@@ -21,14 +33,12 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = original;
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing root div replaces div', () {
+    test('When replacing root div replaces div', () async {
       final original = data(divWithId('div_to_replace'));
       const patch = DivPatchModel(
         changes: [
@@ -39,14 +49,12 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(newText1);
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing div with different type replaces div', () {
+    test('When replacing div with different type replaces div', () async {
       final original = data(divWithId('div_to_replace'));
       const patch = DivPatchModel(
         changes: [
@@ -57,15 +65,13 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(separator);
-      expect(provider.value, result);
+      expect(patched, result);
     });
     // Why don't we allow the structure to be patched from the base?
-    test('When deleting root div does nothing', () {
+    test('When deleting root div does nothing', () async {
       final original = data(divWithId('div_to_delete'));
       const patch = DivPatchModel(
         changes: [
@@ -76,14 +82,12 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = original;
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing root div with multiple divs does nothing', () {
+    test('When replacing root div with multiple divs does nothing', () async {
       final original = data(divWithId('div_to_replace'));
       const patch = DivPatchModel(
         changes: [
@@ -94,14 +98,12 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = original;
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing item in container replaces div', () {
+    test('When replacing item in container replaces div', () async {
       final original = data(
         container([
           separator,
@@ -118,9 +120,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         container([
@@ -129,9 +129,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing items in container replaces divs', () {
+    test('When replacing items in container replaces divs', () async {
       final original = data(
         container([
           separator,
@@ -148,9 +148,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         container([
@@ -160,9 +158,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When deleting item in container removes div', () {
+    test('When deleting item in container removes div', () async {
       final original = data(
         container([
           separator,
@@ -179,9 +177,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         container([
@@ -189,9 +185,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When have multiple changes applies all', () {
+    test('When have multiple changes applies all', () async {
       final original = data(
         container([
           separator,
@@ -213,9 +209,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         container([
@@ -225,9 +219,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing items in gallery replaces divs', () {
+    test('When replacing items in gallery replaces divs', () async {
       final original = data(
         gallery([
           separator,
@@ -244,9 +238,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         gallery([
@@ -256,9 +248,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When deleting item in gallery removes div', () {
+    test('When deleting item in gallery removes div', () async {
       final original = data(
         gallery([
           separator,
@@ -275,9 +267,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         gallery([
@@ -285,9 +275,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing and deleting items in grid applies all', () {
+    test('When replacing and deleting items in grid applies all', () async {
       final original = data(
         grid([
           separator,
@@ -309,9 +299,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         grid([
@@ -321,9 +309,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing and deleting items in pager applies all', () {
+    test('When replacing and deleting items in pager applies all', () async {
       final original = data(
         pager([
           separator,
@@ -345,9 +333,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         pager([
@@ -357,9 +343,9 @@ void main() {
           separator,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing state div replaces div', () {
+    test('When replacing state div replaces div', () async {
       final original = data(
         state([
           divWithId('div_to_replace'),
@@ -374,18 +360,16 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         state([
           newText1,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When deleting state div keeps empty state', () {
+    test('When deleting state div keeps empty state', () async {
       final original = data(
         state([
           divWithId('div_to_delete'),
@@ -400,9 +384,7 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         state([
@@ -410,9 +392,9 @@ void main() {
         ]),
       );
 
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing state div with multiple divs does nothing', () {
+    test('When replacing state div with multiple divs does nothing', () async {
       final original = data(
         state([
           divWithId('div_to_replace'),
@@ -427,14 +409,12 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = original;
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When replacing tabs div replaces div', () {
+    test('When replacing tabs div replaces div', () async {
       final original = data(
         tabs([
           divWithId('div_to_replace'),
@@ -449,18 +429,16 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = data(
         tabs([
           newText1,
         ]),
       );
-      expect(provider.value, result);
+      expect(patched, result);
     });
-    test('When deleting tabs div does nothing', () {
+    test('When deleting tabs div does nothing', () async {
       final original = data(
         tabs([
           divWithId('div_to_delete'),
@@ -475,12 +453,10 @@ void main() {
         ],
       );
 
-      final provider = DefaultDivDataProvider(original);
-      final manager = DefaultDivPatchManager(provider);
-      manager.applyPatch(patch);
+      final patched = await applyPatch(original, patch);
 
       final result = original;
-      expect(provider.value, result);
+      expect(patched, result);
     });
   });
 }

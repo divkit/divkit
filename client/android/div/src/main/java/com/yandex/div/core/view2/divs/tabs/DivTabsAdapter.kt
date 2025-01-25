@@ -5,11 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
+import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
+import com.yandex.div.core.view2.divs.resolvePath
 import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.internal.viewpool.ViewPool
@@ -29,12 +32,13 @@ internal class DivTabsAdapter(
     tabbedCardConfig: TabbedCardConfig,
     heightCalculatorFactory: HeightCalculatorFactory,
     val isDynamicHeight: Boolean,
-    private val bindingContext: BindingContext,
+    var bindingContext: BindingContext,
     textStyleProvider: TabTextStyleProvider,
     private val viewCreator: DivViewCreator,
     private val divBinder: DivBinder,
     val divTabsEventManager: DivTabsEventManager,
-    var path: DivStatePath,
+    val activeStateTracker: DivTabsActiveStateTracker,
+    private var path: DivStatePath,
     private val divPatchCache: DivPatchCache,
 ) : BaseDivTabbedCardUi<DivSimpleTab, ViewGroup, DivAction>(
     viewPool,
@@ -43,10 +47,19 @@ internal class DivTabsAdapter(
     heightCalculatorFactory,
     textStyleProvider,
     divTabsEventManager,
-    divTabsEventManager
+    divTabsEventManager,
+    activeStateTracker,
 ) {
 
     private val tabModels = mutableMapOf<ViewGroup, TabModel>()
+    private val childStates = mutableMapOf<Int, DivStatePath>()
+
+    var statePath
+        get() = path
+        set(value) {
+            path = value
+            childStates.clear()
+        }
 
     fun setData(data: Input<DivSimpleTab>, selectedTab: Int) {
         super.setData(data, bindingContext.expressionResolver, view.expressionSubscriber)
@@ -62,7 +75,7 @@ internal class DivTabsAdapter(
         tabView.releaseAndRemoveChildren(bindingContext.divView)
 
         val itemDiv = tab.item.div
-        val itemView = createItemView(itemDiv, bindingContext.expressionResolver)
+        val itemView = createItemView(itemDiv, bindingContext.expressionResolver, tabNumber)
         tabModels[tabView] = TabModel(tabNumber, itemDiv, itemView)
         tabView.addView(itemView)
 
@@ -76,25 +89,34 @@ internal class DivTabsAdapter(
 
     override fun fillMeasuringTab(tabView: ViewGroup, tab: DivSimpleTab, tabNumber: Int) {
         tabView.releaseAndRemoveChildren(bindingContext.divView)
-        val itemView = createItemView(tab.item.div, bindingContext.expressionResolver)
+        val itemView = createItemView(tab.item.div, bindingContext.expressionResolver, tabNumber)
         tabView.addView(itemView)
     }
 
-    private fun createItemView(div: Div, resolver: ExpressionResolver): View {
+    private fun createItemView(div: Div, resolver: ExpressionResolver, tabNumber: Int): View {
         val itemView = viewCreator.create(div, resolver).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
-        divBinder.bind(bindingContext, itemView, div, path)
+
+        val childPath = getChildPath(tabNumber, div)
+        divBinder.bind(bindingContext, itemView, div, childPath)
 
         return itemView
     }
 
+    private fun getChildPath(index: Int, div: Div): DivStatePath {
+        return childStates.getOrPut(index) {
+            div.value().resolvePath(index, path)
+        }
+    }
+
     fun notifyStateChanged() {
         tabModels.forEach { (tabView, tabModel) ->
-            divBinder.bind(bindingContext, tabModel.view, tabModel.div, path)
+            val childPath = getChildPath(tabModel.index, tabModel.div)
+            divBinder.bind(bindingContext, tabModel.view, tabModel.div, childPath)
             // ... and a little bit of a magic
             tabView.requestLayout()
         }

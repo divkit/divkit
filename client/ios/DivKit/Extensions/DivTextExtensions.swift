@@ -102,6 +102,8 @@ extension DivText: DivBlockModeling {
       )
     }
 
+    let additionalTextInsets = additionalTextInsets(context: context)
+
     return TextBlock(
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
@@ -114,7 +116,9 @@ extension DivText: DivBlockModeling {
       accessibilityElement: nil,
       truncationToken: truncationToken,
       truncationImages: truncationImages,
-      canSelect: resolveSelectable(expressionResolver)
+      additionalTextInsets: additionalTextInsets,
+      canSelect: resolveSelectable(expressionResolver),
+      tightenWidth: resolveTightenWidth(expressionResolver)
     )
   }
 
@@ -162,9 +166,10 @@ extension DivText: DivBlockModeling {
   ) {
     let expressionResolver = context.expressionResolver
 
-    let start = range.resolveStart(expressionResolver) ?? 0
-    let end = range.resolveEnd(expressionResolver) ?? 0
-    guard end > start, start < CFAttributedStringGetLength(string) else {
+    let stringLength = CFAttributedStringGetLength(string)
+    let start = range.resolveStart(expressionResolver)
+    let end = range.resolveEnd(expressionResolver) ?? stringLength
+    guard end > start, start < stringLength else {
       return
     }
 
@@ -198,16 +203,17 @@ extension DivText: DivBlockModeling {
       return
     }
 
-    let actualEnd = min(end, CFAttributedStringGetLength(string))
+    let actualEnd = min(end, stringLength)
     let cfRange = CFRange(location: start, length: actualEnd - start)
     typos.forEach { $0.apply(to: string, at: cfRange) }
     string.apply(actions, at: cfRange)
 
-    range.makeBackground(range: cfRange, resolver: expressionResolver)?
-      .apply(to: string, at: cfRange)
-
-    range.makeBorder(range: cfRange, resolver: expressionResolver)?
-      .apply(to: string, at: cfRange)
+    [
+      range.makeBackground(context: context, range: cfRange),
+      range.makeBorder(range: cfRange, resolver: expressionResolver),
+    ].forEach {
+      $0?.apply(to: string, at: cfRange)
+    }
   }
 
   private func resolveGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
@@ -228,6 +234,25 @@ extension DivText: DivBlockModeling {
         centerY: gradient.resolveCenterY(expressionResolver)
       ).map { .radial($0) }
     }
+  }
+
+  private func additionalTextInsets(
+    context: DivBlockModelingContext
+  ) -> EdgeInsets {
+    var additionalInsets: EdgeInsets = .zero
+    ranges?.forEach {
+      if case let .divCloudBackground(background) = $0.background {
+        let backgroundInsets = background.paddings?.resolve(context) ?? .zero
+        additionalInsets = EdgeInsets(
+          top: max(additionalInsets.top, backgroundInsets.top),
+
+          left: max(additionalInsets.left, backgroundInsets.left),
+          bottom: max(additionalInsets.bottom, backgroundInsets.bottom),
+          right: max(additionalInsets.right, backgroundInsets.right)
+        )
+      }
+    }
+    return additionalInsets
   }
 }
 
@@ -306,14 +331,26 @@ extension DivText.Range {
   }
 
   fileprivate func makeBackground(
-    range: CFRange,
-    resolver: ExpressionResolver
-  ) -> BackgroundAttribute? {
+    context: DivBlockModelingContext,
+    range: CFRange
+  ) -> StringAttribute? {
     guard let background else { return nil }
+    let resolver = context.expressionResolver
     switch background {
     case let .divSolidBackground(solid):
       let color = solid.resolveColor(resolver) ?? .clear
       return BackgroundAttribute(color: color.cgColor, range: range)
+    case let .divCloudBackground(cloud):
+      guard let color = cloud.resolveColor(resolver),
+            let cornerRadius = cloud.resolveCornerRadius(resolver)
+      else { return nil }
+      let insets = cloud.paddings?.resolve(context)
+      return CloudBackgroundAttribute(
+        color: color,
+        cornerRadius: CGFloat(cornerRadius),
+        range: range.location..<(range.location + range.length),
+        insets: insets
+      )
     }
   }
 }

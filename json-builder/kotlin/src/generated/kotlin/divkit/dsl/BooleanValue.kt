@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class BooleanValue internal constructor(
+data class BooleanValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : TypedValue {
@@ -38,7 +38,7 @@ class BooleanValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val value: Property<Boolean>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

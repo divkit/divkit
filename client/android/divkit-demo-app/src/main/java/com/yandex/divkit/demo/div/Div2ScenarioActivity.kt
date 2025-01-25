@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
@@ -32,6 +33,7 @@ import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
@@ -50,12 +52,14 @@ import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.loadText
 import com.yandex.divkit.demo.utils.longToast
+import com.yandex.divkit.demo.utils.showToast
 import com.yandex.divkit.regression.MetadataBottomSheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.UUID
 
 class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.MetadataHost {
 
@@ -191,8 +195,47 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 showDownloadDialog()
                 true
             }
+            R.id.div2_load_div_json -> {
+                showLoadDivJsonDialog()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showLoadDivJsonDialog() {
+        val editText = layoutInflater.inflate(R.layout.load_div_json_dialog, null) as EditText
+        preferences.getString(KEY_DIV2_DIV_JSON, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
+        val adb = SafeAlertDialogBuilder(this)
+            .setView(editText)
+            .setPositiveButton("Apply") { _, _ ->
+                val fieldValue = editText.text.toString()
+                preferences.edit().putString(KEY_DIV2_DIV_JSON, fieldValue).apply()
+
+                lifecycleScope.launch {
+                    val divData: DivData = try {
+                        if (!fieldValue.trimStart().startsWith('{')) {
+                            withContext(Dispatchers.IO) {
+                                loadJson(Uri.parse(fieldValue))
+                            }
+                        } else {
+                            JSONObject(fieldValue)
+                        }.asDiv2DataWithTemplates(errorLogger.apply { clear() })
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        longToast("Error while parsing div json! See logcat!")
+                        return@launch
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        longToast("Error while downloading div json! See logcat!")
+                        return@launch
+                    }
+
+                    div2View.setData(divData, DivDataTag(UUID.randomUUID().toString()))
+                    showToast("New div json applied!")
+                }
+            }
+        adb.create().show()
     }
 
     private fun initDiv() {
@@ -278,10 +321,12 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                             JSONObject(fieldValue)
                         }.asDivPatchWithTemplates(errorLogger.apply { clear() })
                     } catch (e: JSONException) {
-                        longToast("Error while parsing patch!")
+                        e.printStackTrace()
+                        longToast("Error while parsing patch! See logcat!")
                         return@launch
                     } catch (e: Exception) {
-                        longToast("Error while downloading patch!")
+                        e.printStackTrace()
+                        longToast("Error while downloading patch! See logcat!")
                         return@launch
                     }
 
@@ -391,6 +436,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         private const val KEY_DIV2_PATCH_URL = "patch_url"
         private const val KEY_DIV2_VARIABLES_URL = "variables_url"
         private const val KEY_DIV2_ACTION_URL = "action_url"
+        private const val KEY_DIV2_DIV_JSON = "div_json"
     }
 
     override val renderingTimeMessages: HashMap<String, LoggingHistogramBridge.TimeHistogram> = HashMap()

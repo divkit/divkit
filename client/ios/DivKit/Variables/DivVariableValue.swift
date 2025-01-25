@@ -4,6 +4,12 @@ import VGSL
 
 public typealias DivDictionary = [String: AnyHashable]
 
+extension DivDictionary {
+  static func make(from dict: [String: Any]) -> DivDictionary? {
+    NSDictionary(dictionary: dict) as? DivDictionary
+  }
+}
+
 @frozen
 public enum DivVariableValue: Hashable {
   case string(String)

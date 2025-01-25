@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type, name`.
  */
 @Generated
-class DictVariable internal constructor(
+data class DictVariable internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Variable {
@@ -41,7 +41,7 @@ class DictVariable internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Variable name.
          */

@@ -18,6 +18,8 @@
         "tab_bar",
         "list",
         "select",
+        "checkbox",
+        "radio",
         "auto"
       ],
       "default_value": "auto",
@@ -43,6 +45,11 @@
         "android",
         "ios"
       ]
+    },
+    "is_checked": {
+      "$ref": "common.json#/boolean_int",
+      "$description": "translations.json#/div_accessibility_is_checked",
+      "platforms": []
     },
     "mode": {
       "type": "string",

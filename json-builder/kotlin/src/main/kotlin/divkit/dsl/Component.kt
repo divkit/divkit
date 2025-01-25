@@ -7,7 +7,7 @@ import kotlin.Any
 import kotlin.String
 import kotlin.collections.Map
 
-class Component<T : Div> internal constructor(
+data class Component<T : Div> internal constructor(
     @JsonIgnore
     val template: Template<T>,
     @JsonIgnore

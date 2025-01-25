@@ -1,5 +1,4 @@
-import 'package:divkit/src/core/timer/timer.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/divkit.dart';
 
 extension PassDivTimer on DivTimer {
   DivTimerModel get pass => DivTimerModel(

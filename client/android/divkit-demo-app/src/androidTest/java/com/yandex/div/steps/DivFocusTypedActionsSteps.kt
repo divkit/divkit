@@ -8,9 +8,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isFocused
 import androidx.test.espresso.matcher.ViewMatchers.isNotFocused
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.yandex.div.view.ViewActions
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matcher
-import ru.tinkoff.allure.step
 
 internal fun divFocusTypedActions(f: DivFocusTypedActionsSteps.() -> Unit) = f(DivFocusTypedActionsSteps())
 

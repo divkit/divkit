@@ -1,9 +1,27 @@
 import VGSL
 
+protocol DivPatchCallbacks {
+  var elementChanged: (String) -> Void { get set }
+}
+
+struct Callbacks: DivPatchCallbacks {
+  var elementChanged: (String) -> Void
+}
+
+extension Callbacks {
+  static var empty: Self {
+    .init(elementChanged: { _ in })
+  }
+}
+
 extension DivData {
   public func applyPatch(_ patch: DivPatch) -> DivData {
+    applyPatch(patch, callbacks: Callbacks.empty)
+  }
+
+  func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivData {
     let states = states.map {
-      State(div: $0.div.applySingleItemPatch(patch), stateId: $0.stateId)
+      State(div: $0.div.applySingleItemPatch(patch, callbacks: callbacks), stateId: $0.stateId)
     }
     return DivData(
       logId: logId,
@@ -17,39 +35,46 @@ extension DivData {
 }
 
 extension Div {
-  fileprivate func applySingleItemPatch(_ patch: DivPatch) -> Div {
+  fileprivate func applySingleItemPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> Div {
     if let id, let change = patch.getChange(id: id) {
       guard let items = change.items, items.count == 1 else {
         DivKitLogger.error("Patch contains multiple items, but single item is expected: \(id)")
         return self
       }
+      callbacks.elementChanged(id)
       return items[0]
     }
-    return applyPatchToChildren(patch)
+    return applyPatchToChildren(patch, callbacks: callbacks)
   }
 
-  fileprivate func applyOptionalItemPatch(_ patch: DivPatch) -> Div? {
+  fileprivate func applyOptionalItemPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> Div? {
     if let id, let change = patch.getChange(id: id) {
       guard let items = change.items else {
+        callbacks.elementChanged(id)
         return nil
       }
       if items.count == 1 {
+        callbacks.elementChanged(id)
         return items[0]
       }
       DivKitLogger.error("Patch contains multiple items, but single item is expected: \(id)")
       return self
     }
-    return applyPatchToChildren(patch)
+    return applyPatchToChildren(patch, callbacks: callbacks)
   }
 
-  fileprivate func applyMultipleItemsPatch(_ patch: DivPatch) -> [Div] {
+  fileprivate func applyMultipleItemsPatch(
+    _ patch: DivPatch,
+    callbacks: DivPatchCallbacks
+  ) -> [Div] {
     if let id, let change = patch.getChange(id: id) {
+      callbacks.elementChanged(id)
       return change.items ?? []
     }
-    return [applyPatchToChildren(patch)]
+    return [applyPatchToChildren(patch, callbacks: callbacks)]
   }
 
-  private func applyPatchToChildren(_ patch: DivPatch) -> Div {
+  private func applyPatchToChildren(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> Div {
     switch self {
     case .divCustom,
          .divGifImage,
@@ -59,29 +84,31 @@ extension Div {
          .divSelect,
          .divSeparator,
          .divSlider,
+         .divSwitch,
          .divVideo,
          .divText:
       // no children
       self
     case let .divContainer(value):
-      .divContainer(value.applyPatch(patch))
+      .divContainer(value.applyPatch(patch, callbacks: callbacks))
     case let .divGallery(value):
-      .divGallery(value.applyPatch(patch))
+      .divGallery(value.applyPatch(patch, callbacks: callbacks))
     case let .divGrid(value):
-      .divGrid(value.applyPatch(patch))
+      .divGrid(value.applyPatch(patch, callbacks: callbacks))
     case let .divPager(value):
-      .divPager(value.applyPatch(patch))
+      .divPager(value.applyPatch(patch, callbacks: callbacks))
     case let .divState(value):
-      .divState(value.applyPatch(patch))
+      .divState(value.applyPatch(patch, callbacks: callbacks))
     case let .divTabs(value):
-      .divTabs(value.applyPatch(patch))
+      .divTabs(value.applyPatch(patch, callbacks: callbacks))
     }
   }
 }
 
 extension DivContainer {
-  fileprivate func applyPatch(_ patch: DivPatch) -> DivContainer {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
+  fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivContainer {
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivContainer(
       accessibility: accessibility,
       action: action,
@@ -90,6 +117,7 @@ extension DivContainer {
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
       alpha: alpha,
+      animators: animators,
       aspect: aspect,
       background: background,
       border: border,
@@ -101,6 +129,7 @@ extension DivContainer {
       doubletapActions: doubletapActions,
       extensions: extensions,
       focus: focus,
+      functions: functions,
       height: height,
       id: id,
       itemBuilder: itemBuilder,
@@ -122,6 +151,7 @@ extension DivContainer {
       transitionIn: transitionIn,
       transitionOut: transitionOut,
       transitionTriggers: transitionTriggers,
+      variableTriggers: variableTriggers,
       variables: variables,
       visibility: visibility,
       visibilityAction: visibilityAction,
@@ -132,13 +162,15 @@ extension DivContainer {
 }
 
 extension DivGallery {
-  fileprivate func applyPatch(_ patch: DivPatch) -> DivGallery {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
+  fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivGallery {
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivGallery(
       accessibility: accessibility,
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
       alpha: alpha,
+      animators: animators,
       background: background,
       border: border,
       columnCount: columnCount,
@@ -149,6 +181,7 @@ extension DivGallery {
       disappearActions: disappearActions,
       extensions: extensions,
       focus: focus,
+      functions: functions,
       height: height,
       id: id,
       itemBuilder: itemBuilder,
@@ -170,6 +203,7 @@ extension DivGallery {
       transitionIn: transitionIn,
       transitionOut: transitionOut,
       transitionTriggers: transitionTriggers,
+      variableTriggers: variableTriggers,
       variables: variables,
       visibility: visibility,
       visibilityAction: visibilityAction,
@@ -180,8 +214,9 @@ extension DivGallery {
 }
 
 extension DivGrid {
-  fileprivate func applyPatch(_ patch: DivPatch) -> DivGrid {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
+  fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivGrid {
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivGrid(
       accessibility: accessibility,
       action: action,
@@ -190,6 +225,7 @@ extension DivGrid {
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
       alpha: alpha,
+      animators: animators,
       background: background,
       border: border,
       columnCount: columnCount,
@@ -200,13 +236,14 @@ extension DivGrid {
       doubletapActions: doubletapActions,
       extensions: extensions,
       focus: focus,
+      functions: functions,
       height: height,
       id: id,
       items: patchedItems,
       layoutProvider: layoutProvider,
       longtapActions: longtapActions,
       margins: margins,
-      paddings: paddings, 
+      paddings: paddings,
       reuseId: reuseId,
       rowSpan: rowSpan,
       selectedActions: selectedActions,
@@ -216,6 +253,7 @@ extension DivGrid {
       transitionIn: transitionIn,
       transitionOut: transitionOut,
       transitionTriggers: transitionTriggers,
+      variableTriggers: variableTriggers,
       variables: variables,
       visibility: visibility,
       visibilityAction: visibilityAction,
@@ -226,13 +264,15 @@ extension DivGrid {
 }
 
 extension DivPager {
-  fileprivate func applyPatch(_ patch: DivPatch) -> DivPager {
-    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
+  fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivPager {
+    let patchedItems = nonNilItems
+      .flatMap { $0.applyMultipleItemsPatch(patch, callbacks: callbacks) }
     return DivPager(
       accessibility: accessibility,
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
       alpha: alpha,
+      animators: animators,
       background: background,
       border: border,
       columnSpan: columnSpan,
@@ -240,6 +280,7 @@ extension DivPager {
       disappearActions: disappearActions,
       extensions: extensions,
       focus: focus,
+      functions: functions,
       height: height,
       id: id,
       infiniteScroll: infiniteScroll,
@@ -262,6 +303,7 @@ extension DivPager {
       transitionIn: transitionIn,
       transitionOut: transitionOut,
       transitionTriggers: transitionTriggers,
+      variableTriggers: variableTriggers,
       variables: variables,
       visibility: visibility,
       visibilityAction: visibilityAction,
@@ -272,12 +314,12 @@ extension DivPager {
 }
 
 extension DivState {
-  fileprivate func applyPatch(_ patch: DivPatch) -> DivState {
+  fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivState {
     let patchedStates = states.map {
       DivState.State(
         animationIn: $0.animationIn,
         animationOut: $0.animationOut,
-        div: $0.div?.applyOptionalItemPatch(patch),
+        div: $0.div?.applyOptionalItemPatch(patch, callbacks: callbacks),
         stateId: $0.stateId,
         swipeOutActions: $0.swipeOutActions
       )
@@ -287,6 +329,7 @@ extension DivState {
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
       alpha: alpha,
+      animators: animators,
       background: background,
       border: border,
       columnSpan: columnSpan,
@@ -295,6 +338,7 @@ extension DivState {
       divId: divId,
       extensions: extensions,
       focus: focus,
+      functions: functions,
       height: height,
       id: id,
       layoutProvider: layoutProvider,
@@ -312,6 +356,7 @@ extension DivState {
       transitionIn: transitionIn,
       transitionOut: transitionOut,
       transitionTriggers: transitionTriggers,
+      variableTriggers: variableTriggers,
       variables: variables,
       visibility: visibility,
       visibilityAction: visibilityAction,
@@ -322,10 +367,10 @@ extension DivState {
 }
 
 extension DivTabs {
-  fileprivate func applyPatch(_ patch: DivPatch) -> DivTabs {
+  fileprivate func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivTabs {
     let patchedItems = items.map {
       DivTabs.Item(
-        div: $0.div.applySingleItemPatch(patch),
+        div: $0.div.applySingleItemPatch(patch, callbacks: callbacks),
         title: $0.title,
         titleClickAction: $0.titleClickAction
       )
@@ -335,6 +380,7 @@ extension DivTabs {
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
       alpha: alpha,
+      animators: animators,
       background: background,
       border: border,
       columnSpan: columnSpan,
@@ -342,6 +388,7 @@ extension DivTabs {
       dynamicHeight: dynamicHeight,
       extensions: extensions,
       focus: focus,
+      functions: functions,
       hasSeparator: hasSeparator,
       height: height,
       id: id,
@@ -366,6 +413,7 @@ extension DivTabs {
       transitionIn: transitionIn,
       transitionOut: transitionOut,
       transitionTriggers: transitionTriggers,
+      variableTriggers: variableTriggers,
       variables: variables,
       visibility: visibility,
       visibilityAction: visibilityAction,

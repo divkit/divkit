@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
-    import { derived, Readable } from 'svelte/store';
+    import { derived, type Readable } from 'svelte/store';
 
     import css from './Gallery.module.css';
     import rootCss from '../Root.module.css';
@@ -15,9 +15,7 @@
     import type { Size } from '../../types/sizes';
     import type { Style } from '../../types/general';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
@@ -31,9 +29,16 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
 
     export let componentContext: ComponentContext<DivGalleryData>;
     export let layoutParams: LayoutParams | undefined = undefined;
+
+    interface ChildInfo {
+        size?: MaybeMissing<Size>;
+        visibility?: string;
+    }
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
@@ -61,7 +66,7 @@
     let crossSpacing;
     let padding = '';
     let templateSizes: string[] = [];
-    let childStore: Readable<(MaybeMissing<Size> | undefined)[]>;
+    let childStore: Readable<ChildInfo[]>;
     let scrollerStyle: Style = {};
     let scrollSnap = false;
     let childLayoutParams: LayoutParams = {};
@@ -105,12 +110,19 @@
     }
 
     const isDesktop = rootCtx.isDesktop;
+    let items: ComponentContext[] = [];
 
-    $: items = jsonItems.map((item, index) => {
-        return componentContext.produceChildContext(item, {
-            path: index
+    $: {
+        items.forEach(context => {
+            context.destroy();
         });
-    });
+
+        items = jsonItems.map((item, index) => {
+            return componentContext.produceChildContext(item, {
+                path: index
+            });
+        });
+    }
 
     $: shouldCheckArrows = $isDesktop && mounted;
     $: if (shouldCheckArrows) {
@@ -172,14 +184,18 @@
 
     $: gridTemplate = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
     $: {
-        let children: Readable<MaybeMissing<Size> | undefined>[] = [];
+        let children: Readable<ChildInfo>[] = [];
 
         items.forEach(item => {
             const itemSize = orientation === 'horizontal' ? 'width' : 'height';
-            children.push(componentContext.getDerivedFromVars(item.json[itemSize]));
+            children.push(componentContext.getDerivedFromVars({
+                size: item.json[itemSize],
+                visibility: item.json.visibility
+            }));
         });
 
-        childStore = derived(children, val => val);
+        // Create a new array every time so it is not equal to the previous one
+        childStore = derived(children, val => [...val]);
     }
     $: {
         templateSizes = [];
@@ -188,7 +204,11 @@
             templateSizes.push('auto');
         } else {
             $childStore.forEach(childInfo => {
-                if ((!childInfo && orientation === 'horizontal') || childInfo?.type === 'match_parent') {
+                if (childInfo.visibility === 'gone') {
+                    return;
+                }
+
+                if ((!childInfo.size && orientation === 'horizontal') || childInfo.size?.type === 'match_parent') {
                     templateSizes.push('100%');
                 } else {
                     templateSizes.push('max-content');
@@ -378,8 +398,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     const galleryElements = getItems();
@@ -489,6 +509,10 @@
     onDestroy(() => {
         mounted = false;
 
+        items.forEach(context => {
+            context.destroy();
+        });
+
         if (prevId && !componentContext.fakeElement) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
@@ -504,7 +528,7 @@
     {layoutParams}
     customPaddings={true}
     customActions={'gallery'}
-    parentOf={jsonItems}
+    parentOf={items}
     {replaceItems}
 >
     <div

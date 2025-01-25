@@ -9,7 +9,7 @@
     import type { ActionMenuItem } from '../../../typings/common';
     import type { ComponentContext } from '../../types/componentContext';
     import { genClassName } from '../../utils/genClassName';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import Actionable from '../utilities/Actionable.svelte';
 
     export let ownerNode: HTMLElement;

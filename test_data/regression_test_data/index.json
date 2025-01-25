@@ -36,7 +36,8 @@
       "title": "Clear focus actions",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "DivAction"
@@ -47,7 +48,7 @@
       ],
       "expected_results": [
         "input has focus, label says that timer is started",
-        "input had lost the foucs, label says that timer is finished"
+        "input had lost the focus, label says that timer is finished"
       ],
       "file": "actions/clear-focus.json"
     },
@@ -82,7 +83,7 @@
       ],
       "expected_results": [
         "Text 'Click on me' changed to 'You clicked on me'",
-        "Second click chande text to 'Click on me'"
+        "Second click changes text to 'Click on me'"
       ],
       "file": "simple_tap.json"
     },
@@ -99,7 +100,7 @@
         "Long tap on button 'Long tap menu'"
       ],
       "expected_results": [
-        "Menu with butons 'show' and 'hide' is appearing",
+        "Menu with buttons 'show' and 'hide' is appearing",
         "longtap_actions logged"
       ],
       "file": "long_tap.json"
@@ -170,7 +171,7 @@
         "Click on the empty space inside the gallery"
       ],
       "expected_results": [
-        "Check view shown with text 'Last catched action: tap_container'"
+        "Check view shown with text 'Last caught action: tap_container'"
       ],
       "file": "gallery/incompletely_filled_gallery_throws_taps.json"
     },
@@ -224,6 +225,28 @@
       "file": "gallery/gallery-item-actions.json"
     },
     {
+      "title": "Gallery item actions typed",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivGallery",
+        "TypedActions"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right",
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Content is changes depending on scroll direction or clicked buttons",
+        "Gallery scroll is logged",
+        "first and last galleries are scrolled without animation"
+      ],
+      "file": "gallery/gallery-item-actions-typed.json"
+    },
+    {
       "title": "Gallery default item states",
       "automated": [
         "web"
@@ -233,7 +256,7 @@
       ],
       "steps": [
         "Click on button 'Expand' in gallery item",
-        "Click on button 'Collpse' in expanded items"
+        "Click on button 'Collapse' in expanded items"
       ],
       "expected_results": [
         "Only clicked gallery item change state"
@@ -250,7 +273,7 @@
       ],
       "steps": [
         "Click on button 'Expand' in gallery item",
-        "Click on button 'Collpse' in expanded items",
+        "Click on button 'Collapse' in expanded items",
         "Scroll gallery"
       ],
       "expected_results": [
@@ -368,7 +391,7 @@
       "file": "action_animation/animations.json"
     },
     {
-      "title": "Recomendation slider",
+      "title": "Recommendation slider",
       "tags": [
         "Slider"
       ],
@@ -410,7 +433,7 @@
         "Interact with slider"
       ],
       "expected_results": [
-        "Slider poiner shange it's position"
+        "Slider pointer change it's position"
       ],
       "file": "slider_presets.json"
     },
@@ -456,7 +479,7 @@
         "Switch focus to idle"
       ],
       "expected_results": [
-        "Start state of the right evement is 'init'",
+        "Start state of the right element is 'init'",
         "When handler gets focus, state of the right element is 'focus'",
         "When handler lost focus, state of the right element is 'blur'"
       ],
@@ -484,6 +507,29 @@
         "On '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3' Screen reader should say '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3; \u041a\u043d\u043e\u043f\u043a\u0430'"
       ],
       "file": "accessibility/descriptions.json"
+    },
+    {
+      "title": "Accessibility image range",
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Set focus on text",
+        "Listen to Screen reader",
+        "Set focus on image in text",
+        "Listen to Screen reader",
+        "Click on image in text"
+      ],
+      "expected_results": [
+        "After setting focus to text you can hear the text itself.",
+        "After setting focus on image, you should here that this image is a button and you can click on it to trigger an action.",
+        "After click on image action triggered"
+      ],
+      "file": "accessibility/image_and_clickable_range.json"
     },
     {
       "title": "Accessibility types",
@@ -572,7 +618,7 @@
         "Focus on items from top to bottom"
       ],
       "expected_results": [
-        "Focuse on 5-th item",
+        "Focus on 5-th item",
         "\u0423\u0441\u043b\u044b\u0448\u0438\u043c '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 5'",
         "\u041f\u0440\u0438 \u0432\u044b\u043a\u043b\u044e\u0447\u0435\u043d\u043d\u043e\u043c Screen reader \u043d\u0430 \u043a\u0430\u0436\u0434\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0435 \u043f\u0440\u0438 \u0442\u0430\u043f\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u043f\u043e\u044f\u0432\u043b\u044f\u0442\u044c\u0441\u044f \u043c\u0435\u043d\u044e \u0441 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u044d\u0442\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0438"
       ],
@@ -621,7 +667,7 @@
         "Menu with text 'Double tap' appears",
         "Menu with text 'Long tap' appears",
         "Menu with text 'Single tap' appears without delay",
-        "Menu with text 'Single tap' appears and than desappears",
+        "Menu with text 'Single tap' appears and than disappears",
         "Menu with text 'Long tap' appears",
         "Menu with text 'Single tap' appears with delay",
         "Menu with text 'Double tap' appears",
@@ -630,10 +676,6 @@
         "Menu with text 'Long tap on container' appears for container"
       ],
       "file": "button_actions.json"
-    },
-    {
-      "title": "Longtap actions",
-      "file": "pinch-to-zoom-longtap-actions.json"
     },
     {
       "title": "Div errors visualization",
@@ -664,7 +706,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the transparency"
+        "Image should appears and disappears changing the transparency"
       ],
       "file": "animations/transition/fade_full_src.json"
     },
@@ -681,7 +723,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the transparency starting or ending with transparency = 0.5"
+        "Image should appears and disappears changing the transparency starting or ending with transparency = 0.5"
       ],
       "file": "animations/transition/fade_part_src.json"
     },
@@ -698,7 +740,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the scale"
+        "Image should appears and disappears changing the scale"
       ],
       "file": "animations/transition/scale_full_src.json"
     },
@@ -715,7 +757,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the scale starting or ending with scale = 0.75"
+        "Image should appears and disappears changing the scale starting or ending with scale = 0.75"
       ],
       "file": "animations/transition/scale_part_src.json"
     },
@@ -732,7 +774,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears sliding from under the top edge of the card"
+        "Image should appears and disappears sliding from under the top edge of the card"
       ],
       "file": "animations/transition/slide_full_src.json"
     },
@@ -749,7 +791,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears sliding from under the top edge of the card, but not reaching it"
+        "Image should appears and disappears sliding from under the top edge of the card, but not reaching it"
       ],
       "file": "animations/transition/slide_part_src.json"
     },
@@ -766,7 +808,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing trancparency and sliding from center to edge"
+        "Image should appears and disappears changing transparency and sliding from center to edge"
       ],
       "file": "animations/transition/set_src.json"
     },
@@ -783,7 +825,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears from diffrent edges of card"
+        "Image should appears from different edges of card"
       ],
       "file": "animations/transition/change_bounds_diff_ids_src.json"
     },
@@ -849,7 +891,7 @@
         "After expanding of elements click on 'COLLAPSE'"
       ],
       "expected_results": [
-        "Expanding and collapsing the elements shoud be with animation"
+        "Expanding and collapsing the elements should be with animation"
       ],
       "file": "animations/article.json"
     },
@@ -864,7 +906,7 @@
         "After expanding of elements click on 'COLLAPSE'"
       ],
       "expected_results": [
-        "Expanding end collapsing the elements shoud be with animation"
+        "Expanding end collapsing the elements should be with animation"
       ],
       "file": "animations/article_with_transitions.json"
     },
@@ -877,7 +919,7 @@
         "Click on 'BLINK'"
       ],
       "expected_results": [
-        "Red sircle should appear and disappear"
+        "Red circle should appear and disappear"
       ],
       "file": "animations/blink.json"
     },
@@ -911,6 +953,20 @@
         "The text should disappear first, and the background after a short delay"
       ],
       "file": "animations/mute_notification.json"
+    },
+    {
+      "title": "Div with corner radius and shadow set is clipped during transition animation",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on yellow rectangle",
+        "Repeat if necessary"
+      ],
+      "expected_results": [
+        "Blue circle still a circle while transition is in progress"
+      ],
+      "file": "animations/transient_div_with_clip_and_shadow.json"
     },
     {
       "title": "State transition any change",
@@ -972,7 +1028,7 @@
       "file": "animations/lottie/spinner_restart_repeat_mode.json"
     },
     {
-      "title": "Lottie animation (repeate_mode=revese, repeat_count=3)",
+      "title": "Lottie animation (repeat_mode=reverse, repeat_count=3)",
       "platforms": [
         "android",
         "ios",
@@ -992,7 +1048,7 @@
       "file": "animations/lottie/spinner_reverse_repeat_mode.json"
     },
     {
-      "title": "Lottie animation (repeat_mode=restart, repeate_count=-1)",
+      "title": "Lottie animation (repeat_mode=restart, repeat_count=-1)",
       "platforms": [
         "android",
         "ios",
@@ -1008,11 +1064,111 @@
       "file": "animations/lottie/spinner.json"
     },
     {
+      "title": "Lottie params",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "expected_results": [
+        "Animation should be rendered correctly with the different combination of properties"
+      ],
+      "file": "animations/lottie/params.json"
+    },
+    {
       "title": "For the reverse animation of the action, a direct interpolator is used",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "tags": [
         "Animations"
       ],
       "file": "action_animation/button_press_action_animations.json"
+    },
+    {
+      "title": "Simple variable animator",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color. If stopped it stands still."
+      ],
+      "file": "animations/animators/simple_variable_animator.json"
+    },
+    {
+      "title": "Repeating variable animator",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color 4 times. If stopped it stands still."
+      ],
+      "file": "animations/animators/repeating_variable_animator.json"
+    },
+    {
+      "title": "Infinite variable animator",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_variable_animator.json"
+    },
+    {
+      "title": "Infinite alternating variable animator",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles alternating direction until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_alternating_variable_animator.json"
     },
     {
       "title": "Visibility actions in gallery",
@@ -1104,10 +1260,10 @@
       ],
       "steps": [
         "Scroll to positions from 0 to 4",
-        "Check view shown with text 'Last catched visibility action: item_{item_position}'"
+        "Check view shown with text 'Last caught visibility action: item_{item_position}'"
       ],
       "expected_results": [
-        "View shown with text 'Last catched visibility action: item_{item_position}'"
+        "View shown with text 'Last caught visibility action: item_{item_position}'"
       ],
       "file": "visibility_actions/gallery_child_of_item.json"
     },
@@ -1123,13 +1279,13 @@
       ],
       "steps": [
         "Scroll to last position",
-        "Check view shown with text 'Last catched visibility action: none'",
+        "Check view shown with text 'Last caught visibility action: none'",
         "Click on view with text 'Enable actions'",
-        "Check view shown with text 'Last catched visibility action: item_4'"
+        "Check view shown with text 'Last caught visibility action: item_4'"
       ],
       "expected_results": [
-        "When actions disabled view shown with text 'Last catched visibility action: none'",
-        "When actions enabled view shown with text 'Last catched visibility action: item_{index}'"
+        "When actions disabled view shown with text 'Last caught visibility action: none'",
+        "When actions enabled view shown with text 'Last caught visibility action: item_{index}'"
       ],
       "file": "visibility_actions/is_enabled.json"
     },
@@ -1149,8 +1305,8 @@
         "Click on view with text 'Enable actions' and repeat steps before"
       ],
       "expected_results": [
-        "When actions disabled view shown with text 'Last catched action: none'",
-        "When actions enabled view shown with text 'Last catched action: {click | long_click | double_click}'"
+        "When actions disabled view shown with text 'Last caught action: none'",
+        "When actions enabled view shown with text 'Last caught action: {click | long_click | double_click}'"
       ],
       "file": "actions/is_enabled.json"
     },
@@ -1164,8 +1320,7 @@
         "DivPager"
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ],
       "steps": [
         "Check first item visibility logged",
@@ -1174,7 +1329,7 @@
       ],
       "expected_results": [
         "First element logged, example Ya:PagerSelectedActionsTracker onPageSelected(0) Ya:PagerSelectedActionsTracker dispatch selected actions for page 0",
-        "Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
+        "Second element logged, example logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
       ],
       "file": "visibility_actions/pager_selected_actions.json"
     },
@@ -1227,7 +1382,7 @@
       "expected_results": [
         "Text is changed to 'Triggered!'"
       ],
-      "file": "visibility_actions/visibility_aciton.json"
+      "file": "visibility_actions/visibility_action.json"
     },
     {
       "title": "Visibility actions in DivState",
@@ -1371,21 +1526,14 @@
         "Animations"
       ],
       "expected_results": [
-        "Image appeares with described animation"
+        "Image appears with described animation"
       ],
       "file": "action_animation/image_loading_animation.json"
     },
     {
       "title": "Variables in DivIndicator",
-      "steps": [
-        "Click on buttons, check the indicator appearance and animation",
-        "Click on last button to reset",
-        "Scroll pager to the center, click on buttons, check the indicator",
-        "Click on last button to reset",
-        "Scroll pager to the end, click on buttons, check the indicator"
-      ],
-      "expected_results": [
-        "Indicator appearence changes and it changes according to the clicked buttin description"
+      "tags": [
+        "DivIndicator"
       ],
       "file": "variables/div_indicator.json"
     },
@@ -1464,15 +1612,20 @@
     },
     {
       "title": "Local variables",
+      "automated": [
+        "android"
+      ],
       "platforms": [
-        "ios"
+        "android",
+        "ios",
+        "web"
       ],
       "tags": [
         "variables"
       ],
       "expected_results": [
         "Click items",
-        "Corresponding varibale values change"
+        "Corresponding variable values change"
       ],
       "file": "variables/local.json"
     },
@@ -1522,13 +1675,6 @@
       "file": "selectable_text.json"
     },
     {
-      "title": "DivText",
-      "tags": [
-        "DivText"
-      ],
-      "file": "div-text.json"
-    },
-    {
       "title": "Nested change bounds transitions",
       "automated": [
         "web"
@@ -1538,8 +1684,8 @@
         "Click 'PRESS AGAIN'"
       ],
       "expected_results": [
-        "After first click image appers with animation, the container extendes with animation.",
-        "After second click extendes buton, text changes, container extendes again."
+        "After first click image appears with animation, the container extends with animation.",
+        "After second click extends button, text changes, container extends again."
       ],
       "file": "action_animation/nested_change_bounds.json"
     },
@@ -1571,6 +1717,42 @@
         "Max lines = 1. Line break is unavailable."
       ],
       "file": "single_line_input.json"
+    },
+    {
+      "title": "Text input max_length",
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Enter text with more than 10 characters"
+      ],
+      "expected_results": [
+        "text in the field should not be longer than 10 characters"
+      ],
+      "file": "input_max_length.json"
+    },
+    {
+      "title": "Text input (enter key)",
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Change text",
+        "Tap on enter key"
+      ],
+      "expected_results": [
+        "Enter key on keyboard has \"search\" type",
+        "Keyboard is hidden",
+        "Text is changed to \"Search key tapped!\""
+      ],
+      "file": "enter_key_input.json"
     },
     {
       "title": "Select",
@@ -1616,7 +1798,7 @@
         "On tap on 'pause' video pause",
         "On tap on 'reset' video starts from the beginning",
         "If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused",
-        "If video wasn't paused, on tap on 'reset' the video starts playing from beginnging"
+        "If video wasn't paused, on tap on 'reset' the video starts playing from beginning"
       ],
       "file": "video/video_controls.json"
     },
@@ -1649,6 +1831,10 @@
     },
     {
       "title": "Actions logging",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -1666,34 +1852,6 @@
       "file": "logging.json"
     },
     {
-      "title": "Shortcuts",
-      "file": "shortcuts.json"
-    },
-    {
-      "title": "Auto ellipsize",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "file": "auto-ellipsize.json"
-    },
-    {
-      "title": "Expand cutout 1",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "file": "expand-cutout-1.json"
-    },
-    {
-      "title": "Expand cutout 2",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "file": "expand-cutout-2.json"
-    },
-    {
       "title": "Lottie animations",
       "platforms": [
         "android",
@@ -1708,6 +1866,7 @@
     {
       "title": "Lottie gallery",
       "platforms": [
+        "android",
         "ios",
         "web"
       ],
@@ -1719,7 +1878,9 @@
     {
       "title": "Lottie cycled animations",
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ],
       "tags": [
         "lottie"
@@ -1748,10 +1909,6 @@
       "file": "grid_layout.json"
     },
     {
-      "title": "Grid with weights",
-      "file": "grid-with-weights.json"
-    },
-    {
       "title": "Image Shimmer Preview",
       "file": "image_shimmer_preview.json",
       "platforms": [
@@ -1764,10 +1921,18 @@
     },
     {
       "title": "Custom container",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "file": "custom-container.json"
     },
     {
       "title": "Custom card",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "file": "custom-card.json"
     },
     {
@@ -1857,10 +2022,13 @@
       "platforms": [
         "android"
       ],
+      "tags": [
+        "DivIndicator"
+      ],
       "expected_results": [
         "Two pagers with indicator of different shapes - Rounded Rectangle and Circle"
       ],
-      "file": "indicator_shapes.json"
+      "file": "indicator/indicator_shapes.json"
     },
     {
       "title": "Gallery items posing",
@@ -1875,7 +2043,7 @@
         "Try to scroll again"
       ],
       "expected_results": [
-        "Current item always stick to the text"
+        "Current item always stick to the text."
       ],
       "file": "gallery/gallery-items-posing.json"
     },
@@ -1889,6 +2057,22 @@
         "After the duration expires, the timer stops and calls end_actions."
       ],
       "file": "timers/common-timer.json"
+    },
+    {
+      "title": "Common timer with typed action",
+      "tags": [
+        "Timers",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "After the duration expires, the timer stops and calls end_actions."
+      ],
+      "file": "timers/typed-common-timer.json"
     },
     {
       "title": "Endless timer",
@@ -1910,6 +2094,24 @@
         "The timer changes the value of the variable only at the end of the work."
       ],
       "file": "timers/countdown-timer.json"
+    },
+    {
+      "title": "Change bounds transition allows input focus",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+              "android": "The bug is caused by the peculiarities of animation implementation on iOS",
+              "web": "The bug is caused by the peculiarities of animation implementation on iOS"
+      },
+      "tags": [
+        "DivInput",
+        "Animations"
+      ],
+      "expected_results": [
+        "Text can be entered into the input field, focus does not disappear. The check is related to the implementation features of change_bounds on iOS"
+      ],
+      "file": "change_bounds_transition_input.json"
     },
     {
       "title": "Blur in DivImage",
@@ -1952,7 +2154,8 @@
       "title": "LayoutProvider",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "LayoutProvider"
@@ -1961,6 +2164,22 @@
         "Blocks with correct size"
       ],
       "file": "layout_provider.json"
+    },
+    {
+      "title": "LayoutProvider recursive",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "LayoutProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size",
+        "Warning about recursive layout, depends on platform"
+      ],
+      "file": "layout_provider_recursive.json"
     },
     {
       "title": "SizeProvider extension",
@@ -2050,10 +2269,24 @@
       "file": "phone_input_mask.json"
     },
     {
+      "title": "Regex input filter",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entered text must be filtered by a regular expression from another input field"
+      ],
+      "file": "regex_input_filter.json"
+    },
+    {
       "title": "Regex input validator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
@@ -2061,10 +2294,24 @@
       "file": "regex_input_validator.json"
     },
     {
+      "title": "Expression input filter",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entering in the input field should be filtered depending on whether the filter condition is enabled or disabled"
+      ],
+      "file": "expression_input_filter.json"
+    },
+    {
       "title": "Expression input validator",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
@@ -2090,6 +2337,18 @@
       "file": "video/video_with_controls.json"
     },
     {
+      "title": "Video with controls and typed actions",
+      "tags": [
+        "DivVideo",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "file": "video/typed_video_with_controls.json"
+    },
+    {
       "title": "Video volume control",
       "tags": [
         "DivVideo"
@@ -2101,7 +2360,7 @@
       "tags": [
         "DivVideo",
         "Disappear action",
-        "Visibility_actions",
+        "visibility_actions",
         "DivGallery"
       ],
       "file": "video/video_in_gallery.json"
@@ -2122,7 +2381,7 @@
       "tags": [
         "DivVideo",
         "Disappear action",
-        "Visibility_actions",
+        "visibility_actions",
         "DivGallery"
       ],
       "file": "video/fullscreen_video_in_recycler.json"
@@ -2162,19 +2421,6 @@
       "file": "video/video_aspect.json"
     },
     {
-      "title": "Variables in default state id",
-      "tags": [
-        "DivState"
-      ],
-      "steps": [
-        "Check default state"
-      ],
-      "expected_results": [
-        "OK - content in text"
-      ],
-      "file": "state/default_state_id.json"
-    },
-    {
       "title": "state_id_variable",
       "tags": [
         "DivState"
@@ -2190,10 +2436,15 @@
       "file": "state/state_variable.json"
     },
     {
-      "title": "Tooltips",
+      "title": "Tooltips with typed actions",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "Tooltips",
-        "Visibility_actions"
+        "visibility_actions",
+        "TypedActions"
       ],
       "steps": [
         "Click on buttons"
@@ -2203,13 +2454,52 @@
         "Tooltips are hidden when tapping into an empty area",
         "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
       ],
-      "file": "tooltips.json"
+      "file": "typed-tooltips.json"
+    },
+    {
+      "title": "Tooltips",
+      "tags": [
+        "Tooltips",
+        "visibility_actions"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "tooltips/tooltips.json"
+    },
+    {
+      "title": "Tooltip on different positions",
+      "platforms": [
+        "ios"
+      ],
+      "automated": [
+        "ios"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Click on buttons to set different positions of the tooltip",
+        "After that, click the \"tooltip with close button\" button to display the tooltip"
+      ],
+      "expected_results": [
+        "The tooltip is always fully visible on the screen",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "tooltips/tooltip-positions.json"
     },
     {
       "title": "Persistent values storage",
       "platforms": [
         "ios",
-        "web"
+        "web",
+        "android"
       ],
       "steps": [
         "Press 'Store value for 10 seconds'",
@@ -2222,6 +2512,30 @@
         "In the last open there should be again the text 'Nothing stored'"
       ],
       "file": "stored_value.json"
+    },
+    {
+      "title": "Persistent values storage with typed actions",
+      "tags": [
+        "TypedActions"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Press 'Store string value for 10 seconds'",
+        "Press 'Store color value for 10 seconds'",
+        "Press 'Store url value for 10 seconds'",
+        "Press 'Store array value for 10 seconds'",
+        "Press 'Store dict value for 10 seconds'",
+        "Reopen this json in less than 10 seconds",
+        "Reopen this json in after 10 seconds"
+      ],
+      "expected_results": [
+        "In the first open there should be the text 'No String value, https://no-stored-url.com, [], {}'.",
+        "In the second open there should new values should appear 'Stored typed, https://yandex.ru, [1, 2, 3], {\"key\": \"value\"}' on a green background.",
+        "In the last open there should be again as it was at first open."
+      ],
+      "file": "typed_stored_value.json"
     },
     {
       "title": "Patch container",
@@ -2237,6 +2551,25 @@
       "file": "patch/container.json"
     },
     {
+      "title": "Patch container typed action",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "patch",
+        "TypedActions"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red",
+        "In case of success, 'Success!' text appears",
+        "In case of fail 'Fail!' text appears"
+      ],
+      "file": "patch/typed-container.json"
+    },
+    {
       "title": "Patch container internal items",
       "tags": [
         "patch"
@@ -2248,6 +2581,23 @@
         "2 original items should be replaced with the new ones, which background is red"
       ],
       "file": "patch/inside_container.json"
+    },
+    {
+      "title": "Patch gallery with typed action",
+      "platforms":  [
+        "android"
+      ],
+      "tags": [
+        "TypedActions",
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/typed-gallery.json"
     },
     {
       "title": "Patch gallery",
@@ -2284,7 +2634,7 @@
         "Wait 1 second"
       ],
       "expected_results": [
-        "2 orignal items should be replaced with the new ones, which background is red"
+        "2 original items should be replaced with the new ones, which background is red"
       ],
       "file": "patch/grid.json"
     },
@@ -2414,6 +2764,83 @@
       "file": "patch/tabs_transactional_success.json"
     },
     {
+      "title": "Track visibility action from patch",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Should be lorem ipsum text"
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ],
+      "priority": "blocker",
+      "expected_results": [
+        "Lorem ipsum text, showed with animation"
+      ],
+      "file": "patch/patchable_card_with_visibility_actions.json"
+    },
+
+    {
+      "title": "Patch root div",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Second element is gallery"
+      ],
+      "file": "patch/root.json"
+    },
+
+    {
+      "title": "Patch on_applied_actions",
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "2 elements should become red",
+        "Patch status text should become success"
+      ],
+      "file": "patch/actions_applied.json"
+    },
+
+    {
+      "title": "Patch on_failed_actions",
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "android"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Patch status text should become fail",
+        "No other elements hould be changed"
+      ],
+      "file": "patch/actions_failed.json"
+    },
+
+    {
       "title": "State with variable binding",
       "tags": [
         "DivState"
@@ -2457,6 +2884,21 @@
         "A keyboard appears and the number can be edited."
       ],
       "file": "input_inside_pager.json"
+    },
+    {
+      "title": "Input keyboard types",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "The keyboard type when clicking on an input field should differ depending on the select"
+      ],
+      "file": "input_keyboard_types.json"
     },
     {
       "title": "Slider vertical scroll interruption",
@@ -2632,8 +3074,8 @@
     {
       "title": "Container with item_builder",
       "platforms": [
-          "ios",
-          "web"
+        "ios",
+        "web"
       ],
       "tags": [
         "actions",
@@ -2645,13 +3087,29 @@
       "file": "container/item_builder.json"
     },
     {
+      "title": "Container with item_builder and id for each item",
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "tags": [
+        "actions",
+        "DivContainer"
+      ],
+      "steps": [
+        "Tap on button. Second input should be focused"
+      ],
+      "file": "container/Item_builder_with_id_override.json"
+    },
+    {
       "title": "Input password",
       "platforms": [
         "web",
         "android"
       ],
       "tags": [
-        "input"
+        "DivInput"
       ],
       "steps": [
         "Type something inside password",
@@ -2671,7 +3129,7 @@
         "web"
       ],
       "tags": [
-        "input"
+        "DivInput"
       ],
       "steps": [
         "Tap the \"Disable\" button and try to edit text",
@@ -2758,6 +3216,70 @@
         "Page change is logged"
       ],
       "file": "pager/pager.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe pages in both directions"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items.json"
+    },
+    {
+      "title": "Indicator with pager with infinite scroll",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe forward from 0 to 5 element",
+        "Swipe forward",
+        "Swipe backward"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Page with number 0 appears after the page with number 5",
+        "Page with number 5 appears before the page with number 0",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_infinite_scroll.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items and infinite scroll",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe forward from 0 to 10 element",
+        "Swipe forward",
+        "Swipe backward"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Page with number 0 appears after the page with number 10",
+        "Page with number 10 appears before the page with number 0",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items_and_infinite_scroll.json"
     }
   ]
 }

@@ -5,13 +5,14 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
-import android.widget.EditText
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
@@ -29,9 +30,11 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTER
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
@@ -53,11 +56,12 @@ internal class DivInputBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayStringVariableBinder,
+    private val actionBinder: DivActionBinder,
     private val accessibilityStateProvider: AccessibilityStateProvider,
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivInput, DivInputView> {
 
-    override fun bindView(context: BindingContext, view: DivInputView, div: DivInput) {
+    override fun bindView(context: BindingContext, view: DivInputView, div: DivInput, path: DivStatePath) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
@@ -85,11 +89,12 @@ internal class DivInputBinder @Inject constructor(
             observeHintColor(div, expressionResolver)
             observeHighlightColor(div, expressionResolver)
 
-            observeKeyboardType(div, expressionResolver)
+            observeKeyboardTypeAndCapitalization(div, expressionResolver)
+            observeEnterTypeAndActions(div, context, expressionResolver)
             observeSelectAllOnFocus(div, expressionResolver)
             observeIsEnabled(div, expressionResolver)
 
-            observeText(div, expressionResolver, context.divView)
+            observeText(div, context, path)
 
             focusTracker = context.divView.inputFocusTracker
             focusTracker?.requestFocusIfNeeded(view)
@@ -245,16 +250,18 @@ internal class DivInputBinder @Inject constructor(
         addSubscription(highlightColorExpr.observeAndGet(resolver, callback))
     }
 
-    private fun DivInputView.observeKeyboardType(div: DivInput, resolver: ExpressionResolver) {
-        val callback = { type: DivInput.KeyboardType ->
-            applyKeyboardType(type)
+    private fun DivInputView.observeKeyboardTypeAndCapitalization(div: DivInput, resolver: ExpressionResolver) {
+        val callback = { _: Any ->
+            val type = div.keyboardType.evaluate(resolver)
+            inputType = getKeyboardType(type) or getCapitalization(div, resolver)
             setHorizontallyScrolling(type != DivInput.KeyboardType.MULTI_LINE_TEXT)
         }
-        addSubscription(div.keyboardType.observeAndGet(resolver, callback))
+        addSubscription(div.keyboardType.observe(resolver, callback))
+        addSubscription(div.autocapitalization.observeAndGet(resolver, callback))
     }
 
-    private fun EditText.applyKeyboardType(type: DivInput.KeyboardType) {
-        inputType = when(type) {
+    private fun getKeyboardType(type: DivInput.KeyboardType): Int {
+        return when(type) {
             DivInput.KeyboardType.SINGLE_LINE_TEXT -> InputType.TYPE_CLASS_TEXT
             DivInput.KeyboardType.MULTI_LINE_TEXT -> InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE
@@ -267,6 +274,41 @@ internal class DivInputBinder @Inject constructor(
             DivInput.KeyboardType.PHONE -> InputType.TYPE_CLASS_PHONE
             DivInput.KeyboardType.PASSWORD -> InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+    }
+
+    private fun DivInputView.observeEnterTypeAndActions(
+        div: DivInput,
+        bindingContext: BindingContext,
+        resolver: ExpressionResolver
+    ) {
+        val callback = { _: Any ->
+            val enterKeyType = div.enterKeyType.evaluate(resolver)
+            this.imeOptions = getImeAction(enterKeyType)
+
+            val actions = div.enterKeyActions
+            if (!actions.isNullOrEmpty()) {
+                this.setOnEditorActionListener { _, actionId, _ ->
+                    if ((actionId and EditorInfo.IME_MASK_ACTION) != 0) {
+                        actionBinder.handleBulkActions(bindingContext, this, actions, LOG_ENTER)
+                    }
+
+                    false
+                }
+            } else {
+                this.setOnEditorActionListener(null)
+            }
+        }
+        addSubscription(div.enterKeyType.observeAndGet(resolver, callback))
+    }
+
+    private fun getImeAction(type: DivInput.EnterKeyType): Int {
+        return when (type) {
+            DivInput.EnterKeyType.DEFAULT -> EditorInfo.IME_NULL
+            DivInput.EnterKeyType.SEND -> EditorInfo.IME_ACTION_SEND
+            DivInput.EnterKeyType.DONE -> EditorInfo.IME_ACTION_DONE
+            DivInput.EnterKeyType.SEARCH -> EditorInfo.IME_ACTION_SEARCH
+            DivInput.EnterKeyType.GO -> EditorInfo.IME_ACTION_GO
         }
     }
 
@@ -285,14 +327,15 @@ internal class DivInputBinder @Inject constructor(
 
     private fun DivInputView.observeText(
         div: DivInput,
-        resolver: ExpressionResolver,
-        divView: Div2View
+        bindingContext: BindingContext,
+        path: DivStatePath,
     ) {
+        val divView = bindingContext.divView
         removeAfterTextChangeListener()
 
         var inputMask: BaseInputMask? = null
 
-        observeMask(div, resolver, divView) {
+        observeMask(div, bindingContext.expressionResolver, divView) {
             inputMask = it
 
             inputMask?.let { mask ->
@@ -352,9 +395,9 @@ internal class DivInputBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, primaryVariable, callbacks))
+        addSubscription(variableBinder.bindVariable(bindingContext, primaryVariable, callbacks, path))
 
-        observeValidators(div, resolver, divView)
+        observeValidators(div, bindingContext.expressionResolver, divView)
     }
 
     private fun DivInputView.observeValidators(
@@ -367,12 +410,12 @@ internal class DivInputBinder @Inject constructor(
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         val revalidateExpressionValidator = { index: Int  ->
-            validators[index].validate(text.toString(), this, divView)
+            validators[index].validate(text.toString(), this, divView, resolver)
         }
 
         doAfterTextChanged { editable ->
             if (editable != null) {
-                validators.forEach { it.validate(text.toString(), this, divView) }
+                validators.forEach { it.validate(text.toString(), this, divView, resolver) }
             }
         }
 
@@ -391,7 +434,7 @@ internal class DivInputBinder @Inject constructor(
                     }
                 }
 
-                validators.forEach { it.validate(text.toString(), this, divView) }
+                validators.forEach { it.validate(text.toString(), this, divView, resolver) }
             }
         }
 
@@ -461,11 +504,12 @@ internal class DivInputBinder @Inject constructor(
     private fun ValidatorItemData.validate(
         newValue: String,
         view: DivInputView,
-        divView: Div2View
+        divView: Div2View,
+        resolver: ExpressionResolver,
     ) {
         val isValid = validator.validate(newValue)
 
-        divView.setVariable(variableName, isValid.toString())
+        VariableMutationHandler.setVariable(divView, variableName, isValid.toString(), resolver)
 
         attachAccessibility(divView, view, isValid)
     }
@@ -603,5 +647,17 @@ internal class DivInputBinder @Inject constructor(
         }
 
         updateMaskData(Unit)
+    }
+
+    private fun getCapitalization(
+        div: DivInput,
+        resolver: ExpressionResolver,
+    ): Int {
+        return when (div.autocapitalization.evaluate(resolver)) {
+            DivInput.Autocapitalization.SENTENCES -> InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            DivInput.Autocapitalization.WORDS -> InputType.TYPE_TEXT_FLAG_CAP_WORDS
+            DivInput.Autocapitalization.ALL_CHARACTERS -> InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+            else -> 0
+        }
     }
 }

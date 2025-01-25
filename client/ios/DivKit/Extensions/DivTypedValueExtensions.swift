@@ -21,8 +21,8 @@ extension DivTypedValue {
       }
       return nil
     case let .dictValue(value):
-      if let dictValue = value.value as? DivDictionary {
-        return .dict(dictValue)
+      if let divDict = DivDictionary.make(from: value.value) {
+        return .dict(divDict)
       }
       return nil
     case let .integerValue(value):

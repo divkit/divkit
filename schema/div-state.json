@@ -1,5 +1,4 @@
 {
-  "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_state",
   "codegen": {
     "swift": {
@@ -97,6 +96,14 @@
           "default_value": "state_change",
           "$description": "translations.json#/div_state_transition_animation_selector",
           "deprecated": true
+        },
+        "clip_to_bounds": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "$description": "translations.json#/div_clip_to_bounds",
+          "platforms": [
+            "android"
+          ]
         }
       },
       "required": [

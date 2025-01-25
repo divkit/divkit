@@ -1,11 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/action/models/action.dart';
-import 'package:divkit/src/core/protocol/div_action.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
-import 'package:divkit/src/generated_sources/div_action_focus_element.dart';
-import 'package:divkit/src/generated_sources/div_action_set_variable.dart';
+import 'package:divkit/divkit.dart';
 
 class DefaultDivActionHandlerTyped implements DivActionHandler {
   final focusElementHandler = DivFocusElementHandlerTyped();
@@ -40,9 +35,7 @@ class DivFocusElementHandlerTyped {
     DivContext context,
     DivActionFocusElement action,
   ) async {
-    final elementId = await action.elementId.resolveValue(
-      context: context.variableManager.context,
-    );
+    final elementId = action.elementId.resolve(context.variables);
 
     final node = context.getFocusNode(elementId);
     if (node != null) {
@@ -58,40 +51,24 @@ class DivSetVariableHandlerTyped {
     DivContext context,
     DivActionSetVariable action,
   ) async {
-    final variableContext = context.variableManager.context;
+    final variableContext = context.variables;
 
     try {
-      final value = await action.value.map(
-        arrayValue: (arrayValue) async => await arrayValue.value.resolveValue(
-          context: variableContext,
-        ),
-        booleanValue: (booleanValue) async =>
-            await booleanValue.value.resolveValue(
-          context: variableContext,
-        ),
-        colorValue: (colorValue) async => await colorValue.value.resolveValue(
-          context: variableContext,
-        ),
+      final value = action.value.map(
+        arrayValue: (arrayValue) => arrayValue.value.resolve(variableContext),
+        booleanValue: (booleanValue) =>
+            booleanValue.value.resolve(variableContext),
+        colorValue: (colorValue) => colorValue.value.resolve(variableContext),
         dictValue: (dictValue) async => dictValue.value,
-        integerValue: (integerValue) async =>
-            await integerValue.value.resolveValue(
-          context: variableContext,
-        ),
-        numberValue: (numberValue) async =>
-            await numberValue.value.resolveValue(
-          context: variableContext,
-        ),
-        stringValue: (stringValue) async =>
-            await stringValue.value.resolveValue(
-          context: variableContext,
-        ),
-        urlValue: (urlValue) async => await urlValue.value.resolveValue(
-          context: variableContext,
-        ),
+        integerValue: (integerValue) =>
+            integerValue.value.resolve(variableContext),
+        numberValue: (numberValue) =>
+            numberValue.value.resolve(variableContext),
+        stringValue: (stringValue) =>
+            stringValue.value.resolve(variableContext),
+        urlValue: (urlValue) => urlValue.value.resolve(variableContext),
       );
-      final variableName = await action.variableName.resolveValue(
-        context: context.variableManager.context,
-      );
+      final variableName = action.variableName.resolve(context.variables);
 
       context.variableManager.updateVariable(
         variableName,

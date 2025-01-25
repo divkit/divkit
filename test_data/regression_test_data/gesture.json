@@ -1,7 +1,12 @@
 {
   "templates": {
     "rect": {
-      "type": "separator",
+      "type": "text",
+      "text": "Last Gesture:\n@{last_detected_gesture}",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#fff",
+      "font_size": 32,
       "alignment_horizontal": "center",
       "margins": {
         "top": 24
@@ -34,24 +39,40 @@
               {
                 "log_id": "swipe_up",
                 "url": "div-action://set_variable?name=bg_color&value=%23f7cb4d"
+              },
+              {
+                "log_id": "swipe_up_text",
+                "url": "div-action://set_variable?name=last_detected_gesture&value=UP"
               }
             ],
             "swipe_down": [
               {
                 "log_id": "swipe_down",
                 "url": "div-action://set_variable?name=bg_color&value=%2341b375"
+              },
+              {
+                "log_id": "swipe_down_text",
+                "url": "div-action://set_variable?name=last_detected_gesture&value=DOWN"
               }
             ],
             "swipe_left": [
               {
                 "log_id": "swipe_left",
                 "url": "div-action://set_variable?name=bg_color&value=%237baaf7"
+              },
+              {
+                "log_id": "swipe_left_text",
+                "url": "div-action://set_variable?name=last_detected_gesture&value=LEFT"
               }
             ],
             "swipe_right": [
               {
                 "log_id": "swipe_right",
                 "url": "div-action://set_variable?name=bg_color&value=%23ba67c8"
+              },
+              {
+                "log_id": "swipe_right_text",
+                "url": "div-action://set_variable?name=last_detected_gesture&value=RIGHT"
               }
             ]
           }
@@ -65,6 +86,11 @@
         "name": "bg_color",
         "type": "color",
         "value": "#e67c73"
+      },
+      {
+        "name": "last_detected_gesture",
+        "type": "string",
+        "value": "NONE"
       }
     ],
     "log_id": "card_with_gesture",

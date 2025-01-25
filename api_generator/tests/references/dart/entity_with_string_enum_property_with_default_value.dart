@@ -2,15 +2,16 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
+
+class EntityWithStringEnumPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
   const EntityWithStringEnumPropertyWithDefaultValue({
     this.value = const ValueExpression(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
 
   static const type = "entity_with_string_enum_property_with_default_value";
-  // default value: EntityWithStringEnumPropertyWithDefaultValueValue.second
+   // default value: EntityWithStringEnumPropertyWithDefaultValueValue.second
   final Expression<EntityWithStringEnumPropertyWithDefaultValueValue> value;
 
   @override
@@ -24,7 +25,7 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
       value: value ?? this.value,
     );
 
-  static EntityWithStringEnumPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json) {
+  static EntityWithStringEnumPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,9 +37,14 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
   }
+
+  EntityWithStringEnumPropertyWithDefaultValue resolve(DivVariableContext context) {
+    value?.resolve(context);
+    return this;
+  }
 }
 
-enum EntityWithStringEnumPropertyWithDefaultValueValue {
+enum EntityWithStringEnumPropertyWithDefaultValueValue implements Resolvable {
   first('first'),
   second('second'),
   third('third');
@@ -46,6 +52,12 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue {
   final String value;
 
   const EntityWithStringEnumPropertyWithDefaultValueValue(this.value);
+  bool get isFirst => this == first;
+
+  bool get isSecond => this == second;
+
+  bool get isThird => this == third;
+
 
   T map<T>({
     required T Function() first,
@@ -79,7 +91,7 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue {
   }
 
 
-  static EntityWithStringEnumPropertyWithDefaultValueValue? fromJson(String? json) {
+  static EntityWithStringEnumPropertyWithDefaultValueValue? fromJson(String? json,) {
     if (json == null) {
       return null;
     }
@@ -97,4 +109,5 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue {
       return null;
     }
   }
+  EntityWithStringEnumPropertyWithDefaultValueValue resolve(DivVariableContext context) => this;
 }

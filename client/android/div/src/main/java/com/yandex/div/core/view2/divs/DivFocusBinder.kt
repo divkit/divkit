@@ -8,7 +8,6 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.util.allIsNullOrEmpty
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBorder
 import javax.inject.Inject
@@ -29,7 +28,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
             isFocused -> focusedBorder
             else -> defaultBorder
         }
-        applyBorder(border, context.expressionResolver)
+        applyBorder(context, border)
 
         val focusListener = onFocusChangeListener as? FocusChangeListener
         if (focusListener == null && focusedBorder.isConstantlyEmpty()) {
@@ -51,16 +50,16 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
         }
     }
 
-    private fun View.applyBorder(border: DivBorder?, resolver: ExpressionResolver) {
+    private fun View.applyBorder(bindingContext: BindingContext, border: DivBorder?) {
         if (this is DivBorderSupports) {
-            setBorder(border, this, resolver)
+            setBorder(bindingContext, border, this)
             return
         }
 
         elevation = when {
             border == null -> DivBorderDrawer.NO_ELEVATION
             border.isConstantlyEmpty() -> DivBorderDrawer.NO_ELEVATION
-            !border.hasShadow.evaluate(resolver) -> DivBorderDrawer.NO_ELEVATION
+            !border.hasShadow.evaluate(bindingContext.expressionResolver) -> DivBorderDrawer.NO_ELEVATION
             border.shadow != null -> DivBorderDrawer.NO_ELEVATION
             else -> resources.getDimension(R.dimen.div_shadow_elevation)
         }
@@ -118,15 +117,15 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
 
         override fun onFocusChange(v: View, hasFocus: Boolean) {
             if (hasFocus) {
-                focusedBorder?.applyToView(v)
+                applyBorder(v, focusedBorder)
                 focusActions?.handle(v, DivActionBinder.LogType.LOG_FOCUS)
             } else {
-                focusedBorder?.let { blurredBorder?.applyToView(v) }
+                if (focusedBorder != null) applyBorder(v, blurredBorder)
                 blurActions?.handle(v, DivActionBinder.LogType.LOG_BLUR)
             }
         }
 
-        private fun DivBorder.applyToView(v: View) = v.applyBorder(this, context.expressionResolver)
+        private fun applyBorder(view: View, border: DivBorder?) = view.applyBorder(context, border)
 
         private fun List<DivAction>.handle(target: View, actionLogType: String) =
             actionBinder.handleBulkActions(context, target, this, actionLogType)

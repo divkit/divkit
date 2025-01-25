@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class CircleShape internal constructor(
+data class CircleShape internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Shape {
@@ -42,7 +42,7 @@ class CircleShape internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Fill color.
          */

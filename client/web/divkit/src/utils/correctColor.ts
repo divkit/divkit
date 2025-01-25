@@ -23,6 +23,22 @@ export function correctColor(color: string | undefined, alpha = 1, defaultColor 
     return defaultColor;
 }
 
+export function correctColorWithAlpha(color: string | undefined, alpha: number, defaultColor = 'transparent'): string {
+    color = (typeof color === 'string' && color || '').toLowerCase();
+
+    if (color.charAt(0) !== '#') {
+        return defaultColor;
+    }
+
+    const parsedColor = parseColor(color);
+    if (parsedColor) {
+        parsedColor.a = alpha;
+        return stringifyColorToCss(parsedColor);
+    }
+
+    return defaultColor;
+}
+
 export interface ParsedColor {
     a: number;
     r: number;
@@ -30,7 +46,7 @@ export interface ParsedColor {
     b: number;
 }
 
-function stringifyColorToCss(color: ParsedColor): string {
+export function stringifyColorToCss(color: ParsedColor): string {
     if (color.a === 255) {
         return `#${[color.r, color.g, color.b].map(it => {
             return padLeft(Math.round(it).toString(16), 2);

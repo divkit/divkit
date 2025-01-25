@@ -1,5 +1,7 @@
 package com.yandex.div.core.util
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.util.WeakHashMap
 
 internal class SynchronizedWeakHashMap<K: Any, N: Any>: WeakHashMap<K, N>() {
@@ -22,6 +24,7 @@ internal class SynchronizedWeakHashMap<K: Any, N: Any>: WeakHashMap<K, N>() {
 
     override fun remove(key: K?): N? = synchronized(lock) { return super.remove(key) }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun remove(key: K, value: N): Boolean =
         synchronized(lock) { return super.remove(key, value) }
 

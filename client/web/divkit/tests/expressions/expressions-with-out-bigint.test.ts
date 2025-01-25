@@ -1,4 +1,4 @@
-import { evalExpression, EvalResult } from '../../src/expressions/eval';
+import { evalExpression, type EvalResult } from '../../src/expressions/eval';
 import { valToString } from '../../src/expressions/utils';
 import { parse } from '../../src/expressions/expressions';
 import { createVariable } from '../../src/expressions/variable';
@@ -82,7 +82,7 @@ function runCase(item: any) {
         }
         return;
     }
-    const res = evalExpression(vars, undefined, ast);
+    const res = evalExpression(vars, undefined, undefined, ast);
     if (item.expected.value !== '' || res.result.type !== 'error') {
         if (res.result.type === 'number' && item.expected.type === 'number') {
             expect(res.result.value).toBeCloseTo(item.expected.value);

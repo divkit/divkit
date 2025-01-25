@@ -1,7 +1,5 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/input/div_input_model.dart';
-import 'package:divkit/src/generated_sources/div_input.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
@@ -19,31 +17,11 @@ class DivInputWidget extends StatefulWidget {
 }
 
 class _DivInputWidget extends State<DivInputWidget> {
-  // ToDo: Optimize repeated calculations on the same context.
-  // The model itself is not long-lived, so you need to keep the stream in the state?
-  Stream<DivInputModel>? stream;
-
-  late final DivFocusNode focusNode = DivFocusNode(divId: widget.data.id);
-
   final key = GlobalKey();
 
-  final TextEditingController controller = TextEditingController();
+  late final focusNode = DivFocusNode(divId: widget.data.id);
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    stream ??= DivInputModel.from(context, widget.data, controller);
-  }
-
-  @override
-  void didUpdateWidget(covariant DivInputWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.data != oldWidget.data) {
-      stream = DivInputModel.from(context, widget.data, controller);
-    }
-  }
+  final controller = TextEditingController();
 
   double _getLineHeight(TextStyle line) {
     final TextPainter textPainter = TextPainter(
@@ -54,17 +32,80 @@ class _DivInputWidget extends State<DivInputWidget> {
     return textPainter.height;
   }
 
-  @override
-  Widget build(BuildContext context) => DivBaseWidget(
-        data: widget.data,
-        child: StreamBuilder<DivInputModel>(
-          stream: stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final model = snapshot.requireData;
-              final divContext = DivKitProvider.watch<DivContext>(context)!;
+  DivInputModel? value;
 
-              return Material(
+  Stream<DivInputModel>? stream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final divContext = read<DivContext>(context)!;
+    widget.data.resolve(divContext.variables);
+    controller.addListener(() {
+      if (divContext.variables.current[widget.data.textVariable] !=
+          controller.text) {
+        divContext.variableManager.updateVariable(
+          widget.data.textVariable,
+          controller.text,
+        );
+      }
+    });
+    value = widget.data.bind(context, controller);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (stream == null) {
+      final divContext = watch<DivContext>(context)!;
+      stream = divContext.variableManager.watch((values) {
+        widget.data.resolve(values);
+        return widget.data.bind(context, controller);
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant DivInputWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.data != oldWidget.data) {
+      final divContext = watch<DivContext>(context)!;
+      widget.data.resolve(divContext.variables);
+
+      controller.clear();
+      controller.addListener(() {
+        if (divContext.variables.current[widget.data.textVariable] !=
+            controller.text) {
+          divContext.variableManager.updateVariable(
+            widget.data.textVariable,
+            controller.text,
+          );
+        }
+      });
+
+      value = widget.data.bind(context, controller);
+      stream ??= divContext.variableManager.watch((values) {
+        widget.data.resolve(values);
+        return widget.data.bind(context, controller);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => StreamBuilder<DivInputModel>(
+        initialData: value,
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final model = snapshot.requireData;
+            final divContext = watch<DivContext>(context)!;
+
+            return DivBaseWidget(
+              data: widget.data,
+              child: Material(
                 type: MaterialType.transparency,
                 child: Focus.withExternalFocusNode(
                   focusNode: focusNode,
@@ -112,18 +153,19 @@ class _DivInputWidget extends State<DivInputWidget> {
                     ),
                   ),
                 ),
-              );
-            }
+              ),
+            );
+          }
 
-            return const SizedBox.shrink();
-          },
-        ),
+          return const SizedBox.shrink();
+        },
       );
 
   @override
   void dispose() {
     controller.dispose();
     focusNode.dispose();
+    value = null;
     stream = null;
     super.dispose();
   }

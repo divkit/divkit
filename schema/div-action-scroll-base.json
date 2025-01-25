@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "id": {
+      "$description": "translations.json#/div_action_scroll_id",
+      "type": "string"
+    },
+    "animated": {
+      "$description": "translations.json#/div_action_scroll_animated",
+      "type": "boolean",
+      "default_value": "true"
+    }
+  }
+}

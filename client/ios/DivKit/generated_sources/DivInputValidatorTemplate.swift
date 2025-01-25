@@ -36,24 +36,32 @@ public enum DivInputValidatorTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divInputValidatorRegexTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divInputValidatorRegex(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divInputValidatorRegex(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divInputValidatorExpressionTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divInputValidatorExpression(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divInputValidatorExpression(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivInputValidator>!
+      result = result ?? {
+        if case let .divInputValidatorRegexTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divInputValidatorRegex(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divInputValidatorRegex(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divInputValidatorExpressionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divInputValidatorExpression(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divInputValidatorExpression(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivInputValidator> {
@@ -61,26 +69,28 @@ public enum DivInputValidatorTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivInputValidatorRegex.type:
-      let result = DivInputValidatorRegexTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivInputValidator>?
+    result = result ?? { if type == DivInputValidatorRegex.type {
+      let result = { DivInputValidatorRegexTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divInputValidatorRegex(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divInputValidatorRegex(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivInputValidatorExpression.type:
-      let result = DivInputValidatorExpressionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivInputValidatorExpression.type {
+      let result = { DivInputValidatorExpressionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divInputValidatorExpression(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divInputValidatorExpression(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

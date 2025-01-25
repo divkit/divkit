@@ -2,13 +2,14 @@ package com.yandex.divkit.demo.utils
 
 import android.content.Context
 import com.yandex.divkit.demo.BuildConfig
-import com.yandex.metrica.IReporter
-import com.yandex.metrica.Revenue
-import com.yandex.metrica.YandexMetrica
-import com.yandex.metrica.ecommerce.ECommerceEvent
-import com.yandex.metrica.plugins.IPluginReporter
-import com.yandex.metrica.plugins.PluginErrorDetails
-import com.yandex.metrica.profile.UserProfile
+import io.appmetrica.analytics.AdRevenue
+import io.appmetrica.analytics.AppMetrica
+import io.appmetrica.analytics.IReporter
+import io.appmetrica.analytics.Revenue
+import io.appmetrica.analytics.ecommerce.ECommerceEvent
+import io.appmetrica.analytics.plugins.IPluginReporter
+import io.appmetrica.analytics.plugins.PluginErrorDetails
+import io.appmetrica.analytics.profile.UserProfile
 
 object MetricaUtils {
 
@@ -20,7 +21,7 @@ object MetricaUtils {
         if (BuildConfig.METRICA_API_KEY.isEmpty()) {
             return NoOpReporter
         }
-        return YandexMetrica.getReporter(context.applicationContext, BuildConfig.METRICA_API_KEY)
+        return AppMetrica.getReporter(context.applicationContext, BuildConfig.METRICA_API_KEY)
     }
 
     private object NoOpReporter : IReporter {
@@ -47,13 +48,19 @@ object MetricaUtils {
 
         override fun reportECommerce(event: ECommerceEvent) = Unit
 
+        override fun setDataSendingEnabled(p0: Boolean) = Unit
+
         override fun reportUserProfile(profile: UserProfile) = Unit
 
         override fun sendEventsBuffer() = Unit
 
         override fun getPluginExtension(): IPluginReporter = NoOpPluginReporter
 
-        override fun setStatisticsSending(enabled: Boolean) = Unit
+        override fun reportAdRevenue(p0: AdRevenue) = Unit
+
+        override fun putAppEnvironmentValue(p0: String, p1: String?) = Unit
+
+        override fun clearAppEnvironment() = Unit
 
         override fun setUserProfileID(profileID: String?) = Unit
     }

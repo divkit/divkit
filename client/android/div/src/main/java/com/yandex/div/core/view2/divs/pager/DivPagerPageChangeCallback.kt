@@ -9,11 +9,10 @@ import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.hasSightActions
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.DivPager
 
-internal class PageChangeCallback(
+internal class DivPagerPageChangeCallback(
     private val divPager: DivPager,
     private val items: List<DivItemBuilderResult>,
     private val bindingContext: BindingContext,
@@ -43,6 +42,14 @@ internal class PageChangeCallback(
         }
         if (prevPosition != RecyclerView.NO_POSITION) {
             divView.unbindViewFromDiv(pagerView)
+        }
+
+        if (position == RecyclerView.NO_POSITION) {
+            prevPosition = position
+            return
+        }
+
+        if (prevPosition != RecyclerView.NO_POSITION) {
             val direction =
                 if (position > prevPosition) ScrollDirection.NEXT else ScrollDirection.BACK
             divView.div2Component.div2Logger.logPagerChangePage(
@@ -87,10 +94,8 @@ internal class PageChangeCallback(
     private fun trackVisibleChildren() {
         recyclerView.children.forEach { child ->
             val childPosition = recyclerView.getChildAdapterPosition(child)
-            if (childPosition == RecyclerView.NO_POSITION) {
-                KAssert.fail { "Requesting child position during layout" }
-                return
-            }
+            if (childPosition == RecyclerView.NO_POSITION) return
+
             val item = items[childPosition]
             divView.div2Component.visibilityActionTracker
                 .startTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), child, item.div)

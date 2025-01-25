@@ -1,24 +1,20 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithArray(
-    @JvmField final val array: List<Entity>, // at least 1 elements
+    @JvmField val array: List<Entity>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -34,11 +30,9 @@ class EntityWithArray(
         return hash
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.write(key = "array", value = array)
-        json.write(key = "type", value = TYPE)
-        return json
+    fun equals(other: EntityWithArray?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return array.compareWith(other.array) { a, b -> a.equals(b, resolver, otherResolver) }
     }
 
     fun copy(
@@ -46,6 +40,13 @@ class EntityWithArray(
     ) = EntityWithArray(
         array = array,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.write(key = "array", value = array)
+        json.write(key = "type", value = TYPE)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_array"
@@ -63,5 +64,4 @@ class EntityWithArray(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArray(env, json = it) }
     }
-
 }

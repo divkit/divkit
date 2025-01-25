@@ -22,6 +22,7 @@ abstract class DivVisitor<T> {
             is Div.Input -> visit(div, resolver)
             is Div.Select -> visit(div, resolver)
             is Div.Video -> visit(div, resolver)
+            is Div.Switch -> visit(div, resolver)
         }
     }
 
@@ -58,4 +59,6 @@ abstract class DivVisitor<T> {
     protected open fun visit(data: Div.Select, resolver: ExpressionResolver) = defaultVisit(data, resolver)
 
     protected open fun visit(data: Div.Video, resolver: ExpressionResolver) = defaultVisit(data, resolver)
+
+    protected open fun visit(data: Div.Switch, resolver: ExpressionResolver) = defaultVisit(data, resolver)
 }

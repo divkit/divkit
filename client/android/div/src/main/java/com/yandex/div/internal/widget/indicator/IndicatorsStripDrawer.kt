@@ -2,6 +2,7 @@ package com.yandex.div.internal.widget.indicator
 
 import android.graphics.Canvas
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.util.getIndices
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.internal.widget.indicator.animations.IndicatorAnimator
@@ -220,13 +221,17 @@ internal class IndicatorsStripDrawer(
             }
 
             val viewportCenter = viewportWidth / 2f
-            val activeItemOffset: Float
             var offset: Float
             if (view.isLayoutRtl()) {
-                activeItemOffset = allItems[allItems.size - 1 - activePosition].centerOffset
+                val activeItemOffset = if (activePosition == RecyclerView.NO_POSITION) {
+                    0f
+                } else {
+                    allItems[allItems.size - 1 - activePosition].centerOffset
+                }
                 offset = viewportCenter - activeItemOffset + (spaceBetweenCenters * positionFraction)
             } else {
-                activeItemOffset = allItems[activePosition].centerOffset
+                val activeItemOffset =
+                    if (activePosition == RecyclerView.NO_POSITION) 0f else allItems[activePosition].centerOffset
                 offset = viewportCenter - activeItemOffset - (spaceBetweenCenters * positionFraction)
             }
 

@@ -46,11 +46,11 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { visibilityAction } from '../../use/visibilityAction';
     import { genClassName } from '../../utils/genClassName';
-    import { devtool, DevtoolResult } from '../../use/devtool';
-    import { STATE_CTX, StateCtxValue } from '../../context/state';
+    import { devtool, type DevtoolResult } from '../../use/devtool';
+    import { STATE_CTX, type StateCtxValue } from '../../context/state';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctAlpha } from '../../utils/correctAlpha';
@@ -72,6 +72,9 @@
     import { isDeepEqual } from '../../utils/isDeepEqual';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
+    import { layoutProvider } from '../../use/layoutProvider';
+    import { ENABLED_CTX, type EnabledCtxValue } from '../../context/enabled';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -84,13 +87,17 @@
     export let customActions = '';
     export let additionalPaddings: EdgeInsets | null = null;
     export let heightByAspect = false;
-    export let parentOf: (MaybeMissing<DivBaseData> | undefined)[] | undefined = undefined;
+    export let parentOf: {
+        json: MaybeMissing<DivBaseData> | undefined;
+        id: string | undefined;
+    }[] | undefined = undefined;
     export let parentOfSimpleMode: boolean | undefined = undefined;
     export let replaceItems: ((items: (MaybeMissing<DivBaseData> | undefined)[]) => void) | undefined = undefined;
     export let hasInnerFocusable = false;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
+    const { isEnabled } = getContext<EnabledCtxValue>(ENABLED_CTX);
     const direction = rootCtx.direction;
 
     let currentNode: HTMLElement;
@@ -172,9 +179,12 @@
     let transformOrigin: string | undefined;
     let transform: string | undefined;
 
+    let layoutProviderResizeObserver: ResizeObserver | undefined;
+
     let hasCustomFocus = false;
 
     let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
+    let prevTriggersUnsubscribe: (() => void) | undefined = undefined;
 
     let registred: {
         destroy(): void;
@@ -197,11 +207,19 @@
         jsonTransitionTriggers = componentContext.fakeElement ?
             [] :
             (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
-        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.json.id);
-        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.json.id);
+        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.id);
+        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.id);
 
         if (currentNode) {
             useAction(currentNode);
+        }
+
+        prevTriggersUnsubscribe?.();
+        if ($isEnabled) {
+            prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
+                componentContext,
+                componentContext.json.variable_triggers
+            );
         }
     }
 
@@ -209,6 +227,16 @@
     // componentContext could be changed
     $: if (origJson) {
         rebind();
+    }
+
+    $: if ($isEnabled) {
+        prevTriggersUnsubscribe?.();
+        prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
+            componentContext,
+            componentContext.json.variable_triggers
+        );
+    } else {
+        prevTriggersUnsubscribe?.();
     }
 
     $: jsonFocus = componentContext.getDerivedFromVars(componentContext.json.focus);
@@ -262,11 +290,14 @@
 
         const index = parentOf.findIndex(item => item?.id === id);
         const newItems = parentOf.slice();
-        newItems.splice(index, 1, ...(items || []));
+        newItems.splice(index, 1, ...(items || [] as DivBase[]).map(it => ({
+            json: it,
+            id: it?.id as string | undefined
+        })));
 
         parentOf = newItems;
 
-        replaceItems(newItems);
+        replaceItems(newItems.map(it => it?.json));
     }
 
     $: {
@@ -277,7 +308,7 @@
         let newBackgroundRadius = '';
 
         if (border) {
-            if (border.has_shadow) {
+            if (correctBooleanInt(border.has_shadow, false)) {
                 const shadow = border.shadow;
                 if (shadow) {
                     newBorderStyle['box-shadow'] = shadowToCssBoxShadow(shadow);
@@ -291,7 +322,7 @@
                 strokeColor = correctColor(border.stroke.color, 1, strokeColor);
                 newBorderElemStyle['--divkit-border'] = `${pxToEm(strokeWidth + 1)} solid ${strokeColor}`;
             }
-            if (border.corners_radius) {
+            if (border.corners_radius && typeof border.corners_radius === 'object') {
                 cornersRadius = correctBorderRadiusObject(border.corners_radius, cornersRadius);
                 newBorderStyle['border-radius'] = borderRadius(cornersRadius);
                 ([
@@ -393,7 +424,7 @@
             }
 
             if (type === 'match_parent' || !type) {
-                componentContext.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                componentContext.logError(wrapError(new Error('Incorrect child size. Container with wrap_content size contains child with match_parent size along the main axis'), {
                     level: 'warn'
                 }));
             }
@@ -405,8 +436,22 @@
                     level: 'error'
                 }));
             }
-            if (layoutParams.parentLayoutOrientation === 'vertical') {
-                newWidth = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
+            if (layoutParams.parentLayoutOrientation === 'vertical' || layoutParams.stretchWidth) {
+                const leftMargin = ($direction === 'ltr' ? $jsonMargins?.start : $jsonMargins?.end) ??
+                    $jsonMargins?.left ??
+                    0;
+                const rightMargin = ($direction === 'ltr' ? $jsonMargins?.end : $jsonMargins?.start) ??
+                    $jsonMargins?.right ??
+                    0;
+                const totalWidth = `calc(100% - ${pxToEmWithUnits(leftMargin + rightMargin)})`;
+
+                if (layoutParams.stretchWidth) {
+                    // force preferred width to 0
+                    newWidth = '0';
+                    newWidthMin = totalWidth;
+                } else {
+                    newWidth = totalWidth;
+                }
             } else if (layoutParams.parentContainerOrientation === 'horizontal') {
                 newFlexGrow = $jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1;
                 if (layoutParams.parentContainerWrap) {
@@ -471,8 +516,18 @@
                     level: 'error'
                 }));
             }
-            if (layoutParams.parentLayoutOrientation === 'horizontal') {
-                newHeight = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
+            if (layoutParams.parentLayoutOrientation === 'horizontal' || layoutParams.stretchHeight) {
+                const topMargin = $jsonMargins?.top ?? 0;
+                const bottomMargin = $jsonMargins?.bottom ?? 0;
+                const totalHeight = `calc(100% - ${pxToEmWithUnits(topMargin + bottomMargin)})`;
+
+                if (layoutParams.stretchHeight) {
+                    // force preferred height to 0
+                    newHeight = '0';
+                    newHeightMin = totalHeight;
+                } else {
+                    newHeight = totalHeight;
+                }
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
                 newFlexGrow = $jsonHeight?.weight || 1;
                 if (layoutParams.parentContainerWrap) {
@@ -502,7 +557,7 @@
             }
 
             if (type === 'match_parent') {
-                componentContext.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                componentContext.logError(wrapError(new Error('Incorrect child size. Container with wrap_content size contains child with match_parent size along the main axis'), {
                     level: 'warn'
                 }));
             }
@@ -539,10 +594,6 @@
     }
 
     $: parentOverlapMod = layoutParams.overlapParent ? true : undefined;
-
-    $: parentOverlapAbsoluteMod = layoutParams.overlapParent &&
-        (!$jsonWidth || $jsonWidth.type === 'match_parent') && !layoutParams.parentHorizontalWrapContent &&
-        $jsonHeight?.type === 'match_parent' && !layoutParams.parentVerticalWrapContent;
 
     $: gridArea = layoutParams.gridArea ?
         `${layoutParams.gridArea.y + 1}/${layoutParams.gridArea.x + 1}/span ${layoutParams.gridArea.rowSpan}/span ${layoutParams.gridArea.colSpan}` :
@@ -590,8 +641,8 @@
     $: {
         transitionChangeInProgress = undefined;
         if (
-            hasStateChangeTrigger && componentContext.json.transition_change &&
-            rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.json.id)
+            hasStateChangeTrigger &&
+            rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.id)
         ) {
             transitionChangeInProgress = true;
         }
@@ -715,6 +766,11 @@
             hasVisibilityChangeTrigger &&
             transition
         ) {
+            let bbox: DOMRect | undefined;
+            if (nextVisibility === 'gone') {
+                bbox = currentNode.getBoundingClientRect();
+            }
+
             await tick();
 
             if (direction === 'in') {
@@ -728,7 +784,8 @@
                 componentContext,
                 transition,
                 currentNode,
-                direction
+                direction,
+                bbox
             ).then(() => {
                 if (direction === 'in') {
                     visibilityChangingInProgress = false;
@@ -744,7 +801,7 @@
 
     function unmountExtensions(): void {
         if (extensions && currentNode) {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             extensions.forEach(it => {
                 it.unmountView?.(currentNode, ctx);
             });
@@ -763,7 +820,7 @@
             unmountExtensions();
 
             if (Array.isArray(componentContext.json.extensions)) {
-                const ctx = rootCtx.getExtensionContext();
+                const ctx = rootCtx.getExtensionContext(componentContext);
                 extensions = componentContext.json.extensions.map(it => {
                     const id = it.id;
                     if (!id) {
@@ -782,7 +839,13 @@
         });
     }
 
-    function updateDevtool(): void {
+    function afterInstanceUpdate(): void {
+        if (extensions?.length) {
+            const ctx = rootCtx.getExtensionContext(componentContext);
+            extensions.forEach(instance => {
+                instance.updateView?.(currentNode, ctx);
+            });
+        }
         if (dev) {
             dev.update(componentContext);
         }
@@ -792,7 +855,6 @@
         ...widthMods,
         ...heightMods,
         'parent-overlap': parentOverlapMod,
-        'parent-overlap-absolute': parentOverlapAbsoluteMod,
         'scroll-snap': layoutParams.scrollSnap,
         'hide-on-transition-in': stateChangingInProgress ||
             visibilityChangingInProgress ||
@@ -880,7 +942,7 @@
                 node
             );
         }
-        if (hasStateChangeTrigger && componentContext.json.transition_change) {
+        if (!componentContext.fakeElement) {
             stateCtx.registerChildWithTransitionChange(
                 componentContext.json as DivBaseData,
                 componentContext,
@@ -918,14 +980,26 @@
             });
         }
 
-        const id = componentContext.json.id;
+        const id = componentContext.id;
         if (id) {
+            rootCtx.registerId(id, () => currentNode);
             stateCtx.registerChild(id);
         }
 
         componentContext.json.tooltips?.forEach(tooltip => {
             rootCtx.registerTooltip(node, tooltip);
         });
+
+        if (layoutProviderResizeObserver) {
+            layoutProviderResizeObserver.disconnect();
+            layoutProviderResizeObserver = undefined;
+        }
+        layoutProviderResizeObserver = layoutProvider(
+            currentNode,
+            componentContext,
+            componentContext.json.layout_provider?.width_variable_name,
+            componentContext.json.layout_provider?.height_variable_name
+        );
 
         if (devtool && !componentContext.fakeElement) {
             dev = devtool(node, rootCtx, componentContext);
@@ -934,6 +1008,7 @@
         registred = {
             destroy() {
                 if (id) {
+                    rootCtx.unregisterId(id);
                     stateCtx.unregisterChild(id);
                 }
                 if (visAction) {
@@ -969,7 +1044,7 @@
         componentContext.execAnyActions(blurActions);
     }
 
-    afterUpdate(updateDevtool);
+    afterUpdate(afterInstanceUpdate);
 
     onDestroy(() => {
         prevChilds.forEach(id => {
@@ -977,9 +1052,16 @@
         });
         prevChilds = [];
 
+        if (layoutProviderResizeObserver) {
+            layoutProviderResizeObserver.disconnect();
+            layoutProviderResizeObserver = undefined;
+        }
+
         componentContext.json.tooltips?.forEach(tooltip => {
             rootCtx.unregisterTooltip(tooltip);
         });
+
+        prevTriggersUnsubscribe?.();
 
         unmountExtensions();
     });

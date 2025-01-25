@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithComplexProperty(
-    @JvmField final val property: Property,
+    @JvmField val property: Property,
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -21,6 +22,11 @@ class EntityWithComplexProperty(
         return hash
     }
 
+    fun equals(other: EntityWithComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property.equals(other.property, resolver, otherResolver)
+    }
+
     fun copy(
         property: Property = this.property,
     ) = EntityWithComplexProperty(
@@ -31,9 +37,8 @@ class EntityWithComplexProperty(
         const val TYPE = "entity_with_complex_property"
     }
 
-
     class Property(
-        @JvmField final val value: Expression<Uri>,
+        @JvmField val value: Expression<Uri>,
     ) : Hashable {
 
         private var _hash: Int? = null 
@@ -47,6 +52,11 @@ class EntityWithComplexProperty(
                 value.hashCode()
             _hash = hash
             return hash
+        }
+
+        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         fun copy(

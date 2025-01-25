@@ -52,7 +52,7 @@ public class DivConfiguration {
     @NonNull
     private final Div2ImageStubProvider mDiv2ImageStubProvider;
     @NonNull
-    private final DivVisibilityChangeListener mDivVisibilityChangeListener;
+    private final List<DivVisibilityChangeListener> mDivVisibilityChangeListeners;
     @NonNull
     private final DivCustomViewFactory mDivCustomViewFactory;
     @NonNull
@@ -99,6 +99,8 @@ public class DivConfiguration {
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
     private boolean mComplexRebindEnabled;
+    private boolean mPagerPageClipEnabled;
+    private boolean mPermanentDebugPanelEnabled;
 
     private float mRecyclerScrollInterceptionAngle;
 
@@ -110,7 +112,7 @@ public class DivConfiguration {
             @NonNull DivStateChangeListener divStateChangeListener,
             @NonNull DivStateCache divStateCache,
             @NonNull Div2ImageStubProvider div2ImageStubProvider,
-            @NonNull DivVisibilityChangeListener divVisibilityChangeListener,
+            @NonNull List<DivVisibilityChangeListener> divVisibilityChangeListeners,
             @NonNull DivCustomViewFactory divCustomViewFactory,
             @NonNull DivCustomViewAdapter divCustomViewAdapter,
             @NonNull DivCustomContainerViewAdapter divCustomContainerViewAdapter,
@@ -139,6 +141,8 @@ public class DivConfiguration {
             boolean multipleStateChangeEnabled,
             boolean bindOnAttachEnabled,
             boolean complexRebindEnabled,
+            boolean pagerChildrenClipEnabled,
+            boolean permanentDebugPanelEnabled,
             float recyclerScrollInterceptionAngle
     ) {
         mImageLoader = imageLoader;
@@ -148,7 +152,7 @@ public class DivConfiguration {
         mDivStateChangeListener = divStateChangeListener;
         mDivStateCache = divStateCache;
         mDiv2ImageStubProvider = div2ImageStubProvider;
-        mDivVisibilityChangeListener = divVisibilityChangeListener;
+        mDivVisibilityChangeListeners = divVisibilityChangeListeners;
         mDivCustomViewFactory = divCustomViewFactory;
         mDivCustomViewAdapter = divCustomViewAdapter;
         mDivCustomContainerViewAdapter = divCustomContainerViewAdapter;
@@ -175,9 +179,11 @@ public class DivConfiguration {
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
         mComplexRebindEnabled = complexRebindEnabled;
+        mPermanentDebugPanelEnabled = permanentDebugPanelEnabled;
         mGlobalVariableController = globalVariableController;
         mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
+        mPagerPageClipEnabled = pagerChildrenClipEnabled;
     }
 
     @Provides
@@ -222,10 +228,20 @@ public class DivConfiguration {
         return mDiv2ImageStubProvider;
     }
 
-    @Provides
+    @kotlin.Deprecated(message = "Use #getDivVisibilityChangeListeners instead")
     @NonNull
     public DivVisibilityChangeListener getDivVisibilityChangeListener() {
-        return mDivVisibilityChangeListener;
+        if (mDivVisibilityChangeListeners.isEmpty()) {
+            return DivVisibilityChangeListener.STUB;
+        } else {
+            return mDivVisibilityChangeListeners.get(0);
+        }
+    }
+
+    @Provides
+    @NonNull
+    public List<? extends DivVisibilityChangeListener> getDivVisibilityChangeListeners() {
+        return mDivVisibilityChangeListeners;
     }
 
     @Provides
@@ -310,6 +326,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.PAGER_PAGE_CLIP_ENABLED)
+    public boolean isPagerPageClipEnabled() {
+        return mPagerPageClipEnabled;
+    }
+
+    @Provides
     @ExperimentFlag(experiment = Experiment.VIEW_POOL_PROFILING_ENABLED)
     public boolean isViewPoolProfilingEnabled() {
         return mViewPoolProfilingEnabled;
@@ -389,6 +411,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
+    public boolean isPermanentDebugPanelEnabled() {
+        return mPermanentDebugPanelEnabled;
+    }
+
+    @Provides
     public float getRecyclerScrollInterceptionAngle() {
         return mRecyclerScrollInterceptionAngle;
     }
@@ -420,8 +448,8 @@ public class DivConfiguration {
         private DivStateCache mDivStateCache;
         @Nullable
         private Div2ImageStubProvider mDiv2ImageStubProvider;
-        @Nullable
-        private DivVisibilityChangeListener mDivVisibilityChangeListener;
+        @NonNull
+        private final List<DivVisibilityChangeListener> mDivVisibilityChangeListeners = new ArrayList<>();
         @Nullable
         private DivCustomViewFactory mDivCustomViewFactory;
         @Nullable
@@ -464,6 +492,8 @@ public class DivConfiguration {
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
         private boolean mComplexRebindEnabled = Experiment.COMPLEX_REBIND_ENABLED.getDefaultValue();
+        private boolean mPagerPageClipEnabled = Experiment.PAGER_PAGE_CLIP_ENABLED.getDefaultValue();
+        private boolean mPermanentDebugPanelEnabled = Experiment.PERMANENT_DEBUG_PANEL_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
 
         public Builder(@NonNull DivImageLoader imageLoader) {
@@ -526,7 +556,7 @@ public class DivConfiguration {
 
         @NonNull
         public Builder divVisibilityChangeListener(@NonNull DivVisibilityChangeListener listener) {
-            mDivVisibilityChangeListener = listener;
+            mDivVisibilityChangeListeners.add(listener);
             return this;
         }
 
@@ -706,6 +736,18 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enablePagerPageClipping(boolean enable) {
+            mPagerPageClipEnabled = enable;
+            return this;
+        }
+
+        @NonNull
+        public Builder enablePermanentDebugPanel(boolean enable) {
+            mPermanentDebugPanelEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         @Deprecated
         public Builder globalVariableController(GlobalVariableController globalVariableController) {
             mGlobalVariableController = globalVariableController;
@@ -735,8 +777,7 @@ public class DivConfiguration {
                     mDivStateChangeListener == null ? DivStateChangeListener.STUB : mDivStateChangeListener,
                     mDivStateCache == null ? new InMemoryDivStateCache() : mDivStateCache,
                     mDiv2ImageStubProvider == null ? Div2ImageStubProvider.STUB : mDiv2ImageStubProvider,
-                    mDivVisibilityChangeListener == null ?
-                            DivVisibilityChangeListener.STUB : mDivVisibilityChangeListener,
+                    mDivVisibilityChangeListeners,
                     mDivCustomViewFactory == null ? DivCustomViewFactory.STUB : mDivCustomViewFactory,
                     mDivCustomViewAdapter == null ? DivCustomViewAdapter.STUB : mDivCustomViewAdapter,
                     mDivCustomContainerViewAdapter == null ? DivCustomContainerViewAdapter.STUB
@@ -766,6 +807,8 @@ public class DivConfiguration {
                     mMultipleStateChangeEnabled,
                     mBindOnAttachEnabled,
                     mComplexRebindEnabled,
+                    mPagerPageClipEnabled,
+                    mPermanentDebugPanelEnabled,
                     mRecyclerScrollInterceptionAngle);
         }
     }

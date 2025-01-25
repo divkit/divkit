@@ -123,6 +123,27 @@ extension LayeredBlock: ElementStateUpdating {
   }
 }
 
+extension LayeredBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> LayeredBlock {
+    let newChildren = try children.map {
+      try LayeredBlock.Child(
+        content: $0.content.updated(path: path, isFocused: isFocused),
+        alignment: $0.alignment
+      )
+    }
+
+    let childrenChanged = zip(newChildren, children).contains { $0.content !== $1.content }
+
+    return childrenChanged
+      ? LayeredBlock(
+        widthTrait: widthTrait,
+        heightTrait: heightTrait,
+        children: newChildren
+      )
+      : self
+  }
+}
+
 extension LayeredBlock: Equatable {
   public static func ==(lhs: LayeredBlock, rhs: LayeredBlock) -> Bool {
     lhs.widthTrait == rhs.widthTrait &&

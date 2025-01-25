@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class FunctionSignaturesTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
@@ -29,11 +27,13 @@ private func runTest(_ testCase: SignatureTestCase) {
     persistentValuesStorage: DivPersistentValuesStorage()
   )
   let functionName = testCase.functionName
-  let function = functionsProvider.functions
+  let functions = testCase.isMethod ? FunctionsProvider.methods : functionsProvider.functions
+  let function = functions
     .first { name, _ in name == functionName }
     .map { $1 }
   guard let function else {
-    XCTFail("Function \(functionName) is not found")
+    let signatureType = testCase.isMethod ? "Method" : "Function"
+    XCTFail("\(signatureType) \(functionName) is not found")
     return
   }
 
@@ -49,6 +49,7 @@ private struct TestCases: Decodable {
 
 private struct SignatureTestCase: Decodable {
   let functionName: String
+  let isMethod: Bool
   let arguments: [ArgumentSignature]
   let resultType: Any.Type
   let platforms: [Platform]
@@ -56,8 +57,9 @@ private struct SignatureTestCase: Decodable {
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     functionName = try container.decode(String.self, forKey: .functionName)
+    isMethod = (try? container.decode(Bool.self, forKey: .isMethod)) ?? false
     arguments = (try? container.decode([ArgumentSignature].self, forKey: .arguments)) ?? []
-    resultType = parseType(try container.decode(String.self, forKey: .resultType))
+    resultType = try parseType(container.decode(String.self, forKey: .resultType))
     platforms = try container.decode([Platform].self, forKey: .platforms)
   }
 
@@ -67,16 +69,22 @@ private struct SignatureTestCase: Decodable {
 
   var name: String {
     let args = arguments
+      .dropFirst(isMethod ? 1 : 0)
       .map {
         let type = formatTypeForError($0.type)
         return $0.vararg ? "vararg \(type)" : type
       }
       .joined(separator: ", ")
-    return "\(functionName)(\(args)) -> \(formatTypeForError(resultType))"
+    let name = "\(functionName)(\(args)) -> \(formatTypeForError(resultType))"
+    if isMethod, let selfArg = arguments.first {
+      return "\(formatTypeForError(selfArg.type)).\(name)"
+    }
+    return name
   }
 
   private enum CodingKeys: String, CodingKey {
     case functionName = "function_name"
+    case isMethod = "is_method"
     case arguments
     case resultType = "result_type"
     case platforms
@@ -96,17 +104,17 @@ extension Function {
   }
 }
 
-extension FunctionSignature: Equatable {
+extension FunctionSignature: Swift.Equatable {
   public static func ==(lhs: FunctionSignature, rhs: FunctionSignature) -> Bool {
     lhs.arguments == rhs.arguments && lhs.resultType == rhs.resultType
   }
 }
 
-extension ArgumentSignature: Decodable {
+extension ArgumentSignature: Swift.Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.init(
-      type: parseType(try container.decode(String.self, forKey: .type)),
+    try self.init(
+      type: parseType(container.decode(String.self, forKey: .type)),
       vararg: (try? container.decode(Bool.self, forKey: .vararg)) ?? false
     )
   }
@@ -117,7 +125,7 @@ extension ArgumentSignature: Decodable {
   }
 }
 
-extension ArgumentSignature: Equatable {
+extension ArgumentSignature: Swift.Equatable {
   public static func ==(lhs: ArgumentSignature, rhs: ArgumentSignature) -> Bool {
     lhs.type == rhs.type && lhs.vararg == rhs.vararg
   }

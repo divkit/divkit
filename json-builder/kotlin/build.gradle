@@ -18,8 +18,8 @@ allprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
             freeCompilerArgs = ['-Xjvm-default=all']
-            languageVersion = "1.5"
-            apiVersion = "1.5"
+            languageVersion = "1.9"
+            apiVersion = "1.9"
         }
     }
 

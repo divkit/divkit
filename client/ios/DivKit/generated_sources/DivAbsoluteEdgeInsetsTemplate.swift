@@ -32,10 +32,10 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAbsoluteEdgeInsetsTemplate?) -> DeserializationResult<DivAbsoluteEdgeInsets> {
-    let bottomValue = parent?.bottom?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomValidator) ?? .noValue
-    let leftValue = parent?.left?.resolveOptionalValue(context: context, validator: ResolvedValue.leftValidator) ?? .noValue
-    let rightValue = parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue
-    let topValue = parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue
+    let bottomValue = { parent?.bottom?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomValidator) ?? .noValue }()
+    let leftValue = { parent?.left?.resolveOptionalValue(context: context, validator: ResolvedValue.leftValidator) ?? .noValue }()
+    let rightValue = { parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue }()
+    let topValue = { parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue }()
     let errors = mergeErrors(
       bottomValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom", error: $0) },
       leftValue.errorsOrWarnings?.map { .nestedObjectError(field: "left", error: $0) },
@@ -43,10 +43,10 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
       topValue.errorsOrWarnings?.map { .nestedObjectError(field: "top", error: $0) }
     )
     let result = DivAbsoluteEdgeInsets(
-      bottom: bottomValue.value,
-      left: leftValue.value,
-      right: rightValue.value,
-      top: topValue.value
+      bottom: { bottomValue.value }(),
+      left: { leftValue.value }(),
+      right: { rightValue.value }(),
+      top: { topValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -55,31 +55,57 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var bottomValue: DeserializationResult<Expression<Int>> = parent?.bottom?.value() ?? .noValue
-    var leftValue: DeserializationResult<Expression<Int>> = parent?.left?.value() ?? .noValue
-    var rightValue: DeserializationResult<Expression<Int>> = parent?.right?.value() ?? .noValue
-    var topValue: DeserializationResult<Expression<Int>> = parent?.top?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "bottom":
-        bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator).merged(with: bottomValue)
-      case "left":
-        leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator).merged(with: leftValue)
-      case "right":
-        rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator).merged(with: rightValue)
-      case "top":
-        topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).merged(with: topValue)
-      case parent?.bottom?.link:
-        bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
-      case parent?.left?.link:
-        leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
-      case parent?.right?.link:
-        rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
-      case parent?.top?.link:
-        topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
-      default: break
+    var bottomValue: DeserializationResult<Expression<Int>> = { parent?.bottom?.value() ?? .noValue }()
+    var leftValue: DeserializationResult<Expression<Int>> = { parent?.left?.value() ?? .noValue }()
+    var rightValue: DeserializationResult<Expression<Int>> = { parent?.right?.value() ?? .noValue }()
+    var topValue: DeserializationResult<Expression<Int>> = { parent?.top?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "bottom" {
+           bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator).merged(with: bottomValue)
+          }
+        }()
+        _ = {
+          if key == "left" {
+           leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator).merged(with: leftValue)
+          }
+        }()
+        _ = {
+          if key == "right" {
+           rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator).merged(with: rightValue)
+          }
+        }()
+        _ = {
+          if key == "top" {
+           topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).merged(with: topValue)
+          }
+        }()
+        _ = {
+         if key == parent?.bottom?.link {
+           bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.left?.link {
+           leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.right?.link {
+           rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.top?.link {
+           topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       bottomValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom", error: $0) },
       leftValue.errorsOrWarnings?.map { .nestedObjectError(field: "left", error: $0) },
@@ -87,10 +113,10 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
       topValue.errorsOrWarnings?.map { .nestedObjectError(field: "top", error: $0) }
     )
     let result = DivAbsoluteEdgeInsets(
-      bottom: bottomValue.value,
-      left: leftValue.value,
-      right: rightValue.value,
-      top: topValue.value
+      bottom: { bottomValue.value }(),
+      left: { leftValue.value }(),
+      right: { rightValue.value }(),
+      top: { topValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

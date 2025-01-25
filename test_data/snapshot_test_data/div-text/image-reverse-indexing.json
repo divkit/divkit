@@ -1,0 +1,61 @@
+{
+  "description": "Images in different positions in text, using indexing_direction parameter",
+  "platforms": [
+    "android"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Image inserted in the beggining.",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/star.png"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Image inserted in the end.",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/star.png",
+                  "indexing_direction": "reversed"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Image inserted before last word.",
+              "images": [
+                {
+                  "start": 5,
+                  "url": "https://yastatic.net/s3/home/divkit/star.png",
+                  "indexing_direction": "reversed"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Image inserted after first word.",
+              "images": [
+                {
+                  "start": 5,
+                  "url": "https://yastatic.net/s3/home/divkit/star.png"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -10,6 +10,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
+import com.yandex.div.data.VariableMutationException
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import java.lang.AssertionError
+import org.mockito.stubbing.Answer
 
 /**
  * Tests for [DivVariableController].
@@ -73,9 +75,13 @@ class DivVariableControllerTest {
     fun `variable declaration notification happens only once`() {
         val name = "var_name"
         var lastVariableValue: Any? = null
-        underTest.variableSource.observeDeclaration {
-            lastVariableValue = it.getValue()
-        }
+
+        underTest.variableSource.observeDeclaration (object : DeclarationObserver {
+            override fun onDeclared(variable: Variable) {
+                lastVariableValue = variable.getValue()
+            }
+            override fun onUndeclared(variable: Variable) = Unit
+        })
 
         val firstVar = Variable.StringVariable(name, "A")
         val secondVar = Variable.StringVariable(name, "B")
@@ -91,9 +97,12 @@ class DivVariableControllerTest {
         val firstVar = Variable.StringVariable("A", "value of A")
         val secondVar = Variable.StringVariable("B", "value of B")
         var secondVarAtDeclareTime: Variable? = null
-        underTest.variableSource.observeDeclaration {
-            secondVarAtDeclareTime = underTest.variableSource.getMutableVariable(secondVar.name)
-        }
+        underTest.variableSource.observeDeclaration (object : DeclarationObserver {
+            override fun onDeclared(variable: Variable) {
+                secondVarAtDeclareTime = underTest.variableSource.getMutableVariable(secondVar.name)
+            }
+            override fun onUndeclared(variable: Variable) = Unit
+        })
 
         underTest.putOrUpdate(firstVar, secondVar)
         Assert.assertEquals(secondVar, secondVarAtDeclareTime)
@@ -103,8 +112,8 @@ class DivVariableControllerTest {
     fun `put or update in declaration callback not lead to deadlock`() = runBlocking {
         val firstVar = Variable.StringVariable("A", "value of A")
         val secondVar = Variable.StringVariable("B", "value of B")
-        val declarationCallback = mock<(Variable) -> Unit> {
-            on { invoke(any()) } doAnswer { underTest.putOrUpdate(secondVar) }
+        val declarationCallback = mock<DeclarationObserver> {
+            on { onDeclared(any()) } doAnswer Answer { underTest.putOrUpdate(secondVar) }
         }
 
         withContext(Dispatchers.IO) {
@@ -113,7 +122,7 @@ class DivVariableControllerTest {
         }
 
         underTest.putOrUpdate(firstVar)
-        verify(declarationCallback, times(2)).invoke(any())
+        verify(declarationCallback, times(2)).onDeclared(any())
     }
 
     @Test
@@ -133,9 +142,11 @@ class DivVariableControllerTest {
     fun `variable declaration notification happens only once, second one throw exception`() {
         val name = "var_name"
         var lastVariableValue: Any? = null
-        underTest.variableSource.observeDeclaration {
-            lastVariableValue = it.getValue()
+        val declarationCallback = object : DeclarationObserver {
+            override fun onDeclared(variable: Variable) { lastVariableValue = variable.getValue() }
+            override fun onUndeclared(variable: Variable) = Unit
         }
+        underTest.variableSource.observeDeclaration(declarationCallback)
 
         val firstVar = Variable.StringVariable(name, "A")
         val secondVar = Variable.StringVariable(name, "B")
@@ -211,6 +222,68 @@ class DivVariableControllerTest {
 
         val result = evaluateExpression(div2View, "@{${variable.name}}")
         Assert.assertEquals(variable.getValue(), result)
+    }
+
+    @Test
+    fun `removing variable removes only provided variables `() {
+        val strVariable = Variable.StringVariable("str_original", "original_value")
+        val strVariable2 = Variable.StringVariable("str_original2", "original_value")
+        val strVariable3 = Variable.StringVariable("str_original3", "original_value")
+        underTest.declare(strVariable, strVariable2, strVariable3)
+
+        underTest.removeAll("str_original")
+
+        Assert.assertNotNull(underTest.get("str_original2"))
+        Assert.assertNotNull(underTest.get("str_original3"))
+    }
+
+    @Test
+    fun `after removing variable and redeclaration of variable with the same name only new one will be used`() {
+        val original = Variable.StringVariable("name", "original_value")
+        val redeclared = Variable.StringVariable("name", "redeclared_value")
+
+        underTest.declare(original)
+        Assert.assertEquals("original_value", underTest.get("name")?.getValue())
+
+        underTest.removeAll("name")
+        Assert.assertNull(underTest.get("name"))
+
+        underTest.putOrUpdate(redeclared)
+        Assert.assertEquals("redeclared_value", underTest.get("name")?.getValue())
+
+        // changing removed variable should not cause any change
+        original.setValue(Variable.StringVariable("name", "updated_original"))
+        Assert.assertEquals("redeclared_value", underTest.get("name")?.getValue())
+
+        // changing redeclared variable should update value in DivVariableController
+        redeclared.setValue(Variable.StringVariable("name", "updated_value"))
+        Assert.assertEquals("updated_value", underTest.get("name")?.getValue())
+    }
+
+    @Test
+    fun `replacing variable with a variable of other type throws an exception`() {
+        val strVariable = Variable.StringVariable("str_original", "original_value")
+        underTest.declare(strVariable)
+
+        val doubleVariable = Variable.DoubleVariable("str_original", 1.0)
+        try {
+            underTest.replaceAll(doubleVariable)
+            Assert.fail()
+        } catch (e: VariableMutationException) { }
+    }
+
+    @Test
+    fun `removing variable and putting variable with another type with the same name throws an exception`() {
+        val strVariable = Variable.StringVariable("str_original", "original_value")
+        underTest.declare(strVariable)
+
+        underTest.removeAll("str_original")
+
+        val doubleVariable = Variable.DoubleVariable("str_original", 1.0)
+        try {
+            underTest.putOrUpdate(doubleVariable)
+            Assert.fail()
+        } catch (e: VariableMutationException) { }
     }
 
     private fun evaluateExpression(div2View: Div2View, expression: String): Any {

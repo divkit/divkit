@@ -18,7 +18,7 @@ export const funcByArgs: Map<string, Func> = new Map();
 export const methods: Map<string, Func[]> = new Map();
 export const methodByArgs: Map<string, Func> = new Map();
 
-type FuncMatchError = {
+export type FuncMatchError = {
     type: 'mismatch';
     expected: EvalTypes;
     found: EvalTypes;
@@ -33,6 +33,13 @@ type FuncMatchError = {
 } | {
     type: 'missing';
 };
+
+export interface FuncMatchFound {
+    func: Func;
+    conversions: number;
+}
+
+export type FuncMatch = FuncMatchFound | FuncMatchError;
 
 // no args
 export function registerFunc(name: string, args: [], cb: (ctx?: EvalContext) => EvalValue): void;
@@ -239,11 +246,8 @@ function matchFuncArgs(func: Func, args: EvalValue[]): {
     };
 }
 
-export function findBestMatchedFunc(type: 'function' | 'method', funcName: string, args: EvalValue[]): {
-    func: Func;
-    conversions: number;
-} | FuncMatchError {
-    const list = (type === 'function' ? funcs : methods).get(funcName);
+export function findBestMatchedFunc(map: Map<string, Func[]>, funcName: string, args: EvalValue[]): FuncMatch {
+    const list = map.get(funcName);
     if (!list) {
         return {
             type: 'missing'
@@ -296,4 +300,8 @@ export function convertArgs(func: Func, args: EvalValue[]): EvalValue[] {
 
         return arg;
     });
+}
+
+export function funcToKey(funcName: string, func: Func): string {
+    return funcName + ':' + func.args.map(arg => typeof arg === 'string' ? arg : arg.type).join('#');
 }

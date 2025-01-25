@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, radius`.
  */
 @Generated
-class Blur internal constructor(
+data class Blur internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Filter {
@@ -40,7 +40,7 @@ class Blur internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Blur radius. Defines how many pixels blend into each other. Specified in: `dp`.
          */

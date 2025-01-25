@@ -11,6 +11,7 @@ public final class DivVisibilityAction: DivSightAction {
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
+  public let scopeId: String?
   public let typed: DivActionTyped?
   public let url: Expression<URL>?
   public let visibilityDuration: Expression<Int> // constraint: number >= 0; default value: 800
@@ -60,6 +61,7 @@ public final class DivVisibilityAction: DivSightAction {
     logLimit: Expression<Int>? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
+    scopeId: String? = nil,
     typed: DivActionTyped? = nil,
     url: Expression<URL>? = nil,
     visibilityDuration: Expression<Int>? = nil,
@@ -71,6 +73,7 @@ public final class DivVisibilityAction: DivSightAction {
     self.logLimit = logLimit ?? .value(1)
     self.payload = payload
     self.referer = referer
+    self.scopeId = scopeId
     self.typed = typed
     self.url = url
     self.visibilityDuration = visibilityDuration ?? .value(800)
@@ -92,13 +95,18 @@ extension DivVisibilityAction: Equatable {
     guard
       lhs.logLimit == rhs.logLimit,
       lhs.referer == rhs.referer,
-      lhs.typed == rhs.typed
+      lhs.scopeId == rhs.scopeId
     else {
       return false
     }
     guard
+      lhs.typed == rhs.typed,
       lhs.url == rhs.url,
-      lhs.visibilityDuration == rhs.visibilityDuration,
+      lhs.visibilityDuration == rhs.visibilityDuration
+    else {
+      return false
+    }
+    guard
       lhs.visibilityPercentage == rhs.visibilityPercentage
     else {
       return false
@@ -117,6 +125,7 @@ extension DivVisibilityAction: Serializable {
     result["log_limit"] = logLimit.toValidSerializationValue()
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()
+    result["scope_id"] = scopeId
     result["typed"] = typed?.toDictionary()
     result["url"] = url?.toValidSerializationValue()
     result["visibility_duration"] = visibilityDuration.toValidSerializationValue()

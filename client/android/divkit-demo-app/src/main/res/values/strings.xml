@@ -31,4 +31,5 @@
     <string name="perform_action">Perform action</string>
     <string name="variables">Load variables</string>
     <string name="load_patch">Load patch</string>
+    <string name="load_div_json">Load another div json</string>
 </resources>

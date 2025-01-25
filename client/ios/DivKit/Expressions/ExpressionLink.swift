@@ -30,7 +30,7 @@ public struct ExpressionLink<T> {
 
     func appendString(_ value: String) {
       if let unescapedValue = ExpressionValueConverter.unescape(value, errorTracker: errorTracker) {
-        return items.append(.string(unescapedValue))
+        items.append(.string(unescapedValue))
       }
     }
 

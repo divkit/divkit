@@ -1,10 +1,11 @@
 // Generated code. Do not modify.
 
 @testable import DivKit
-
 import Foundation
 import Serialization
 import VGSL
+
+import enum DivKit.Expression
 
 public final class EntityWithArrayOfExpressions {
   public static let type: String = "entity_with_array_of_expressions"

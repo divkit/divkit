@@ -1,4 +1,4 @@
-import { AnyTransition, AppearanceTransition } from '../types/base';
+import type { AnyTransition, AppearanceTransition } from '../types/base';
 
 export function flattenTransition(transition: AppearanceTransition): AnyTransition[] {
     const res: AnyTransition[] = [];

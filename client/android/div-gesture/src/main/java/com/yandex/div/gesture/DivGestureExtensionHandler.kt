@@ -59,10 +59,10 @@ public class DivGestureExtensionHandler (
 
         val swipeTouchListener = OnSwipeTouchListener(
                 context = view.context,
-                onSwipeUp = createSwipeActionPerformer(swipeUpActions, divView),
-                onSwipeDown = createSwipeActionPerformer(swipeDownActions, divView),
-                onSwipeLeft = createSwipeActionPerformer(swipeLeftActions, divView),
-                onSwipeRight = createSwipeActionPerformer(swipeRightActions, divView),
+                onSwipeUp = createSwipeActionPerformer(swipeUpActions, divView, expressionResolver),
+                onSwipeDown = createSwipeActionPerformer(swipeDownActions, divView, expressionResolver),
+                onSwipeLeft = createSwipeActionPerformer(swipeLeftActions, divView, expressionResolver),
+                onSwipeRight = createSwipeActionPerformer(swipeRightActions, divView, expressionResolver),
         )
 
         view.setOnTouchListener(swipeTouchListener)
@@ -81,11 +81,12 @@ public class DivGestureExtensionHandler (
     private fun createSwipeActionPerformer(
         divActions: List<DivAction>?,
         divView: Div2View,
+        expressionResolver: ExpressionResolver,
     ): () -> Unit {
         return {
             divActions?.let { actions ->
                 actions
-                    .filter { it.isEnabled.evaluate(divView.expressionResolver) }
+                    .filter { it.isEnabled.evaluate(expressionResolver) }
                     .forEach { action -> divView.handleAction(action) }
             }
         }
@@ -100,7 +101,7 @@ public class DivGestureExtensionHandler (
     ) : View.OnTouchListener {
 
         private val gestureConsumer = object : SwipeGestureConsumer {
-            override fun onTouchStart(info: SwipeGestureInfo): Boolean = false
+            override fun onTouchStart(info: SwipeGestureInfo): Boolean = true
             override fun onSwipe(info: SwipeGestureInfo): Boolean = info.isTouchSlopBreached
             override fun onTouchEnd(info: SwipeGestureInfo): Boolean {
                 return when {

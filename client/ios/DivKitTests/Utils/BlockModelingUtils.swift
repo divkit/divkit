@@ -1,15 +1,20 @@
 @testable import DivKit
-@testable import LayoutKit
-
+import DivKitTestsSupport
 import Foundation
-
+@testable import LayoutKit
 import VGSL
+import XCTest
 
 func makeBlock(
   _ div: Div,
-  context: DivBlockModelingContext = DivBlockModelingContext()
+  context: DivBlockModelingContext = DivBlockModelingContext(),
+  ignoreErrors: Bool = false
 ) -> StateBlock {
-  try! divData(div).makeBlock(context: context) as! StateBlock
+  let block = try! divData(div).makeBlock(context: context) as! StateBlock
+  if !ignoreErrors, let error = context.errorsStorage.errors.first {
+    XCTFail(error.message)
+  }
+  return block
 }
 
 func separatorBlock() -> Block {
@@ -18,9 +23,12 @@ func separatorBlock() -> Block {
   )
 }
 
-func textBlock(text: String) -> Block {
+func textBlock(
+  widthTrait: LayoutTrait = .resizable,
+  text: String
+) -> Block {
   TextBlock(
-    widthTrait: .resizable,
+    widthTrait: widthTrait,
     text: text.withTypo(),
     verticalAlignment: .leading,
     accessibilityElement: nil
@@ -69,7 +77,7 @@ extension ActionAnimation {
 }
 
 extension UIElementPath {
-  static let root = DivKitTests.cardId.path
+  static let root = DivBlockModelingContext.testCardId.path
 }
 
 extension DivAction {
@@ -130,6 +138,6 @@ func url(_ string: String) -> URL {
   URL(string: string)!
 }
 
-func expression<T>(_ expression: String) -> Expression<T> {
+func expression<T>(_ expression: String) -> DivKit.Expression<T> {
   .link(ExpressionLink<T>(rawValue: expression)!)
 }

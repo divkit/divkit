@@ -1,10 +1,11 @@
 // Generated code. Do not modify.
 
 @testable import DivKit
-
 import Foundation
 import Serialization
 import VGSL
+
+import enum DivKit.Expression
 
 public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue {
   public typealias Value = EntityWithStringEnumPropertyWithDefaultValue.Value
@@ -29,12 +30,12 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
-    let valueValue = parent?.value?.resolveOptionalValue(context: context) ?? .noValue
+    let valueValue = { parent?.value?.resolveOptionalValue(context: context) ?? .noValue }()
     let errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     let result = EntityWithStringEnumPropertyWithDefaultValue(
-      value: valueValue.value
+      value: { valueValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -43,21 +44,29 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var valueValue: DeserializationResult<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>> = parent?.value?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "value":
-        valueValue = deserialize(__dictValue).merged(with: valueValue)
-      case parent?.value?.link:
-        valueValue = valueValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var valueValue: DeserializationResult<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>> = { parent?.value?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "value" {
+           valueValue = deserialize(__dictValue).merged(with: valueValue)
+          }
+        }()
+        _ = {
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     let result = EntityWithStringEnumPropertyWithDefaultValue(
-      value: valueValue.value
+      value: { valueValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

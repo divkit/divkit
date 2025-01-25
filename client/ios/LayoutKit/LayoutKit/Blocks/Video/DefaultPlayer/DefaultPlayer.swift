@@ -22,7 +22,6 @@ final class DefaultPlayer: Player {
   func set(data: VideoData, config: PlaybackConfig) {
     context = SourceContext(videoData: data, playbackConfig: config)
     guard let source = data.getSupportedVideo(player.staticScope.isMIMETypeSupported) else {
-      assertionFailure("Empty source")
       eventPipe.send(.fatal)
       return
     }

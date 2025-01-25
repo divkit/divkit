@@ -3,6 +3,8 @@ import Foundation
 
 import VGSL
 
+public typealias TextInputFilter = (String) -> Bool
+
 public final class TextInputBlock: BlockWithTraits {
   public enum InputType: Equatable {
     public enum KeyboardType: Equatable {
@@ -36,6 +38,13 @@ public final class TextInputBlock: BlockWithTraits {
     public static let `default`: Self = .keyboard(.default)
   }
 
+  public enum AutocapitalizationType {
+    case none
+    case words
+    case sentences
+    case allCharacters
+  }
+
   public enum TextAlignmentHorizontal: Equatable {
     case left
     case center
@@ -50,6 +59,14 @@ public final class TextInputBlock: BlockWithTraits {
     case bottom
   }
 
+  public enum EnterKeyType: Equatable {
+    case `default`
+    case go
+    case search
+    case send
+    case done
+  }
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
@@ -58,6 +75,9 @@ public final class TextInputBlock: BlockWithTraits {
   public let textTypo: Typo
   public let multiLineMode: Bool
   public let inputType: InputType
+  public var accessoryView: ViewType?
+  public let autocapitalizationType: AutocapitalizationType
+  public let enterKeyType: EnterKeyType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
@@ -66,13 +86,18 @@ public final class TextInputBlock: BlockWithTraits {
   public let isFocused: Bool
   public let onFocusActions: [UserInterfaceAction]
   public let onBlurActions: [UserInterfaceAction]
+  public let enterKeyActions: [UserInterfaceAction]
   public let textAlignmentHorizontal: TextAlignmentHorizontal
   public let textAlignmentVertical: TextAlignmentVertical
   public weak var parentScrollView: ScrollView?
+  public let filters: [TextInputFilter]?
   public let validators: [TextInputValidator]?
   public let layoutDirection: UserInterfaceLayoutDirection
   public let paddings: EdgeInsets?
   public let isEnabled: Bool
+  public let maxLength: Int?
+
+  let shouldClearFocus: Variable<Bool>
 
   public init(
     widthTrait: LayoutTrait = .resizable,
@@ -83,6 +108,9 @@ public final class TextInputBlock: BlockWithTraits {
     textTypo: Typo,
     multiLineMode: Bool = true,
     inputType: InputType = .default,
+    accessoryView: ViewType? = nil,
+    autocapitalizationType: AutocapitalizationType = .sentences,
+    enterKeyType: EnterKeyType = .default,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
@@ -91,13 +119,17 @@ public final class TextInputBlock: BlockWithTraits {
     isFocused: Bool = false,
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
+    enterKeyActions: [UserInterfaceAction] = [],
     parentScrollView: ScrollView? = nil,
+    filters: [TextInputFilter]? = nil,
     validators: [TextInputValidator]? = nil,
     layoutDirection: UserInterfaceLayoutDirection,
     textAlignmentHorizontal: TextAlignmentHorizontal = .start,
     textAlignmentVertical: TextAlignmentVertical = .center,
     paddings: EdgeInsets? = nil,
-    isEnabled: Bool = true
+    isEnabled: Bool = true,
+    maxLength: Int? = nil,
+    shouldClearFocus: Variable<Bool> = .constant(true)
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -107,6 +139,9 @@ public final class TextInputBlock: BlockWithTraits {
     self.textTypo = textTypo
     self.multiLineMode = multiLineMode
     self.inputType = inputType
+    self.accessoryView = accessoryView
+    self.autocapitalizationType = autocapitalizationType
+    self.enterKeyType = enterKeyType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
@@ -115,13 +150,17 @@ public final class TextInputBlock: BlockWithTraits {
     self.isFocused = isFocused
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions
+    self.enterKeyActions = enterKeyActions
     self.parentScrollView = parentScrollView
+    self.filters = filters
     self.validators = validators
     self.layoutDirection = layoutDirection
     self.textAlignmentHorizontal = textAlignmentHorizontal
     self.textAlignmentVertical = textAlignmentVertical
     self.paddings = paddings
     self.isEnabled = isEnabled
+    self.maxLength = maxLength
+    self.shouldClearFocus = shouldClearFocus
   }
 
   public var intrinsicContentWidth: CGFloat {
@@ -204,6 +243,46 @@ extension TextInputBlock {
 
 extension TextInputBlock: LayoutCachingDefaultImpl {}
 extension TextInputBlock: ElementStateUpdatingDefaultImpl {}
+extension TextInputBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> TextInputBlock {
+    if path != self.path {
+      return self
+    }
+
+    return TextInputBlock(
+      widthTrait: widthTrait,
+      heightTrait: heightTrait,
+      hint: hint,
+      textValue: textValue,
+      rawTextValue: rawTextValue,
+      textTypo: textTypo,
+      multiLineMode: multiLineMode,
+      inputType: inputType,
+      accessoryView: accessoryView,
+      autocapitalizationType: autocapitalizationType,
+      enterKeyType: enterKeyType,
+      highlightColor: highlightColor,
+      maxVisibleLines: maxVisibleLines,
+      selectAllOnFocus: selectAllOnFocus,
+      maskValidator: maskValidator,
+      path: path,
+      isFocused: isFocused,
+      onFocusActions: onFocusActions,
+      onBlurActions: onBlurActions,
+      enterKeyActions: enterKeyActions,
+      parentScrollView: parentScrollView,
+      filters: filters,
+      validators: validators,
+      layoutDirection: layoutDirection,
+      textAlignmentHorizontal: textAlignmentHorizontal,
+      textAlignmentVertical: textAlignmentVertical,
+      paddings: paddings,
+      isEnabled: isEnabled,
+      maxLength: maxLength
+    )
+  }
+}
+
 extension TextInputBlock: PathHolder {}
 
 private let defaultTextForMeasuring = "A"

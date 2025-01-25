@@ -1,0 +1,67 @@
+{
+    "features": [{
+        "id": "patch_base",
+        "name": "Basic patch support for <code>container</code>, <code>grid</code>, <code>gallery</code> and <code>pager</code>",
+        "compat": {
+            "web": {
+                "version_added": "27.2.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            }
+        }
+    }, {
+        "id": "patch_tabs_states",
+        "name": "Basic patch support for <code>tabs</code> and <code>states</code>",
+        "compat": {
+            "web": {
+                "version_added": "29.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            }
+        }
+    }, {
+        "id": "patch_transactional_mode",
+        "name": "Patch <code>transactional</code> <code>mode</code>",
+        "compat": {
+            "web": {
+                "version_added": "27.2.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            }
+        }
+    }, {
+        "id": "patch_on_applied_actions",
+        "name": "Patch <code>on_applied_actions</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.12.0"
+            },
+            "ios": {
+                "version_added": "30.12.0"
+            },
+            "web": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "patch_on_failed_actions",
+        "name": "Patch <code>on_failed_actions</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.12.0"
+            },
+            "web": {
+                "version_added": "30.20.0"
+            }
+        }
+    }]
+}

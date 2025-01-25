@@ -36,6 +36,11 @@ class IntegerOverflow(
         cause: Exception? = null
 ) : EvaluableException("Failed to evaluate [$expression]. $REASON_INTEGER_OVERFLOW", cause)
 
+class MissingLocalFunctionException(
+    name: String,
+    args: List<EvaluableType>,
+): EvaluableException("Function '$name(${args.toMessageFormat()})' is missing.")
+
 internal fun throwExceptionOnEvaluationFailed(
     expression: String,
     reason: String,

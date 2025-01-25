@@ -1,13 +1,12 @@
 package com.yandex.test.screenshot
 
 import com.yandex.test.screenshot.tasks.CompareScreenshotsTask
-import com.yandex.test.screenshot.tasks.GenerateScreenshotConfigTask
-import com.yandex.test.screenshot.tasks.PullScreenshotsTask
 import com.yandex.test.screenshot.tasks.ValidateTestResultsTask
 import com.yandex.test.util.android
 import com.yandex.test.util.androidComponents
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import kotlin.io.path.Path
 
 class ScreenshotTestPlugin : Plugin<Project> {
 
@@ -17,36 +16,32 @@ class ScreenshotTestPlugin : Plugin<Project> {
             ScreenshotTestPluginExtension::class.java
         )
 
-        val generateScreenshotConfigTask = project.tasks.register(
-            "generateScreenshotConfig",
-            GenerateScreenshotConfigTask::class.java,
-        ) {
-            it.deviceDir.set(extension.deviceDir)
-        }
         project.androidComponents.onVariants { variant ->
-            if (extension.enabled) {
-                val javaSources = checkNotNull(variant.sources.java) {
-                    "Not found java sources for variant $variant"
-                }
-                javaSources.addGeneratedSourceDirectory(
-                    generateScreenshotConfigTask,
-                    GenerateScreenshotConfigTask::outputDir
-                )
-            }
+            val variantName = variant.name.replaceFirstChar { it.uppercase() }
+            CompareScreenshotsTask.register(project, extension, variantName)
         }
 
         project.afterEvaluate {
             val validateTestResultsTask = ValidateTestResultsTask.register(project)
-            val pullScreenshotsTask = PullScreenshotsTask.register(project, extension)
-            val compareScreenshotsTask = CompareScreenshotsTask.register(project, extension,) {
-                it.mustRunAfter(pullScreenshotsTask)
-            }
-
             if (extension.enabled) {
                 project.tasks.matching {
                     it.name.startsWith("connected") && it.name.endsWith("AndroidTest")
                 }.configureEach { task ->
-                    task.finalizedBy(pullScreenshotsTask)
+                    val additionalOutputs = task.outputs.files.single {
+                        val path = it.toPath()
+                        path.contains(Path("connected_android_test_additional_output"))
+                    }
+
+                    val variant = task.name.removePrefix("connected")
+                        .removeSuffix("AndroidTest")
+
+                    val compareScreenshotsTask =
+                        project.tasks.withType(CompareScreenshotsTask::class.java)
+                            .named("compare${variant}Screenshots")
+                            .get()
+
+                    compareScreenshotsTask.screenshotDir.set(additionalOutputs)
+
                     if (extension.enableComparison) {
                         task.finalizedBy(compareScreenshotsTask)
                     }
@@ -55,7 +50,6 @@ class ScreenshotTestPlugin : Plugin<Project> {
             }
         }
 
-        @Suppress("UnstableApiUsage")
         project.androidComponents.finalizeDsl {
             val screenshotTestAnnotations = extension.testAnnotations
             if (screenshotTestAnnotations.isNotEmpty()) {

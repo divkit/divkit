@@ -1,16 +1,10 @@
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
-import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/utils/configuration.dart';
+
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
 
-/// Configuration model.
-class ShowUnsupportedDivs {
-  final bool enabled;
-
-  const ShowUnsupportedDivs(this.enabled);
-}
-
-class DivErrorWidget extends StatelessWidget {
+class DivErrorWidget extends StatefulWidget {
   static const errorColor = Color(0xFFFF0000);
 
   final String? error;
@@ -23,18 +17,30 @@ class DivErrorWidget extends StatelessWidget {
   });
 
   @override
+  State<DivErrorWidget> createState() => _DivErrorWidgetState();
+}
+
+class _DivErrorWidgetState extends State<DivErrorWidget> {
+  @override
+  void initState() {
+    super.initState();
+    final divContext = read<DivContext>(context)!;
+    widget.data.resolve(divContext.variables);
+  }
+
+  @override
   Widget build(BuildContext context) =>
-      DivKitProvider.watch<ShowUnsupportedDivs>(context)?.enabled ?? false
+      watch<DivConfiguration>(context)?.showUnsupportedDivs ?? false
           ? DivBaseWidget(
-              data: data,
+              data: widget.data,
               child: Placeholder(
-                color: errorColor,
+                color: DivErrorWidget.errorColor,
                 child: Center(
                   child: Material(
                     type: MaterialType.transparency,
                     child: Text(
-                      error ?? '',
-                      style: const TextStyle(color: errorColor),
+                      widget.error ?? '',
+                      style: const TextStyle(color: DivErrorWidget.errorColor),
                     ),
                   ),
                 ),

@@ -1,87 +1,65 @@
 import 'package:collection/collection.dart';
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/gallery/div_gallery_model.dart';
-import 'package:divkit/src/generated_sources/div_gallery.dart';
+import 'package:divkit/src/utils/mapping_widget.dart';
+import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/widgets.dart';
 
-class DivGalleryWidget extends StatefulWidget {
-  final DivGallery data;
-
+class DivGalleryWidget extends DivMappingWidget<DivGallery, DivGalleryModel> {
   const DivGalleryWidget(
-    this.data, {
+    super.data, {
     super.key,
   });
 
   @override
-  State<DivGalleryWidget> createState() => _DivGalleryWidgetState();
-}
-
-class _DivGalleryWidgetState extends State<DivGalleryWidget> {
-  // ToDo: Optimize repeated calculations on the same context
-  Stream<DivGalleryModel>? stream;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    stream ??= DivGalleryModel.from(context, widget.data);
+  DivGalleryModel value(BuildContext context) {
+    final divContext = read<DivContext>(context)!;
+    data.resolve(divContext.variables);
+    return data.bind(context);
   }
 
   @override
-  void didUpdateWidget(covariant DivGalleryWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.data != oldWidget.data) {
-      stream = DivGalleryModel.from(context, widget.data);
-    }
+  Stream<DivGalleryModel> stream(BuildContext context) {
+    final divContext = watch<DivContext>(context)!;
+    return divContext.variableManager.watch((values) {
+      data.resolve(values);
+      return data.bind(context);
+    });
   }
 
   @override
-  Widget build(BuildContext context) => DivBaseWidget(
-        data: widget.data,
-        child: StreamBuilder<DivGalleryModel>(
-          stream: stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final model = snapshot.requireData;
+  Widget build(BuildContext context, DivGalleryModel model) {
+    final isHorizontal = model.orientation == Axis.horizontal;
 
-              final isHorizontal = model.orientation == Axis.horizontal;
+    final childrenWithSpacing = model.children
+        .mapIndexed((i, element) {
+          final isLastElement = i == model.children.length - 1;
+          final spacing = isLastElement ? 0.0 : model.itemSpacing;
+          return [
+            element,
+            SizedBox(
+              width: isHorizontal ? spacing : null,
+              height: isHorizontal ? null : spacing,
+            ),
+          ];
+        })
+        .expand((element) => element)
+        .toList();
 
-              final childrenWithSpacing = model.children
-                  .mapIndexed((i, e) {
-                    final isLastElement = i == model.children.length - 1;
-                    final spacing = isLastElement ? 0.0 : model.itemSpacing;
-                    return [
-                      e,
-                      SizedBox(
-                        width: isHorizontal ? spacing : null,
-                        height: isHorizontal ? null : spacing,
-                      ),
-                    ];
-                  })
-                  .expand((el) => el)
-                  .toList();
-
-              return SingleChildScrollView(
-                scrollDirection: model.orientation,
-                child: isHorizontal
-                    ? Row(
-                        children: childrenWithSpacing,
-                      )
-                    : Column(
-                        children: childrenWithSpacing,
-                      ),
-              );
-            }
-
-            return const SizedBox.shrink();
-          },
+    return DivBaseWidget(
+      data: data,
+      child: SingleChildScrollView(
+        scrollDirection: model.orientation,
+        child: provide(
+          isHorizontal ? DivParentData.row : DivParentData.column,
+          child: Flex(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            direction: isHorizontal ? Axis.horizontal : Axis.vertical,
+            mainAxisSize: MainAxisSize.min,
+            children: childrenWithSpacing,
+          ),
         ),
-      );
-
-  @override
-  void dispose() {
-    stream = null;
-    super.dispose();
+      ),
+    );
   }
 }

@@ -1,0 +1,129 @@
+{
+  "description": "",
+  "platforms": [
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "margins": {
+          "top": 100,
+          "left": 100,
+          "right": 100,
+          "bottom": 100
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alpha": 1,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center"
+      }
+    },
+    "card": {
+      "log_id": "visibility",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "button",
+            "text": "show the tooltip",
+            "tooltips": [
+              {
+                "id": "tooltip",
+                "position": "bottom",
+                "duration": 0,
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 4
+                  }
+                },
+                "div": {
+                  "type": "text",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "paddings": {
+                    "left": 16,
+                    "top": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#000000"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 6
+                  },
+                  "text_color": "#ffffff",
+                  "text": "Title tooltip",
+                  "font_size": 14,
+                  "font_weight": "medium"
+                }
+              }
+            ],
+            "actions": [
+              {
+                "log_id": "show_tooltip",
+                "url": "div-action://show_tooltip?id=tooltip&multiple=false"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://show_tooltip?id=tooltip&multiple=false",
+          "log_id": "show_tooltip"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://hide_tooltip?id=tooltip",
+          "log_id": "hide_tooltip"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

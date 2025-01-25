@@ -1,5 +1,4 @@
 {
-  "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_text",
   "codegen": {
     "divan": {
@@ -19,11 +18,20 @@
       "properties": {
         "start": {
           "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
           "$description": "translations.json#/div_text_range_start"
         },
         "end": {
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_text_range_end"
+        },
+        "alignment_vertical": {
+          "$ref": "div-text-alignment-vertical.json",
+          "$description": "translations.json#/div_text_range_alignment_vertical",
+          "platforms": [
+            "android",
+            "web"
+          ]
         },
         "font_size": {
           "$ref": "common.json#/non_negative_integer",
@@ -110,12 +118,14 @@
             "android",
             "web"
           ]
+        },
+        "mask": {
+          "$ref": "div-text-range-mask.json",
+          "$description": "translations.json#/div_text_range_mask",
+          "platforms": [
+          ]
         }
       },
-      "required": [
-        "start",
-        "end"
-      ],
       "$description": "translations.json#/div_text_range"
     },
     "image": {
@@ -163,6 +173,52 @@
           "$description": "translations.json#/div_image_base_preload_required",
           "platforms": [
             "web"
+          ]
+        },
+        "accessibility": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string",
+              "$description": "translations.json#/div_accessibility_description"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "none",
+                "button",
+                "image",
+                "text",
+                "auto"
+              ],
+              "default_value": "auto",
+              "supports_expressions": false,
+              "$description": "translations.json#/div_accessibility_type"
+            }
+          },
+          "platforms": [
+            "android"
+          ]
+        },
+        "alignment_vertical": {
+          "$ref": "div-text-alignment-vertical.json",
+          "default_value": "center",
+          "$description": "translations.json#/div_text_image_alignment_vertical",
+          "platforms": [
+            "android",
+            "web"
+          ]
+        },
+        "indexing_direction": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "reversed"
+          ],
+          "default_value": "normal",
+          "$description": "translations.json#/div_text_image_indexing_direction",
+          "platforms": [
+            "android"
           ]
         }
       },
@@ -402,6 +458,15 @@
             "android",
             "ios",
             "web"
+          ]
+        },
+        "tighten_width": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_text_tighten_width",
+          "platforms": [
+            "android",
+            "ios"
           ]
         },
         "truncate": {

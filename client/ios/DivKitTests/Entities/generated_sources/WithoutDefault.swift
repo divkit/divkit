@@ -1,10 +1,11 @@
 // Generated code. Do not modify.
 
 @testable import DivKit
-
 import Foundation
 import Serialization
 import VGSL
+
+import enum DivKit.Expression
 
 public final class WithoutDefault {
   public static let type: String = "non_default"

@@ -10,14 +10,14 @@ sealed interface ArrayElement<T>
 /**
  * [ArrayElement] that resolves as a literal value.
  */
-class LiteralArrayElement<T> internal constructor(
+data class LiteralArrayElement<T> internal constructor(
     val value: T,
 ) : ArrayElement<T>
 
 /**
  * [ArrayElement] that resolves as an expression.
  */
-class ExpressionArrayElement<T> internal constructor(
+data class ExpressionArrayElement<T> internal constructor(
     val expression: String,
 ) : ArrayElement<T>
 

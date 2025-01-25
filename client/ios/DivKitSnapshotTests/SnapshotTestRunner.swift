@@ -1,14 +1,15 @@
+@testable import DivKit
+@testable import LayoutKit
 import Testing
 import UIKit
-
-@testable import DivKit
-import LayoutKit
 import VGSL
 
 let testCardId = DivCardID(rawValue: "test_card_id")
 
 @MainActor
 final class SnapshotTestRunner {
+  private typealias CheckAction = (_ view: UIView?) throws -> Void
+
   #if UPDATE_SNAPSHOTS
   let mode = TestMode.update
   #else
@@ -56,15 +57,44 @@ final class SnapshotTestRunner {
         }
         divKitComponents.flushUpdateActions()
         view.forceLayout()
-        try checkSnapshots(
-          view: view,
-          caseName: caseName,
-          stepName: step.name ?? "step\(index)"
+
+        let check: CheckAction = { additionalView in
+          try self.checkSnapshots(
+            view: view,
+            caseName: caseName,
+            stepName: step.name ?? "step\(index)",
+            additionalView: additionalView
+          )
+        }
+
+        let tooltipManager = divKitComponents.tooltipManager as! DefaultTooltipManager
+        try await tooltipsTestStepRun(
+          manager: tooltipManager,
+          check: check
         )
       }
     } else {
       try checkSnapshots(view: view, caseName: caseName)
     }
+  }
+
+  private func tooltipsTestStepRun(
+    manager: DefaultTooltipManager,
+    check: CheckAction
+  ) async throws {
+    guard let tooltipView = manager.tooltipWindow?.subviews.first else {
+      try check(nil)
+      return
+    }
+
+    tooltipView.forceLayout()
+
+    // Time to layout tooltips
+    for _ in 0..<2 {
+      await Task.yield()
+    }
+
+    try check(tooltipView)
   }
 
   private func getLayoutDirection(from jsonDict: [String: Any]) -> UserInterfaceLayoutDirection {
@@ -85,20 +115,37 @@ final class SnapshotTestRunner {
   private func checkSnapshots(
     view: DivView,
     caseName: String,
-    stepName: String? = nil
+    stepName: String? = nil,
+    additionalView: UIView? = nil
   ) throws {
-    let screen = try Screen.makeForScale(UIScreen.main.scale)
+    let screen = Screen.makeForScale(UIScreen.main.scale)
     let cardSize = view.cardSize?.sizeFor(parentViewSize: screen.size) ?? .zero
     view.frame = CGRect(origin: .zero, size: cardSize)
 
+    let testView = {
+      if let additionalView {
+        let testView = UIView()
+        testView.addSubview(view)
+        testView.addSubview(additionalView)
+
+        testView.frame.origin = view.frame.origin
+        testView.frame.size = view.frame.size.max(
+          size: additionalView.frame.size
+        )
+        return testView
+      } else {
+        return view
+      }
+    }()
+
     let nonEmptyView: UIView
-    if view.bounds.isEmpty {
+    if testView.bounds.isEmpty {
       let label = UILabel()
       label.text = "<empty view>"
       label.frame = CGRect(origin: .zero, size: label.intrinsicContentSize)
       nonEmptyView = label
     } else {
-      nonEmptyView = view
+      nonEmptyView = testView
     }
 
     let image = try #require(nonEmptyView.makeSnapshot())
@@ -152,8 +199,7 @@ private final class TestImageHolderFactory: DivImageHolderFactory {
     let urlString = url.absoluteString
     if !reportedUrls.contains(urlString) {
       Issue.record(
-        "Loading images from network is prohibited in tests. You need to load image from "
-          + urlString + " and add it to Images.xcassets in testing bundle"
+        "Loading images from network is prohibited in tests. You need to load image from \(urlString) and add it to Images.xcassets in testing bundle"
       )
       reportedUrls.insert(urlString)
     }
@@ -176,5 +222,14 @@ private struct TestStep {
           .unwrap()
       }
     ).unwrap()
+  }
+}
+
+extension CGSize {
+  fileprivate func max(size: CGSize) -> CGSize {
+    CGSize(
+      width: Swift.max(width, size.width),
+      height: Swift.max(height, size.height)
+    )
   }
 }

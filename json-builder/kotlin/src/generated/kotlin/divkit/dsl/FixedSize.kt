@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class FixedSize internal constructor(
+data class FixedSize internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : RadialGradientRadius, Size {
@@ -41,7 +41,7 @@ class FixedSize internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Element size.
          */

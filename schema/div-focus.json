@@ -32,25 +32,37 @@
       "$description": "translations.json#/div_focus_next_focus_ids",
       "properties": {
         "forward": {
-          "type": "string"
+          "type": "string",
+          "platforms": [
+            "android",
+            "ios"
+          ]
         },
         "right": {
-          "type": "string"
+          "type": "string",
+          "platforms": [
+            "android"
+          ]
         },
         "down": {
-          "type": "string"
+          "type": "string",
+          "platforms": [
+            "android"
+          ]
         },
         "left": {
-          "type": "string"
+          "type": "string",
+          "platforms": [
+            "android"
+          ]
         },
         "up": {
-          "type": "string"
+          "type": "string",
+          "platforms": [
+            "android"
+          ]
         }
-      },
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      }
     }
   }
 }

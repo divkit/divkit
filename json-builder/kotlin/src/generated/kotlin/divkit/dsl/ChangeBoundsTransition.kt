@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class ChangeBoundsTransition internal constructor(
+data class ChangeBoundsTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ChangeTransition {
@@ -42,7 +42,7 @@ class ChangeBoundsTransition internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Animation duration in milliseconds.
          * Default value: `200`.

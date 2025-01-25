@@ -1,5 +1,4 @@
 {
-  "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_input",
   "definitions": {
     "native_interface": {
@@ -60,6 +59,16 @@
             "android"
           ]
         },
+        "filters": {
+          "type": "array",
+          "$description": "translations.json#/div_input_filters",
+          "platforms": [
+            "ios"
+          ],
+          "items": {
+            "$ref": "div-input-filter.json"
+          }
+        },
         "text_color": {
           "$ref": "common.json#/color",
           "default_value": "#FF000000",
@@ -92,6 +101,7 @@
           "$description": "translations.json#/div_input_max_length",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },
@@ -130,6 +140,48 @@
             "android"
           ]
         },
+        "autocapitalization": {
+          "type": "string",
+          "enum": [
+            "auto", "none", "words", "sentences", "all_characters"
+          ],
+          "default_value": "auto",
+          "$description": "translations.json#/div_input_autocapitalization",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "enter_key_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "$description": "translations.json#/div_input_enter_key_actions",
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ]
+        },
+        "enter_key_type": {
+          "type": "string",
+          "enum": [
+            "default",
+            "go",
+            "search",
+            "send",
+            "done"
+          ],
+          "default_value": "default",
+          "$description": "translations.json#/div_input_enter_key_type",
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ]
+        },
         "keyboard_type": {
           "type": "string",
           "enum": [
@@ -162,7 +214,8 @@
           "$description": "translations.json#/div_input_validators",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ],
           "items": {
             "$ref": "div-input-validator.json"

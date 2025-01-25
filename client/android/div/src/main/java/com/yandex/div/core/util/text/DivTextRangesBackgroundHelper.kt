@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.view.View
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivTextRangeBackground
 
 internal class DivTextRangesBackgroundHelper(
     val view: View,
@@ -37,6 +38,13 @@ internal class DivTextRangesBackgroundHelper(
         )
     }
 
+    private val cloudBackgroundRenderer: CloudTextRangeBackgroundRenderer by lazy {
+        CloudTextRangeBackgroundRenderer(
+            context = view.context,
+            expressionResolver = resolver
+        )
+    }
+
     fun draw(canvas: Canvas, text: Spanned, layout: Layout) {
         spans.forEach { span ->
             val spanStart = text.getSpanStart(span)
@@ -47,9 +55,18 @@ internal class DivTextRangesBackgroundHelper(
             val startOffset = layout.getPrimaryHorizontal(spanStart).toInt()
             val endOffset = layout.getPrimaryHorizontal(spanEnd).toInt()
 
-            val renderer = if (startLine == endLine) singleLineRenderer else multiLineRenderer
-            renderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
-                span.border, span.background)
+            when (span.background) {
+                is DivTextRangeBackground.Cloud -> {
+                    cloudBackgroundRenderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
+                        span.border, span.background)
+                }
+
+                else -> {
+                    val renderer = if (startLine == endLine) singleLineRenderer else multiLineRenderer
+                    renderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset,
+                        span.border, span.background)
+                }
+            }
         }
     }
 }

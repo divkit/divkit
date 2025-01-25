@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.variables
 
-import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
@@ -11,14 +10,20 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.json.missingVariable
 
 @Mockable
-internal class VariableControllerImpl : VariableController {
+internal class VariableControllerImpl(
+    private val delegate: VariableController? = null,
+): VariableController {
     private val variables = mutableMapOf<String, Variable>()
     private val extraVariablesSources = mutableListOf<VariableSource>()
     private val onChangeObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
+    private val onRemoveObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
 
     private val onAnyVariableChangeObservers = ObserverList<(Variable) -> Unit>()
     private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
-    private val declarationObserver = { v : Variable -> onVariableDeclared(v) }
+    private val declarationObserver = object : DeclarationObserver {
+        override fun onDeclared(variable: Variable) = onVariableDeclared(variable)
+        override fun onUndeclared(variable: Variable) = onVariableRemoved(variable)
+    }
 
     private fun addObserver(name: String, observer: (Variable) -> Unit) {
         val observers = onChangeObservers.getOrPut(name) {
@@ -32,13 +37,24 @@ internal class VariableControllerImpl : VariableController {
         invokeOnSubscription: Boolean,
         observer: (Variable) -> Unit
     ): Disposable {
+        val disposables = mutableListOf<Disposable>()
         names.forEach { name ->
-            subscribeToVariableChangeImpl(name, null, invokeOnSubscription, observer)
-        }
-        return Disposable {
-            names.forEach { name ->
-                removeChangeObserver(name, observer)
+            if (!variables.containsKey(name) && delegate?.getMutableVariable(name) != null) {
+                // if required variable stored in delegate we should subscribe on it
+                delegate.subscribeToVariableChange(
+                    name = name,
+                    errorCollector = null,
+                    invokeOnSubscription = invokeOnSubscription,
+                    observer = observer,
+                ).also { disposables.add(it) }
+            } else {
+                subscribeToVariableChangeImpl(name, null, invokeOnSubscription, observer)
             }
+        }
+
+        return Disposable {
+            names.forEach { removeChangeObserver(it, observer) }
+            disposables.forEach { it.close() }
         }
     }
 
@@ -48,9 +64,34 @@ internal class VariableControllerImpl : VariableController {
         invokeOnSubscription: Boolean,
         observer: (Variable) -> Unit
     ): Disposable {
-        subscribeToVariableChangeImpl(name, errorCollector, invokeOnSubscription, observer)
+        return if (!variables.containsKey(name) && delegate?.getMutableVariable(name) != null) {
+            // if required variable stored in delegate we should subscribe on it
+            delegate.subscribeToVariableChange(
+                name = name,
+                errorCollector = errorCollector,
+                invokeOnSubscription = invokeOnSubscription,
+                observer = observer,
+            )
+        } else {
+            subscribeToVariableChangeImpl(name, errorCollector, invokeOnSubscription, observer)
+            Disposable { removeChangeObserver(name, observer) }
+        }
+    }
+
+    override fun subscribeToVariablesUndeclared(
+        names: List<String>,
+        observer: (Variable) -> Unit
+    ): Disposable {
+        names.forEach {
+            onRemoveObservers.getOrPut(it) {
+                ObserverList<(Variable) -> Unit>()
+            }.addObserver(observer)
+        }
+
         return Disposable {
-            removeChangeObserver(name, observer)
+            names.forEach {
+                onRemoveObservers[it]?.removeObserver(observer)
+            }
         }
     }
 
@@ -60,12 +101,11 @@ internal class VariableControllerImpl : VariableController {
         invokeOnSubscription: Boolean = false,
         observer: (Variable) -> Unit
     ) {
-        val variable = getMutableVariable(name)
-            ?: run {
-                errorCollector?.logError(missingVariable(name))
-                addObserver(name, observer)
-                return
-            }
+        val variable = getMutableVariable(name) ?: run {
+            errorCollector?.logError(missingVariable(name))
+            addObserver(name, observer)
+            return
+        }
 
         if (invokeOnSubscription) {
             // Any on variable changed notify should be executed on main thread.
@@ -83,7 +123,9 @@ internal class VariableControllerImpl : VariableController {
     private fun notifyVariableChanged(v: Variable) {
         Assert.assertMainThread()
         onAnyVariableChangeObservers.forEach { it.invoke(v) }
-        onChangeObservers[v.name]?.forEach { it.invoke(v) }
+        onChangeObservers[v.name]?.forEach {
+            it.invoke(v)
+        }
     }
 
     /**
@@ -100,8 +142,23 @@ internal class VariableControllerImpl : VariableController {
         notifyVariableChanged(variable)
     }
 
+    private fun onVariableRemoved(variable: Variable) {
+        variable.removeObserver(notifyVariableChangedCallback)
+        onRemoveObservers[variable.name]?.forEach { it.invoke(variable) }
+        onAnyVariableChangeObservers.forEach {
+            it.invoke(variable)
+            variable.removeObserver(it)
+        }
+
+        variables.remove(variable.name)
+    }
+
     override fun getMutableVariable(name: String): Variable? {
         variables[name]?.let {
+            return it
+        }
+
+        delegate?.getMutableVariable(name)?.let {
             return it
         }
 
@@ -114,7 +171,7 @@ internal class VariableControllerImpl : VariableController {
         return null
     }
 
-    internal fun cleanupSubscriptions() {
+    override fun cleanupSubscriptions() {
         extraVariablesSources.forEach { variableSource ->
             variableSource.removeVariablesObserver(notifyVariableChangedCallback)
             variableSource.removeDeclarationObserver(declarationObserver)
@@ -122,7 +179,7 @@ internal class VariableControllerImpl : VariableController {
         onAnyVariableChangeObservers.clear()
     }
 
-    internal fun restoreSubscriptions() {
+    override fun restoreSubscriptions() {
         extraVariablesSources.forEach { variableSource ->
             variableSource.observeVariables(notifyVariableChangedCallback)
             variableSource.receiveVariablesUpdates(notifyVariableChangedCallback)
@@ -142,5 +199,12 @@ internal class VariableControllerImpl : VariableController {
 
     override fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit) {
         onAnyVariableChangeObservers.addObserver(callback)
+        delegate?.setOnAnyVariableChangeCallback {
+            if (variables[it.name] == null) callback.invoke(it)
+        }
+    }
+
+    override fun captureAll(): List<Variable> {
+        return variables.values.toList()
     }
 }

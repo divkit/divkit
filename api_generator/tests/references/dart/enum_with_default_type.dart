@@ -2,11 +2,13 @@
 
 import 'package:equatable/equatable.dart';
 
+import 'package:divkit/src/utils/parsing_utils.dart';
+
 import 'with_default.dart';
 import 'without_default.dart';
 
-class EnumWithDefaultType with EquatableMixin {
-  final Object value;
+class EnumWithDefaultType extends Resolvable with EquatableMixin {
+  final Resolvable value;
   final int _index;
 
   @override
@@ -20,7 +22,7 @@ class EnumWithDefaultType with EquatableMixin {
       case 0: return withDefault(value as WithDefault,);
       case 1: return withoutDefault(value as WithoutDefault,);
     }
-    throw Exception("Type ${value.runtimeType.toString()} is not generalized in EnumWithDefaultType");
+    throw Exception("Type ${value.runtimeType.toString()} is not generalized in EnumWithDefaultType",);
   }
 
   T maybeMap<T>({
@@ -53,21 +55,26 @@ class EnumWithDefaultType with EquatableMixin {
   ) : value = obj,
       _index = 1;
 
+  bool get isWithDefault => _index == 0;
 
-  static EnumWithDefaultType? fromJson(Map<String, dynamic>? json) {
+  bool get isWithoutDefault => _index == 1;
+
+
+  static EnumWithDefaultType? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       switch (json['type']) {
-        case WithDefault.type :
-          return EnumWithDefaultType.withDefault(WithDefault.fromJson(json)!);
-        case WithoutDefault.type :
-          return EnumWithDefaultType.withoutDefault(WithoutDefault.fromJson(json)!);
-      }
+      case WithDefault.type :
+        return EnumWithDefaultType.withDefault(WithDefault.fromJson(json)!,);
+      case WithoutDefault.type :
+        return EnumWithDefaultType.withoutDefault(WithoutDefault.fromJson(json)!,);
+    }
       return null;
     } catch (e, st) {
       return null;
     }
   }
+  EnumWithDefaultType resolve(DivVariableContext context) { value.resolve(context); return this; }
 }

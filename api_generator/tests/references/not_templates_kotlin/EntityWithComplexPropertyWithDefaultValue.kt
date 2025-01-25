@@ -1,24 +1,20 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithComplexPropertyWithDefaultValue(
-    @JvmField final val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
+    @JvmField val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -34,11 +30,9 @@ class EntityWithComplexPropertyWithDefaultValue(
         return hash
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.write(key = "property", value = property)
-        json.write(key = "type", value = TYPE)
-        return json
+    fun equals(other: EntityWithComplexPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property.equals(other.property, resolver, otherResolver)
     }
 
     fun copy(
@@ -46,6 +40,13 @@ class EntityWithComplexPropertyWithDefaultValue(
     ) = EntityWithComplexPropertyWithDefaultValue(
         property = property,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.write(key = "property", value = property)
+        json.write(key = "type", value = TYPE)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_complex_property_with_default_value"
@@ -64,10 +65,8 @@ class EntityWithComplexPropertyWithDefaultValue(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyWithDefaultValue(env, json = it) }
     }
 
-
-    @Mockable
     class Property(
-        @JvmField final val value: Expression<String>,
+        @JvmField val value: Expression<String>,
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 
@@ -83,10 +82,9 @@ class EntityWithComplexPropertyWithDefaultValue(
             return hash
         }
 
-        override fun writeToJSON(): JSONObject {
-            val json = JSONObject()
-            json.writeExpression(key = "value", value = value)
-            return json
+        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         fun copy(
@@ -94,6 +92,12 @@ class EntityWithComplexPropertyWithDefaultValue(
         ) = Property(
             value = value,
         )
+
+        override fun writeToJSON(): JSONObject {
+            val json = JSONObject()
+            json.writeExpression(key = "value", value = value)
+            return json
+        }
 
         companion object {
             @JvmStatic
@@ -107,6 +111,5 @@ class EntityWithComplexPropertyWithDefaultValue(
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Property(env, json = it) }
         }
-
     }
 }

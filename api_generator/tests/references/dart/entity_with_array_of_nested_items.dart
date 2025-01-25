@@ -2,16 +2,17 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
 import 'entity.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithArrayOfNestedItems with EquatableMixin {
+
+class EntityWithArrayOfNestedItems extends Resolvable with EquatableMixin  {
   const EntityWithArrayOfNestedItems({
     required this.items,
   });
 
   static const type = "entity_with_array_of_nested_items";
-  // at least 1 elements
+   // at least 1 elements
   final List<EntityWithArrayOfNestedItemsItem> items;
 
   @override
@@ -25,29 +26,32 @@ class EntityWithArrayOfNestedItems with EquatableMixin {
       items: items ?? this.items,
     );
 
-  static EntityWithArrayOfNestedItems? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayOfNestedItems? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithArrayOfNestedItems(
-        items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!),)!,
+        items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!,),)!,
       );
     } catch (e, st) {
       return null;
     }
   }
+
+  EntityWithArrayOfNestedItems resolve(DivVariableContext context) {
+    return this;
+  }
 }
 
-class EntityWithArrayOfNestedItemsItem with EquatableMixin {
+
+class EntityWithArrayOfNestedItemsItem extends Resolvable with EquatableMixin  {
   const EntityWithArrayOfNestedItemsItem({
     required this.entity,
     required this.property,
   });
 
-
   final Entity entity;
-
   final Expression<String> property;
 
   @override
@@ -64,7 +68,7 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
       property: property ?? this.property,
     );
 
-  static EntityWithArrayOfNestedItemsItem? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayOfNestedItemsItem? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -76,5 +80,11 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithArrayOfNestedItemsItem resolve(DivVariableContext context) {
+    entity.resolve(context);
+    property.resolve(context);
+    return this;
   }
 }

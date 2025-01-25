@@ -1,0 +1,187 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "card": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "bottom": 16,
+        "right": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 16,
+        "has_shadow": true
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "max_lines": 1,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Visibility actions"
+            },
+            {
+              "type": "state",
+              "div_id": "state",
+              "states": [
+                {
+                  "state_id": "first",
+                  "div": {
+                    "type": "card",
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "center",
+                    "background_color": "#6C71C4",
+                    "text_color": "#FDF6E3",
+                    "text": "FIRST",
+                    "visibility_actions": [
+                      {
+                        "log_id": "first_state_is_visible",
+                        "log_limit": 0,
+                        "visibility_duration": 0,
+                        "visibility_percentage": 100
+                      },
+                      {
+                        "log_id": "switch_to_second_state",
+                        "log_limit": 0,
+                        "visibility_duration": 500,
+                        "visibility_percentage": 100,
+                        "url": "div-action://set_state?state_id=0/state/second"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "second",
+                  "div": {
+                    "type": "card",
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "center",
+                    "background_color": "#2AA198",
+                    "text_color": "#FDF6E3",
+                    "text": "SECOND",
+                    "visibility_actions": [
+                      {
+                        "log_id": "second_state_is_visible",
+                        "log_limit": 0,
+                        "visibility_duration": 0,
+                        "visibility_percentage": 100
+                      },
+                      {
+                        "log_id": "switch_to_third_state",
+                        "log_limit": 0,
+                        "visibility_duration": 500,
+                        "visibility_percentage": 100,
+                        "url": "div-action://set_state?state_id=0/state/third"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "third",
+                  "div": {
+                    "type": "card",
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "center",
+                    "background_color": "#B58900",
+                    "text_color": "#FDF6E3",
+                    "text": "THIRD",
+                    "visibility_actions": [
+                      {
+                        "log_id": "third_state_is_visible",
+                        "log_limit": 0,
+                        "visibility_duration": 0,
+                        "visibility_percentage": 100
+                      },
+                      {
+                        "log_id": "switch_to_fourth_state",
+                        "log_limit": 0,
+                        "visibility_duration": 500,
+                        "visibility_percentage": 100,
+                        "url": "div-action://set_state?state_id=0/state/fourth"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "fourth",
+                  "div": {
+                    "type": "card",
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "center",
+                    "background_color": "#CB4B16",
+                    "text_color": "#FDF6E3",
+                    "text": "FOURTH",
+                    "visibility_actions": [
+                      {
+                        "log_id": "fourth_state_is_visible",
+                        "log_limit": 0,
+                        "visibility_duration": 0,
+                        "visibility_percentage": 100
+                      },
+                      {
+                        "log_id": "switch_to_first_state",
+                        "log_limit": 0,
+                        "visibility_duration": 500,
+                        "visibility_percentage": 100,
+                        "url": "div-action://set_state?state_id=0/state/first"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "card_is_visible",
+              "log_limit": 0,
+              "visibility_duration": 0,
+              "visibility_percentage": 100
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

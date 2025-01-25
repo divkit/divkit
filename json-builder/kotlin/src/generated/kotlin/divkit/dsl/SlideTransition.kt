@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class SlideTransition internal constructor(
+data class SlideTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : AppearanceTransition {
@@ -44,7 +44,7 @@ class SlideTransition internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * A fixed value of an offset which the element starts appearing from or at which it finishes disappearing. If no value is specified, the distance to the selected edge of a parent element is used.
          */

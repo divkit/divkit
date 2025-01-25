@@ -1,9 +1,7 @@
-import XCTest
-
 @testable import DivKit
-
 import Serialization
 import VGSL
+import XCTest
 
 final class ExpressionResolverTests: XCTestCase {
   private var isErrorExpected = false
@@ -412,7 +410,10 @@ final class ExpressionResolverTests: XCTestCase {
   }
 }
 
-private func expressionWithValidator<T>(_ expression: String, isValid: Bool) -> Expression<T> {
+private func expressionWithValidator<T>(
+  _ expression: String,
+  isValid: Bool
+) -> DivKit.Expression<T> {
   .link(ExpressionLink(rawValue: expression, validator: AnyValueValidator { _ in isValid })!)
 }
 

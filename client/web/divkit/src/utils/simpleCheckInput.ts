@@ -1,5 +1,5 @@
 import type { DivJson } from '../../typings/common';
-import { wrapError, WrappedError } from './wrapError';
+import { wrapError, type WrappedError } from './wrapError';
 import { TYPE_MAP } from '../components/typeMap';
 
 /**

@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithStringEnumPropertyWithDefaultValue(
-    @JvmField final val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
+    @JvmField val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -21,6 +22,11 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         return hash
     }
 
+    fun equals(other: EntityWithStringEnumPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return value.evaluate(resolver) == other.value.evaluate(otherResolver)
+    }
+
     fun copy(
         value: Expression<Value> = this.value,
     ) = EntityWithStringEnumPropertyWithDefaultValue(
@@ -33,19 +39,19 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         private val VALUE_DEFAULT_VALUE = Expression.constant(Value.SECOND)
     }
 
-
     enum class Value(private val value: String) {
         FIRST("first"),
         SECOND("second"),
         THIRD("third");
 
         companion object Converter {
+
             fun toString(obj: Value): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Value? {
-                return when (string) {
+            fun fromString(value: String): Value? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     THIRD.value -> THIRD
@@ -53,14 +59,11 @@ class EntityWithStringEnumPropertyWithDefaultValue(
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    THIRD.value -> THIRD
-                    else -> null
-                }
-            }
+            @JvmField
+            val TO_STRING = { value: Value -> toString(value) }
+
+            @JvmField
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

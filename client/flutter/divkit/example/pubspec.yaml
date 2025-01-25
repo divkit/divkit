@@ -1,5 +1,5 @@
 name: example
-description: Usage example and test pad.
+description: Usage samples, testing space and simple editor.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -12,7 +12,6 @@ dependencies:
 
   flutter_riverpod: ^2.0.0
   equatable: ^2.0.5
-  cupertino_icons: ^1.0.5
 
   divkit:
     path: ../
@@ -21,8 +20,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  integration_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true
@@ -30,42 +27,51 @@ flutter:
     - assets/
     - assets/application/
     - assets/application/images/
-    - assets/test_data/expression_test_data/
-    - assets/test_data/samples/animations/
-    - assets/test_data/samples/base/
-    - assets/test_data/samples/container/
-    - assets/test_data/samples/gallery/
-    - assets/test_data/samples/grid/
-    - assets/test_data/samples/image/
-    - assets/test_data/samples/input/
-    - assets/test_data/samples/pager/
-    - assets/test_data/samples/select/
-    - assets/test_data/samples/separator/
-    - assets/test_data/samples/slider/
-    - assets/test_data/samples/state/
-    - assets/test_data/samples/tabs/
-    - assets/test_data/samples/text/
-    - assets/test_data/samples/video/
-    - assets/test_data/regression_test_data/
-    - assets/test_data/regression_test_data/accessibility/
-    - assets/test_data/regression_test_data/accessibility/mode/
-    - assets/test_data/regression_test_data/action_animation/
-    - assets/test_data/regression_test_data/animations/
-    - assets/test_data/regression_test_data/animations/lottie/
-    - assets/test_data/regression_test_data/animations/transition/
-    - assets/test_data/regression_test_data/animations/rive/
-    - assets/test_data/regression_test_data/gallery/
-    - assets/test_data/regression_test_data/pager/
-    - assets/test_data/regression_test_data/variables/
-    - assets/test_data/regression_test_data/video/
-    - assets/test_data/regression_test_data/actions/
-    - assets/test_data/regression_test_data/container/
-    - assets/test_data/regression_test_data/patch/
-    - assets/test_data/regression_test_data/rebind/
-    - assets/test_data/regression_test_data/rebind/gallery/
-    - assets/test_data/regression_test_data/rebind/grid/
-    - assets/test_data/regression_test_data/rebind/pager/
-    - assets/test_data/regression_test_data/rebind/tabs/
-    - assets/test_data/regression_test_data/state/
-    - assets/test_data/regression_test_data/timers/
-    - assets/test_data/regression_test_data/visibility_actions/
+    - assets/samples/animations/
+    - assets/samples/base/
+    - assets/samples/container/
+    - assets/samples/gallery/
+    - assets/samples/grid/
+    - assets/samples/image/
+    - assets/samples/input/
+    - assets/samples/pager/
+    - assets/samples/select/
+    - assets/samples/separator/
+    - assets/samples/slider/
+    - assets/samples/state/
+    - assets/samples/tabs/
+    - assets/samples/text/
+    - assets/samples/video/
+    - assets/regression/
+    - assets/regression/accessibility/
+    - assets/regression/accessibility/mode/
+    - assets/regression/action_animation/
+    - assets/regression/animations/
+    - assets/regression/animations/animators/
+    - assets/regression/animations/lottie/
+    - assets/regression/animations/transition/
+    - assets/regression/animations/rive/
+    - assets/regression/gallery/
+    - assets/regression/indicator/
+    - assets/regression/pager/
+    - assets/regression/variables/
+    - assets/regression/video/
+    - assets/regression/actions/
+    - assets/regression/container/
+    - assets/regression/patch/
+    - assets/regression/rebind/
+    - assets/regression/rebind/container/
+    - assets/regression/rebind/custom/
+    - assets/regression/rebind/gallery/
+    - assets/regression/rebind/grid/
+    - assets/regression/rebind/pager/
+    - assets/regression/rebind/tabs/
+    - assets/regression/state/
+    - assets/regression/timers/
+    - assets/regression/visibility_actions/
+    - assets/perf/
+
+  fonts:
+    - family: ProtestGuerrilla
+      fonts:
+        - asset: assets/fonts/ProtestGuerrilla/ProtestGuerrilla-Regular.ttf

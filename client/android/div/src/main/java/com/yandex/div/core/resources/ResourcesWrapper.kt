@@ -38,6 +38,7 @@ internal open class ResourcesWrapper(
         return resources.getBoolean(id)
     }
 
+    @Deprecated("Deprecated in Java")
     @Throws(NotFoundException::class)
     override fun getColor(id: Int): Int {
         return resources.getColor(id)
@@ -55,6 +56,7 @@ internal open class ResourcesWrapper(
         return resources.getColorStateList(id, theme)
     }
 
+    @Deprecated("Deprecated in Java")
     @Throws(NotFoundException::class)
     override fun getColorStateList(id: Int): ColorStateList {
         return resources.getColorStateList(id)
@@ -88,11 +90,13 @@ internal open class ResourcesWrapper(
         return resources.getDrawable(id, theme)
     }
 
+    @Deprecated("Deprecated in Java")
     @Throws(NotFoundException::class)
     override fun getDrawable(id: Int): Drawable? {
         return resources.getDrawable(id)
     }
 
+    @Deprecated("Deprecated in Java")
     @Throws(NotFoundException::class)
     override fun getDrawableForDensity(id: Int, density: Int): Drawable? {
         return resources.getDrawableForDensity(id, density)
@@ -138,6 +142,7 @@ internal open class ResourcesWrapper(
         return resources.getLayout(id)
     }
 
+    @Deprecated("Deprecated in Java")
     @Throws(NotFoundException::class)
     override fun getMovie(id: Int): Movie? {
         return resources.getMovie(id)
@@ -267,6 +272,7 @@ internal open class ResourcesWrapper(
         resources.removeLoaders(*loaders)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun updateConfiguration(config: Configuration?, metrics: DisplayMetrics?) {
         super.updateConfiguration(config, metrics)
         // May be called from super's constructor (before Android 7), so have to check for null.

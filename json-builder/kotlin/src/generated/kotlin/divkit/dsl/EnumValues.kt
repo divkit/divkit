@@ -26,7 +26,8 @@ sealed class EnumValue(
 @Generated
 object DefaultEnumValue : EnumValue("default"),
     Accessibility.Mode,
-    Gallery.ScrollMode
+    Gallery.ScrollMode,
+    Input.EnterKeyType
 
 @Generated
 object MergeEnumValue : EnumValue("merge"),
@@ -40,22 +41,27 @@ object ExcludeEnumValue : EnumValue("exclude"),
 object NoneEnumValue : EnumValue("none"),
     Accessibility.Type,
     Gallery.Scrollbar,
+    Input.Autocapitalization,
     LineStyle,
     Tabs.TabTitleStyle.AnimationType,
+    Text.Image.Accessibility.Type,
     Text.Truncate,
     TransitionSelector
 
 @Generated
 object ButtonEnumValue : EnumValue("button"),
-    Accessibility.Type
+    Accessibility.Type,
+    Text.Image.Accessibility.Type
 
 @Generated
 object ImageEnumValue : EnumValue("image"),
-    Accessibility.Type
+    Accessibility.Type,
+    Text.Image.Accessibility.Type
 
 @Generated
 object TextEnumValue : EnumValue("text"),
-    Accessibility.Type
+    Accessibility.Type,
+    Text.Image.Accessibility.Type
 
 @Generated
 object EditTextEnumValue : EnumValue("edit_text"),
@@ -80,7 +86,9 @@ object SelectEnumValue : EnumValue("select"),
 @Generated
 object AutoEnumValue : EnumValue("auto"),
     Accessibility.Type,
-    Gallery.Scrollbar
+    Gallery.Scrollbar,
+    Input.Autocapitalization,
+    Text.Image.Accessibility.Type
 
 @Generated
 object SelfEnumValue : EnumValue("_self"),
@@ -89,6 +97,73 @@ object SelfEnumValue : EnumValue("_self"),
 @Generated
 object BlankEnumValue : EnumValue("_blank"),
     Action.Target
+
+@Generated
+object ClampEnumValue : EnumValue("clamp"),
+    ActionScrollBy.Overflow
+
+@Generated
+object RingEnumValue : EnumValue("ring"),
+    ActionScrollBy.Overflow
+
+@Generated
+object GetEnumValue : EnumValue("get"),
+    ActionSubmit.Request.Method
+
+@Generated
+object PostEnumValue : EnumValue("post"),
+    ActionSubmit.Request.Method
+
+@Generated
+object PutEnumValue : EnumValue("put"),
+    ActionSubmit.Request.Method
+
+@Generated
+object PatchEnumValue : EnumValue("patch"),
+    ActionSubmit.Request.Method
+
+@Generated
+object DeleteEnumValue : EnumValue("delete"),
+    ActionSubmit.Request.Method
+
+@Generated
+object HeadEnumValue : EnumValue("head"),
+    ActionSubmit.Request.Method
+
+@Generated
+object OptionsEnumValue : EnumValue("options"),
+    ActionSubmit.Request.Method
+
+@Generated
+object StartEnumValue : EnumValue("start"),
+    ActionTimer.Action,
+    ActionVideo.Action,
+    AlignmentHorizontal,
+    ContentAlignmentHorizontal,
+    Gallery.CrossContentAlignment,
+    PageContentSize.Alignment,
+    Text.Truncate
+
+@Generated
+object StopEnumValue : EnumValue("stop"),
+    ActionTimer.Action
+
+@Generated
+object PauseEnumValue : EnumValue("pause"),
+    ActionTimer.Action,
+    ActionVideo.Action
+
+@Generated
+object ResumeEnumValue : EnumValue("resume"),
+    ActionTimer.Action
+
+@Generated
+object CancelEnumValue : EnumValue("cancel"),
+    ActionTimer.Action
+
+@Generated
+object ResetEnumValue : EnumValue("reset"),
+    ActionTimer.Action
 
 @Generated
 object LeftEnumValue : EnumValue("left"),
@@ -104,6 +179,8 @@ object CenterEnumValue : EnumValue("center"),
     ContentAlignmentHorizontal,
     ContentAlignmentVertical,
     Gallery.CrossContentAlignment,
+    PageContentSize.Alignment,
+    TextAlignmentVertical,
     Tooltip.Position
 
 @Generated
@@ -114,17 +191,11 @@ object RightEnumValue : EnumValue("right"),
     Tooltip.Position
 
 @Generated
-object StartEnumValue : EnumValue("start"),
-    AlignmentHorizontal,
-    ContentAlignmentHorizontal,
-    Gallery.CrossContentAlignment,
-    Text.Truncate
-
-@Generated
 object EndEnumValue : EnumValue("end"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
     Gallery.CrossContentAlignment,
+    PageContentSize.Alignment,
     Text.Truncate
 
 @Generated
@@ -132,6 +203,7 @@ object TopEnumValue : EnumValue("top"),
     AlignmentVertical,
     ContentAlignmentVertical,
     SlideTransition.Edge,
+    TextAlignmentVertical,
     Tooltip.Position
 
 @Generated
@@ -139,12 +211,14 @@ object BottomEnumValue : EnumValue("bottom"),
     AlignmentVertical,
     ContentAlignmentVertical,
     SlideTransition.Edge,
+    TextAlignmentVertical,
     Tooltip.Position
 
 @Generated
 object BaselineEnumValue : EnumValue("baseline"),
     AlignmentVertical,
-    ContentAlignmentVertical
+    ContentAlignmentVertical,
+    TextAlignmentVertical
 
 @Generated
 object FadeEnumValue : EnumValue("fade"),
@@ -171,6 +245,23 @@ object SetEnumValue : EnumValue("set"),
 @Generated
 object NoAnimationEnumValue : EnumValue("no_animation"),
     Animation.Name
+
+@Generated
+object NormalEnumValue : EnumValue("normal"),
+    AnimationDirection,
+    Text.Image.IndexingDirection
+
+@Generated
+object ReverseEnumValue : EnumValue("reverse"),
+    AnimationDirection
+
+@Generated
+object AlternateEnumValue : EnumValue("alternate"),
+    AnimationDirection
+
+@Generated
+object AlternateReverseEnumValue : EnumValue("alternate_reverse"),
+    AnimationDirection
 
 @Generated
 object LinearEnumValue : EnumValue("linear"),
@@ -262,6 +353,43 @@ object SpaceEvenlyEnumValue : EnumValue("space-evenly"),
     ContentAlignmentVertical
 
 @Generated
+object StringEnumValue : EnumValue("string"),
+    EvaluableType
+
+@Generated
+object IntegerEnumValue : EnumValue("integer"),
+    EvaluableType
+
+@Generated
+object NumberEnumValue : EnumValue("number"),
+    EvaluableType,
+    Input.KeyboardType
+
+@Generated
+object BooleanEnumValue : EnumValue("boolean"),
+    EvaluableType
+
+@Generated
+object DatetimeEnumValue : EnumValue("datetime"),
+    EvaluableType
+
+@Generated
+object ColorEnumValue : EnumValue("color"),
+    EvaluableType
+
+@Generated
+object UrlEnumValue : EnumValue("url"),
+    EvaluableType
+
+@Generated
+object DictEnumValue : EnumValue("dict"),
+    EvaluableType
+
+@Generated
+object ArrayEnumValue : EnumValue("array"),
+    EvaluableType
+
+@Generated
 object LightEnumValue : EnumValue("light"),
     FontWeight
 
@@ -309,6 +437,34 @@ object SliderEnumValue : EnumValue("slider"),
     Indicator.Animation
 
 @Generated
+object WordsEnumValue : EnumValue("words"),
+    Input.Autocapitalization
+
+@Generated
+object SentencesEnumValue : EnumValue("sentences"),
+    Input.Autocapitalization
+
+@Generated
+object AllCharactersEnumValue : EnumValue("all_characters"),
+    Input.Autocapitalization
+
+@Generated
+object GoEnumValue : EnumValue("go"),
+    Input.EnterKeyType
+
+@Generated
+object SearchEnumValue : EnumValue("search"),
+    Input.EnterKeyType
+
+@Generated
+object SendEnumValue : EnumValue("send"),
+    Input.EnterKeyType
+
+@Generated
+object DoneEnumValue : EnumValue("done"),
+    Input.EnterKeyType
+
+@Generated
 object SingleLineTextEnumValue : EnumValue("single_line_text"),
     Input.KeyboardType
 
@@ -318,10 +474,6 @@ object MultiLineTextEnumValue : EnumValue("multi_line_text"),
 
 @Generated
 object PhoneEnumValue : EnumValue("phone"),
-    Input.KeyboardType
-
-@Generated
-object NumberEnumValue : EnumValue("number"),
     Input.KeyboardType
 
 @Generated
@@ -383,6 +535,10 @@ object SlideEnumValue : EnumValue("slide"),
 @Generated
 object MiddleEnumValue : EnumValue("middle"),
     Text.Truncate
+
+@Generated
+object ReversedEnumValue : EnumValue("reversed"),
+    Text.Image.IndexingDirection
 
 @Generated
 object TopLeftEnumValue : EnumValue("top-left"),
@@ -499,6 +655,66 @@ val DivScope.blank: BlankEnumValue
     get() = BlankEnumValue
 
 @Generated
+val DivScope.clamp: ClampEnumValue
+    get() = ClampEnumValue
+
+@Generated
+val DivScope.ring: RingEnumValue
+    get() = RingEnumValue
+
+@Generated
+val DivScope.get: GetEnumValue
+    get() = GetEnumValue
+
+@Generated
+val DivScope.post: PostEnumValue
+    get() = PostEnumValue
+
+@Generated
+val DivScope.put: PutEnumValue
+    get() = PutEnumValue
+
+@Generated
+val DivScope.patch: PatchEnumValue
+    get() = PatchEnumValue
+
+@Generated
+val DivScope.delete: DeleteEnumValue
+    get() = DeleteEnumValue
+
+@Generated
+val DivScope.head: HeadEnumValue
+    get() = HeadEnumValue
+
+@Generated
+val DivScope.options: OptionsEnumValue
+    get() = OptionsEnumValue
+
+@Generated
+val DivScope.start: StartEnumValue
+    get() = StartEnumValue
+
+@Generated
+val DivScope.stop: StopEnumValue
+    get() = StopEnumValue
+
+@Generated
+val DivScope.pause: PauseEnumValue
+    get() = PauseEnumValue
+
+@Generated
+val DivScope.resume: ResumeEnumValue
+    get() = ResumeEnumValue
+
+@Generated
+val DivScope.cancel: CancelEnumValue
+    get() = CancelEnumValue
+
+@Generated
+val DivScope.reset: ResetEnumValue
+    get() = ResetEnumValue
+
+@Generated
 val DivScope.left: LeftEnumValue
     get() = LeftEnumValue
 
@@ -509,10 +725,6 @@ val DivScope.center: CenterEnumValue
 @Generated
 val DivScope.right: RightEnumValue
     get() = RightEnumValue
-
-@Generated
-val DivScope.start: StartEnumValue
-    get() = StartEnumValue
 
 @Generated
 val DivScope.end: EndEnumValue
@@ -553,6 +765,22 @@ val DivScope.set: SetEnumValue
 @Generated
 val DivScope.no_animation: NoAnimationEnumValue
     get() = NoAnimationEnumValue
+
+@Generated
+val DivScope.normal: NormalEnumValue
+    get() = NormalEnumValue
+
+@Generated
+val DivScope.reverse: ReverseEnumValue
+    get() = ReverseEnumValue
+
+@Generated
+val DivScope.alternate: AlternateEnumValue
+    get() = AlternateEnumValue
+
+@Generated
+val DivScope.alternate_reverse: AlternateReverseEnumValue
+    get() = AlternateReverseEnumValue
 
 @Generated
 val DivScope.linear: LinearEnumValue
@@ -635,6 +863,42 @@ val DivScope.space_evenly: SpaceEvenlyEnumValue
     get() = SpaceEvenlyEnumValue
 
 @Generated
+val DivScope.string: StringEnumValue
+    get() = StringEnumValue
+
+@Generated
+val DivScope.integer: IntegerEnumValue
+    get() = IntegerEnumValue
+
+@Generated
+val DivScope.number: NumberEnumValue
+    get() = NumberEnumValue
+
+@Generated
+val DivScope.boolean: BooleanEnumValue
+    get() = BooleanEnumValue
+
+@Generated
+val DivScope.datetime: DatetimeEnumValue
+    get() = DatetimeEnumValue
+
+@Generated
+val DivScope.color: ColorEnumValue
+    get() = ColorEnumValue
+
+@Generated
+val DivScope.url: UrlEnumValue
+    get() = UrlEnumValue
+
+@Generated
+val DivScope.dict: DictEnumValue
+    get() = DictEnumValue
+
+@Generated
+val DivScope.array: ArrayEnumValue
+    get() = ArrayEnumValue
+
+@Generated
 val DivScope.light: LightEnumValue
     get() = LightEnumValue
 
@@ -679,6 +943,34 @@ val DivScope.slider: SliderEnumValue
     get() = SliderEnumValue
 
 @Generated
+val DivScope.words: WordsEnumValue
+    get() = WordsEnumValue
+
+@Generated
+val DivScope.sentences: SentencesEnumValue
+    get() = SentencesEnumValue
+
+@Generated
+val DivScope.all_characters: AllCharactersEnumValue
+    get() = AllCharactersEnumValue
+
+@Generated
+val DivScope.go: GoEnumValue
+    get() = GoEnumValue
+
+@Generated
+val DivScope.search: SearchEnumValue
+    get() = SearchEnumValue
+
+@Generated
+val DivScope.send: SendEnumValue
+    get() = SendEnumValue
+
+@Generated
+val DivScope.done: DoneEnumValue
+    get() = DoneEnumValue
+
+@Generated
 val DivScope.single_line_text: SingleLineTextEnumValue
     get() = SingleLineTextEnumValue
 
@@ -689,10 +981,6 @@ val DivScope.multi_line_text: MultiLineTextEnumValue
 @Generated
 val DivScope.phone: PhoneEnumValue
     get() = PhoneEnumValue
-
-@Generated
-val DivScope.number: NumberEnumValue
-    get() = NumberEnumValue
 
 @Generated
 val DivScope.email: EmailEnumValue
@@ -753,6 +1041,10 @@ val DivScope.slide: SlideEnumValue
 @Generated
 val DivScope.middle: MiddleEnumValue
     get() = MiddleEnumValue
+
+@Generated
+val DivScope.reversed: ReversedEnumValue
+    get() = ReversedEnumValue
 
 @Generated
 val DivScope.top_left: TopLeftEnumValue

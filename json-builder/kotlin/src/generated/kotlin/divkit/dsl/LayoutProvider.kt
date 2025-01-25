@@ -21,7 +21,7 @@ import kotlin.collections.Map
  * Can be created using the method [layoutProvider].
  */
 @Generated
-class LayoutProvider internal constructor(
+data class LayoutProvider internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -35,13 +35,13 @@ class LayoutProvider internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
-         * Variable name to store element height.
+         * Name of the variable that stores the element’s height.
          */
         val heightVariableName: Property<String>?,
         /**
-         * Variable name to store element width.
+         * Name of the variable that stores the element’s width.
          */
         val widthVariableName: Property<String>?,
     ) {
@@ -56,8 +56,8 @@ class LayoutProvider internal constructor(
 }
 
 /**
- * @param heightVariableName Variable name to store element height.
- * @param widthVariableName Variable name to store element width.
+ * @param heightVariableName Name of the variable that stores the element’s height.
+ * @param widthVariableName Name of the variable that stores the element’s width.
  */
 @Generated
 fun DivScope.layoutProvider(
@@ -72,8 +72,8 @@ fun DivScope.layoutProvider(
 )
 
 /**
- * @param heightVariableName Variable name to store element height.
- * @param widthVariableName Variable name to store element width.
+ * @param heightVariableName Name of the variable that stores the element’s height.
+ * @param widthVariableName Name of the variable that stores the element’s width.
  */
 @Generated
 fun DivScope.layoutProviderProps(
@@ -86,8 +86,8 @@ fun DivScope.layoutProviderProps(
 )
 
 /**
- * @param heightVariableName Variable name to store element height.
- * @param widthVariableName Variable name to store element width.
+ * @param heightVariableName Name of the variable that stores the element’s height.
+ * @param widthVariableName Name of the variable that stores the element’s width.
  */
 @Generated
 fun TemplateScope.layoutProviderRefs(
@@ -100,8 +100,8 @@ fun TemplateScope.layoutProviderRefs(
 )
 
 /**
- * @param heightVariableName Variable name to store element height.
- * @param widthVariableName Variable name to store element width.
+ * @param heightVariableName Name of the variable that stores the element’s height.
+ * @param widthVariableName Name of the variable that stores the element’s width.
  */
 @Generated
 fun LayoutProvider.override(
@@ -116,30 +116,14 @@ fun LayoutProvider.override(
 )
 
 /**
- * @param heightVariableName Variable name to store element height.
- * @param widthVariableName Variable name to store element width.
+ * @param heightVariableName Name of the variable that stores the element’s height.
+ * @param widthVariableName Name of the variable that stores the element’s width.
  */
 @Generated
 fun LayoutProvider.defer(
     `use named arguments`: Guard = Guard.instance,
     heightVariableName: ReferenceProperty<String>? = null,
     widthVariableName: ReferenceProperty<String>? = null,
-): LayoutProvider = LayoutProvider(
-    LayoutProvider.Properties(
-        heightVariableName = heightVariableName ?: properties.heightVariableName,
-        widthVariableName = widthVariableName ?: properties.widthVariableName,
-    )
-)
-
-/**
- * @param heightVariableName Variable name to store element height.
- * @param widthVariableName Variable name to store element width.
- */
-@Generated
-fun LayoutProvider.evaluate(
-    `use named arguments`: Guard = Guard.instance,
-    heightVariableName: ExpressionProperty<String>? = null,
-    widthVariableName: ExpressionProperty<String>? = null,
 ): LayoutProvider = LayoutProvider(
     LayoutProvider.Properties(
         heightVariableName = heightVariableName ?: properties.heightVariableName,

@@ -2,15 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithComplexProperty with EquatableMixin {
+
+class EntityWithComplexProperty extends Resolvable with EquatableMixin  {
   const EntityWithComplexProperty({
     required this.property,
   });
 
   static const type = "entity_with_complex_property";
-
   final EntityWithComplexPropertyProperty property;
 
   @override
@@ -24,7 +24,7 @@ class EntityWithComplexProperty with EquatableMixin {
       property: property ?? this.property,
     );
 
-  static EntityWithComplexProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithComplexProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,13 +36,18 @@ class EntityWithComplexProperty with EquatableMixin {
       return null;
     }
   }
+
+  EntityWithComplexProperty resolve(DivVariableContext context) {
+    property.resolve(context);
+    return this;
+  }
 }
 
-class EntityWithComplexPropertyProperty with EquatableMixin {
+
+class EntityWithComplexPropertyProperty extends Resolvable with EquatableMixin  {
   const EntityWithComplexPropertyProperty({
     required this.value,
   });
-
 
   final Expression<Uri> value;
 
@@ -57,7 +62,7 @@ class EntityWithComplexPropertyProperty with EquatableMixin {
       value: value ?? this.value,
     );
 
-  static EntityWithComplexPropertyProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithComplexPropertyProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -68,5 +73,10 @@ class EntityWithComplexPropertyProperty with EquatableMixin {
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithComplexPropertyProperty resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

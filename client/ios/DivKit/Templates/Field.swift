@@ -123,6 +123,13 @@ extension Field where T: ValidSerializationValue {
 
 extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
   @inlinable
+  func resolveValue(
+    context: TemplatesContext
+  ) -> DeserializationResult<T> {
+    resolveValue(context: context, transform: T.init(rawValue:))
+  }
+
+  @inlinable
   func resolveOptionalValue(
     context: TemplatesContext,
     validator: AnyValueValidator<T>? = nil

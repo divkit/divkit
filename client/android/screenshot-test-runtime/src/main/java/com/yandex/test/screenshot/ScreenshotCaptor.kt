@@ -5,13 +5,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.os.Build
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import androidx.annotation.MainThread
-import androidx.test.uiautomator.UiDevice
-import java.io.File
-import java.io.FileOutputStream
 import java.util.Properties
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -21,7 +17,6 @@ class ScreenshotCaptor {
      */
     @MainThread
     fun takeScreenshots(
-        device: UiDevice,
         view: View,
         suiteName: String,
         name: String
@@ -31,11 +26,8 @@ class ScreenshotCaptor {
             saveDeviceProperties(view.context)
         }
 
-        prepareDirectories(suiteName)
-
         takeViewRender(view, outputFile = ScreenshotType.ViewRender.asFile(suiteName, name))
         takeViewPixelCopy(view, outputFile = ScreenshotType.ViewPixelCopy.asFile(suiteName, name))
-        takeDeviceScreenshot(device, outputFile = ScreenshotType.Device.asFile(suiteName, name))
 
         return listOf(
             ScreenshotType.ViewRender.relativeScreenshotPath(suiteName, name),
@@ -53,35 +45,29 @@ class ScreenshotCaptor {
             put("displayDensity", specs.density.toString())
         }
 
-        val propertiesWriter = File(rootDir, "device.properties").bufferedWriter()
+        val propertiesWriter = TestFile("device.properties").open().bufferedWriter()
         propertiesWriter.use {
             properties.store(it, null)
         }
     }
 
     @MainThread
-    fun takeViewRender(view: View, outputFile: File) {
+    fun takeViewRender(view: View, outputFile: TestFile) {
         val bitmap = ViewRasterizer.rasterize(view)
-        Log.i(TAG, "saving view render to ${outputFile.absolutePath}")
+        Log.i(TAG, "saving view render to ${outputFile.path}")
 
         bitmap.save(outputFile)
     }
 
     @MainThread
-    fun takeViewPixelCopy(view: View, outputFile: File) {
+    fun takeViewPixelCopy(view: View, outputFile: TestFile) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val window = view.context.asActivity().window
         val pixelCopy = ViewRasterizer.pixelCopy(window, view)
-        Log.i(TAG, "saving view pixel copy to ${outputFile.absolutePath}")
+        Log.i(TAG, "saving view pixel copy to ${outputFile.path}")
 
         pixelCopy.save(outputFile)
-    }
-
-    fun takeDeviceScreenshot(device: UiDevice, outputFile: File) {
-        device.waitForIdle(IDLE_TIMEOUT)
-        Log.i(TAG, "saving device screenshot to ${outputFile.absolutePath}")
-        device.takeScreenshot(outputFile)
     }
 
     private fun Context.asActivity(): Activity {
@@ -93,36 +79,22 @@ class ScreenshotCaptor {
     }
 
     companion object {
-
         private const val TAG = "ScreenshotCapture"
-        private const val IDLE_TIMEOUT = 2000L
 
-        val rootDir by lazy {
-            File("${Environment.getExternalStorageDirectory()}/${ScreenshotBuildSpecs.screenshotRootDir}").apply {
-                mkdirs()
-            }
-        }
-
-        private fun ScreenshotType.asFile(suiteName: String, fileName: String): File {
-            return File(rootDir, relativeScreenshotPath(suiteName, fileName))
-        }
-
-        private fun prepareDirectories(suiteName: String) {
-            ScreenshotType.values()
-                .map { File(rootDir, it.relativeDirPath(suiteName)) }
-                .forEach { it.mkdirs() }
+        private fun ScreenshotType.asFile(suiteName: String, fileName: String): TestFile {
+            return TestFile(relativeScreenshotPath(suiteName, fileName))
         }
 
         private val propertiesSaved = AtomicBoolean(false)
 
-        private fun Bitmap.save(outputFile: File) {
+        private fun Bitmap.save(outputFile: TestFile) {
             val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 Bitmap.CompressFormat.WEBP_LOSSLESS
             } else {
                 Bitmap.CompressFormat.PNG
             }
 
-            outputFile.outputStream().use {
+            outputFile.open().use {
                 compress(format, 100, it)
             }
         }

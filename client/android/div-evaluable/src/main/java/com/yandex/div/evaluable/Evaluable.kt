@@ -39,7 +39,7 @@ abstract class Evaluable(val rawExpr: String) {
             get() =  if (this::expression.isInitialized) {
                 expression.variables
             } else {
-                tokens.filterIsInstance(Token.Operand.Variable::class.java).map { it.name }
+                tokens.filterIsInstance<Token.Operand.Variable>().map { it.name }
             }
         override fun evalImpl(evaluator: Evaluator): Any {
             if (!this::expression.isInitialized) {

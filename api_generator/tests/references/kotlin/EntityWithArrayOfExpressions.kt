@@ -1,24 +1,20 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithArrayOfExpressions(
-    @JvmField final val items: ExpressionList<String>, // at least 1 elements
+    @JvmField val items: ExpressionList<String>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _propertiesHash: Int? = null 
@@ -44,11 +40,9 @@ class EntityWithArrayOfExpressions(
         return hash
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.writeExpressionList(key = "items", value = items)
-        json.write(key = "type", value = TYPE)
-        return json
+    fun equals(other: EntityWithArrayOfExpressions?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.evaluate(resolver).compareWith(other.items.evaluate(otherResolver)) { a, b -> a == b }
     }
 
     fun copy(
@@ -56,6 +50,13 @@ class EntityWithArrayOfExpressions(
     ) = EntityWithArrayOfExpressions(
         items = items,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.writeExpressionList(key = "items", value = items)
+        json.write(key = "type", value = TYPE)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_array_of_expressions"
@@ -73,5 +74,4 @@ class EntityWithArrayOfExpressions(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfExpressions(env, json = it) }
     }
-
 }

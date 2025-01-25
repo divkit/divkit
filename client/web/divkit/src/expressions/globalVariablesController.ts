@@ -15,6 +15,11 @@ export function getControllerStore(controller: GlobalVariablesController): Writa
     return store;
 }
 
+export function cleanControllerStore(controller: GlobalVariablesController): void {
+    controllerToStore.delete(controller);
+    controllerToVars.delete(controller);
+}
+
 export function getControllerVars(controller: GlobalVariablesController): Map<string, Variable> {
     const map = controllerToVars.get(controller) || new Map();
 

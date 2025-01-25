@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-object ActionClearFocus : ActionTyped {
+data object ActionClearFocus : ActionTyped {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "clear_focus")
 }

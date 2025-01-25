@@ -1,7 +1,10 @@
 package com.yandex.div.evaluable.function
 
-import com.yandex.div.evaluable.*
+import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
+import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.REASON_CONVERT_TO_COLOR
 import com.yandex.div.evaluable.REASON_OUT_OF_RANGE
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
@@ -294,13 +297,13 @@ internal object ColorRgb : Function() {
 }
 
 @Throws(IllegalArgumentException::class)
-private fun Int.toColorFloatComponentValue(): Double {
+internal fun Int.toColorFloatComponentValue(): Double {
     if (this !in 0..255) throw IllegalArgumentException("Value out of channel range 0..255")
     return this.toDouble() / 255f
 }
 
 @Throws(IllegalArgumentException::class)
-private fun Double.toColorIntComponentValue(): Int {
+internal fun Double.toColorIntComponentValue(): Int {
     if (this < 0f || this > 1f) throw IllegalArgumentException()
     return (this * 255f + 0.5f).toInt()
 }

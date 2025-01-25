@@ -205,7 +205,9 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
                         @NonNull HeightCalculatorFactory heightCalculatorFactory,
                         @NonNull TabTextStyleProvider textStyleProvider,
                         @Nullable ViewPager.OnPageChangeListener extendedListener,
-                        @NonNull ActiveTabClickListener<ACTION> activeTabClickListener) {
+                        @NonNull ActiveTabClickListener<ACTION> activeTabClickListener,
+                        @NonNull ViewPager.OnPageChangeListener activeTabsTracker
+    ) {
         mViewPool = viewPool;
         mView = view;
         mHeightCalculatorFactory = heightCalculatorFactory;
@@ -233,6 +235,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         if (extendedListener != null) {
             mPager.addOnPageChangeListener(extendedListener);
         }
+        mPager.addOnPageChangeListener(activeTabsTracker);
         mPager.setScrollEnabled(tabbedCardConfig.isViewPagerScrollable());
         mPager.setEdgeScrollEnabled(tabbedCardConfig.isViewPagerEdgeScrollable());
         mPager.setPageTransformer(false, new DataBindingTransformer());

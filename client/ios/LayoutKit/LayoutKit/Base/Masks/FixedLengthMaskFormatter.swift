@@ -10,7 +10,7 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
   public init(pattern: String, alwaysVisible: Bool, patternElements: [PatternElement]) {
     self.pattern = pattern
     self.alwaysVisible = alwaysVisible
-    let decoding = [Character: Pattern].init(
+    let decoding = [Character: Pattern](
       patternElements.map(\.key),
       patternElements
         .map { Pattern(regexp: $0.regex, placeHolder: $0.placeholder) }

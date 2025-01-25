@@ -121,12 +121,12 @@ public final class DivView: VisibleBoundsTrackingView {
   public override func layoutSubviews() {
     super.layoutSubviews()
     guard let blockView else { return }
-    blockView.frame = bounds
-    blockView.layoutIfNeeded()
     blockView.onVisibleBoundsChanged(
       from: oldBounds,
       to: blockProvider?.lastVisibleBounds ?? .zero
     )
+    blockView.frame = bounds
+    blockView.layoutIfNeeded()
   }
 
   /// Returns ``DivCardSize`` of the ``DivView``.
@@ -202,7 +202,11 @@ public final class DivView: VisibleBoundsTrackingView {
   ///  - to: The new bounds rectangle.
   public func onVisibleBoundsChanged(to: CGRect) {
     blockProvider?.lastVisibleBounds = to
-    setNeedsLayout()
+    if window == nil {
+      forceLayout()
+    } else {
+      setNeedsLayout()
+    }
   }
 
   /// Use ``onVisibleBoundsChanged(to:)`` instead.
@@ -219,16 +223,17 @@ extension DivView: ElementStateObserver {
 
   public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.focusedElementChanged(isFocused: isFocused, forPath: path)
-    let states = divKitComponents.blockStateStorage.getStateUntyped(path).map { [path: $0] } ?? [:]
-    blockProvider?.update(withStates: states)
+    blockProvider?.update(path: path, isFocused: isFocused)
   }
 }
 
 extension DivView: UIActionEventPerforming {
   public func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
     switch event.payload {
-    case .empty, .url:
+    case .empty:
       break
+    case let .url(url):
+      divKitComponents.urlHandler.handle(url, sender: self)
     case let .menu(menu):
       nearestViewController?.showMenu(menu, actionPerformer: self)
     case let .divAction(params):
@@ -251,6 +256,19 @@ extension DivView {
       invalidateIntrinsicContentSize()
     }
     oldBounds = bounds
+  }
+
+  public override var accessibilityElements: [Any]? {
+    get {
+      guard let elements = self.blockProvider?.accessibilityElementsStorage?
+        .getAccessibilityElements(from: self),
+        !elements.isEmpty else {
+        return super.accessibilityElements
+      }
+
+      return elements
+    }
+    set {}
   }
 }
 

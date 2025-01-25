@@ -5,9 +5,7 @@ import com.yandex.div.internal.widget.indicator.IndicatorParams
 
 internal class WormIndicatorAnimator(private val styleParams: IndicatorParams.Style): IndicatorAnimator {
 
-    private var selectedPosition: Int = 0
     private var selectedPositionOffset: Float = 0f
-    private var itemsCount: Int = 0
     private val itemRect = RectF()
     private var spaceBetweenCenters: Float = 0f
     private var itemWidthOverride: Float = 0f
@@ -22,12 +20,7 @@ internal class WormIndicatorAnimator(private val styleParams: IndicatorParams.St
     override fun getColorAt(position: Int): Int = styleParams.inactiveShape.color
 
     override fun onPageScrolled(position: Int, positionOffset: Float) {
-        selectedPosition = position
         selectedPositionOffset = positionOffset
-    }
-
-    override fun onPageSelected(position: Int) {
-        selectedPosition = position
     }
 
     override fun updateSpaceBetweenCenters(spaceBetweenCenters: Float) {
@@ -36,10 +29,6 @@ internal class WormIndicatorAnimator(private val styleParams: IndicatorParams.St
 
     override fun overrideItemWidth(width: Float) {
         itemWidthOverride = width
-    }
-
-    override fun setItemsCount(count: Int) {
-        itemsCount = count
     }
 
     override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float, isLayoutRtl: Boolean): RectF {

@@ -191,7 +191,7 @@ private let missingTypeErrors: [DeserializationError] = [
   ),
 ]
 
-extension DeserializationError: Equatable {
+extension DeserializationError: Swift.Equatable {
   public static func ==(lhs: DeserializationError, rhs: DeserializationError) -> Bool {
     switch (lhs, rhs) {
     case (.generic, .generic),
@@ -239,7 +239,7 @@ extension DeserializationError: Equatable {
   }
 }
 
-extension DeserializationError.DerivedError: Equatable {
+extension DeserializationError.DerivedError: Swift.Equatable {
   public static func ==(
     lhs: Serialization.DeserializationError.DerivedError,
     rhs: Serialization.DeserializationError.DerivedError

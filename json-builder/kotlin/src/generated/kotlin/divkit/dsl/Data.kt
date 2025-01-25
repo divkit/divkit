@@ -25,14 +25,14 @@ import kotlin.collections.Map
  * Required parameters: `states, log_id`.
  */
 @Generated
-class Data internal constructor(
+data class Data internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Logging ID.
          */
@@ -79,7 +79,7 @@ class Data internal constructor(
      * Required parameters: `state_id, div`.
      */
     @Generated
-    class State internal constructor(
+    data class State internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -93,7 +93,7 @@ class Data internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * State ID.
              */

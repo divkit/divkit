@@ -13,10 +13,12 @@ import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.downloader.DivPatchCache
+import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.font.DivTypefaceType
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
@@ -52,7 +54,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSize
-import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivTabs
 import javax.inject.Inject
 import javax.inject.Named
@@ -69,6 +70,8 @@ internal class DivTabsBinder @Inject constructor(
     private val visibilityActionTracker: DivVisibilityActionTracker,
     private val divPatchCache: DivPatchCache,
     @Named(Names.THEMED_CONTEXT) private val context: Context,
+    private val runtimeVisitor: DivRuntimeVisitor,
+    private val tabsStateCache: TabsStateCache,
 ) {
     private var oldDivSelectedTab: Long? = null
 
@@ -149,8 +152,10 @@ internal class DivTabsBinder @Inject constructor(
         val reusableAdapter = view.divTabsAdapter.tryReuse(div, resolver)
 
         if (reusableAdapter != null) {
-            reusableAdapter.path = path
+            reusableAdapter.bindingContext = bindingContext
+            reusableAdapter.statePath = path
             reusableAdapter.divTabsEventManager.div = div
+            reusableAdapter.activeStateTracker.div = div
             if (oldDiv === div) {
                 // rebind tabs only
                 reusableAdapter.notifyStateChanged()
@@ -233,12 +238,13 @@ internal class DivTabsBinder @Inject constructor(
                 eventManager.onPageDisplayed(currentTab)
             }
         }
+        val activeStateTracker = DivTabsActiveStateTracker(
+            bindingContext, path, div2Logger, tabsStateCache, runtimeVisitor, div)
         return DivTabsAdapter(
             viewPool, view, getTabbedCardLayoutIds(), heightCalculatorFactory, isDynamicHeight,
             bindingContext, textStyleProvider, viewCreator, divBinder,
-            eventManager, path, divPatchCache
+            eventManager, activeStateTracker, path, divPatchCache
         )
-
     }
 
     private fun getDisabledScrollPages(lastPageNumber: Int, isSwipeEnabled: Boolean): MutableSet<Int> {

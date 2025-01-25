@@ -60,8 +60,8 @@
               "custom_type": "custom_video",
               "id": "demo_video",
               "custom_props": {
-                "stub_image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/divkit-stub-image.png",
-                "url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/video/city.mp4",
+                "stub_image_url": "https://yastatic.net/s3/home/divkit/divkit-stub-image.png",
+                "url": "https://yastatic.net/s3/home/divkit/city.mp4",
                 "start_mode": "when_ready",
                 "repeat": true
               },

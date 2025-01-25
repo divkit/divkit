@@ -12,14 +12,29 @@ final class DivActionHandlerTests: XCTestCase {
   private var handledUrl: URL?
 
   override func setUp() {
+    let idToPath = IdToPath()
+    idToPath[cardId.path + "element_id"] = cardId.path + "element_id"
     actionHandler = DivActionHandler(
       stateUpdater: DefaultDivStateManagement(),
+      blockStateStorage: DivBlockStateStorage(),
       patchProvider: MockPatchProvider(),
+      submitter: MockSubmitter(),
       variablesStorage: variablesStorage,
+      functionsStorage: nil,
       updateCard: { _ in },
+      showTooltip: nil,
+      tooltipActionPerformer: nil,
       logger: logger,
-      urlHandler: DivUrlHandlerDelegate { url, _ in self.handledUrl = url },
-      reporter: reporter
+      trackVisibility: { _, _ in },
+      trackDisappear: { _, _ in },
+      performTimerAction: { _, _, _ in },
+      urlHandler: DivUrlHandlerDelegate { url, _ in
+        self.handledUrl = url
+      },
+      persistentValuesStorage: DivPersistentValuesStorage(),
+      reporter: reporter,
+      idToPath: idToPath,
+      animatorController: DivAnimatorController()
     )
   }
 
@@ -335,6 +350,23 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertEqual(["value 1", "value 2"], getVariableValue("array_var"))
   }
 
+  func test_SetVariableAction_SetsDictVariable() {
+    let nestedDict: [String: Any] = ["key_1": "value_1", "nested": ["key_2": "value_2"]]
+    setVariableValue("dict_var", .dict([:]))
+
+    let dictVal = DictValue(value: nestedDict)
+
+    handle(.divActionSetVariable(
+      DivActionSetVariable(
+        value: .dictValue(dictVal),
+        variableName: .value("dict_var")
+      )
+    ))
+
+    let result = getVariableValue("dict_var") as [String: Any]?
+    XCTAssertTrue(NSDictionary(dictionary: nestedDict).isEqual(to: result!))
+  }
+
   func test_SetVariableAction_SetsLocalVariable() {
     let path = cardId.path + "element_id"
     variablesStorage.initializeIfNeeded(
@@ -351,6 +383,34 @@ final class DivActionHandlerTests: XCTestCase {
         ))
       ),
       path: path,
+      source: .tap,
+      sender: nil
+    )
+
+    XCTAssertEqual(
+      "new value",
+      variablesStorage.getVariableValue(path: path, name: "local_var")
+    )
+  }
+
+  func test_ActionWithScopeId() {
+    let actionPath = cardId.path + "element_with_action_id"
+    let path = cardId.path + "element_id"
+    variablesStorage.initializeIfNeeded(
+      path: path,
+      variables: ["local_var": .string("value")]
+    )
+
+    actionHandler.handle(
+      divAction(
+        logId: "log_id",
+        scopeId: "element_id",
+        typed: .divActionSetVariable(DivActionSetVariable(
+          value: stringValue("new value"),
+          variableName: .value("local_var")
+        ))
+      ),
+      path: actionPath,
       source: .tap,
       sender: nil
     )
@@ -442,6 +502,16 @@ private final class MockActionLogger: DivActionLogger {
     lastReferer = referer
     lastPayload = payload
   }
+}
+
+private final class MockSubmitter: DivSubmitter {
+  func submit(
+    request _: SubmitRequest,
+    data _: [String: String],
+    completion _: @escaping DivSubmitterCompletion
+  ) {}
+
+  func cancelRequests() {}
 }
 
 final class MockPatchProvider: DivPatchProvider {

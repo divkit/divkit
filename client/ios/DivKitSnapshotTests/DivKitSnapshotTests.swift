@@ -1,11 +1,11 @@
-import Testing
-import UIKit
-import XCTest
-
 @testable import DivKit
 import DivKitExtensions
+import DivKitMarkdownExtension
 @testable import LayoutKit
+import Testing
+import UIKit
 import VGSL
+import XCTest
 
 final class AllTests: XCTestCase {
   func testAll() async {
@@ -36,7 +36,7 @@ struct DivKitSnapshotTests {
     try await test.run(
       caseName: file.name.removingFileExtension,
       blocksState: defaultPagerViewState,
-      extensions: [labelImagePreviewExtension]
+      extensions: [labelImagePreviewExtension, MarkdownExtensionHandler()]
     )
   }
 

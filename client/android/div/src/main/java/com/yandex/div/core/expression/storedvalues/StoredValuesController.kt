@@ -4,8 +4,10 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.StoredValue
+import com.yandex.div.data.StoredValue.ArrayStoredValue
 import com.yandex.div.data.StoredValue.BooleanStoredValue
 import com.yandex.div.data.StoredValue.ColorStoredValue
+import com.yandex.div.data.StoredValue.DictStoredValue
 import com.yandex.div.data.StoredValue.DoubleStoredValue
 import com.yandex.div.data.StoredValue.IntegerStoredValue
 import com.yandex.div.data.StoredValue.StringStoredValue
@@ -115,6 +117,8 @@ internal class StoredValuesController @Inject constructor(
             StoredValue.Type.NUMBER -> DoubleStoredValue(name, getDouble(KEY_VALUE))
             StoredValue.Type.COLOR -> ColorStoredValue(name, Color.parse(getString(KEY_VALUE)))
             StoredValue.Type.URL -> UrlStoredValue(name, Url.from(getString(KEY_VALUE)))
+            StoredValue.Type.ARRAY -> ArrayStoredValue(name, getJSONArray(KEY_VALUE))
+            StoredValue.Type.DICT -> DictStoredValue(name, getJSONObject(KEY_VALUE))
         }
 
     private fun StoredValue.toJSONObject(lifetime: Long): JSONObject {
@@ -122,6 +126,8 @@ internal class StoredValuesController @Inject constructor(
             is StringStoredValue,
             is IntegerStoredValue,
             is BooleanStoredValue,
+            is ArrayStoredValue,
+            is DictStoredValue,
             is DoubleStoredValue -> getValue()
             is UrlStoredValue,
             is ColorStoredValue -> getValue().toString()

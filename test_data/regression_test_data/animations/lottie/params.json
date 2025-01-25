@@ -1,0 +1,240 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "$text": "title",
+      "font_size": 22,
+      "font_weight": "medium",
+      "margins": {
+        "top": 16,
+        "right": 16,
+        "bottom": 4,
+        "left": 16
+      }
+    },
+    "select_control": {
+      "type": "select",
+      "font_size": 14,
+      "paddings": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "margins": {
+        "top": 4,
+        "bottom": 4,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ]
+    },
+    "lottie_card": {
+      "type": "container",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "gif",
+          "gif_url": "https://i.gifer.com/VhdJ.gif",
+          "aspect": {
+            "ratio": "@{toNumber(ratio)}"
+          },
+          "$scale": "scale",
+          "content_alignment_horizontal": "@{halign}",
+          "content_alignment_vertical": "@{valign}",
+          "extensions": [
+            {
+              "id": "lottie",
+              "params": {
+                "lottie_url": "https://yastatic.net/s3/home/divkit/DivGif23.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "root",
+    "variables": [
+      {
+        "name": "ratio",
+        "type": "string",
+        "value": "3"
+      },
+      {
+        "name": "scale",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "halign",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "valign",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "title",
+              "title": "Scale"
+            },
+            {
+              "type": "select_control",
+              "value_variable": "scale",
+              "options": [
+                {
+                  "text": "Default",
+                  "value": ""
+                },
+                {
+                  "text": "no_scale",
+                  "value": "no_scale"
+                },
+                {
+                  "text": "fit",
+                  "value": "fit"
+                },
+                {
+                  "text": "fill",
+                  "value": "fill"
+                },
+                {
+                  "text": "stretch",
+                  "value": "stretch"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "title": "Aspect ratio"
+            },
+            {
+              "type": "select_control",
+              "value_variable": "ratio",
+              "options": [
+                {
+                  "text": "3",
+                  "value": "3"
+                },
+                {
+                  "text": "1",
+                  "value": "1"
+                },
+                {
+                  "text": ".5",
+                  "value": ".5"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "title": "Horizontal align"
+            },
+            {
+              "type": "select_control",
+              "value_variable": "halign",
+              "options": [
+                {
+                  "text": "Default",
+                  "value": ""
+                },
+                {
+                  "text": "start",
+                  "value": "start"
+                },
+                {
+                  "text": "left",
+                  "value": "left"
+                },
+                {
+                  "text": "center",
+                  "value": "center"
+                },
+                {
+                  "text": "end",
+                  "value": "end"
+                },
+                {
+                  "text": "right",
+                  "value": "right"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "title": "Vertical align"
+            },
+            {
+              "type": "select_control",
+              "value_variable": "valign",
+              "options": [
+                {
+                  "text": "Default",
+                  "value": ""
+                },
+                {
+                  "text": "top",
+                  "value": "top"
+                },
+                {
+                  "text": "center",
+                  "value": "center"
+                },
+                {
+                  "text": "bottom",
+                  "value": "bottom"
+                }
+              ]
+            },
+            {
+              "type": "lottie_card",
+              "title": "No scale",
+              "scale": "@{scale}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

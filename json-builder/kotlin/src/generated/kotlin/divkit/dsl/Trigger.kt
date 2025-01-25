@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `condition, actions`.
  */
 @Generated
-class Trigger internal constructor(
+data class Trigger internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -40,7 +40,7 @@ class Trigger internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Action when a trigger is activated.
          */

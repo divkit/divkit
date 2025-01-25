@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `position, id, div`.
  */
 @Generated
-class Tooltip internal constructor(
+data class Tooltip internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -44,7 +44,7 @@ class Tooltip internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
          */

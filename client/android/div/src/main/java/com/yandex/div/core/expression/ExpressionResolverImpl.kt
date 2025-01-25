@@ -2,9 +2,9 @@ package com.yandex.div.core.expression
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
-import com.yandex.div.core.expression.variables.LocalVariableController
+import com.yandex.div.core.expression.variables.ConstantsProvider
+import com.yandex.div.core.expression.variables.VariableAndConstantController
 import com.yandex.div.core.expression.variables.VariableController
-import com.yandex.div.core.expression.variables.VariableSource
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
@@ -17,6 +17,7 @@ import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.ParsingExceptionReason
+import com.yandex.div.json.SILENT_PARSING_EXCEPTION
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.invalidValue
 import com.yandex.div.json.missingVariable
@@ -28,12 +29,23 @@ internal class ExpressionResolverImpl(
     private val variableController: VariableController,
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
+    private val onCreateCallback: OnCreateCallback
 ) : ExpressionResolver {
 
     private val evaluationsCache = mutableMapOf<String, Any>()
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
 
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
+
+    var suppressMissingVariableException: Boolean = false
+
+    init {
+        onCreateCallback.onCreate(
+            this,
+            variableController,
+            evaluator.evaluationContext.functionProvider as FunctionProviderDecorator
+        )
+    }
 
     override fun <R, T : Any> get(
         expressionKey: String,
@@ -48,6 +60,9 @@ internal class ExpressionResolverImpl(
             tryResolve(expressionKey, rawExpression, evaluable, converter, validator, fieldType)
         } catch (e: ParsingException) {
             if (e.reason == ParsingExceptionReason.MISSING_VARIABLE) {
+                if (suppressMissingVariableException) {
+                    throw SILENT_PARSING_EXCEPTION
+                }
                 throw e
             }
             logger.logError(e)
@@ -215,19 +230,20 @@ internal class ExpressionResolverImpl(
         }
     }
 
-    operator fun plus(variableSource: VariableSource): ExpressionResolverImpl {
-        val localVariableController = LocalVariableController(variableController, variableSource)
+    operator fun plus(constants: ConstantsProvider): ExpressionResolverImpl {
+        val variableAndConstantController = VariableAndConstantController(variableController, constants)
         return ExpressionResolverImpl(
-            variableController = localVariableController,
+            variableController = variableAndConstantController,
             evaluator = Evaluator(
                 evaluationContext = EvaluationContext(
-                    variableProvider = localVariableController,
+                    variableProvider = variableAndConstantController,
                     storedValueProvider = evaluator.evaluationContext.storedValueProvider,
                     functionProvider = evaluator.evaluationContext.functionProvider,
                     warningSender = evaluator.evaluationContext.warningSender
                 )
             ),
-            errorCollector = errorCollector
+            errorCollector = errorCollector,
+            onCreateCallback = onCreateCallback,
         )
     }
 
@@ -236,5 +252,18 @@ internal class ExpressionResolverImpl(
             errorCollector.logError(typeMismatch(index, element))
             null
         }
+    }
+
+    /**
+     * ExpressionResolverImpl may create new instance in 'plus' operator.
+     * To be able to registrate all created resolvers and their variables controllers
+     * as a new ExpressionRuntime we are using OnCreateCallback.
+     */
+    internal fun interface OnCreateCallback {
+        fun onCreate(
+            resolver: ExpressionResolverImpl,
+            variableController: VariableController,
+            functionProvider: FunctionProviderDecorator
+        )
     }
 }

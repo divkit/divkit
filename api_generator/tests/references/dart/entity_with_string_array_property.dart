@@ -2,15 +2,16 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithStringArrayProperty with EquatableMixin {
+
+class EntityWithStringArrayProperty extends Resolvable with EquatableMixin  {
   const EntityWithStringArrayProperty({
     required this.array,
   });
 
   static const type = "entity_with_string_array_property";
-  // at least 1 elements
+   // at least 1 elements
   final Expression<List<String>> array;
 
   @override
@@ -24,16 +25,21 @@ class EntityWithStringArrayProperty with EquatableMixin {
       array: array ?? this.array,
     );
 
-  static EntityWithStringArrayProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithStringArrayProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithStringArrayProperty(
-        array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseStr(v?.toString(),)!),)!,
+        array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseStr(v?.toString(),)!,),)!,
       );
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithStringArrayProperty resolve(DivVariableContext context) {
+    array.resolve(context);
+    return this;
   }
 }

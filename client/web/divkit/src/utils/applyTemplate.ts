@@ -1,4 +1,4 @@
-import { wrapError, WrappedError } from './wrapError';
+import { wrapError, type WrappedError } from './wrapError';
 import type { DivBase, TemplateContext } from '../../typings/common';
 import type { DivBaseData } from '../types/base';
 

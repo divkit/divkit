@@ -275,7 +275,7 @@ internal object ToUpperCase : Function() {
         args: List<Any>
     ): Any {
         val str = args[0] as String
-        return str.toUpperCase()
+        return str.uppercase()
     }
 }
 
@@ -293,7 +293,7 @@ internal object ToLowerCase : Function() {
         args: List<Any>
     ): Any {
         val str = args[0] as String
-        return str.toLowerCase()
+        return str.lowercase()
     }
 }
 
@@ -442,7 +442,29 @@ internal object TestRegex : Function() {
     }
 }
 
-private fun buildRepeatableString(
+internal object EncodeRegex : Function() {
+
+    override val name = "encodeRegex"
+
+    override val declaredArgs: List<FunctionArgument> = listOf(
+        FunctionArgument(type = EvaluableType.STRING)
+    )
+
+    override val resultType = EvaluableType.STRING
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val str = args[0] as String
+        val regex = Regex("[.*+?^\${}()|\\[\\]\\\\]")
+        return str.replace(regex) { "\\${it.value}" }
+    }
+}
+
+internal fun buildRepeatableString(
     evaluationContext: EvaluationContext,
     expressionContext: ExpressionContext,
     length: Int,

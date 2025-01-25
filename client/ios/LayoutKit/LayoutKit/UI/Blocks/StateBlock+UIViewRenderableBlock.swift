@@ -22,7 +22,8 @@ extension StateBlock {
       ids: Set(ids.map { BlockViewID(rawValue: $0) }),
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate
+      renderingDelegate: renderingDelegate,
+      parentBlock: self
     )
   }
 }
@@ -109,24 +110,36 @@ private final class StateBlockView: BlockView {
   private var childView: BlockView?
   private var stateId: String?
 
+  private var parentBlock: StateBlock?
+  private weak var observer: ElementStateObserver?
+  private weak var overscrollDelegate: ScrollDelegate?
+  private weak var renderingDelegate: RenderingDelegate?
+
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
-
-  init() {
-    super.init(frame: .zero)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
 
   func configure(
     child: Block,
     ids: Set<BlockViewID>,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
+    renderingDelegate: RenderingDelegate?,
+    parentBlock: StateBlock
   ) {
+    defer {
+      self.parentBlock = parentBlock
+      self.observer = observer
+      self.overscrollDelegate = overscrollDelegate
+      self.renderingDelegate = renderingDelegate
+    }
+
+    if let oldParentChild = self.parentBlock?.child,
+       child.self.equals(oldParentChild),
+       self.observer === observer,
+       self.overscrollDelegate === overscrollDelegate,
+       self.renderingDelegate === renderingDelegate {
+      return // The child block hasn't changed, stop configuring
+    }
+
     // remove views with unfinished animations
     for subview in subviews {
       if subview !== childView {
@@ -158,19 +171,27 @@ private final class StateBlockView: BlockView {
     )
 
     let viewsToAdd = subviewStorage.getViewsToAdd()
+
     if viewsToAdd.isEmpty, viewsToTransition.isEmpty {
       setNeedsLayout()
     } else {
       forceLayout()
 
-      for view in viewsToAdd {
-        view.addWithAnimation(in: self)
-      }
+      changeBoundsWithAnimation(viewsToTransition)
+      addWithAnimations(viewsToAdd)
+    }
+  }
 
-      for (id, frame) in viewsToTransition {
-        if let view = subviewStorage.getView(id) {
-          view.changeBoundsWithAnimation(in: self, startFrame: frame)
-        }
+  private func addWithAnimations(_ views: [DetachableAnimationBlockView]) {
+    for view in views {
+      view.addWithAnimation(in: self)
+    }
+  }
+
+  private func changeBoundsWithAnimation(_ views: [SubviewStorage.FrameWithID]) {
+    for (id, frame) in views {
+      if let view = subviewStorage.getView(id) {
+        view.changeBoundsWithAnimation(in: self, startFrame: frame)
       }
     }
   }

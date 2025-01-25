@@ -31,7 +31,7 @@ internal object Tokenizer {
         }
 
         val stringTemplateTokens = mutableListOf<Token>()
-        val stringLiteral = processString(state, isPartOfExpression)
+        val stringLiteral = processString(state, isLiteral = isPartOfExpression)
 
         if (state.currentChar().isAtEnd()) {
             if (isPartOfExpression) {
@@ -56,7 +56,7 @@ internal object Tokenizer {
             val expressionTokens = mutableListOf<Token>()
             processExpression(state, expressionTokens)
 
-            val stringAfterExpression = processString(state)
+            val stringAfterExpression = processString(state, isLiteral = isPartOfExpression)
 
             val isSpecialCaseWithExpressionInStringTemplate = !isPartOfExpression
                     && stringTemplateTokens.isEmpty()

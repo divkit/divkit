@@ -43,12 +43,23 @@ extension DivInput: DivBlockModeling {
 
     let hintValue = resolveHintText(expressionResolver) ?? ""
     let keyboardType = resolveKeyboardType(expressionResolver)
+    let autocapitalizationType = resolveAutocapitalization(expressionResolver)
 
     let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
+    let enterKeyActions = enterKeyActions?.uiActions(context: context) ?? []
+    let enterKeyType = resolveEnterKeyType(expressionResolver)
+
     let inputPath = context.parentPath + (id ?? DivInput.type)
-    let isFocused = context.blockStateStorage.isFocused(path: inputPath)
+
+    let blockStateStorage = context.blockStateStorage
+    let isFocused = blockStateStorage.isFocused(path: inputPath)
+
+    if isFocused { blockStateStorage.setInputFocused() }
+    let shouldClearFocus = Variable<Bool> { [weak blockStateStorage] in
+      blockStateStorage.map { !$0.isInputFocused } ?? true
+    }
 
     return TextInputBlock(
       widthTrait: resolveWidthTrait(context),
@@ -59,6 +70,8 @@ extension DivInput: DivBlockModeling {
       textTypo: typo.with(color: resolveTextColor(expressionResolver)),
       multiLineMode: keyboardType == .multiLineText,
       inputType: keyboardType.system,
+      autocapitalizationType: autocapitalizationType.system,
+      enterKeyType: enterKeyType.system,
       highlightColor: resolveHighlightColor(expressionResolver),
       maxVisibleLines: resolveMaxVisibleLines(expressionResolver),
       selectAllOnFocus: resolveSelectAllOnFocus(expressionResolver),
@@ -67,13 +80,17 @@ extension DivInput: DivBlockModeling {
       isFocused: isFocused,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
+      enterKeyActions: enterKeyActions,
       parentScrollView: context.parentScrollView,
+      filters: makeFilters(context),
       validators: makeValidators(context),
       layoutDirection: context.layoutDirection,
       textAlignmentHorizontal: resolveTextAlignmentHorizontal(expressionResolver).textAlignment,
       textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment,
       paddings: paddings?.resolve(context),
-      isEnabled: resolveIsEnabled(expressionResolver)
+      isEnabled: resolveIsEnabled(expressionResolver),
+      maxLength: resolveMaxLength(expressionResolver),
+      shouldClearFocus: shouldClearFocus
     )
   }
 
@@ -111,6 +128,27 @@ extension DivInput: DivBlockModeling {
             cardId: context.cardId
           )
         )
+      }
+    }
+  }
+
+  private func makeFilters(_ context: DivBlockModelingContext) -> [TextInputFilter]? {
+    let expressionResolver = context.expressionResolver
+    return filters?.compactMap { filter -> TextInputFilter? in
+      switch filter {
+      case let .divInputFilterExpression(expressionFilter):
+        return { _ in
+          expressionFilter.resolveCondition(context.expressionResolver) ?? true
+        }
+      case let .divInputFilterRegex(regexFilter):
+        let pattern = regexFilter.resolvePattern(expressionResolver) ?? ""
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+          DivKitLogger.error("Invalid regex pattern '\(pattern)'")
+          return nil
+        }
+        return { text in
+          text.fullMatchesRegex(regex)
+        }
       }
     }
   }
@@ -184,6 +222,29 @@ extension DivInput.KeyboardType {
     case .password:
       DivKitLogger.warning("Keyboard type '\(self.rawValue)' is not supported")
       return .default
+    }
+  }
+}
+
+extension DivInput.Autocapitalization {
+  fileprivate var system: TextInputBlock.AutocapitalizationType {
+    switch self {
+    case .none: .none
+    case .words: .words
+    case .auto, .sentences: .sentences
+    case .allCharacters: .allCharacters
+    }
+  }
+}
+
+extension DivInput.EnterKeyType {
+  fileprivate var system: TextInputBlock.EnterKeyType {
+    switch self {
+    case .default: .default
+    case .go: .go
+    case .search: .search
+    case .send: .send
+    case .done: .done
     }
   }
 }

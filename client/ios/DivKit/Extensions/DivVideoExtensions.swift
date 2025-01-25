@@ -14,7 +14,7 @@ extension DivVideo: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     guard let playerFactory = context.playerFactory else {
-      DivKitLogger.warning("There is no player factory in the context")
+      DivKitLogger.error("There is no player factory in the context")
       return EmptyBlock()
     }
 
@@ -32,7 +32,7 @@ extension DivVideo: DivBlockModeling {
       context.makeBinding(variableName: $0, defaultValue: 0)
     }
     let preview: Image? = resolvePreview(resolver).flatMap(_makeImage(base64:))
-    let videoData = VideoData(videos: videoSources.map { $0.makeVideo(resolver: resolver) })
+    let videoData = VideoData(videos: videoSources.compactMap { $0.makeVideo(resolver: resolver) })
 
     let playbackConfig = PlaybackConfig(
       autoPlay: autostart,
@@ -79,15 +79,18 @@ extension DivVideo: DivBlockModeling {
 }
 
 extension DivVideoSource {
-  public func makeVideo(resolver: ExpressionResolver) -> Video {
+  public func makeVideo(resolver: ExpressionResolver) -> Video? {
     let resolution: CGSize? = resolution.flatMap { resolution in
       CGSize(
         width: resolution.resolveWidth(resolver) ?? 0,
         height: resolution.resolveHeight(resolver) ?? 0
       )
     }
+    guard let url = resolveUrl(resolver) else {
+      return nil
+    }
     return Video(
-      url: resolveUrl(resolver)!,
+      url: url,
       resolution: resolution,
       bitrate: resolveBitrate(resolver).flatMap { Double($0) },
       mimeType: resolveMimeType(resolver)

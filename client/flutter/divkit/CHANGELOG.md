@@ -1,28 +1,92 @@
-## 0.3.0-pre+2
-* Add visibility triggers feature
-* Add Full support div-background
-* Isolate problematic divs
+## 0.6.0-rc.2
 
-## 0.3.0-pre+1
+* Update generated schema
+* Support nullable end in div-ranges and cloud background fallback
+* Clean dependencies
+* Add a synchronous method to resolve expression
+* Auto generate resolve DTO mechanism
+* Rewrite context initialization mechanism to synchronous
+* Rewrite conversion mechanism, simplify and standardize
+* Rewrite expression analyzer to synchronous
+* Fix unsafe map of backgrounds
 
+## Migration 0.5.0 → 0.6.0
+* Remove DivKitView property `cacheManager` as unsupported to the proper extent
+* Remove DivKitView property `loadingBuilder` as unused
+* Replace DivKitView props `viewScale` and `textScale` to `scale`
+* Remove DivData `preload` and `parse` methods for simplification
+* DTO models use the generated resolve instead of extension
+* Change prop.resolve(context: context) to prop.resolve(context)
+* Now are required to perform the conversion DTO to DivModel
+* Due to architecture changes and conversion mechanism changes, you need to migrate your codebase
+
+## 0.5.0
+
+* Add full implementation on Dart of DivKit specification for calculating expressions: Runtime
+* Completely remove use of the div_expressions_resolver plugin
+* Start to remove additional code intended for using plugin
+* Previously organize caching of the execution tree within life cycle of expression
+* Fix patches are not applied to items of custom
+* Add custom font family provider
+* Provide documentation for generated schema
+
+## Migration 0.4 → 0.5
+* The DivExpressionResolver method `clearVariables` was removed as unused
+* To ensure stability and a large change in the main calculation mechanism,
+  you need to check the your application when updating
+
+## 0.4.0
+
+* Use low-level divkit layout implementation: DivLayout
+* Optimize pre-calculation of states when switching
+* Fix sticky switching of states
+* Fix inner objects in templates breaks rendering
+* Add support div-text features: font_family, letter_spacing font_weight_value, text_shadow
+* Add scenario list to testing page
+* Add handling url in playground editor
+* Added feature logging management
+
+
+## Migration 0.3 → 0.4
+
+* No changes in the public API!
+* Due to the change in the layout system, we cannot guarantee full compliance with the rendering
+  of the previous version, now we use a lower-level, rather than a composition of standard components.
+
+## 0.3.0
+
+* Provide instant rendering of DivKitView, asynchronous parsing and preloading
+* Change the layout system, refuse ParentData
+* Add call tracking tools
 * Fix object parsing in DTO
-* Add ranges in div-text
+* Add div-ranges in div-text
 * Open access to the classes DivAction, DivTimer, DivVariable, DivPatch, DivDownloadCallbacks and
   converters in the public api
 * Add visibility triggers feature
+* Add Full support div-background
+* Isolate problematic divs with parsing errors
+* Expansion of logged incidents
+* Public BuildContext in DivContext
+* Add div-pager
 
-## Migration 0.2 → 0.3.0-pre+1
+## Migration 0.2 → 0.3
 
-* Now we have fixed the error and extract the value of dict type values when parsing.
+* Now DTO has changed the folder from generated_sources to schema
+* Now DefaultDivKitData needs to be built and preloaded for instant rendering
+* Now we have fixed the error and extract the value of dict type values when parsing
   This change affected the following structures: dict_value, dict_variable, div_action, div_custom,
-  div_disappear_action, div_extension, div_video, div_visibility_action.
-  `-action.payload['payload']`
-  `+action.payload`
+  div_disappear_action, div_extension, div_video, div_visibility_action:
+  ```diff
+  - action.payload['payload']
+  + action.payload
+  ```
 * The naming of the classes of the public api was changed so as not to conflict with the dto
   classes:
-  `-DivAction, DivTimer, DivVariable, DivPatch, DivDownloadCallbacks`
-  `+DivActionModel, DivTimerModel, DivVariableModel, DivPatchModel, DivDownloadCallbacksModel`
-
+  ```diff
+  - DivAction, DivTimer, DivVariable, DivPatch, DivDownloadCallbacks
+  + DivActionModel, DivTimerModel, DivVariableModel, DivPatchModel, DivDownloadCallbacksModel
+  ```
+  
 ## 0.2.0
 
 * Correct interpretation of dict in variables context
@@ -40,9 +104,11 @@
 
 * Now DivContext specified in div-customs protocol, you need to change signature of function if it
   was used.
-  `-Widget createCustom(DivCustom div);`
-  `+Widget createCustom(DivCustom div, DivContext context)`
-
+  ```diff
+  - Widget createCustom(DivCustom div);
+  + Widget createCustom(DivCustom div, DivContext context)
+  ```
+  
 ## 0.1.5
 
 * Templater support: templates can be inherited, composited, links and transitive links to fields.

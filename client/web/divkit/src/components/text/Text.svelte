@@ -4,7 +4,7 @@
     import css from './Text.module.css';
     import rootCss from '../Root.module.css';
 
-    import type { DivTextData, TextImage, TextRange, TextStyles } from '../../types/text';
+    import type { DivTextData, TextImage, TextRange, TextStyles, TextVerticalAlignment } from '../../types/text';
     import type { Style } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { AlignmentHorizontal } from '../../types/alignment';
@@ -12,7 +12,7 @@
     import type { TintMode } from '../../types/image';
     import type { MaybeMissing } from '../../expressions/json';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import TextRangeView from './TextRange.svelte';
     import { makeStyle } from '../../utils/makeStyle';
@@ -22,13 +22,17 @@
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
-    import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { correctColor } from '../../utils/correctColor';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { propToString } from '../../utils/propToString';
     import { correctTintMode } from '../../utils/correctTintMode';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { autoEllipsize } from '../../use/autoEllipsize';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';
+    import { wrapError } from '../../utils/wrapError';
 
     export let componentContext: ComponentContext<DivTextData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -40,7 +44,7 @@
     let text = '';
     let fontSize = 12;
     let lineHeight = 1.25;
-    let customLineHeight = false;
+    let customLineHeight: number | null = null;
     let maxHeight = '';
     let maxLines: number | undefined;
     let lineClamp: string | number = '';
@@ -54,7 +58,7 @@
 
     let renderList: ({
         text: string;
-        textStyles: TextStyles;
+        textStyles: TextRange;
         actions?: MaybeMissing<Action[]>;
     } | {
         image: {
@@ -64,14 +68,16 @@
             wrapperStyle: Style;
             svgFilterId: string;
             preloadRequired: boolean;
+            verticalAlign: TextVerticalAlignment | undefined;
         };
     })[] = [];
+    let hasCloudBg = false;
     let usedTintColors: [string, TintMode][] = [];
 
     $: if (componentContext.json) {
         fontSize = 12;
         lineHeight = 1.25;
-        customLineHeight = false;
+        customLineHeight = null;
         maxHeight = '';
         maxLines = undefined;
         lineClamp = '';
@@ -110,9 +116,15 @@
     $: jsonTextGradient = componentContext.getDerivedFromVars(componentContext.json.text_gradient);
     $: jsonSelectable = componentContext.getDerivedFromVars(componentContext.json.selectable);
     $: jsonAutoEllipsize = componentContext.getDerivedFromVars(componentContext.json.auto_ellipsize);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
 
     $: {
-        text = propToString($jsonText);
+        if (typeof componentContext.json.text === 'string') {
+            text = propToString($jsonText);
+        } else {
+            text = '';
+            componentContext.logError(wrapError(new Error('Incorrect text value type')));
+        }
     }
 
     $: {
@@ -123,9 +135,9 @@
         const newLineHeight = $jsonLineHeight;
         if (isPositiveNumber(newLineHeight)) {
             lineHeight = Number(newLineHeight) / fontSize;
-            customLineHeight = true;
+            customLineHeight = lineHeight;
         } else {
-            customLineHeight = false;
+            customLineHeight = null;
         }
     }
 
@@ -165,7 +177,13 @@
         !$jsonRanges ||
         (
             text && $jsonRanges.length === 1 && $jsonRanges[0] &&
-            $jsonRanges[0].start === 0 && typeof $jsonRanges[0].end === 'number' && $jsonRanges[0].end >= text.length
+            (
+                !$jsonRanges[0].start || $jsonRanges[0].start === 0
+            ) &&
+            (
+                !$jsonRanges[0].end ||
+                typeof $jsonRanges[0].end === 'number' && $jsonRanges[0].end >= text.length
+            )
         );
 
 
@@ -260,29 +278,31 @@
         })[] = [];
 
         ranges.forEach(range => {
-            if (range.start !== undefined && range.end !== undefined) {
-                const rangeWithExplicitProps = {
-                    top_offset: 0,
-                    ...range
-                };
-                list.push({
-                    index: range.start,
-                    range: rangeWithExplicitProps as typeof range & {
-                        start: number;
-                        end: number;
-                    },
-                    type: 'rangeStart',
-                    isStart: true
-                });
-                list.push({
-                    index: range.end,
-                    range: rangeWithExplicitProps as typeof range & {
-                        start: number;
-                        end: number;
-                    },
-                    type: 'rangeEnd'
-                });
-            }
+            const rangeStart = range.start || 0;
+            const rangeEnd = range.end || text.length;
+            const rangeWithExplicitProps = {
+                top_offset: 0,
+                ...range,
+                start: rangeStart,
+                end: rangeEnd
+            };
+            list.push({
+                index: rangeStart,
+                range: rangeWithExplicitProps as typeof range & {
+                    start: number;
+                    end: number;
+                },
+                type: 'rangeStart',
+                isStart: true
+            });
+            list.push({
+                index: rangeEnd,
+                range: rangeWithExplicitProps as typeof range & {
+                    start: number;
+                    end: number;
+                },
+                type: 'rangeEnd'
+            });
         });
         images.forEach((image, index) => {
             if (image.start !== undefined && image.url && image.start <= content.length) {
@@ -372,7 +392,8 @@
                         height: imageHeight,
                         wrapperStyle,
                         svgFilterId,
-                        preloadRequired: Boolean(item.image.preload_required)
+                        preloadRequired: Boolean(item.image.preload_required),
+                        verticalAlign: item.image.alignment_vertical
                     }
                 });
             }
@@ -388,6 +409,7 @@
         }
 
         renderList = newRenderList;
+        hasCloudBg = newRenderList.some(it => 'text' in it && it.textStyles.background?.type === 'cloud');
     }
 
     $: updateRenderList(text, $jsonRanges, $jsonImages, $jsonRootTextStyles);
@@ -402,7 +424,8 @@
     };
 
     $: innerMods = {
-        gradient: Boolean(gradient)
+        gradient: Boolean(gradient),
+        'has-cloud-bg': hasCloudBg
     };
 
     $: style = {
@@ -414,6 +437,11 @@
         'background-image': gradient,
         '--divkit-text-focus-color': focusTextColor
     };
+
+    $: cloudPadding = edgeInsertsToCss(
+        edgeInsertsMultiply(correctEdgeInsertsObject($jsonPaddings, {}) || {}, 10 / fontSize),
+        $direction
+    );
 
     function onImgError(event: Event): void {
         if (event.target && 'classList' in event.target) {
@@ -433,6 +461,41 @@
     {componentContext}
     {layoutParams}
 >
+    {#if hasCloudBg}
+        <span
+            class={genClassName('text__inner', css, {
+                ...innerMods,
+                'cloud-bg': true
+            })}
+            style={makeStyle({
+                ...style,
+                padding: cloudPadding
+            })}
+        >
+            {#each renderList as item}
+                {#if 'text' in item}
+                    {#if item.text}
+                        <TextRangeView
+                            {componentContext}
+                            text={item.text}
+                            rootFontSize={fontSize}
+                            textStyles={item.textStyles}
+                            {singleline}
+                            cloudBg
+                        />
+                    {/if}
+                {:else if item.image}
+                    <span style={makeStyle(item.image.wrapperStyle)}><span class={genClassName('text__image-wrapper', css, {
+                        align: item.image.verticalAlign,
+                        crop: customLineHeight !== null
+                    })} style={makeStyle({
+                        width: item.image.width,
+                        height: (customLineHeight && item.image.verticalAlign !== 'baseline') ? customLineHeight + 'em' : undefined
+                    })}></span></span>
+                {/if}
+            {/each}
+        </span>
+    {/if}
     <span
         class={genClassName('text__inner', css, innerMods)}
         style={makeStyle(style)}
@@ -456,7 +519,13 @@
                         />
                     {/if}
                 {:else if item.image}
-                    <span style={makeStyle(item.image.wrapperStyle)}><img
+                    <span style={makeStyle(item.image.wrapperStyle)}><span class={genClassName('text__image-wrapper', css, {
+                        align: item.image.verticalAlign,
+                        crop: customLineHeight !== null
+                    })} style={makeStyle({
+                        width: item.image.width,
+                        height: (customLineHeight && item.image.verticalAlign !== 'baseline') ? customLineHeight + 'em' : undefined
+                    })}><img
                         class={css.text__image}
                         src={item.image.url}
                         loading={item.image.preloadRequired ? 'eager' : 'lazy'}
@@ -464,15 +533,11 @@
                         aria-hidden="true"
                         alt=""
                         style={makeStyle({
-                            width: item.image.width,
                             height: item.image.height,
-                            // Normalizes line-height for the containing text line
-                            'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
-                            'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
                             filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
                         })}
                         on:error={onImgError}
-                    ></span>
+                    ></span></span>
                 {/if}
             {/each}
         {:else}

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `video_sources, type`.
  */
 @Generated
-class Video internal constructor(
+data class Video internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -40,6 +40,7 @@ class Video internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             aspect = additive.aspect ?: properties.aspect,
             autostart = additive.autostart ?: properties.autostart,
             background = additive.background ?: properties.background,
@@ -52,6 +53,7 @@ class Video internal constructor(
             extensions = additive.extensions ?: properties.extensions,
             fatalActions = additive.fatalActions ?: properties.fatalActions,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
@@ -74,6 +76,7 @@ class Video internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             videoSources = additive.videoSources ?: properties.videoSources,
             visibility = additive.visibility ?: properties.visibility,
@@ -83,7 +86,7 @@ class Video internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -101,6 +104,10 @@ class Video internal constructor(
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
          */
@@ -151,6 +158,10 @@ class Video internal constructor(
          */
         val focus: Property<Focus>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
@@ -160,7 +171,7 @@ class Video internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -203,7 +214,7 @@ class Video internal constructor(
          */
         val resumeActions: Property<List<Action>>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -211,7 +222,7 @@ class Video internal constructor(
          */
         val rowSpan: Property<Int>?,
         /**
-         * Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+         * Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
          * Default value: `fit`.
          */
         val scale: Property<VideoScale>?,
@@ -244,7 +255,11 @@ class Video internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         val videoSources: Property<List<VideoSource>>?,
@@ -274,6 +289,7 @@ class Video internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("aspect", aspect)
             result.tryPutProperty("autostart", autostart)
             result.tryPutProperty("background", background)
@@ -286,6 +302,7 @@ class Video internal constructor(
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("fatal_actions", fatalActions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("layout_provider", layoutProvider)
@@ -308,6 +325,7 @@ class Video internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("video_sources", videoSources)
             result.tryPutProperty("visibility", visibility)
@@ -324,6 +342,7 @@ class Video internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -336,9 +355,10 @@ class Video internal constructor(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -348,9 +368,9 @@ class Video internal constructor(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -358,7 +378,8 @@ class Video internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -371,6 +392,7 @@ fun DivScope.video(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -383,6 +405,7 @@ fun DivScope.video(
     extensions: List<Extension>? = null,
     fatalActions: List<Action>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -405,6 +428,7 @@ fun DivScope.video(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
@@ -417,6 +441,7 @@ fun DivScope.video(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         aspect = valueOrNull(aspect),
         autostart = valueOrNull(autostart),
         background = valueOrNull(background),
@@ -429,6 +454,7 @@ fun DivScope.video(
         extensions = valueOrNull(extensions),
         fatalActions = valueOrNull(fatalActions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
@@ -451,6 +477,7 @@ fun DivScope.video(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
@@ -465,6 +492,7 @@ fun DivScope.video(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -477,9 +505,10 @@ fun DivScope.video(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -489,9 +518,9 @@ fun DivScope.video(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -499,7 +528,8 @@ fun DivScope.video(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -512,6 +542,7 @@ fun DivScope.videoProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -524,6 +555,7 @@ fun DivScope.videoProps(
     extensions: List<Extension>? = null,
     fatalActions: List<Action>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -546,6 +578,7 @@ fun DivScope.videoProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
@@ -557,6 +590,7 @@ fun DivScope.videoProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     aspect = valueOrNull(aspect),
     autostart = valueOrNull(autostart),
     background = valueOrNull(background),
@@ -569,6 +603,7 @@ fun DivScope.videoProps(
     extensions = valueOrNull(extensions),
     fatalActions = valueOrNull(fatalActions),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
     layoutProvider = valueOrNull(layoutProvider),
@@ -591,6 +626,7 @@ fun DivScope.videoProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     videoSources = valueOrNull(videoSources),
     visibility = valueOrNull(visibility),
@@ -604,6 +640,7 @@ fun DivScope.videoProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -616,9 +653,10 @@ fun DivScope.videoProps(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -628,9 +666,9 @@ fun DivScope.videoProps(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -638,7 +676,8 @@ fun DivScope.videoProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -651,6 +690,7 @@ fun TemplateScope.videoRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -663,6 +703,7 @@ fun TemplateScope.videoRefs(
     extensions: ReferenceProperty<List<Extension>>? = null,
     fatalActions: ReferenceProperty<List<Action>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -685,6 +726,7 @@ fun TemplateScope.videoRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
@@ -696,6 +738,7 @@ fun TemplateScope.videoRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     aspect = aspect,
     autostart = autostart,
     background = background,
@@ -708,6 +751,7 @@ fun TemplateScope.videoRefs(
     extensions = extensions,
     fatalActions = fatalActions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     layoutProvider = layoutProvider,
@@ -730,6 +774,7 @@ fun TemplateScope.videoRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     videoSources = videoSources,
     visibility = visibility,
@@ -743,6 +788,7 @@ fun TemplateScope.videoRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -755,9 +801,10 @@ fun TemplateScope.videoRefs(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -767,9 +814,9 @@ fun TemplateScope.videoRefs(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -777,7 +824,8 @@ fun TemplateScope.videoRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -790,6 +838,7 @@ fun Video.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -802,6 +851,7 @@ fun Video.override(
     extensions: List<Extension>? = null,
     fatalActions: List<Action>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -824,6 +874,7 @@ fun Video.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
@@ -836,6 +887,7 @@ fun Video.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         aspect = valueOrNull(aspect) ?: properties.aspect,
         autostart = valueOrNull(autostart) ?: properties.autostart,
         background = valueOrNull(background) ?: properties.background,
@@ -848,6 +900,7 @@ fun Video.override(
         extensions = valueOrNull(extensions) ?: properties.extensions,
         fatalActions = valueOrNull(fatalActions) ?: properties.fatalActions,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
@@ -870,6 +923,7 @@ fun Video.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         videoSources = valueOrNull(videoSources) ?: properties.videoSources,
         visibility = valueOrNull(visibility) ?: properties.visibility,
@@ -884,6 +938,7 @@ fun Video.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -896,9 +951,10 @@ fun Video.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -908,9 +964,9 @@ fun Video.override(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -918,7 +974,8 @@ fun Video.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -931,6 +988,7 @@ fun Video.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -943,6 +1001,7 @@ fun Video.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     fatalActions: ReferenceProperty<List<Action>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -965,6 +1024,7 @@ fun Video.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
@@ -977,6 +1037,7 @@ fun Video.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         aspect = aspect ?: properties.aspect,
         autostart = autostart ?: properties.autostart,
         background = background ?: properties.background,
@@ -989,6 +1050,7 @@ fun Video.defer(
         extensions = extensions ?: properties.extensions,
         fatalActions = fatalActions ?: properties.fatalActions,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
@@ -1011,6 +1073,7 @@ fun Video.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         videoSources = videoSources ?: properties.videoSources,
         visibility = visibility ?: properties.visibility,
@@ -1030,9 +1093,9 @@ fun Video.defer(
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param visibility Element visibility.
  */
 @Generated
@@ -1057,6 +1120,7 @@ fun Video.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         aspect = properties.aspect,
         autostart = autostart ?: properties.autostart,
         background = properties.background,
@@ -1069,6 +1133,7 @@ fun Video.evaluate(
         extensions = properties.extensions,
         fatalActions = properties.fatalActions,
         focus = properties.focus,
+        functions = properties.functions,
         height = properties.height,
         id = properties.id,
         layoutProvider = properties.layoutProvider,
@@ -1091,6 +1156,7 @@ fun Video.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         videoSources = properties.videoSources,
         visibility = visibility ?: properties.visibility,
@@ -1105,6 +1171,7 @@ fun Video.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -1117,9 +1184,10 @@ fun Video.evaluate(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1129,9 +1197,9 @@ fun Video.evaluate(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1139,7 +1207,8 @@ fun Video.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1152,6 +1221,7 @@ fun Component<Video>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -1164,6 +1234,7 @@ fun Component<Video>.override(
     extensions: List<Extension>? = null,
     fatalActions: List<Action>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -1186,6 +1257,7 @@ fun Component<Video>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
@@ -1199,6 +1271,7 @@ fun Component<Video>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         aspect = valueOrNull(aspect),
         autostart = valueOrNull(autostart),
         background = valueOrNull(background),
@@ -1211,6 +1284,7 @@ fun Component<Video>.override(
         extensions = valueOrNull(extensions),
         fatalActions = valueOrNull(fatalActions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
@@ -1233,6 +1307,7 @@ fun Component<Video>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
@@ -1247,6 +1322,7 @@ fun Component<Video>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -1259,9 +1335,10 @@ fun Component<Video>.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1271,9 +1348,9 @@ fun Component<Video>.override(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1281,7 +1358,8 @@ fun Component<Video>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1294,6 +1372,7 @@ fun Component<Video>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -1306,6 +1385,7 @@ fun Component<Video>.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     fatalActions: ReferenceProperty<List<Action>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -1328,6 +1408,7 @@ fun Component<Video>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
@@ -1341,6 +1422,7 @@ fun Component<Video>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         aspect = aspect,
         autostart = autostart,
         background = background,
@@ -1353,6 +1435,7 @@ fun Component<Video>.defer(
         extensions = extensions,
         fatalActions = fatalActions,
         focus = focus,
+        functions = functions,
         height = height,
         id = id,
         layoutProvider = layoutProvider,
@@ -1375,6 +1458,7 @@ fun Component<Video>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
         variables = variables,
         videoSources = videoSources,
         visibility = visibility,
@@ -1394,9 +1478,9 @@ fun Component<Video>.defer(
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param visibility Element visibility.
  */
 @Generated
@@ -1422,6 +1506,7 @@ fun Component<Video>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         aspect = null,
         autostart = autostart,
         background = null,
@@ -1434,6 +1519,7 @@ fun Component<Video>.evaluate(
         extensions = null,
         fatalActions = null,
         focus = null,
+        functions = null,
         height = null,
         id = null,
         layoutProvider = null,
@@ -1456,6 +1542,7 @@ fun Component<Video>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variableTriggers = null,
         variables = null,
         videoSources = null,
         visibility = visibility,

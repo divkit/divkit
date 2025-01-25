@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_set_state",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set_state"
+      ]
+    },
+    "state_id": {
+      "$description": "translations.json#/div_action_set_state_state_id",
+      "type": "string"
+    },
+    "temporary": {
+      "$description": "translations.json#/div_action_set_state_temporary",
+      "type": "boolean",
+      "default_value": "true"
+    }
+  },
+  "platforms": [
+    "android"
+  ],
+  "required": [
+    "type",
+    "state_id"
+  ]
+}

@@ -4,15 +4,19 @@ final exprAnalyzer = DivExpressionAnalyzer();
 
 /// Analyzer of expressions to optimize their usage.
 class DivExpressionAnalyzer {
-  Set<String> extractVariables(String expression, {int depth = 0}) {
+  Set<String> extractVariables(
+    String expression, {
+    int depth = 0,
+  }) {
     final result = <String>{};
-
     int index = 0;
     while (index < expression.length) {
       // Search inner expressions.
       int startIndex = expression.indexOf('@{', index);
       if (startIndex == -1 && depth > 0) {
-        result.addAll(parseExpressionLine(expression.substring(index)));
+        result.addAll(
+          parseExpressionLine(expression.substring(index)),
+        );
         break;
       }
 
@@ -28,7 +32,7 @@ class DivExpressionAnalyzer {
         );
       }
 
-      int endIndex = findClosingBraceIndex(
+      int endIndex = _findClosingBraceIndex(
         expression,
         max(startIndex, index) + 2,
       );
@@ -51,7 +55,7 @@ class DivExpressionAnalyzer {
     return result;
   }
 
-  int findClosingBraceIndex(String expression, int startIndex) {
+  int _findClosingBraceIndex(String expression, int startIndex) {
     int depth = 1;
     for (int i = startIndex; i < expression.length; i++) {
       if (expression.startsWith('@{', i)) {

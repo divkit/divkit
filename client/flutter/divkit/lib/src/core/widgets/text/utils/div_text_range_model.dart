@@ -1,6 +1,6 @@
+import 'package:divkit/divkit.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:divkit/src/core/action/models/action.dart';
+import 'package:flutter/widgets.dart';
 
 class DivTextRangeModel with EquatableMixin {
   final String text;

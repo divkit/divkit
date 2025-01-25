@@ -6,11 +6,11 @@ extension DivData: DivBlockModeling {
   static let rootPath = DivStatePath(rawValue: UIElementPath("{root}"))
 
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let stateManager = context.stateManager
-    guard let state = getCurrentState(stateManager: stateManager, context: context) else {
+    guard let state = getCurrentState(context: context) else {
       throw DivBlockModelingError("DivData has no states", path: context.parentPath)
     }
 
+    let stateManager = context.stateManager
     if let previousRootState = getPreviousRootState(stateManager: stateManager) {
       context.lastVisibleBoundsCache.dropVisibleBounds(
         prefix: context.parentPath + previousRootState.rawValue
@@ -43,11 +43,8 @@ extension DivData: DivBlockModeling {
       .addingDebugInfo(context: divContext)
   }
 
-  private func getCurrentState(
-    stateManager: DivStateManager,
-    context: DivBlockModelingContext
-  ) -> DivData.State? {
-    guard let item = stateManager.get(stateBlockPath: DivData.rootPath) else {
+  private func getCurrentState(context: DivBlockModelingContext) -> DivData.State? {
+    guard let item = context.stateManager.get(stateBlockPath: DivData.rootPath) else {
       return states.first
     }
 

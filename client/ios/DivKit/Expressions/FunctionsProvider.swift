@@ -1,3 +1,5 @@
+import Foundation
+
 import VGSL
 
 final class FunctionsProvider {
@@ -9,6 +11,14 @@ final class FunctionsProvider {
   ) {
     self.persistentValuesStorage = persistentValuesStorage
   }
+
+  static let methods: [String: Function] = {
+    var methods: [String: Function] = [:]
+    methods.addArrayMethods()
+    methods.addDictMethods()
+    methods.addToStringFunctions()
+    return methods
+  }()
 
   lazy var functions: [String: Function] =
     lock.withLock {
@@ -40,14 +50,62 @@ final class FunctionsProvider {
           guard let self else {
             return nil
           }
-          return FunctionEvaluator(symbol, functions: self.functions)
+          return CustomFunctionEvaluator(
+            symbol,
+            fallbackEvaluator: FunctionEvaluator(
+              symbol,
+              functions: self.functions
+            )
+          )
         case let .method(name):
-          return FunctionEvaluator(symbol, functions: methods)
+          return FunctionEvaluator(symbol, functions: FunctionsProvider.methods)
         case .postfix:
           return nil
         }
       }
     }
+}
+
+private struct CustomFunctionEvaluator: Function {
+  private let symbol: CalcExpression.Symbol
+  private let fallbackEvaluator: Function
+
+  init(
+    _ symbol: CalcExpression.Symbol,
+    fallbackEvaluator: Function
+  ) {
+    self.symbol = symbol
+    self.fallbackEvaluator = fallbackEvaluator
+  }
+
+  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
+    let name = symbol.name
+    if let customFunctionsStorage = context.customFunctionsStorageProvider(name) {
+      var storage: DivFunctionsStorage? = customFunctionsStorage
+
+      var result: Any?
+      while result == nil, storage != nil, let functions = storage?.getFunctions(with: name),
+            !functions.isEmpty {
+        do {
+          result = try OverloadedFunction(
+            functions: functions
+          ).invoke(args, context: context)
+        } catch {
+          if error is NoMatchingSignatureError {
+            storage = storage?.outerStorage
+          } else {
+            throw error
+          }
+        }
+      }
+
+      if let result {
+        return result
+      }
+    }
+
+    return try fallbackEvaluator.invoke(args, context: context)
+  }
 }
 
 private struct FunctionEvaluator: Function {
@@ -118,35 +176,17 @@ private let operators: [CalcExpression.Symbol: Function] = {
   return operators
 }()
 
-private let methods: [String: Function] = {
-  var methods: [String: Function] = [:]
-  methods.addArrayMethods()
-  methods.addDictMethods()
-  methods.addToStringFunctions()
-  return methods
-}()
-
 extension [String: Function] {
   mutating func addFunction(_ name: String, _ function: Function) {
     var functions: [SimpleFunction] = []
     if let existingFunction = self[name] {
-      functions.appendFunctions(existingFunction)
+      functions += existingFunction.simpleFunctions
     }
-    functions.appendFunctions(function)
+    functions += function.simpleFunctions
     if functions.count > 1 {
       self[name] = OverloadedFunction(functions: functions)
     } else if functions.count == 1 {
       self[name] = functions[0]
-    }
-  }
-}
-
-extension [SimpleFunction] {
-  fileprivate mutating func appendFunctions(_ function: Function) {
-    if let overloadedFunction = function as? OverloadedFunction {
-      append(contentsOf: overloadedFunction.functions)
-    } else if let simpleFunction = function as? SimpleFunction {
-      append(simpleFunction)
     }
   }
 }

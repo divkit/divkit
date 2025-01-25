@@ -4,6 +4,7 @@ import type { DivBaseData } from './base';
 export interface CollectionItemBuilderPrototype {
     selector?: BooleanInt;
     div: DivBaseData;
+    id?: string;
 }
 
 export interface CollectionItemBuilder {

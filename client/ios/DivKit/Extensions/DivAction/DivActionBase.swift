@@ -9,6 +9,7 @@ public protocol DivActionBase: Serializable {
   var payload: [String: Any]? { get }
   var typed: DivActionTyped? { get }
   var url: Expression<URL>? { get }
+  var scopeId: String? { get }
 
   func resolveLogId(_ resolver: ExpressionResolver) -> String?
   func resolveLogUrl(_ resolver: ExpressionResolver) -> URL?

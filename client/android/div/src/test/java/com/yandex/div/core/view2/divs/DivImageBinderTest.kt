@@ -25,6 +25,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
 import org.mockito.kotlin.spy
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
@@ -120,6 +121,54 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `do apply preview when imageUrl did not change but preview did changed`() {
+        val (view, _) = createTestDiv("with_action.json")
+
+        val divImage = DivImage(
+            imageUrl = Uri.parse("empty://").asExpression(),
+            preview = PREVIEW.asExpression(),
+            highPriorityPreviewShow = true.asExpression()
+        )
+
+        binder.bindView(bindingContext, view, divImage)
+
+        val nextDivImage = DivImage(
+            imageUrl = Uri.parse("empty://").asExpression(),
+            preview = PREVIEW_B.asExpression(),
+            highPriorityPreviewShow = true.asExpression()
+        )
+
+        binder.bindView(bindingContext, view, nextDivImage)
+
+        verify(placeholderLoader, times(2)).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
+        verify(imageLoader).loadImage(eq(divImage.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
+    }
+
+    @Test
+    fun `do not apply preview when both imageUrl and preview did not not change`() {
+        val (view, _) = createTestDiv("with_action.json")
+
+        val divImage = DivImage(
+            imageUrl = Uri.parse("empty://").asExpression(),
+            preview = PREVIEW.asExpression(),
+            highPriorityPreviewShow = true.asExpression()
+        )
+
+        binder.bindView(bindingContext, view, divImage)
+
+        val nextDivImage = DivImage(
+            imageUrl = Uri.parse("empty://").asExpression(),
+            preview = PREVIEW.asExpression(),
+            highPriorityPreviewShow = true.asExpression()
+        )
+
+        binder.bindView(bindingContext, view, nextDivImage)
+
+        verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
+        verify(imageLoader).loadImage(eq(divImage.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
+    }
+
+        @Test
     fun `bind image when bitmap was loaded but imageUrl changed`() {
         val (view, _) = createTestDiv("with_action.json")
 
@@ -284,5 +333,6 @@ class DivImageBinderTest : DivBinderTest() {
     companion object {
         private const val IMAGE_DIR = "div-image"
         private const val PREVIEW = "iVBORw0KGgoAAAANSUhEUgAAAEEAAABACAYAAABFqxrgAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIsSURBVHgB7ZqNbcIwEIXdTsAI6QRtN2CDMgIblA1CJ2g3gE5QOkEYgQ3MBnSDV1s2KjKOf0gVfOY+yUImF8Kdz+aeDiEYhmEYhmEYhjwAJmq0anRqHGA42Plc1I5ycnbieB9SjUbUiF39VHSgnkRN6JVFPjoQE5HJvSiXzvPemxoPdwr1+qzGp3NdB2AhakCntWeVZz22y//IhuJQTiwcxzYRe/fgnIoMSt0OjTPfRuy/I/cHoRKEGPTT/whMUfTuOQ+6yH1yyHYoBsSLor6DsXUNBTVg6oEOabSwlaG9z5c1K0EF/OmBvtWPlco+JKiUz+qLTnG+j0+dX9ogLZDOdcpmZKo7mBT+CjjSuSupPycQsCPyWgHIUnfq9RXh1J8FntXYYHQoRUojX93tAtc/QK3MxWXqzkcHwr/n0uOQPsgae12Ln3XAeZ0ZdJUehqk7zQrUFR5GVndjkSugGme+jdgPUndjkRuE3FQmkfq5Qdg585eI/aMz3wvqwJS7qQdj6xqKWoBf8WmHG3u9T91pJGpolvRkQy4dqDdLkKfuQqxIBwPp6k4LrXXErg0FAyX3IpGh7qztBuGAzT3PqK8XaZ2SKcFA7b1IxLeTRD40u08wQksmOpmiVpeCIjDnRezwvI1eZCAYt9OLVB33vRpzca4+t5Fbq+xF/og8BqV/qUFgtQpWqwZcrlbp9CJj4DK1KlHbX/lAoRc5Bii5FzkmKLEXyTAMwzAMw9wQvznV1eV5FJ3aAAAAAElFTkSuQmCC"
+        private const val PREVIEW_B = "iVBORw0KGgoAAAANSUhEUgAAAEEAAABACAYAAABFqxrgAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIsSURBVHgB7ZqNbcIwEIXdTsAI6QRtN2CDMgIblI02kA1CJ2g3gE5QOkEYgQ3MBnSDV1s2KjKOf0gVfOY+yUImF8Kdz+aeDiEYhmEYhmEYhjwAJmq0anRqHGA42Plc1I5ycnbieB9SjUbUiF39VHSgnkRN6JVFPjoQE5HJvSiXzvPemxoPdwr1+qzGp3NdB2AhakCntWeVZz22y//IhuJQTiwcxzYRe/fgnIoMSt0OjTPfRuy/I/cHoRKEGPTT/whMUfTuOQ+6yH1yyHYoBsSLor6DsXUNBTVg6oEOabSwlaG9z5c1K0EF/OmBvtWPlco+JKiUz+qLTnG+j0+dX9ogLZDOdcpmZKo7mBT+CjjSuSupPycQsCPyWgHIUnfq9RXh1J8FntXYYHQoRUojX93tAtc/QK3MxWXqzkcHwr/n0uOQPsgae12Ln3XAeZ0ZdJUehqk7zQrUFR5GVndjkSugGme+jdgPUndjkRuE3FQmkfq5Qdg585eI/aMz3wvqwJS7qQdj6xqKWoBf8WmHG3u9T91pJGpolvRkQy4dqDdLkKfuQqxIBwPp6k4LrXXErg0FAyX3IpGh7qztBuGAzT3PqK8XaZ2SKcFA7b1IxLeTRD40u08wQksmOpmiVpeCIjDnRezwvI1eZCAYt9OLVB33vRpzca4+t5Fbq+xF/og8BqV/qUFgtQpWqwZcrlbp9CJj4DK1KlHbX/lAoRc5Bii5FzkmKLEXyTAMwzAMw9wQvznV1eV5FJ3aAAAAAElFTkSuQmCC"
     }
 }

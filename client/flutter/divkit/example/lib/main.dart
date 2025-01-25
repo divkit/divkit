@@ -11,5 +11,9 @@ void main() {
     ..keepLog = kDebugMode
     ..onLog = print;
 
-  return runApp(const ProviderScope(child: PlaygroundApp()));
+  debugPrintDivKitViewLifecycle = true;
+  debugPrintDivExpressionResolve = true;
+  debugPrintDivPerformLayout = false;
+
+  runApp(const ProviderScope(child: PlaygroundApp()));
 }

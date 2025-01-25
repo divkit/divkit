@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.R
@@ -53,6 +54,12 @@ internal class DivPagerView @JvmOverloads constructor(
 
     internal var pagerOnItemsCountChange: OnItemsUpdatedCallback? = null
 
+    internal var clipToPage: Boolean
+        get() = getRecyclerView()?.clipChildren ?: false
+        set(value) {
+            getRecyclerView()?.clipChildren = value
+        }
+
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 
     internal var currentItem: Int
@@ -61,17 +68,20 @@ internal class DivPagerView @JvmOverloads constructor(
 
     private val accessibilityDelegate by lazy(LazyThreadSafetyMode.NONE) {
         val recycler = getRecyclerView() ?: return@lazy null
+        recycler.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
 
         object : RecyclerViewAccessibilityDelegate(recycler) {
             override fun onRequestSendAccessibilityEvent(
-                host: ViewGroup?, child: View?, event: AccessibilityEvent?
+                host: ViewGroup, child: View, event: AccessibilityEvent
             ): Boolean {
-                if (child != null && event?.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
-                    (child.getTag(R.id.div_pager_item_clip_id) as Int?)?.let { pos ->
-                        viewPager.adapter?.let { adapter ->
-                            if (pos >= 0 && pos < adapter.itemCount) {
-                                currentItem = pos
-                            }
+                if (event.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
+                    getFocusedChildPos(child)?.let { pos ->
+                        if (currentItem != pos) {
+                            recycler.performAccessibilityAction(
+                                if (pos > currentItem) AccessibilityNodeInfo.ACTION_SCROLL_FORWARD
+                                else AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD,
+                                null
+                            )
                         }
                     }
                 }
@@ -128,6 +138,15 @@ internal class DivPagerView @JvmOverloads constructor(
         val recyclerView = getRecyclerView() ?: return null
         val wrappedChild = recyclerView.getChildAt(index) as? ViewGroup ?: return null
         return wrappedChild.getChildAt(0)
+    }
+
+    private fun getFocusedChildPos(child: View): Int? {
+        var child = child
+        while (child != this) {
+            (child.getTag(R.id.div_pager_item_clip_id) as? Int)?.let { return it }
+            child = child.parent as? View ?: return null
+        }
+        return null
     }
 
     internal fun interface OnItemsUpdatedCallback {

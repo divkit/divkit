@@ -2,6 +2,8 @@ package com.yandex.div.data
 
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
+import org.json.JSONArray
+import org.json.JSONObject
 
 sealed class StoredValue {
     abstract val name: String
@@ -12,7 +14,9 @@ sealed class StoredValue {
         BOOLEAN("boolean"),
         NUMBER("number"),
         COLOR("color"),
-        URL("url");
+        URL("url"),
+        ARRAY("array"),
+        DICT("dict");
 
         companion object Converter {
             fun toString(obj: Type): String {
@@ -27,6 +31,8 @@ sealed class StoredValue {
                     NUMBER.value -> NUMBER
                     COLOR.value -> COLOR
                     URL.value -> URL
+                    ARRAY.value -> ARRAY
+                    DICT.value -> DICT
                     else -> null
                 }
             }
@@ -63,6 +69,16 @@ sealed class StoredValue {
         val value: Url,
     ) : StoredValue()
 
+    data class ArrayStoredValue(
+        override val name: String,
+        val value: JSONArray
+    ) : StoredValue()
+
+    data class DictStoredValue(
+        override val name: String,
+        val value: JSONObject
+    ) : StoredValue()
+
     fun getValue(): Any = when (this) {
         is StringStoredValue -> value
         is IntegerStoredValue -> value
@@ -70,6 +86,8 @@ sealed class StoredValue {
         is DoubleStoredValue -> value
         is ColorStoredValue -> value
         is UrlStoredValue -> value
+        is ArrayStoredValue -> value
+        is DictStoredValue -> value
     }
 
     fun getType(): Type = when (this) {
@@ -79,6 +97,8 @@ sealed class StoredValue {
         is DoubleStoredValue -> Type.NUMBER
         is ColorStoredValue -> Type.COLOR
         is UrlStoredValue -> Type.URL
+        is ArrayStoredValue -> Type.ARRAY
+        is DictStoredValue -> Type.DICT
     }
 
 }

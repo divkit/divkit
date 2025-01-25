@@ -25,7 +25,7 @@ public final class DivPhoneInputMaskTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPhoneInputMaskTemplate?) -> DeserializationResult<DivPhoneInputMask> {
-    let rawTextVariableValue = parent?.rawTextVariable?.resolveValue(context: context) ?? .noValue
+    let rawTextVariableValue = { parent?.rawTextVariable?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivPhoneInputMaskTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPhoneInputMask(
-      rawTextVariable: rawTextVariableNonNil
+      rawTextVariable: { rawTextVariableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,16 +47,24 @@ public final class DivPhoneInputMaskTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "raw_text_variable":
-        rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
-      case parent?.rawTextVariable?.link:
-        rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var rawTextVariableValue: DeserializationResult<String> = { parent?.rawTextVariable?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "raw_text_variable" {
+           rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
+          }
+        }()
+        _ = {
+         if key == parent?.rawTextVariable?.link {
+           rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) }
     )
@@ -69,7 +77,7 @@ public final class DivPhoneInputMaskTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPhoneInputMask(
-      rawTextVariable: rawTextVariableNonNil
+      rawTextVariable: { rawTextVariableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

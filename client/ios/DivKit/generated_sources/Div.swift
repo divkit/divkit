@@ -19,6 +19,7 @@ public enum Div {
   case divCustom(DivCustom)
   case divIndicator(DivIndicator)
   case divSlider(DivSlider)
+  case divSwitch(DivSwitch)
   case divInput(DivInput)
   case divSelect(DivSelect)
   case divVideo(DivVideo)
@@ -50,6 +51,8 @@ public enum Div {
     case let .divIndicator(value):
       return value
     case let .divSlider(value):
+      return value
+    case let .divSwitch(value):
       return value
     case let .divInput(value):
       return value
@@ -87,6 +90,8 @@ public enum Div {
     case let .divIndicator(value):
       return value.id
     case let .divSlider(value):
+      return value.id
+    case let .divSwitch(value):
       return value.id
     case let .divInput(value):
       return value.id
@@ -127,6 +132,8 @@ extension Div: Equatable {
     case let (.divIndicator(l), .divIndicator(r)):
       return l == r
     case let (.divSlider(l), .divSlider(r)):
+      return l == r
+    case let (.divSwitch(l), .divSwitch(r)):
       return l == r
     case let (.divInput(l), .divInput(r)):
       return l == r

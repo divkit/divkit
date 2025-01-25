@@ -3,11 +3,11 @@ import type { Node } from './expressions/ast';
 import type { ComponentCallback, CustomActionCallback, Customization, DivExtensionClass, DivJson, ErrorCallback, FetchInit, Platform, StatCallback, Theme, TypefaceProvider, WrappedError } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { Store } from '../typings/store';
+import type { CustomComponentDescription } from '../typings/custom';
+import type { DivkitDebugInstance } from '../typings/client-devtool';
 import { parse } from './expressions/expressions';
-import { evalExpression as evalExpressionInner, EvalResult } from './expressions/eval';
+import { evalExpression as evalExpressionInner, type EvalResult } from './expressions/eval';
 import { funcs } from './expressions/funcs/funcs';
-import { CustomComponentDescription } from '../typings/custom';
-import { DivkitDebugInstance } from '../typings/client-devtool';
 import Root from './components/Root.svelte';
 
 export function render(opts: {
@@ -93,7 +93,7 @@ export function evalExpressionWithFullResult(expr: string, opts?: {
             warnings: []
         };
     }
-    return evalExpressionInner(opts?.variables || new Map(), undefined, ast);
+    return evalExpressionInner(opts?.variables || new Map(), undefined, undefined, ast);
 }
 
 export { valToString } from './expressions/utils';

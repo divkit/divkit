@@ -1,9 +1,8 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/state/div_id_provider.dart';
-import 'package:divkit/src/generated_sources/div_state.dart';
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/state/state_id.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 
 class DivStateModel with EquatableMixin {
   final List<DivStateState> states;
@@ -17,45 +16,6 @@ class DivStateModel with EquatableMixin {
     this.stateId,
     this.defaultStateId,
   });
-
-  static Stream<DivStateModel> from(
-    BuildContext context,
-    DivState data,
-  ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(context)!.variableManager;
-
-    final inheritedDivId = InheritedDivId.of(context);
-
-    String divId;
-    if (inheritedDivId != null) {
-      if (data.divId != null) {
-        divId = '$inheritedDivId/${data.divId}';
-      } else if (data.id != null) {
-        divId = '$inheritedDivId/${data.id}';
-      } else {
-        divId = inheritedDivId;
-      }
-    } else {
-      divId = data.divId ?? data.id ?? '';
-    }
-
-    final state = DivKitProvider.watch<DivContext>(context)!.stateManager;
-    state.registerState(divId);
-
-    return state
-        .watch<DivStateModel>(
-          (context) async => DivStateModel(
-            divId: divId,
-            stateId: context[divId],
-            defaultStateId: await data.defaultStateId?.resolveValue(
-              context: variables.context,
-            ),
-            states: data.states,
-          ),
-        )
-        .distinct();
-  }
 
   DivStateState? get state {
     if (states.isEmpty) {
@@ -88,4 +48,35 @@ class DivStateModel with EquatableMixin {
         defaultStateId,
         states,
       ];
+}
+
+extension DivStateBinder on DivState {
+  String resolveDivId(BuildContext context) {
+    final inheritedDivId = read<DivStateId>(context)?.id;
+
+    String divId;
+    if (inheritedDivId != null) {
+      if (this.divId != null) {
+        divId = '$inheritedDivId/${this.divId}';
+      } else if (id != null) {
+        divId = '$inheritedDivId/$id';
+      } else {
+        divId = inheritedDivId;
+      }
+    } else {
+      divId = this.divId ?? id ?? '';
+    }
+    return divId;
+  }
+
+  DivStateModel bind(BuildContext context) {
+    final resolvedId = resolveDivId(context);
+    final state = read<DivContext>(context)!.stateManager;
+    return DivStateModel(
+      divId: resolvedId,
+      stateId: state.states[resolvedId],
+      defaultStateId: defaultStateId?.value,
+      states: states,
+    );
+  }
 }

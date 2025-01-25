@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value`.
  */
 @Generated
-class Dimension internal constructor(
+data class Dimension internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -39,7 +39,7 @@ class Dimension internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Value.
          */

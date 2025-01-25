@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/protocol/div_data_provider.dart';
-import 'package:divkit/src/generated_sources/div_data.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 

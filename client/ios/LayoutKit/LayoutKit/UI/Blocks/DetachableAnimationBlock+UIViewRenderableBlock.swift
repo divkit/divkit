@@ -31,15 +31,32 @@ extension DetachableAnimationBlock {
   }
 }
 
-final class DetachableAnimationBlockView: BlockView {
+final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView {
   private var childView: BlockView? {
     didSet {
-      if let childView {
+      guard childView !== oldValue else { return }
+
+      switch (oldValue, childView) {
+      case (.none, .none):
+        break
+      case let (.some(oldValue), .some(childView)):
         addSubview(childView)
-        animatedView = nil
-      } else {
         animatedView = oldValue
-        oldValue?.removeFromSuperview()
+        oldValue.removeFromSuperview()
+      case let (.some(oldValue), .none):
+        animatedView = oldValue
+        oldValue.removeFromSuperview()
+      case let (.none, .some(childView)):
+        addSubview(childView)
+        applyVisibilityAction()
+      }
+    }
+  }
+
+  var visibilityAction: Action? {
+    didSet {
+      if childView != nil, visibilityAction != nil {
+        applyVisibilityAction()
       }
     }
   }
@@ -53,15 +70,6 @@ final class DetachableAnimationBlockView: BlockView {
   private var child: Block?
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
-
-  init() {
-    super.init(frame: .zero)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
 
   func configure(
     child: Block,
@@ -108,8 +116,13 @@ final class DetachableAnimationBlockView: BlockView {
           let animationChange else {
       return
     }
+
     let finishFrame = convertFrame(to: container)
+
+    guard finishFrame != startFrame else { return }
+
     self.childView = nil
+
     let blockSize = CGSize(
       width: startFrame.width,
       height: child?.intrinsicContentHeight(forWidth: startFrame.width) ?? .zero
@@ -121,6 +134,7 @@ final class DetachableAnimationBlockView: BlockView {
     animationContainer.frame = startFrame
     animationContainer.clipsToBounds = true
     animationContainer.addSubview(childView)
+
     container.addSubview(animationContainer)
     container.layoutIfNeeded()
 
@@ -138,11 +152,10 @@ final class DetachableAnimationBlockView: BlockView {
         container.layoutIfNeeded()
       },
       completion: { [weak self] _ in
-        guard animationContainer.superview == container else {
-          return
+        if animationContainer.superview == container {
+          animationContainer.removeFromSuperview()
+          self?.childView = childView
         }
-        animationContainer.removeFromSuperview()
-        self?.childView = childView
       }
     )
   }
@@ -172,17 +185,18 @@ final class DetachableAnimationBlockView: BlockView {
     self.childView = nil
 
     let minDelay = animationIn.sortedChronologically().first?.delay.value ?? 0
+
     let item = DispatchWorkItem { [weak self] in
       container.addSubview(childView)
       childView.setInitialParamsAndAnimate(
         animations: animationIn.withDelay(-minDelay),
         completion: { [weak self] in
+
           self?.queuedAnimation = nil
-          guard childView.superview == container else {
-            return
+          if childView.superview == container {
+            childView.frame = originalFrame
+            self?.childView = childView
           }
-          childView.frame = originalFrame
-          self?.childView = childView
         }
       )
     }

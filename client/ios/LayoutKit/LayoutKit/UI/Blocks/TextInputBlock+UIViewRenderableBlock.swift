@@ -14,7 +14,11 @@ extension TextInputBlock {
     let inputView = view as! TextInputBlockView
     inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
+    inputView.setInputAccessoryView(accessoryView)
+    inputView.setAutocapitalizationType(autocapitalizationType)
+    inputView.setEnterKeyType(enterKeyType)
     inputView.setValidators(validators)
+    inputView.setFilters(filters)
     inputView.setTextAlignmentHorizontal(textAlignmentHorizontal)
     inputView.setTextAlignmentVertical(textAlignmentVertical)
     inputView.setText(
@@ -29,12 +33,14 @@ extension TextInputBlock {
     inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
     inputView.setParentScrollView(parentScrollView)
-    inputView.setIsFocused(isFocused)
+    inputView.setIsFocused(isFocused, shouldClear: shouldClearFocus.value)
     inputView.setOnFocusActions(onFocusActions)
     inputView.setOnBlurActions(onBlurActions)
+    inputView.setEnterKeyActions(enterKeyActions)
     inputView.setPath(path)
     inputView.setObserver(observer)
     inputView.setIsEnabled(isEnabled)
+    inputView.setMaxLength(maxLength)
     inputView.paddings = paddings ?? .zero
   }
 
@@ -57,17 +63,22 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var maskedViewModel: MaskedInputViewModel?
   private var onFocusActions: [UserInterfaceAction] = []
   private var onBlurActions: [UserInterfaceAction] = []
+  private var enterKeyActions: [UserInterfaceAction] = []
   private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
   private var typo: Typo?
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
   private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
+  private var filters: [TextInputFilter]?
   private var validators: [TextInputValidator]?
   private let disposePool = AutodisposePool()
   private var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   private var textAlignmentHorizontal: TextInputBlock.TextAlignmentHorizontal = .start
   private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
   private var isInputFocused = false
+  private var keyboardHeight: CGFloat?
+  private var maxLength: Int?
+
   var paddings: EdgeInsets = .zero
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
@@ -84,6 +95,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.backgroundColor = .clear
     multiLineInput.delegate = self
     multiLineInput.textContainer.lineFragmentPadding = 0
+    multiLineInput.returnKeyType = .default
 
     singleLineInput.isHidden = true
     singleLineInput.autocorrectionType = .no
@@ -91,6 +103,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     singleLineInput.delegate = self
     singleLineInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     singleLineInput.contentVerticalAlignment = .top
+    singleLineInput.returnKeyType = .default
 
     hintView.backgroundColor = .clear
     hintView.numberOfLines = 0
@@ -115,6 +128,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
     multiLineInput.frame = bounds
     multiLineInput.textContainerInset = paddings
+    updateScrollOnMultilineChange()
     updateMultiLineOffset()
 
     singleLineInput.frame = bounds
@@ -181,6 +195,21 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
+  func setInputAccessoryView(_ accessoryView: ViewType?) {
+    multiLineInput.inputAccessoryView = accessoryView
+    singleLineInput.inputAccessoryView = accessoryView
+  }
+
+  func setAutocapitalizationType(_ type: TextInputBlock.AutocapitalizationType) {
+    singleLineInput.autocapitalizationType = type.uiType
+    multiLineInput.autocapitalizationType = type.uiType
+  }
+
+  func setEnterKeyType(_ type: TextInputBlock.EnterKeyType) {
+    singleLineInput.returnKeyType = type.uiType
+    multiLineInput.returnKeyType = type.uiType
+  }
+
   func setTextAlignmentHorizontal(_ alignment: TextInputBlock.TextAlignmentHorizontal) {
     textAlignmentHorizontal = alignment
   }
@@ -211,11 +240,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.parentScrollView = parentScrollView
   }
 
-  func setIsFocused(_ isFocused: Bool) {
+  func setIsFocused(_ isFocused: Bool, shouldClear: Bool) {
     isInputFocused = isFocused
     if isFocused {
-      focusTextInput()
-    } else {
+      if allSuperviewsAreVisible() {
+        focusTextInput()
+      }
+    } else if shouldClear {
       clearFocus()
     }
   }
@@ -236,6 +267,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.onBlurActions = onBlurActions
   }
 
+  func setEnterKeyActions(_ actions: [UserInterfaceAction]) {
+    self.enterKeyActions = actions
+  }
+
   func setPath(_ path: UIElementPath) {
     self.path = path
   }
@@ -251,11 +286,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     mask: MaskValidator?
   ) {
     self.typo = typo.with(alignment: textAlignment)
+    self.textValue = textValue
     if let mask, let rawTextValue {
-      self.textValue = textValue
       setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
     } else {
-      self.textValue = textValue
       let text: String = if let selectionItems = self.selectionItems {
         selectionItems.first { $0.value == textValue.value }?.text ?? ""
       } else {
@@ -273,9 +307,17 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.validators = validators
   }
 
+  func setFilters(_ filters: [TextInputFilter]?) {
+    self.filters = filters
+  }
+
   func setHint(_ value: NSAttributedString) {
     hintView.attributedText = value
     setNeedsLayout()
+  }
+
+  func setMaxLength(_ value: Int?) {
+    maxLength = value
   }
 
   private func updateHintVisibility() {
@@ -290,6 +332,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func updateSingleLineOffset() {
     guard !singleLineInput.isHidden else { return }
     singleLineInput.frame.origin = CGPoint(x: 0, y: singleLineOffsetY)
+  }
+
+  private func updateScrollOnMultilineChange() {
+    guard let keyboardHeight else { return }
+    scrollingWasDone = false
+    tryScrollToMultiLine(keyboardHeight)
   }
 
   private func updateHintViewOffset() {
@@ -311,7 +359,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     guard let typo else { return }
     let attributedText = text.with(typo: typo)
     multiLineInput.attributedText = attributedText
-    singleLineInput.attributedText = attributedText
+    if let selectedRange = singleLineInput.selectedTextRange {
+      singleLineInput.attributedText = attributedText
+      singleLineInput.selectedTextRange = selectedRange
+    }
     multiLineInput.typingAttributes = typo.attributes
     singleLineInput.defaultTextAttributes = typo.attributes
   }
@@ -354,6 +405,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
         DispatchQueue.main.async {
           self.setTextData(input)
           self.textValue.value = input
+          self.updateHintVisibility()
         }
       }.dispose(in: disposePool)
   }
@@ -362,7 +414,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     if window != nil {
       startKeyboardTracking()
       if isInputFocused {
-        focusTextInput()
+        // The didMoveToWindow method in UIView is not a direct replacement for the viewDidAppear
+        // method in UIViewController.
+        // This causes the focusTextInput method to be called too early, before the view is actually
+        // in the view hierarchy.
+        // As a result, the keyboard does not appear as expected.
+        DispatchQueue.main.async {
+          self.focusTextInput()
+        }
       }
     } else {
       stopAllTracking()
@@ -388,6 +447,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       .userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
       let keyboardRectangle = keyboardFrame.cgRectValue
       let keyboardHeight = keyboardRectangle.height
+      self.keyboardHeight = keyboardHeight
       tryScrollToMultiLine(keyboardHeight)
       tryScrollToSingleLine(keyboardHeight)
     }
@@ -396,9 +456,17 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func tryScrollToMultiLine(_ keyboardHeight: CGFloat) {
     guard !scrollingWasDone, multiLineInput.isFirstResponder,
           !multiLineInput.isHidden else { return }
-    let frameInWindow = multiLineInput.convert(multiLineInput.frame, to: nil)
-    let cursorPoint = frameInWindow.origin.y + multiLineInput.contentSize
-      .height - multiLineOffsetY + additionalOffset
+
+    let frameInWindow = if let textRange = multiLineInput.selectedTextRange {
+      multiLineInput.convert(
+        multiLineInput.caretRect(for: textRange.start),
+        to: nil
+      )
+    } else {
+      multiLineInput.convert(multiLineInput.bounds, to: nil)
+    }
+
+    let cursorPoint = frameInWindow.origin.y + additionalOffset
     scrollToVisible(targetY: cursorPoint, keyboardHeight: keyboardHeight)
   }
 
@@ -459,6 +527,7 @@ extension TextInputBlockView {
   func inputViewDidEndEditing(_: UIView) {
     stopListeningTap()
     scrollingWasDone = false
+    keyboardHeight = nil
     onBlur()
   }
 
@@ -520,6 +589,18 @@ extension TextInputBlockView {
       }
       return false
     }
+
+    if let filters, text != "" {
+      return filters.allSatisfy { filter in
+        filter(currentText + text)
+      }
+    }
+
+    if let maxLength, text != "" {
+      let updatedText = currentText.replacingCharactersInRange(range, withString: text)
+      return updatedText.result.count <= maxLength
+    }
+
     return true
   }
 }
@@ -532,6 +613,7 @@ extension TextInputBlockView: UITextViewDelegate {
   func textViewDidChange(_ textView: UITextView) {
     updateMultiLineOffset()
     inputViewDidChange(textView)
+    updateScrollOnMultilineChange()
   }
 
   func textViewDidEndEditing(_ textView: UITextView) {
@@ -582,6 +664,15 @@ extension TextInputBlockView: UITextFieldDelegate {
     }
 
     return inputViewReplaceTextIn(view: textField, range: range, text: string)
+  }
+
+  func textFieldShouldReturn(_: UITextField) -> Bool {
+    guard !enterKeyActions.isEmpty else {
+      return true
+    }
+
+    enterKeyActions.perform(sendingFrom: self)
+    return false
   }
 }
 
@@ -640,6 +731,17 @@ extension TextInputBlockView {
     } else {
       singleLineCusorOffset
     }
+  }
+}
+
+extension UIView {
+  fileprivate func allSuperviewsAreVisible() -> Bool {
+    var inspectedView: UIView? = self
+    while let currentView = inspectedView {
+      guard !currentView.isHidden, currentView.alpha > 0 else { return false }
+      inspectedView = currentView.superview
+    }
+    return true
   }
 }
 
@@ -724,6 +826,29 @@ extension TextInputBlock.TextAlignmentVertical {
   }
 }
 
+extension TextInputBlock.AutocapitalizationType {
+  fileprivate var uiType: UITextAutocapitalizationType {
+    switch self {
+    case .none: .none
+    case .words: .words
+    case .sentences: .sentences
+    case .allCharacters: .allCharacters
+    }
+  }
+}
+
+extension TextInputBlock.EnterKeyType {
+  fileprivate var uiType: UIReturnKeyType {
+    switch self {
+    case .default: .default
+    case .search: .search
+    case .send: .send
+    case .done: .done
+    case .go: .go
+    }
+  }
+}
+
 private class PatchedUITextField: UITextField {
   var paddings: EdgeInsets = .zero
 
@@ -750,6 +875,6 @@ private class PatchedUITextView: UITextView {
   }
 }
 
-private let additionalOffset = 25.0
+private let additionalOffset = 40.0
 private let singleLineCusorOffset = 2.0
 private let multiLineCusorOffset = 0.0

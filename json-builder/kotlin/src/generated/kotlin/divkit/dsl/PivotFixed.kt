@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [pivotFixed].
  */
 @Generated
-class PivotFixed internal constructor(
+data class PivotFixed internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Pivot {
@@ -39,7 +39,7 @@ class PivotFixed internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `dp`.

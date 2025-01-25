@@ -18,14 +18,14 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Sets value in dictionary for the given key. Removes key if the value is not defined.
+ * Sets the value in the dictionary by the specified key. Deletes the key if the value is not set.
  * 
  * Can be created using the method [actionDictSetValue].
  * 
  * Required parameters: `variable_name, type, key`.
  */
 @Generated
-class ActionDictSetValue internal constructor(
+data class ActionDictSetValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -42,7 +42,7 @@ class ActionDictSetValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val key: Property<String>?,
         val value: Property<TypedValue>?,
         val variableName: Property<String>?,

@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [PageSize], [NeighbourPageSize].
+ * Possible values: [PageSize], [NeighbourPageSize], [PageContentSize].
  */
 @Generated
 sealed interface PagerLayoutMode

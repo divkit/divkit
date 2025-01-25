@@ -89,6 +89,7 @@ internal class TriggersController(
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
+        if (currentView == view) return
         currentView = view
         activeTriggers?.let {
             executors[it]?.forEach { executor -> executor.view = view }
@@ -113,6 +114,7 @@ private class TriggerExecutor(
     private var currentMode = DivTrigger.Mode.ON_CONDITION
     private var wasConditionSatisfied = false
     private var observersDisposable = Disposable.NULL
+    private var removingDisposable = Disposable.NULL
 
     var view: DivViewFacade? = null
         set(value) {
@@ -127,6 +129,7 @@ private class TriggerExecutor(
     private fun stopObserving() {
         modeObserver.close()
         observersDisposable.close()
+        removingDisposable.close()
     }
 
     private fun startObserving() {
@@ -137,7 +140,12 @@ private class TriggerExecutor(
             changeTrigger
         )
 
+        removingDisposable = variableController.subscribeToVariablesUndeclared(condition.variables) {
+            stopObserving()
+        }
+
         modeObserver = mode.observeAndGet(resolver) { currentMode = it }
+
         tryTriggerActions()
     }
 
@@ -155,7 +163,7 @@ private class TriggerExecutor(
                 logger.logTrigger(div2View, it)
             }
         }
-        divActionBinder.handleActions(viewFacade, viewFacade.expressionResolver, actions, DivActionReason.TRIGGER)
+        divActionBinder.handleActions(viewFacade, resolver, actions, DivActionReason.TRIGGER)
     }
 
     private fun conditionSatisfied(): Boolean {

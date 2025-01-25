@@ -27,6 +27,7 @@ import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_BLUR
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_CLICK
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_DOUBLE_CLICK
+import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTER
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_FOCUS
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_LONG_CLICK
 import com.yandex.div.internal.Assert
@@ -323,6 +324,7 @@ internal class DivActionBinder @Inject constructor(
                     LOG_DOUBLE_CLICK -> logger.logDoubleClick(divView, resolver, target, action, uuid)
                     LOG_FOCUS -> logger.logFocusChanged(divView, resolver, target, action, true)
                     LOG_BLUR -> logger.logFocusChanged(divView, resolver, target, action, false)
+                    LOG_ENTER -> logger.logImeEnter(divView, resolver, target, action)
                     else -> Assert.fail("Please, add new logType")
                 }
                 divActionBeaconSender.sendTapActionBeacon(action, resolver)
@@ -337,6 +339,7 @@ internal class DivActionBinder @Inject constructor(
         LOG_DOUBLE_CLICK -> DivActionReason.DOUBLE_CLICK
         LOG_FOCUS -> DivActionReason.FOCUS
         LOG_BLUR -> DivActionReason.BLUR
+        LOG_ENTER -> DivActionReason.ENTER
         else -> DivActionReason.EXTERNAL
     }
 
@@ -471,7 +474,7 @@ internal class DivActionBinder @Inject constructor(
 
 
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(LOG_CLICK, LOG_LONG_CLICK, LOG_DOUBLE_CLICK, LOG_FOCUS, LOG_BLUR)
+    @StringDef(LOG_CLICK, LOG_LONG_CLICK, LOG_DOUBLE_CLICK, LOG_FOCUS, LOG_BLUR, LOG_ENTER)
     internal annotation class LogType {
         companion object {
             const val LOG_CLICK = "click"
@@ -479,6 +482,7 @@ internal class DivActionBinder @Inject constructor(
             const val LOG_DOUBLE_CLICK = "double_click"
             const val LOG_FOCUS = "focus"
             const val LOG_BLUR = "blur"
+            const val LOG_ENTER = "enter"
         }
     }
 }

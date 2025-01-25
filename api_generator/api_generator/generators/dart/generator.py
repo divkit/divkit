@@ -32,7 +32,7 @@ class DartGenerator(Generator):
         for obj in objects:
             file_content += f'export \'./{self.filename(obj.name)}\';'
         file_content += '\n'
-        filename = os.path.join(self._output_path, 'generated_sources.dart')
+        filename = os.path.join(self._output_path, 'schema.dart')
         with open(filename, 'w') as file:
             file.write(file_content.__str__())
             file.close()
@@ -56,7 +56,7 @@ class DartGenerator(Generator):
                            filter(None, [d.get_default_import for d in entity.instance_properties])]
 
         # Parsing utils import
-        parsing_ext_import = entity.import_parsing_utils
+        parsing_ext_import = ["import 'package:divkit/src/utils/parsing_utils.dart';"]
 
         # Imports section declaration
         if entity.is_main_declaration:
@@ -79,7 +79,8 @@ class DartGenerator(Generator):
 
         # Class header declaration
         full_name = get_full_name(entity)
-        result += f'class {full_name} with EquatableMixin {conformance}' + '{'
+        result += f'/// {entity.doc}' if len(entity.doc) != 0 else ''
+        result += f'class {full_name} extends Resolvable with EquatableMixin {conformance} {{'
 
         # Constructor declaration
         props_decl = Text()
@@ -97,13 +98,14 @@ class DartGenerator(Generator):
 
         # Instance props declaration
         for instance_prop in entity.instance_properties:
+            documentation = f'  /// {instance_prop.doc}\n' if len(instance_prop.doc) != 0 else ''
+            comment = f'  {instance_prop.comment}\n' if len(instance_prop.comment) != 0 else ''
             override = '  @override\n' if instance_prop.name in needs_override_names else ''
             property_type = cast(DartPropertyType, instance_prop.property_type)
             prop_type = property_type.declaration()
             type_decl = f'Expression<{prop_type}>' if instance_prop.supports_expressions else prop_type
             option = '?' if instance_prop.optional and not instance_prop.has_default else ''
-            comment = f'{" " + instance_prop.comment}' + '\n'
-            result += f'{comment}{override}  final {type_decl}{option} {utils.lower_camel_case(instance_prop.name)};'
+            result += f'{documentation}{comment}{override}  final {type_decl}{option} {utils.lower_camel_case(instance_prop.name)};'
 
         # Equatable declaration
         if len(entity.instance_properties) != 0:
@@ -144,7 +146,7 @@ class DartGenerator(Generator):
         # Serializable declaration
         if len(entity.instance_properties) != 0:
             result += EMPTY
-            result += f'  static {full_name}? fromJson(Map<String, dynamic>? json)' + ' {'
+            result += f'  static {full_name}? fromJson(Map<String, dynamic>? json,) {{'
             result += '    if (json == null) {'
             result += '      return null;'
             result += '    }'
@@ -160,12 +162,26 @@ class DartGenerator(Generator):
             result += '  }'
         else:
             result += EMPTY
-            result += f'  static {full_name}? fromJson(Map<String, dynamic>? json)' + ' {'
+            result += f'  static {full_name}? fromJson(Map<String, dynamic>? json,) {{'
             result += '    if (json == null) {'
             result += '      return null;'
             result += '    }'
             result += f'    return const {full_name}();'
             result += '  }'
+
+        # Resolve declaration
+        if len(entity.instance_properties) != 0:
+            result += EMPTY
+            result += f'  {full_name} resolve(DivVariableContext context) {{'
+            for prop in entity.instance_properties:
+                preload_strategy = prop.get_resolve_strategy()
+                if preload_strategy is not None:
+                    result += f"    {preload_strategy}"
+            result += '    return this;'
+            result += '  }'
+        else:
+            result += EMPTY
+            result += f'  {full_name} resolve(DivVariableContext context) => this;'
 
         result += '}'
 
@@ -178,15 +194,18 @@ class DartGenerator(Generator):
     def _entity_enumeration_declaration(self, entity_enumeration: EntityEnumeration) -> Text:
         result = Text()
 
-        # Equatable util import
         if entity_enumeration.parent is None:
+            # Equatable util import
             result += "import 'package:equatable/equatable.dart';\n"
+            # Parsing utils import
+            result += "import 'package:divkit/src/utils/parsing_utils.dart';"
+            result += EMPTY
 
         full_name = get_full_name(entity_enumeration)
         common_interface = entity_enumeration.common_interface(GeneratedLanguage.DART)
         has_interface = common_interface is not None
 
-        interface_name = common_interface.__str__() if has_interface else 'Object'
+        interface_name = common_interface.__str__() if has_interface else 'Resolvable'
         interface_import = []
         if has_interface:
             interface_import.append(interface_name)
@@ -195,7 +214,7 @@ class DartGenerator(Generator):
             result += f'import \'{utils.snake_case(n)}.dart\';'
         result += EMPTY
 
-        result += f'class {full_name} with EquatableMixin' + ' {'
+        result += f'class {full_name} extends Resolvable with EquatableMixin {{'
 
         result += f'  final {interface_name} value;'
         result += '  final int _index;'
@@ -218,7 +237,7 @@ class DartGenerator(Generator):
         for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
             result += f'      case {i}: return {utils.lower_camel_case(n)}(value as {utils.capitalize_camel_case(n)},);'
         result += '    }'
-        result += '    throw Exception("Type ${value.runtimeType.toString()}' + f' is not generalized in {full_name}");'
+        result += '    throw Exception("Type ${value.runtimeType.toString()}' + f' is not generalized in {full_name}",);'
         result += '  }'
         result += EMPTY
 
@@ -230,7 +249,7 @@ class DartGenerator(Generator):
         result += '    switch(_index!) {'
         for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
             result += f'    case {i}:'
-            result += f'      if ({utils.lower_camel_case(n)} != null)' + ' {'
+            result += f'      if ({utils.lower_camel_case(n)} != null) {{'
             result += f'        return {utils.lower_camel_case(n)}(value as {utils.capitalize_camel_case(n)},);'
             result += '      }'
             result += '      break;'
@@ -246,23 +265,32 @@ class DartGenerator(Generator):
             result += f'      _index = {i};'
             result += EMPTY
 
+        # Checker declaration
+        for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
+            result += f'  bool get is{utils.capitalize_camel_case(n)} => _index == {i};'
+            result += EMPTY
+
         # Serializable declaration
         result += EMPTY
-        result += f'  static {full_name}? fromJson(Map<String, dynamic>? json)' + ' {'
+        result += f'  static {full_name}? fromJson(Map<String, dynamic>? json,) {{'
         result += '    if (json == null) {'
         result += '      return null;'
         result += '    }'
         result += '    try {'
         result += '      switch (json[\'type\']) {'
         for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
-            result += f'        case {utils.capitalize_camel_case(n)}.type :\n' \
-                      f'          return {full_name}.{utils.lower_camel_case(n)}({utils.capitalize_camel_case(n)}.fromJson(json)!);'
-        result += '      }'
+            result += f'      case {utils.capitalize_camel_case(n)}.type :\n' \
+                      f'        return {full_name}.{utils.lower_camel_case(n)}({utils.capitalize_camel_case(n)}.fromJson(json)!,);'
+        result += '    }'
         result += '      return null;'
         result += '    } catch (e, st) {'
         result += '      return null;'
         result += '    }'
         result += '  }'
+
+        # Resolve declaration
+        result += f'  {full_name} resolve(DivVariableContext context) {{ value.resolve(context); return this; }}'
+
         result += '}'
 
         return result
@@ -270,9 +298,14 @@ class DartGenerator(Generator):
     def _string_enumeration_declaration(self, string_enumeration: StringEnumeration) -> Text:
         result = Text()
 
+        if string_enumeration.parent is None:
+            # Parsing utils import
+            result += "import 'package:divkit/src/utils/parsing_utils.dart';"
+            result += EMPTY
+
         full_name = get_full_name(string_enumeration)
 
-        result += f'enum {full_name}' + ' {'
+        result += f'enum {full_name} implements Resolvable {{'
         cases_len = len(string_enumeration.cases)
         for i in range(cases_len):
             result += f'  {allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))}' \
@@ -282,6 +315,12 @@ class DartGenerator(Generator):
         result += '  final String value;'
         result += EMPTY
         result += f'  const {full_name}(this.value);'
+
+        # Checker declaration
+        for i in range(cases_len):
+            variant = allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))
+            result += f'  bool get is{utils.capitalize_camel_case(variant)} => this == {variant};'
+            result += EMPTY
 
         result += EMPTY
         result += '  T map<T>({'
@@ -311,7 +350,7 @@ class DartGenerator(Generator):
 
         # Serializable declaration
         result += EMPTY
-        result += f'  static {full_name}? fromJson(String? json)' + ' {'
+        result += f'  static {full_name}? fromJson(String? json,) {{'
         result += '    if (json == null) {'
         result += '      return null;'
         result += '    }'
@@ -326,13 +365,17 @@ class DartGenerator(Generator):
         result += '      return null;'
         result += '    }'
         result += '  }'
+
+        # Resolvable declaration
+        result += f'  {full_name} resolve(DivVariableContext context) => this;'
+
         result += '}'
 
         return result
 
     @staticmethod
     def __declaration_as_interface(entity: DartEntity) -> Text:
-        result = Text(f'abstract class {get_full_name(entity)} {{')
+        result = Text(f'abstract class {get_full_name(entity)} extends Resolvable {{')
         props = entity.instance_properties
         for i, prop in enumerate(props):
             name = prop.declaration_name
@@ -341,5 +384,9 @@ class DartGenerator(Generator):
             result += f'{comment}  {type_decl} get {name};'
             if i != len(props) - 1:
                 result += '\n'
+
+        # Resolvable declaration
+        result += f'  {get_full_name(entity)} resolve(DivVariableContext context);'
+
         result += '}'
         return result

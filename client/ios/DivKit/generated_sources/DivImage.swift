@@ -13,6 +13,7 @@ public final class DivImage: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let appearanceAnimation: DivFadeTransition?
   public let aspect: DivAspect?
   public let background: [DivBackground]?
@@ -25,6 +26,7 @@ public final class DivImage: DivBase {
   public let extensions: [DivExtension]?
   public let filters: [DivFilter]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highPriorityPreviewShow: Expression<Bool> // default value: false
   public let id: String?
@@ -48,6 +50,7 @@ public final class DivImage: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
@@ -142,6 +145,7 @@ public final class DivImage: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    animators: [DivAnimator]? = nil,
     appearanceAnimation: DivFadeTransition? = nil,
     aspect: DivAspect? = nil,
     background: [DivBackground]? = nil,
@@ -154,6 +158,7 @@ public final class DivImage: DivBase {
     extensions: [DivExtension]? = nil,
     filters: [DivFilter]? = nil,
     focus: DivFocus? = nil,
+    functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     highPriorityPreviewShow: Expression<Bool>? = nil,
     id: String? = nil,
@@ -177,6 +182,7 @@ public final class DivImage: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variableTriggers: [DivTrigger]? = nil,
     variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
@@ -190,6 +196,7 @@ public final class DivImage: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.appearanceAnimation = appearanceAnimation
     self.aspect = aspect
     self.background = background
@@ -202,6 +209,7 @@ public final class DivImage: DivBase {
     self.extensions = extensions
     self.filters = filters
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.highPriorityPreviewShow = highPriorityPreviewShow ?? .value(false)
     self.id = id
@@ -225,6 +233,7 @@ public final class DivImage: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
@@ -252,85 +261,92 @@ extension DivImage: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.appearanceAnimation == rhs.appearanceAnimation,
-      lhs.aspect == rhs.aspect
+      lhs.animators == rhs.animators,
+      lhs.appearanceAnimation == rhs.appearanceAnimation
     else {
       return false
     }
     guard
+      lhs.aspect == rhs.aspect,
       lhs.background == rhs.background,
-      lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.border == rhs.border
     else {
       return false
     }
     guard
+      lhs.columnSpan == rhs.columnSpan,
       lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
-      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions,
-      lhs.filters == rhs.filters
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.filters == rhs.filters,
       lhs.focus == rhs.focus,
+      lhs.functions == rhs.functions
+    else {
+      return false
+    }
+    guard
       lhs.height == rhs.height,
-      lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow
+      lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow,
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
       lhs.imageUrl == rhs.imageUrl,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
-      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.paddings == rhs.paddings,
+      lhs.placeholderColor == rhs.placeholderColor
     else {
       return false
     }
     guard
-      lhs.placeholderColor == rhs.placeholderColor,
       lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview
+      lhs.preview == rhs.preview,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.scale == rhs.scale,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.tintColor == rhs.tintColor,
-      lhs.tintMode == rhs.tintMode
+      lhs.tintMode == rhs.tintMode,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
@@ -363,6 +379,7 @@ extension DivImage: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["appearance_animation"] = appearanceAnimation?.toDictionary()
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
@@ -375,6 +392,7 @@ extension DivImage: Serializable {
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["filters"] = filters?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["high_priority_preview_show"] = highPriorityPreviewShow.toValidSerializationValue()
     result["id"] = id
@@ -398,6 +416,7 @@ extension DivImage: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()

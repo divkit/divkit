@@ -32,6 +32,7 @@ public final class DivAction {
   public let menuItems: [MenuItem]?
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
+  public let scopeId: String?
   public let typed: DivActionTyped?
   public let url: Expression<URL>?
 
@@ -63,6 +64,7 @@ public final class DivAction {
     menuItems: [MenuItem]? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
+    scopeId: String? = nil,
     typed: DivActionTyped? = nil,
     url: Expression<URL>? = nil
   ) {
@@ -73,6 +75,7 @@ public final class DivAction {
     self.menuItems = menuItems
     self.payload = payload
     self.referer = referer
+    self.scopeId = scopeId
     self.typed = typed
     self.url = url
   }
@@ -97,6 +100,7 @@ extension DivAction: Equatable {
       return false
     }
     guard
+      lhs.scopeId == rhs.scopeId,
       lhs.typed == rhs.typed,
       lhs.url == rhs.url
     else {
@@ -117,6 +121,7 @@ extension DivAction: Serializable {
     result["menu_items"] = menuItems?.map { $0.toDictionary() }
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()
+    result["scope_id"] = scopeId
     result["typed"] = typed?.toDictionary()
     result["url"] = url?.toValidSerializationValue()
     return result

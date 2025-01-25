@@ -1,5 +1,6 @@
 package com.yandex.div.core.actions
 
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -14,6 +15,7 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
     : DivActionTypedHandler {
 
     override fun handleAction(
+        scopeId: String?,
         action: DivActionTyped,
         view: Div2View,
         resolver: ExpressionResolver,
@@ -33,7 +35,7 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
         val variableName = action.variableName.evaluate(resolver)
         val key = action.key.evaluate(resolver)
         val newValue = action.value?.evaluate(resolver)
-        view.setVariable(variableName) { variable: Variable ->
+        VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->
             if (variable !is Variable.DictVariable) {
                 view.logError(
                     IllegalArgumentException("dict_set_value action requires dict variable")

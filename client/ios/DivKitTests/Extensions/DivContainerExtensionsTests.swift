@@ -42,6 +42,29 @@ final class DivContainerExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_EmptyItems_WrapContent() throws {
+    let block = makeBlock(
+      divContainer(
+        items: [],
+        width: wrapContentSize()
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          widthTrait: .intrinsic,
+          children: []
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WithItems() throws {
     let block = makeBlock(
       divContainer(
@@ -316,6 +339,58 @@ final class DivContainerExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WrapContent_MatchParentItem() throws {
+    let context = DivBlockModelingContext()
+    let block = makeBlock(
+      divContainer(
+        items: [
+          divText(
+            text: "Hello!",
+            width: matchParentSize()
+          ),
+        ],
+        width: wrapContentSize()
+      ),
+      context: context,
+      ignoreErrors: true
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          widthTrait: .intrinsic,
+          children: [
+            DecoratingBlock(
+              child: textBlock(
+                widthTrait: .intrinsic(
+                  constrained: true,
+                  minSize: 0,
+                  maxSize: .infinity
+                ),
+                text: "Hello!"
+              ),
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Hello!"
+              )
+            ),
+          ]
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+
+    assertEqual(context.errorsStorage.errors.count, 1)
+    assertEqual(
+      context.errorsStorage.errors.first?.message,
+      "All items in DivContainer with wrap_content width has match_parent width"
+    )
+  }
+
   func test_AddsIndexedParentPathToItems() throws {
     let block = try makeBlock(
       fromFile: "item_with_action"
@@ -442,7 +517,7 @@ private func makeBlock(fromFile filename: String) throws -> Block {
   )
 }
 
-extension DivBlockModelingError: Equatable {
+extension DivBlockModelingError: Swift.Equatable {
   public static func ==(lhs: DivBlockModelingError, rhs: DivBlockModelingError) -> Bool {
     lhs.message == rhs.message
       && lhs.path == rhs.path

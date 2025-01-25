@@ -1,8 +1,8 @@
 import type { LogError } from './wrapError';
 import type { MaskData } from './mask/baseInputMask';
+import type { MaybeMissing } from '../expressions/json';
+import type { FixedLengthInputMask as FixedLengthInputMaskType } from '../types/input';
 import { FixedLengthInputMask } from './mask/fixedLengthInputMask';
-import { MaybeMissing } from '../expressions/json';
-import { FixedLengthInputMask as FixedLengthInputMaskType } from '../types/input';
 
 export function updateFixedMask(
     mask: MaybeMissing<FixedLengthInputMaskType>,

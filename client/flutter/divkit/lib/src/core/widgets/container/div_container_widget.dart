@@ -1,98 +1,75 @@
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/container/div_container_model.dart';
-import 'package:divkit/src/generated_sources/div_container.dart';
-import 'package:divkit/src/utils/content_alignment_converters.dart';
+import 'package:divkit/src/utils/mapping_widget.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/widgets.dart';
 
-class DivContainerWidget extends StatefulWidget {
-  final DivContainer data;
-
+class DivContainerWidget
+    extends DivMappingWidget<DivContainer, DivContainerModel> {
   const DivContainerWidget(
-    this.data, {
+    super.data, {
     super.key,
   });
 
   @override
-  State<DivContainerWidget> createState() => _DivContainerWidgetState();
-}
-
-class _DivContainerWidgetState extends State<DivContainerWidget> {
-  // ToDo:Optimize repeated calculations on the same context.
-  // The model itself is not long-lived, so you need to keep the stream in the state?
-  Stream<DivContainerModel>? stream;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    stream ??= DivContainerModel.from(context, widget.data);
+  DivContainerModel value(BuildContext context) {
+    final divContext = read<DivContext>(context)!;
+    data.resolve(divContext.variables);
+    return data.bind(context);
   }
 
   @override
-  void didUpdateWidget(covariant DivContainerWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.data != oldWidget.data) {
-      stream = DivContainerModel.from(context, widget.data);
-    }
+  Stream<DivContainerModel> stream(BuildContext context) {
+    final divContext = watch<DivContext>(context)!;
+    return divContext.variableManager.watch((values) {
+      data.resolve(values);
+      return data.bind(context);
+    });
   }
 
   @override
-  Widget build(BuildContext context) => DivBaseWidget(
-        data: widget.data,
-        action: widget.data.action,
-        actions: widget.data.actions,
-        longtapActions: widget.data.longtapActions,
-        actionAnimation: widget.data.actionAnimation,
-        child: StreamBuilder<DivContainerModel>(
-          stream: stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final model = snapshot.requireData;
-              final mainWidget = DivKitProvider<ContentAlignment>(
-                value: model.contentAlignment,
-                child: model.contentAlignment.map(
-                  flex: (flexData) => Flex(
-                    direction: flexData.direction,
-                    mainAxisAlignment: flexData.mainAxisAlignment,
-                    crossAxisAlignment: flexData.crossAxisAlignment,
-                    mainAxisSize: MainAxisSize.min,
-                    children: model.children,
-                  ),
-                  wrap: (wrapData) => Wrap(
-                    direction: wrapData.direction,
-                    alignment: wrapData.wrapAlignment,
-                    runAlignment: wrapData.runAlignment,
-                    children: model.children,
-                  ),
-                  stack: (stackData) => Stack(
-                    alignment: stackData.contentAlignment ??
-                        AlignmentDirectional.topStart,
-                    children: model.children,
-                  ),
-                ),
-              );
-
-              final aspect = model.aspectRatio;
-              if (aspect != null) {
-                return AspectRatio(
-                  aspectRatio: aspect,
-                  child: mainWidget,
-                );
-              }
-
-              return mainWidget;
-            }
-
-            return const SizedBox.shrink();
-          },
+  Widget build(BuildContext context, DivContainerModel model) {
+    final mainWidget = model.contentAlignment.map(
+      flex: (data) => provide(
+        data.direction == Axis.vertical
+            ? DivParentData.column
+            : DivParentData.row,
+        child: Flex(
+          mainAxisSize: MainAxisSize.min,
+          direction: data.direction,
+          mainAxisAlignment: data.mainAxisAlignment,
+          crossAxisAlignment: data.crossAxisAlignment,
+          children: model.children,
         ),
-      );
+      ),
+      wrap: (data) => provide(
+        DivParentData.wrap,
+        child: Wrap(
+          direction: data.direction,
+          alignment: data.wrapAlignment,
+          runAlignment: data.runAlignment,
+          children: model.children,
+        ),
+      ),
+      stack: (data) => provide(
+        DivParentData.stack,
+        child: Stack(
+          alignment: data.contentAlignment ?? AlignmentDirectional.topStart,
+          children: model.children,
+        ),
+      ),
+    );
 
-  @override
-  void dispose() {
-    stream = null;
-    super.dispose();
+    return DivBaseWidget(
+      data: data,
+      aspect: data.aspect?.ratio,
+      tapActionData: DivTapActionData(
+        action: data.action,
+        actions: data.actions,
+        longtapActions: data.longtapActions,
+        actionAnimation: data.actionAnimation,
+      ),
+      child: mainWidget,
+    );
   }
 }

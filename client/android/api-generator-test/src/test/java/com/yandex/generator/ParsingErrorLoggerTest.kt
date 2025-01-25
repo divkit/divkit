@@ -17,7 +17,7 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -50,7 +50,7 @@ class ParsingErrorLoggerTest {
 
         EntityWithOptionalProperty(environment, json)
 
-        verifyZeroInteractions(logger)
+        verifyNoInteractions(logger)
     }
 
     @Test
@@ -81,7 +81,7 @@ class ParsingErrorLoggerTest {
             // expected
         }
 
-        verifyZeroInteractions(logger)
+        verifyNoInteractions(logger)
     }
 
     @Test
@@ -94,7 +94,7 @@ class ParsingErrorLoggerTest {
             // expected
         }
 
-        verifyZeroInteractions(logger)
+        verifyNoInteractions(logger)
     }
 
     @Ignore

@@ -2,15 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithStringEnumProperty with EquatableMixin {
+
+class EntityWithStringEnumProperty extends Resolvable with EquatableMixin  {
   const EntityWithStringEnumProperty({
     required this.property,
   });
 
   static const type = "entity_with_string_enum_property";
-
   final Expression<EntityWithStringEnumPropertyProperty> property;
 
   @override
@@ -24,7 +24,7 @@ class EntityWithStringEnumProperty with EquatableMixin {
       property: property ?? this.property,
     );
 
-  static EntityWithStringEnumProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithStringEnumProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,15 +36,24 @@ class EntityWithStringEnumProperty with EquatableMixin {
       return null;
     }
   }
+
+  EntityWithStringEnumProperty resolve(DivVariableContext context) {
+    property.resolve(context);
+    return this;
+  }
 }
 
-enum EntityWithStringEnumPropertyProperty {
+enum EntityWithStringEnumPropertyProperty implements Resolvable {
   first('first'),
   second('second');
 
   final String value;
 
   const EntityWithStringEnumPropertyProperty(this.value);
+  bool get isFirst => this == first;
+
+  bool get isSecond => this == second;
+
 
   T map<T>({
     required T Function() first,
@@ -72,7 +81,7 @@ enum EntityWithStringEnumPropertyProperty {
   }
 
 
-  static EntityWithStringEnumPropertyProperty? fromJson(String? json) {
+  static EntityWithStringEnumPropertyProperty? fromJson(String? json,) {
     if (json == null) {
       return null;
     }
@@ -88,4 +97,5 @@ enum EntityWithStringEnumPropertyProperty {
       return null;
     }
   }
+  EntityWithStringEnumPropertyProperty resolve(DivVariableContext context) => this;
 }

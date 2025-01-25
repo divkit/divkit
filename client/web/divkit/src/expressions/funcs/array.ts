@@ -116,6 +116,13 @@ function len(_ctx: EvalContext, array: ArrayValue): EvalValue {
     };
 }
 
+function isEmpty(_ctx: EvalContext, array: ArrayValue): EvalValue {
+    return {
+        type: BOOLEAN,
+        value: array.value.length === 0 ? 1 : 0
+    };
+}
+
 export function registerArray(): void {
     registerFunc('getArrayString', [
         ARRAY,
@@ -289,4 +296,5 @@ export function registerArray(): void {
     registerMethod('getColor', [ARRAY, INTEGER], getArrayColor);
     registerMethod('getArray', [ARRAY, INTEGER], getArrayArray);
     registerMethod('getDict', [ARRAY, INTEGER], getArrayDict);
+    registerMethod('isEmpty', [ARRAY], isEmpty);
 }

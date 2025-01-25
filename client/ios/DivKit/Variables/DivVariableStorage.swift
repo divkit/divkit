@@ -143,11 +143,33 @@ public final class DivVariableStorage {
     }
   }
 
+  /// Removes variables from the storage.
+  /// Does not affect outer storage.
+  public func remove(
+    variableNames: Set<DivVariableName>,
+    notifyObservers: Bool = true
+  ) {
+    let changedVariables = lock.withLock {
+      var changedVariables = Set<DivVariableName>()
+      for variableName in variableNames {
+        let removedValue = _values.removeValue(forKey: variableName)
+        if removedValue != nil {
+          changedVariables.insert(variableName)
+        }
+      }
+      return changedVariables
+    }
+
+    if !changedVariables.isEmpty, notifyObservers {
+      notify(ChangeEvent(changedVariables: changedVariables))
+    }
+  }
+
   func update(
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
   ) -> Bool {
-    let (isUpdated, hasLocalValue) = lock.withLock {
+    var (isUpdated, hasLocalValue) = lock.withLock {
       guard let oldValue = _values[name] else {
         return (false, false)
       }
@@ -167,12 +189,12 @@ public final class DivVariableStorage {
     }
 
     if let outerStorage {
-      _ = outerStorage.update(name: name, valueFactory: valueFactory)
+      isUpdated = outerStorage.update(name: name, valueFactory: valueFactory)
     } else {
       DivKitLogger.error("Variable is not declared: \(name)")
     }
 
-    return false
+    return isUpdated
   }
 
   public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {

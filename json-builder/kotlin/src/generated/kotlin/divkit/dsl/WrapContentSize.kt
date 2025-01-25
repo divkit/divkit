@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class WrapContentSize internal constructor(
+data class WrapContentSize internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Size {
@@ -42,7 +42,7 @@ class WrapContentSize internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.
          */
@@ -72,7 +72,7 @@ class WrapContentSize internal constructor(
      * Required parameters: `value`.
      */
     @Generated
-    class ConstraintSize internal constructor(
+    data class ConstraintSize internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -86,7 +86,7 @@ class WrapContentSize internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
              * Default value: `dp`.

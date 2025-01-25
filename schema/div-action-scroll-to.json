@@ -1,0 +1,31 @@
+{
+  "allOf": [
+    {
+      "$ref": "div-action-scroll-base.json"
+    },
+    {
+      "type": "object",
+      "$description": "translations.json#/div_action_scroll_to",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "scroll_to"
+          ]
+        },
+        "destination": {
+          "$description": "translations.json#/div_action_scroll_to_destination",
+          "$ref": "div-action-scroll-destination.json"
+        }
+      },
+      "platforms": [
+        "android"
+      ],
+      "required": [
+        "type",
+        "id",
+        "destination"
+      ]
+    }
+  ]
+}

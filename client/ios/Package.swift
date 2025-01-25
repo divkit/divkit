@@ -4,10 +4,21 @@ import Foundation
 import PackageDescription
 
 let vgsl = {
-  let version = Version("6.0.0")
+  let version = Version("6.12.0")
   return (
     package: Package.Dependency.package(url: "https://github.com/yandex/vgsl.git", from: version),
     packageName: "vgsl"
+  )
+}()
+
+let markdown = {
+  let version = Version("0.4.0")
+  return (
+    package: Package.Dependency.package(
+      url: "https://github.com/apple/swift-markdown.git",
+      from: version
+    ),
+    packageName: "swift-markdown"
   )
 }()
 
@@ -21,12 +32,14 @@ let package = Package(
   products: [
     .library(name: "DivKit", targets: ["DivKit"]),
     .library(name: "DivKitExtensions", targets: ["DivKitExtensions"]),
+    .library(name: "DivKitMarkdownExtension", targets: ["DivKitMarkdownExtension"]),
     .library(name: "LayoutKit", targets: ["LayoutKit"]),
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
     .library(name: "Serialization", targets: ["Serialization"]),
   ],
   dependencies: [
     vgsl.package,
+    markdown.package,
   ],
   targets: [
     .target(
@@ -49,6 +62,17 @@ let package = Package(
         "DivKit",
       ],
       path: "DivKitExtensions",
+      swiftSettings: swiftSettings
+    ),
+    .target(
+      name: "DivKitMarkdownExtension",
+      dependencies: [
+        "DivKit",
+        "LayoutKit",
+        .product(name: "VGSL", package: vgsl.packageName),
+        .product(name: "Markdown", package: markdown.packageName),
+      ],
+      path: "DivKitMarkdownExtension",
       swiftSettings: swiftSettings
     ),
     .target(

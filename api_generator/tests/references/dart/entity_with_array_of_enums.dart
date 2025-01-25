@@ -2,15 +2,16 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithArrayOfEnums with EquatableMixin {
+
+class EntityWithArrayOfEnums extends Resolvable with EquatableMixin  {
   const EntityWithArrayOfEnums({
     required this.items,
   });
 
   static const type = "entity_with_array_of_enums";
-  // at least 1 elements
+   // at least 1 elements
   final List<EntityWithArrayOfEnumsItem> items;
 
   @override
@@ -24,27 +25,35 @@ class EntityWithArrayOfEnums with EquatableMixin {
       items: items ?? this.items,
     );
 
-  static EntityWithArrayOfEnums? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayOfEnums? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithArrayOfEnums(
-        items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!),)!,
+        items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!,),)!,
       );
     } catch (e, st) {
       return null;
     }
   }
+
+  EntityWithArrayOfEnums resolve(DivVariableContext context) {
+    return this;
+  }
 }
 
-enum EntityWithArrayOfEnumsItem {
+enum EntityWithArrayOfEnumsItem implements Resolvable {
   first('first'),
   second('second');
 
   final String value;
 
   const EntityWithArrayOfEnumsItem(this.value);
+  bool get isFirst => this == first;
+
+  bool get isSecond => this == second;
+
 
   T map<T>({
     required T Function() first,
@@ -72,7 +81,7 @@ enum EntityWithArrayOfEnumsItem {
   }
 
 
-  static EntityWithArrayOfEnumsItem? fromJson(String? json) {
+  static EntityWithArrayOfEnumsItem? fromJson(String? json,) {
     if (json == null) {
       return null;
     }
@@ -88,4 +97,5 @@ enum EntityWithArrayOfEnumsItem {
       return null;
     }
   }
+  EntityWithArrayOfEnumsItem resolve(DivVariableContext context) => this;
 }

@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithEntityProperty(
-    @JvmField final val entity: Entity = ENTITY_DEFAULT_VALUE, // default value: Entity.WithStringEnumProperty(EntityWithStringEnumProperty(property = Expression.constant(EntityWithStringEnumProperty.Property.SECOND)))
+    @JvmField val entity: Entity = ENTITY_DEFAULT_VALUE, // default value: Entity.WithStringEnumProperty(EntityWithStringEnumProperty(property = Expression.constant(EntityWithStringEnumProperty.Property.SECOND)))
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -21,6 +22,11 @@ class EntityWithEntityProperty(
         return hash
     }
 
+    fun equals(other: EntityWithEntityProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return entity.equals(other.entity, resolver, otherResolver)
+    }
+
     fun copy(
         entity: Entity = this.entity,
     ) = EntityWithEntityProperty(
@@ -32,5 +38,4 @@ class EntityWithEntityProperty(
 
         private val ENTITY_DEFAULT_VALUE = Entity.WithStringEnumProperty(EntityWithStringEnumProperty(property = Expression.constant(EntityWithStringEnumProperty.Property.SECOND)))
     }
-
 }

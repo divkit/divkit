@@ -35,8 +35,9 @@ internal class VerticalTranslation(
         sceneRoot: ViewGroup,
         view: View,
         startValues: TransitionValues?,
-        endValues: TransitionValues
-    ): Animator {
+        endValues: TransitionValues?
+    ): Animator? {
+        endValues ?: return null
         val height = view.height
 
         val startY = translatedValue * height
@@ -70,9 +71,10 @@ internal class VerticalTranslation(
     override fun onDisappear(
         sceneRoot: ViewGroup,
         view: View,
-        startValues: TransitionValues,
+        startValues: TransitionValues?,
         endValues: TransitionValues?
-    ): Animator {
+    ): Animator? {
+        startValues ?: return null
         val startY = stableValue
         val endY = translatedValue * view.height.toFloat()
 

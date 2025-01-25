@@ -3,6 +3,9 @@
   "platforms": [
     "android"
   ],
+  "unsupported_platforms": {
+    "web": "The markdown library is not part of the DivKit library"
+  },
   "templates": {
     "md_text": {
       "paddings": {

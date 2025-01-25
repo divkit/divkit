@@ -2,15 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithOptionalStringEnumProperty with EquatableMixin {
+
+class EntityWithOptionalStringEnumProperty extends Resolvable with EquatableMixin  {
   const EntityWithOptionalStringEnumProperty({
     this.property,
   });
 
   static const type = "entity_with_optional_string_enum_property";
-
   final Expression<EntityWithOptionalStringEnumPropertyProperty>? property;
 
   @override
@@ -24,7 +24,7 @@ class EntityWithOptionalStringEnumProperty with EquatableMixin {
       property: property != null ? property.call() : this.property,
     );
 
-  static EntityWithOptionalStringEnumProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithOptionalStringEnumProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,15 +36,24 @@ class EntityWithOptionalStringEnumProperty with EquatableMixin {
       return null;
     }
   }
+
+  EntityWithOptionalStringEnumProperty resolve(DivVariableContext context) {
+    property?.resolve(context);
+    return this;
+  }
 }
 
-enum EntityWithOptionalStringEnumPropertyProperty {
+enum EntityWithOptionalStringEnumPropertyProperty implements Resolvable {
   first('first'),
   second('second');
 
   final String value;
 
   const EntityWithOptionalStringEnumPropertyProperty(this.value);
+  bool get isFirst => this == first;
+
+  bool get isSecond => this == second;
+
 
   T map<T>({
     required T Function() first,
@@ -72,7 +81,7 @@ enum EntityWithOptionalStringEnumPropertyProperty {
   }
 
 
-  static EntityWithOptionalStringEnumPropertyProperty? fromJson(String? json) {
+  static EntityWithOptionalStringEnumPropertyProperty? fromJson(String? json,) {
     if (json == null) {
       return null;
     }
@@ -88,4 +97,5 @@ enum EntityWithOptionalStringEnumPropertyProperty {
       return null;
     }
   }
+  EntityWithOptionalStringEnumPropertyProperty resolve(DivVariableContext context) => this;
 }

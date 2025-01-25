@@ -29,8 +29,10 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
+import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
@@ -43,6 +45,7 @@ import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
+import com.yandex.div.core.view2.animations.SceneRootWatcher
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.DivLayoutProviderVariablesHolder
@@ -58,17 +61,19 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.logging.bind.BindingEventReporterProvider
 import com.yandex.div.core.view2.logging.bind.ForceRebindReporter
 import com.yandex.div.core.view2.logging.bind.SimpleRebindReporter
+import com.yandex.div.core.view2.logging.patch.PatchEventReporter
 import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
 import com.yandex.div.core.view2.reuse.ComplexRebindReporter
 import com.yandex.div.core.view2.reuse.RebindTask
 import com.yandex.div.core.view2.reuse.ReusableTokenList
-import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -129,16 +134,20 @@ class Div2View private constructor(
         get() = viewComponent.releaseViewVisitor
     internal val mediaReleaseViewVisitor: MediaReleaseViewVisitor
         get() = viewComponent.mediaReleaseViewVisitor
-    private var _expressionsRuntime: ExpressionsRuntime? = null
+    internal var expressionsRuntime: ExpressionsRuntime? = null
     private var oldExpressionsRuntime: ExpressionsRuntime? = null
     private val variableController: VariableController?
-        get() = _expressionsRuntime?.variableController
+        get() = expressionsRuntime?.variableController
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
+    internal var runtimeStore: RuntimeStore? = null
 
     internal var bindingContext: BindingContext = BindingContext.createEmpty(this)
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
+
+    @PublishedApi
+    internal var forceCanvasClipping: Boolean = false
 
     private val monitor = Any()
 
@@ -173,7 +182,7 @@ class Div2View private constructor(
     }
     internal val inputFocusTracker = viewComponent.inputFocusTracker
 
-    internal val layoutSizes = mutableMapOf<String, Int>()
+    internal val layoutSizes = mutableMapOf<ExpressionResolver, MutableMap<String, Int>>()
     internal val variablesHolders = mutableMapOf<DivData, DivLayoutProviderVariablesHolder>()
     internal var clearVariablesListener: ViewTreeObserver.OnPreDrawListener? = null
 
@@ -197,22 +206,29 @@ class Div2View private constructor(
 
     private fun updateExpressionsRuntime(data: DivData? = divData, tag: DivDataTag = dataTag) {
         data ?: return
-        oldExpressionsRuntime = _expressionsRuntime
-        _expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
-        _expressionsRuntime?.updateSubscriptions()
-        if (oldExpressionsRuntime != _expressionsRuntime) {
-            oldExpressionsRuntime?.clearBinding()
+        oldExpressionsRuntime = expressionsRuntime
+        expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
+        expressionsRuntime?.runtimeStore?.updateSubscriptions()
+        if (oldExpressionsRuntime != expressionsRuntime) {
+            runtimeStore?.clearBindings()
         }
-        bindingContext = bindingContext.getFor(expressionResolver)
+        runtimeStore = expressionsRuntime?.runtimeStore
+        bindingContext = bindingContext.getFor(expressionResolver, runtimeStore)
     }
 
-    private fun attachVariableTriggers() {
+    private fun attachVariableTriggers(data: DivData) {
+        val state = data.state() ?: return
+        val attachTriggers = {
+            viewComponent.runtimeVisitor.createAndAttachRuntimes(
+                state.div, DivStatePath.fromState(data.stateId()), this
+            )
+        }
         if (bindOnAttachEnabled) {
             setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
-                _expressionsRuntime?.onAttachedToWindow(this)
+                attachTriggers.invoke()
             }
         } else {
-            _expressionsRuntime?.onAttachedToWindow(this)
+            attachTriggers.invoke()
         }
     }
 
@@ -327,7 +343,7 @@ class Div2View private constructor(
         div2Component.divBinder.attachIndicators()
 
         sendCreationHistograms()
-        oldExpressionsRuntime = _expressionsRuntime
+        oldExpressionsRuntime = expressionsRuntime
         persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
         return result
     }
@@ -387,7 +403,7 @@ class Div2View private constructor(
         }
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
-        oldExpressionsRuntime = _expressionsRuntime
+        oldExpressionsRuntime = expressionsRuntime
         persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
         return result
     }
@@ -395,22 +411,72 @@ class Div2View private constructor(
     fun applyPatch(patch: DivPatch): Boolean = synchronized(monitor) {
         val oldData: DivData = divData ?: return false
         val newDivData = div2Component.patchManager.createPatchedDivData(oldData, dataTag, patch, expressionResolver)
-        val state = newDivData?.stateToBind
         val reporter = patchReporterProvider.get(patch)
 
-        if (state != null) {
-            bindOnAttachRunnable?.cancel()
+        if (newDivData != null && tryApplyPatch(patch, oldData, newDivData, reporter)) {
+            div2Component.patchManager.removePatch(dataTag)
+            divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
+            attachVariableTriggers(newDivData)
+            div2Component.divBinder.attachIndicators()
+            reporter.onPatchSuccess()
+            div2Component.actionBinder
+                .handleActions(this, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
+            return true
+        }
+
+        div2Component.actionBinder
+            .handleActions(this, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
+        reporter.onPatchNoState()
+        return false
+    }
+
+    private fun tryApplyPatch(
+        patch: DivPatch,
+        oldData: DivData,
+        newDivData: DivData,
+        reporter: PatchEventReporter,
+    ): Boolean {
+        val state = newDivData.stateToBind ?: return false
+
+        bindOnAttachRunnable?.cancel()
+        val oldRootDiv = oldData.state()?.div
+        val rootChanges = patch.changes.find { it.id == oldRootDiv?.value()?.id } ?: run {
             rebind(oldData, false, reporter)
             divData = newDivData
             div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div)
-            div2Component.patchManager.removePatch(dataTag)
-            divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
-            attachVariableTriggers()
-            reporter.onPatchSuccess()
             return true
         }
-        reporter.onPatchNoState()
-        return false
+
+        val items = rootChanges.items
+        val newRootDiv = when {
+            items.isNullOrEmpty() -> {
+                KLog.e(DivPatchApply.TAG) { "Unable to patch root div because there is no div in patch." }
+                return false
+            }
+            items.size > 1 -> {
+                KLog.e(DivPatchApply.TAG) { "More than 1 div in patch for root div. The first was applied." }
+                items[0]
+            }
+            else -> items[0]
+        }
+
+        val bindingReporter = bindingReporterProvider.get(newDivData, oldData)
+        val isDataReplaceable = DivComparator.areDivsReplaceable(
+            oldRootDiv,
+            newRootDiv,
+            expressionResolver,
+            expressionResolver,
+            bindingReporter
+        )
+        return when {
+            !isDataReplaceable && complexRebindEnabled && view.getChildAt(0) is ViewGroup &&
+                complexRebind(newDivData, oldData, bindingReporter) -> true
+            isDataReplaceable -> {
+                rebind(newDivData, false, reporter)
+                true
+            }
+            else -> updateNow(newDivData, dataTag, reporter)
+        }
     }
 
     private fun updateNow(data: DivData, tag: DivDataTag, reporter: ForceRebindReporter): Boolean {
@@ -428,7 +494,7 @@ class Div2View private constructor(
 
         val result = switchToDivData(oldData, data, reporter)
 
-        attachVariableTriggers()
+        attachVariableTriggers(data)
 
         if (oldData != null) {
             histogramReporter.onRebindingFinished()
@@ -456,6 +522,12 @@ class Div2View private constructor(
         trackChildrenVisibility()
     }
 
+    private fun discardVisibilityTracking() {
+        val state = divData?.states?.firstOrNull { it.stateId == stateId }
+        state?.let { discardStateVisibility(it) }
+        discardChildrenVisibility()
+    }
+
     private fun trackStateVisibility(state: DivData.State) {
         div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, expressionResolver, view, state.div)
     }
@@ -472,10 +544,21 @@ class Div2View private constructor(
     fun trackChildrenVisibility() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         viewToDivBindings.forEach { (view, div) ->
-            if (ViewCompat.isAttachedToWindow(view)) {
-                view.bindingContext?.expressionResolver?.let {
+            view.bindingContext?.expressionResolver?.let {
+                if (ViewCompat.isAttachedToWindow(view)) {
                     visibilityActionTracker.trackVisibilityActionsOf(this, it, view, div)
+                } else {
+                    visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
                 }
+            }
+        }
+    }
+
+    private fun discardChildrenVisibility() {
+        val visibilityActionTracker = div2Component.visibilityActionTracker
+        viewToDivBindings.forEach { (view, div) ->
+            view.bindingContext?.expressionResolver?.let {
+                visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
             }
         }
     }
@@ -526,8 +609,9 @@ class Div2View private constructor(
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        tryLogVisibility()
+        discardVisibilityTracking()
         divTimerEventDispatcher?.onDetach(this)
+        viewComponent.animatorController.onDetachedFromWindow()
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
@@ -573,7 +657,9 @@ class Div2View private constructor(
         rebindTask?.clear()?.let {
             rebindTask = null
         }
+        discardVisibilityTracking()
         cancelImageLoads()
+        releaseMedia(this)
         stopLoadAndSubscriptions() // Depends on children, should be called before removing them
         if (removeChildren) {
             releaseAndRemoveChildren(this) // Removes children
@@ -792,8 +878,9 @@ class Div2View private constructor(
         }
 
         if (transition != null) {
-            val newStateScene = Scene(this, newStateView)
             TransitionManager.endTransitions(this)
+            val newStateScene = Scene(this, newStateView)
+            SceneRootWatcher.watchFor(newStateScene, transition)
             TransitionManager.go(newStateScene, transition)
         } else {
             addView(newStateView)
@@ -979,7 +1066,7 @@ class Div2View private constructor(
     override fun getView() = this
 
     override fun getExpressionResolver(): ExpressionResolver {
-        return _expressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
+        return expressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
     }
 
     override fun showTooltip(tooltipId: String) {
@@ -1035,51 +1122,20 @@ class Div2View private constructor(
     /**
      * @return exception if setting variable failed, null otherwise.
      */
-    fun setVariable(name: String, value: String): VariableMutationException? {
-        val mutableVariable = variableController?.getMutableVariable(name) ?: run {
-            val error = VariableMutationException("Variable '$name' not defined!")
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-
-        try {
-            mutableVariable.set(value)
-        } catch (e: VariableMutationException) {
-            val error = VariableMutationException("Variable '$name' mutation failed!", e)
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-        return null
-    }
-
-    /**
-     * @return exception if setting variable failed, null otherwise.
-     * @param valueMutation - gets variable as argument for modification opportunities
-     */
-    internal fun <T : Variable> setVariable(name: String, valueMutation: (T) -> T): VariableMutationException? {
-        val mutableVariable = variableController?.getMutableVariable(name) ?: run {
-            val error = VariableMutationException("Variable '$name' not defined!")
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-
-        try {
-            val newValue = valueMutation.invoke(mutableVariable as T)
-            mutableVariable.setValue(newValue)
-        } catch (e: VariableMutationException) {
-            val error = VariableMutationException("Variable '$name' mutation failed!", e)
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-        return null
-    }
+    fun setVariable(name: String, value: String): VariableMutationException? =
+        VariableMutationHandler.setVariable(this, name, value, expressionResolver)
 
     fun applyTimerCommand(id: String, command: String) {
         divTimerEventDispatcher?.changeState(id, command)
     }
 
-    fun applyVideoCommand(divId: String, command: String): Boolean {
-        return divVideoActionHandler.handleAction(this, divId, command)
+    @JvmOverloads
+    fun applyVideoCommand(
+        divId: String,
+        command: String,
+        expressionResolver: ExpressionResolver = getExpressionResolver()
+    ): Boolean {
+        return divVideoActionHandler.handleAction(this, divId, command, expressionResolver)
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)
@@ -1108,7 +1164,7 @@ class Div2View private constructor(
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
             }
-            attachVariableTriggers()
+            attachVariableTriggers(newData)
             histogramReporter.onRebindingFinished()
 
             reporter.onSimpleRebindSuccess()
@@ -1137,12 +1193,8 @@ class Div2View private constructor(
             this.rebindTask = it
         }
 
-        val state = newData.stateToBind ?: let {
-            reporter.onComplexRebindFatalNoState()
-            return false
-        }
         val viewToRebind = (view.getChildAt(0) as ViewGroup).apply {
-            bindLayoutParams(state.div.value(), expressionResolver)
+            bindLayoutParams(stateToBind.div.value(), expressionResolver)
         }
 
         div2Component.stateManager.updateState(dataTag, stateToBind.stateId, false)
@@ -1178,19 +1230,18 @@ class Div2View private constructor(
     }
 
     private inner class BulkActionHandler {
-        private var bulkMode = false
+        private var bulkModeDepth = 0
         private var pendingState: DivData.State? = null
         private var isPendingStateTemporary: Boolean = true
         private val pendingPaths = mutableListOf<DivStatePath>()
 
         fun bulkActions(function: () -> Unit = {}) {
-            if (bulkMode) {
-                return
-            }
-            bulkMode = true
+            bulkModeDepth++
             function()
-            runBulkActions()
-            bulkMode = false
+            bulkModeDepth--
+            if (bulkModeDepth == 0) {
+                runBulkActions()
+            }
         }
 
         fun switchState(state: DivData.State?, path: DivStatePath, temporary: Boolean) {
@@ -1212,7 +1263,7 @@ class Div2View private constructor(
                 div2Component.stateManager.updateStates(divTag.id, path, temporary)
             }
 
-            if (!bulkMode) {
+            if (bulkModeDepth == 0) {
                 runBulkActions()
             }
         }

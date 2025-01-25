@@ -30,7 +30,9 @@ android {
         buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
         buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(project.findProperty("httpHeaders") ?: "{}")
 
-        testInstrumentationRunner "com.yandex.test.runner.AllureAwareAndroidRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments useTestStorageService: 'true'
+
         if (!project.hasProperty("include-regression-tests")) {
             testInstrumentationRunnerArguments.notAnnotation = "com.yandex.alicekit.uitests.annotations.Regression"
         }
@@ -66,6 +68,10 @@ android {
         androidTest {
             java.srcDirs += 'src/screenshotTest/java'
         }
+    }
+
+    lint {
+        baseline file("lint-baseline.xml")
     }
 }
 
@@ -107,7 +113,7 @@ dependencies {
     implementation libs.markwon
 
     implementation(libs.appmetrica.lib) {
-        exclude group: 'com.yandex.android', module: 'mobmetricalib-identifiers'
+        exclude group: 'io.appmetrica.analytics', module: 'analytics-identifiers'
     }
 
     implementation libs.stetho.core
@@ -120,23 +126,27 @@ dependencies {
     implementation libs.zxing.embedded
     implementation libs.zxing.core
 
+    androidTestUtil libs.androidx.test.services
     androidTestImplementation libs.hamcrest.library
     androidTestImplementation libs.androidx.lifecycle.viewmodel
     androidTestImplementation libs.androidx.viewpager2
 }
 
 screenshotTests {
-    enabled = project.hasProperty("screenshot-tests")
+    var isInIde = System.getProperty("idea.active") == "true"
+    enabled = project.hasProperty("screenshot-tests") || isInIde
     enableComparison = !project.hasProperty("disable-screenshot-comparison")
     strictComparison = project.hasProperty("screenshot-strict-comparison")
     testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
-    deviceDir = "${android.defaultConfig.applicationId}/screenshots"
     referencesDir = "src/screenshotTest/screenshots"
+    if (project.hasProperty("screenshot-dir")) {
+        screenshotDir = project.property("screenshot-dir")
+    }
 }
 
-android.applicationVariants.all { variant ->
+android.applicationVariants.configureEach { variant ->
 
-    variant.outputs.all {
+    variant.outputs.configureEach {
         boolean isPerf = variant.baseName.contains("perf")
 
         if (!isPerf) {

@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, property`.
  */
 @Generated
-class WithComplexProperty internal constructor(
+data class WithComplexProperty internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -42,7 +42,7 @@ class WithComplexProperty internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val property: Property<Property>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -59,7 +59,7 @@ class WithComplexProperty internal constructor(
      * Required parameters: `value`.
      */
     @Generated
-    class Property internal constructor(
+    data class Property internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -72,7 +72,7 @@ class WithComplexProperty internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             val value: Property<Url>?,
         ) {
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

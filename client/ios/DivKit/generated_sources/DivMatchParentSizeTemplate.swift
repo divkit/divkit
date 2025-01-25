@@ -25,12 +25,12 @@ public final class DivMatchParentSizeTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivMatchParentSizeTemplate?) -> DeserializationResult<DivMatchParentSize> {
-    let weightValue = parent?.weight?.resolveOptionalValue(context: context, validator: ResolvedValue.weightValidator) ?? .noValue
+    let weightValue = { parent?.weight?.resolveOptionalValue(context: context, validator: ResolvedValue.weightValidator) ?? .noValue }()
     let errors = mergeErrors(
       weightValue.errorsOrWarnings?.map { .nestedObjectError(field: "weight", error: $0) }
     )
     let result = DivMatchParentSize(
-      weight: weightValue.value
+      weight: { weightValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -39,21 +39,29 @@ public final class DivMatchParentSizeTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var weightValue: DeserializationResult<Expression<Double>> = parent?.weight?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "weight":
-        weightValue = deserialize(__dictValue, validator: ResolvedValue.weightValidator).merged(with: weightValue)
-      case parent?.weight?.link:
-        weightValue = weightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.weightValidator) })
-      default: break
+    var weightValue: DeserializationResult<Expression<Double>> = { parent?.weight?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "weight" {
+           weightValue = deserialize(__dictValue, validator: ResolvedValue.weightValidator).merged(with: weightValue)
+          }
+        }()
+        _ = {
+         if key == parent?.weight?.link {
+           weightValue = weightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.weightValidator) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       weightValue.errorsOrWarnings?.map { .nestedObjectError(field: "weight", error: $0) }
     )
     let result = DivMatchParentSize(
-      weight: weightValue.value
+      weight: { weightValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

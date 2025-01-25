@@ -29,6 +29,34 @@ public final class DivText: DivBase {
   }
 
   public final class Image {
+    public final class Accessibility {
+      @frozen
+      public enum Kind: String, CaseIterable {
+        case none = "none"
+        case button = "button"
+        case image = "image"
+        case text = "text"
+        case auto = "auto"
+      }
+
+      public let description: Expression<String>?
+      public let type: Kind // default value: auto
+
+      public func resolveDescription(_ resolver: ExpressionResolver) -> String? {
+        resolver.resolveString(description)
+      }
+
+      init(
+        description: Expression<String>? = nil,
+        type: Kind? = nil
+      ) {
+        self.description = description
+        self.type = type ?? .auto
+      }
+    }
+
+    public let accessibility: Accessibility?
+    public let alignmentVertical: Expression<DivTextAlignmentVertical> // default value: center
     public let height: DivFixedSize // default value: DivFixedSize(value: .value(20))
     public let preloadRequired: Expression<Bool> // default value: false
     public let start: Expression<Int> // constraint: number >= 0
@@ -36,6 +64,10 @@ public final class DivText: DivBase {
     public let tintMode: Expression<DivBlendMode> // default value: source_in
     public let url: Expression<URL>
     public let width: DivFixedSize // default value: DivFixedSize(value: .value(20))
+
+    public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivTextAlignmentVertical {
+      resolver.resolveEnum(alignmentVertical) ?? DivTextAlignmentVertical.center
+    }
 
     public func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool {
       resolver.resolveNumeric(preloadRequired) ?? false
@@ -61,6 +93,8 @@ public final class DivText: DivBase {
       makeValueValidator(valueValidator: { $0 >= 0 })
 
     init(
+      accessibility: Accessibility? = nil,
+      alignmentVertical: Expression<DivTextAlignmentVertical>? = nil,
       height: DivFixedSize? = nil,
       preloadRequired: Expression<Bool>? = nil,
       start: Expression<Int>,
@@ -69,6 +103,8 @@ public final class DivText: DivBase {
       url: Expression<URL>,
       width: DivFixedSize? = nil
     ) {
+      self.accessibility = accessibility
+      self.alignmentVertical = alignmentVertical ?? .value(.center)
       self.height = height ?? DivFixedSize(value: .value(20))
       self.preloadRequired = preloadRequired ?? .value(false)
       self.start = start
@@ -81,9 +117,10 @@ public final class DivText: DivBase {
 
   public final class Range {
     public let actions: [DivAction]?
+    public let alignmentVertical: Expression<DivTextAlignmentVertical>?
     public let background: DivTextRangeBackground?
     public let border: DivTextRangeBorder?
-    public let end: Expression<Int> // constraint: number > 0
+    public let end: Expression<Int>? // constraint: number > 0
     public let fontFamily: Expression<String>?
     public let fontFeatureSettings: Expression<String>?
     public let fontSize: Expression<Int>? // constraint: number >= 0
@@ -92,12 +129,16 @@ public final class DivText: DivBase {
     public let fontWeightValue: Expression<Int>? // constraint: number > 0
     public let letterSpacing: Expression<Double>?
     public let lineHeight: Expression<Int>? // constraint: number >= 0
-    public let start: Expression<Int> // constraint: number >= 0
+    public let start: Expression<Int> // constraint: number >= 0; default value: 0
     public let strike: Expression<DivLineStyle>?
     public let textColor: Expression<Color>?
     public let textShadow: DivShadow?
     public let topOffset: Expression<Int>? // constraint: number >= 0
     public let underline: Expression<DivLineStyle>?
+
+    public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivTextAlignmentVertical? {
+      resolver.resolveEnum(alignmentVertical)
+    }
 
     public func resolveEnd(_ resolver: ExpressionResolver) -> Int? {
       resolver.resolveNumeric(end)
@@ -135,8 +176,8 @@ public final class DivText: DivBase {
       resolver.resolveNumeric(lineHeight)
     }
 
-    public func resolveStart(_ resolver: ExpressionResolver) -> Int? {
-      resolver.resolveNumeric(start)
+    public func resolveStart(_ resolver: ExpressionResolver) -> Int {
+      resolver.resolveNumeric(start) ?? 0
     }
 
     public func resolveStrike(_ resolver: ExpressionResolver) -> DivLineStyle? {
@@ -175,9 +216,10 @@ public final class DivText: DivBase {
 
     init(
       actions: [DivAction]? = nil,
+      alignmentVertical: Expression<DivTextAlignmentVertical>? = nil,
       background: DivTextRangeBackground? = nil,
       border: DivTextRangeBorder? = nil,
-      end: Expression<Int>,
+      end: Expression<Int>? = nil,
       fontFamily: Expression<String>? = nil,
       fontFeatureSettings: Expression<String>? = nil,
       fontSize: Expression<Int>? = nil,
@@ -186,7 +228,7 @@ public final class DivText: DivBase {
       fontWeightValue: Expression<Int>? = nil,
       letterSpacing: Expression<Double>? = nil,
       lineHeight: Expression<Int>? = nil,
-      start: Expression<Int>,
+      start: Expression<Int>? = nil,
       strike: Expression<DivLineStyle>? = nil,
       textColor: Expression<Color>? = nil,
       textShadow: DivShadow? = nil,
@@ -194,6 +236,7 @@ public final class DivText: DivBase {
       underline: Expression<DivLineStyle>? = nil
     ) {
       self.actions = actions
+      self.alignmentVertical = alignmentVertical
       self.background = background
       self.border = border
       self.end = end
@@ -205,7 +248,7 @@ public final class DivText: DivBase {
       self.fontWeightValue = fontWeightValue
       self.letterSpacing = letterSpacing
       self.lineHeight = lineHeight
-      self.start = start
+      self.start = start ?? .value(0)
       self.strike = strike
       self.textColor = textColor
       self.textShadow = textShadow
@@ -222,6 +265,7 @@ public final class DivText: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let autoEllipsize: Expression<Bool>?
   public let background: [DivBackground]?
   public let border: DivBorder?
@@ -238,6 +282,7 @@ public final class DivText: DivBase {
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
   public let fontWeightValue: Expression<Int>? // constraint: number > 0
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let images: [Image]?
@@ -261,6 +306,7 @@ public final class DivText: DivBase {
   public let textColor: Expression<Color> // default value: #FF000000
   public let textGradient: DivTextGradient?
   public let textShadow: DivShadow?
+  public let tightenWidth: Expression<Bool> // default value: false
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
@@ -268,6 +314,7 @@ public final class DivText: DivBase {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let underline: Expression<DivLineStyle> // default value: none
+  public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
@@ -370,6 +417,10 @@ public final class DivText: DivBase {
     resolver.resolveColor(textColor) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
 
+  public func resolveTightenWidth(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(tightenWidth) ?? false
+  }
+
   public func resolveUnderline(_ resolver: ExpressionResolver) -> DivLineStyle {
     resolver.resolveEnum(underline) ?? DivLineStyle.none
   }
@@ -413,6 +464,7 @@ public final class DivText: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    animators: [DivAnimator]? = nil,
     autoEllipsize: Expression<Bool>? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
@@ -429,6 +481,7 @@ public final class DivText: DivBase {
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
     fontWeightValue: Expression<Int>? = nil,
+    functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     id: String? = nil,
     images: [Image]? = nil,
@@ -452,6 +505,7 @@ public final class DivText: DivBase {
     textColor: Expression<Color>? = nil,
     textGradient: DivTextGradient? = nil,
     textShadow: DivShadow? = nil,
+    tightenWidth: Expression<Bool>? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
     transitionChange: DivChangeTransition? = nil,
@@ -459,6 +513,7 @@ public final class DivText: DivBase {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     underline: Expression<DivLineStyle>? = nil,
+    variableTriggers: [DivTrigger]? = nil,
     variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
@@ -472,6 +527,7 @@ public final class DivText: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.autoEllipsize = autoEllipsize
     self.background = background
     self.border = border
@@ -488,6 +544,7 @@ public final class DivText: DivBase {
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
     self.fontWeightValue = fontWeightValue
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.images = images
@@ -511,6 +568,7 @@ public final class DivText: DivBase {
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textGradient = textGradient
     self.textShadow = textShadow
+    self.tightenWidth = tightenWidth ?? .value(false)
     self.tooltips = tooltips
     self.transform = transform
     self.transitionChange = transitionChange
@@ -518,6 +576,7 @@ public final class DivText: DivBase {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.underline = underline ?? .value(.none)
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
@@ -545,97 +604,104 @@ extension DivText: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.autoEllipsize == rhs.autoEllipsize,
-      lhs.background == rhs.background
+      lhs.animators == rhs.animators,
+      lhs.autoEllipsize == rhs.autoEllipsize
     else {
       return false
     }
     guard
+      lhs.background == rhs.background,
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.doubletapActions == rhs.doubletapActions,
-      lhs.ellipsis == rhs.ellipsis,
-      lhs.extensions == rhs.extensions
+      lhs.ellipsis == rhs.ellipsis
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.focusedTextColor == rhs.focusedTextColor,
-      lhs.fontFamily == rhs.fontFamily
+      lhs.focusedTextColor == rhs.focusedTextColor
     else {
       return false
     }
     guard
+      lhs.fontFamily == rhs.fontFamily,
       lhs.fontFeatureSettings == rhs.fontFeatureSettings,
-      lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit
+      lhs.fontSize == rhs.fontSize
     else {
       return false
     }
     guard
+      lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.fontWeightValue == rhs.fontWeightValue,
-      lhs.height == rhs.height
+      lhs.fontWeightValue == rhs.fontWeightValue
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height,
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
       lhs.images == rhs.images,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.letterSpacing == rhs.letterSpacing
     else {
       return false
     }
     guard
-      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.longtapActions == rhs.longtapActions,
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
-      lhs.margins == rhs.margins,
       lhs.maxLines == rhs.maxLines,
-      lhs.minHiddenLines == rhs.minHiddenLines
+      lhs.minHiddenLines == rhs.minHiddenLines,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
       lhs.ranges == rhs.ranges,
-      lhs.reuseId == rhs.reuseId
+      lhs.reuseId == rhs.reuseId,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
-      lhs.rowSpan == rhs.rowSpan,
       lhs.selectable == rhs.selectable,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectedActions == rhs.selectedActions,
+      lhs.strike == rhs.strike
     else {
       return false
     }
     guard
-      lhs.strike == rhs.strike,
       lhs.text == rhs.text,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical
     else {
       return false
     }
     guard
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor,
-      lhs.textGradient == rhs.textGradient
+      lhs.textGradient == rhs.textGradient,
+      lhs.textShadow == rhs.textShadow
     else {
       return false
     }
     guard
-      lhs.textShadow == rhs.textShadow,
+      lhs.tightenWidth == rhs.tightenWidth,
       lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform
     else {
@@ -651,18 +717,19 @@ extension DivText: Equatable {
     guard
       lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.underline == rhs.underline,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -683,6 +750,7 @@ extension DivText: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["auto_ellipsize"] = autoEllipsize?.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
@@ -699,6 +767,7 @@ extension DivText: Serializable {
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["images"] = images?.map { $0.toDictionary() }
@@ -722,6 +791,7 @@ extension DivText: Serializable {
     result["text_color"] = textColor.toValidSerializationValue()
     result["text_gradient"] = textGradient?.toDictionary()
     result["text_shadow"] = textShadow?.toDictionary()
+    result["tighten_width"] = tightenWidth.toValidSerializationValue()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
@@ -729,6 +799,7 @@ extension DivText: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["underline"] = underline.toValidSerializationValue()
+    result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
@@ -759,23 +830,39 @@ extension DivText.Ellipsis: Equatable {
 #endif
 
 #if DEBUG
+extension DivText.Image.Accessibility: Equatable {
+  public static func ==(lhs: DivText.Image.Accessibility, rhs: DivText.Image.Accessibility) -> Bool {
+    guard
+      lhs.description == rhs.description,
+      lhs.type == rhs.type
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+#if DEBUG
 extension DivText.Image: Equatable {
   public static func ==(lhs: DivText.Image, rhs: DivText.Image) -> Bool {
     guard
-      lhs.height == rhs.height,
+      lhs.accessibility == rhs.accessibility,
+      lhs.alignmentVertical == rhs.alignmentVertical,
+      lhs.height == rhs.height
+    else {
+      return false
+    }
+    guard
       lhs.preloadRequired == rhs.preloadRequired,
-      lhs.start == rhs.start
+      lhs.start == rhs.start,
+      lhs.tintColor == rhs.tintColor
     else {
       return false
     }
     guard
-      lhs.tintColor == rhs.tintColor,
       lhs.tintMode == rhs.tintMode,
-      lhs.url == rhs.url
-    else {
-      return false
-    }
-    guard
+      lhs.url == rhs.url,
       lhs.width == rhs.width
     else {
       return false
@@ -790,42 +877,47 @@ extension DivText.Range: Equatable {
   public static func ==(lhs: DivText.Range, rhs: DivText.Range) -> Bool {
     guard
       lhs.actions == rhs.actions,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.alignmentVertical == rhs.alignmentVertical,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.end == rhs.end,
-      lhs.fontFamily == rhs.fontFamily,
-      lhs.fontFeatureSettings == rhs.fontFeatureSettings
+      lhs.fontFamily == rhs.fontFamily
     else {
       return false
     }
     guard
+      lhs.fontFeatureSettings == rhs.fontFeatureSettings,
       lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight
+      lhs.fontSizeUnit == rhs.fontSizeUnit
     else {
       return false
     }
     guard
+      lhs.fontWeight == rhs.fontWeight,
       lhs.fontWeightValue == rhs.fontWeightValue,
-      lhs.letterSpacing == rhs.letterSpacing,
-      lhs.lineHeight == rhs.lineHeight
+      lhs.letterSpacing == rhs.letterSpacing
     else {
       return false
     }
     guard
+      lhs.lineHeight == rhs.lineHeight,
       lhs.start == rhs.start,
-      lhs.strike == rhs.strike,
-      lhs.textColor == rhs.textColor
+      lhs.strike == rhs.strike
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.textShadow == rhs.textShadow,
-      lhs.topOffset == rhs.topOffset,
+      lhs.topOffset == rhs.topOffset
+    else {
+      return false
+    }
+    guard
       lhs.underline == rhs.underline
     else {
       return false
@@ -846,9 +938,20 @@ extension DivText.Ellipsis: Serializable {
   }
 }
 
+extension DivText.Image.Accessibility: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["description"] = description?.toValidSerializationValue()
+    result["type"] = type.rawValue
+    return result
+  }
+}
+
 extension DivText.Image: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
+    result["accessibility"] = accessibility?.toDictionary()
+    result["alignment_vertical"] = alignmentVertical.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["start"] = start.toValidSerializationValue()
@@ -864,9 +967,10 @@ extension DivText.Range: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["actions"] = actions?.map { $0.toDictionary() }
+    result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["background"] = background?.toDictionary()
     result["border"] = border?.toDictionary()
-    result["end"] = end.toValidSerializationValue()
+    result["end"] = end?.toValidSerializationValue()
     result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_feature_settings"] = fontFeatureSettings?.toValidSerializationValue()
     result["font_size"] = fontSize?.toValidSerializationValue()

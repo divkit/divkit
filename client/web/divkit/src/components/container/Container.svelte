@@ -27,8 +27,8 @@
 </script>
 
 <script lang="ts">
-    import { getContext } from 'svelte';
-    import { Readable, derived } from 'svelte/store';
+    import { getContext, onDestroy } from 'svelte';
+    import { type Readable, derived } from 'svelte/store';
 
     import css from './Container.module.css';
 
@@ -40,21 +40,22 @@
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import { prepareMargins } from '../../utils/container';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
-    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
-    import { calcAdditionalPaddings, calcItemsGap, hasKnownHeightCheck, hasKnownWidthCheck } from '../../utils/container';
+    import { correctDrawableStyle, type DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { calcAdditionalPaddings, calcItemsGap, isHeightMatchParent, isWidthMatchParent } from '../../utils/container';
     import { hasGapSupport } from '../../utils/hasGapSupport';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
-    import ContainerSeparators from './ContainerSeparators.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
-    import Outer from '../utilities/Outer.svelte';
-    import { ContentAlignmentVerticalMapped, correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
-    import { ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
+    import { type ContentAlignmentVerticalMapped, correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
+    import { type ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { constStore } from '../../utils/constStore';
+    import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
+    import ContainerSeparators from './ContainerSeparators.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import Outer from '../utilities/Outer.svelte';
 
     export let componentContext: ComponentContext<DivContainerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -117,6 +118,7 @@
     $: {
         let newItems: {
             div: MaybeMissing<DivBaseData>;
+            id?: string | undefined;
             vars?: Map<string, Variable> | undefined;
         }[] = [];
         if (
@@ -125,39 +127,7 @@
             Array.isArray(componentContext.json.item_builder.prototypes)
         ) {
             const builder = componentContext.json.item_builder;
-            newItems = [];
-
-            $jsonItemBuilderData.forEach((it, index) => {
-                if (it === null || typeof it !== 'object') {
-                    return;
-                }
-                const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>, index);
-
-                let div: MaybeMissing<DivBaseData> | undefined;
-                for (let i = 0; i < builder.prototypes.length; ++i) {
-                    const prototype = builder.prototypes[i];
-                    if (!prototype.div) {
-                        continue;
-                    }
-                    if (prototype.selector === undefined) {
-                        div = prototype.div;
-                        break;
-                    }
-
-                    const selectorVal = componentContext.getJsonWithVars(prototype.selector, additionalVars);
-                    if (selectorVal) {
-                        div = prototype.div;
-                        break;
-                    }
-                }
-
-                if (div) {
-                    newItems.push({
-                        div,
-                        vars: additionalVars
-                    });
-                }
-            });
+            newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
         } else {
             newItems = (Array.isArray(jsonItems) && jsonItems || []).map(it => {
                 return {
@@ -166,10 +136,15 @@
             });
         }
 
+        items.forEach(context => {
+            context.destroy();
+        });
+
         items = newItems.map((item, index) => {
             return componentContext.produceChildContext(item.div, {
                 path: index,
-                variables: item.vars
+                variables: item.vars,
+                id: item.id
             });
         });
     }
@@ -196,8 +171,11 @@
 
     $: wrap = $jsonLayoutMode === 'wrap';
 
-    $: hasKnownWidth = orientation !== 'horizontal' && !wrap && $childStore.some(hasKnownWidthCheck);
-    $: hasKnownHeight = orientation !== 'vertical' && !wrap && $childStore.some(hasKnownHeightCheck);
+    $: supportWidthWrapContent = orientation !== 'horizontal' && !wrap;
+    $: supportHeightWrapContent = orientation !== 'vertical' && !wrap;
+
+    $: stretchWidth = orientation === 'overlap' && !$childStore.every(isWidthMatchParent);
+    $: stretchHeight = orientation === 'overlap' && !$childStore.every(isHeightMatchParent);
 
     $: {
         contentVAlign = correctContentAlignmentVertical($jsonContentVAlign, contentVAlign);
@@ -281,23 +259,23 @@
         if (orientation !== 'vertical') {
             newChildLayoutParams.parentVAlign = wrap ? 'start' : VALIGN_MAP[contentVAlign];
         }
-        if (
-            !aspect && !hasKnownHeight && (
-                !$jsonHeight ||
-                $jsonHeight.type === 'wrap_content' ||
-                $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
-            )
-        ) {
-            newChildLayoutParams.parentVerticalWrapContent = true;
-        }
-        if (
-            !hasKnownWidth && (
-                $jsonWidth?.type === 'wrap_content' ||
-                $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
-            )
-        ) {
+        const isWidthWrapContent = (
+            $jsonWidth?.type === 'wrap_content' ||
+            $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
+        );
+        const isHeightWrapContent = (
+            !$jsonHeight ||
+            $jsonHeight.type === 'wrap_content' ||
+            $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
+        );
+        if (!supportWidthWrapContent && isWidthWrapContent) {
             newChildLayoutParams.parentHorizontalWrapContent = true;
         }
+        if (!aspect && !supportHeightWrapContent && isHeightWrapContent) {
+            newChildLayoutParams.parentVerticalWrapContent = true;
+        }
+        newChildLayoutParams.stretchWidth = stretchWidth;
+        newChildLayoutParams.stretchHeight = stretchHeight;
         if (orientation === 'horizontal') {
             newChildLayoutParams.parentContainerOrientation = 'horizontal';
         }
@@ -325,6 +303,12 @@
             undefined,
         'aspect-ratio': aspect
     };
+
+    onDestroy(() => {
+        items.forEach(context => {
+            context.destroy();
+        });
+    });
 </script>
 
 <Outer
@@ -334,7 +318,7 @@
     {style}
     {additionalPaddings}
     heightByAspect={Boolean(aspect)}
-    parentOf={items.map(it => it.json)}
+    parentOf={items}
     {replaceItems}
 >
     {#each items as item}

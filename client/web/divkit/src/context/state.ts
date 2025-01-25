@@ -32,7 +32,7 @@ export interface StateCtxValue {
     registerChildWithTransitionChange(
         json: DivBaseData,
         componentContext: ComponentContext,
-        transitions: MaybeMissing<TransitionChange>,
+        transitions: MaybeMissing<TransitionChange> | undefined,
         node: HTMLElement
     ): Promise<void>;
 
@@ -43,7 +43,8 @@ export interface StateCtxValue {
         componentContext: ComponentContext,
         transitions: MaybeMissing<AppearanceTransition>,
         node: HTMLElement,
-        direction: 'in' | 'out'
+        direction: 'in' | 'out',
+        bbox?: DOMRect | undefined
     ): Promise<void>;
 
     registerChild(id: string): void;

@@ -2,15 +2,16 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithJsonProperty with EquatableMixin {
+
+class EntityWithJsonProperty extends Resolvable with EquatableMixin  {
   const EntityWithJsonProperty({
     this.jsonProperty = None,
   });
 
   static const type = "entity_with_json_property";
-  // default value: None
+   // default value: None
   final Map<String, dynamic> jsonProperty;
 
   @override
@@ -24,7 +25,7 @@ class EntityWithJsonProperty with EquatableMixin {
       jsonProperty: jsonProperty ?? this.jsonProperty,
     );
 
-  static EntityWithJsonProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithJsonProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -35,5 +36,9 @@ class EntityWithJsonProperty with EquatableMixin {
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithJsonProperty resolve(DivVariableContext context) {
+    return this;
   }
 }

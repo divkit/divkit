@@ -1,6 +1,6 @@
 import type { Filter } from '../types/filter';
 import type { MaybeMissing } from '../expressions/json';
-import { LogError, wrapError } from './wrapError';
+import { type LogError, wrapError } from './wrapError';
 import { isPositiveNumber } from './isPositiveNumber';
 import { pxToEmWithUnits } from './pxToEm';
 

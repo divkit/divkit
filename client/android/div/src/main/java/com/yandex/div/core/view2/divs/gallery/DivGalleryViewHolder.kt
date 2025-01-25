@@ -8,6 +8,9 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.core.view2.divs.resolvePath
+import com.yandex.div.core.view2.divs.resolveRuntime
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
@@ -16,6 +19,7 @@ import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 
 internal class DivGalleryViewHolder(
+    private val parentContext: BindingContext,
     private val rootView: DivViewWrapper,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
@@ -24,6 +28,8 @@ internal class DivGalleryViewHolder(
 ) : RecyclerView.ViewHolder(rootView) {
 
     private var oldDiv: Div? = null
+
+    private val childrenPaths = mutableMapOf<String, DivStatePath>()
 
     fun bind(context: BindingContext, div: Div, position: Int) {
         if (rootView.tryRebindRecycleContainerChildren(context.divView, div)) {
@@ -42,7 +48,21 @@ internal class DivGalleryViewHolder(
 
         oldDiv = div
         rootView.setTag(R.id.div_gallery_item_index, position)
-        divBinder.bind(context, divView, div, path)
+        val id = div.value().getChildPathUnit(position)
+        val childPath = childrenPaths.getOrPut(id) { div.value().resolvePath(id, path) }
+
+        if (parentContext.expressionResolver != context.expressionResolver) {
+            resolveRuntime(
+                runtimeStore = context.runtimeStore,
+                div = div.value(),
+                path = childPath.fullPath,
+                resolver = resolver,
+                parentResolver = parentContext.expressionResolver,
+            )
+        }
+
+        context.runtimeStore?.showWarningIfNeeded(div.value())
+        divBinder.bind(context, divView, div, childPath)
         divBinder.attachIndicators()
     }
 

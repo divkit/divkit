@@ -1,9 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/visibility/models/visibility_action.dart';
-
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/visibility/models/action_visibility_state_type.dart';
+import 'package:divkit/divkit.dart';
 
 class VisibilityActionState {
   DivVisibilityActionModel divVisibilityAction;

@@ -56,6 +56,8 @@ final class DivBlockProvider {
 
   var lastVisibleBounds: CGRect = .zero
 
+  var accessibilityElementsStorage: DivAccessibilityElementsStorage?
+
   init(
     divKitComponents: DivKitComponents,
     onCardSizeChanged: @escaping (DivCardID, DivViewSize) -> Void
@@ -171,8 +173,10 @@ final class DivBlockProvider {
       self.divData = nil
       return
     }
-    divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
-    divKitComponents.setTimers(divData: divData, cardId: cardId)
+    if !id.isTooltip {
+      divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
+      divKitComponents.setTimers(divData: divData, cardId: cardId)
+    }
     self.divData = divData
   }
 
@@ -188,7 +192,12 @@ final class DivBlockProvider {
     }
 
     reasons.compactMap { $0.patch(for: self.cardId) }.forEach {
-      divData = divData.applyPatch($0)
+      divData = divData.applyPatch(
+        $0,
+        callbacks: Callbacks(elementChanged: { [weak self] id in
+          self?.divKitComponents.triggersStorage.reset(elementId: id)
+        })
+      )
       $0.onAppliedActions?.forEach { action in
         divKitComponents.actionHandler.handle(
           action,
@@ -213,6 +222,7 @@ final class DivBlockProvider {
           context: context
         )
       }
+      accessibilityElementsStorage = context.accessibilityElementsStorage
       debugParams.processMeasurements((cardId: cardId, measurements: measurements))
       for error in context.errorsStorage.errors {
         divKitComponents.reporter.reportError(cardId: cardId, error: error)
@@ -260,6 +270,14 @@ final class DivBlockProvider {
     }
   }
 
+  func update(path: UIElementPath, isFocused: Bool) {
+    do {
+      block = try block.updated(path: path, isFocused: isFocused)
+    } catch {
+      block = handleError(error: error)
+    }
+  }
+
   private func parseDivDataWithTemplates(
     _ jsonDict: [String: Any],
     cardId: DivCardID
@@ -280,13 +298,14 @@ final class DivBlockProvider {
     cardId: DivCardID
   ) async throws -> DeserializationResult<DivData> {
     let rawDivData = try RawDivData(dictionary: jsonDict)
+    let measurements = measurements
     let templates = try measurements.templateParsingTime.updateMeasure {
       DivTemplates(dictionary: rawDivData.templates)
     }
     let result = try await withCheckedThrowingContinuation { continuation in
-      DispatchQueue.global().async {
+      DispatchQueue.global().async { [measurements] in
         do {
-          let result = try self.measurements.divDataParsingTime.updateMeasure {
+          let result = try measurements.divDataParsingTime.updateMeasure {
             templates
               .parseValue(type: DivDataTemplate.self, from: rawDivData.card)
               .asCardResult(cardId: cardId)

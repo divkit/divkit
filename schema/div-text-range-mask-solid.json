@@ -1,0 +1,28 @@
+{
+  "allOf": [
+    {
+      "$ref": "div-text-range-mask-base.json"
+    },
+    {
+      "$description": "translations.json#/div_text_range_mask_solid",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "solid"
+          ]
+        },
+        "color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_solid_background_color"
+        }
+      },
+      "platforms": [
+      ],
+      "required": [
+        "color",
+        "type"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import type { LogError, WrappedError } from '../wrapError';
-import { BaseInputMask, MaskData } from './baseInputMask';
+import { BaseInputMask, type MaskData } from './baseInputMask';
 
 export class FixedLengthInputMask extends BaseInputMask {
     constructor(initialMaskData: MaskData, private readonly logError: LogError) {

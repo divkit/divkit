@@ -24,7 +24,7 @@ final class WrapperBlockTests: XCTestCase {
       background: .solidColor(.clear),
       child: childBlock
     )
-    
+
     XCTAssertEqual(wrapperBlock.reuseId, reuseId)
   }
 }

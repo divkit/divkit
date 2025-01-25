@@ -1,9 +1,10 @@
 import type { Direction } from '../../typings/common';
+import type { MaybeMissing } from '../expressions/json';
 import type { EdgeInsets } from '../types/edgeInserts';
 import { pxToEm } from './pxToEm';
 
 export function edgeInsertsToCss(
-    edgeInsets: EdgeInsets,
+    edgeInsets: MaybeMissing<EdgeInsets>,
     direction: Direction
 ): string {
     const top = edgeInsets.top || 0;

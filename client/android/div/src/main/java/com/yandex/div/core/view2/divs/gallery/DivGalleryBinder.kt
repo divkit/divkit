@@ -158,7 +158,7 @@ internal class DivGalleryBinder @Inject constructor(
         view.clearOnScrollListeners()
         context.divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
-            val galleryState = state.getBlockState(id) as GalleryState?
+            val galleryState = state.getBlockState(id) as? GalleryState
             val position = galleryState?.visibleItemIndex
                 ?: div.defaultItem.evaluate(resolver).toIntSafely()
             val offset = galleryState?.scrollOffset ?: if (view.isLayoutRtl()) view.paddingRight else view.paddingLeft

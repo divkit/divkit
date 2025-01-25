@@ -22,10 +22,15 @@ import javax.inject.Inject
 internal class DivVideoActionHandler @Inject constructor(
     private val videoViewMapper: DivVideoViewMapper
 ) {
-    fun handleAction(div2View: Div2View, divId: String, action: String): Boolean {
+    fun handleAction(
+        div2View: Div2View,
+        divId: String,
+        action: String,
+        expressionResolver: ExpressionResolver
+    ): Boolean {
         val divData = div2View.divData ?: return false
-        val video = searchDivDataForVideo(divData, divId, div2View.expressionResolver) ?: return false
-        val player = videoViewMapper.getPlayerView(video)?.getAttachedPlayer() ?: return false
+        val video = searchDivDataForVideo(divData, divId, expressionResolver) ?: return false
+        val player = videoViewMapper.getPlayer(video) ?: return false
 
         when (action) {
             START_COMMAND -> player.play()

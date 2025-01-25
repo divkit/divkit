@@ -15,10 +15,8 @@
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivBaseData } from '../../types/base';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
-    import Actionable from '../utilities/Actionable.svelte';
+    import { correctTabDelimiterStyle, type TabsDelimiter } from '../../utils/correctTabDelimiterStyle';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { makeStyle } from '../../utils/makeStyle';
@@ -32,12 +30,16 @@
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
-    import { Coords, getTouchCoords } from '../../utils/getTouchCoords';
+    import { type Coords, getTouchCoords } from '../../utils/getTouchCoords';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import Outer from '../utilities/Outer.svelte';
+    import Actionable from '../utilities/Actionable.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
+    import EnabledContext from '../utilities/EnabledContext.svelte';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -94,6 +96,7 @@
     let isSwipeCanceled = false;
     let startTransform: number;
     let currentTransform: number;
+    let delimitierStyle: TabsDelimiter | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -113,6 +116,7 @@
         separatorBackground = '';
         separatorMargins = '';
         titlePadding = null;
+        delimitierStyle = undefined;
     }
 
     $: if (origJson) {
@@ -121,7 +125,10 @@
 
     $: items = Array.isArray(componentContext.json.items) && componentContext.json.items || [];
     $: parentOfItems = items.map(it => {
-        return it.div;
+        return {
+            json: it.div,
+            id: it.div?.id
+        };
     });
 
     $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
@@ -136,6 +143,7 @@
     );
     $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
     $: jsonTitlePaddings = componentContext.getDerivedFromVars(componentContext.json.title_paddings);
+    $: jsonDelimiterStyle = componentContext.getDerivedFromVars(componentContext.json.tab_title_delimiter);
 
     $: selected = jsonSelectedTab && Number(jsonSelectedTab) || 0;
 
@@ -356,10 +364,18 @@
         titlePadding = correctEdgeInsertsObject($jsonTitlePaddings ? $jsonTitlePaddings : undefined, titlePadding);
     }
 
+    $: {
+        delimitierStyle = correctTabDelimiterStyle($jsonDelimiterStyle, delimitierStyle);
+    }
+
     function updateItems(items: MaybeMissing<TabItem>[]): void {
         if (hasError) {
             return;
         }
+
+        showedPanels.forEach(componentContext => {
+            componentContext?.destroy();
+        });
 
         showedPanels = items.map((item, i) => {
             if (i === selected && item?.div) {
@@ -440,12 +456,17 @@
             Math.min(items.length - 1, selected + 1) :
             Math.max(selected, previousSelected ?? selected);
 
+        showedPanels.forEach(componentContext => {
+            componentContext?.destroy();
+        });
+
         showedPanels = showedPanels.map((context, index) => {
             if (context) {
                 return context;
             }
-            if (index >= start && index <= end && items[index]?.div) {
-                return componentContext.produceChildContext(items[index].div, {
+            const div = items[index]?.div;
+            if (index >= start && index <= end && div) {
+                return componentContext.produceChildContext(div, {
                     path: index
                 });
             }
@@ -617,8 +638,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !hasError && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !hasError && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     if (item < 0 || item > items.length - 1) {
@@ -660,6 +681,10 @@
     };
 
     onDestroy(() => {
+        showedPanels.forEach(componentContext => {
+            componentContext?.destroy();
+        });
+
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
@@ -702,6 +727,18 @@
             {#each $childStore as item}
                 {@const index = item.index}
                 {@const isSelected = index === selected}
+
+                {#if delimitierStyle && index > 0}
+                    <img
+                        class={css.tabs__delimitier}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        src={delimitierStyle.url}
+                        style:width={delimitierStyle.width ? pxToEm(delimitierStyle.width) : undefined}
+                        style:height={delimitierStyle.height ? pxToEm(delimitierStyle.height) : undefined}
+                    />
+                {/if}
 
                 <Actionable
                     {componentContext}
@@ -761,9 +798,10 @@
                         style="left: {index * 100}%"
                     >
                         {#if childComponentContext}
-                            <Unknown
+                            <EnabledContext
                                 componentContext={childComponentContext}
                                 layoutParams={childLayoutParams}
+                                enabled={index === selected}
                             />
                         {/if}
                     </div>
@@ -771,4 +809,8 @@
             </div>
         </div>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

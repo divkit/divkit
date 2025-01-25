@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-object FilterRtlMirror : Filter {
+data object FilterRtlMirror : Filter {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "rtl_mirror")
 }

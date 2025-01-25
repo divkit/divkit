@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:divkit/divkit.dart';
+
 import 'package:flutter/material.dart';
 
 import '../pages/playground.dart';
 import '../pages/samples.dart';
-import '../pages/testing.dart';
+import '../pages/testing/testing.dart';
 
 const _openScreen = 'open_screen';
 const _schemeDivAction = 'div-action';
@@ -106,9 +107,7 @@ class PlaygroundAppRootActionHandler implements DivActionHandler {
   void showSnackBar(String text) {
     ScaffoldMessenger.of(_navigator.currentContext!).hideCurrentSnackBar();
     ScaffoldMessenger.of(_navigator.currentContext!).showSnackBar(
-      SnackBar(
-        content: Text(text),
-      ),
+      SnackBar(content: Text(text)),
     );
   }
 }

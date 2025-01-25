@@ -2,9 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithSimpleProperties with EquatableMixin {
+/// Entity with simple properties.
+class EntityWithSimpleProperties extends Resolvable with EquatableMixin  {
   const EntityWithSimpleProperties({
     this.boolean,
     this.booleanInt,
@@ -18,23 +19,25 @@ class EntityWithSimpleProperties with EquatableMixin {
   });
 
   static const type = "entity_with_simple_properties";
-
+  /// Boolean property.
   final Expression<bool>? boolean;
-
+  /// Boolean value in numeric format.
   final Expression<bool>? booleanInt;
-
+  /// Color.
   final Expression<Color>? color;
-
+  /// Floating point number.
   final Expression<double>? dNum;
-  // default value: 0
+  /// ID. Can't contain expressions.
+   // default value: 0
   final int id;
-  // default value: 0
+  /// Integer.
+   // default value: 0
   final Expression<int> integer;
-  // constraint: number > 0
+  /// Positive integer.
+   // constraint: number > 0
   final Expression<int>? positiveInteger;
-
+  /// String.
   final Expression<String>? string;
-
   final Expression<Uri>? url;
 
   @override
@@ -72,7 +75,7 @@ class EntityWithSimpleProperties with EquatableMixin {
       url: url != null ? url.call() : this.url,
     );
 
-  static EntityWithSimpleProperties? fromJson(Map<String, dynamic>? json) {
+  static EntityWithSimpleProperties? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -91,5 +94,17 @@ class EntityWithSimpleProperties with EquatableMixin {
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithSimpleProperties resolve(DivVariableContext context) {
+    boolean?.resolve(context);
+    booleanInt?.resolve(context);
+    color?.resolve(context);
+    dNum?.resolve(context);
+    integer?.resolve(context);
+    positiveInteger?.resolve(context);
+    string?.resolve(context);
+    url?.resolve(context);
+    return this;
   }
 }

@@ -105,18 +105,12 @@ private fun DivAnimation.toAnimation(
                 animation?.let { addAnimation(it) }
             }
         }
-        DivAnimation.Name.SCALE ->
-            if (reverse) {
-                createScaleAnimation(
-                    endValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_END_VALUE,
-                    startValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_START_VALUE
-                )
-            } else {
-                createScaleAnimation(
-                    startValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_START_VALUE,
-                    endValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_END_VALUE
-                )
-            }
+
+        DivAnimation.Name.SCALE -> createScaleAnimation(
+            startValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_START_VALUE,
+            endValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_END_VALUE
+        )
+
         DivAnimation.Name.NATIVE -> {
             if (view != null) {
                 val layers = view.background as? LayerDrawable
@@ -150,19 +144,13 @@ private fun DivAnimation.toAnimation(
             }
             null
         }
+
         DivAnimation.Name.NO_ANIMATION -> null
-        else ->
-            if (reverse) {
-                AlphaAnimation(
-                    endValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_END_VALUE,
-                    startValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_START_VALUE
-                )
-            } else {
-                AlphaAnimation(
-                    startValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_START_VALUE,
-                    endValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_END_VALUE
-                )
-            }
+
+        else -> AlphaAnimation(
+            startValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_START_VALUE,
+            endValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_END_VALUE
+        )
     }
 
     if (animationName != DivAnimation.Name.SET) {

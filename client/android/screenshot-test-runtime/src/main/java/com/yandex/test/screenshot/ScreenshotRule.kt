@@ -2,7 +2,6 @@ package com.yandex.test.screenshot
 
 import android.app.Instrumentation
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
 import com.yandex.test.idling.waitForView
 import org.junit.rules.TestRule
 import org.junit.runner.Description
@@ -28,10 +27,6 @@ class ScreenshotRule(
         val screenshotName = screenshot.name.ifEmpty { name.ifEmpty { description.methodName } }
         val suiteName = description.className + "/" + screenshotPath
         val screenshotCapture = ScreenshotCaptor()
-        val testCaseReferenceFile = TestCaseReferencesFileWriter(
-            fileDir = ScreenshotCaptor.rootDir
-        )
-
         return object : Statement() {
             override fun evaluate() {
                 base.evaluate()
@@ -40,13 +35,10 @@ class ScreenshotRule(
                 beforeScreenshotTakenAction?.invoke()
 
                 instrumentation.runOnMainSync {
-                    val instrumentation = InstrumentationRegistry.getInstrumentation()
-                    val device = UiDevice.getInstance(instrumentation)
-
                     val screenshotRelativePaths =
-                        screenshotCapture.takeScreenshots(device, view, suiteName, screenshotName)
+                        screenshotCapture.takeScreenshots(view, suiteName, screenshotName)
 
-                    testCaseReferenceFile.append(casePath, screenshotRelativePaths)
+                    TestCaseReferencesFileWriter.append(casePath, screenshotRelativePaths)
                 }
             }
         }

@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithArrayOfEnums(
-    @JvmField final val items: List<Item>, // at least 1 elements
+    @JvmField val items: List<Item>, // at least 1 elements
 ) : Hashable {
 
     private var _propertiesHash: Int? = null 
@@ -31,6 +32,11 @@ class EntityWithArrayOfEnums(
         return hash
     }
 
+    fun equals(other: EntityWithArrayOfEnums?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.compareWith(other.items) { a, b -> a == b }
+    }
+
     fun copy(
         items: List<Item> = this.items,
     ) = EntityWithArrayOfEnums(
@@ -39,35 +45,31 @@ class EntityWithArrayOfEnums(
 
     companion object {
         const val TYPE = "entity_with_array_of_enums"
-
-        private val ITEMS_VALIDATOR = ListValidator<EntityWithArrayOfEnums.Item> { it: List<*> -> it.size >= 1 }
     }
-
 
     enum class Item(private val value: String) {
         FIRST("first"),
         SECOND("second");
 
         companion object Converter {
+
             fun toString(obj: Item): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Item? {
-                return when (string) {
+            fun fromString(value: String): Item? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     else -> null
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    else -> null
-                }
-            }
+            @JvmField
+            val TO_STRING = { value: Item -> toString(value) }
+
+            @JvmField
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

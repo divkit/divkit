@@ -36,24 +36,32 @@ public enum DivPageTransformationTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divPageTransformationSlideTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divPageTransformationSlide(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divPageTransformationSlide(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divPageTransformationOverlapTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divPageTransformationOverlap(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divPageTransformationOverlap(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivPageTransformation>!
+      result = result ?? {
+        if case let .divPageTransformationSlideTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divPageTransformationSlide(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divPageTransformationSlide(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divPageTransformationOverlapTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divPageTransformationOverlap(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divPageTransformationOverlap(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivPageTransformation> {
@@ -61,26 +69,28 @@ public enum DivPageTransformationTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivPageTransformationSlide.type:
-      let result = DivPageTransformationSlideTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivPageTransformation>?
+    result = result ?? { if type == DivPageTransformationSlide.type {
+      let result = { DivPageTransformationSlideTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divPageTransformationSlide(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divPageTransformationSlide(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivPageTransformationOverlap.type:
-      let result = DivPageTransformationOverlapTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivPageTransformationOverlap.type {
+      let result = { DivPageTransformationOverlapTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divPageTransformationOverlap(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divPageTransformationOverlap(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

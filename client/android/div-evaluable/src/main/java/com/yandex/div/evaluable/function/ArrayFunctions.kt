@@ -15,279 +15,190 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigDecimal
 import java.math.BigInteger
+import kotlin.math.roundToLong
 
 internal abstract class ArrayFunction(
     final override val resultType: EvaluableType,
 ) : Function() {
+
     override val declaredArgs: List<FunctionArgument> = listOf(
         FunctionArgument(type = EvaluableType.ARRAY), // variable name
         FunctionArgument(type = EvaluableType.INTEGER) // index at array
     )
+
     override val isPure: Boolean = false
 }
 
 internal abstract class ArrayOptFunction(
     final override val resultType: EvaluableType,
 ) : Function() {
+
     override val declaredArgs: List<FunctionArgument> = listOf(
         FunctionArgument(type = EvaluableType.ARRAY), // variable name
         FunctionArgument(type = EvaluableType.INTEGER), // index at array
         FunctionArgument(type = resultType)
     )
+
     override val isPure: Boolean = false
 }
 
-internal object GetArrayInteger : ArrayFunction(EvaluableType.INTEGER) {
+internal abstract class ArrayInteger : ArrayFunction(EvaluableType.INTEGER) {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        return when (val result = evaluate(name, args)) {
+            is Int -> result.toLong()
+            is Long -> result
+            is BigInteger -> throwArrayException(name, args, "Integer overflow.")
+            is BigDecimal -> throwArrayException(name, args, "Cannot convert value to integer.")
+            is Double -> {
+                if (result < Long.MIN_VALUE || result > Long.MAX_VALUE) {
+                    throwArrayException(name, args, "Integer overflow.")
+                }
+                val longResult = result.roundToLong()
+                if (result - longResult == 0.0) return longResult
+                throwArrayException(name, args, "Cannot convert value to integer.")
+            }
+            else -> throwWrongTypeException(name, args, resultType, result)
+        }
+    }
+}
 
+internal object GetArrayInteger : ArrayInteger() {
     override val name: String = "getArrayInteger"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        when (it) {
-            is Int -> it.toLong()
-            is Long -> it
-            is BigInteger -> throwException(name, args, "Integer overflow.")
-            is BigDecimal -> throwException(name, args, "Cannot convert value to integer.")
-            else -> throwWrongTypeException(name, args, resultType, it)
-        }
-    }
 }
 
-internal object GetIntegerFromArray : ArrayFunction(EvaluableType.INTEGER) {
-
+internal object GetIntegerFromArray : ArrayInteger() {
     override val name: String = "getIntegerFromArray"
+}
 
+internal abstract class ArrayOptInteger : ArrayOptFunction(EvaluableType.INTEGER) {
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any = evaluate(name, args).let {
-        when (it) {
-            is Int -> it.toLong()
-            is Long -> it
-            is BigInteger -> throwException(name, args, "Integer overflow.")
-            is BigDecimal -> throwException(name, args, "Cannot convert value to integer.")
-            else -> throwWrongTypeException(name, args, resultType, it)
+    ): Any {
+        return when (val result = evaluateSafe(name, args)) {
+            is Int -> result.toLong()
+            is Long -> result
+            else -> args[2] // fallback
         }
     }
 }
 
-internal object GetArrayOptInteger : ArrayOptFunction(EvaluableType.INTEGER) {
-
+internal object GetArrayOptInteger : ArrayOptInteger() {
     override val name: String = "getArrayOptInteger"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as Long
-        return evaluateSafe(name, args).let {
-            when (it) {
-                is Int -> it.toLong()
-                is Long -> it
-                else -> fallback
-            }
-        }
-    }
 }
 
-internal object GetOptIntegerFromArray : ArrayOptFunction(EvaluableType.INTEGER) {
-
+internal object GetOptIntegerFromArray : ArrayOptInteger() {
     override val name: String = "getOptIntegerFromArray"
+}
 
+internal abstract class ArrayNumber : ArrayFunction(EvaluableType.NUMBER) {
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = args[2] as Long
-        return evaluateSafe(name, args).let {
-            when (it) {
-                is Int -> it.toLong()
-                is Long -> it
-                else -> fallback
-            }
-        }
+        val result = evaluate(name, args)
+        return (result as? Number)?.toDouble() ?: throwWrongTypeException(name, args, resultType, result)
     }
 }
 
-internal object GetArrayNumber : ArrayFunction(EvaluableType.NUMBER) {
-
+internal object GetArrayNumber : ArrayNumber() {
     override val name: String = "getArrayNumber"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        when (it) {
-            is Double -> it
-            is Int -> it.toDouble()
-            is Long -> it.toDouble()
-            is BigDecimal -> it.toDouble()
-            else -> throwWrongTypeException(name, args, resultType, it)
-        }
-    }
 }
 
-internal object GetNumberFromArray : ArrayFunction(EvaluableType.NUMBER) {
-
+internal object GetNumberFromArray : ArrayNumber() {
     override val name: String = "getNumberFromArray"
+}
 
+internal abstract class ArrayOptNumber : ArrayOptFunction(EvaluableType.NUMBER) {
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any = evaluate(name, args).let {
-        when (it) {
-            is Double -> it
-            is Int -> it.toDouble()
-            is Long -> it.toDouble()
-            is BigDecimal -> it.toDouble()
-            else -> throwWrongTypeException(name, args, resultType, it)
-        }
+    ): Any {
+        val result = evaluateSafe(name, args) as? Number
+        return result?.toDouble() ?: args[2]
     }
 }
 
-internal object GetArrayOptNumber : ArrayOptFunction(EvaluableType.NUMBER) {
-
+internal object GetArrayOptNumber : ArrayOptNumber() {
     override val name: String = "getArrayOptNumber"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as Double
-        return evaluateSafe(name, args).let {
-            when (it) {
-                is Double -> it
-                is Int -> it.toDouble()
-                is Long -> it.toDouble()
-                is BigDecimal -> it.toDouble()
-                else -> fallback
-            }
-        }
-    }
 }
 
-internal object GetOptNumberFromArray : ArrayOptFunction(EvaluableType.NUMBER) {
-
+internal object GetOptNumberFromArray : ArrayOptNumber() {
     override val name: String = "getOptNumberFromArray"
+}
 
+internal abstract class ArrayString : ArrayFunction(EvaluableType.STRING) {
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = args[2] as Double
-        return evaluateSafe(name, args).let {
-            when (it) {
-                is Double -> it
-                is Int -> it.toDouble()
-                is Long -> it.toDouble()
-                is BigDecimal -> it.toDouble()
-                else -> fallback
+        val result = evaluate(name, args)
+        return result as? String ?: throwWrongTypeException(name, args, resultType, result)
+    }
+}
+
+internal object GetArrayString : ArrayString() {
+    override val name: String = "getArrayString"
+}
+
+internal object GetStringFromArray : ArrayString() {
+    override val name: String = "getStringFromArray"
+}
+
+internal abstract class ArrayOptString : ArrayOptFunction(EvaluableType.STRING) {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = evaluateSafe(name, args) as? String ?: args[2] // fallback
+}
+
+internal object GetArrayOptString : ArrayOptString() {
+    override val name: String = "getArrayOptString"
+}
+
+internal object GetOptStringFromArray : ArrayOptString() {
+    override val name: String = "getOptStringFromArray"
+}
+
+internal abstract class ArrayColor : ArrayFunction(EvaluableType.COLOR) {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        return when (val result = evaluate(name, args)) {
+            is Color -> result
+            !is String -> throwWrongTypeException(name, args, resultType, result)
+            else -> {
+                runCatching {
+                    Color.parse(result)
+                }.getOrElse {
+                    throwArrayException(name, args, "Unable to convert value to Color, expected format #AARRGGBB.")
+                }
             }
         }
     }
 }
 
-internal object GetArrayString : ArrayFunction(EvaluableType.STRING) {
-
-    override val name: String = "getArrayString"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        it as? String ?: throwWrongTypeException(name, args, resultType, it)
-    }
-}
-
-internal object GetStringFromArray : ArrayFunction(EvaluableType.STRING) {
-
-    override val name: String = "getStringFromArray"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        it as? String ?: throwWrongTypeException(name, args, resultType, it)
-    }
-}
-
-internal object GetArrayOptString : ArrayOptFunction(EvaluableType.STRING) {
-
-    override val name: String = "getArrayOptString"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as String
-        return evaluateSafe(name, args) as? String ?: fallback
-    }
-}
-
-internal object GetOptStringFromArray : ArrayOptFunction(EvaluableType.STRING) {
-
-    override val name: String = "getOptStringFromArray"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as String
-        return evaluateSafe(name, args) as? String ?: fallback
-    }
-}
-
-internal object GetArrayColor : ArrayFunction(EvaluableType.COLOR) {
-
+internal object GetArrayColor : ArrayColor() {
     override val name: String = "getArrayColor"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        (it as? Color) ?: (it as? String)?.runCatching {
-            Color.parse(this)
-        }?.getOrElse {
-            throwException(name, args, "Unable to convert value to Color, expected format #AARRGGBB.")
-        } ?: throwWrongTypeException(name, args, resultType, it)
-    }
 }
 
-internal object GetColorFromArray : ArrayFunction(EvaluableType.COLOR) {
-
+internal object GetColorFromArray : ArrayColor() {
     override val name: String = "getColorFromArray"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        (it as? Color) ?: (it as? String)?.runCatching {
-            Color.parse(this)
-        }?.getOrElse {
-            throwException(name, args, "Unable to convert value to Color, expected format #AARRGGBB.")
-        } ?: throwWrongTypeException(name, args, resultType, it)
-    }
 }
 
-internal object GetArrayOptColorWithStringFallback : ArrayOptFunction(EvaluableType.COLOR) {
+internal abstract class ArrayOptColorWithStringFallback : ArrayOptFunction(EvaluableType.COLOR) {
 
-    override val name: String = "getArrayOptColor"
     override val declaredArgs: List<FunctionArgument> = listOf(
         FunctionArgument(type = EvaluableType.ARRAY), // variable name
         FunctionArgument(type = EvaluableType.INTEGER), // index at array
@@ -299,99 +210,63 @@ internal object GetArrayOptColorWithStringFallback : ArrayOptFunction(EvaluableT
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = args[2] as String
-        val result = evaluateSafe(name, args)
-        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
-        throwException(name, args, REASON_CONVERT_TO_COLOR)
-    }
-}
-
-internal object GetOptColorFromArrayWithStringFallback : ArrayOptFunction(EvaluableType.COLOR) {
-
-    override val name: String = "getOptColorFromArray"
-    override val declaredArgs: List<FunctionArgument> = listOf(
-        FunctionArgument(type = EvaluableType.ARRAY), // variable name
-        FunctionArgument(type = EvaluableType.INTEGER), // index at array
-        FunctionArgument(type = EvaluableType.STRING) // fallback
-    )
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as String
-        val result = evaluateSafe(name, args)
-        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
-        throwException(name, args, REASON_CONVERT_TO_COLOR)
+        return (evaluateSafe(name, args) as? String).safeConvertToColor()
+            ?: (args[2] as String).safeConvertToColor() // fallback
+            ?: throwArrayException(name, args, REASON_CONVERT_TO_COLOR)
     }
 }
 
 internal fun String?.safeConvertToColor() = this?.runCatching { Color.parse(this) }?.getOrNull()
 
-internal object GetArrayOptColorWithColorFallback : ArrayOptFunction(EvaluableType.COLOR) {
-
+internal object GetArrayOptColorWithStringFallback : ArrayOptColorWithStringFallback() {
     override val name: String = "getArrayOptColor"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as Color
-        val evaluateSafe = evaluateSafe(name, args)
-        return (evaluateSafe as? Color) ?: (evaluateSafe as? String)?.runCatching {
-            Color.parse(this)
-        }?.getOrNull() ?: fallback
-    }
 }
 
-internal object GetOptColorFromArrayWithColorFallback : ArrayOptFunction(EvaluableType.COLOR) {
-
+internal object GetOptColorFromArrayWithStringFallback : ArrayOptColorWithStringFallback() {
     override val name: String = "getOptColorFromArray"
+}
 
+internal abstract class ArrayOptColorWithColorFallback : ArrayOptFunction(EvaluableType.COLOR) {
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = args[2] as Color
         val evaluateSafe = evaluateSafe(name, args)
         return (evaluateSafe as? Color) ?: (evaluateSafe as? String)?.runCatching {
             Color.parse(this)
-        }?.getOrNull() ?: fallback
+        }?.getOrNull() ?: args[2] // fallback
     }
 }
 
-internal object GetArrayUrl : ArrayFunction(EvaluableType.URL) {
+internal object GetArrayOptColorWithColorFallback : ArrayOptColorWithColorFallback() {
+    override val name: String = "getArrayOptColor"
+}
 
+internal object GetOptColorFromArrayWithColorFallback : ArrayOptColorWithColorFallback() {
+    override val name: String = "getOptColorFromArray"
+}
+
+internal abstract class ArrayUrl : ArrayFunction(EvaluableType.URL) {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val result = evaluate(name, args)
+        return (result as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, result)
+    }
+}
+
+internal object GetArrayUrl : ArrayUrl() {
     override val name: String = "getArrayUrl"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
-    }
 }
 
-internal object GetUrlFromArray : ArrayFunction(EvaluableType.URL) {
-
+internal object GetUrlFromArray : ArrayUrl() {
     override val name: String = "getUrlFromArray"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
-    }
 }
 
-internal object GetArrayOptUrlWithStringFallback : ArrayOptFunction(EvaluableType.URL) {
-
-    override val name: String = "getArrayOptUrl"
+internal abstract class ArrayOptUrlWithStringFallback : ArrayOptFunction(EvaluableType.URL) {
 
     override val declaredArgs: List<FunctionArgument> = listOf(
         FunctionArgument(type = EvaluableType.ARRAY), // variable name
@@ -404,135 +279,89 @@ internal object GetArrayOptUrlWithStringFallback : ArrayOptFunction(EvaluableTyp
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = args[2] as String
-        val result = evaluateSafe(name, args)
-        return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl()
-        ?: throwException(name, args, REASON_CONVERT_TO_URL)
-    }
-}
-
-internal object GetOptUrlFromArrayWithStringFallback : ArrayOptFunction(EvaluableType.URL) {
-
-    override val name: String = "getOptUrlFromArray"
-
-    override val declaredArgs: List<FunctionArgument> = listOf(
-        FunctionArgument(type = EvaluableType.ARRAY), // variable name
-        FunctionArgument(type = EvaluableType.INTEGER), // index at array
-        FunctionArgument(type = EvaluableType.STRING) // fallback
-    )
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as String
-        val result = evaluateSafe(name, args)
-        return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl()
-        ?: throwException(name, args, REASON_CONVERT_TO_URL)
+        return (evaluateSafe(name, args) as? String).safeConvertToUrl()
+            ?: (args[2] as String).safeConvertToUrl() // fallback
+            ?: throwArrayException(name, args, REASON_CONVERT_TO_URL)
     }
 }
 
 internal fun String?.safeConvertToUrl() = this?.runCatching { Url.from(this) }?.getOrNull()
 
-internal object GetArrayOptUrlWithUrlFallback : ArrayOptFunction(EvaluableType.URL) {
-
+internal object GetArrayOptUrlWithStringFallback : ArrayOptUrlWithStringFallback() {
     override val name: String = "getArrayOptUrl"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as Url
-        val evaluateSafe = evaluateSafe(name, args)
-        return (evaluateSafe as? String).safeConvertToUrl() ?: fallback
-    }
 }
 
-internal object GetOptUrlFromArrayWithUrlFallback : ArrayOptFunction(EvaluableType.URL) {
-
+internal object GetOptUrlFromArrayWithStringFallback : ArrayOptUrlWithStringFallback() {
     override val name: String = "getOptUrlFromArray"
+}
 
+internal abstract class ArrayOptUrlWithUrlFallback : ArrayOptFunction(EvaluableType.URL) {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = (evaluateSafe(name, args) as? String).safeConvertToUrl() ?: args[2] // fallback
+}
+
+internal object GetArrayOptUrlWithUrlFallback : ArrayOptUrlWithUrlFallback() {
+    override val name: String = "getArrayOptUrl"
+}
+
+internal object GetOptUrlFromArrayWithUrlFallback : ArrayOptUrlWithUrlFallback() {
+    override val name: String = "getOptUrlFromArray"
+}
+
+internal abstract class ArrayBoolean : ArrayFunction(EvaluableType.BOOLEAN) {
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = args[2] as Url
-        val evaluateSafe = evaluateSafe(name, args)
-        return (evaluateSafe as? String).safeConvertToUrl() ?: fallback
+        val result = evaluate(name, args)
+        return result as? Boolean ?: throwWrongTypeException(name, args, resultType, result)
     }
 }
 
-internal object GetArrayBoolean : ArrayFunction(EvaluableType.BOOLEAN) {
-
+internal object GetArrayBoolean : ArrayBoolean() {
     override val name: String = "getArrayBoolean"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any = evaluate(name, args).let {
-        it as? Boolean ?: throwWrongTypeException(name, args, resultType, it)
-    }
 }
 
-internal object GetBooleanFromArray : ArrayFunction(EvaluableType.BOOLEAN) {
-
+internal object GetBooleanFromArray : ArrayBoolean() {
     override val name: String = "getBooleanFromArray"
+}
 
+internal abstract class ArrayOptBoolean : ArrayOptFunction(EvaluableType.BOOLEAN) {
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any = evaluate(name, args).let {
-        it as? Boolean ?: throwWrongTypeException(name, args, resultType, it)
-    }
+    ): Any = evaluateSafe(name, args) as? Boolean ?: args[2] // fallback
 }
 
-internal object GetArrayOptBoolean : ArrayOptFunction(EvaluableType.BOOLEAN) {
-
+internal object GetArrayOptBoolean : ArrayOptBoolean() {
     override val name: String = "getArrayOptBoolean"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as Boolean
-        return evaluateSafe(name, args) as? Boolean ?: fallback
-    }
 }
 
-internal object GetOptBooleanFromArray : ArrayOptFunction(EvaluableType.BOOLEAN) {
-
+internal object GetOptBooleanFromArray : ArrayOptBoolean() {
     override val name: String = "getOptBooleanFromArray"
-
-    override fun evaluate(
-        evaluationContext: EvaluationContext,
-        expressionContext: ExpressionContext,
-        args: List<Any>
-    ): Any {
-        val fallback = args[2] as Boolean
-        return evaluateSafe(name, args) as? Boolean ?: fallback
-    }
 }
 
 internal object GetArrayFromArray : ArrayFunction(EvaluableType.ARRAY) {
+
     override val name: String = "getArrayFromArray"
 
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any =
-        evaluate(name, args).let {
-            it as? JSONArray ?: throwWrongTypeException(name, args, resultType, it)
-        }
+    ): Any {
+        val result = evaluate(name, args)
+        return result as? JSONArray ?: throwWrongTypeException(name, args, resultType, result)
+    }
 }
 
 internal object GetOptArrayFromArray : ArrayOptFunction(EvaluableType.ARRAY) {
+
     override val name: String = "getOptArrayFromArray"
 
     override val declaredArgs: List<FunctionArgument> = listOf(
@@ -544,26 +373,25 @@ internal object GetOptArrayFromArray : ArrayOptFunction(EvaluableType.ARRAY) {
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any =
-        evaluateSafe(name, args).let {
-            it as? JSONArray ?: JSONArray()
-        }
+    ): Any = evaluateSafe(name, args) as? JSONArray ?: JSONArray()
 }
 
 internal object GetDictFromArray : ArrayFunction(EvaluableType.DICT) {
+
     override val name: String = "getDictFromArray"
 
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any =
-        evaluate(name, args).let {
-            it as? JSONObject ?: throwWrongTypeException(name, args, resultType, it)
-        }
+    ): Any {
+        val result = evaluate(name, args)
+        return result as? JSONObject ?: throwWrongTypeException(name, args, resultType, result)
+    }
 }
 
 internal object GetOptDictFromArray : ArrayFunction(EvaluableType.DICT) {
+
     override val name: String = "getOptDictFromArray"
 
     override val declaredArgs: List<FunctionArgument> = listOf(
@@ -575,10 +403,7 @@ internal object GetOptDictFromArray : ArrayFunction(EvaluableType.DICT) {
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any =
-        evaluate(name, args).let {
-            it as? JSONObject ?: JSONObject()
-        }
+    ): Any = evaluate(name, args) as? JSONObject ?: JSONObject()
 }
 
 internal object GetArrayLength : Function() {
@@ -603,14 +428,14 @@ internal object GetArrayLength : Function() {
     }
 }
 
-private fun evaluate(functionName: String, args: List<Any>): Any {
+internal fun evaluate(functionName: String, args: List<Any>): Any {
     checkIndexOfBoundException(functionName, args)
     val array = args[0] as JSONArray
     val index = args[1] as Long
     return array.get(index.toInt())
 }
 
-private fun evaluateSafe(functionName: String, args: List<Any>): Any? {
+internal fun evaluateSafe(functionName: String, args: List<Any>): Any? {
     return runCatching {
         checkIndexOfBoundException(functionName, args)
         val array = args[0] as JSONArray
@@ -623,7 +448,7 @@ private fun checkIndexOfBoundException(functionName: String, args: List<Any>) {
     val arraySize = (args[0] as JSONArray).length()
     val index = args[1] as Long
     if (index >= arraySize) {
-        throwException(
+        throwArrayException(
             functionName = functionName,
             args = args,
             message = "Requested index (${index}) out of bounds array size ($arraySize)."
@@ -631,25 +456,29 @@ private fun checkIndexOfBoundException(functionName: String, args: List<Any>) {
     }
 }
 
-private fun throwWrongTypeException(
+internal fun throwWrongTypeException(
     functionName: String,
     args: List<Any>,
     expected: EvaluableType,
     actual: Any
 ) {
     val actualType = when (actual) {
-        is Int, is Double, is BigDecimal -> "Number"
+        JSONObject.NULL -> "Null"
+        is Number -> "Number"
         is JSONObject -> "Dict"
         is JSONArray -> "Array"
         else -> actual.javaClass.simpleName
     }
-    throwException(functionName, args,
+    throwArrayException(functionName, args,
         "Incorrect value type: expected ${expected.typeName}, got $actualType.")
 }
 
-private fun throwException(functionName: String, args: List<Any>, message: String): Nothing {
+internal fun throwArrayException(functionName: String, args: List<Any>, message: String): Nothing =
+    throwException("array", functionName, args, message)
+
+internal fun throwException(type: String, functionName: String, args: List<Any>, message: String): Nothing {
     val signature = args.subList(1, args.size)
-        .joinToString(prefix = "${functionName}(<array>, ", postfix = ")") {
+        .joinToString(prefix = "${functionName}(<$type>, ", postfix = ")") {
             it.toMessageFormat()
         }
     throwExceptionOnEvaluationFailed(signature, message)

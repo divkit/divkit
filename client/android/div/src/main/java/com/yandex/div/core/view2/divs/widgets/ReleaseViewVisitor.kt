@@ -26,6 +26,16 @@ internal class ReleaseViewVisitor @Inject constructor(
     override fun defaultVisit(view: DivHolderView<*>) =
         releaseInternal(view as View, view.div, view.bindingContext?.expressionResolver)
 
+    override fun visit(view: DivPagerView) {
+        super.visit(view)
+        view.viewPager.adapter = null
+    }
+
+    override fun visit(view: DivRecyclerView) {
+        super.visit(view)
+        view.adapter = null
+    }
+
     override fun visit(view: DivCustomWrapper) {
         val divCustom = view.div ?: return
         val resolver = view.bindingContext?.expressionResolver ?: return

@@ -1,7 +1,8 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 sealed class Entity : Hashable {
@@ -86,6 +87,31 @@ sealed class Entity : Hashable {
        return hash
     }
 
+    fun equals(other: Entity?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return when(this) {
+            is WithArray -> this.value.equals(other.value() as? EntityWithArray, resolver, otherResolver)
+            is WithArrayOfEnums -> this.value.equals(other.value() as? EntityWithArrayOfEnums, resolver, otherResolver)
+            is WithArrayOfExpressions -> this.value.equals(other.value() as? EntityWithArrayOfExpressions, resolver, otherResolver)
+            is WithArrayOfNestedItems -> this.value.equals(other.value() as? EntityWithArrayOfNestedItems, resolver, otherResolver)
+            is WithArrayWithTransform -> this.value.equals(other.value() as? EntityWithArrayWithTransform, resolver, otherResolver)
+            is WithComplexProperty -> this.value.equals(other.value() as? EntityWithComplexProperty, resolver, otherResolver)
+            is WithComplexPropertyWithDefaultValue -> this.value.equals(other.value() as? EntityWithComplexPropertyWithDefaultValue, resolver, otherResolver)
+            is WithEntityProperty -> this.value.equals(other.value() as? EntityWithEntityProperty, resolver, otherResolver)
+            is WithOptionalComplexProperty -> this.value.equals(other.value() as? EntityWithOptionalComplexProperty, resolver, otherResolver)
+            is WithOptionalProperty -> this.value.equals(other.value() as? EntityWithOptionalProperty, resolver, otherResolver)
+            is WithOptionalStringEnumProperty -> this.value.equals(other.value() as? EntityWithOptionalStringEnumProperty, resolver, otherResolver)
+            is WithPropertyWithDefaultValue -> this.value.equals(other.value() as? EntityWithPropertyWithDefaultValue, resolver, otherResolver)
+            is WithRawArray -> this.value.equals(other.value() as? EntityWithRawArray, resolver, otherResolver)
+            is WithRequiredProperty -> this.value.equals(other.value() as? EntityWithRequiredProperty, resolver, otherResolver)
+            is WithSimpleProperties -> this.value.equals(other.value() as? EntityWithSimpleProperties, resolver, otherResolver)
+            is WithStringArrayProperty -> this.value.equals(other.value() as? EntityWithStringArrayProperty, resolver, otherResolver)
+            is WithStringEnumProperty -> this.value.equals(other.value() as? EntityWithStringEnumProperty, resolver, otherResolver)
+            is WithStringEnumPropertyWithDefaultValue -> this.value.equals(other.value() as? EntityWithStringEnumPropertyWithDefaultValue, resolver, otherResolver)
+            is WithoutProperties -> this.value.equals(other.value() as? EntityWithoutProperties, resolver, otherResolver)
+        }
+    }
+
     fun value(): Any {
         return when (this) {
             is WithArray -> value
@@ -109,5 +135,4 @@ sealed class Entity : Hashable {
             is WithoutProperties -> value
         }
     }
-
 }

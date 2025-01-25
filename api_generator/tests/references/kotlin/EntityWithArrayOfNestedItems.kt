@@ -1,24 +1,20 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithArrayOfNestedItems(
-    @JvmField final val items: List<Item>, // at least 1 elements
+    @JvmField val items: List<Item>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _propertiesHash: Int? = null 
@@ -44,11 +40,9 @@ class EntityWithArrayOfNestedItems(
         return hash
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.write(key = "items", value = items)
-        json.write(key = "type", value = TYPE)
-        return json
+    fun equals(other: EntityWithArrayOfNestedItems?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.compareWith(other.items) { a, b -> a.equals(b, resolver, otherResolver) }
     }
 
     fun copy(
@@ -56,6 +50,13 @@ class EntityWithArrayOfNestedItems(
     ) = EntityWithArrayOfNestedItems(
         items = items,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.write(key = "items", value = items)
+        json.write(key = "type", value = TYPE)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_array_of_nested_items"
@@ -74,11 +75,9 @@ class EntityWithArrayOfNestedItems(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItems(env, json = it) }
     }
 
-
-    @Mockable
     class Item(
-        @JvmField final val entity: Entity,
-        @JvmField final val property: Expression<String>,
+        @JvmField val entity: Entity,
+        @JvmField val property: Expression<String>,
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 
@@ -95,11 +94,10 @@ class EntityWithArrayOfNestedItems(
             return hash
         }
 
-        override fun writeToJSON(): JSONObject {
-            val json = JSONObject()
-            json.write(key = "entity", value = entity)
-            json.writeExpression(key = "property", value = property)
-            return json
+        fun equals(other: Item?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return entity.equals(other.entity, resolver, otherResolver) &&
+                property.evaluate(resolver) == other.property.evaluate(otherResolver)
         }
 
         fun copy(
@@ -109,6 +107,13 @@ class EntityWithArrayOfNestedItems(
             entity = entity,
             property = property,
         )
+
+        override fun writeToJSON(): JSONObject {
+            val json = JSONObject()
+            json.write(key = "entity", value = entity)
+            json.writeExpression(key = "property", value = property)
+            return json
+        }
 
         companion object {
             @JvmStatic
@@ -123,6 +128,5 @@ class EntityWithArrayOfNestedItems(
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Item(env, json = it) }
         }
-
     }
 }

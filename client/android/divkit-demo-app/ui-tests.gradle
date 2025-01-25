@@ -1,6 +1,6 @@
 def connectedTestTaskName = "connectedDebugAndroidTest" // encapsulating test variant
 
-task runUiTests {
+tasks.register('runUiTests') {
     if (!project.hasProperty("runsNumber")) {
         dependsOn connectedTestTaskName
     } else {

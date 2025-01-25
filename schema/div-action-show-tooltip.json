@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_show_tooltip",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "show_tooltip"
+      ]
+    },
+    "id": {
+      "$description": "translations.json#/div_action_tooltip_id",
+      "type": "string"
+    },
+    "multiple": {
+      "$description": "translations.json#/div_action_show_tooltip_multiple",
+      "type": "boolean"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "required": [
+    "type",
+    "id"
+  ]
+}

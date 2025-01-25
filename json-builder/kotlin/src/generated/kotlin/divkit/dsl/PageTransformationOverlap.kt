@@ -18,14 +18,14 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * The pages are stacked when the pager is scrolled overlapping each other.
+ * Pages are stacked during animation overlapping one another.
  * 
  * Can be created using the method [pageTransformationOverlap].
  * 
  * Required parameters: `type`.
  */
 @Generated
-class PageTransformationOverlap internal constructor(
+data class PageTransformationOverlap internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : PageTransformation {
@@ -45,34 +45,34 @@ class PageTransformationOverlap internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
-         * Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
+         * Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
          * Default value: `ease_in_out`.
          */
         val interpolator: Property<AnimationInterpolator>?,
         /**
-         * Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+         * Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
          * Default value: `1.0`.
          */
         val nextPageAlpha: Property<Double>?,
         /**
-         * Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+         * Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
          * Default value: `1.0`.
          */
         val nextPageScale: Property<Double>?,
         /**
-         * Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
+         * Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
          * Default value: `1.0`.
          */
         val previousPageAlpha: Property<Double>?,
         /**
-         * Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
+         * Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
          * Default value: `1.0`.
          */
         val previousPageScale: Property<Double>?,
         /**
-         * If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+         * If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
          * Default value: `false`.
          */
         val reversedStackingOrder: Property<Boolean>?,
@@ -92,12 +92,12 @@ class PageTransformationOverlap internal constructor(
 }
 
 /**
- * @param interpolator Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
- * @param nextPageAlpha Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param nextPageScale Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageAlpha Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageScale Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param reversedStackingOrder If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+ * @param interpolator Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
+ * @param nextPageAlpha Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param nextPageScale Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageAlpha Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param reversedStackingOrder If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
  */
 @Generated
 fun DivScope.pageTransformationOverlap(
@@ -120,12 +120,12 @@ fun DivScope.pageTransformationOverlap(
 )
 
 /**
- * @param interpolator Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
- * @param nextPageAlpha Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param nextPageScale Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageAlpha Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageScale Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param reversedStackingOrder If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+ * @param interpolator Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
+ * @param nextPageAlpha Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param nextPageScale Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageAlpha Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param reversedStackingOrder If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
  */
 @Generated
 fun DivScope.pageTransformationOverlapProps(
@@ -146,12 +146,12 @@ fun DivScope.pageTransformationOverlapProps(
 )
 
 /**
- * @param interpolator Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
- * @param nextPageAlpha Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param nextPageScale Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageAlpha Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageScale Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param reversedStackingOrder If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+ * @param interpolator Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
+ * @param nextPageAlpha Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param nextPageScale Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageAlpha Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param reversedStackingOrder If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
  */
 @Generated
 fun TemplateScope.pageTransformationOverlapRefs(
@@ -172,12 +172,12 @@ fun TemplateScope.pageTransformationOverlapRefs(
 )
 
 /**
- * @param interpolator Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
- * @param nextPageAlpha Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param nextPageScale Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageAlpha Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageScale Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param reversedStackingOrder If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+ * @param interpolator Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
+ * @param nextPageAlpha Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param nextPageScale Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageAlpha Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param reversedStackingOrder If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
  */
 @Generated
 fun PageTransformationOverlap.override(
@@ -200,12 +200,12 @@ fun PageTransformationOverlap.override(
 )
 
 /**
- * @param interpolator Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
- * @param nextPageAlpha Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param nextPageScale Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageAlpha Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageScale Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param reversedStackingOrder If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+ * @param interpolator Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
+ * @param nextPageAlpha Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param nextPageScale Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageAlpha Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param reversedStackingOrder If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
  */
 @Generated
 fun PageTransformationOverlap.defer(
@@ -228,12 +228,12 @@ fun PageTransformationOverlap.defer(
 )
 
 /**
- * @param interpolator Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
- * @param nextPageAlpha Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param nextPageScale Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageAlpha Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param previousPageScale Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
- * @param reversedStackingOrder If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+ * @param interpolator Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
+ * @param nextPageAlpha Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param nextPageScale Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageAlpha Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param reversedStackingOrder If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
  */
 @Generated
 fun PageTransformationOverlap.evaluate(

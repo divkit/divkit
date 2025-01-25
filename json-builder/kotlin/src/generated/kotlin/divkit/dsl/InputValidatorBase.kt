@@ -21,7 +21,7 @@ import kotlin.collections.Map
  * Can be created using the method [inputValidatorBase].
  */
 @Generated
-class InputValidatorBase internal constructor(
+data class InputValidatorBase internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -36,7 +36,7 @@ class InputValidatorBase internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Determines whether the empty field value is valid.
          * Default value: `false`.

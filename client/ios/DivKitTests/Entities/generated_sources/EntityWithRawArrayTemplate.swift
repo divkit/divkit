@@ -1,10 +1,11 @@
 // Generated code. Do not modify.
 
 @testable import DivKit
-
 import Foundation
 import Serialization
 import VGSL
+
+import enum DivKit.Expression
 
 public final class EntityWithRawArrayTemplate: TemplateValue {
   public static let type: String = "entity_with_raw_array"
@@ -27,7 +28,7 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithRawArrayTemplate?) -> DeserializationResult<EntityWithRawArray> {
-    let arrayValue = parent?.array?.resolveValue(context: context) ?? .noValue
+    let arrayValue = { parent?.array?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
     )
@@ -40,7 +41,7 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithRawArray(
-      array: arrayNonNil
+      array: { arrayNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -49,16 +50,24 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var arrayValue: DeserializationResult<Expression<[Any]>> = parent?.array?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "array":
-        arrayValue = deserialize(__dictValue).merged(with: arrayValue)
-      case parent?.array?.link:
-        arrayValue = arrayValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var arrayValue: DeserializationResult<Expression<[Any]>> = { parent?.array?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "array" {
+           arrayValue = deserialize(__dictValue).merged(with: arrayValue)
+          }
+        }()
+        _ = {
+         if key == parent?.array?.link {
+           arrayValue = arrayValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
     )
@@ -71,7 +80,7 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithRawArray(
-      array: arrayNonNil
+      array: { arrayNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -1,0 +1,80 @@
+{
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "alpha": 1.0,
+          "alignment_horizontal": "center",
+          "alignment_vertical": "center",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#0e000000"
+            }
+          ],
+          "border": {
+            "corner_radius": 8
+          },
+          "font_size": 22,
+          "font_weight": "medium",
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "text_color": "#000000",
+          "text": "It is a  dark time for the Rebellion.",
+          "images": [
+            {
+              "start": 6,
+              "url": "https://yastatic.net/s3/home/test/omni_icon.png",
+              "width": {
+                "type": "fixed",
+                "value": 48
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "accessibility": {
+                "description": "click to do nothing",
+                "type": "button"
+              },
+              "tint_color": "#FF0000"
+            }
+          ],
+          "ranges": [
+            {
+              "start": 6,
+              "end": 7,
+              "actions": [
+                {
+                  "log_id": "clicked on image",
+                  "url": "div-action://"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -4,6 +4,15 @@
       "type": "string",
       "$description": "translations.json#/div_action_base_log_id"
     },
+    "scope_id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_action_base_scope_id",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
     "url": {
       "$ref": "common.json#/url",
       "$description": "translations.json#/div_action_base_url"

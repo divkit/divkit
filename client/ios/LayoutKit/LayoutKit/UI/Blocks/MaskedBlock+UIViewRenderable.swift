@@ -42,6 +42,15 @@ private final class MaskedBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   private var model: Model!
 
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+
+    isUserInteractionEnabled = false
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [maskedBlockView, maskBlockView].compactMap { $0 }
   }

@@ -40,6 +40,7 @@ internal class ExistingToken(
             is Div.Input -> emptyList()
             is Div.Select -> emptyList()
             is Div.Video -> emptyList()
+            is Div.Switch -> emptyList()
             is Div.Container -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
             is Div.Custom -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
             is Div.Grid -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
@@ -89,7 +90,7 @@ internal class ExistingToken(
         val tokens = mutableListOf<ExistingToken>()
         val pager = (view as? DivPagerView)?.viewPager ?: return emptyList()
         val adapter = (pager.adapter as? DivPagerAdapter) ?: return emptyList()
-        val activeHashes = adapter.visibleItems.map { it.div.hash() }
+        val activeHashes = adapter.itemsToShow.map { it.div.hash() }
 
         buildItems(resolver).forEachIndexed { index, newItem ->
             if (newItem.div.hash() in activeHashes) {

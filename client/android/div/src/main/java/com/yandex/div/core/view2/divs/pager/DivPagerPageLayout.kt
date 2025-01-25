@@ -2,20 +2,22 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Canvas
+import android.view.ViewGroup.LayoutParams
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.util.makeFocusable
+import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.makeUnspecifiedSpec
 import com.yandex.div.internal.widget.DivLayoutParams
-import com.yandex.div.internal.widget.FrameContainerLayout
 
 @SuppressLint("ViewConstructor")
 internal class DivPagerPageLayout(
     context: Context,
     private val orientationProvider: () -> Int
-) : FrameContainerLayout(context) {
+) : DivViewWrapper(context) {
 
     init {
-        makeFocusable()
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -28,6 +30,11 @@ internal class DivPagerPageLayout(
         val widthSpec = getSpec(lp.width, widthMeasureSpec, isHorizontal)
         val heightSpec = getSpec(lp.height, heightMeasureSpec, !isHorizontal)
         super.onMeasure(widthSpec, heightSpec)
+    }
+
+    override fun dispatchDraw(canvas: Canvas) {
+        drawChildrenShadows(canvas)
+        super.dispatchDraw(canvas)
     }
 
     private fun getSpec(size: Int, parentSpec: Int, alongScrollAxis: Boolean): Int {

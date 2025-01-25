@@ -1,11 +1,11 @@
 apply from: "${buildscript.sourceFile.parent}/publish-common.gradle"
 
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     archiveClassifier = "sources"
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
     archiveClassifier = 'javadoc'
     from javadoc.destinationDir
 }

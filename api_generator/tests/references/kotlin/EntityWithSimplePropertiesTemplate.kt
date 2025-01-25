@@ -1,34 +1,52 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<EntityWithSimpleProperties> {
-    @JvmField final val boolean: Field<Expression<Boolean>>
-    @JvmField final val booleanInt: Field<Expression<Boolean>>
-    @JvmField final val color: Field<Expression<Int>>
-    @JvmField final val double: Field<Expression<Double>>
-    @JvmField final val id: Field<Long> // default value: 0
-    @JvmField final val integer: Field<Expression<Long>> // default value: 0
-    @JvmField final val positiveInteger: Field<Expression<Long>> // constraint: number > 0
-    @JvmField final val string: Field<Expression<String>>
-    @JvmField final val url: Field<Expression<Uri>>
+    @JvmField val boolean: Field<Expression<Boolean>>
+    @JvmField val booleanInt: Field<Expression<Boolean>>
+    @JvmField val color: Field<Expression<Int>>
+    @JvmField val double: Field<Expression<Double>>
+    @JvmField val id: Field<Long>
+    @JvmField val integer: Field<Expression<Long>>
+    @JvmField val positiveInteger: Field<Expression<Long>>
+    @JvmField val string: Field<Expression<String>>
+    @JvmField val url: Field<Expression<Uri>>
 
-    constructor (
+    constructor(
+        boolean: Field<Expression<Boolean>>,
+        booleanInt: Field<Expression<Boolean>>,
+        color: Field<Expression<Int>>,
+        double: Field<Expression<Double>>,
+        id: Field<Long>,
+        integer: Field<Expression<Long>>,
+        positiveInteger: Field<Expression<Long>>,
+        string: Field<Expression<String>>,
+        url: Field<Expression<Uri>>,
+    ) {
+        this.boolean = boolean
+        this.booleanInt = booleanInt
+        this.color = color
+        this.double = double
+        this.id = id
+        this.integer = integer
+        this.positiveInteger = positiveInteger
+        this.string = string
+        this.url = url
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithSimplePropertiesTemplate? = null,
         topLevel: Boolean = false,
@@ -43,20 +61,20 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         integer = JsonTemplateParser.readOptionalFieldWithExpression(json, "integer", topLevel, parent?.integer, NUMBER_TO_INT, logger, env, TYPE_HELPER_INT)
         positiveInteger = JsonTemplateParser.readOptionalFieldWithExpression(json, "positive_integer", topLevel, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
         string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, logger, env, TYPE_HELPER_STRING)
-        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, logger, env, TYPE_HELPER_URI)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithSimpleProperties {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithSimpleProperties {
         return EntityWithSimpleProperties(
-            boolean = boolean.resolveOptional(env = env, key = "boolean", data = rawData, reader = BOOLEAN_READER),
-            booleanInt = booleanInt.resolveOptional(env = env, key = "boolean_int", data = rawData, reader = BOOLEAN_INT_READER),
-            color = color.resolveOptional(env = env, key = "color", data = rawData, reader = COLOR_READER),
-            double = double.resolveOptional(env = env, key = "double", data = rawData, reader = DOUBLE_READER),
-            id = id.resolveOptional(env = env, key = "id", data = rawData, reader = ID_READER) ?: ID_DEFAULT_VALUE,
-            integer = integer.resolveOptional(env = env, key = "integer", data = rawData, reader = INTEGER_READER) ?: INTEGER_DEFAULT_VALUE,
-            positiveInteger = positiveInteger.resolveOptional(env = env, key = "positive_integer", data = rawData, reader = POSITIVE_INTEGER_READER),
-            string = string.resolveOptional(env = env, key = "string", data = rawData, reader = STRING_READER),
-            url = url.resolveOptional(env = env, key = "url", data = rawData, reader = URL_READER)
+            boolean = this.boolean.resolveOptional(env = env, key = "boolean", data = data, reader = BOOLEAN_READER),
+            booleanInt = this.booleanInt.resolveOptional(env = env, key = "boolean_int", data = data, reader = BOOLEAN_INT_READER),
+            color = this.color.resolveOptional(env = env, key = "color", data = data, reader = COLOR_READER),
+            double = this.double.resolveOptional(env = env, key = "double", data = data, reader = DOUBLE_READER),
+            id = this.id.resolveOptional(env = env, key = "id", data = data, reader = ID_READER) ?: ID_DEFAULT_VALUE,
+            integer = this.integer.resolveOptional(env = env, key = "integer", data = data, reader = INTEGER_READER) ?: INTEGER_DEFAULT_VALUE,
+            positiveInteger = this.positiveInteger.resolveOptional(env = env, key = "positive_integer", data = data, reader = POSITIVE_INTEGER_READER),
+            string = this.string.resolveOptional(env = env, key = "string", data = data, reader = STRING_READER),
+            url = this.url.resolveOptional(env = env, key = "url", data = data, reader = URL_READER)
         )
     }
 
@@ -93,9 +111,8 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         val POSITIVE_INTEGER_READER: Reader<Expression<Long>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, env.logger, env, TYPE_HELPER_INT) }
         val STRING_READER: Reader<Expression<String>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
-        val URL_READER: Reader<Expression<Uri>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, env.logger, env, TYPE_HELPER_URI) }
+        val URL_READER: Reader<Expression<Uri>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_URI, env.logger, env, TYPE_HELPER_URI) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithSimplePropertiesTemplate(env, json = it) }
     }
-
 }

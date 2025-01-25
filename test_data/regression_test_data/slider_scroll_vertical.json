@@ -58,6 +58,9 @@
             {
               "type": "gallery",
               "orientation": "vertical",
+              "height": {
+                "type": "match_parent"
+              },
               "items": [
                 {
                   "type": "fill_img",

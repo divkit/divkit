@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-object InfinityCount : Count {
+data object InfinityCount : Count {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "infinity")
 }

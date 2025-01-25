@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [transform].
  */
 @Generated
-class Transform internal constructor(
+data class Transform internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -38,7 +38,7 @@ class Transform internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * X coordinate of the rotation axis.
          * Default value: `{"type": "pivot-percentage","value":50}`.

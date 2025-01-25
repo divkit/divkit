@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithComplexPropertyWithDefaultValue(
-    @JvmField final val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
+    @JvmField val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -21,6 +22,11 @@ class EntityWithComplexPropertyWithDefaultValue(
         return hash
     }
 
+    fun equals(other: EntityWithComplexPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property.equals(other.property, resolver, otherResolver)
+    }
+
     fun copy(
         property: Property = this.property,
     ) = EntityWithComplexPropertyWithDefaultValue(
@@ -33,9 +39,8 @@ class EntityWithComplexPropertyWithDefaultValue(
         private val PROPERTY_DEFAULT_VALUE = EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
     }
 
-
     class Property(
-        @JvmField final val value: Expression<String>,
+        @JvmField val value: Expression<String>,
     ) : Hashable {
 
         private var _hash: Int? = null 
@@ -49,6 +54,11 @@ class EntityWithComplexPropertyWithDefaultValue(
                 value.hashCode()
             _hash = hash
             return hash
+        }
+
+        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         fun copy(

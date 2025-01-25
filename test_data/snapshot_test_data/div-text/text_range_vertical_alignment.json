@@ -1,0 +1,266 @@
+{
+  "description": "Ranges with text vertical alignment",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "font_size": 12,
+      "font_weight": "medium",
+      "text_color": "#586E75"
+    },
+    "test_text": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#002B36"
+    }
+  },
+  "card": {
+    "log_id": "text_vertical_alignment",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FDF6E3"
+            }
+          ],
+          "items": [
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with font size and alignment"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "font_size": 10,
+                  "alignment_vertical": "center"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with font size, line height and alignment"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "font_size": 10,
+                  "line_height": 24,
+                  "alignment_vertical": "center"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Multiple ranges with alignment"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "line_height": 24,
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 11,
+                  "font_size": 10,
+                  "alignment_vertical": "bottom"
+                },
+                {
+                  "start": 12,
+                  "end": 17,
+                  "font_size": 10,
+                  "alignment_vertical": "center"
+                },
+                {
+                  "start": 18,
+                  "end": 21,
+                  "font_size": 10,
+                  "alignment_vertical": "top"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Multiple ranges with different font size and alignment"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "line_height": 24,
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 11,
+                  "font_size": 10,
+                  "alignment_vertical": "center"
+                },
+                {
+                  "start": 12,
+                  "end": 17,
+                  "font_size": 24,
+                  "alignment_vertical": "center"
+                },
+                {
+                  "start": 18,
+                  "end": 21,
+                  "font_size": 20,
+                  "alignment_vertical": "center"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Ranges with alignment in multiline text"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "line_height": 24,
+              "text": "Lorem ipsum\ndolor sit amet",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 11,
+                  "font_size": 10,
+                  "alignment_vertical": "center"
+                },
+                {
+                  "start": 12,
+                  "end": 17,
+                  "font_size": 24,
+                  "alignment_vertical": "center"
+                },
+                {
+                  "start": 18,
+                  "end": 21,
+                  "font_size": 20,
+                  "alignment_vertical": "center"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with alignment spanned on multiple lines"
+            },
+            {
+              "type": "test_text",
+              "width": {
+                "type": "fixed",
+                "value": 96
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 18,
+                  "font_size": 10,
+                  "alignment_vertical": "center"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with alignment spanned on multiple paragraphs"
+            },
+            {
+              "type": "test_text",
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum\ndolor sit amet",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 18,
+                  "font_size": 10,
+                  "alignment_vertical": "center"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

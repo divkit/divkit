@@ -9,6 +9,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+def buildDir = layout.buildDirectory.get().asFile
 def generatorOutputDir = "build/generated/sources/java"
 
 sourceSets {
@@ -25,9 +26,9 @@ sourceSets {
     }
 }
 
-def generateFunctionProvider = task "generateFunctionProvider"(type: JavaExec) {
+tasks.register("generateFunctionProvider", JavaExec) {
     classpath = sourceSets.generator.runtimeClasspath
-    main = "com.yandex.div.evaluable.function.BuiltinFunctionProviderGenerator"
+    getMainClass().set("com.yandex.div.evaluable.function.BuiltinFunctionProviderGenerator")
     workingDir(generatorOutputDir)
     outputs.dir(generatorOutputDir)
 }
@@ -40,11 +41,12 @@ tasks.named("sourcesJar").configure {
     dependsOn(generateFunctionProvider)
 }
 
-task "test${testVariant.capitalize()}UnitTest" {
+tasks.register("test${testVariant.capitalize()}UnitTest") {
     dependsOn test
 }
 
-task replJar(type: Jar, dependsOn: "testClasses") {
+tasks.register('replJar', Jar) {
+    dependsOn "testClasses"
     from "$buildDir/classes/kotlin/test"
     from "$buildDir/classes/kotlin/main"
     from {
@@ -69,6 +71,8 @@ dependencies {
     generatorImplementation libs.javax
     generatorCompileOnly libs.json
     generatorImplementation libs.kotlinpoet
+
+    testImplementation project(path: ':expression-test-common')
 
     testImplementation libs.json
     testImplementation libs.junit

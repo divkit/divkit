@@ -2,16 +2,17 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
 import 'entity.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithArray with EquatableMixin {
+
+class EntityWithArray extends Resolvable with EquatableMixin  {
   const EntityWithArray({
     required this.array,
   });
 
   static const type = "entity_with_array";
-  // at least 1 elements
+   // at least 1 elements
   final List<Entity> array;
 
   @override
@@ -25,16 +26,21 @@ class EntityWithArray with EquatableMixin {
       array: array ?? this.array,
     );
 
-  static EntityWithArray? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArray? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithArray(
-        array: safeParseObj(safeListMap(json['array'], (v) => safeParseObj(Entity.fromJson(v),)!),)!,
+        array: safeParseObj(safeListMap(json['array'], (v) => safeParseObj(Entity.fromJson(v),)!,),)!,
       );
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithArray resolve(DivVariableContext context) {
+    safeListResolve(array, (v) => v.resolve(context));
+    return this;
   }
 }

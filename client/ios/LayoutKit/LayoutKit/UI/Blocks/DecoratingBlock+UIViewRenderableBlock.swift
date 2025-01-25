@@ -178,7 +178,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         return
       }
 
-      updateContentHighlightState(animated: true)
+      updateHighlightState(animated: true)
     }
   }
 
@@ -188,7 +188,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         return
       }
 
-      updateContentHighlightState(animated: false)
+      updateHighlightState(animated: false)
     }
   }
 
@@ -385,15 +385,13 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
     configureRecognizers()
 
-    if #available(iOS 13.0, *) {
-      interactions.forEach(removeInteraction)
-      contextMenuDelegate = nil
-      if let longTapActions = model.longTapActions,
-         case let .contextMenu(contextMenu) = longTapActions {
-        let delegate = ContextMenuDelegate(contextMenu: contextMenu, view: self)
-        contextMenuDelegate = delegate
-        addInteraction(UIContextMenuInteraction(delegate: delegate))
-      }
+    interactions.forEach(removeInteraction)
+    contextMenuDelegate = nil
+    if let longTapActions = model.longTapActions,
+       case let .contextMenu(contextMenu) = longTapActions {
+      let delegate = ContextMenuDelegate(contextMenu: contextMenu, view: self)
+      contextMenuDelegate = delegate
+      addInteraction(UIContextMenuInteraction(delegate: delegate))
     }
 
     layer.masksToBounds = model.boundary.clipsToBounds
@@ -401,7 +399,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     setNeedsLayout()
   }
 
-  private func updateContentHighlightState(animated: Bool) {
+  private func updateHighlightState(animated: Bool) {
     updateContentBackgroundColor(animated: animated)
 
     guard let actionAnimation = model.actionAnimation(for: highlightState) else {
@@ -445,19 +443,36 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
+  private func onVisibleBoundsChangedInternal(from: CGRect, to: CGRect) {
     passVisibleBoundsChanged(from: from, to: to)
 
     if model.visibilityParams != nil {
+      if from == .zero, to == .zero { return }
       visibilityActionPerformers?.onVisibleBoundsChanged(to: to, bounds: bounds)
     }
   }
 
+  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
+    if let child = childView as? DelayedVisibilityActionView {
+      child.visibilityAction = { [weak self] in
+
+        guard let self else { return }
+        onVisibleBoundsChangedInternal(from: from, to: to)
+      }
+    } else {
+      onVisibleBoundsChangedInternal(from: from, to: to)
+    }
+  }
+
   func makeTooltipEvent(with info: TooltipInfo) -> TooltipEvent? {
-    guard let tooltipModel = model.tooltips.first(where: { $0.id == info.id }) else { return nil }
+    guard let tooltipModel = model.tooltips.first(where: { $0.id == info.id }), let window else {
+      return nil
+    }
     let tooltipView = tooltipModel.block.makeBlockView()
-    let frame = tooltipModel.calculateFrame(targeting: bounds)
-    tooltipView.frame = convert(frame, to: nil)
+    tooltipView.frame = tooltipModel.calculateFrame(
+      targeting: convert(bounds, to: nil),
+      constrainedBy: window.bounds
+    )
     return TooltipEvent(
       info: info,
       tooltipView: tooltipView,
@@ -483,14 +498,8 @@ extension DecoratingView {
       switch longTapActions {
       case let .actions(actions):
         actions.forEach { $0.perform(sendingFrom: self) }
-      case let .contextMenu(contextMenu):
-        if #available(iOS 13.0, *) {} else {
-          window?.rootViewController!.present(
-            contextMenu.makeAlertController(sender: self),
-            animated: true,
-            completion: nil
-          )
-        }
+      case .contextMenu:
+        break
       }
     }
   }
@@ -532,28 +541,6 @@ extension DecoratingView.Model {
 }
 
 private let contentAnimationDuration = UIStyles.AnimationDuration.touchHighlighting
-
-extension ContextMenu {
-  fileprivate func makeAlertController(
-    sender: UIResponder
-  ) -> UIAlertController {
-    let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
-    for item in items {
-      let action = item.action
-      let style: UIAlertAction.Style = item.isDestructive ? .destructive : .default
-      alert.addAction(UIAlertAction(
-        title: item.text,
-        style: style,
-        handler: { [action] _ in
-          action.perform(sendingFrom: sender)
-        }
-      ))
-    }
-
-    alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: nil))
-    return alert
-  }
-}
 
 extension BlurEffect {
   fileprivate func cast() -> UIBlurEffect.Style {

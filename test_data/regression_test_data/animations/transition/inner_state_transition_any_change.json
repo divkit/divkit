@@ -182,8 +182,8 @@
               },
               "alignment_horizontal": "right",
               "alignment_vertical": "top",
-              "inactive_icon_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/icons/star_outline.png",
-              "active_icon_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/icons/star_fill.png",
+              "inactive_icon_url": "https://yastatic.net/s3/home/divkit/star_outline.png",
+              "active_icon_url": "https://yastatic.net/s3/home/divkit/star_fill.png",
               "inactive_actions": [
                 {
                   "log_id": "press_inactive_button",

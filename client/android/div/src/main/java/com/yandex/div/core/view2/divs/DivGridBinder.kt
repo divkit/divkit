@@ -1,9 +1,9 @@
 package com.yandex.div.core.view2.divs
 
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
@@ -20,6 +20,7 @@ import com.yandex.div.internal.core.toDivItemBuilderResult
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
@@ -31,7 +32,6 @@ import javax.inject.Provider
 internal class DivGridBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val divPatchManager: DivPatchManager,
-    private val divPatchCache: DivPatchCache,
     private val divBinder: Provider<DivBinder>,
     private val divViewCreator: Provider<DivViewCreator>,
 ) : DivViewBinder<DivGrid, DivGridLayout> {
@@ -68,44 +68,10 @@ internal class DivGridBinder @Inject constructor(
 
         view.tryRebindPlainContainerChildren(divView, items.toDivItemBuilderResult(resolver), divViewCreator)
 
-        var viewsPositionDiff = 0
-        for (gridIndex in items.indices) {
-            val childDivValue = items[gridIndex].value()
-            val childView = view.getChildAt(gridIndex + viewsPositionDiff)
-            val childDivId = childDivValue.id
-            // applying div patch
-            if (childDivId != null && !divView.complexRebindInProgress) {
-                val patchViewsToAdd = divPatchManager.createViewsForId(context, childDivId)
-                val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)
-                if (patchViewsToAdd != null && patchDivs != null) {
-                    view.removeViewAt(gridIndex + viewsPositionDiff)
-                    for (patchIndex in patchViewsToAdd.indices) {
-                        val patchDivValue = patchDivs[patchIndex].value()
-                        val patchViews = patchViewsToAdd[patchIndex]
-                        val layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-                        view.addView(patchViews, gridIndex + viewsPositionDiff + patchIndex, layoutParams)
-                        if (patchDivValue.hasSightActions) {
-                            divView.bindViewToDiv(patchViews, patchDivs[patchIndex])
-                        }
-                        bindLayoutParams(patchViews, childDivValue, resolver)
-                    }
-                    viewsPositionDiff += patchViewsToAdd.size - 1
-                    continue
-                }
-            }
-            childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            divBinder.get().bind(context, childView, items[gridIndex], path)
-            bindLayoutParams(childView, childDivValue, resolver)
-            if (childDivValue.hasSightActions) {
-                divView.bindViewToDiv(childView, items[gridIndex])
-            } else {
-                divView.unbindViewFromDiv(childView)
-            }
-        }
-
+        val dispatchedItems = view.dispatchBinding(context, items, path)
         view.trackVisibilityActions(
             divView,
-            items.toDivItemBuilderResult(resolver),
+            dispatchedItems.toDivItemBuilderResult(resolver),
             oldDiv?.items?.toDivItemBuilderResult(resolver),
         )
     }
@@ -122,6 +88,59 @@ internal class DivGridBinder @Inject constructor(
         }
         addSubscription(horizontalAlignment.observe(resolver, callback))
         addSubscription(verticalAlignment.observe(resolver, callback))
+    }
+
+    private fun DivGridLayout.dispatchBinding(
+        bindingContext: BindingContext,
+        items: List<Div>,
+        path: DivStatePath
+    ): List<Div> {
+        val divView = bindingContext.divView
+        val resolver = bindingContext.expressionResolver
+        var shift = 0
+
+        val patchedItems = items.flatMapIndexed { index, item ->
+            applyPatchToChild(
+                bindingContext,
+                item,
+                index + shift
+            ).also { shift += it.size - 1 }
+        }
+
+        patchedItems.forEachIndexed { index, item ->
+            val childView = getChildAt(index)
+            val childDiv = item.value()
+            val childPath = childDiv.resolvePath(index, path)
+
+            childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            divBinder.get().bind(bindingContext, childView, item, childPath)
+            bindLayoutParams(childView, childDiv, resolver)
+            if (childDiv.hasSightActions) {
+                divView.bindViewToDiv(childView, item)
+            } else {
+                divView.unbindViewFromDiv(childView)
+            }
+        }
+        return patchedItems
+    }
+
+    private fun ViewGroup.applyPatchToChild(
+        bindingContext: BindingContext,
+        childDiv: Div,
+        childIndex: Int
+    ): List<Div> {
+        val divView = bindingContext.divView
+        val childId = childDiv.value().id
+        if (childId != null && !divView.complexRebindInProgress) {
+            val patch = divPatchManager.createViewsForId(bindingContext, childId) ?: return listOf(childDiv)
+            removeViewAt(childIndex)
+            var shift = 0
+            patch.forEach { (_, patchView) ->
+                addView(patchView, childIndex + shift++, DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT))
+            }
+            return patch.keys.toList()
+        }
+        return listOf(childDiv)
     }
 
     private fun bindLayoutParams(childView: View, childDiv: DivBase, resolver: ExpressionResolver) {

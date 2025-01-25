@@ -28,7 +28,8 @@ data class ViewPreCreationProfile(
     val slider: PreCreationModel = PreCreationModel(2),
     val input: PreCreationModel = PreCreationModel(2),
     val select: PreCreationModel = PreCreationModel(2),
-    val video: PreCreationModel = PreCreationModel(2)
+    val video: PreCreationModel = PreCreationModel(2),
+    val switch: PreCreationModel = PreCreationModel(2),
 ) {
     companion object {
         fun unconstrained(
@@ -49,7 +50,8 @@ data class ViewPreCreationProfile(
             sliderCapacity: Int = 2,
             inputCapacity: Int = 2,
             selectCapacity: Int = 2,
-            videoCapacity: Int = 2
+            videoCapacity: Int = 2,
+            switchCapacity: Int = 2
         ): ViewPreCreationProfile = ViewPreCreationProfile(
             id = id,
             text = PreCreationModel(textCapacity),
@@ -68,7 +70,8 @@ data class ViewPreCreationProfile(
             slider = PreCreationModel(sliderCapacity),
             input = PreCreationModel(inputCapacity),
             select = PreCreationModel(selectCapacity),
-            video = PreCreationModel(videoCapacity)
+            video = PreCreationModel(videoCapacity),
+            switch = PreCreationModel(switchCapacity)
         )
     }
 }
@@ -91,7 +94,8 @@ fun FixedPreCreationProfile(
     sliderCapacity: Int = 2,
     inputCapacity: Int = 2,
     selectCapacity: Int = 2,
-    videoCapacity: Int = 2
+    videoCapacity: Int = 2,
+    switchCapacity: Int = 2
 ): ViewPreCreationProfile = ViewPreCreationProfile.unconstrained(
     textCapacity = textCapacity,
     imageCapacity = imageCapacity,
@@ -109,5 +113,6 @@ fun FixedPreCreationProfile(
     sliderCapacity = sliderCapacity,
     inputCapacity = inputCapacity,
     selectCapacity = selectCapacity,
-    videoCapacity = videoCapacity
+    videoCapacity = videoCapacity,
+    switchCapacity = switchCapacity
 )

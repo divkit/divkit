@@ -1,5 +1,4 @@
 {
-  "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_tabs",
   "codegen": {
     "swift": {
@@ -186,7 +185,8 @@
           "$ref": "#/definitions/delimiter_style",
           "$description": "translations.json#/div_tabs_tab_title_delimiter_delimiter_style",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "selected_tab": {

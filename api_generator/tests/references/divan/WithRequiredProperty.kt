@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, property`.
  */
 @Generated
-class WithRequiredProperty internal constructor(
+data class WithRequiredProperty internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -42,7 +42,7 @@ class WithRequiredProperty internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val property: Property<String>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

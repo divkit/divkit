@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithArrayOfExpressions(
-    @JvmField final val items: ExpressionList<String>, // at least 1 elements
+    @JvmField val items: ExpressionList<String>, // at least 1 elements
 ) : Hashable {
 
     private var _propertiesHash: Int? = null 
@@ -31,6 +32,11 @@ class EntityWithArrayOfExpressions(
         return hash
     }
 
+    fun equals(other: EntityWithArrayOfExpressions?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.evaluate(resolver).compareWith(other.items.evaluate(otherResolver)) { a, b -> a == b }
+    }
+
     fun copy(
         items: ExpressionList<String> = this.items,
     ) = EntityWithArrayOfExpressions(
@@ -39,8 +45,5 @@ class EntityWithArrayOfExpressions(
 
     companion object {
         const val TYPE = "entity_with_array_of_expressions"
-
-        private val ITEMS_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
     }
-
 }

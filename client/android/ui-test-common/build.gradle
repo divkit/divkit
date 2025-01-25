@@ -17,17 +17,7 @@ dependencies {
     api libs.androidx.espresso.core
     api libs.androidx.espresso.intents
 
-    api libs.allure.common
-    api libs.allure.model
-    api (libs.allure.android)  {
-        artifact {
-            type = "aar"
-            transitive = false
-        }
-    }
-
     implementation project(path: ':div-core')
     implementation libs.androidx.test.uiautomator
     implementation libs.fest.reflect
-    implementation libs.gson  // used by allure
 }

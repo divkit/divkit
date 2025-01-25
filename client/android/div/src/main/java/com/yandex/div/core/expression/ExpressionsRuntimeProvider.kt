@@ -4,6 +4,7 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -47,7 +48,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val errorCollector = errorCollectors.getOrCreate(tag, data)
         divDataTags.getOrPut(div2View, ::mutableSetOf).add(tag.id)
         ensureVariablesSynced(result.variableController, data, errorCollector)
-        result.triggersController.ensureTriggersSynced(data.variableTriggers ?: emptyList())
+        result.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
         return result
     }
 
@@ -62,8 +63,8 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     }
 
     internal fun cleanupRuntime(view: Div2View) {
-        divDataTags[view]?.forEach {
-            runtimes[it]?.cleanup()
+        divDataTags[view]?.forEach { tag ->
+            runtimes[tag]?.runtimeStore?.cleanup()
         }
         divDataTags.remove(view)
     }
@@ -124,12 +125,13 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             addSource(globalVariableController.variableSource)
         }
 
+        val functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
         val evaluationContext = EvaluationContext(
             variableProvider = variableController,
             storedValueProvider = { storedValueName ->
                 storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
             },
-            functionProvider = GeneratedBuiltinFunctionProvider,
+            functionProvider = functionProvider,
             warningSender = { expressionContext, message ->
                 val rawExpr = expressionContext.evaluable.rawExpr
                 val warning = "Warning occurred while evaluating '$rawExpr': $message"
@@ -140,10 +142,18 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
         val evaluator = Evaluator(evaluationContext)
 
+        val runtimeStore = RuntimeStore(evaluator, errorCollector, logger, divActionBinder)
+        val callback = ExpressionResolverImpl.OnCreateCallback { resolver, variableController, functionProvider ->
+            runtimeStore.putRuntime(
+                runtime = ExpressionsRuntime(resolver, variableController, null, functionProvider, runtimeStore)
+            )
+        }
+
         val expressionResolver = ExpressionResolverImpl(
             variableController,
             evaluator,
             errorCollector,
+            callback,
         )
 
         val triggersController = TriggersController(
@@ -159,7 +169,9 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             expressionResolver,
             variableController,
             triggersController,
-        )
+            functionProvider,
+            runtimeStore,
+        ).also { runtimeStore.rootRuntime = it }
     }
 }
 

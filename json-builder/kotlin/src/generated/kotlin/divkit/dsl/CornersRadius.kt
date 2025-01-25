@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [cornersRadius].
  */
 @Generated
-class CornersRadius internal constructor(
+data class CornersRadius internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -39,7 +39,7 @@ class CornersRadius internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Rounding radius of a lower left corner. If not specified, then `corner_radius` is used.
          */

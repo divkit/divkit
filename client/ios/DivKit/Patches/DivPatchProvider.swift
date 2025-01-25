@@ -22,8 +22,28 @@ public protocol DivPatchProvider {
   /// `Error` on failure.
   func getPatch(url: URL, completion: @escaping DivPatchProviderCompletion)
 
+  /// Downloads a patch from the specified URL.
+  ///
+  /// - Parameters:
+  ///   - url: The URL from which to download the patch.
+  ///   - action: Corresponding action info.
+  ///   - completion: The completion handler to be called when the download is complete.
+  ///                 The `Result` object contains the downloaded patch data on success or an
+  /// `Error` on failure.
+  func getPatch(url: URL, info: DivActionInfo, completion: @escaping DivPatchProviderCompletion)
+
   /// Cancels any ongoing patch download requests.
   func cancelRequests()
+}
+
+extension DivPatchProvider {
+  public func getPatch(
+    url: URL,
+    info _: DivActionInfo,
+    completion: @escaping DivPatchProviderCompletion
+  ) {
+    getPatch(url: url, completion: completion)
+  }
 }
 
 public typealias DivPatchProviderCompletion = (Result<DivPatch, Error>) -> Void

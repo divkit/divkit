@@ -2,6 +2,7 @@ import Foundation
 
 import DivKit
 import DivKitExtensions
+import DivKitMarkdownExtension
 import LayoutKit
 import VGSL
 
@@ -31,9 +32,12 @@ enum AppComponents {
       extensionHandlers: [
         lottieExtensionHanlder,
         sizeProviderExtensionHandler,
+        InputAccessoryViewExtensionHandler(viewProvider: AccessoryViewProvider()),
         ShimmerImagePreviewExtension(),
         VideoDurationExtensionHandler(),
         GestureExtensionHandler(),
+        MarkdownExtensionHandler(),
+        ShineExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,

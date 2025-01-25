@@ -22,12 +22,12 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivSliderData } from '../../types/slider';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import { ACTION_CTX, ActionCtxValue } from '../../context/action';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
     import { genClassName } from '../../utils/genClassName';
-    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { correctDrawableStyle, type DrawableStyle } from '../../utils/correctDrawableStyles';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
-    import { correctSliderTextStyle, TransformedSliderTextStyle } from '../../utils/correctSliderTextStyle';
+    import { correctSliderTextStyle, type TransformedSliderTextStyle } from '../../utils/correctSliderTextStyle';
     import { wrapError } from '../../utils/wrapError';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { clamp } from '../../utils/clamp';
@@ -35,6 +35,7 @@
     import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
     import { debounce } from '../../utils/debounce';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivSliderData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -354,8 +355,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerFocusable(prevId, {
                 focus() {
                     if (input) {
@@ -489,4 +490,8 @@
             </div>
         </div>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

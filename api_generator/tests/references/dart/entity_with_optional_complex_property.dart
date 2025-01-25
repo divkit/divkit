@@ -2,15 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithOptionalComplexProperty with EquatableMixin {
+
+class EntityWithOptionalComplexProperty extends Resolvable with EquatableMixin  {
   const EntityWithOptionalComplexProperty({
     this.property,
   });
 
   static const type = "entity_with_optional_complex_property";
-
   final EntityWithOptionalComplexPropertyProperty? property;
 
   @override
@@ -24,7 +24,7 @@ class EntityWithOptionalComplexProperty with EquatableMixin {
       property: property != null ? property.call() : this.property,
     );
 
-  static EntityWithOptionalComplexProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithOptionalComplexProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,13 +36,18 @@ class EntityWithOptionalComplexProperty with EquatableMixin {
       return null;
     }
   }
+
+  EntityWithOptionalComplexProperty resolve(DivVariableContext context) {
+    property?.resolve(context);
+    return this;
+  }
 }
 
-class EntityWithOptionalComplexPropertyProperty with EquatableMixin {
+
+class EntityWithOptionalComplexPropertyProperty extends Resolvable with EquatableMixin  {
   const EntityWithOptionalComplexPropertyProperty({
     required this.value,
   });
-
 
   final Expression<Uri> value;
 
@@ -57,7 +62,7 @@ class EntityWithOptionalComplexPropertyProperty with EquatableMixin {
       value: value ?? this.value,
     );
 
-  static EntityWithOptionalComplexPropertyProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithOptionalComplexPropertyProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -68,5 +73,10 @@ class EntityWithOptionalComplexPropertyProperty with EquatableMixin {
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithOptionalComplexPropertyProperty resolve(DivVariableContext context) {
+    value.resolve(context);
+    return this;
   }
 }

@@ -7,10 +7,10 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivVideoData, VideoElements } from '../../types/video';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { createVariable } from '../../expressions/variable';
-    import { PreparedVideoSource, correctVideoSource } from '../../utils/correctVideoSource';
+    import { type PreparedVideoSource, correctVideoSource } from '../../utils/correctVideoSource';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Outer from '../utilities/Outer.svelte';
     import { prepareBase64 } from '../../utils/prepareBase64';
@@ -18,6 +18,7 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { genClassName } from '../../utils/genClassName';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivVideoData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -134,8 +135,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !hasError && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !hasError && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<VideoElements>(prevId, {
                 pause,
                 start
@@ -207,6 +208,7 @@
         customActions={'video'}
         {componentContext}
         {layoutParams}
+        heightByAspect={aspectPaddingBottom !== '0'}
     >
         {#if mods.aspect}
             <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
@@ -260,4 +262,8 @@
             </video>
         {/if}
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

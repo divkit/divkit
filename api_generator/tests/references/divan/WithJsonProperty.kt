@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class WithJsonProperty internal constructor(
+data class WithJsonProperty internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -42,7 +42,7 @@ class WithJsonProperty internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Default value: `{ "key": "value", "items": [ "value" ] }`.
          */

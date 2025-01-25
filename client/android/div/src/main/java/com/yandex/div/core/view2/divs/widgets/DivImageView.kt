@@ -18,7 +18,6 @@ internal open class DivImageView @JvmOverloads constructor(
     DivExtensionView {
 
     internal var imageUrl: Uri? = null
-    internal var preview: String? = null
 
     init {
         super.setAdjustViewBounds(true)

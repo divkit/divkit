@@ -1,19 +1,13 @@
 package com.yandex.test.screenshot
 
-import java.io.File
-
 private const val TEST_CASE_REFERENCES_FILE_NAME = "testcase_references.json"
 
-
-class TestCaseReferencesFileWriter(fileDir: File) {
-    private val referencesFile = File(fileDir, TEST_CASE_REFERENCES_FILE_NAME).apply {
-        if (!exists()) {
-            createNewFile()
-        }
-    }
+object TestCaseReferencesFileWriter {
+    private val referencesFileWriter = TestFile(TEST_CASE_REFERENCES_FILE_NAME).open().writer()
 
     fun append(caseFilePath: String, screenshotPaths: Collection<String>) {
-        referencesFile.appendText(createJson(caseFilePath, screenshotPaths))
+        referencesFileWriter.write(createJson(caseFilePath, screenshotPaths))
+        referencesFileWriter.flush()
     }
 
     private fun createJson(caseFilePath: String, screenshotPaths: Collection<String>): String {

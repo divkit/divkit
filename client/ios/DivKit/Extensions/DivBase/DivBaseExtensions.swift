@@ -14,19 +14,43 @@ extension DivBase {
   ) throws -> Block {
     let path = context.parentPath
 
+    context.functionsStorage?.setIfNeeded(
+      path: path,
+      functions: functions ?? []
+    )
     context.variablesStorage.initializeIfNeeded(
       path: path,
       variables: variables?.extractDivVariableValues() ?? [:]
     )
+    context.triggersStorage?.setIfNeeded(
+      path: path,
+      triggers: variableTriggers ?? []
+    )
+
+    if let id = context.elementId ?? id {
+      context.idToPath[path.cardId.path + id] = path
+    }
+
+    animators?.forEach { animator in
+      context.animatorController?.initializeIfNeeded(
+        path: path,
+        id: animator.id,
+        animator: Variable { animator.resolve(context) }
+      )
+    }
 
     let extensionHandlers = context.getExtensionHandlers(for: self)
     for extensionHandler in extensionHandlers {
       extensionHandler.accept(div: self, context: context)
     }
 
-    let statePath = context.parentDivStatePath ?? DivData.rootPath
-
     let expressionResolver = context.expressionResolver
+    if let forwardId = focus?.nextFocusIds?.resolveForward(expressionResolver),
+       let currentId = self.id {
+      context.accessibilityElementsStorage.put(id: currentId, nextId: forwardId)
+    }
+
+    let statePath = context.parentDivStatePath ?? DivData.rootPath
     let visibility = resolveVisibility(expressionResolver)
     if visibility == .gone {
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
@@ -49,7 +73,7 @@ extension DivBase {
     }
 
     block = block.addingEdgeInsets(
-      applyPaddings ? paddings.resolve(context): .zero,
+      applyPaddings ? paddings.resolve(context) : .zero,
       clipsToBounds: clipToBounds
     )
 
@@ -121,7 +145,7 @@ extension DivBase {
       )
     }
 
-    let clipToBounds = rotation == nil && shadow == nil
+    let clipToBounds = [nil, 0.0].contains(rotation) && shadow == nil
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
       .addActions(context: context, actionsHolder: actionsHolder, clipToBounds: clipToBounds)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)

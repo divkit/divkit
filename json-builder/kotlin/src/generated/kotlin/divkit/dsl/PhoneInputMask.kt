@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, raw_text_variable`.
  */
 @Generated
-class PhoneInputMask internal constructor(
+data class PhoneInputMask internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : InputMask {
@@ -40,7 +40,7 @@ class PhoneInputMask internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Name of the variable to store the unprocessed value.
          */

@@ -5,6 +5,7 @@ import VGSL
 
 final class DivTimerStorage {
   private let variablesStorage: DivVariablesStorage
+  private let functionsStorage: DivFunctionsStorage
   private let actionHandler: DivActionHandler
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let timerScheduler = TimerScheduler()
@@ -16,12 +17,14 @@ final class DivTimerStorage {
 
   init(
     variablesStorage: DivVariablesStorage,
+    functionsStorage: DivFunctionsStorage,
     actionHandler: DivActionHandler,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter
   ) {
     self.variablesStorage = variablesStorage
+    self.functionsStorage = functionsStorage
     self.actionHandler = actionHandler
     self.updateCard = updateCard
     self.persistentValuesStorage = persistentValuesStorage
@@ -139,6 +142,7 @@ final class DivTimerStorage {
         self?.updateCard(.timer(cardId))
       },
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter
     )

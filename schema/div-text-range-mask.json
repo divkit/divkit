@@ -1,0 +1,10 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-text-range-mask-particles.json"
+    },
+    {
+      "$ref": "div-text-range-mask-solid.json"
+    }
+  ]
+}

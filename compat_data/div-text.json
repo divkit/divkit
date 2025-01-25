@@ -56,5 +56,60 @@
                 "version_added": "30.7.0"
             }
         }
+    }, {
+        "id": "text_images_accessibility",
+        "name": "<code>accessibility</code> property for images inside text",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            }
+        }
+    }, {
+        "id": "text_items_alignment_vertical",
+        "name": "<code>alignment_vertical</code> property for images and ranges inside text",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
+            }
+        }
+    }, {
+        "id": "text_tighten_width",
+        "name": "Text <code>tighten_width</code> property, that removes unnecessary horizontal paddings in multiline texts",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "ios": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "text_optional_start_end",
+        "name": "Optional properties of the <code>start</code> and <code>end</code> of the <code>text</code> <code>range</code>, which were originally required",
+        "compat": {
+            "android": {
+                "version_added": "30.22.0"
+            },
+            "ios": {
+                "version_added": "30.22.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
+            }
+        }
+    }, {
+        "id": "text_range_background_cloud",
+        "name": "<code>cloud</code> background type for the range of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.22.0"
+            },
+            "web": {
+                "version_added": "30.24.0"
+            }
+        }
     }]
 }

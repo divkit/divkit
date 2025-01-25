@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, content`.
  */
 @Generated
-class ActionCopyToClipboard internal constructor(
+data class ActionCopyToClipboard internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -40,7 +40,7 @@ class ActionCopyToClipboard internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val content: Property<ActionCopyToClipboardContent>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

@@ -15,7 +15,26 @@ class Template<T : Div> internal constructor(
     val div: T,
     val dependencies: List<Template<out Div>>,
     val supplements: Map<SupplementKey<*>, Supplement>,
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other == null) return false
+        if (other !is Template<*>) {
+            return false
+        }
+        return name == other.name &&
+            div == other.div &&
+            dependencies == other.dependencies
+    }
+
+    override fun hashCode(): Int {
+        var result = 1
+        result = 31 * result + name.hashCode()
+        result = 31 * result + div.hashCode()
+        result = 31 * result + dependencies.hashCode()
+        return result
+    }
+}
 
 
 fun <T : Div> template(name: String, builder: TemplateScope.() -> T): Template<T> {

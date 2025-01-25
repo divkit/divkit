@@ -10,19 +10,23 @@ void makeGoldenTest({
   CustomPump? customPump,
 }) {
   testGoldens(description, (tester) async {
-    await tester.pumpAutoSizeWidgetBuilder(
-      builder: builder,
-      afterBuild: () => enhancedScreenMatchesGolden(
-        tester,
-        fileName,
-        customPump: customPump,
-      ),
-      device: Devices.phone375x500,
-      wrapper: (child) => MaterialApp(
-        supportedLocales: const [Locale('en')],
-        debugShowCheckedModeBanner: false,
-        home: child,
+    await loadAllNetworkImages(
+      tester,
+      builder: () async => tester.pumpAutoSizeWidgetBuilder(
+        builder: builder,
+        device: Devices.phone375x500,
+        wrapper: (child) => MaterialApp(
+          supportedLocales: const [Locale('en')],
+          debugShowCheckedModeBanner: false,
+          home: child,
+        ),
       ),
     );
+    await enhancedScreenMatchesGolden(
+      tester,
+      fileName,
+      customPump: customPump,
+    );
+    await cleanUpNetworkImageMocks(tester);
   });
 }

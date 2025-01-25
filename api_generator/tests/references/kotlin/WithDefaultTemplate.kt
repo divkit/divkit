@@ -1,34 +1,31 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class WithDefaultTemplate : JSONSerializable, JsonTemplate<WithDefault> {
 
-    constructor (
+    constructor()
+
+    constructor(
         env: ParsingEnvironment,
         parent: WithDefaultTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
     ) {
-        val logger = env.logger
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): WithDefault {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): WithDefault {
         return WithDefault()
     }
 
@@ -45,5 +42,4 @@ class WithDefaultTemplate : JSONSerializable, JsonTemplate<WithDefault> {
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> WithDefaultTemplate(env, json = it) }
     }
-
 }

@@ -1,0 +1,63 @@
+{
+  "description": "Pager with wrap_content height and children with different height have height of the tallest initially visible child.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "block": {
+      "type": "container",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#aaaaaa"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "$value": "block_height"
+      }
+    }
+  },
+  "card": {
+    "log_id": "pager_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "item_spacing": {
+            "type": "fixed",
+            "value": 4
+          },
+          "layout_mode": {
+            "type": "fixed",
+            "neighbour_page_width": {
+              "type": "fixed",
+              "value": 20
+            }
+          },
+          "default_item": 1,
+          "items": [
+            {
+              "type": "block",
+              "block_height": 70
+            },
+            {
+              "type": "block",
+              "block_height": 30
+            },
+            {
+              "type": "block",
+              "block_height": 50
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

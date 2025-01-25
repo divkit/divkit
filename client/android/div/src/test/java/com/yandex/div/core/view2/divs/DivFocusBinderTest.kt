@@ -58,8 +58,8 @@ class DivFocusBinderTest {
     private val resolver = mock<ExpressionResolver>()
     private val context = BindingContext.createEmpty(divView).getFor(resolver)
     private val defaultBorder = DivBorder(hasShadow = Expression.constant(true))
-    private val focusActions = listOf(mock<DivAction>())
-    private val blurActions = listOf(mock<DivAction>())
+    private val focusActions = listOf(mockDivAction("focus"))
+    private val blurActions = listOf(mockDivAction("blur"))
 
     private val underTest = DivFocusBinder(actionBinder)
 
@@ -223,7 +223,7 @@ class DivFocusBinderTest {
 
         onFocusChange(true)
 
-        verify(view, never()).setBorder(any(), eq(view), any())
+        verify(view, never()).setBorder(any(), any(), eq(view))
     }
 
     @Test
@@ -235,7 +235,7 @@ class DivFocusBinderTest {
 
         onFocusChange(false)
 
-        verify(view, never()).setBorder(any(), eq(view), any())
+        verify(view, never()).setBorder(any(), any(), eq(view))
     }
 
     @Test
@@ -339,7 +339,7 @@ class DivFocusBinderTest {
 
     @Test
     fun `handle focus actions on focus after rebind actions`() {
-        val newActions = listOf(mock<DivAction>())
+        val newActions = listOf(mockDivAction("new_focus"))
         bindActions(focusActions, null)
         bindActions(newActions, null)
 
@@ -351,7 +351,7 @@ class DivFocusBinderTest {
 
     @Test
     fun `handle blur actions on blur after rebind actions`() {
-        val newActions = listOf(mock<DivAction>())
+        val newActions = listOf(mockDivAction("new_blur"))
         bindActions(null, blurActions)
         bindActions(null, newActions)
 
@@ -383,10 +383,17 @@ class DivFocusBinderTest {
 
     private fun onFocusChange(hasFocus: Boolean) = focusListener?.onFocusChange(view, hasFocus)
 
+    private fun mockDivAction(id: String): DivAction {
+        return DivAction(
+            logId = Expression.constant(id),
+            url = mock()
+        )
+    }
+
     private fun verifyBorderSet(
         border: DivBorder = defaultBorder,
         mode: VerificationMode = times(1)
-    ) = verify(view, mode).setBorder(border, view, resolver)
+    ) = verify(view, mode).setBorder(any(), eq(border), eq(view))
 
     private fun verifyNoElevation() = verifyElevation(0f)
 

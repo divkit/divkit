@@ -1,6 +1,4 @@
-import 'package:divkit/src/core/variable/variable.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/divkit.dart';
 
 extension PassDivVariable on DivVariable {
   /// Creating a reactive variable from raw data.

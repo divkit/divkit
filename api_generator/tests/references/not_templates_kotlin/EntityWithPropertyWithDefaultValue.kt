@@ -1,26 +1,22 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithPropertyWithDefaultValue(
-    @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
-    @JvmField final val nested: Nested? = null,
-    @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+    @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+    @JvmField val nested: Nested? = null,
+    @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -38,13 +34,11 @@ class EntityWithPropertyWithDefaultValue(
         return hash
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.writeExpression(key = "int", value = int)
-        json.write(key = "nested", value = nested)
-        json.write(key = "type", value = TYPE)
-        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
-        return json
+    fun equals(other: EntityWithPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
+            (nested?.equals(other.nested, resolver, otherResolver) ?: (other.nested == null)) &&
+            url.evaluate(resolver) == other.url.evaluate(otherResolver)
     }
 
     fun copy(
@@ -56,6 +50,15 @@ class EntityWithPropertyWithDefaultValue(
         nested = nested,
         url = url,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.writeExpression(key = "int", value = int)
+        json.write(key = "nested", value = nested)
+        json.write(key = "type", value = TYPE)
+        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_property_with_default_value"
@@ -70,7 +73,7 @@ class EntityWithPropertyWithDefaultValue(
             return EntityWithPropertyWithDefaultValue(
                 int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
                 nested = JsonParser.readOptional(json, "nested", Nested.CREATOR, logger, env),
-                url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
+                url = JsonParser.readOptionalExpression(json, "url", ANY_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
             )
         }
 
@@ -80,12 +83,10 @@ class EntityWithPropertyWithDefaultValue(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValue(env, json = it) }
     }
 
-
-    @Mockable
     class Nested(
-        @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
-        @JvmField final val nonOptional: Expression<String>,
-        @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+        @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+        @JvmField val nonOptional: Expression<String>,
+        @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 
@@ -103,12 +104,11 @@ class EntityWithPropertyWithDefaultValue(
             return hash
         }
 
-        override fun writeToJSON(): JSONObject {
-            val json = JSONObject()
-            json.writeExpression(key = "int", value = int)
-            json.writeExpression(key = "non_optional", value = nonOptional)
-            json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
-            return json
+        fun equals(other: Nested?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
+                nonOptional.evaluate(resolver) == other.nonOptional.evaluate(otherResolver) &&
+                url.evaluate(resolver) == other.url.evaluate(otherResolver)
         }
 
         fun copy(
@@ -121,6 +121,14 @@ class EntityWithPropertyWithDefaultValue(
             url = url,
         )
 
+        override fun writeToJSON(): JSONObject {
+            val json = JSONObject()
+            json.writeExpression(key = "int", value = int)
+            json.writeExpression(key = "non_optional", value = nonOptional)
+            json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+            return json
+        }
+
         companion object {
             private val INT_DEFAULT_VALUE = Expression.constant(0L)
             private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
@@ -132,7 +140,7 @@ class EntityWithPropertyWithDefaultValue(
                 return Nested(
                     int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
                     nonOptional = JsonParser.readExpression(json, "non_optional", logger, env, TYPE_HELPER_STRING),
-                    url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
+                    url = JsonParser.readOptionalExpression(json, "url", ANY_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
                 )
             }
 
@@ -141,6 +149,5 @@ class EntityWithPropertyWithDefaultValue(
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Nested(env, json = it) }
         }
-
     }
 }

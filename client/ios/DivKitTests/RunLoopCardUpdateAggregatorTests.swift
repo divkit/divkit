@@ -70,7 +70,7 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
   }
 }
 
-extension DivActionURLHandler.UpdateReason: Equatable {
+extension DivActionURLHandler.UpdateReason: Swift.Equatable {
   public static func ==(
     lhs: DivActionURLHandler.UpdateReason,
     rhs: DivActionURLHandler.UpdateReason

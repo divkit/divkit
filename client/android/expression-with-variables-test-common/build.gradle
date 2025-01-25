@@ -1,0 +1,10 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+
+android {
+    namespace 'com.yandex.div.test.expression'
+}
+
+dependencies {
+    implementation project(path: ':div')
+    api project(path: ':expression-test-common')
+}

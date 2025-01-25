@@ -23,6 +23,7 @@ extension TextBlock {
       images: block.images,
       accessibilityElement: nil,
       truncationToken: nil,
+      additionalTextInsets: block.additionalTextInsets,
       canSelect: block.canSelect
     )
   }

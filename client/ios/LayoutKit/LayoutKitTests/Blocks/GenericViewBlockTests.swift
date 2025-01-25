@@ -36,11 +36,10 @@ final class GenericViewBlockTests: XCTestCase {
 }
 
 private func makeBlock(_ content: GenericViewBlock.Content) -> GenericViewBlock {
-  return GenericViewBlock(content: content, width: .resizable, height: .resizable)
+  GenericViewBlock(content: content, width: .resizable, height: .resizable)
 }
 
 extension GenericViewBlock {
-
   fileprivate func configure(_ view: UIView & BlockViewProtocol) {
     configureBlockView(
       view,

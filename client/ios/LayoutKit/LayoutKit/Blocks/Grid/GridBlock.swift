@@ -242,6 +242,32 @@ extension GridBlock {
   }
 }
 
+extension GridBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> GridBlock {
+    let newItems = try items.map {
+      try GridBlock.Item(
+        span: $0.span,
+        weight: $0.weight,
+        contents: $0.contents.updated(path: path, isFocused: isFocused),
+        alignment: $0.alignment
+      )
+    }
+
+    let itemsChanged = zip(newItems, items).contains { $0.contents !== $1.contents }
+
+    return itemsChanged
+      ? GridBlock(
+        widthTrait: widthTrait,
+        heightTrait: heightTrait,
+        contentAlignment: contentAlignment,
+        items: newItems,
+        columnCount: columnCount,
+        grid: grid
+      )
+      : self
+  }
+}
+
 extension GridBlock.Item {
   public static func ==(lhs: GridBlock.Item, rhs: GridBlock.Item) -> Bool {
     lhs.span == rhs.span

@@ -13,6 +13,7 @@ public final class DivGrid: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnCount: Expression<Int> // constraint: number >= 0
@@ -23,6 +24,7 @@ public final class DivGrid: DivBase {
   public let doubletapActions: [DivAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let items: [Div]?
@@ -39,6 +41,7 @@ public final class DivGrid: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
@@ -108,6 +111,7 @@ public final class DivGrid: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
     alpha: Expression<Double>?,
+    animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
     columnCount: Expression<Int>,
@@ -118,6 +122,7 @@ public final class DivGrid: DivBase {
     doubletapActions: [DivAction]?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
+    functions: [DivFunction]?,
     height: DivSize?,
     id: String?,
     items: [Div]?,
@@ -134,6 +139,7 @@ public final class DivGrid: DivBase {
     transitionIn: DivAppearanceTransition?,
     transitionOut: DivAppearanceTransition?,
     transitionTriggers: [DivTransitionTrigger]?,
+    variableTriggers: [DivTrigger]?,
     variables: [DivVariable]?,
     visibility: Expression<DivVisibility>?,
     visibilityAction: DivVisibilityAction?,
@@ -147,6 +153,7 @@ public final class DivGrid: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnCount = columnCount
@@ -157,6 +164,7 @@ public final class DivGrid: DivBase {
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.items = items
@@ -173,6 +181,7 @@ public final class DivGrid: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
@@ -200,64 +209,71 @@ extension DivGrid: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.animators == rhs.animators,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnCount == rhs.columnCount,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
       lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.doubletapActions == rhs.doubletapActions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.doubletapActions == rhs.doubletapActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height,
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
       lhs.items == rhs.items,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
-      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.paddings == rhs.paddings,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectedActions == rhs.selectedActions,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
@@ -290,6 +306,7 @@ extension DivGrid: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_count"] = columnCount.toValidSerializationValue()
@@ -300,6 +317,7 @@ extension DivGrid: Serializable {
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["items"] = items?.map { $0.toDictionary() }
@@ -316,6 +334,7 @@ extension DivGrid: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()

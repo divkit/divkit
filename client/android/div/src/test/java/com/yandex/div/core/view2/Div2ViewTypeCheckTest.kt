@@ -60,7 +60,7 @@ class Div2ViewTypeCheckTest {
         val parsingExceptions = parsingErrors.map { it as ParsingException }
         Assert.assertEquals(ParsingExceptionReason.TYPE_MISMATCH, parsingExceptions[0].reason)
         Assert.assertEquals(ParsingExceptionReason.TYPE_MISMATCH, parsingExceptions[1].reason)
-        Assert.assertEquals(ParsingExceptionReason.INVALID_VALUE, parsingExceptions[2].reason)
+        Assert.assertEquals(ParsingExceptionReason.DEPENDENCY_FAILED, parsingExceptions[2].reason)
         Assert.assertEquals("Value '[]' for key 'colors' is not valid",
             (parsingExceptions[2].cause as ParsingException).message)
     }

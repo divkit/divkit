@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.annotation.MainThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.local.needLocalRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.divs.DivContainerBinder
 import com.yandex.div.core.view2.divs.DivCustomBinder
 import com.yandex.div.core.view2.divs.DivGifImageBinder
@@ -19,6 +21,7 @@ import com.yandex.div.core.view2.divs.DivSelectBinder
 import com.yandex.div.core.view2.divs.DivSeparatorBinder
 import com.yandex.div.core.view2.divs.DivSliderBinder
 import com.yandex.div.core.view2.divs.DivStateBinder
+import com.yandex.div.core.view2.divs.DivSwitchBinder
 import com.yandex.div.core.view2.divs.DivTextBinder
 import com.yandex.div.core.view2.divs.DivVideoBinder
 import com.yandex.div.core.view2.divs.applyMargins
@@ -40,6 +43,7 @@ import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -58,6 +62,7 @@ import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
+import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVideo
@@ -84,10 +89,12 @@ internal class DivBinder @Inject constructor(
     private val selectBinder: DivSelectBinder,
     private val videoBinder: DivVideoBinder,
     private val extensionController: DivExtensionController,
-    private val pagerIndicatorConnector: PagerIndicatorConnector
+    private val pagerIndicatorConnector: PagerIndicatorConnector,
+    private val switchBinder: DivSwitchBinder
 ) {
     @MainThread
-    fun bind(context: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
+    fun bind(parentContext: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
+        val context = getBindingContext(parentContext, div, path)
         val divView = context.divView
         val resolver = context.expressionResolver
         divView.currentRebindReusableList?.pop(div)?.let {
@@ -118,10 +125,11 @@ internal class DivBinder @Inject constructor(
             is Div.State -> bindState(context, view, div.value, path)
             is Div.Custom -> bindCustom(context, view, div.value, path)
             is Div.Indicator -> bindIndicator(context, view, div.value)
-            is Div.Slider -> bindSlider(context, view, div.value)
-            is Div.Input -> bindInput(context, view, div.value)
-            is Div.Select -> bindSelect(context, view, div.value)
-            is Div.Video -> bindVideo(context, view, div.value)
+            is Div.Slider -> bindSlider(context, view, div.value, path)
+            is Div.Input -> bindInput(context, view, div.value, path)
+            is Div.Select -> bindSelect(context, view, div.value, path)
+            is Div.Video -> bindVideo(context, view, div.value, path)
+            is Div.Switch -> bindSwitch(context, view, div.value, path)
         }.also {
             // extensionController bound new CustomView in DivCustomBinder after replacing in parent
             if (div !is Div.Custom) {
@@ -183,20 +191,24 @@ internal class DivBinder @Inject constructor(
         indicatorBinder.bindView(context, view as DivPagerIndicatorView, data)
     }
 
-    private fun bindSlider(context: BindingContext, view: View, data: DivSlider) {
-        sliderBinder.bindView(context, view as DivSliderView, data)
+    private fun bindSlider(context: BindingContext, view: View, data: DivSlider, path: DivStatePath) {
+        sliderBinder.bindView(context, view as DivSliderView, data, path)
     }
 
-    private fun bindInput(context: BindingContext, view: View, data: DivInput) {
-        inputBinder.bindView(context, view as DivInputView, data)
+    private fun bindInput(context: BindingContext, view: View, data: DivInput, path: DivStatePath) {
+        inputBinder.bindView(context, view as DivInputView, data, path)
     }
 
-    private fun bindSelect(context: BindingContext, view: View, data: DivSelect) {
-        selectBinder.bindView(context, view as DivSelectView, data)
+    private fun bindSelect(context: BindingContext, view: View, data: DivSelect, path: DivStatePath) {
+        selectBinder.bindView(context, view as DivSelectView, data, path)
     }
 
-    private fun bindVideo(context: BindingContext, view: View, data: DivVideo) {
-        videoBinder.bindView(context, view as DivVideoView, data)
+    private fun bindVideo(context: BindingContext, view: View, data: DivVideo, path: DivStatePath) {
+        videoBinder.bindView(context, view as DivVideoView, data, path)
+    }
+
+    private fun bindSwitch(context: BindingContext, view: View, data: DivSwitch, path: DivStatePath) {
+        switchBinder.bindView(context, view as DivSwitchView, data, path)
     }
 
     private fun bindLayoutParams(view: View, data: DivBase, resolver: ExpressionResolver) {
@@ -220,6 +232,7 @@ internal class DivBinder @Inject constructor(
         is Div.Input -> (view as DivInputView).setDataWithoutBinding(context, div.value)
         is Div.Select -> (view as DivSelectView).setDataWithoutBinding(context, div.value)
         is Div.Video -> (view as DivVideoView).setDataWithoutBinding(context, div.value)
+        is Div.Switch -> (view as DivSwitchView).setDataWithoutBinding(context, div.value)
     }
 
     private fun <T: DivBase> DivHolderView<T>.setDataWithoutBinding(context: BindingContext, newDiv: T) {
@@ -233,5 +246,23 @@ internal class DivBinder @Inject constructor(
 
     private fun setGridData(context: BindingContext, view: View, data: DivGrid) {
         gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data)
+    }
+
+    private fun getBindingContext(
+        parentContext: BindingContext, div: Div, path: DivStatePath
+    ): BindingContext {
+        return if (div.needLocalRuntime) {
+                parentContext.getFor(
+                parentContext.runtimeStore?.getOrCreateRuntime(
+                    path = path.fullPath,
+                    parentResolver = parentContext.expressionResolver,
+                    variables = div.value().variables?.toVariables(),
+                    triggers = div.value().variableTriggers,
+                    functions = div.value().functions,
+                )?.expressionResolver ?: parentContext.expressionResolver
+            )
+        } else {
+            parentContext
+        }
     }
 }

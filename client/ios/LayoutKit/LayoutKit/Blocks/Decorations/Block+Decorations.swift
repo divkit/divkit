@@ -30,10 +30,11 @@ extension Block {
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String?
   ) -> Block {
+    let hasAlpha = alpha != nil && alpha?.isApproximatelyEqualTo(1) != true
     let anythingToApplyExceptBoundary =
       (border != nil && border?.width.isApproximatelyEqualTo(0) != true)
         || (backgroundColor != nil && backgroundColor?.alpha.isApproximatelyEqualTo(0) != true)
-        || (alpha != nil && alpha?.isApproximatelyEqualTo(1) != true)
+        || hasAlpha
         || blurEffect != nil
         || actions != nil
         || doubleTapActions != nil
@@ -45,39 +46,16 @@ extension Block {
         || accessibilityElement != nil
         || reuseId != nil
 
-    if !forceWrapping, let block = self as? DecoratingBlock {
-      #if INTERNAL_BUILD
-      let newBoundary = block.makeNewBoundary(fromModifying: boundary)
-      #else
-      let newBoundary = boundary
-      #endif
-
-      guard (newBoundary != nil && newBoundary != block.boundary) || anythingToApplyExceptBoundary
+    let decoratingSelf = self as? DecoratingBlock
+    let selfBackgroundColor = decoratingSelf?.backgroundColor
+    let shouldWrapAlpha = hasAlpha
+      && selfBackgroundColor != nil
+      && selfBackgroundColor != DecoratingBlock.defaultBackgroundColor
+    if !forceWrapping, !shouldWrapAlpha, let block = decoratingSelf {
+      guard (boundary != nil && boundary != block.boundary) || anythingToApplyExceptBoundary
       else {
         return self
       }
-
-      #if INTERNAL_BUILD
-      assert(
-        block.backgroundColor.alpha.isApproximatelyEqualTo(0) || backgroundColor == nil,
-        "Replacing background color is suspicious, consider revising decorations order"
-      )
-
-      assert(
-        block.analyticsURL == nil || analyticsURL == nil,
-        "Applying analytics URL over another one doesn't make sense"
-      )
-
-      assert(
-        border == nil || block.border == nil,
-        "Applying border over another border doesn't make sense"
-      )
-
-      assert(
-        block.visibilityParams == nil || visibilityParams == nil,
-        "Applying visibility actions over another one doesn't make sense"
-      )
-      #endif
 
       return block.modifying(
         backgroundColor: backgroundColor,
@@ -87,7 +65,7 @@ extension Block {
         doubleTapActions: doubleTapActions ?? block.doubleTapActions,
         longTapActions: longTapActions ?? block.longTapActions,
         analyticsURL: (analyticsURL ?? block.analyticsURL) as URL?,
-        boundary: newBoundary ?? block.boundary,
+        boundary: boundary ?? block.boundary,
         border: (border ?? block.border) as BlockBorder?,
         childAlpha: alpha.map { $0 * block.childAlpha },
         blurEffect: blurEffect ?? block.blurEffect,
@@ -268,37 +246,6 @@ extension DecoratingBlock {
       && boundary.allCornersAreApproximatelyEqualToZero()
       && border == nil
   }
-
-  #if INTERNAL_BUILD
-  fileprivate func makeNewBoundary(fromModifying newBoundary: BoundaryTrait?) -> BoundaryTrait? {
-    guard let newBoundary else {
-      return nil
-    }
-    switch (boundary, newBoundary) {
-    case let (.clipCorner(corners), .clipCorner):
-      assert(
-        corners.allCornersAreApproximatelyEqualToZero(),
-        "Applying one corner radius over another doesn't make sense"
-      )
-      return newBoundary
-    case (.clipCorner, .noClip):
-      assertionFailure("""
-        Changing from .clip to .noClip is suspicious move,
-        consider revising decorations order
-      """)
-      return boundary
-    case (.noClip, .clipCorner):
-      return newBoundary
-    case (.noClip, .noClip):
-      return nil // nothing to change
-    case (.noClip, .clipPath):
-      return newBoundary
-    case (.clipPath, _), (.clipCorner, _):
-      assertionFailure()
-      return newBoundary
-    }
-  }
-  #endif
 }
 
 extension BoundaryTrait? {

@@ -4,21 +4,30 @@ import LayoutKit
 import VGSL
 
 public final class DivTriggersStorage {
-  private typealias CardTriggers = (cardId: DivCardID, items: [Item])
-
   private final class Item {
-    let trigger: DivTrigger
-    var condition = false
+    final class Trigger {
+      let divTrigger: DivTrigger
+      var condition = false
 
-    init(_ trigger: DivTrigger) {
-      self.trigger = trigger
+      init(_ divTrigger: DivTrigger) {
+        self.divTrigger = divTrigger
+      }
+    }
+
+    let triggers: [Trigger]
+    var active = true
+
+    init(_ triggers: [Trigger]) {
+      self.triggers = triggers
     }
   }
 
-  private var triggersByCard: [CardTriggers] = []
+  private var triggersByPath: [UIElementPath: Item] = [:]
+  private var disposablesByPath: [UIElementPath: Disposable] = [:]
   private let lock = AllocatedUnfairLock()
 
   private let variablesStorage: DivVariablesStorage
+  private let functionsStorage: DivFunctionsStorage?
   private let actionHandler: DivActionHandler?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
@@ -26,17 +35,20 @@ public final class DivTriggersStorage {
 
   public init(
     variablesStorage: DivVariablesStorage,
+    functionsStorage: DivFunctionsStorage? = nil,
+    stateUpdates: Signal<DivBlockStateStorage.ChangeEvent> = .empty,
     actionHandler: DivActionHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter? = nil
   ) {
     self.variablesStorage = variablesStorage
+    self.functionsStorage = functionsStorage
     self.actionHandler = actionHandler
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter ?? DefaultDivReporter()
 
-    variablesStorage.addObserver { [unowned self] event in
-      runActions(event: event)
+    stateUpdates.addObserver { [weak self] stateEvent in
+      self?.handleStateEvent(stateEvent)
     }.dispose(in: disposePool)
   }
 
@@ -44,45 +56,107 @@ public final class DivTriggersStorage {
     cardId: DivCardID,
     triggers: [DivTrigger]
   ) {
-    let cardTriggers = (cardId, triggers.map { Item($0) })
-    lock.withLock {
-      triggersByCard.removeAll { $0.cardId == cardId }
-      triggersByCard.append(cardTriggers)
+    reset(cardId: cardId)
+    setIfNeeded(path: cardId.path, triggers: triggers)
+  }
+
+  func setIfNeeded(
+    path: UIElementPath,
+    triggers: [DivTrigger]
+  ) {
+    let item = lock.withLock {
+      if let item = triggersByPath[path] {
+        return item
+      }
+
+      let newItem = Item(triggers.map { Item.Trigger($0) })
+      if !newItem.triggers.isEmpty {
+        triggersByPath[path] = newItem
+        disposablesByPath[path] = variablesStorage
+          .getNearestStorage(path)
+          .addObserver { [weak self] event in
+            self?.runActions(
+              path: path,
+              item: newItem,
+              changedVariablesNames: event.changedVariables
+            )
+          }
+      }
+      return newItem
     }
+
     runActions(
-      cardTriggers: cardTriggers,
+      path: path,
+      item: item,
       changedVariablesNames: nil
     )
   }
 
-  private func runActions(event: DivVariablesStorage.ChangeEvent) {
-    let triggers = lock.withLock {
-      switch event.kind {
-      case let .local(cardId, _):
-        triggersByCard
-          .first { $0.cardId == cardId }
-          .map { [$0] } ?? []
-      case .global:
-        triggersByCard
+  func reset() {
+    lock.withLock {
+      triggersByPath.removeAll()
+      disposablesByPath.removeAll()
+    }
+  }
+
+  func reset(cardId: DivCardID) {
+    lock.withLock {
+      for path in triggersByPath.keys {
+        if path.cardId == cardId {
+          triggersByPath.removeValue(forKey: path)
+          disposablesByPath.removeValue(forKey: path)
+        }
       }
     }
+  }
 
-    for cardTriggers in triggers {
-      runActions(
-        cardTriggers: cardTriggers,
-        changedVariablesNames: event.changedVariables
-      )
+  func reset(elementId: String) {
+    lock.withLock {
+      for path in triggersByPath.keys {
+        if path.contains(elementId) {
+          triggersByPath.removeValue(forKey: path)
+          disposablesByPath.removeValue(forKey: path)
+        }
+      }
+    }
+  }
+
+  func enableTriggers(path: UIElementPath) {
+    enableTriggers(predicate: { $0.starts(with: path) })
+  }
+
+  func disableTriggers(path: UIElementPath) {
+    disableTriggers(predicate: { $0.starts(with: path) })
+  }
+
+  private func enableTriggers(predicate: (UIElementPath) -> Bool) {
+    let items = lock.withLock {
+      let triggers = triggersByPath.filter { predicate($0.key) }
+      triggers.forEach { $0.value.active = true }
+      return triggers
+    }
+
+    for (path, item) in items {
+      runActions(path: path, item: item, changedVariablesNames: nil)
+    }
+  }
+
+  private func disableTriggers(predicate: (UIElementPath) -> Bool) {
+    lock.withLock {
+      triggersByPath
+        .filter { predicate($0.key) }
+        .forEach { $0.value.active = false }
     }
   }
 
   private func runActions(
-    cardTriggers: CardTriggers,
+    path: UIElementPath,
+    item: Item,
     changedVariablesNames: Set<DivVariableName>?
   ) {
-    let cardId = cardTriggers.cardId
-    for item in cardTriggers.items {
-      let trigger = item.trigger
-      let triggerVariablesNames = trigger.condition.variablesNames
+    guard item.active else { return }
+    for trigger in item.triggers {
+      let triggerVariablesNames = trigger.divTrigger.condition.variablesNames
       if triggerVariablesNames.isEmpty {
         // conditions without variables is considered to be invalid
         continue
@@ -92,29 +166,53 @@ public final class DivTriggersStorage {
         continue
       }
 
-      let oldCondition = item.condition
+      let oldCondition = trigger.condition
       let expressionResolver = ExpressionResolver(
-        path: cardId.path,
+        path: path,
         variablesStorage: variablesStorage,
+        functionsStorage: functionsStorage,
         persistentValuesStorage: persistentValuesStorage,
         reporter: reporter
       )
-      item.condition = trigger.resolveCondition(expressionResolver) ?? false
-      if !item.condition {
+      trigger.condition = trigger.divTrigger.resolveCondition(expressionResolver) ?? false
+      if !trigger.condition {
         continue
       }
-      if trigger.resolveMode(expressionResolver) == .onCondition, oldCondition {
+      if changedVariablesNames == nil, trigger.condition, oldCondition {
+        continue
+      }
+      if trigger.divTrigger.resolveMode(expressionResolver) == .onCondition, oldCondition {
         continue
       }
 
-      for action in trigger.actions {
+      for action in trigger.divTrigger.actions {
         actionHandler?.handle(
           action,
-          path: cardId.path,
+          path: path,
           source: .trigger,
           sender: nil
         )
       }
+    }
+  }
+
+  private func handleStateEvent(_ stateEvent: DivBlockStateStorage.ChangeEvent) {
+    if let tabState = stateEvent.state as? TabViewState {
+      let activeTab = Int(tabState.selectedPageIndex)
+
+      for index in 0..<tabState.countOfPages {
+        if index != activeTab {
+          disableTriggers(predicate: {
+            $0.cardId == stateEvent.id.cardId
+              && $0.findTabId(stateEvent.id.id) == String(index)
+          })
+        }
+      }
+
+      enableTriggers(predicate: {
+        $0.cardId == stateEvent.id.cardId
+          && $0.findTabId(stateEvent.id.id) == String(activeTab)
+      })
     }
   }
 }
@@ -127,5 +225,29 @@ extension Expression {
     case .value:
       []
     }
+  }
+}
+
+extension UIElementPath {
+  fileprivate func contains(_ part: String) -> Bool {
+    var currPath: UIElementPath? = self
+    while let path = currPath {
+      if path.leaf == part {
+        return true
+      }
+      currPath = currPath?.parent
+    }
+    return false
+  }
+
+  fileprivate func findTabId(_ tabsId: String) -> String? {
+    var currPath: UIElementPath? = self
+    while let path = currPath {
+      if path.parent?.leaf == tabsId {
+        return path.leaf
+      }
+      currPath = currPath?.parent
+    }
+    return nil
   }
 }

@@ -1,32 +1,12 @@
 import 'dart:ui';
 
-import 'package:divkit/src/core/visibility/default_div_visibility_action_manager.dart';
-import 'package:divkit/src/core/action/handler/default_div_action_handler.dart';
-import 'package:divkit/src/core/data/data_provider.dart';
-import 'package:divkit/src/core/patch/patch_manager.dart';
-import 'package:divkit/src/core/protocol/div_action.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_custom.dart';
-import 'package:divkit/src/core/protocol/div_data.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
-import 'package:divkit/src/core/protocol/div_trigger.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/core/state/div_state_manager.dart';
-import 'package:divkit/src/core/timer/timer_converter.dart';
-import 'package:divkit/src/core/timer/timer_manager.dart';
-import 'package:divkit/src/core/trigger/trigger_converter.dart';
-import 'package:divkit/src/core/trigger/trigger_manager.dart';
-import 'package:divkit/src/core/variable/variable_converter.dart';
-import 'package:divkit/src/core/variable/variable_storage.dart';
-import 'package:divkit/src/core/variable/variable_storage_manager.dart';
-import 'package:divkit/src/core/widgets/card_state/div_card_state_widget.dart';
-import 'package:divkit/src/core/widgets/div_error_widget.dart';
-import 'package:divkit/src/generated_sources/div_data.dart';
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/widgets/root/div_root_widget.dart';
+import 'package:divkit/src/utils/configuration.dart';
 import 'package:divkit/src/utils/provider.dart';
+import 'package:divkit/src/utils/trace.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:meta/meta.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
 
 /// The main widget embedding DivKit BDUI in the Flutter host application.
 class DivKitView extends StatelessWidget {
@@ -46,12 +26,14 @@ class DivKitView extends StatelessWidget {
   /// Handler for div-custom.
   final DivCustomHandler? customHandler;
 
+  /// Provider of text font resource.
+  final DivFontProvider? fontProvider;
+
   /// LTR or RTL mode. If null used auto.
   final TextDirection? textDirection;
 
-  /// [NOT_USED_FOR_SVG] Cache manager to override DefaultCacheManager if needed in DivImage.
-  @experimental
-  final BaseCacheManager? cacheManager;
+  /// Options for text and UI scaling
+  final DivScale? scale;
 
   /// [NOT_SUPPORTED_YET] Light or dark mode. If null used auto.
   @experimental
@@ -60,19 +42,6 @@ class DivKitView extends StatelessWidget {
   /// This flag allows you to highlight unsupported divs.
   @experimental
   final bool showUnsupportedDivs;
-
-  /// This callback is triggered after the first frame,
-  /// when the [DivContext] has been fully initialized.
-  @experimental
-  final void Function(DivContext)? onInit;
-
-  /// Can be used for scaling ui
-  @experimental
-  final double viewScale;
-
-  /// Can be used for scaling text
-  @experimental
-  final double textScale;
 
   /// Use DivKitView inside your widget tree with layout passed by param "data":
   /// ```dart
@@ -100,35 +69,29 @@ class DivKitView extends StatelessWidget {
     this.variableStorage,
     this.actionHandler,
     this.customHandler,
-    this.cacheManager,
+    this.fontProvider,
     this.brightness,
     this.textDirection,
+    this.scale,
     this.showUnsupportedDivs = false,
-    this.onInit,
-    this.viewScale = 1,
-    this.textScale = 1,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) => Directionality(
         textDirection: textDirection ?? Directionality.of(context),
-        child: DivKitProvider<DivScalingModel>(
-          value: DivScalingModel(
-            textScale: textScale,
-            viewScale: viewScale,
+        child: provide(
+          DivConfiguration(
+            showUnsupportedDivs: showUnsupportedDivs,
           ),
-          child: DivKitProvider<ShowUnsupportedDivs>(
-            value: ShowUnsupportedDivs(showUnsupportedDivs),
-            child: FocusScope(
-              child: _DivKitView(
-                data: data,
-                variableStorage: variableStorage,
-                actionHandler: actionHandler,
-                customHandler: customHandler,
-                cacheManager: cacheManager,
-                onInit: onInit,
-              ),
+          child: FocusScope(
+            child: _DivKitView(
+              data: data,
+              scale: scale,
+              fontProvider: fontProvider,
+              variableStorage: variableStorage,
+              actionHandler: actionHandler,
+              customHandler: customHandler,
             ),
           ),
         ),
@@ -137,19 +100,19 @@ class DivKitView extends StatelessWidget {
 
 class _DivKitView extends StatefulWidget {
   final DivKitData data;
+  final DivScale? scale;
+  final DivFontProvider? fontProvider;
   final DivVariableStorage? variableStorage;
   final DivActionHandler? actionHandler;
   final DivCustomHandler? customHandler;
-  final BaseCacheManager? cacheManager;
-  final void Function(DivContext)? onInit;
 
   const _DivKitView({
     required this.data,
+    required this.scale,
+    required this.fontProvider,
     required this.variableStorage,
     required this.actionHandler,
     required this.customHandler,
-    required this.cacheManager,
-    required this.onInit,
   });
 
   @override
@@ -157,63 +120,26 @@ class _DivKitView extends StatefulWidget {
 }
 
 class _DivKitViewState extends State<_DivKitView> {
-  late DivLoggerContext loggerContext;
-  late DivRootContext divRootContext;
-  late DivTriggerManager triggerManager;
-  late DivCustomHandler customHandler;
-
-  DivContext get divContext => divRootContext;
-
-  void init(DivKitData data) {
-    final source = data.source;
-
-    loggerContext = DefaultDivLoggerContext(source?.logId);
-
-    if (source != null) {
-      loggerUse(loggerContext).debug('Init DivKitView $hashCode');
-      divRootContext = DivRootContext(buildContext: context)
-        ..dataProvider = DefaultDivDataProvider(source)
-        ..visibilityActionManager = DefaultDivVisibilityActionManager()
-        ..variableManager = DefaultDivVariableManager(
-          storage: DefaultDivVariableStorage(
-            inheritedStorage: widget.variableStorage,
-            variables: source.variables?.map((v) => v.pass).toList(),
-          ),
-        )
-        ..stateManager = DefaultDivStateManager()
-        ..actionHandler = widget.actionHandler ?? DefaultDivActionHandler();
-
-      divRootContext.patchManager =
-          DefaultDivPatchManager(divRootContext.dataProvider!);
-
-      final timerManager = DefaultDivTimerManager(divContext: divContext);
-
-      // Async feature initialization.
-      timerManager.init(
-        timers: source.timers?.map((t) => t.pass).toList(),
-        onEnd: () =>
-            loggerUse(loggerContext).debug('Timers initialized $hashCode'),
-      );
-
-      divRootContext.timerManager = timerManager;
-
-      triggerManager = DefaultDivTriggerManager(
-        divContext: divContext,
-        triggers: source.variableTriggers?.map((t) => t.pass).toList(),
-      );
-
-      customHandler = widget.customHandler ?? DivCustomHandler.none();
-    }
-  }
+  DivRootContext? divRootContext;
 
   @override
   void initState() {
     super.initState();
-    init(widget.data);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      loggerUse(loggerContext).debug("First frame rendered $hashCode");
-      widget.onInit?.call(divContext);
-    });
+    traceEvent('Initialize DivKitView');
+    initialize();
+  }
+
+  /// Updates the root context using widget data
+  void initialize() {
+    divRootContext = DivRootContext.initialize(
+      context: context,
+      data: widget.data,
+      scale: widget.scale,
+      fontProvider: widget.fontProvider,
+      variableStorage: widget.variableStorage,
+      actionHandler: widget.actionHandler,
+      customHandler: widget.customHandler,
+    );
   }
 
   @override
@@ -223,45 +149,38 @@ class _DivKitViewState extends State<_DivKitView> {
     final dataUpdated = widget.data != oldWidget.data;
     final storageUpdated = widget.variableStorage != oldWidget.variableStorage;
 
-    // ToDo: Optimize parameters updates
-    // Full view recreation now
+    // Needs full recreation
     if (dataUpdated || storageUpdated) {
-      loggerUse(loggerContext).debug(
-        "Update DivKitView $hashCode [dataUpdated:$dataUpdated storageUpdated:$storageUpdated]",
-      );
-      init(widget.data);
-    }
-
-    if (widget.actionHandler != oldWidget.actionHandler) {
-      divRootContext.actionHandler =
-          widget.actionHandler ?? DefaultDivActionHandler();
+      traceEvent('Updated DivKitView');
+      initialize();
+    } else {
+      // Allow reuse
+      if (widget.actionHandler != oldWidget.actionHandler) {
+        divRootContext?.actionHandler =
+            widget.actionHandler ?? DefaultDivActionHandler();
+      }
+      if (widget.customHandler != oldWidget.customHandler) {
+        divRootContext?.customHandler =
+            widget.customHandler ?? DivCustomHandler.none();
+      }
     }
   }
 
   @override
-  Widget build(BuildContext context) => DivKitProvider(
-        value: divContext,
-        child: DivKitProvider(
-          value: widget.cacheManager,
-          child: DivKitProvider(
-            value: customHandler,
-            child: StreamBuilder<DivData>(
-              initialData: divRootContext.dataProvider!.value,
-              stream: divRootContext.dataProvider!.stream,
-              builder: (context, snapshot) => DivCardStateWidget(
-                snapshot.requireData,
-              ),
-            ),
-          ),
-        ),
-      );
+  Widget build(BuildContext context) => divRootContext != null
+      ? DivKitProvider(
+          value: divRootContext as DivContext,
+          child: DivRootWidget(divRootContext!),
+        )
+
+      /// Don't show anything if an error has occurred
+      : const SizedBox.shrink();
 
   @override
   void dispose() {
-    divRootContext.dispose();
-    triggerManager.dispose();
-
-    loggerUse(loggerContext).debug("Dispose DivKitView $hashCode");
+    traceEvent('Dispose DivKitView');
+    divRootContext?.dispose();
+    divRootContext = null;
     super.dispose();
   }
 }

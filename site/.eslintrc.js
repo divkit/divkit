@@ -46,6 +46,7 @@ module.exports = {
         }
     ],
     globals: {
-        'Ya': true
+        'Ya': true,
+        'process': true
     }
 };

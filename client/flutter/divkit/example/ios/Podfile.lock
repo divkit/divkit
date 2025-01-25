@@ -1,98 +1,40 @@
 PODS:
-  - div_expressions_resolver (0.4.2):
-    - DivKit (~> 29.0)
-    - Flutter
-  - DivKit (29.15.1):
-    - DivKit_LayoutKit (= 29.15.1)
-    - DivKit_Serialization (= 29.15.1)
-    - VGSLCommonCore (~> 4.1)
-    - VGSLNetworking (~> 4.1)
-  - DivKit_LayoutKit (29.15.1):
-    - DivKit_LayoutKitInterface (= 29.15.1)
-    - VGSLCommonCore (~> 4.1)
-    - VGSLNetworking (~> 4.1)
-  - DivKit_LayoutKitInterface (29.15.1):
-    - VGSLBase (~> 4.1)
-    - VGSLBaseTiny (~> 4.1)
-    - VGSLBaseUI (~> 4.1)
-  - DivKit_Serialization (29.15.1):
-    - VGSLCommonCore (~> 4.1)
   - Flutter (1.0.0)
-  - integration_test (0.0.1):
-    - Flutter
+  - FMDB (2.7.12):
+    - FMDB/standard (= 2.7.12)
+  - FMDB/Core (2.7.12)
+  - FMDB/standard (2.7.12):
+    - FMDB/Core
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sqflite (0.0.3):
+  - sqflite (0.0.2):
     - Flutter
-    - FlutterMacOS
-  - VGSL_Fundamentals (4.2.0):
-    - VGSL_Fundamentals_Tiny (= 4.2.0)
-  - VGSL_Fundamentals_Tiny (4.2.0)
-  - VGSLBase (4.2.0):
-    - VGSL_Fundamentals (= 4.2.0)
-    - VGSLBaseTiny (= 4.2.0)
-    - VGSLBaseUI (= 4.2.0)
-  - VGSLBaseTiny (4.2.0):
-    - VGSL_Fundamentals_Tiny (= 4.2.0)
-  - VGSLBaseUI (4.2.0):
-    - VGSLBaseTiny (= 4.2.0)
-  - VGSLCommonCore (4.2.0):
-    - VGSLBase (= 4.2.0)
-  - VGSLNetworking (4.2.0):
-    - VGSLBase (= 4.2.0)
+    - FMDB (>= 2.7.5)
 
 DEPENDENCIES:
-  - div_expressions_resolver (from `.symlinks/plugins/div_expressions_resolver/ios`)
   - Flutter (from `Flutter`)
-  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - sqflite (from `.symlinks/plugins/sqflite/darwin`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
   trunk:
-    - DivKit
-    - DivKit_LayoutKit
-    - DivKit_LayoutKitInterface
-    - DivKit_Serialization
-    - VGSL_Fundamentals
-    - VGSL_Fundamentals_Tiny
-    - VGSLBase
-    - VGSLBaseTiny
-    - VGSLBaseUI
-    - VGSLCommonCore
-    - VGSLNetworking
+    - FMDB
 
 EXTERNAL SOURCES:
-  div_expressions_resolver:
-    :path: ".symlinks/plugins/div_expressions_resolver/ios"
   Flutter:
     :path: Flutter
-  integration_test:
-    :path: ".symlinks/plugins/integration_test/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   sqflite:
-    :path: ".symlinks/plugins/sqflite/darwin"
+    :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  div_expressions_resolver: cfd6eedb1a599d16fbfed6b25d2709cf8b3807da
-  DivKit: 96a1189bbb1286544119551819db721237edc49a
-  DivKit_LayoutKit: d8cd3826a2d004b159517d514e1580467f89efc3
-  DivKit_LayoutKitInterface: 805245d61e6525632171de529592afb880692cae
-  DivKit_Serialization: 3921944d94687b824d79bad54ae9811326fc36ca
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: 13825b8a9334a850581300559b8839134b124670
+  FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
-  VGSL_Fundamentals: 5967995b1ff711ef1fdd459bd07d0b2890478e5c
-  VGSL_Fundamentals_Tiny: 37acd9341007d21a4d6a3b07e74803c3ed8410eb
-  VGSLBase: 1142504ccd655d0e0cf89691df47e780f633d25a
-  VGSLBaseTiny: 43fe5f51ecac7bc41a66c6c25f06256a3106e390
-  VGSLBaseUI: aac2f8706940763e672d83d96ff2666643b14ef1
-  VGSLCommonCore: 36d3b0cd249a982961bddbc9682286654e4b66c8
-  VGSLNetworking: 1852dcdd30783aecdf83c57a5cb9ba7fab86b86b
+  sqflite: f7868cb717a559a515967bb4033af73521c7d3f4
 
-PODFILE CHECKSUM: bcf165e4d33a528bc23ac62b5ab2a1deae0a95b3
+PODFILE CHECKSUM: bdb6020bee847baa4ad4ac9429c3786eff42bb51
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2

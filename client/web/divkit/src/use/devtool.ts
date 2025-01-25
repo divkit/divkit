@@ -6,7 +6,11 @@ export interface DevtoolResult {
     destroy(): void;
 }
 
-function devtoolReal(node: HTMLElement, rootCtx: RootCtxValue, componentContext: ComponentContext): DevtoolResult {
+function devtoolReal(
+    node: HTMLElement | null,
+    rootCtx: RootCtxValue,
+    componentContext: ComponentContext
+): DevtoolResult {
     rootCtx.componentDevtool?.({
         type: 'mount',
         node,

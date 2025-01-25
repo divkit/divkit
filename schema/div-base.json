@@ -57,6 +57,18 @@
       "$ref": "div-alignment-horizontal.json",
       "$description": "translations.json#/div_base_alignment_horizontal"
     },
+    "animators": {
+      "type": "array",
+      "items": {
+        "$ref": "div-animator.json"
+      },
+      "$description": "translations.json#/div_base_animators",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
     "row_span": {
       "$ref": "common.json#/non_negative_integer",
       "$description": "translations.json#/div_base_row_span",
@@ -203,6 +215,18 @@
       "$description": "translations.json#/div_base_visibility",
       "default_value": "visible"
     },
+    "functions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-function.json"
+      },
+      "$description": "translations.json#/div_base_functions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
     "variables": {
       "type": "array",
       "items": {
@@ -210,7 +234,21 @@
       },
       "$description": "translations.json#/div_base_variables",
       "platforms": [
-        "ios"
+        "ios",
+        "web",
+        "android"
+      ]
+    },
+    "variable_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-trigger.json"
+      },
+      "$description": "translations.json#/div_base_variable_triggers",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
       ]
     },
     "transform": {
@@ -227,7 +265,8 @@
       "$description": "translations.json#/div_layout_provider",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "reuse_id": {

@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class ColorValue internal constructor(
+data class ColorValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : TypedValue {
@@ -38,7 +38,7 @@ class ColorValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val value: Property<Color>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

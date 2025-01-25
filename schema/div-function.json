@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_function",
+  "properties": {
+    "name": {
+      "type": "string",
+      "$description": "translations.json#/div_function_name",
+      "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+      "supports_expressions": false
+    },
+    "body": {
+      "type": "string",
+      "$description": "translations.json#/div_function_body",
+      "supports_expressions": false
+    },
+    "return_type": {
+      "$ref": "div-evaluable-type.json",
+      "$description": "translations.json#/div_function_return_type",
+      "supports_expressions": false
+    },
+    "arguments": {
+      "type": "array",
+      "$description": "translations.json#/div_function_argument",
+      "items": {
+        "$ref": "div-function-argument.json"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "body",
+    "return_type",
+    "arguments"
+  ]
+}

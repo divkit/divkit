@@ -6,6 +6,7 @@ import androidx.transition.TransitionManager
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.animations.SceneRootWatcher
 import javax.inject.Provider
 
 @PublicApi
@@ -37,6 +38,7 @@ class DefaultDivStateChangeListener @JvmOverloads constructor(
         val rootView = rootViewProvider.get() ?: return
         val transition = DivStateTransition(divView).setInterpolator(interpolator)
         TransitionManager.endTransitions(rootView)
+        SceneRootWatcher.watchFor(rootView, transition)
         TransitionManager.beginDelayedTransition(rootView, transition)
     }
 }

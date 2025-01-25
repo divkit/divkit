@@ -65,7 +65,7 @@ final class DivVariableTrackerTests: XCTestCase {
       variableTracker.usedVariablesByCard,
       [
         id1.cardId: ["Var1"],
-        id2.cardId: ["Var2", "Var3"]
+        id2.cardId: ["Var2", "Var3"],
       ]
     )
   }

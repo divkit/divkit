@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { getContext, onDestroy, onMount } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
 
     import css from './Select.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import type { DivSelectData } from '../../types/select';
+    import type { EdgeInsets } from '../../types/edgeInserts';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
     import { wrapError } from '../../utils/wrapError';
@@ -15,12 +17,11 @@
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { isNumber } from '../../utils/isNumber';
     import { createVariable } from '../../expressions/variable';
-    import { DivSelectData } from '../../types/select';
-    import { EdgeInsets } from '../../types/edgeInserts';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { makeStyle } from '../../utils/makeStyle';
     import Outer from '../utilities/Outer.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivSelectData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -186,8 +187,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerFocusable(prevId, {
                 focus() {
                     if (select) {
@@ -239,4 +240,8 @@
             {/each}
         </select>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

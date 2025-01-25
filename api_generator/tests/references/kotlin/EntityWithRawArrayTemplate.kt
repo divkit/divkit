@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithRawArrayTemplate : JSONSerializable, JsonTemplate<EntityWithRawArray> {
-    @JvmField final val array: Field<Expression<JSONArray>>
+    @JvmField val array: Field<Expression<JSONArray>>
 
-    constructor (
+    constructor(
+        array: Field<Expression<JSONArray>>,
+    ) {
+        this.array = array
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithRawArrayTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithRawArrayTemplate : JSONSerializable, JsonTemplate<EntityWithRawA
         array = JsonTemplateParser.readFieldWithExpression(json, "array", topLevel, parent?.array, logger, env, TYPE_HELPER_JSON_ARRAY)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithRawArray {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithRawArray {
         return EntityWithRawArray(
-            array = array.resolve(env = env, key = "array", data = rawData, reader = ARRAY_READER)
+            array = this.array.resolve(env = env, key = "array", data = data, reader = ARRAY_READER)
         )
     }
 
@@ -51,5 +53,4 @@ class EntityWithRawArrayTemplate : JSONSerializable, JsonTemplate<EntityWithRawA
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithRawArrayTemplate(env, json = it) }
     }
-
 }

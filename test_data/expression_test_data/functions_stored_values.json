@@ -93,9 +93,9 @@
         }
       ],
       "platforms": [
-        "android",
         "ios",
-        "web"
+        "web",
+        "android"
       ]
     },
     {
@@ -108,6 +108,26 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "expression": "@{getStoredArrayValue('unknown_var')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getStoredArrayValue('unknown_var')]. Missing value."
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{getStoredDictValue('unknown_var')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getStoredDictValue('unknown_var')]. Missing value."
+      },
+      "platforms": [
+        "android"
       ]
     }
   ]

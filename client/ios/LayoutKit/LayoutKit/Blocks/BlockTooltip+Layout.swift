@@ -3,13 +3,93 @@ import CoreGraphics
 import VGSL
 
 extension BlockTooltip {
-  public func calculateFrame(targeting targetRect: CGRect) -> CGRect {
-    CGRect(
+  public func calculateFrame(
+    targeting targetRect: CGRect,
+    constrainedBy bounds: CGRect
+  ) -> CGRect {
+    let size = block.intrinsicSize
+    var result = CGRect(
       coordinate: targetRect.coordinate(of: position),
       ofPosition: position.opposite,
-      size: block.intrinsicSize
+      size: size
     ).offset(by: offset)
+
+    if result.intersection(bounds) == result {
+      return result
+    } else {
+      result.move(to: bounds)
+      return result
+    }
   }
+}
+
+extension CGRect {
+  fileprivate mutating func move(to bounds: CGRect) {
+    for direction in MoveDirection.allCases {
+      let (minPos, maxPos) = minAndMaxPos(direction)
+      let (minBound, maxBound) = bounds.minAndMaxPos(direction)
+
+      var newOrigin: CGFloat = origin(direction)
+
+      if self.size(direction) > bounds.size(direction) {
+        switch (minPos, maxPos) {
+        case let (min, _) where min > minBound:
+          newOrigin = minBound
+        case let (_, max) where max < maxBound:
+          newOrigin -= maxBound - max
+        default:
+          break
+        }
+      } else {
+        switch (minPos, maxPos) {
+        case let (min, _) where min < minBound:
+          newOrigin = minBound
+        case let (_, max) where max > maxBound:
+          newOrigin -= max - maxBound
+        default:
+          break
+        }
+      }
+
+      switch direction {
+      case .horizontal:
+        origin.x = newOrigin
+      case .vertical:
+        origin.y = newOrigin
+      }
+    }
+  }
+
+  private func origin(_ direction: MoveDirection) -> CGFloat {
+    switch direction {
+    case .horizontal:
+      origin.x
+    case .vertical:
+      origin.y
+    }
+  }
+
+  private func size(_ direction: MoveDirection) -> CGFloat {
+    switch direction {
+    case .horizontal:
+      width
+    case .vertical:
+      height
+    }
+  }
+
+  private func minAndMaxPos(
+    _ direction: MoveDirection
+  ) -> (min: CGFloat, max: CGFloat) {
+    switch direction {
+    case .horizontal:
+      (minX, maxX)
+    case .vertical:
+      (minY, maxY)
+    }
+  }
+
+  fileprivate typealias MoveDirection = ScrollDirection
 }
 
 extension CGRect {

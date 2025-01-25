@@ -1,7 +1,8 @@
 package com.yandex.div.evaluable.types
 
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.SimpleTimeZone
+import java.util.TimeZone
 
 private const val TO_MILLIS = 60 * 1000
 
@@ -36,17 +37,7 @@ class DateTime(
     }
 
     companion object {
-        private const val DEFAULT_FORMAT_PATTERN = "yyyy-MM-dd hh:mm:ss"
         private val utcTimezone = SimpleTimeZone(0, "UTC")
-
-        internal fun parseAsUTC(source: String): DateTime {
-            val dateFormat = SimpleDateFormat(DEFAULT_FORMAT_PATTERN, Locale.getDefault())
-            val date: Date = dateFormat.parse(source)!!
-            return DateTime(
-                timestampMillis = date.time + Calendar.getInstance().timeZone.rawOffset,
-                timezone = TimeZone.getTimeZone("UTC"),
-            )
-        }
 
         internal fun formatDate(c: Calendar): String {
             val yyyy = c.get(Calendar.YEAR).toString()

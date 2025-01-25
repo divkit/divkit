@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/utils/provider.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/visibility/models/visibility_action.dart';
+import 'package:flutter/widgets.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class DivVisibilityEmitter extends StatelessWidget {
@@ -24,6 +22,9 @@ class DivVisibilityEmitter extends StatelessWidget {
     final isVisible = divVisibility == DivVisibility.visible;
     return Visibility(
       visible: isVisible,
+      // ToDo: Needs replace to something?
+      // Have test error, but not checked!
+      replacement: IgnorePointer(child: child),
       child: IgnorePointer(
         ignoring: !isVisible,
         child: _DivVisibilityActionEmitter(
@@ -60,7 +61,7 @@ class _DivVisibilityActionEmitterState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final divContext = DivKitProvider.watch<DivContext>(context)!;
+    final divContext = watch<DivContext>(context)!;
     if (widget.actions.isNotEmpty) {
       divContext.visibilityActionManager.addOrUpdateActions(
         widget.actions,
@@ -73,7 +74,7 @@ class _DivVisibilityActionEmitterState
   void didUpdateWidget(covariant _DivVisibilityActionEmitter oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.actions != widget.actions && widget.actions.isNotEmpty) {
-      final divContext = DivKitProvider.watch<DivContext>(context)!;
+      final divContext = watch<DivContext>(context)!;
       if (widget.actions.isNotEmpty) {
         divContext.visibilityActionManager.addOrUpdateActions(
           widget.actions,
@@ -85,24 +86,20 @@ class _DivVisibilityActionEmitterState
 
   @override
   Widget build(BuildContext context) {
-    final divContext = DivKitProvider.watch<DivContext>(context)!;
+    final divContext = watch<DivContext>(context)!;
     final needVisibilityDetector =
         divContext.visibilityActionManager.hasNoEndActions(widget.id) &&
             widget.isVisible;
 
     if (!widget.isVisible) {
-      divContext.visibilityActionManager.stopAllWaitIfNeed(
-        widget.id,
-      );
+      divContext.visibilityActionManager.stopAllWaitIfNeed(widget.id);
     }
     if (!needVisibilityDetector) {
       return widget.child;
     }
 
     return VisibilityDetector(
-      key: ValueKey(
-        widget.id,
-      ),
+      key: ValueKey(widget.id),
       child: widget.child,
       onVisibilityChanged: (VisibilityInfo info) {
         divContext.visibilityActionManager.updateActionsStateIfNeed(

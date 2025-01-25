@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.reuse
 
 import android.view.View
+import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.view2.Div2View
@@ -42,7 +43,10 @@ internal class InputFocusTracker @Inject constructor(
     }
 
     fun removeFocusFromFocusedInput() {
-        lastFocused?.get()?.clearFocus()
+        lastFocused?.get()?.also {
+            it.clearFocus()
+            it.closeKeyboard()
+        }
     }
 
     inner class InputFocusPersistentDivDataChangedObserver: PersistentDivDataObserver {

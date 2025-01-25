@@ -11,12 +11,12 @@
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { doNothing } from '../../utils/doNothing';
-    import { ACTION_CTX, ActionCtxValue } from '../../context/action';
+    import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
     import { wrapError } from '../../utils/wrapError';
     import { getUrlSchema, isBuiltinSchema } from '../../utils/url';
-    import { Coords, getTouchCoords } from '../../utils/getTouchCoords';
+    import { type Coords, getTouchCoords } from '../../utils/getTouchCoords';
 
     export let componentContext: ComponentContext;
     export let id = '';

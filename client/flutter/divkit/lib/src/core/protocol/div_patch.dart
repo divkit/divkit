@@ -1,6 +1,4 @@
-import 'package:divkit/src/generated_sources/div_data.dart';
-
-import 'package:divkit/src/core/patch/patch.dart';
+import 'package:divkit/divkit.dart';
 
 abstract class DivPatchManager {
   const DivPatchManager();

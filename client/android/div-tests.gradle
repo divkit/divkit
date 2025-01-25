@@ -8,6 +8,7 @@ android {
 
     testOptions {
         unitTests {
+            //noinspection ConfigurationAvoidance
             all {
                 jacoco {
                     includeNoLocationClasses = true

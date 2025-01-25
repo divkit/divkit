@@ -5,7 +5,7 @@ import Foundation
 typealias JsonPublisher = AnyPublisher<[String: Any], Never>
 
 struct PlaygroundJsonProvider {
-  private let jsonSubject = CurrentValueSubject<[String: Any], Never>([:])
+  private let jsonSubject = PassthroughSubject<[String: Any], Never>()
 
   var jsonPublisher: JsonPublisher {
     jsonSubject.eraseToAnyPublisher()

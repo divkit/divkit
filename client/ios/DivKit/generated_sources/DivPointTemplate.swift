@@ -24,8 +24,8 @@ public final class DivPointTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPointTemplate?) -> DeserializationResult<DivPoint> {
-    let xValue = parent?.x?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-    let yValue = parent?.y?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+    let xValue = { parent?.x?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let yValue = { parent?.y?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       xValue.errorsOrWarnings?.map { .nestedObjectError(field: "x", error: $0) },
       yValue.errorsOrWarnings?.map { .nestedObjectError(field: "y", error: $0) }
@@ -43,8 +43,8 @@ public final class DivPointTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPoint(
-      x: xNonNil,
-      y: yNonNil
+      x: { xNonNil }(),
+      y: { yNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -55,22 +55,36 @@ public final class DivPointTemplate: TemplateValue {
     }
     var xValue: DeserializationResult<DivDimension> = .noValue
     var yValue: DeserializationResult<DivDimension> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "x":
-        xValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).merged(with: xValue)
-      case "y":
-        yValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).merged(with: yValue)
-      case parent?.x?.link:
-        xValue = xValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
-      case parent?.y?.link:
-        yValue = yValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "x" {
+           xValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).merged(with: xValue)
+          }
+        }()
+        _ = {
+          if key == "y" {
+           yValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).merged(with: yValue)
+          }
+        }()
+        _ = {
+         if key == parent?.x?.link {
+           xValue = xValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.y?.link {
+           yValue = yValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      xValue = xValue.merged(with: { parent.x?.resolveValue(context: context, useOnlyLinks: true) })
-      yValue = yValue.merged(with: { parent.y?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = { xValue = xValue.merged(with: { parent.x?.resolveValue(context: context, useOnlyLinks: true) }) }()
+      _ = { yValue = yValue.merged(with: { parent.y?.resolveValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       xValue.errorsOrWarnings?.map { .nestedObjectError(field: "x", error: $0) },
@@ -89,8 +103,8 @@ public final class DivPointTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPoint(
-      x: xNonNil,
-      y: yNonNil
+      x: { xNonNil }(),
+      y: { yNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -1,7 +1,8 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithoutProperties() : Hashable {
@@ -17,10 +18,13 @@ class EntityWithoutProperties() : Hashable {
         return hash
     }
 
+    fun equals(other: EntityWithoutProperties?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        return other != null
+    }
+
     fun copy() = EntityWithoutProperties()
 
     companion object {
         const val TYPE = "entity_without_properties"
     }
-
 }

@@ -1,11 +1,12 @@
 @testable import DivKit
-
 import XCTest
 
 final class FunctionTests: XCTestCase {
   private let context = ExpressionContext(
     evaluators: { _ in nil },
-    variableValueProvider: { _ in nil }
+    variableValueProvider: { _ in nil },
+    customFunctionsStorageProvider: { _ in nil },
+    errorTracker: { _ in }
   )
 
   private var unaryFunction = FunctionUnary<String, Bool> { _ in true }
@@ -140,7 +141,7 @@ final class FunctionTests: XCTestCase {
   }
 }
 
-extension ExpressionError: Equatable {
+extension ExpressionError: Swift.Equatable {
   public static func ==(lhs: ExpressionError, rhs: ExpressionError) -> Bool {
     lhs.description == rhs.description
   }

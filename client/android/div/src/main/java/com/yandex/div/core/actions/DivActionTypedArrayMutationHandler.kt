@@ -1,5 +1,6 @@
 package com.yandex.div.core.actions
 
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.util.asList
@@ -17,6 +18,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
     : DivActionTypedHandler {
 
     override fun handleAction(
+        scopeId: String?,
         action: DivActionTyped,
         view: Div2View,
         resolver: ExpressionResolver,
@@ -44,7 +46,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index?.evaluate(resolver)?.toInt()
         val newValue = action.value.evaluate(resolver)
-        view.updateVariable(variableName) { array ->
+        view.updateVariable(variableName, resolver) { array ->
             val length = array.length()
             when (index) {
                 null, length -> array.mutate { add(newValue) }
@@ -66,7 +68,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index.evaluate(resolver).toInt()
-        view.updateVariable(variableName) { array ->
+        view.updateVariable(variableName, resolver) { array ->
             val length = array.length()
             when (index) {
                 in 0 until length -> array.mutate { removeAt(index) }
@@ -88,7 +90,7 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index.evaluate(resolver).toInt()
         val newValue = action.value.evaluate(resolver)
-        view.updateVariable(variableName) { array ->
+        view.updateVariable(variableName, resolver) { array ->
             val length = array.length()
             when (index) {
                 in 0 until length -> array.mutate { this[index] = newValue }
@@ -112,9 +114,10 @@ private fun JSONArray.mutate(action: MutableList<Any>.() -> Unit): JSONArray {
 
 private fun Div2View.updateVariable(
     name: String,
+    resolver: ExpressionResolver,
     valueMutation: (JSONArray) -> JSONArray
 ) {
-    view.setVariable(name) { variable: Variable ->
+    VariableMutationHandler.setVariable(this, name, resolver) { variable: Variable ->
         if (variable !is Variable.ArrayVariable) {
             view.logError(
                 IllegalArgumentException("Action requires array variable")

@@ -7,6 +7,7 @@ import type { GradientBackground, SolidBackground } from './background';
 import type { BooleanInt } from '../../typings/common';
 import type { TintMode } from './image';
 import type { Shadow, Stroke } from './border';
+import type { EdgeInsets } from './edgeInserts';
 
 export type FontWeight = 'light' | 'regular' | 'medium' | 'bold';
 
@@ -29,18 +30,30 @@ export interface TextStyles {
     text_shadow?: Shadow;
 }
 
+export interface CloudBackground {
+    type: 'cloud';
+    color: string;
+    corner_radius: number;
+    paddings?: EdgeInsets;
+}
+
+export type RangeBackground = SolidBackground | CloudBackground;
+
 export interface TextRangeBorder {
     stroke?: Stroke;
     corner_radius?: number;
 }
 
+export type TextVerticalAlignment = 'top' | 'center' | 'bottom' | 'baseline';
+
 export interface TextRange extends TextStyles {
-    start: number;
-    end: number;
+    start?: number;
+    end?: number;
     actions?: Action[];
     top_offset?: number;
     border?: TextRangeBorder;
-    background?: SolidBackground;
+    background?: RangeBackground;
+    alignment_vertical?: TextVerticalAlignment;
 }
 
 export interface TextImage {
@@ -51,6 +64,7 @@ export interface TextImage {
     tint_color?: string;
     tint_mode?: TintMode;
     preload_required?: BooleanInt;
+    alignment_vertical?: TextVerticalAlignment;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

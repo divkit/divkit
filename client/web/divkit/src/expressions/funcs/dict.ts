@@ -101,6 +101,13 @@ function containsKey(_ext: EvalContext, dict: DictValue, key: StringValue): Bool
     };
 }
 
+function isEmpty(_ext: EvalContext, dict: DictValue): BooleanValue {
+    return {
+        type: BOOLEAN,
+        value: Object.keys(dict.value).length ? 0 : 1
+    };
+}
+
 export function registerDict(): void {
     const STRING_VARARG = {
         type: STRING,
@@ -166,4 +173,5 @@ export function registerDict(): void {
     registerMethod('getArray', [DICT, STRING_VARARG], getDictArray);
     registerMethod('getDict', [DICT, STRING_VARARG], getDictDict);
     registerMethod('containsKey', [DICT, STRING], containsKey);
+    registerMethod('isEmpty', [DICT], isEmpty);
 }

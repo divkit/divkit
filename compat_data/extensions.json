@@ -44,6 +44,12 @@
         "compat": {
             "ios": {
                 "version_added": "29.15.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "30.25.0"
             }
         }
     }, {
@@ -66,6 +72,31 @@
         "compat": {
             "android": {
                 "version_added": "30.8.0"
+            },
+            "web": {
+                "version_added": "30.14.0"
+            },
+            "ios": {
+                "version_added": "30.17.0"
+            }
+        }
+    }, {
+        "id": "ext_shimmer",
+        "name": "<code>shimmer</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "23.4.0"
+            },
+            "ios": {
+                "version_added": "23.0.0"
+            }
+        }
+    }, {
+        "id": "ext_shimmer_corner_radius",
+        "name": "Custom corner radius for the <code>shimmer</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "30.12.0"
             }
         }
     }]

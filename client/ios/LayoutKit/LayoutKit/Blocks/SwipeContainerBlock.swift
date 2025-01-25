@@ -86,4 +86,20 @@ extension SwipeContainerBlock: ElementStateUpdating {
   }
 }
 
+extension SwipeContainerBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> SwipeContainerBlock {
+    let newChild = try child.updated(path: path, isFocused: isFocused)
+    if newChild === child {
+      return self
+    }
+
+    return SwipeContainerBlock(
+      child: newChild,
+      state: state,
+      path: path,
+      swipeOutActions: swipeOutActions
+    )
+  }
+}
+
 extension SwipeContainerBlock: PathHolder {}

@@ -197,6 +197,7 @@ public final class DivTabs: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
@@ -204,6 +205,7 @@ public final class DivTabs: DivBase {
   public let dynamicHeight: Expression<Bool> // default value: false
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let hasSeparator: Expression<Bool> // default value: false
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
@@ -228,6 +230,7 @@ public final class DivTabs: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
@@ -309,6 +312,7 @@ public final class DivTabs: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
     alpha: Expression<Double>?,
+    animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
     columnSpan: Expression<Int>?,
@@ -316,6 +320,7 @@ public final class DivTabs: DivBase {
     dynamicHeight: Expression<Bool>?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
+    functions: [DivFunction]?,
     hasSeparator: Expression<Bool>?,
     height: DivSize?,
     id: String?,
@@ -340,6 +345,7 @@ public final class DivTabs: DivBase {
     transitionIn: DivAppearanceTransition?,
     transitionOut: DivAppearanceTransition?,
     transitionTriggers: [DivTransitionTrigger]?,
+    variableTriggers: [DivTrigger]?,
     variables: [DivVariable]?,
     visibility: Expression<DivVisibility>?,
     visibilityAction: DivVisibilityAction?,
@@ -350,6 +356,7 @@ public final class DivTabs: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -357,6 +364,7 @@ public final class DivTabs: DivBase {
     self.dynamicHeight = dynamicHeight ?? .value(false)
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.hasSeparator = hasSeparator ?? .value(false)
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
@@ -381,6 +389,7 @@ public final class DivTabs: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
@@ -401,77 +410,84 @@ extension DivTabs: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.animators == rhs.animators,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.dynamicHeight == rhs.dynamicHeight
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.dynamicHeight == rhs.dynamicHeight,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.hasSeparator == rhs.hasSeparator
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
+      lhs.functions == rhs.functions,
+      lhs.hasSeparator == rhs.hasSeparator,
+      lhs.height == rhs.height
+    else {
+      return false
+    }
+    guard
       lhs.id == rhs.id,
-      lhs.items == rhs.items
+      lhs.items == rhs.items,
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
-      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.paddings == rhs.paddings,
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.rowSpan == rhs.rowSpan,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.selectedTab == rhs.selectedTab,
-      lhs.separatorColor == rhs.separatorColor
+      lhs.separatorColor == rhs.separatorColor,
+      lhs.separatorPaddings == rhs.separatorPaddings
     else {
       return false
     }
     guard
-      lhs.separatorPaddings == rhs.separatorPaddings,
       lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled,
-      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter
+      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter,
+      lhs.tabTitleStyle == rhs.tabTitleStyle
     else {
       return false
     }
     guard
-      lhs.tabTitleStyle == rhs.tabTitleStyle,
       lhs.titlePaddings == rhs.titlePaddings,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables
     else {
       return false
@@ -501,6 +517,7 @@ extension DivTabs: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
@@ -508,6 +525,7 @@ extension DivTabs: Serializable {
     result["dynamic_height"] = dynamicHeight.toValidSerializationValue()
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["has_separator"] = hasSeparator.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["id"] = id
@@ -532,6 +550,7 @@ extension DivTabs: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()

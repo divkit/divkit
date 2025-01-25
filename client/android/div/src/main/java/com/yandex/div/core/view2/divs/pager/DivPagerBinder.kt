@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.util.SparseArray
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindItemBuilder
+import com.yandex.div.core.view2.divs.bindStates
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter.Companion.OFFSET_TO_REAL_ITEM
 import com.yandex.div.core.view2.divs.toPxF
@@ -66,6 +68,7 @@ internal class DivPagerBinder @Inject constructor(
                 view.pageTransformer?.onItemsCountChanged()
                 view.pagerOnItemsCountChange?.onItemsUpdated()
             }
+            view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
             return
         }
 
@@ -75,17 +78,19 @@ internal class DivPagerBinder @Inject constructor(
         val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
         val adapter = DivPagerAdapter(
-                div.buildItems(resolver),
-                context,
-                divBinder.get(),
-                pageTranslations,
-                viewCreator,
-                path,
-                a11yEnabled,
-            )
+            div.buildItems(resolver),
+            context,
+            divBinder.get(),
+            pageTranslations,
+            viewCreator,
+            path,
+            a11yEnabled,
+            view
+        )
         view.viewPager.adapter = adapter
         view.bindInfiniteScroll(div, resolver)
         view.pagerOnItemsCountChange?.onItemsUpdated()
+        view.clipToPage = divView.div2Component.isPagerPageClipEnabled
 
         val reusableObserver = { _: Any ->
             val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
@@ -119,7 +124,7 @@ internal class DivPagerBinder @Inject constructor(
             divActionBinder = divActionBinder,
         )
 
-        view.changePageCallbackForLogger = PageChangeCallback(
+        view.changePageCallbackForLogger = DivPagerPageChangeCallback(
             bindingContext = context,
             divPager = div,
             recyclerView = view.viewPager.getChildAt(0) as RecyclerView,
@@ -129,10 +134,11 @@ internal class DivPagerBinder @Inject constructor(
 
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
-            val pagerState = state.getBlockState(id) as PagerState?
+            val pagerState = state.getBlockState(id) as? PagerState
             view.changePageCallbackForState = UpdateStateChangePageCallback(id, state)
-            view.currentItem = pagerState?.currentPageIndex
-                ?: adapter.getPosition(div.defaultItem.evaluate(resolver).toIntSafely())
+            view.currentItem = pagerState?.currentPageIndex?.takeIf {
+                it < adapter.getRealPosition(adapter.itemsToShow.size)
+            } ?: adapter.getPosition(div.defaultItem.evaluate(resolver).toIntSafely())
         }
 
         view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->
@@ -142,6 +148,8 @@ internal class DivPagerBinder @Inject constructor(
                 null
             }
         })
+
+        view.addInitialRelayout()
 
         view.bindItemBuilder(context, div)
         if (a11yEnabled) {
@@ -206,6 +214,7 @@ internal class DivPagerBinder @Inject constructor(
         val neighbourItemIsShown = when (val mode = div.layoutMode) {
             is DivPagerLayoutMode.PageSize -> mode.value.pageWidth.value.evaluate(resolver) < 100
             is DivPagerLayoutMode.NeighbourPageSize -> mode.value.neighbourPageWidth.value.evaluate(resolver) > 0
+            is DivPagerLayoutMode.PageContentSize -> true
         }
         if (neighbourItemIsShown && viewPager.offscreenPageLimit != 1) {
             viewPager.offscreenPageLimit = 1
@@ -285,6 +294,22 @@ internal class DivPagerBinder @Inject constructor(
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, context.expressionResolver) {
             (viewPager.adapter as DivPagerAdapter?)?.setItems(builder.build(context.expressionResolver))
+            pageTransformer?.onItemsCountChanged()
+            pagerOnItemsCountChange?.onItemsUpdated()
+            getRecyclerView()?.scrollToPosition(currentItem)
+        }
+    }
+
+    private fun DivPagerView.addInitialRelayout() {
+        if (isWrapContentAlongCrossAxis()) {
+            viewTreeObserver.addOnGlobalLayoutListener(
+                object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        requestLayout()
+                    }
+                }
+            )
         }
     }
 }

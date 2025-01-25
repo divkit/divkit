@@ -1,3 +1,4 @@
+import type { AnimatorDirection, AnimatorRepeatCount, Interpolation } from '../src/types/base';
 import type { Variable } from './variables';
 
 export type BooleanInt = 0 | 1 | false | true;
@@ -200,11 +201,30 @@ export interface ActionArraySetValue {
     value: TypedValue;
 }
 
+export interface ActionAnimatorStart {
+    type: 'animator_start';
+    animator_id: string;
+    duration?: number;
+    start_delay?: number;
+    interpolator?: Interpolation;
+    direction?: AnimatorDirection;
+    repeat_count?: AnimatorRepeatCount;
+    start_value?: TypedValue;
+    end_value?: TypedValue;
+}
+
+export interface ActionAnimatorStop {
+    type: 'animator_stop';
+    animator_id: string;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
-    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue;
+    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
+    ActionAnimatorStart | ActionAnimatorStop;
 
 export interface ActionBase {
     log_id: string;
+    scope_id?: string;
     url?: string;
     // referer
     payload?: Record<string, unknown>;
@@ -248,7 +268,7 @@ export type CustomActionCallback = (action: Action & { url: string }) => void;
 
 export type ComponentCallback = (details: {
     type: 'mount' | 'update' | 'destroy';
-    node: HTMLElement;
+    node: HTMLElement | null;
     json: DivBase;
     origJson: DivBase | undefined;
     templateContext: TemplateContext;
@@ -295,9 +315,11 @@ export interface Customization {
 
 export interface DivExtensionContext {
     variables: Map<string, Variable>;
+    direction: Direction;
     processExpressions<T>(t: T): T;
     execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;
+    getComponentProperty<T>(property: string): T;
 }
 
 export interface DivExtensionClass {
@@ -307,6 +329,8 @@ export interface DivExtensionClass {
 
 export interface DivExtension {
     mountView?(node: HTMLElement, context: DivExtensionContext): void;
+
+    updateView?(node: HTMLElement, context: DivExtensionContext): void;
 
     unmountView?(node: HTMLElement, context: DivExtensionContext): void;
 }

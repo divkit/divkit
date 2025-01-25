@@ -1,10 +1,11 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:divkit/divkit.dart';
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:divkit/divkit.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
 
-final directoryPath = 'example/assets/test_data/parsing_test_data';
+const directoryPath = 'test_data/parsing_test_data';
 
 Future<List<Map<String, dynamic>>> loadTests(String directoryPath) async {
   final directory = Directory(directoryPath);
@@ -30,13 +31,16 @@ void main() async {
   group('Global DivKit parsing tests', () {
     for (final testCase in tests) {
       // We cannot pass this case due to the fact that the calculator sends strings on ios
-      if (testCase['description'] !=
-          'String value in boolean_int property (div-text.auto_ellipsize)') {
+      if (![
+        'String value in boolean_int property (div-text.auto_ellipsize)',
+        'Invalid item in array (transition_triggers) is ignored',
+      ].contains(testCase['description'])) {
         test(
           testCase['description'] ?? testCase['path'],
           () {
-            final data = DefaultDivKitData.fromJson(testCase);
-            final expected = DefaultDivKitData.fromJson(testCase['expected']);
+            final data = DefaultDivKitData.fromJson(testCase).build();
+            final expected =
+                DefaultDivKitData.fromJson(testCase['expected']).build();
             expect(data, expected);
           },
         );

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, colors`.
  */
 @Generated
-class RadialGradient internal constructor(
+data class RadialGradient internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Background, TextGradient {
@@ -43,7 +43,7 @@ class RadialGradient internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Shift of the central point of the gradient relative to the left edge along the X axis.
          * Default value: `{"type": "relative", "value": 0.5 }`.

@@ -50,13 +50,19 @@ public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDele
   /// - Parameter anchorView: The event that anchorView disappeared from view hierarchy.  An anchor
   /// view is the view to which a tooltip is attached.
   func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView)
+
+  /// Removes all tooltips.
+  func reset()
+
+  /// Sets handler for the tooltip view UI events.
+  func setHandler(_ handler: @escaping (UIActionEvent) -> Void)
 }
 
 extension TooltipManager {
-  public func mapView(_: BlockView, to _: BlockViewID) {}
+  public func setHandler(_: @escaping (UIActionEvent) -> Void) {}
 }
 
-public final class DefaultTooltipManager: TooltipManager {
+public class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
     public let id: String
     public let duration: Duration
@@ -65,26 +71,38 @@ public final class DefaultTooltipManager: TooltipManager {
 
   public var shownTooltips: Property<Set<String>>
 
-  private let handleAction: (UIActionEvent) -> Void
+  private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
-  private var tooltipWindow: UIWindow?
+  private(set) var tooltipWindow: UIWindow?
+  private var previousOrientation = UIDevice.current.orientation
 
   public init(
-    shownTooltips: Property<Set<String>>,
-    handleAction: @escaping (UIActionEvent) -> Void
+    shownTooltips: Property<Set<String>> = Property(),
+    handleAction: @escaping (UIActionEvent) -> Void = { _ in }
   ) {
     self.handleAction = handleAction
     self.shownTooltips = shownTooltips
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(orientationDidChange),
+      name: UIDevice.orientationDidChangeNotification,
+      object: nil
+    )
   }
 
   public func showTooltip(info: TooltipInfo) {
-    if !info.multiple, !shownTooltips.value.insert(info.id).inserted { return }
-    guard !showingTooltips.keys.contains(info.id),
-          let tooltip = existingAnchorViews.compactMap({ $0?.makeTooltip(id: info.id) }).first
-    else { return }
-
     setupTooltipWindow()
+
+    guard let tooltipWindow else { return }
+
+    let windowBounds = tooltipWindow.bounds.inset(by: tooltipWindow.safeAreaInsets)
+    guard !showingTooltips.keys.contains(info.id),
+          let tooltip = existingAnchorViews.compactMap({
+            $0?.makeTooltip(id: info.id, in: windowBounds)
+          }).first
+    else { return }
 
     let view = TooltipContainerView(
       tooltipView: tooltip.view,
@@ -95,10 +113,17 @@ public final class DefaultTooltipManager: TooltipManager {
         self?.tooltipWindow?.isHidden = true
       }
     )
-    tooltipWindow?.addSubview(view)
-    tooltipWindow?.isHidden = false
-    tooltipWindow?.makeKeyAndVisible()
-    view.frame = tooltipWindow?.bounds ?? .zero
+    // Passing the statusBarStyle control to `rootViewController` of the main window
+    let vc = ProxyViewController(
+      viewController: UIApplication.shared.delegate?.window??
+        .rootViewController ?? UIViewController()
+    )
+    vc.view = view
+    // Window won't rotate if `rootViewController` is not set
+    tooltipWindow.rootViewController = vc
+    tooltipWindow.isHidden = false
+    tooltipWindow.makeKeyAndVisible()
+    view.frame = tooltipWindow.bounds
     showingTooltips[info.id] = view
     if !tooltip.duration.value.isZero {
       after(tooltip.duration.value, block: { self.hideTooltip(id: tooltip.id) })
@@ -108,7 +133,6 @@ public final class DefaultTooltipManager: TooltipManager {
   public func hideTooltip(id: String) {
     guard let tooltipView = showingTooltips[id] else { return }
     tooltipView.close()
-    tooltipWindow?.isHidden = true
   }
 
   public func tooltipAnchorViewAdded(anchorView: TooltipAnchorView) {
@@ -119,39 +143,88 @@ public final class DefaultTooltipManager: TooltipManager {
     existingAnchorViews.remove(anchorView)
   }
 
+  public func reset() {
+    showingTooltips = [:]
+    tooltipWindow = nil
+  }
+
+  public func setHandler(_ handler: @escaping (UIActionEvent) -> Void) {
+    handleAction = handler
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(
+      self,
+      name: UIDevice.orientationDidChangeNotification,
+      object: nil
+    )
+  }
+
+  @objc func orientationDidChange(_: Notification) {
+    let orientation = UIDevice.current.orientation
+    guard orientation != previousOrientation, !orientation.isFlat else { return }
+    if !(orientation.isPortrait && previousOrientation.isPortrait) {
+      reset()
+    }
+    previousOrientation = orientation
+  }
+
   private func setupTooltipWindow() {
-    if #available(iOS 13.0, *) {
-      if tooltipWindow == nil {
-        guard let windowScene = UIApplication.shared.connectedScenes
-          .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
-        else { return }
-        tooltipWindow = UIWindow(windowScene: windowScene)
-        tooltipWindow?.windowLevel = UIWindow.Level.alert + 1
-        tooltipWindow?.isHidden = true
-      }
-    } else {
-      tooltipWindow = UIApplication.shared.windows.first
+    if tooltipWindow == nil {
+      guard let windowScene = UIApplication.shared.connectedScenes
+        .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+      else { return }
+      tooltipWindow = UIWindow(windowScene: windowScene)
+      tooltipWindow?.windowLevel = UIWindow.Level.alert + 1
+      tooltipWindow?.isHidden = true
     }
   }
 }
 
 extension TooltipAnchorView {
-  fileprivate func makeTooltip(id: String) -> DefaultTooltipManager.Tooltip? {
+  fileprivate func makeTooltip(
+    id: String,
+    in constraint: CGRect
+  ) -> DefaultTooltipManager.Tooltip? {
     tooltips
       .first { $0.id == id }
       .flatMap {
         let tooltip = $0
+        let targetRect = window != nil ?
+          convert(bounds, to: nil) :
+          frame
+
         return DefaultTooltipManager.Tooltip(
           id: tooltip.id,
           duration: tooltip.duration,
           view: {
-            let frame = tooltip.calculateFrame(targeting: bounds)
             let tooltipView = tooltip.tooltipViewFactory?.value ?? tooltip.block.makeBlockView()
-            tooltipView.frame = convert(frame, to: nil)
+            tooltipView.frame = tooltip.calculateFrame(
+              targeting: targetRect,
+              constrainedBy: constraint
+            )
             return tooltipView
           }()
         )
       }
+  }
+}
+
+private final class ProxyViewController: UIViewController {
+  private let viewController: UIViewController
+
+  init(viewController: UIViewController) {
+    self.viewController = viewController
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    viewController.preferredStatusBarStyle
   }
 }
 #else
@@ -164,3 +237,8 @@ public final class DefaultTooltipManager: TooltipManager {
   public func hideTooltip(id _: String) {}
 }
 #endif
+
+extension TooltipManager {
+  public func mapView(_: BlockView, to _: BlockViewID) {}
+  public func reset() {}
+}

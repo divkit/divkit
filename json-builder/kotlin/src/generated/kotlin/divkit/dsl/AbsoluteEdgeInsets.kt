@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [absoluteEdgeInsets].
  */
 @Generated
-class AbsoluteEdgeInsets internal constructor(
+data class AbsoluteEdgeInsets internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -39,7 +39,7 @@ class AbsoluteEdgeInsets internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Bottom margin.
          * Default value: `0`.

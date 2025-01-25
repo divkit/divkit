@@ -38,6 +38,7 @@ extension [String: Function] {
     addFunction("getNumber", _getNumber)
     addFunction("getString", _getString)
     addFunction("getUrl", _getUrl)
+    addFunction("isEmpty", _isEmpty)
 
     addFunction("containsKey", _containsKey)
   }
@@ -81,6 +82,10 @@ private let _getString = FunctionVarBinary<DivDictionary, String, String> {
 
 private let _getUrl = FunctionVarBinary<DivDictionary, String, URL> {
   try $0.getUrl(path: $1)
+}
+
+private let _isEmpty = FunctionUnary<DivDictionary, Bool> {
+  $0.isEmpty
 }
 
 private let _getOptArray = FunctionVarBinary<DivDictionary, String, [AnyHashable]> {

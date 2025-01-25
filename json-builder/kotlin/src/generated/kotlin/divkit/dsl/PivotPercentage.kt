@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class PivotPercentage internal constructor(
+data class PivotPercentage internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Pivot {
@@ -40,7 +40,7 @@ class PivotPercentage internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Coordinate value as a percentage.
          */

@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithRawArray(
-    @JvmField final val array: Expression<JSONArray>,
+    @JvmField val array: Expression<JSONArray>,
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -21,6 +22,11 @@ class EntityWithRawArray(
         return hash
     }
 
+    fun equals(other: EntityWithRawArray?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return array.evaluate(resolver) == other.array.evaluate(otherResolver)
+    }
+
     fun copy(
         array: Expression<JSONArray> = this.array,
     ) = EntityWithRawArray(
@@ -30,5 +36,4 @@ class EntityWithRawArray(
     companion object {
         const val TYPE = "entity_with_raw_array"
     }
-
 }

@@ -11,18 +11,24 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.evaluable.types.DateTime
-import com.yandex.div.internal.parser.*
+import com.yandex.div.internal.parser.Converter
+import com.yandex.div.internal.parser.NUMBER_TO_DOUBLE
+import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
+import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
+import com.yandex.div.internal.parser.TYPE_HELPER_INT
+import com.yandex.div.internal.parser.TYPE_HELPER_STRING
+import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.Expression
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
-import java.util.*
-import org.junit.Before
+import java.util.TimeZone
 
 /**
  * Tests for [ExpressionResolverImpl].
@@ -70,15 +76,15 @@ class ExpressionResolverImplTest {
     private val evaluationContext = EvaluationContext(
         variableProvider = { externalVariables.getMutableVariable(it)?.getValue() },
         storedValueProvider = mock(),
-        functionProvider = GeneratedBuiltinFunctionProvider,
+        functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider),
         warningSender = { _, _ -> }
     )
 
     private val underTest = ExpressionResolverImpl(
         externalVariables,
         Evaluator(evaluationContext),
-        mock(),
-    )
+        mock()
+    ) { _, _, _ -> }
 
     private val withFuncGetCallback = { callback: () -> Unit ->
         ExpressionResolverImpl(
@@ -87,7 +93,7 @@ class ExpressionResolverImplTest {
                 EvaluationContext(
                     variableProvider = evaluationContext.variableProvider,
                     storedValueProvider = evaluationContext.storedValueProvider,
-                    functionProvider = object : FunctionProvider {
+                    functionProvider = FunctionProviderDecorator(object : FunctionProvider {
                         override fun get(name: String, args: List<EvaluableType>): Function {
                             callback()
                             return evaluationContext.functionProvider.get(name, args)
@@ -97,12 +103,12 @@ class ExpressionResolverImplTest {
                             callback()
                             return evaluationContext.functionProvider.getMethod(name, args)
                         }
-                    },
+                    }),
                     warningSender = evaluationContext.warningSender
                 )
             ),
             mock()
-        )
+        ) { _, _, _ -> }
     }
 
     @Before

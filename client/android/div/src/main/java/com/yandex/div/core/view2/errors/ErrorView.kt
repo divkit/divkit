@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -22,6 +23,7 @@ import com.yandex.div.internal.widget.FrameContainerLayout
 internal class ErrorView(
     private val root: ViewGroup,
     private val errorModel: ErrorModel,
+    private val showPermanently: Boolean,
 ) : Disposable {
     private var counterView: ViewGroup? = null
     private var detailsView: DetailsViewGroup? = null
@@ -48,8 +50,9 @@ internal class ErrorView(
         if (new.showDetails) {
             tryAddDetailsView()
             detailsView?.text = new.getDetails()
+            detailsView?.updateVariables(errorModel.getAllControllers())
         } else {
-            if (new.getCounterText().isNotEmpty()) {
+            if (new.getCounterText().isNotEmpty() || showPermanently) {
                 tryAddCounterView()
             } else {
                 counterView?.let { root.removeView(it) }
@@ -68,15 +71,16 @@ internal class ErrorView(
             return
         }
 
-        val view = DetailsViewGroup(root.context,
+        val view = DetailsViewGroup(root.context, errorModel.getErrorHandler(),
             onCloseAction = {
                 errorModel.hideDetails()
-            }, onCopyAction = {
-
+            },
+            onCopyAction = {
                 viewModel?.let {
                     pasteToClipBoard(errorModel.generateFullReport())
                 }
-            })
+            }
+        )
 
         val layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -147,52 +151,39 @@ internal class ErrorView(
 @SuppressLint("ViewConstructor")
 private class DetailsViewGroup(
     context: Context,
+    errorHandler: (Throwable) -> Unit,
     private val onCloseAction: () -> Unit,
     private val onCopyAction: () -> Unit,
 ) : LinearLayout(context) {
-    private val errorsOutput = AppCompatTextView(context).apply {
-        setTextColor(Color.WHITE)
-        gravity = Gravity.LEFT
-    }
+
+    private val variableMonitor = VariableMonitor(errorHandler)
+
+    private val errorsOutput = createErrorsOutput()
+    private val monitorView = VariableMonitorView(context, variableMonitor)
 
     init {
-        val padding = 8.dpToPx(resources.displayMetrics)
-        setPadding(padding, padding, padding, padding)
-        orientation = HORIZONTAL
-        setBackgroundColor(Color.argb(186, 0, 0, 0))
-        elevation = resources.getDimension(R.dimen.div_shadow_elevation)
-        val controls = LinearLayout(context).apply {
-            setPadding(0, 0, /*right*/padding, 0)
-            orientation = VERTICAL
-            val closeView = ImageView(context).apply {
-                setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
-                setOnClickListener { onCloseAction() }
-            }
-            val copyView = ImageView(context).apply {
-                setImageResource(android.R.drawable.ic_menu_save)
-                setOnClickListener { onCopyAction() }
-            }
+        configureView()
+    }
 
-            addView(
-                closeView, LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT,
-                )
-            )
-            addView(
-                copyView, LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT,
-                )
-            )
+    var text: String
+        set(value) {
+            errorsOutput.text = value
         }
+        get() = errorsOutput.text.toString()
+    
+    fun updateVariables(controllers: Map<String, VariableController>) {
+        variableMonitor.controllerMap = controllers
+    }
+
+    private fun createTopPanel() = LinearLayout(context).apply {
+        orientation = HORIZONTAL
+
         addView(
-            controls, LayoutParams(
+            createControls(), LayoutParams(
                 32.dpToPx(resources.displayMetrics),
                 LayoutParams.WRAP_CONTENT,
             )
         )
-
         addView(
             errorsOutput, LayoutParams(
                 LayoutParams.WRAP_CONTENT,
@@ -201,9 +192,58 @@ private class DetailsViewGroup(
         )
     }
 
-    var text: String
-        set(value) {
-            errorsOutput.text = value
+    private fun createControls() = LinearLayout(context).apply {
+        val padding = 8.dpToPx(resources.displayMetrics)
+        setPadding(0, 0, /*right*/padding, 0)
+        orientation = VERTICAL
+
+        val closeView = ImageView(context).apply {
+            setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
+            setOnClickListener { onCloseAction() }
         }
-        get() = errorsOutput.text.toString()
+        val copyView = ImageView(context).apply {
+            setImageResource(android.R.drawable.ic_menu_save)
+            setOnClickListener { onCopyAction() }
+        }
+
+        addView(
+            closeView, LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+            )
+        )
+        addView(
+            copyView, LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+            )
+        )
+    }
+
+    private fun createErrorsOutput() = AppCompatTextView(context).apply {
+        setTextColor(Color.WHITE)
+        gravity = Gravity.LEFT
+    }
+
+    private fun configureView() {
+        val padding = 8.dpToPx(resources.displayMetrics)
+        setPadding(padding, padding, padding, padding)
+        orientation = VERTICAL
+        setBackgroundColor(Color.argb(186, 0, 0, 0))
+        elevation = resources.getDimension(R.dimen.div_shadow_elevation)
+
+        addView(
+            createTopPanel(), LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+            )
+        )
+        addView(
+            monitorView, LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT,
+            )
+        )
+    }
+
 }

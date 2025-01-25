@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, image_url`.
  */
 @Generated
-class Image internal constructor(
+data class Image internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -44,6 +44,7 @@ class Image internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             appearanceAnimation = additive.appearanceAnimation ?: properties.appearanceAnimation,
             aspect = additive.aspect ?: properties.aspect,
             background = additive.background ?: properties.background,
@@ -56,8 +57,11 @@ class Image internal constructor(
             extensions = additive.extensions ?: properties.extensions,
             filters = additive.filters ?: properties.filters,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             highPriorityPreviewShow = additive.highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
+            hoverEndActions = additive.hoverEndActions ?: properties.hoverEndActions,
+            hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
@@ -65,6 +69,8 @@ class Image internal constructor(
             paddings = additive.paddings ?: properties.paddings,
             placeholderColor = additive.placeholderColor ?: properties.placeholderColor,
             preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
+            pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
+            pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             preview = additive.preview ?: properties.preview,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -78,6 +84,7 @@ class Image internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -86,7 +93,7 @@ class Image internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Direct URL to an image.
          */
@@ -121,6 +128,10 @@ class Image internal constructor(
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Transparency animation when loading an image.
          */
@@ -172,6 +183,10 @@ class Image internal constructor(
          */
         val focus: Property<Focus>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
@@ -182,11 +197,19 @@ class Image internal constructor(
          */
         val highPriorityPreviewShow: Property<Boolean>?,
         /**
+         * Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverStartActions: Property<List<Action>>?,
+        /**
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -212,11 +235,19 @@ class Image internal constructor(
          */
         val preloadRequired: Property<Boolean>?,
         /**
+         * Actions performed when an element is released.
+         */
+        val pressEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when an element is pressed.
+         */
+        val pressStartActions: Property<List<Action>>?,
+        /**
          * Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
          */
         val preview: Property<String>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -266,7 +297,11 @@ class Image internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -299,6 +334,7 @@ class Image internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("appearance_animation", appearanceAnimation)
             result.tryPutProperty("aspect", aspect)
             result.tryPutProperty("background", background)
@@ -311,8 +347,11 @@ class Image internal constructor(
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("filters", filters)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("high_priority_preview_show", highPriorityPreviewShow)
+            result.tryPutProperty("hover_end_actions", hoverEndActions)
+            result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("longtap_actions", longtapActions)
@@ -320,6 +359,8 @@ class Image internal constructor(
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("placeholder_color", placeholderColor)
             result.tryPutProperty("preload_required", preloadRequired)
+            result.tryPutProperty("press_end_actions", pressEndActions)
+            result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("preview", preview)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
@@ -333,6 +374,7 @@ class Image internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -352,6 +394,7 @@ class Image internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -364,17 +407,22 @@ class Image internal constructor(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -386,7 +434,8 @@ class Image internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -403,6 +452,7 @@ fun DivScope.image(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     appearanceAnimation: FadeTransition? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
@@ -415,8 +465,11 @@ fun DivScope.image(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -424,6 +477,8 @@ fun DivScope.image(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -437,6 +492,7 @@ fun DivScope.image(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -452,6 +508,7 @@ fun DivScope.image(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         appearanceAnimation = valueOrNull(appearanceAnimation),
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
@@ -464,8 +521,11 @@ fun DivScope.image(
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
@@ -473,6 +533,8 @@ fun DivScope.image(
         paddings = valueOrNull(paddings),
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -486,6 +548,7 @@ fun DivScope.image(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -503,6 +566,7 @@ fun DivScope.image(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -515,17 +579,22 @@ fun DivScope.image(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -537,7 +606,8 @@ fun DivScope.image(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -554,6 +624,7 @@ fun DivScope.imageProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     appearanceAnimation: FadeTransition? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
@@ -566,8 +637,11 @@ fun DivScope.imageProps(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -575,6 +649,8 @@ fun DivScope.imageProps(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -588,6 +664,7 @@ fun DivScope.imageProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -602,6 +679,7 @@ fun DivScope.imageProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     appearanceAnimation = valueOrNull(appearanceAnimation),
     aspect = valueOrNull(aspect),
     background = valueOrNull(background),
@@ -614,8 +692,11 @@ fun DivScope.imageProps(
     extensions = valueOrNull(extensions),
     filters = valueOrNull(filters),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
+    hoverEndActions = valueOrNull(hoverEndActions),
+    hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
     layoutProvider = valueOrNull(layoutProvider),
     longtapActions = valueOrNull(longtapActions),
@@ -623,6 +704,8 @@ fun DivScope.imageProps(
     paddings = valueOrNull(paddings),
     placeholderColor = valueOrNull(placeholderColor),
     preloadRequired = valueOrNull(preloadRequired),
+    pressEndActions = valueOrNull(pressEndActions),
+    pressStartActions = valueOrNull(pressStartActions),
     preview = valueOrNull(preview),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
@@ -636,6 +719,7 @@ fun DivScope.imageProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -652,6 +736,7 @@ fun DivScope.imageProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -664,17 +749,22 @@ fun DivScope.imageProps(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -686,7 +776,8 @@ fun DivScope.imageProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -703,6 +794,7 @@ fun TemplateScope.imageRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     appearanceAnimation: ReferenceProperty<FadeTransition>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -715,8 +807,11 @@ fun TemplateScope.imageRefs(
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -724,6 +819,8 @@ fun TemplateScope.imageRefs(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -737,6 +834,7 @@ fun TemplateScope.imageRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -751,6 +849,7 @@ fun TemplateScope.imageRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     appearanceAnimation = appearanceAnimation,
     aspect = aspect,
     background = background,
@@ -763,8 +862,11 @@ fun TemplateScope.imageRefs(
     extensions = extensions,
     filters = filters,
     focus = focus,
+    functions = functions,
     height = height,
     highPriorityPreviewShow = highPriorityPreviewShow,
+    hoverEndActions = hoverEndActions,
+    hoverStartActions = hoverStartActions,
     id = id,
     layoutProvider = layoutProvider,
     longtapActions = longtapActions,
@@ -772,6 +874,8 @@ fun TemplateScope.imageRefs(
     paddings = paddings,
     placeholderColor = placeholderColor,
     preloadRequired = preloadRequired,
+    pressEndActions = pressEndActions,
+    pressStartActions = pressStartActions,
     preview = preview,
     reuseId = reuseId,
     rowSpan = rowSpan,
@@ -785,6 +889,7 @@ fun TemplateScope.imageRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -801,6 +906,7 @@ fun TemplateScope.imageRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -813,17 +919,22 @@ fun TemplateScope.imageRefs(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -835,7 +946,8 @@ fun TemplateScope.imageRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -852,6 +964,7 @@ fun Image.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     appearanceAnimation: FadeTransition? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
@@ -864,8 +977,11 @@ fun Image.override(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -873,6 +989,8 @@ fun Image.override(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -886,6 +1004,7 @@ fun Image.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -901,6 +1020,7 @@ fun Image.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         appearanceAnimation = valueOrNull(appearanceAnimation) ?: properties.appearanceAnimation,
         aspect = valueOrNull(aspect) ?: properties.aspect,
         background = valueOrNull(background) ?: properties.background,
@@ -913,8 +1033,11 @@ fun Image.override(
         extensions = valueOrNull(extensions) ?: properties.extensions,
         filters = valueOrNull(filters) ?: properties.filters,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow) ?: properties.highPriorityPreviewShow,
+        hoverEndActions = valueOrNull(hoverEndActions) ?: properties.hoverEndActions,
+        hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
@@ -922,6 +1045,8 @@ fun Image.override(
         paddings = valueOrNull(paddings) ?: properties.paddings,
         placeholderColor = valueOrNull(placeholderColor) ?: properties.placeholderColor,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
+        pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
+        pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         preview = valueOrNull(preview) ?: properties.preview,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -935,6 +1060,7 @@ fun Image.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -952,6 +1078,7 @@ fun Image.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -964,17 +1091,22 @@ fun Image.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -986,7 +1118,8 @@ fun Image.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1003,6 +1136,7 @@ fun Image.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     appearanceAnimation: ReferenceProperty<FadeTransition>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -1015,8 +1149,11 @@ fun Image.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1024,6 +1161,8 @@ fun Image.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1037,6 +1176,7 @@ fun Image.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1052,6 +1192,7 @@ fun Image.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         appearanceAnimation = appearanceAnimation ?: properties.appearanceAnimation,
         aspect = aspect ?: properties.aspect,
         background = background ?: properties.background,
@@ -1064,8 +1205,11 @@ fun Image.defer(
         extensions = extensions ?: properties.extensions,
         filters = filters ?: properties.filters,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         longtapActions = longtapActions ?: properties.longtapActions,
@@ -1073,6 +1217,8 @@ fun Image.defer(
         paddings = paddings ?: properties.paddings,
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         preview = preview ?: properties.preview,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1086,6 +1232,7 @@ fun Image.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1106,7 +1253,7 @@ fun Image.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.
@@ -1143,6 +1290,7 @@ fun Image.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         appearanceAnimation = properties.appearanceAnimation,
         aspect = properties.aspect,
         background = properties.background,
@@ -1155,8 +1303,11 @@ fun Image.evaluate(
         extensions = properties.extensions,
         filters = properties.filters,
         focus = properties.focus,
+        functions = properties.functions,
         height = properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
+        hoverEndActions = properties.hoverEndActions,
+        hoverStartActions = properties.hoverStartActions,
         id = properties.id,
         layoutProvider = properties.layoutProvider,
         longtapActions = properties.longtapActions,
@@ -1164,6 +1315,8 @@ fun Image.evaluate(
         paddings = properties.paddings,
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
+        pressEndActions = properties.pressEndActions,
+        pressStartActions = properties.pressStartActions,
         preview = preview ?: properties.preview,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1177,6 +1330,7 @@ fun Image.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1194,6 +1348,7 @@ fun Image.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -1206,17 +1361,22 @@ fun Image.evaluate(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1228,7 +1388,8 @@ fun Image.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1245,6 +1406,7 @@ fun Component<Image>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     appearanceAnimation: FadeTransition? = null,
     aspect: Aspect? = null,
     background: List<Background>? = null,
@@ -1257,8 +1419,11 @@ fun Component<Image>.override(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
@@ -1266,6 +1431,8 @@ fun Component<Image>.override(
     paddings: EdgeInsets? = null,
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     preview: String? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1279,6 +1446,7 @@ fun Component<Image>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1295,6 +1463,7 @@ fun Component<Image>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         appearanceAnimation = valueOrNull(appearanceAnimation),
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
@@ -1307,8 +1476,11 @@ fun Component<Image>.override(
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
@@ -1316,6 +1488,8 @@ fun Component<Image>.override(
         paddings = valueOrNull(paddings),
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         preview = valueOrNull(preview),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -1329,6 +1503,7 @@ fun Component<Image>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1346,6 +1521,7 @@ fun Component<Image>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -1358,17 +1534,22 @@ fun Component<Image>.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1380,7 +1561,8 @@ fun Component<Image>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1397,6 +1579,7 @@ fun Component<Image>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     appearanceAnimation: ReferenceProperty<FadeTransition>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -1409,8 +1592,11 @@ fun Component<Image>.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1418,6 +1604,8 @@ fun Component<Image>.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     preview: ReferenceProperty<String>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1431,6 +1619,7 @@ fun Component<Image>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1447,6 +1636,7 @@ fun Component<Image>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         appearanceAnimation = appearanceAnimation,
         aspect = aspect,
         background = background,
@@ -1459,8 +1649,11 @@ fun Component<Image>.defer(
         extensions = extensions,
         filters = filters,
         focus = focus,
+        functions = functions,
         height = height,
         highPriorityPreviewShow = highPriorityPreviewShow,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
         id = id,
         layoutProvider = layoutProvider,
         longtapActions = longtapActions,
@@ -1468,6 +1661,8 @@ fun Component<Image>.defer(
         paddings = paddings,
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         preview = preview,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -1481,6 +1676,7 @@ fun Component<Image>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1501,7 +1697,7 @@ fun Component<Image>.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.
@@ -1539,6 +1735,7 @@ fun Component<Image>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         appearanceAnimation = null,
         aspect = null,
         background = null,
@@ -1551,8 +1748,11 @@ fun Component<Image>.evaluate(
         extensions = null,
         filters = null,
         focus = null,
+        functions = null,
         height = null,
         highPriorityPreviewShow = highPriorityPreviewShow,
+        hoverEndActions = null,
+        hoverStartActions = null,
         id = null,
         layoutProvider = null,
         longtapActions = null,
@@ -1560,6 +1760,8 @@ fun Component<Image>.evaluate(
         paddings = null,
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
+        pressEndActions = null,
+        pressStartActions = null,
         preview = preview,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -1573,6 +1775,7 @@ fun Component<Image>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,

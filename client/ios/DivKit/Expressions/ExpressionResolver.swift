@@ -9,33 +9,40 @@ public final class ExpressionResolver {
   /// Depreacated.
   public typealias VariableTracker = (Set<DivVariableName>) -> Void
 
+  private let customFunctionsStorageProvider: (String) -> DivFunctionsStorage?
   private let functionsProvider: FunctionsProvider
   private let variableValueProvider: (String) -> Any?
   private let errorTracker: ExpressionErrorTracker
 
   private lazy var context = ExpressionContext(
     evaluators: functionsProvider.evaluators,
-    variableValueProvider: variableValueProvider
+    variableValueProvider: variableValueProvider,
+    customFunctionsStorageProvider: customFunctionsStorageProvider,
+    errorTracker: errorTracker
   )
 
   init(
     functionsProvider: FunctionsProvider,
+    customFunctionsStorageProvider: @escaping (String) -> DivFunctionsStorage? = { _ in nil },
     variableValueProvider: @escaping (String) -> Any?,
     errorTracker: @escaping ExpressionErrorTracker
   ) {
     self.functionsProvider = functionsProvider
+    self.customFunctionsStorageProvider = customFunctionsStorageProvider
     self.variableValueProvider = variableValueProvider
     self.errorTracker = errorTracker
   }
 
   public init(
     variableValueProvider: @escaping (String) -> Any?,
+    customFunctionsStorageProvider: @escaping (String) -> DivFunctionsStorage? = { _ in nil },
     persistentValuesStorage: DivPersistentValuesStorage,
     errorTracker: @escaping ExpressionErrorTracker
   ) {
     self.functionsProvider = FunctionsProvider(
       persistentValuesStorage: persistentValuesStorage
     )
+    self.customFunctionsStorageProvider = customFunctionsStorageProvider
     self.variableValueProvider = variableValueProvider
     self.errorTracker = errorTracker
   }
@@ -50,6 +57,7 @@ public final class ExpressionResolver {
     self.functionsProvider = FunctionsProvider(
       persistentValuesStorage: persistentValuesStorage
     )
+    self.customFunctionsStorageProvider = { _ in nil }
     self.variableValueProvider = {
       let variableName = DivVariableName(rawValue: $0)
       variableTracker([variableName])
@@ -61,12 +69,16 @@ public final class ExpressionResolver {
   init(
     path: UIElementPath,
     variablesStorage: DivVariablesStorage,
+    functionsStorage: DivFunctionsStorage?,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter
   ) {
     self.functionsProvider = FunctionsProvider(
       persistentValuesStorage: persistentValuesStorage
     )
+    self.customFunctionsStorageProvider = {
+      functionsStorage?.getStorage(path: path, contains: $0)
+    }
     self.variableValueProvider = {
       let variableName = DivVariableName(rawValue: $0)
       return variablesStorage.getVariableValue(path: path, name: variableName)

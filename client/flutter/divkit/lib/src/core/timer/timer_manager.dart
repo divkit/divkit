@@ -1,6 +1,4 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_timer.dart';
-import 'package:divkit/src/core/timer/timer.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/timer/timer_scheduler.dart';
 
 class DefaultDivTimerManager extends DivTimerManager {
@@ -11,18 +9,17 @@ class DefaultDivTimerManager extends DivTimerManager {
     required this.divContext,
   });
 
-  Future<void> init({
+  DivTimerManager init({
     Iterable<DivTimerModel>? timers,
-    void Function()? onEnd,
-  }) async {
+  }) {
     if (timers != null) {
       for (final timer in timers) {
-        await timer.init(divContext);
+        timer.init(divContext);
       }
     }
 
     scheduler = DivTimerScheduler(timers: timers);
-    onEnd?.call();
+    return this;
   }
 
   @override

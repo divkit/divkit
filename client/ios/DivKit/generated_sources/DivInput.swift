@@ -6,6 +6,24 @@ import VGSL
 
 public final class DivInput: DivBase {
   @frozen
+  public enum Autocapitalization: String, CaseIterable {
+    case auto = "auto"
+    case none = "none"
+    case words = "words"
+    case sentences = "sentences"
+    case allCharacters = "all_characters"
+  }
+
+  @frozen
+  public enum EnterKeyType: String, CaseIterable {
+    case `default` = "default"
+    case go = "go"
+    case search = "search"
+    case send = "send"
+    case done = "done"
+  }
+
+  @frozen
   public enum KeyboardType: String, CaseIterable {
     case singleLineText = "single_line_text"
     case multiLineText = "multi_line_text"
@@ -35,17 +53,23 @@ public final class DivInput: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
+  public let autocapitalization: Expression<Autocapitalization> // default value: auto
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
+  public let enterKeyActions: [DivAction]?
+  public let enterKeyType: Expression<EnterKeyType> // default value: default
   public let extensions: [DivExtension]?
+  public let filters: [DivInputFilter]?
   public let focus: DivFocus?
   public let fontFamily: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
   public let fontWeightValue: Expression<Int>? // constraint: number > 0
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highlightColor: Expression<Color>?
   public let hintColor: Expression<Color> // default value: #73000000
@@ -77,6 +101,7 @@ public final class DivInput: DivBase {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let validators: [DivInputValidator]?
+  public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
@@ -95,8 +120,16 @@ public final class DivInput: DivBase {
     resolver.resolveNumeric(alpha) ?? 1.0
   }
 
+  public func resolveAutocapitalization(_ resolver: ExpressionResolver) -> Autocapitalization {
+    resolver.resolveEnum(autocapitalization) ?? Autocapitalization.auto
+  }
+
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(columnSpan)
+  }
+
+  public func resolveEnterKeyType(_ resolver: ExpressionResolver) -> EnterKeyType {
+    resolver.resolveEnum(enterKeyType) ?? EnterKeyType.default
   }
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
@@ -215,17 +248,23 @@ public final class DivInput: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    animators: [DivAnimator]? = nil,
+    autocapitalization: Expression<Autocapitalization>? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
     disappearActions: [DivDisappearAction]? = nil,
+    enterKeyActions: [DivAction]? = nil,
+    enterKeyType: Expression<EnterKeyType>? = nil,
     extensions: [DivExtension]? = nil,
+    filters: [DivInputFilter]? = nil,
     focus: DivFocus? = nil,
     fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
     fontWeightValue: Expression<Int>? = nil,
+    functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     highlightColor: Expression<Color>? = nil,
     hintColor: Expression<Color>? = nil,
@@ -257,6 +296,7 @@ public final class DivInput: DivBase {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     validators: [DivInputValidator]? = nil,
+    variableTriggers: [DivTrigger]? = nil,
     variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
@@ -267,17 +307,23 @@ public final class DivInput: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
+    self.autocapitalization = autocapitalization ?? .value(.auto)
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
+    self.enterKeyActions = enterKeyActions
+    self.enterKeyType = enterKeyType ?? .value(.default)
     self.extensions = extensions
+    self.filters = filters
     self.focus = focus
     self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
     self.fontWeightValue = fontWeightValue
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.highlightColor = highlightColor
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
@@ -309,6 +355,7 @@ public final class DivInput: DivBase {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.validators = validators
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
@@ -329,29 +376,43 @@ extension DivInput: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
+      lhs.animators == rhs.animators,
+      lhs.autocapitalization == rhs.autocapitalization
+    else {
+      return false
+    }
+    guard
       lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.border == rhs.border,
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
-      lhs.columnSpan == rhs.columnSpan,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions
+      lhs.enterKeyActions == rhs.enterKeyActions,
+      lhs.enterKeyType == rhs.enterKeyType
     else {
       return false
     }
     guard
-      lhs.focus == rhs.focus,
+      lhs.extensions == rhs.extensions,
+      lhs.filters == rhs.filters,
+      lhs.focus == rhs.focus
+    else {
+      return false
+    }
+    guard
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize
+      lhs.fontSize == rhs.fontSize,
+      lhs.fontSizeUnit == rhs.fontSizeUnit
     else {
       return false
     }
     guard
-      lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.fontWeightValue == rhs.fontWeightValue
+      lhs.fontWeightValue == rhs.fontWeightValue,
+      lhs.functions == rhs.functions
     else {
       return false
     }
@@ -427,14 +488,19 @@ extension DivInput: Equatable {
     }
     guard
       lhs.validators == rhs.validators,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -452,17 +518,23 @@ extension DivInput: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
+    result["autocapitalization"] = autocapitalization.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
+    result["enter_key_actions"] = enterKeyActions?.map { $0.toDictionary() }
+    result["enter_key_type"] = enterKeyType.toValidSerializationValue()
     result["extensions"] = extensions?.map { $0.toDictionary() }
+    result["filters"] = filters?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["highlight_color"] = highlightColor?.toValidSerializationValue()
     result["hint_color"] = hintColor.toValidSerializationValue()
@@ -494,6 +566,7 @@ extension DivInput: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["validators"] = validators?.map { $0.toDictionary() }
+    result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()

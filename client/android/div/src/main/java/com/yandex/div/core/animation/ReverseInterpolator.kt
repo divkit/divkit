@@ -7,7 +7,7 @@ internal class ReverseInterpolator(
 ) : Interpolator {
 
     override fun getInterpolation(input: Float): Float {
-        return 1.0f - base.getInterpolation(1.0f - input)
+        return base.getInterpolation(1.0f - input)
     }
 }
 

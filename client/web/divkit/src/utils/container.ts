@@ -95,18 +95,18 @@ export function calcItemsGap(
 }
 
 export interface ContainerChildInfo {
-    width: MaybeMissing<Size> | undefined;
-    height: MaybeMissing<Size> | undefined;
+    width?: MaybeMissing<Size>;
+    height?: MaybeMissing<Size>;
 }
 
-export function hasKnownWidthCheck(item: ContainerChildInfo) {
+export function isWidthMatchParent(item: ContainerChildInfo) {
     const type = item.width?.type;
 
-    return type === 'wrap_content' || type === 'fixed';
+    return type !== 'wrap_content' && type !== 'fixed';
 }
 
-export function hasKnownHeightCheck(item: ContainerChildInfo) {
+export function isHeightMatchParent(item: ContainerChildInfo) {
     const type = item.height?.type;
 
-    return type !== 'match_parent';
+    return type === 'match_parent';
 }

@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "focus_next_focused_ids_forwars",
+        "name": "<code>next_focus_ids.forward</code> property support in the <code>focus</code>",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "30.24.0"
+            }
+        }
+    }]
+}

@@ -5,6 +5,26 @@
         "compat": {
             "ios": {
                 "version_added": "30.8.0"
+            },
+            "android": {
+                "version_added": "30.14.0"
+            },
+            "web": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "base_component_variable_triggers",
+        "name": "Base component property <code>variable_triggers</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.13.0"
+            },
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
             }
         }
     }, {
@@ -13,6 +33,48 @@
         "compat": {
             "ios": {
                 "version_added": "30.9.0"
+            },
+            "android": {
+                "version_added": "30.12.0"
+            },
+            "web": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "base_component_reuse_id",
+        "name": "Base component property <code>reuse_id</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.11.0"
+            },
+            "ios": {
+                "version_added": "30.11.0"
+            },
+            "web": {
+                "notes": "Web support is not planned, it works on other principles"
+            }
+        }
+    }, {
+        "id": "base_component_animators",
+        "name": "Base component property <code>animators</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "ios": {
+                "version_added": "30.23.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "base_component_functions",
+        "name": "Base component property <code>functions</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.20.0"
             }
         }
     }]

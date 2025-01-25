@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `log_id`.
  */
 @Generated
-class Action internal constructor(
+data class Action internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -41,13 +41,14 @@ class Action internal constructor(
             menuItems = additive.menuItems ?: properties.menuItems,
             payload = additive.payload ?: properties.payload,
             referer = additive.referer ?: properties.referer,
+            scopeId = additive.scopeId ?: properties.scopeId,
             target = additive.target ?: properties.target,
             typed = additive.typed ?: properties.typed,
             url = additive.url ?: properties.url,
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Callbacks that are called after [data loading](../../interaction#loading-data).
          */
@@ -78,6 +79,10 @@ class Action internal constructor(
          */
         val referer: Property<Url>?,
         /**
+         * The ID of the element within which the specified action will be performed.
+         */
+        val scopeId: Property<String>?,
+        /**
          * The tab in which the URL must be opened.
          */
         val target: Property<Target>?,
@@ -97,6 +102,7 @@ class Action internal constructor(
             result.tryPutProperty("menu_items", menuItems)
             result.tryPutProperty("payload", payload)
             result.tryPutProperty("referer", referer)
+            result.tryPutProperty("scope_id", scopeId)
             result.tryPutProperty("target", target)
             result.tryPutProperty("typed", typed)
             result.tryPutProperty("url", url)
@@ -118,7 +124,7 @@ class Action internal constructor(
      * Required parameters: `text`.
      */
     @Generated
-    class MenuItem internal constructor(
+    data class MenuItem internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -133,7 +139,7 @@ class Action internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * One action when clicking on a menu item. Not used if the `actions` parameter is set.
              */
@@ -168,6 +174,7 @@ class Action internal constructor(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -181,6 +188,7 @@ fun DivScope.action(
     menuItems: List<Action.MenuItem>? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    scopeId: String? = null,
     target: Action.Target? = null,
     typed: ActionTyped? = null,
     url: Url? = null,
@@ -193,6 +201,7 @@ fun DivScope.action(
         menuItems = valueOrNull(menuItems),
         payload = valueOrNull(payload),
         referer = valueOrNull(referer),
+        scopeId = valueOrNull(scopeId),
         target = valueOrNull(target),
         typed = valueOrNull(typed),
         url = valueOrNull(url),
@@ -207,6 +216,7 @@ fun DivScope.action(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -220,6 +230,7 @@ fun DivScope.actionProps(
     menuItems: List<Action.MenuItem>? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    scopeId: String? = null,
     target: Action.Target? = null,
     typed: ActionTyped? = null,
     url: Url? = null,
@@ -231,6 +242,7 @@ fun DivScope.actionProps(
     menuItems = valueOrNull(menuItems),
     payload = valueOrNull(payload),
     referer = valueOrNull(referer),
+    scopeId = valueOrNull(scopeId),
     target = valueOrNull(target),
     typed = valueOrNull(typed),
     url = valueOrNull(url),
@@ -244,6 +256,7 @@ fun DivScope.actionProps(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -257,6 +270,7 @@ fun TemplateScope.actionRefs(
     menuItems: ReferenceProperty<List<Action.MenuItem>>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    scopeId: ReferenceProperty<String>? = null,
     target: ReferenceProperty<Action.Target>? = null,
     typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
@@ -268,6 +282,7 @@ fun TemplateScope.actionRefs(
     menuItems = menuItems,
     payload = payload,
     referer = referer,
+    scopeId = scopeId,
     target = target,
     typed = typed,
     url = url,
@@ -281,6 +296,7 @@ fun TemplateScope.actionRefs(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -294,6 +310,7 @@ fun Action.override(
     menuItems: List<Action.MenuItem>? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    scopeId: String? = null,
     target: Action.Target? = null,
     typed: ActionTyped? = null,
     url: Url? = null,
@@ -306,6 +323,7 @@ fun Action.override(
         menuItems = valueOrNull(menuItems) ?: properties.menuItems,
         payload = valueOrNull(payload) ?: properties.payload,
         referer = valueOrNull(referer) ?: properties.referer,
+        scopeId = valueOrNull(scopeId) ?: properties.scopeId,
         target = valueOrNull(target) ?: properties.target,
         typed = valueOrNull(typed) ?: properties.typed,
         url = valueOrNull(url) ?: properties.url,
@@ -320,6 +338,7 @@ fun Action.override(
  * @param menuItems Context menu.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -333,6 +352,7 @@ fun Action.defer(
     menuItems: ReferenceProperty<List<Action.MenuItem>>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    scopeId: ReferenceProperty<String>? = null,
     target: ReferenceProperty<Action.Target>? = null,
     typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
@@ -345,6 +365,7 @@ fun Action.defer(
         menuItems = menuItems ?: properties.menuItems,
         payload = payload ?: properties.payload,
         referer = referer ?: properties.referer,
+        scopeId = scopeId ?: properties.scopeId,
         target = target ?: properties.target,
         typed = typed ?: properties.typed,
         url = url ?: properties.url,
@@ -377,6 +398,7 @@ fun Action.evaluate(
         menuItems = properties.menuItems,
         payload = properties.payload,
         referer = referer ?: properties.referer,
+        scopeId = properties.scopeId,
         target = target ?: properties.target,
         typed = properties.typed,
         url = url ?: properties.url,

@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class WithOptionalStringEnumProperty internal constructor(
+data class WithOptionalStringEnumProperty internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -42,7 +42,7 @@ class WithOptionalStringEnumProperty internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val property: Property<Property>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

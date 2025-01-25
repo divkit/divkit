@@ -1,9 +1,8 @@
 import CoreGraphics
+import CoreText
 import Foundation
 
 import VGSL
-
-@_implementationOnly import CoreText
 
 public final class TextBlock: BlockWithTraits {
   public struct InlineImage: Equatable {
@@ -30,6 +29,8 @@ public final class TextBlock: BlockWithTraits {
   public let images: [InlineImage]
   public let accessibilityElement: AccessibilityElement?
   public let canSelect: Bool
+  public let tightenWidth: Bool
+  public let additionalTextInsets: EdgeInsets
 
   let attachments: [TextAttachment]
   let truncationToken: NSAttributedString?
@@ -51,7 +52,9 @@ public final class TextBlock: BlockWithTraits {
     accessibilityElement: AccessibilityElement?,
     truncationToken: NSAttributedString? = nil,
     truncationImages: [TextBlock.InlineImage] = [],
-    canSelect: Bool = false
+    additionalTextInsets: EdgeInsets? = nil,
+    canSelect: Bool = false,
+    tightenWidth: Bool = false
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -63,6 +66,7 @@ public final class TextBlock: BlockWithTraits {
     self.images = images
     self.accessibilityElement = accessibilityElement
     self.canSelect = canSelect
+    self.tightenWidth = tightenWidth
     self.truncationImages = truncationImages
     if let truncationToken {
       (self.truncationToken, self.truncationAttachments) = setImagePlaceholders(
@@ -72,6 +76,7 @@ public final class TextBlock: BlockWithTraits {
       self.truncationToken = nil
       self.truncationAttachments = []
     }
+    self.additionalTextInsets = additionalTextInsets ?? .zero
   }
 
   public convenience init(
@@ -85,7 +90,9 @@ public final class TextBlock: BlockWithTraits {
     images: [InlineImage] = [],
     truncationToken: NSAttributedString? = nil,
     truncationImages: [TextBlock.InlineImage] = [],
-    canSelect: Bool = false
+    additionalTextInsets: EdgeInsets? = nil,
+    canSelect: Bool = false,
+    tightenWidth: Bool = false
   ) {
     self.init(
       widthTrait: widthTrait,
@@ -99,7 +106,9 @@ public final class TextBlock: BlockWithTraits {
       accessibilityElement: .staticText(label: text.string),
       truncationToken: truncationToken,
       truncationImages: truncationImages,
-      canSelect: canSelect
+      additionalTextInsets: additionalTextInsets,
+      canSelect: canSelect,
+      tightenWidth: tightenWidth
     )
   }
 
@@ -110,7 +119,10 @@ public final class TextBlock: BlockWithTraits {
         return cached
       }
 
-      let width = ceil(text.sizeForWidth(.infinity).width)
+      let width = ceil(
+        text.sizeForWidth(tightenWidth ? maxSize : .infinity)
+          .width + additionalTextInsets.horizontal.sum
+      )
       let result = clamp(width, min: minSize, max: maxSize)
       cachedIntrinsicWidth = result
       return result
@@ -134,7 +146,7 @@ public final class TextBlock: BlockWithTraits {
           width,
           maxNumberOfLines: maxIntrinsicNumberOfLines,
           minNumberOfHiddenLines: minNumberOfHiddenLines
-        )
+        ) + additionalTextInsets.vertical.sum
       )
       let result = clamp(height, min: minSize, max: maxSize)
       cachedIntrinsicHeight = (width: width, height: result)
@@ -171,6 +183,7 @@ public final class TextBlock: BlockWithTraits {
       && lhs.minNumberOfHiddenLines == rhs.minNumberOfHiddenLines
       && lhs.images == rhs.images
       && lhs.accessibilityElement == rhs.accessibilityElement
+      && lhs.tightenWidth == rhs.tightenWidth
   }
 }
 

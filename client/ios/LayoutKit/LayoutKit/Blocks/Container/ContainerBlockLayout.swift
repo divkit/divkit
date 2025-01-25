@@ -236,18 +236,6 @@ struct ContainerBlockLayout {
     separator: ContainerBlock.Separator?,
     lineSeparator: ContainerBlock.Separator?
   ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
-    #if INTERNAL_BUILD
-    assert(
-      gaps.allSatisfy { $0.isApproximatelyEqualTo(0) },
-      "You cannot use gaps in wrap container."
-    )
-    assert(
-      !children
-        .contains { $0.content.isHorizontallyResizable || $0.content.isVerticallyResizable
-        },
-      "You cannot use resizable blocks in wrap container."
-    )
-    #endif
     var frames = [CGRect]()
     var containerAscent: CGFloat?
     let buildingDirectionKeyPath = layoutDirection.buildingDirectionKeyPath

@@ -30,7 +30,6 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.TypeSafeMatcher
-import ru.tinkoff.allure.step as allureStep
 
 internal fun slider(f: SliderSteps.() -> Unit) = f(SliderSteps(SliderViews.commonSlider))
 
@@ -49,7 +48,7 @@ internal open class SliderSteps(
     private val sliderView: ViewInteraction
 ) : DivTestAssetSteps(), CoordinateSteps by CoordinateStepsMixin() {
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = step("Build container") {
         buildContainer(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT,

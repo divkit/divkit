@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `log_id`.
  */
 @Generated
-class DisappearAction internal constructor(
+data class DisappearAction internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -41,13 +41,14 @@ class DisappearAction internal constructor(
             logLimit = additive.logLimit ?: properties.logLimit,
             payload = additive.payload ?: properties.payload,
             referer = additive.referer ?: properties.referer,
+            scopeId = additive.scopeId ?: properties.scopeId,
             typed = additive.typed ?: properties.typed,
             url = additive.url ?: properties.url,
             visibilityPercentage = additive.visibilityPercentage ?: properties.visibilityPercentage,
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
          * Default value: `800`.
@@ -79,6 +80,10 @@ class DisappearAction internal constructor(
          * Referer URL for logging.
          */
         val referer: Property<Url>?,
+        /**
+         * The ID of the element within which the specified action will be performed.
+         */
+        val scopeId: Property<String>?,
         val typed: Property<ActionTyped>?,
         /**
          * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
@@ -100,6 +105,7 @@ class DisappearAction internal constructor(
             result.tryPutProperty("log_limit", logLimit)
             result.tryPutProperty("payload", payload)
             result.tryPutProperty("referer", referer)
+            result.tryPutProperty("scope_id", scopeId)
             result.tryPutProperty("typed", typed)
             result.tryPutProperty("url", url)
             result.tryPutProperty("visibility_percentage", visibilityPercentage)
@@ -116,6 +122,7 @@ class DisappearAction internal constructor(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -129,6 +136,7 @@ fun DivScope.disappearAction(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    scopeId: String? = null,
     typed: ActionTyped? = null,
     url: Url? = null,
     visibilityPercentage: Int? = null,
@@ -141,6 +149,7 @@ fun DivScope.disappearAction(
         logLimit = valueOrNull(logLimit),
         payload = valueOrNull(payload),
         referer = valueOrNull(referer),
+        scopeId = valueOrNull(scopeId),
         typed = valueOrNull(typed),
         url = valueOrNull(url),
         visibilityPercentage = valueOrNull(visibilityPercentage),
@@ -155,6 +164,7 @@ fun DivScope.disappearAction(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -168,6 +178,7 @@ fun DivScope.disappearActionProps(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    scopeId: String? = null,
     typed: ActionTyped? = null,
     url: Url? = null,
     visibilityPercentage: Int? = null,
@@ -179,6 +190,7 @@ fun DivScope.disappearActionProps(
     logLimit = valueOrNull(logLimit),
     payload = valueOrNull(payload),
     referer = valueOrNull(referer),
+    scopeId = valueOrNull(scopeId),
     typed = valueOrNull(typed),
     url = valueOrNull(url),
     visibilityPercentage = valueOrNull(visibilityPercentage),
@@ -192,6 +204,7 @@ fun DivScope.disappearActionProps(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -205,6 +218,7 @@ fun TemplateScope.disappearActionRefs(
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    scopeId: ReferenceProperty<String>? = null,
     typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
@@ -216,6 +230,7 @@ fun TemplateScope.disappearActionRefs(
     logLimit = logLimit,
     payload = payload,
     referer = referer,
+    scopeId = scopeId,
     typed = typed,
     url = url,
     visibilityPercentage = visibilityPercentage,
@@ -229,6 +244,7 @@ fun TemplateScope.disappearActionRefs(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -242,6 +258,7 @@ fun DisappearAction.override(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    scopeId: String? = null,
     typed: ActionTyped? = null,
     url: Url? = null,
     visibilityPercentage: Int? = null,
@@ -254,6 +271,7 @@ fun DisappearAction.override(
         logLimit = valueOrNull(logLimit) ?: properties.logLimit,
         payload = valueOrNull(payload) ?: properties.payload,
         referer = valueOrNull(referer) ?: properties.referer,
+        scopeId = valueOrNull(scopeId) ?: properties.scopeId,
         typed = valueOrNull(typed) ?: properties.typed,
         url = valueOrNull(url) ?: properties.url,
         visibilityPercentage = valueOrNull(visibilityPercentage) ?: properties.visibilityPercentage,
@@ -268,6 +286,7 @@ fun DisappearAction.override(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -281,6 +300,7 @@ fun DisappearAction.defer(
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    scopeId: ReferenceProperty<String>? = null,
     typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
@@ -293,6 +313,7 @@ fun DisappearAction.defer(
         logLimit = logLimit ?: properties.logLimit,
         payload = payload ?: properties.payload,
         referer = referer ?: properties.referer,
+        scopeId = scopeId ?: properties.scopeId,
         typed = typed ?: properties.typed,
         url = url ?: properties.url,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,
@@ -327,6 +348,7 @@ fun DisappearAction.evaluate(
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,
         referer = referer ?: properties.referer,
+        scopeId = properties.scopeId,
         typed = properties.typed,
         url = url ?: properties.url,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,

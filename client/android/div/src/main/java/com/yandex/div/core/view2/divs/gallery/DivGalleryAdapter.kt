@@ -7,7 +7,6 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
-import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.Div
 import java.util.WeakHashMap
@@ -34,8 +33,8 @@ internal class DivGalleryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder {
-        val view = DivViewWrapper(bindingContext.divView.context)
-        return DivGalleryViewHolder(view, divBinder, viewCreator, itemStateBinder, path)
+        val view = DivGalleryItemLayout(bindingContext.divView.context)
+        return DivGalleryViewHolder(bindingContext, view, divBinder, viewCreator, itemStateBinder, path)
     }
 
     override fun getItemId(position: Int): Long {

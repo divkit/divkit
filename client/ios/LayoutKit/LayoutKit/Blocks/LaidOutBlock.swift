@@ -73,4 +73,11 @@ extension LaidOutBlock {
   }
 }
 
+extension LaidOutBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> LaidOutBlock {
+    let newBlock = try block.updated(path: path, isFocused: isFocused)
+    return newBlock === block ? self : LaidOutBlock(block: newBlock, width: size.width)
+  }
+}
+
 extension LaidOutBlock: LayoutCachingDefaultImpl {}

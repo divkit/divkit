@@ -14,5 +14,6 @@ module.exports.COMPONENTS = [
     'input',
     'select',
     'video',
+    'switch',
     'custom'
 ];

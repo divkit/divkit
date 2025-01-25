@@ -1,6 +1,21 @@
 {{
-    import { MAX_INT, MIN_INT } from './const';
     import { toBigInt } from './bigint';
+
+    function buildConditionalExpression(expr, tail) {
+        if (tail && tail[3] && tail[7]) {
+            return {type: 'ConditionalExpression', test: expr, consequent: tail[3], alternate: tail[7]};
+        }
+
+        return expr;
+    }
+
+    function buildTryExpression(expr, tail) {
+        if (tail && tail[3]) {
+            return {type: 'TryExpression', test: expr, alternate: tail[3]};
+        }
+
+        return expr;
+    }
 
     function buildBinaryExpression(head, tail) {
         if (!tail.length) {
@@ -125,14 +140,12 @@ JsonStringChar
     / '\\' { throw new Error("Error tokenizing '" + input + "'."); }
 
 Expression
-    = expr:Try _ '?' _ first:Expression _ ':' _ second:Expression
-        { return {type: 'ConditionalExpression', test: expr, consequent: first, alternate: second}; }
-    / Try
+    = expr:Try tail:(_ '?' _ Expression _ ':' _ Expression)?
+        { return buildConditionalExpression(expr, tail); }
 
 Try
-    = expr:Or _ '!:' _ second:Expression
-        { return {type: 'TryExpression', test: expr, alternate: second}; }
-    / Or
+    = expr:Or tail:(_ '!:' _ Expression)?
+        { return buildTryExpression(expr, tail); }
 
 Or
     = head:And tail:( _ '||' _ And )*

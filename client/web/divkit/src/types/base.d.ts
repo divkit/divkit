@@ -4,9 +4,10 @@ import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
-import type { Action, DisappearAction, VisibilityAction } from '../../typings/common';
+import type { Action, DisappearAction, DivVariable, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
+import type { EvalTypes } from '../expressions/eval';
 
 export interface Accessibility {
     description?: string;
@@ -108,6 +109,58 @@ export interface Tooltip {
     animation_out?: Animation;
 }
 
+export interface DivLayoutProvider {
+    width_variable_name?: string;
+    height_variable_name?: string;
+}
+
+export type AnimatorDirection = 'normal' | 'reverse' | 'alternate' | 'alternate_reverse';
+
+export type AnimatorRepeatCount = {
+    type: 'infinity';
+} | {
+    type: 'fixed';
+    value: number;
+};
+
+export interface AnimatorBase {
+    id: string;
+    variable_name: string;
+    duration: number;
+    start_delay?: number;
+    interpolator?: Interpolation;
+    direction?: AnimatorDirection;
+    repeat_count?: AnimatorRepeatCount;
+    end_actions?: Action[];
+    cancel_actions?: Action[];
+}
+
+export interface NumberAnimator extends AnimatorBase {
+    type: 'number_animator';
+    start_value?: number;
+    end_value: number;
+}
+
+export interface ColorAnimator extends AnimatorBase {
+    type: 'color_animator';
+    start_value?: string;
+    end_value: string;
+}
+
+export type Animator = NumberAnimator | ColorAnimator;
+
+export interface DivFunctionArgument {
+    name: string;
+    type: EvalTypes;
+}
+
+export interface DivFunction {
+    name: string;
+    body: string;
+    return_type: EvalTypes;
+    arguments: DivFunctionArgument[];
+}
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -135,5 +188,10 @@ export interface DivBaseData {
     transition_triggers?: TransitionTrigger[];
     selected_actions?: Action[];
     focus?: Focus;
+    layout_provider?: DivLayoutProvider;
     transform?: Transform;
+    variables?: DivVariable[];
+    variable_triggers?: VariableTrigger[];
+    animators?: Animator[];
+    functions?: DivFunction[];
 }

@@ -20,7 +20,9 @@ abstract class Function {
     ): Any {
         val result = evaluate(evaluationContext, expressionContext, args)
         if (EvaluableType.of(result) != resultType) {
-            throw EvaluableException("Function returned ${EvaluableType.of(result)}, but $resultType was expected")
+            throw EvaluableException(
+                "Function $this returned ${EvaluableType.of(result)}, but $resultType was expected."
+            )
         }
         return result
     }

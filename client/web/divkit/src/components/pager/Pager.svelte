@@ -1,5 +1,40 @@
+<script lang="ts" context="module">
+    import type { Mods } from '../../types/general';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
+
+    interface ChildInfo {
+        width?: MaybeMissing<Size>;
+        height?: MaybeMissing<Size>;
+    }
+
+    const SIZE_MAP: Record<Size['type'], string> = {
+        wrap_content: 'content',
+        fixed: 'fixed',
+        match_parent: 'parent'
+    };
+
+    function getItemMods(orientation: Orientation, childInfo: ChildInfo): Mods {
+        if (orientation === 'horizontal') {
+            const heightType = childInfo.height?.type || '';
+
+            return {
+                height: heightType in SIZE_MAP ? SIZE_MAP[heightType as Size['type']] : 'content',
+                'height-constrained': childInfo.height?.type === 'wrap_content' ? correctBooleanInt(childInfo.height.constrained, false) : false
+            };
+        }
+
+        const widthType = childInfo.width?.type || '';
+
+        return {
+            width: widthType in SIZE_MAP ? SIZE_MAP[widthType as Size['type']] : 'parent',
+            'width-constrained': childInfo.width?.type === 'wrap_content' ? correctBooleanInt(childInfo.width.constrained, false) : false
+        };
+    }
+</script>
+
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
+    import { derived, type Readable } from 'svelte/store';
 
     import css from './Pager.module.css';
     import rootCss from '../Root.module.css';
@@ -13,10 +48,12 @@
     import type { Overflow, SwitchElements } from '../../types/switch-elements';
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { Size } from '../../types/sizes';
+    import type { Variable } from '../../expressions/variable';
 
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
@@ -27,6 +64,9 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
+    import { constStore } from '../../utils/constStore';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivPagerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -49,6 +89,8 @@
     let pagerItemsWrapper: HTMLElement;
     let mounted = false;
 
+    let childStore: Readable<ChildInfo[]>;
+
     let currentItem = 0;
     let prevSelectedItem = 0;
 
@@ -59,6 +101,8 @@
     let padding = '';
     let sizeVal = '';
 
+    let items: ComponentContext[] = [];
+
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
@@ -68,6 +112,11 @@
     $: if (origJson) {
         rebind();
     }
+
+    // eslint-disable-next-line no-nested-ternary
+    $: jsonItemBuilderData = typeof componentContext.json.item_builder?.data === 'string' ? componentContext.getDerivedFromVars(
+        componentContext.json.item_builder?.data, undefined, true
+    ) : (componentContext.json.item_builder?.data ? constStore(componentContext.json.item_builder.data) : undefined);
 
     $: jsonLayoutMode = componentContext.getDerivedFromVars(componentContext.json.layout_mode);
     $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
@@ -85,11 +134,56 @@
         };
     }
 
-    $: items = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map((item, index) => {
-        return componentContext.produceChildContext(item, {
-            path: index
+    $: {
+        let newItems: {
+            div: MaybeMissing<DivBaseData>;
+            id?: string | undefined;
+            vars?: Map<string, Variable> | undefined;
+        }[] = [];
+        if (
+            componentContext.json.item_builder &&
+            Array.isArray($jsonItemBuilderData) &&
+            Array.isArray(componentContext.json.item_builder.prototypes)
+        ) {
+            const builder = componentContext.json.item_builder;
+            newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
+        } else {
+            newItems = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map(it => {
+                return {
+                    div: it
+                };
+            });
+        }
+
+        items.forEach(context => {
+            context.destroy();
         });
-    });
+
+        items = newItems.map((item, index) => {
+            return componentContext.produceChildContext(item.div, {
+                path: index,
+                variables: item.vars,
+                id: item.id
+            });
+        });
+    }
+
+    $: {
+        let children: Readable<ChildInfo>[] = [];
+
+        items.forEach(item => {
+            children.push(
+                componentContext.getDerivedFromVars({
+                    width: item.json.width,
+                    height: item.json.height
+                })
+            );
+        });
+
+        // Create a new array every time so that it is not equal to the previous one
+        childStore = derived(children, val => [...val]);
+    }
+
     $: {
         if (!$jsonLayoutMode) {
             hasLayoutModeError = true;
@@ -202,7 +296,7 @@
     $: pagers = rootCtx.getStore<Map<string, PagerData>>('pagers');
 
     function pagerDataUpdate(size: number, currentItem: number): void {
-        const pagerId = componentContext.json.id;
+        const pagerId = componentContext.id;
         if (pagerId) {
             const newPagersMap = new Map($pagers);
             $pagers = newPagersMap.set(pagerId, { instId, size, currentItem, scrollToPagerItem });
@@ -231,10 +325,13 @@
         const isHorizontal = orientation === 'horizontal';
         const nextPagerItem = pagerItemsWrapper.children[index] as HTMLElement;
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
+        const elementSize: keyof HTMLElement = isHorizontal ? 'offsetWidth' : 'offsetHeight';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
+        const position = nextPagerItem[elementOffset] + nextPagerItem[elementSize] / 2 -
+            pagerItemsWrapper[elementSize] / 2;
 
         pagerItemsWrapper.scroll({
-            [scrollDirection]: nextPagerItem[elementOffset],
+            [scrollDirection]: position,
             behavior
         });
         currentItem = index;
@@ -261,13 +358,18 @@
     }
 
     $: if (componentContext.json) {
+        const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
+        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
+            currentItem = prevSelectedItem = defaultItem;
+        }
+
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     if (item < 0 || item > items.length - 1) {
@@ -302,10 +404,18 @@
                 item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
             }
         }
+
+        if (currentItem > 0) {
+            scrollToPagerItem(currentItem, 'instant');
+        }
     });
 
     onDestroy(() => {
         mounted = false;
+
+        items.forEach(context => {
+            context.destroy();
+        });
 
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
@@ -320,7 +430,7 @@
         {componentContext}
         {layoutParams}
         customPaddings={true}
-        parentOf={items.map(it => it.json)}
+        parentOf={items}
         {replaceItems}
     >
         <div
@@ -329,8 +439,8 @@
             bind:this={pagerItemsWrapper}
             on:scroll={onScrollDebounced}
         >
-            {#each items as item}
-                <div class={css.pager__item}>
+            {#each items as item, index}
+                <div class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}>
                     <Unknown
                         componentContext={item}
                     />
@@ -361,4 +471,8 @@
             </div>
         {/if}
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

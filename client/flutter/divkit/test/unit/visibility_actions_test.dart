@@ -1,14 +1,14 @@
 import 'package:divkit/divkit.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:fake_async/fake_async.dart';
 import 'package:divkit/src/utils/duration_helper.dart';
+import 'package:fake_async/fake_async.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   late DivVisibilityActionManager actionManager;
   late DivRootContext divContext;
-  final elementId1 = 'element1';
-  final elementId2 = 'element2';
-  final logId = 'id';
+  const elementId1 = 'element1';
+  const elementId2 = 'element2';
+  const logId = 'id';
 
   setUp(
     () {
@@ -34,12 +34,14 @@ void main() {
         () {
           actionManager.addOrUpdateActions(
             [
-              DivVisibilityActionModel(
+              const DivVisibilityActionModel(
                 divAction: DivActionModel(
                   enabled: true,
                   logId: logId,
                 ),
-              )
+                visibilityDuration: 800,
+                visibilityPercentage: 50,
+              ),
             ],
             elementId1,
           );
@@ -53,12 +55,14 @@ void main() {
         () {
           actionManager.addOrUpdateActions(
             [
-              DivVisibilityActionModel(
+              const DivVisibilityActionModel(
                 divAction: DivActionModel(
                   enabled: true,
                   logId: logId,
                 ),
-              )
+                visibilityDuration: 800,
+                visibilityPercentage: 50,
+              ),
             ],
             elementId1,
           );
@@ -75,14 +79,14 @@ void main() {
           (async) {
             actionManager.addOrUpdateActions(
               [
-                DivVisibilityActionModel(
+                const DivVisibilityActionModel(
                   visibilityPercentage: 20,
                   visibilityDuration: 500,
                   divAction: DivActionModel(
                     enabled: true,
                     logId: logId,
                   ),
-                )
+                ),
               ],
               elementId1,
             );
@@ -110,14 +114,14 @@ void main() {
             (async) {
               actionManager.addOrUpdateActions(
                 [
-                  DivVisibilityActionModel(
+                  const DivVisibilityActionModel(
                     visibilityPercentage: 20,
                     visibilityDuration: 500,
                     divAction: DivActionModel(
                       enabled: true,
                       logId: logId,
                     ),
-                  )
+                  ),
                 ],
                 elementId1,
               );
@@ -146,14 +150,14 @@ void main() {
             (async) {
               actionManager.addOrUpdateActions(
                 [
-                  DivVisibilityActionModel(
+                  const DivVisibilityActionModel(
                     visibilityPercentage: 20,
                     visibilityDuration: 500,
                     divAction: DivActionModel(
                       enabled: true,
                       logId: logId,
                     ),
-                  )
+                  ),
                 ],
                 elementId1,
               );
@@ -182,14 +186,14 @@ void main() {
             (async) {
               actionManager.addOrUpdateActions(
                 [
-                  DivVisibilityActionModel(
+                  const DivVisibilityActionModel(
                     visibilityPercentage: 20,
                     visibilityDuration: 500,
                     divAction: DivActionModel(
                       enabled: true,
                       logId: logId,
                     ),
-                  )
+                  ),
                 ],
                 elementId2,
               );
@@ -218,14 +222,14 @@ void main() {
             (async) {
               actionManager.addOrUpdateActions(
                 [
-                  DivVisibilityActionModel(
+                  const DivVisibilityActionModel(
                     visibilityPercentage: 20,
                     visibilityDuration: 500,
                     divAction: DivActionModel(
                       enabled: true,
                       logId: logId,
                     ),
-                  )
+                  ),
                 ],
                 elementId1,
               );
@@ -250,14 +254,14 @@ void main() {
             (async) {
               actionManager.addOrUpdateActions(
                 [
-                  DivVisibilityActionModel(
+                  const DivVisibilityActionModel(
                     visibilityPercentage: 20,
                     visibilityDuration: 500,
                     divAction: DivActionModel(
                       enabled: true,
                       logId: logId,
                     ),
-                  )
+                  ),
                 ],
                 elementId1,
               );
@@ -292,14 +296,14 @@ void main() {
             (async) {
               actionManager.addOrUpdateActions(
                 [
-                  DivVisibilityActionModel(
+                  const DivVisibilityActionModel(
                     visibilityPercentage: 20,
                     visibilityDuration: 500,
                     divAction: DivActionModel(
                       enabled: true,
                       logId: logId,
                     ),
-                  )
+                  ),
                 ],
                 elementId1,
               );
@@ -332,14 +336,14 @@ void main() {
         () {
           actionManager.addOrUpdateActions(
             [
-              DivVisibilityActionModel(
+              const DivVisibilityActionModel(
                 visibilityPercentage: 20,
                 visibilityDuration: 500,
                 divAction: DivActionModel(
                   enabled: true,
                   logId: logId,
                 ),
-              )
+              ),
             ],
             elementId1,
           );
@@ -361,7 +365,7 @@ void main() {
       test(
         'The new VisibilityActionModel has the following state notStart',
         () {
-          final action = DivVisibilityActionModel(
+          const action = DivVisibilityActionModel(
             visibilityPercentage: 20,
             visibilityDuration: 500,
             divAction: DivActionModel(
@@ -382,7 +386,7 @@ void main() {
       test(
         'The running VisibilityActionModel has the following state wait',
         () {
-          final action = DivVisibilityActionModel(
+          const action = DivVisibilityActionModel(
             visibilityPercentage: 20,
             visibilityDuration: 500,
             divAction: DivActionModel(
@@ -406,7 +410,7 @@ void main() {
         () {
           fakeAsync(
             (async) {
-              final action = DivVisibilityActionModel(
+              const action = DivVisibilityActionModel(
                 visibilityPercentage: 20,
                 visibilityDuration: 500,
                 divAction: DivActionModel(
@@ -435,7 +439,7 @@ void main() {
         () {
           fakeAsync(
             (async) {
-              final action = DivVisibilityActionModel(
+              const action = DivVisibilityActionModel(
                 visibilityPercentage: 20,
                 visibilityDuration: 500,
                 divAction: DivActionModel(

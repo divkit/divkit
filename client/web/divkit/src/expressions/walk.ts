@@ -1,4 +1,4 @@
-import { Node } from './ast';
+import type { Node } from './ast';
 
 export function walk(ast: Node, visitors: {
     [Type in Node['type']]?: (node: Extract<Node, { type: Type }>) => void;
@@ -29,6 +29,12 @@ export function walk(ast: Node, visitors: {
             walk(ast.alternate, visitors);
             break;
         case 'CallExpression':
+            ast.arguments.forEach(item => {
+                walk(item, visitors);
+            });
+            break;
+        case 'MethodExpression':
+            walk(ast.object, visitors);
             ast.arguments.forEach(item => {
                 walk(item, visitors);
             });

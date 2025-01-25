@@ -33,9 +33,9 @@ public final class DivShapeDrawableTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivShapeDrawableTemplate?) -> DeserializationResult<DivShapeDrawable> {
-    let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
-    let shapeValue = parent?.shape?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-    let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
+    let shapeValue = { parent?.shape?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let strokeValue = { parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
       shapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "shape", error: $0) },
@@ -54,9 +54,9 @@ public final class DivShapeDrawableTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivShapeDrawable(
-      color: colorNonNil,
-      shape: shapeNonNil,
-      stroke: strokeValue.value
+      color: { colorNonNil }(),
+      shape: { shapeNonNil }(),
+      stroke: { strokeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -65,29 +65,49 @@ public final class DivShapeDrawableTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
+    var colorValue: DeserializationResult<Expression<Color>> = { parent?.color?.value() ?? .noValue }()
     var shapeValue: DeserializationResult<DivShape> = .noValue
     var strokeValue: DeserializationResult<DivStroke> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "color":
-        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
-      case "shape":
-        shapeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self).merged(with: shapeValue)
-      case "stroke":
-        strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
-      case parent?.color?.link:
-        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-      case parent?.shape?.link:
-        shapeValue = shapeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self) })
-      case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "color" {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
+          }
+        }()
+        _ = {
+          if key == "shape" {
+           shapeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self).merged(with: shapeValue)
+          }
+        }()
+        _ = {
+          if key == "stroke" {
+           strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
+          }
+        }()
+        _ = {
+         if key == parent?.color?.link {
+           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+          }
+        }()
+        _ = {
+         if key == parent?.shape?.link {
+           shapeValue = shapeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.stroke?.link {
+           strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      shapeValue = shapeValue.merged(with: { parent.shape?.resolveValue(context: context, useOnlyLinks: true) })
-      strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { shapeValue = shapeValue.merged(with: { parent.shape?.resolveValue(context: context, useOnlyLinks: true) }) }()
+      _ = { strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
@@ -107,9 +127,9 @@ public final class DivShapeDrawableTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivShapeDrawable(
-      color: colorNonNil,
-      shape: shapeNonNil,
-      stroke: strokeValue.value
+      color: { colorNonNil }(),
+      shape: { shapeNonNil }(),
+      stroke: { strokeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

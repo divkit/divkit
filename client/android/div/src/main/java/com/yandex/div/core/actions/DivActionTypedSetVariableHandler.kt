@@ -1,6 +1,7 @@
 package com.yandex.div.core.actions
 
 import android.net.Uri
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.types.Color
@@ -16,6 +17,7 @@ internal class DivActionTypedSetVariableHandler @Inject constructor()
     : DivActionTypedHandler {
 
     override fun handleAction(
+        scopeId: String?,
         action: DivActionTyped,
         view: Div2View,
         resolver: ExpressionResolver,
@@ -36,7 +38,7 @@ internal class DivActionTypedSetVariableHandler @Inject constructor()
     ) {
         val variableName = action.value.variableName.evaluate(resolver)
         val newValue = action.value.value.evaluate(resolver)
-        view.setVariable(variableName) { variable: Variable ->
+        VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->
             variable.apply {
                 when (this) {
                     is Variable.ArrayVariable ->

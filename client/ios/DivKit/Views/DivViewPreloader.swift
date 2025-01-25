@@ -95,7 +95,7 @@ public final class DivViewPreloader {
       try? await oldTask?.value
       let blockProviders = sources.map { blockProvider(for: $0.id.cardId) }
       await withTaskGroup(of: Void.self) { group in
-        zip(blockProviders, sources).forEach { blockProvider, source in
+        for (blockProvider, source) in zip(blockProviders, sources) {
           group.addTask {
             await blockProvider.setSource(source, debugParams: debugParams)
           }

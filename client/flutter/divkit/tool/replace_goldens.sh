@@ -1,9 +1,7 @@
 #!/bin/bash
 
 INPUT_PATH=$1
-GOLDENS_DIR="test/goldens/goldens"
-FAILURES_DIR="test/goldens/failures"
-TEMP_DIR="temp_extracted_to_replace"
+TEMP_DIR="$(dirname $INPUT_PATH)/temp_extracted_to_replace"
 TEST_FILE_POSTFIX="_testImage"
 ZIP_FILE=false
 
@@ -31,7 +29,7 @@ if [[ $ZIP_FILE = true ]]; then
    unzip -o "$INPUT_PATH" -d $WORK_FOLDER
    echo
 else
-   WORK_FOLDER=$FAILURES_DIR
+   WORK_FOLDER=$INPUT_PATH
 fi
 
 function testImageFiles() {
@@ -48,10 +46,24 @@ echo "Found ${#FILES_ARRAY[@]} test files"
 echo
 
 for FILE in $FILES; do
-      # Remove substring to match golden file name
+      # Here convert string like "/Users/username/Downloads/test/goldens/failures/testName_testImage.png"
+      # To string like "test/goldens/failures/testName.png"
+      # And then move it to this path
+
+      # Remove "_test" substring to match golden file name
       GOLDEN_FILE_NAME=${FILE//$TEST_FILE_POSTFIX/}
+      # Remove start path, but keep the "test" part, if we have it
+      TO_KEEP="test/*"
+      TO_REMOVE_PREFIX="$WORK_FOLDER/"
+      TO_REMOVE_PREFIX=${TO_REMOVE_PREFIX//$TO_KEEP/}
+      GOLDENS_DIR=${GOLDEN_FILE_NAME//$TO_REMOVE_PREFIX/}
+      # Change postfix to "goldens"
+      TO_REMOVE_POSTFIX="failures/*"
+      TO_ADD_POSTFIX="goldens/"
+      GOLDENS_DIR=${GOLDENS_DIR//$TO_REMOVE_POSTFIX/$TO_ADD_POSTFIX}
+
       echo "Moving $GOLDEN_FILE_NAME"
-      mv "$FILE" "$GOLDEN_FILE_NAME"
+      cp "$FILE" "$GOLDEN_FILE_NAME"
       mkdir -p $GOLDENS_DIR
       mv "$GOLDEN_FILE_NAME" $GOLDENS_DIR
    done

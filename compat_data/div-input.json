@@ -17,6 +17,9 @@
             "ios": {
                 "version_added": "29.13.0"
             },
+            "android": {
+                "version_added": "29.14.0"
+            },
             "web": {
                 "version_added": "29.15.0"
             }
@@ -30,6 +33,9 @@
             },
             "web": {
                 "version_added": "30.3.0"
+            },
+            "ios": {
+                "version_added": "30.18.0"
             }
         }
     }, {
@@ -44,6 +50,70 @@
             },
             "android": {
                 "version_added": "30.7.0"
+            }
+        }
+    }, {
+        "id": "input_autocapitalization",
+        "name": "Input <code>autocapitalization</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.16.0"
+            },
+            "android": {
+                "version_added": "30.19.0"
+            },
+            "web": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "input_filters",
+        "name": "Input <code>filters</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.16.0"
+            }
+        }
+    }, {
+        "id": "input_validators",
+        "name": "Input <code>validators</code> property",
+        "compat": {
+            "android": {
+                "version_added": "25.4.0"
+            },
+            "ios": {
+                "version_added": "27.3.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "input_enter_key_type",
+        "name": "Input <code>enter_key_type</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.25.0"
+            },
+            "android": {
+                "version_added": "30.28.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "input_enter_key_actions",
+        "name": "Input <code>enter_key_actions</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.25.0"
+            },
+            "android": {
+                "version_added": "30.28.0"
+            },
+            "web": {
+                "version_added": "30.28.0"
             }
         }
     }]

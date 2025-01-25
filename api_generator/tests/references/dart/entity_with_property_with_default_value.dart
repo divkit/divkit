@@ -2,9 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithPropertyWithDefaultValue with EquatableMixin {
+
+class EntityWithPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
   const EntityWithPropertyWithDefaultValue({
     this.iNum = const ValueExpression(0),
     this.nested,
@@ -12,11 +13,11 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
   });
 
   static const type = "entity_with_property_with_default_value";
-  // constraint: number >= 0; default value: 0
+   // constraint: number >= 0; default value: 0
   final Expression<int> iNum;
-
+  /// non_optional is used to suppress auto-generation of default value for object with all-optional fields.
   final EntityWithPropertyWithDefaultValueNested? nested;
-  // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
+   // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
   final Expression<Uri> url;
 
   @override
@@ -36,7 +37,7 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
       url: url ?? this.url,
     );
 
-  static EntityWithPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json) {
+  static EntityWithPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -50,20 +51,27 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
   }
+
+  EntityWithPropertyWithDefaultValue resolve(DivVariableContext context) {
+    iNum?.resolve(context);
+    nested?.resolve(context);
+    url?.resolve(context);
+    return this;
+  }
 }
 
-class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
+/// non_optional is used to suppress auto-generation of default value for object with all-optional fields.
+class EntityWithPropertyWithDefaultValueNested extends Resolvable with EquatableMixin  {
   const EntityWithPropertyWithDefaultValueNested({
     this.iNum = const ValueExpression(0),
     required this.nonOptional,
     this.url = const ValueExpression(const Uri.parse("https://yandex.ru")),
   });
 
-  // constraint: number >= 0; default value: 0
+   // constraint: number >= 0; default value: 0
   final Expression<int> iNum;
-
   final Expression<String> nonOptional;
-  // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
+   // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
   final Expression<Uri> url;
 
   @override
@@ -83,7 +91,7 @@ class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
       url: url ?? this.url,
     );
 
-  static EntityWithPropertyWithDefaultValueNested? fromJson(Map<String, dynamic>? json) {
+  static EntityWithPropertyWithDefaultValueNested? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -96,5 +104,12 @@ class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
     } catch (e, st) {
       return null;
     }
+  }
+
+  EntityWithPropertyWithDefaultValueNested resolve(DivVariableContext context) {
+    iNum?.resolve(context);
+    nonOptional.resolve(context);
+    url?.resolve(context);
+    return this;
   }
 }

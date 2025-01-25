@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, text`.
  */
 @Generated
-class Text internal constructor(
+data class Text internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -44,6 +44,7 @@ class Text internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             autoEllipsize = additive.autoEllipsize ?: properties.autoEllipsize,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
@@ -60,7 +61,10 @@ class Text internal constructor(
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
             fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
+            hoverEndActions = additive.hoverEndActions ?: properties.hoverEndActions,
+            hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
             images = additive.images ?: properties.images,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
@@ -71,6 +75,8 @@ class Text internal constructor(
             maxLines = additive.maxLines ?: properties.maxLines,
             minHiddenLines = additive.minHiddenLines ?: properties.minHiddenLines,
             paddings = additive.paddings ?: properties.paddings,
+            pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
+            pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             ranges = additive.ranges ?: properties.ranges,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -82,6 +88,7 @@ class Text internal constructor(
             textColor = additive.textColor ?: properties.textColor,
             textGradient = additive.textGradient ?: properties.textGradient,
             textShadow = additive.textShadow ?: properties.textShadow,
+            tightenWidth = additive.tightenWidth ?: properties.tightenWidth,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
@@ -90,6 +97,7 @@ class Text internal constructor(
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             truncate = additive.truncate ?: properties.truncate,
             underline = additive.underline ?: properties.underline,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -98,7 +106,7 @@ class Text internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Text.
          */
@@ -133,6 +141,10 @@ class Text internal constructor(
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that change variable values over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Automatic text cropping to fit the container size.
          */
@@ -200,10 +212,22 @@ class Text internal constructor(
          */
         val fontWeightValue: Property<Int>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
         val height: Property<Size>?,
+        /**
+         * Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+         */
+        val hoverStartActions: Property<List<Action>>?,
         /**
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
@@ -213,7 +237,7 @@ class Text internal constructor(
          */
         val images: Property<List<Image>>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -246,11 +270,19 @@ class Text internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
+         * Actions performed when an element is released.
+         */
+        val pressEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when an element is pressed.
+         */
+        val pressStartActions: Property<List<Action>>?,
+        /**
          * A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
          */
         val ranges: Property<List<Range>>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -295,6 +327,11 @@ class Text internal constructor(
          */
         val textShadow: Property<Shadow>?,
         /**
+         * Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+         * Default value: `false`.
+         */
+        val tightenWidth: Property<Boolean>?,
+        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -330,7 +367,11 @@ class Text internal constructor(
          */
         val underline: Property<LineStyle>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -363,6 +404,7 @@ class Text internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("auto_ellipsize", autoEllipsize)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
@@ -379,7 +421,10 @@ class Text internal constructor(
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
             result.tryPutProperty("font_weight_value", fontWeightValue)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
+            result.tryPutProperty("hover_end_actions", hoverEndActions)
+            result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
             result.tryPutProperty("images", images)
             result.tryPutProperty("layout_provider", layoutProvider)
@@ -390,6 +435,8 @@ class Text internal constructor(
             result.tryPutProperty("max_lines", maxLines)
             result.tryPutProperty("min_hidden_lines", minHiddenLines)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("press_end_actions", pressEndActions)
+            result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("ranges", ranges)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
@@ -401,6 +448,7 @@ class Text internal constructor(
             result.tryPutProperty("text_color", textColor)
             result.tryPutProperty("text_gradient", textGradient)
             result.tryPutProperty("text_shadow", textShadow)
+            result.tryPutProperty("tighten_width", tightenWidth)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transition_change", transitionChange)
@@ -409,6 +457,7 @@ class Text internal constructor(
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("truncate", truncate)
             result.tryPutProperty("underline", underline)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -434,7 +483,7 @@ class Text internal constructor(
      * Required parameters: `text`.
      */
     @Generated
-    class Ellipsis internal constructor(
+    data class Ellipsis internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -450,7 +499,7 @@ class Text internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Actions when clicking on a crop marker.
              */
@@ -489,7 +538,7 @@ class Text internal constructor(
      * Required parameters: `url, start`.
      */
     @Generated
-    class Image internal constructor(
+    data class Image internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -498,7 +547,10 @@ class Text internal constructor(
 
         operator fun plus(additive: Properties): Image = Image(
             Properties(
+                accessibility = additive.accessibility ?: properties.accessibility,
+                alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
                 height = additive.height ?: properties.height,
+                indexingDirection = additive.indexingDirection ?: properties.indexingDirection,
                 preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
                 start = additive.start ?: properties.start,
                 tintColor = additive.tintColor ?: properties.tintColor,
@@ -508,12 +560,25 @@ class Text internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
+            val accessibility: Property<Accessibility>?,
+            /**
+             * Vertical image alignment within the row.
+             * Default value: `center`.
+             */
+            val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
              * Image height.
              * Default value: `{"type": "fixed","value":20}`.
              */
             val height: Property<FixedSize>?,
+            /**
+             * Defines direction in `start` parameter:
+            `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+            `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+             * Default value: `normal`.
+             */
+            val indexingDirection: Property<IndexingDirection>?,
             /**
              * Background image must be loaded before the display.
              * Default value: `false`.
@@ -545,7 +610,10 @@ class Text internal constructor(
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
+                result.tryPutProperty("accessibility", accessibility)
+                result.tryPutProperty("alignment_vertical", alignmentVertical)
                 result.tryPutProperty("height", height)
+                result.tryPutProperty("indexing_direction", indexingDirection)
                 result.tryPutProperty("preload_required", preloadRequired)
                 result.tryPutProperty("start", start)
                 result.tryPutProperty("tint_color", tintColor)
@@ -555,6 +623,64 @@ class Text internal constructor(
                 return result
             }
         }
+
+        /**
+         * Defines direction in `start` parameter:
+        `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+        `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+         * 
+         * Possible values: [normal], [reversed].
+         */
+        @Generated
+        sealed interface IndexingDirection
+
+        /**
+         * Can be created using the method [textImageAccessibility].
+         */
+        @Generated
+        data class Accessibility internal constructor(
+            @JsonIgnore
+            val properties: Properties,
+        ) {
+            @JsonAnyGetter
+            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+            operator fun plus(additive: Properties): Accessibility = Accessibility(
+                Properties(
+                    description = additive.description ?: properties.description,
+                    type = additive.type ?: properties.type,
+                )
+            )
+
+            data class Properties internal constructor(
+                /**
+                 * Element description. It is used as the main description for screen reading applications.
+                 */
+                val description: Property<String>?,
+                /**
+                 * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
+                 * Default value: `auto`.
+                 */
+                val type: Property<Type>?,
+            ) {
+                internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                    val result = mutableMapOf<String, Any>()
+                    result.putAll(properties)
+                    result.tryPutProperty("description", description)
+                    result.tryPutProperty("type", type)
+                    return result
+                }
+            }
+
+            /**
+             * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
+             * 
+             * Possible values: [none], [button], [image], [text], [auto].
+             */
+            @Generated
+            sealed interface Type
+        }
+
     }
 
 
@@ -562,11 +688,9 @@ class Text internal constructor(
      * Additional parameters of the character range.
      * 
      * Can be created using the method [textRange].
-     * 
-     * Required parameters: `start, end`.
      */
     @Generated
-    class Range internal constructor(
+    data class Range internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -576,6 +700,7 @@ class Text internal constructor(
         operator fun plus(additive: Properties): Range = Range(
             Properties(
                 actions = additive.actions ?: properties.actions,
+                alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
                 background = additive.background ?: properties.background,
                 border = additive.border ?: properties.border,
                 end = additive.end ?: properties.end,
@@ -587,6 +712,7 @@ class Text internal constructor(
                 fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
                 letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
                 lineHeight = additive.lineHeight ?: properties.lineHeight,
+                mask = additive.mask ?: properties.mask,
                 start = additive.start ?: properties.start,
                 strike = additive.strike ?: properties.strike,
                 textColor = additive.textColor ?: properties.textColor,
@@ -596,11 +722,15 @@ class Text internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Action when clicking on text.
              */
             val actions: Property<List<Action>>?,
+            /**
+             * Vertical text alignment within the row.
+             */
+            val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
              * Character range background.
              */
@@ -610,7 +740,7 @@ class Text internal constructor(
              */
             val border: Property<TextRangeBorder>?,
             /**
-             * Ordinal number of the last character to be included in the range.
+             * Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
              */
             val end: Property<Int>?,
             /**
@@ -647,7 +777,12 @@ class Text internal constructor(
              */
             val lineHeight: Property<Int>?,
             /**
+             * A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+             */
+            val mask: Property<TextRangeMask>?,
+            /**
              * Ordinal number of a character which the range begins from. The first character has a number `0`.
+             * Default value: `0`.
              */
             val start: Property<Int>?,
             /**
@@ -675,6 +810,7 @@ class Text internal constructor(
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
                 result.tryPutProperty("actions", actions)
+                result.tryPutProperty("alignment_vertical", alignmentVertical)
                 result.tryPutProperty("background", background)
                 result.tryPutProperty("border", border)
                 result.tryPutProperty("end", end)
@@ -686,6 +822,7 @@ class Text internal constructor(
                 result.tryPutProperty("font_weight_value", fontWeightValue)
                 result.tryPutProperty("letter_spacing", letterSpacing)
                 result.tryPutProperty("line_height", lineHeight)
+                result.tryPutProperty("mask", mask)
                 result.tryPutProperty("start", start)
                 result.tryPutProperty("strike", strike)
                 result.tryPutProperty("text_color", textColor)
@@ -708,6 +845,7 @@ class Text internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -723,10 +861,13 @@ class Text internal constructor(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -734,8 +875,10 @@ class Text internal constructor(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -745,6 +888,7 @@ class Text internal constructor(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -753,7 +897,8 @@ class Text internal constructor(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -770,6 +915,7 @@ fun DivScope.text(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -786,7 +932,10 @@ fun DivScope.text(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -797,6 +946,8 @@ fun DivScope.text(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -808,6 +959,7 @@ fun DivScope.text(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -816,6 +968,7 @@ fun DivScope.text(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -831,6 +984,7 @@ fun DivScope.text(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         autoEllipsize = valueOrNull(autoEllipsize),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -847,7 +1001,10 @@ fun DivScope.text(
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         images = valueOrNull(images),
         layoutProvider = valueOrNull(layoutProvider),
@@ -858,6 +1015,8 @@ fun DivScope.text(
         maxLines = valueOrNull(maxLines),
         minHiddenLines = valueOrNull(minHiddenLines),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -869,6 +1028,7 @@ fun DivScope.text(
         textColor = valueOrNull(textColor),
         textGradient = valueOrNull(textGradient),
         textShadow = valueOrNull(textShadow),
+        tightenWidth = valueOrNull(tightenWidth),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
@@ -877,6 +1037,7 @@ fun DivScope.text(
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
         underline = valueOrNull(underline),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -894,6 +1055,7 @@ fun DivScope.text(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -909,10 +1071,13 @@ fun DivScope.text(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -920,8 +1085,10 @@ fun DivScope.text(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -931,6 +1098,7 @@ fun DivScope.text(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -939,7 +1107,8 @@ fun DivScope.text(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -956,6 +1125,7 @@ fun DivScope.textProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -972,7 +1142,10 @@ fun DivScope.textProps(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -983,6 +1156,8 @@ fun DivScope.textProps(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -994,6 +1169,7 @@ fun DivScope.textProps(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -1002,6 +1178,7 @@ fun DivScope.textProps(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1016,6 +1193,7 @@ fun DivScope.textProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     autoEllipsize = valueOrNull(autoEllipsize),
     background = valueOrNull(background),
     border = valueOrNull(border),
@@ -1032,7 +1210,10 @@ fun DivScope.textProps(
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
     fontWeightValue = valueOrNull(fontWeightValue),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
+    hoverEndActions = valueOrNull(hoverEndActions),
+    hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
     images = valueOrNull(images),
     layoutProvider = valueOrNull(layoutProvider),
@@ -1043,6 +1224,8 @@ fun DivScope.textProps(
     maxLines = valueOrNull(maxLines),
     minHiddenLines = valueOrNull(minHiddenLines),
     paddings = valueOrNull(paddings),
+    pressEndActions = valueOrNull(pressEndActions),
+    pressStartActions = valueOrNull(pressStartActions),
     ranges = valueOrNull(ranges),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
@@ -1054,6 +1237,7 @@ fun DivScope.textProps(
     textColor = valueOrNull(textColor),
     textGradient = valueOrNull(textGradient),
     textShadow = valueOrNull(textShadow),
+    tightenWidth = valueOrNull(tightenWidth),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transitionChange = valueOrNull(transitionChange),
@@ -1062,6 +1246,7 @@ fun DivScope.textProps(
     transitionTriggers = valueOrNull(transitionTriggers),
     truncate = valueOrNull(truncate),
     underline = valueOrNull(underline),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -1078,6 +1263,7 @@ fun DivScope.textProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1093,10 +1279,13 @@ fun DivScope.textProps(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1104,8 +1293,10 @@ fun DivScope.textProps(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1115,6 +1306,7 @@ fun DivScope.textProps(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1123,7 +1315,8 @@ fun DivScope.textProps(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1140,6 +1333,7 @@ fun TemplateScope.textRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1156,7 +1350,10 @@ fun TemplateScope.textRefs(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -1167,6 +1364,8 @@ fun TemplateScope.textRefs(
     maxLines: ReferenceProperty<Int>? = null,
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1178,6 +1377,7 @@ fun TemplateScope.textRefs(
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
+    tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -1186,6 +1386,7 @@ fun TemplateScope.textRefs(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1200,6 +1401,7 @@ fun TemplateScope.textRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     autoEllipsize = autoEllipsize,
     background = background,
     border = border,
@@ -1216,7 +1418,10 @@ fun TemplateScope.textRefs(
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
     fontWeightValue = fontWeightValue,
+    functions = functions,
     height = height,
+    hoverEndActions = hoverEndActions,
+    hoverStartActions = hoverStartActions,
     id = id,
     images = images,
     layoutProvider = layoutProvider,
@@ -1227,6 +1432,8 @@ fun TemplateScope.textRefs(
     maxLines = maxLines,
     minHiddenLines = minHiddenLines,
     paddings = paddings,
+    pressEndActions = pressEndActions,
+    pressStartActions = pressStartActions,
     ranges = ranges,
     reuseId = reuseId,
     rowSpan = rowSpan,
@@ -1238,6 +1445,7 @@ fun TemplateScope.textRefs(
     textColor = textColor,
     textGradient = textGradient,
     textShadow = textShadow,
+    tightenWidth = tightenWidth,
     tooltips = tooltips,
     transform = transform,
     transitionChange = transitionChange,
@@ -1246,6 +1454,7 @@ fun TemplateScope.textRefs(
     transitionTriggers = transitionTriggers,
     truncate = truncate,
     underline = underline,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -1262,6 +1471,7 @@ fun TemplateScope.textRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1277,10 +1487,13 @@ fun TemplateScope.textRefs(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1288,8 +1501,10 @@ fun TemplateScope.textRefs(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1299,6 +1514,7 @@ fun TemplateScope.textRefs(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1307,7 +1523,8 @@ fun TemplateScope.textRefs(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1324,6 +1541,7 @@ fun Text.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1340,7 +1558,10 @@ fun Text.override(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -1351,6 +1572,8 @@ fun Text.override(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1362,6 +1585,7 @@ fun Text.override(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -1370,6 +1594,7 @@ fun Text.override(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1385,6 +1610,7 @@ fun Text.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         autoEllipsize = valueOrNull(autoEllipsize) ?: properties.autoEllipsize,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
@@ -1401,7 +1627,10 @@ fun Text.override(
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
+        hoverEndActions = valueOrNull(hoverEndActions) ?: properties.hoverEndActions,
+        hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
         images = valueOrNull(images) ?: properties.images,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
@@ -1412,6 +1641,8 @@ fun Text.override(
         maxLines = valueOrNull(maxLines) ?: properties.maxLines,
         minHiddenLines = valueOrNull(minHiddenLines) ?: properties.minHiddenLines,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
+        pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         ranges = valueOrNull(ranges) ?: properties.ranges,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -1423,6 +1654,7 @@ fun Text.override(
         textColor = valueOrNull(textColor) ?: properties.textColor,
         textGradient = valueOrNull(textGradient) ?: properties.textGradient,
         textShadow = valueOrNull(textShadow) ?: properties.textShadow,
+        tightenWidth = valueOrNull(tightenWidth) ?: properties.tightenWidth,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
@@ -1431,6 +1663,7 @@ fun Text.override(
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         truncate = valueOrNull(truncate) ?: properties.truncate,
         underline = valueOrNull(underline) ?: properties.underline,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -1448,6 +1681,7 @@ fun Text.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1463,10 +1697,13 @@ fun Text.override(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1474,8 +1711,10 @@ fun Text.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1485,6 +1724,7 @@ fun Text.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1493,7 +1733,8 @@ fun Text.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1510,6 +1751,7 @@ fun Text.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1526,7 +1768,10 @@ fun Text.defer(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -1537,6 +1782,8 @@ fun Text.defer(
     maxLines: ReferenceProperty<Int>? = null,
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1548,6 +1795,7 @@ fun Text.defer(
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
+    tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -1556,6 +1804,7 @@ fun Text.defer(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1571,6 +1820,7 @@ fun Text.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
         background = background ?: properties.background,
         border = border ?: properties.border,
@@ -1587,7 +1837,10 @@ fun Text.defer(
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         images = images ?: properties.images,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
@@ -1598,6 +1851,8 @@ fun Text.defer(
         maxLines = maxLines ?: properties.maxLines,
         minHiddenLines = minHiddenLines ?: properties.minHiddenLines,
         paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         ranges = ranges ?: properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1609,6 +1864,7 @@ fun Text.defer(
         textColor = textColor ?: properties.textColor,
         textGradient = textGradient ?: properties.textGradient,
         textShadow = textShadow ?: properties.textShadow,
+        tightenWidth = tightenWidth ?: properties.tightenWidth,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transitionChange = transitionChange ?: properties.transitionChange,
@@ -1617,6 +1873,7 @@ fun Text.defer(
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
         underline = underline ?: properties.underline,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1642,13 +1899,14 @@ fun Text.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -1680,6 +1938,7 @@ fun Text.evaluate(
     textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    tightenWidth: ExpressionProperty<Boolean>? = null,
     truncate: ExpressionProperty<Text.Truncate>? = null,
     underline: ExpressionProperty<LineStyle>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1693,6 +1952,7 @@ fun Text.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
         background = properties.background,
         border = properties.border,
@@ -1709,7 +1969,10 @@ fun Text.evaluate(
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = properties.functions,
         height = properties.height,
+        hoverEndActions = properties.hoverEndActions,
+        hoverStartActions = properties.hoverStartActions,
         id = properties.id,
         images = properties.images,
         layoutProvider = properties.layoutProvider,
@@ -1720,6 +1983,8 @@ fun Text.evaluate(
         maxLines = maxLines ?: properties.maxLines,
         minHiddenLines = minHiddenLines ?: properties.minHiddenLines,
         paddings = properties.paddings,
+        pressEndActions = properties.pressEndActions,
+        pressStartActions = properties.pressStartActions,
         ranges = properties.ranges,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -1731,6 +1996,7 @@ fun Text.evaluate(
         textColor = textColor ?: properties.textColor,
         textGradient = properties.textGradient,
         textShadow = properties.textShadow,
+        tightenWidth = tightenWidth ?: properties.tightenWidth,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transitionChange = properties.transitionChange,
@@ -1739,6 +2005,7 @@ fun Text.evaluate(
         transitionTriggers = properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
         underline = underline ?: properties.underline,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1756,6 +2023,7 @@ fun Text.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1771,10 +2039,13 @@ fun Text.evaluate(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1782,8 +2053,10 @@ fun Text.evaluate(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1793,6 +2066,7 @@ fun Text.evaluate(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1801,7 +2075,8 @@ fun Text.evaluate(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1818,6 +2093,7 @@ fun Component<Text>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1834,7 +2110,10 @@ fun Component<Text>.override(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
     layoutProvider: LayoutProvider? = null,
@@ -1845,6 +2124,8 @@ fun Component<Text>.override(
     maxLines: Int? = null,
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     ranges: List<Text.Range>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
@@ -1856,6 +2137,7 @@ fun Component<Text>.override(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -1864,6 +2146,7 @@ fun Component<Text>.override(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1880,6 +2163,7 @@ fun Component<Text>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         autoEllipsize = valueOrNull(autoEllipsize),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -1896,7 +2180,10 @@ fun Component<Text>.override(
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         images = valueOrNull(images),
         layoutProvider = valueOrNull(layoutProvider),
@@ -1907,6 +2194,8 @@ fun Component<Text>.override(
         maxLines = valueOrNull(maxLines),
         minHiddenLines = valueOrNull(minHiddenLines),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         ranges = valueOrNull(ranges),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
@@ -1918,6 +2207,7 @@ fun Component<Text>.override(
         textColor = valueOrNull(textColor),
         textGradient = valueOrNull(textGradient),
         textShadow = valueOrNull(textShadow),
+        tightenWidth = valueOrNull(tightenWidth),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
@@ -1926,6 +2216,7 @@ fun Component<Text>.override(
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
         underline = valueOrNull(underline),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1943,6 +2234,7 @@ fun Component<Text>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1958,10 +2250,13 @@ fun Component<Text>.override(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1969,8 +2264,10 @@ fun Component<Text>.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed when an element is released.
+ * @param pressStartActions Actions performed when an element is pressed.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1980,6 +2277,7 @@ fun Component<Text>.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1988,7 +2286,8 @@ fun Component<Text>.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -2005,6 +2304,7 @@ fun Component<Text>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -2021,7 +2321,10 @@ fun Component<Text>.defer(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -2032,6 +2335,8 @@ fun Component<Text>.defer(
     maxLines: ReferenceProperty<Int>? = null,
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -2043,6 +2348,7 @@ fun Component<Text>.defer(
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
+    tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -2051,6 +2357,7 @@ fun Component<Text>.defer(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -2067,6 +2374,7 @@ fun Component<Text>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         autoEllipsize = autoEllipsize,
         background = background,
         border = border,
@@ -2083,7 +2391,10 @@ fun Component<Text>.defer(
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = functions,
         height = height,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
         id = id,
         images = images,
         layoutProvider = layoutProvider,
@@ -2094,6 +2405,8 @@ fun Component<Text>.defer(
         maxLines = maxLines,
         minHiddenLines = minHiddenLines,
         paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         ranges = ranges,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -2105,6 +2418,7 @@ fun Component<Text>.defer(
         textColor = textColor,
         textGradient = textGradient,
         textShadow = textShadow,
+        tightenWidth = tightenWidth,
         tooltips = tooltips,
         transform = transform,
         transitionChange = transitionChange,
@@ -2113,6 +2427,7 @@ fun Component<Text>.defer(
         transitionTriggers = transitionTriggers,
         truncate = truncate,
         underline = underline,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -2138,13 +2453,14 @@ fun Component<Text>.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -2176,6 +2492,7 @@ fun Component<Text>.evaluate(
     textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    tightenWidth: ExpressionProperty<Boolean>? = null,
     truncate: ExpressionProperty<Text.Truncate>? = null,
     underline: ExpressionProperty<LineStyle>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -2190,6 +2507,7 @@ fun Component<Text>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         autoEllipsize = autoEllipsize,
         background = null,
         border = null,
@@ -2206,7 +2524,10 @@ fun Component<Text>.evaluate(
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = null,
         height = null,
+        hoverEndActions = null,
+        hoverStartActions = null,
         id = null,
         images = null,
         layoutProvider = null,
@@ -2217,6 +2538,8 @@ fun Component<Text>.evaluate(
         maxLines = maxLines,
         minHiddenLines = minHiddenLines,
         paddings = null,
+        pressEndActions = null,
+        pressStartActions = null,
         ranges = null,
         reuseId = reuseId,
         rowSpan = rowSpan,
@@ -2228,6 +2551,7 @@ fun Component<Text>.evaluate(
         textColor = textColor,
         textGradient = null,
         textShadow = null,
+        tightenWidth = tightenWidth,
         tooltips = null,
         transform = null,
         transitionChange = null,
@@ -2236,6 +2560,7 @@ fun Component<Text>.evaluate(
         transitionTriggers = null,
         truncate = truncate,
         underline = underline,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,
@@ -2379,7 +2704,11 @@ fun Text.Ellipsis.evaluate(
 fun Text.Ellipsis.asList() = listOf(this)
 
 /**
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2390,7 +2719,10 @@ fun Text.Ellipsis.asList() = listOf(this)
 @Generated
 fun DivScope.textImage(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: Text.Image.Accessibility? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
+    indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
@@ -2399,7 +2731,10 @@ fun DivScope.textImage(
     width: FixedSize? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = valueOrNull(accessibility),
+        alignmentVertical = valueOrNull(alignmentVertical),
         height = valueOrNull(height),
+        indexingDirection = valueOrNull(indexingDirection),
         preloadRequired = valueOrNull(preloadRequired),
         start = valueOrNull(start),
         tintColor = valueOrNull(tintColor),
@@ -2410,7 +2745,11 @@ fun DivScope.textImage(
 )
 
 /**
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2421,7 +2760,10 @@ fun DivScope.textImage(
 @Generated
 fun DivScope.textImageProps(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: Text.Image.Accessibility? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
+    indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
@@ -2429,7 +2771,10 @@ fun DivScope.textImageProps(
     url: Url? = null,
     width: FixedSize? = null,
 ) = Text.Image.Properties(
+    accessibility = valueOrNull(accessibility),
+    alignmentVertical = valueOrNull(alignmentVertical),
     height = valueOrNull(height),
+    indexingDirection = valueOrNull(indexingDirection),
     preloadRequired = valueOrNull(preloadRequired),
     start = valueOrNull(start),
     tintColor = valueOrNull(tintColor),
@@ -2439,7 +2784,11 @@ fun DivScope.textImageProps(
 )
 
 /**
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2450,7 +2799,10 @@ fun DivScope.textImageProps(
 @Generated
 fun TemplateScope.textImageRefs(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     height: ReferenceProperty<FixedSize>? = null,
+    indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
@@ -2458,7 +2810,10 @@ fun TemplateScope.textImageRefs(
     url: ReferenceProperty<Url>? = null,
     width: ReferenceProperty<FixedSize>? = null,
 ) = Text.Image.Properties(
+    accessibility = accessibility,
+    alignmentVertical = alignmentVertical,
     height = height,
+    indexingDirection = indexingDirection,
     preloadRequired = preloadRequired,
     start = start,
     tintColor = tintColor,
@@ -2468,7 +2823,11 @@ fun TemplateScope.textImageRefs(
 )
 
 /**
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2479,7 +2838,10 @@ fun TemplateScope.textImageRefs(
 @Generated
 fun Text.Image.override(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: Text.Image.Accessibility? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
+    indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
@@ -2488,7 +2850,10 @@ fun Text.Image.override(
     width: FixedSize? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = valueOrNull(accessibility) ?: properties.accessibility,
+        alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         height = valueOrNull(height) ?: properties.height,
+        indexingDirection = valueOrNull(indexingDirection) ?: properties.indexingDirection,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         start = valueOrNull(start) ?: properties.start,
         tintColor = valueOrNull(tintColor) ?: properties.tintColor,
@@ -2499,7 +2864,11 @@ fun Text.Image.override(
 )
 
 /**
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2510,7 +2879,10 @@ fun Text.Image.override(
 @Generated
 fun Text.Image.defer(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     height: ReferenceProperty<FixedSize>? = null,
+    indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
@@ -2519,7 +2891,10 @@ fun Text.Image.defer(
     width: ReferenceProperty<FixedSize>? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         height = height ?: properties.height,
+        indexingDirection = indexingDirection ?: properties.indexingDirection,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
         tintColor = tintColor ?: properties.tintColor,
@@ -2530,6 +2905,10 @@ fun Text.Image.defer(
 )
 
 /**
+ * @param alignmentVertical Vertical image alignment within the row.
+ * @param indexingDirection Defines direction in `start` parameter:
+`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
+`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2539,6 +2918,8 @@ fun Text.Image.defer(
 @Generated
 fun Text.Image.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
+    indexingDirection: ExpressionProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     start: ExpressionProperty<Int>? = null,
     tintColor: ExpressionProperty<Color>? = null,
@@ -2546,7 +2927,10 @@ fun Text.Image.evaluate(
     url: ExpressionProperty<Url>? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = properties.accessibility,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         height = properties.height,
+        indexingDirection = indexingDirection ?: properties.indexingDirection,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
         tintColor = tintColor ?: properties.tintColor,
@@ -2561,9 +2945,10 @@ fun Text.Image.asList() = listOf(this)
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2572,6 +2957,7 @@ fun Text.Image.asList() = listOf(this)
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2583,6 +2969,7 @@ fun Text.Image.asList() = listOf(this)
 fun DivScope.textRange(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
@@ -2594,6 +2981,7 @@ fun DivScope.textRange(
     fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
+    mask: TextRangeMask? = null,
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
@@ -2603,6 +2991,7 @@ fun DivScope.textRange(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = valueOrNull(actions),
+        alignmentVertical = valueOrNull(alignmentVertical),
         background = valueOrNull(background),
         border = valueOrNull(border),
         end = valueOrNull(end),
@@ -2614,6 +3003,7 @@ fun DivScope.textRange(
         fontWeightValue = valueOrNull(fontWeightValue),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
+        mask = valueOrNull(mask),
         start = valueOrNull(start),
         strike = valueOrNull(strike),
         textColor = valueOrNull(textColor),
@@ -2625,9 +3015,10 @@ fun DivScope.textRange(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2636,6 +3027,7 @@ fun DivScope.textRange(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2647,6 +3039,7 @@ fun DivScope.textRange(
 fun DivScope.textRangeProps(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
@@ -2658,6 +3051,7 @@ fun DivScope.textRangeProps(
     fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
+    mask: TextRangeMask? = null,
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
@@ -2666,6 +3060,7 @@ fun DivScope.textRangeProps(
     underline: LineStyle? = null,
 ) = Text.Range.Properties(
     actions = valueOrNull(actions),
+    alignmentVertical = valueOrNull(alignmentVertical),
     background = valueOrNull(background),
     border = valueOrNull(border),
     end = valueOrNull(end),
@@ -2677,6 +3072,7 @@ fun DivScope.textRangeProps(
     fontWeightValue = valueOrNull(fontWeightValue),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
+    mask = valueOrNull(mask),
     start = valueOrNull(start),
     strike = valueOrNull(strike),
     textColor = valueOrNull(textColor),
@@ -2687,9 +3083,10 @@ fun DivScope.textRangeProps(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2698,6 +3095,7 @@ fun DivScope.textRangeProps(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2709,6 +3107,7 @@ fun DivScope.textRangeProps(
 fun TemplateScope.textRangeRefs(
     `use named arguments`: Guard = Guard.instance,
     actions: ReferenceProperty<List<Action>>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
@@ -2720,6 +3119,7 @@ fun TemplateScope.textRangeRefs(
     fontWeightValue: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
+    mask: ReferenceProperty<TextRangeMask>? = null,
     start: ReferenceProperty<Int>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -2728,6 +3128,7 @@ fun TemplateScope.textRangeRefs(
     underline: ReferenceProperty<LineStyle>? = null,
 ) = Text.Range.Properties(
     actions = actions,
+    alignmentVertical = alignmentVertical,
     background = background,
     border = border,
     end = end,
@@ -2739,6 +3140,7 @@ fun TemplateScope.textRangeRefs(
     fontWeightValue = fontWeightValue,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
+    mask = mask,
     start = start,
     strike = strike,
     textColor = textColor,
@@ -2749,9 +3151,10 @@ fun TemplateScope.textRangeRefs(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2760,6 +3163,7 @@ fun TemplateScope.textRangeRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2771,6 +3175,7 @@ fun TemplateScope.textRangeRefs(
 fun Text.Range.override(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
@@ -2782,6 +3187,7 @@ fun Text.Range.override(
     fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
+    mask: TextRangeMask? = null,
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
@@ -2791,6 +3197,7 @@ fun Text.Range.override(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = valueOrNull(actions) ?: properties.actions,
+        alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         end = valueOrNull(end) ?: properties.end,
@@ -2802,6 +3209,7 @@ fun Text.Range.override(
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
+        mask = valueOrNull(mask) ?: properties.mask,
         start = valueOrNull(start) ?: properties.start,
         strike = valueOrNull(strike) ?: properties.strike,
         textColor = valueOrNull(textColor) ?: properties.textColor,
@@ -2813,9 +3221,10 @@ fun Text.Range.override(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2824,6 +3233,7 @@ fun Text.Range.override(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2835,6 +3245,7 @@ fun Text.Range.override(
 fun Text.Range.defer(
     `use named arguments`: Guard = Guard.instance,
     actions: ReferenceProperty<List<Action>>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
@@ -2846,6 +3257,7 @@ fun Text.Range.defer(
     fontWeightValue: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
+    mask: ReferenceProperty<TextRangeMask>? = null,
     start: ReferenceProperty<Int>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -2855,6 +3267,7 @@ fun Text.Range.defer(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = actions ?: properties.actions,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = background ?: properties.background,
         border = border ?: properties.border,
         end = end ?: properties.end,
@@ -2866,6 +3279,7 @@ fun Text.Range.defer(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
+        mask = mask ?: properties.mask,
         start = start ?: properties.start,
         strike = strike ?: properties.strike,
         textColor = textColor ?: properties.textColor,
@@ -2876,7 +3290,8 @@ fun Text.Range.defer(
 )
 
 /**
- * @param end Ordinal number of the last character to be included in the range.
+ * @param alignmentVertical Vertical text alignment within the row.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2894,6 +3309,7 @@ fun Text.Range.defer(
 @Generated
 fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
     end: ExpressionProperty<Int>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontFeatureSettings: ExpressionProperty<String>? = null,
@@ -2911,6 +3327,7 @@ fun Text.Range.evaluate(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = properties.actions,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = properties.background,
         border = properties.border,
         end = end ?: properties.end,
@@ -2922,6 +3339,7 @@ fun Text.Range.evaluate(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
+        mask = properties.mask,
         start = start ?: properties.start,
         strike = strike ?: properties.strike,
         textColor = textColor ?: properties.textColor,

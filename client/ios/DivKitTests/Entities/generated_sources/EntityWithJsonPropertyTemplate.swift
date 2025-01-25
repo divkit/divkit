@@ -1,10 +1,11 @@
 // Generated code. Do not modify.
 
 @testable import DivKit
-
 import Foundation
 import Serialization
 import VGSL
+
+import enum DivKit.Expression
 
 public final class EntityWithJsonPropertyTemplate: TemplateValue {
   public static let type: String = "entity_with_json_property"
@@ -27,12 +28,12 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithJsonPropertyTemplate?) -> DeserializationResult<EntityWithJsonProperty> {
-    let jsonPropertyValue = parent?.jsonProperty?.resolveOptionalValue(context: context) ?? .noValue
+    let jsonPropertyValue = { parent?.jsonProperty?.resolveOptionalValue(context: context) ?? .noValue }()
     let errors = mergeErrors(
       jsonPropertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "json_property", error: $0) }
     )
     let result = EntityWithJsonProperty(
-      jsonProperty: jsonPropertyValue.value
+      jsonProperty: { jsonPropertyValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -41,21 +42,29 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var jsonPropertyValue: DeserializationResult<[String: Any]> = parent?.jsonProperty?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "json_property":
-        jsonPropertyValue = deserialize(__dictValue).merged(with: jsonPropertyValue)
-      case parent?.jsonProperty?.link:
-        jsonPropertyValue = jsonPropertyValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var jsonPropertyValue: DeserializationResult<[String: Any]> = { parent?.jsonProperty?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "json_property" {
+           jsonPropertyValue = deserialize(__dictValue).merged(with: jsonPropertyValue)
+          }
+        }()
+        _ = {
+         if key == parent?.jsonProperty?.link {
+           jsonPropertyValue = jsonPropertyValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       jsonPropertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "json_property", error: $0) }
     )
     let result = EntityWithJsonProperty(
-      jsonProperty: jsonPropertyValue.value
+      jsonProperty: { jsonPropertyValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

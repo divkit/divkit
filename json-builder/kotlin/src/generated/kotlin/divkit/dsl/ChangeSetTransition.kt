@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
-class ChangeSetTransition internal constructor(
+data class ChangeSetTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ChangeTransition {
@@ -40,7 +40,7 @@ class ChangeSetTransition internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * List of animations.
          */

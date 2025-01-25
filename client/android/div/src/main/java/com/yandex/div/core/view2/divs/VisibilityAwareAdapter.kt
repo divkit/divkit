@@ -12,26 +12,28 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     ExpressionSubscriber {
 
     val items = items.toMutableList()
+    private val indexedItems get() = items.withIndex()
 
     private val _visibleItems = mutableListOf<IndexedValue<DivItemBuilderResult>>()
-    val visibleItems: List<DivItemBuilderResult> = _visibleItems.dropIndex()
+    val visibleItems: List<DivItemBuilderResult> = object : AbstractList<DivItemBuilderResult>() {
+
+        override fun get(index: Int) = _visibleItems[index].value
+
+        override val size get() = _visibleItems.size
+    }
 
     private val visibilityMap = mutableMapOf<DivItemBuilderResult, Boolean>()
 
     override val subscriptions = mutableListOf<Disposable>()
 
     init {
-        updateVisibleItems()
+        initVisibleItems()
         subscribeOnElements()
     }
 
-    fun updateVisibleItems() {
-        _visibleItems.clear()
-        visibilityMap.clear()
-
+    private fun initVisibleItems() {
         indexedItems.forEach {
-            val isVisible = it.value.div.value().visibility.evaluate(it.value.expressionResolver).isVisible
-
+            val isVisible = it.value.visibility != DivVisibility.GONE
             visibilityMap[it.value] = isVisible
             if (isVisible) {
                 _visibleItems.add(it)
@@ -39,60 +41,46 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         }
     }
 
+    private val DivItemBuilderResult.visibility get() = div.value().visibility.evaluate(expressionResolver)
+
     fun subscribeOnElements() {
+        closeAllSubscription()
         indexedItems.forEach { item ->
             val subscription = item.value.div.value().visibility.observe(item.value.expressionResolver) {
-                item.updateVisibility(it)
+                updateItemVisibility(item.index, it)
             }
             addSubscription(subscription)
         }
     }
 
-    val DivItemBuilderResult.isVisible get() = visibilityMap[this] == true
-
     protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(position)
 
     protected open fun notifyRawItemInserted(position: Int) = notifyItemInserted(position)
 
-    protected open fun notifyRawItemRangeInserted(positionStart: Int, itemCount: Int) =
-        notifyItemRangeInserted(positionStart, itemCount)
+    protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(position)
 
-    private val indexedItems
-        get() = items.withIndex()
-
-    private fun IndexedValue<DivItemBuilderResult>.updateVisibility(newVisibility: DivVisibility) {
-        val wasVisible = visibilityMap[value] ?: false
-        val isVisible = newVisibility.isVisible
+    protected fun updateItemVisibility(
+        rawIndex: Int,
+        newVisibility: DivVisibility = items[rawIndex].visibility,
+    ) {
+        val item = items[rawIndex]
+        val wasVisible = visibilityMap[item] ?: false
+        val isVisible = newVisibility != DivVisibility.GONE
 
         if (!wasVisible && isVisible) {
-            val position = _visibleItems.insertionSortPass(this)
+            val position = _visibleItems
+                .indexOfFirst { it.index > rawIndex }
+                .takeUnless { it == -1 } ?: _visibleItems.size
+            _visibleItems.add(position, IndexedValue(rawIndex, item))
             notifyRawItemInserted(position)
         } else if (wasVisible && !isVisible) {
-            val position = _visibleItems.indexOf(this)
+            val position = _visibleItems.indexOfFirst { it.value == item }
             _visibleItems.removeAt(position)
             notifyRawItemRemoved(position)
         }
 
-        visibilityMap[value] = isVisible
+        visibilityMap[item] = isVisible
     }
 
     override fun getItemCount() = visibleItems.size
-
-    companion object {
-        internal val DivVisibility?.isVisible get() = this != null && this != DivVisibility.GONE
-
-        private fun <T : Any> List<IndexedValue<T>>.dropIndex(): List<T> =
-            object : AbstractList<T>() {
-                override fun get(index: Int): T = this@dropIndex[index].value
-
-                override val size: Int
-                    get() = this@dropIndex.size
-            }
-
-        private fun <T : Any> MutableList<IndexedValue<T>>.insertionSortPass(item: IndexedValue<T>): Int {
-            val position = indexOfFirst { it.index > item.index }.takeUnless { it == -1 } ?: size
-            add(position, item)
-            return position
-        }
-    }
 }

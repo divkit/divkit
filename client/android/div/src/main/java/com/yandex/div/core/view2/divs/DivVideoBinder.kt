@@ -1,13 +1,17 @@
 package com.yandex.div.core.view2.divs
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import com.yandex.div.core.DecodeBase64ImageTask
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.dagger.DivScope
@@ -18,14 +22,15 @@ import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.player.DivVideoViewMapper
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVideo
+import com.yandex.div2.DivVideoScale
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 
@@ -37,7 +42,7 @@ internal class DivVideoBinder @Inject constructor(
     private val videoViewMapper: DivVideoViewMapper,
     private val executorService: ExecutorService,
 ) : DivViewBinder<DivVideo, DivVideoView> {
-    override fun bindView(context: BindingContext, view: DivVideoView, div: DivVideo) {
+    override fun bindView(context: BindingContext, view: DivVideoView, div: DivVideo, path: DivStatePath) {
         val oldDiv = view.div
         val divView = context.divView
         val resolver = context.expressionResolver
@@ -55,11 +60,11 @@ internal class DivVideoBinder @Inject constructor(
         val player = divView.div2Component.divVideoFactory.makePlayer(source, config)
 
         val currentPlayerView = view.getPlayerView()
-        var currentPreviewView: ImageView? = null
+        var currentPreviewView: PreviewImageView? = null
 
         for (i in 0 until view.childCount) {
             val childView = view.getChildAt(i)
-            if (childView is ImageView) {
+            if (childView is PreviewImageView) {
                 currentPreviewView = childView
                 break
             }
@@ -70,12 +75,7 @@ internal class DivVideoBinder @Inject constructor(
             visibility = View.INVISIBLE
         }
 
-        val previewImageView: ImageView = currentPreviewView ?: ImageView(view.context).apply {
-            layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            scaleType = ImageView.ScaleType.FIT_CENTER
-            setBackgroundColor(Color.TRANSPARENT)
-            visibility = View.INVISIBLE
-        }
+        val previewImageView: PreviewImageView = currentPreviewView ?: PreviewImageView(view.context)
 
         div.applyPreview(resolver) { preview ->
             preview?.let {
@@ -120,15 +120,15 @@ internal class DivVideoBinder @Inject constructor(
         playerView.attach(player)
 
         if (div === oldDiv) {
-            view.observeElapsedTime(div, divView, player)
+            view.observeElapsedTime(div, context, player, path)
             view.observeMuted(div, resolver, player)
-            view.observeScale(div, resolver, playerView)
+            view.observeScale(div, resolver, playerView, previewImageView)
             return
         }
 
-        view.observeElapsedTime(div, divView, player)
+        view.observeElapsedTime(div, context, player, path)
         view.observeMuted(div, resolver, player)
-        view.observeScale(div, resolver, playerView)
+        view.observeScale(div, resolver, playerView, previewImageView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
             view.removeAllViews()
@@ -143,8 +143,9 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideoView.observeElapsedTime(
         div: DivVideo,
-        divView: Div2View,
-        player: DivPlayer
+        bindingContext: BindingContext,
+        player: DivPlayer,
+        path: DivStatePath,
     ) {
         val elapsedTimeVariable = div.elapsedTimeVariable ?: return
 
@@ -164,7 +165,7 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, elapsedTimeVariable, callbacks))
+        addSubscription(variableBinder.bindVariable(bindingContext, elapsedTimeVariable, callbacks, path))
     }
 
     private fun DivVideoView.observeMuted(
@@ -182,11 +183,13 @@ internal class DivVideoBinder @Inject constructor(
     private fun DivVideoView.observeScale(
         div: DivVideo,
         resolver: ExpressionResolver,
-        playerView: DivPlayerView
+        playerView: DivPlayerView,
+        previewView: PreviewImageView,
     ) {
         addSubscription(
             div.scale.observeAndGet(resolver) {
                 playerView.setScale(it)
+                previewView.setScale(it)
             }
         )
     }
@@ -233,4 +236,50 @@ fun DivVideo.createPreview(resolver: ExpressionResolver): Bitmap? {
         return null
     }
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+}
+
+private class PreviewImageView(context: Context) : AppCompatImageView(context) {
+
+    init {
+        layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        setBackgroundColor(Color.TRANSPARENT)
+        visibility = View.INVISIBLE
+    }
+
+    override fun setImageDrawable(drawable: Drawable?) {
+        super.setImageDrawable(drawable?.tryScaleAccordingToDensity())
+    }
+
+    override fun setImageBitmap(bm: Bitmap?) {
+        if (scaleType == NO_SCALE) {
+            bm?.density = DisplayMetrics.DENSITY_DEFAULT
+        }
+        super.setImageBitmap(bm)
+    }
+
+    fun setScale(scale: DivVideoScale) {
+        val previewScale = when(scale) {
+            DivVideoScale.FILL -> FILL
+            DivVideoScale.NO_SCALE -> NO_SCALE
+            DivVideoScale.FIT -> FIT
+        }
+        scaleType = previewScale
+    }
+
+    private fun Drawable.tryScaleAccordingToDensity(): Drawable = when {
+        scaleType != NO_SCALE -> this
+
+        this is BitmapDrawable -> this.apply {
+            bitmap?.density = DisplayMetrics.DENSITY_DEFAULT
+            setTargetDensity(context.resources.displayMetrics)
+        }
+
+        else -> this
+    }
+
+    companion object {
+        private val NO_SCALE = ScaleType.CENTER
+        private val FIT = ScaleType.FIT_CENTER
+        private val FILL = ScaleType.CENTER_CROP
+    }
 }

@@ -13,7 +13,6 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     self.view = view
   }
 
-  @available(iOS 13.0, *)
   public func contextMenuInteraction(
     _: UIContextMenuInteraction,
     configurationForMenuAtLocation _: CGPoint
@@ -33,7 +32,6 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     return viewController
   }
 
-  @available(iOS 13.0, *)
   public func contextMenuInteraction(
     _: UIContextMenuInteraction,
     previewForHighlightingMenuWithConfiguration _: UIContextMenuConfiguration
@@ -56,7 +54,6 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
 }
 
 extension ContextMenu {
-  @available(iOS 13.0, *)
   func makeUIMenu(sender: UIResponder) -> UIMenu {
     let childrenItems: [UIAction] = items.map {
       let action = $0.action

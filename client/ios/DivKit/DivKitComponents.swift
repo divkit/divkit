@@ -21,6 +21,7 @@ public final class DivKitComponents {
   public let fontProvider: DivFontProvider
   public let imageHolderFactory: DivImageHolderFactory
   public let layoutDirection: UserInterfaceLayoutDirection
+  public let submitter: DivSubmitter
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
   public let reporter: DivReporter
@@ -42,10 +43,13 @@ public final class DivKitComponents {
   private let layoutProviderHandler: DivLayoutProviderHandler
   private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
+  private let functionsStorage: DivFunctionsStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
   private let variableTracker = DivVariableTracker()
+  private let idToPath = IdToPath()
+  private let animatorController = DivAnimatorController()
 
   /// You can create an instance of `DivKitComponents` with various optional parameters that allow
   /// you to customize the behavior and functionality of `DivKit` to suit your specific needs.
@@ -73,6 +77,8 @@ public final class DivKitComponents {
   ///   - showTooltip: Deprecated. This parameter is deprecated, use ``tooltipManager`` instead.
   ///   - stateManagement: An optional ``DivStateManagement`` object responsible for managing card
   /// states.
+  ///   - submitter: An optional ``DivSubmitter`` object responsible for submitting data from
+  /// container.
   ///   - tooltipManager: An optional `TooltipManager` object that manages the processing and
   /// display of tooltips.
   ///   - trackVisibility: A closure that tracks the visibility of elements. Deprecated. Use
@@ -99,6 +105,7 @@ public final class DivKitComponents {
     reporter: DivReporter? = nil,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
+    submitter: DivSubmitter? = nil,
     tooltipManager: TooltipManager? = nil,
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
@@ -143,45 +150,41 @@ public final class DivKitComponents {
         )
     ).withAssets()
 
+    self.submitter = submitter
+      ?? DivNetworkSubmitter(requestPerformer: requestPerformer)
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
-    weak var weakTimerStorage: DivTimerStorage?
-    weak var weakActionHandler: DivActionHandler?
-
-    #if os(iOS)
-    self.tooltipManager = tooltipManager ?? DefaultTooltipManager(
-      shownTooltips: .init(),
-      handleAction: {
-        switch $0.payload {
-        case let .divAction(params: params):
-          weakActionHandler?.handle(params: params, sender: nil)
-        default: break
-        }
-      }
-    )
-    #else
     self.tooltipManager = tooltipManager ?? DefaultTooltipManager()
-    #endif
 
+    functionsStorage = DivFunctionsStorage(reporter: reporter)
+
+    weak var weakTimerStorage: DivTimerStorage?
     actionHandler = DivActionHandler(
       stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
       patchProvider: self.patchProvider,
+      submitter: self.submitter,
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: self.tooltipManager,
+      logger: EmptyDivActionLogger(),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
-      reporter: reporter
+      reporter: reporter,
+      idToPath: idToPath,
+      animatorController: animatorController
     )
 
     triggersStorage = DivTriggersStorage(
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
+      stateUpdates: blockStateStorage.stateUpdates,
       actionHandler: actionHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter
@@ -189,28 +192,45 @@ public final class DivKitComponents {
 
     timerStorage = DivTimerStorage(
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       actionHandler: actionHandler,
       updateCard: updateCard,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter
     )
 
-    weakActionHandler = actionHandler
     weakTimerStorage = timerStorage
     variablesStorage.changeEvents.addObserver { [weak self] event in
       self?.onVariablesChanged(event: event)
     }.dispose(in: disposePool)
+
+    #if os(iOS)
+    self.tooltipManager.setHandler { [weak self] in
+      switch $0.payload {
+      case let .divAction(params):
+        self?.actionHandler.handle(params: params, sender: nil)
+      default:
+        break
+      }
+    }
+    #endif
   }
 
   public func reset() {
     patchProvider.cancelRequests()
+    submitter.cancelRequests()
 
     blockStateStorage.reset()
     lastVisibleBoundsCache.reset()
     stateManagement.reset()
     variablesStorage.reset()
+    triggersStorage.reset()
+    functionsStorage.reset()
     visibilityCounter.reset()
     timerStorage.reset()
+    tooltipManager.reset()
+    idToPath.reset()
+    animatorController.reset()
   }
 
   public func reset(cardId: DivCardID) {
@@ -218,8 +238,12 @@ public final class DivKitComponents {
     lastVisibleBoundsCache.dropVisibleBounds(prefix: UIElementPath(cardId.rawValue))
     stateManagement.reset(cardId: cardId)
     variablesStorage.reset(cardId: cardId)
+    triggersStorage.reset(cardId: cardId)
+    functionsStorage.reset(cardId: cardId)
     visibilityCounter.reset(cardId: cardId)
     timerStorage.reset(cardId: cardId)
+    idToPath.reset(cardId: cardId)
+    animatorController.reset(cardId: cardId)
   }
 
   /// When using DivView, use DivData.resolve to avoid adding variables twice.
@@ -281,28 +305,49 @@ public final class DivKitComponents {
     debugParams: DebugParams = DebugParams(),
     parentScrollView: ScrollView? = nil
   ) -> DivBlockModelingContext {
-    variableTracker.onModelingStarted(id: DivViewId(cardId: cardId, additionalId: additionalId))
+    let viewId = DivViewId(cardId: cardId, additionalId: additionalId)
+    variableTracker.onModelingStarted(id: viewId)
+
+    // for now tooltip state management is broken
+    let stateManager = viewId.isTooltip
+      ? DivStateManager()
+      : stateManagement.getStateManagerForCard(cardId: cardId)
+
     return DivBlockModelingContext(
-      cardId: cardId,
-      additionalId: additionalId,
-      stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
+      viewId: viewId,
+      cardLogId: nil,
+      parentPath: nil,
+      parentDivStatePath: nil,
+      stateManager: stateManager,
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
-      imageHolderFactory: imageHolderFactory.withCache(cachedImageHolders),
+      imageHolderFactory: imageHolderFactory
+        .withCache(cachedImageHolders),
+      highPriorityImageHolderFactory: nil,
       divCustomBlockFactory: divCustomBlockFactory,
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
-      extensionHandlers: extensionHandlers,
+      extensionHandlers: extensionHandlers.dictionary,
+      functionsStorage: functionsStorage,
       variablesStorage: variablesStorage,
+      triggersStorage: triggersStorage,
       playerFactory: playerFactory,
       debugParams: debugParams,
+      scheduler: nil,
       parentScrollView: parentScrollView,
+      errorsStorage: nil,
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: DivTooltipViewFactory(divKitComponents: self, cardId: cardId),
-      layoutProviderHandler: layoutProviderHandler
+      tooltipViewFactory: DivTooltipViewFactory(
+        divKitComponents: self,
+        cardId: cardId
+      ),
+      layoutProviderHandler: layoutProviderHandler,
+      idToPath: idToPath,
+      animatorController: animatorController
     )
   }
 

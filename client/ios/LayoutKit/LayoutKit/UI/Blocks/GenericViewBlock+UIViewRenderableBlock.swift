@@ -82,9 +82,9 @@ extension GenericViewBlock.Content {
   fileprivate func isChild(of parent: UIView) -> Bool {
     switch self {
     case let .view(view):
-      return view.superview === parent
+      view.superview === parent
     case let .layer(layer):
-      return layer.superlayer === parent.layer
+      layer.superlayer === parent.layer
     }
   }
 }

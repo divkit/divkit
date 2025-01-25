@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithStringArrayProperty> {
-    @JvmField final val array: Field<ExpressionList<String>> // at least 1 elements
+    @JvmField val array: Field<ExpressionList<String>>
 
-    constructor (
+    constructor(
+        array: Field<ExpressionList<String>>,
+    ) {
+        this.array = array
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithStringArrayPropertyTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<Ent
         array = JsonTemplateParser.readExpressionListField(json, "array", topLevel, parent?.array, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithStringArrayProperty {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringArrayProperty {
         return EntityWithStringArrayProperty(
-            array = array.resolveExpressionList(env = env, key = "array", data = rawData, reader = ARRAY_READER)
+            array = this.array.resolveExpressionList(env = env, key = "array", data = data, reader = ARRAY_READER)
         )
     }
 
@@ -54,5 +56,4 @@ class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<Ent
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithStringArrayPropertyTemplate(env, json = it) }
     }
-
 }

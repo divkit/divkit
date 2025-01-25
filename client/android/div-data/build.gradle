@@ -21,8 +21,11 @@ dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div-core')
     implementation project(path: ':div-evaluable')
-    implementation project(path: ':div-json')
+    implementation project(path: ':logging')
     implementation project(path: ':utils')
+
+    api libs.androidx.core
+
     testImplementation libs.kotlin.reflect
 }
 
@@ -40,6 +43,5 @@ schemas {
 tasks.withType(KotlinCompile).configureEach {
     compilerOptions {
         freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-        freeCompilerArgs.add("-opt-in=com.yandex.div.data.DivModelInternalApi")
     }
 }

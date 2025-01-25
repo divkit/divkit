@@ -57,8 +57,11 @@ internal interface DivGalleryItemHelper {
         isRelayoutingChildren: Boolean = false
     ) {
         val orientation = getLayoutManagerOrientation()
-        val shouldRelayout = (orientation == RecyclerView.VERTICAL && child.measuredWidth == 0) ||
-                (orientation == RecyclerView.HORIZONTAL && child.measuredHeight == 0)
+        val shouldRelayout = when (orientation) {
+            RecyclerView.VERTICAL -> view.measuredWidth == 0 || child.measuredWidth == 0
+            RecyclerView.HORIZONTAL -> view.measuredHeight == 0 || child.measuredHeight == 0
+            else -> false
+        }
 
         if (shouldRelayout) {
             superLayoutDecoratedWithMargins(child, left, top, right, bottom)

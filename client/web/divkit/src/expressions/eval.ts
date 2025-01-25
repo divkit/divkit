@@ -12,7 +12,7 @@ import type {
     UnaryExpression, Variable
 } from './ast';
 import type { WrappedError } from '../utils/wrapError';
-import { convertArgs, findBestMatchedFunc, Func, funcByArgs, funcs, methodByArgs } from './funcs/funcs';
+import { convertArgs, findBestMatchedFunc, type Func, funcByArgs, type FuncMatch, type FuncMatchError, funcs, methodByArgs, methods } from './funcs/funcs';
 import {
     checkIntegerOverflow,
     evalError,
@@ -29,6 +29,7 @@ import { Variable as VariableInstance, variableToValue } from './variable';
 import { toBigInt } from './bigint';
 import { wrapError } from '../utils/wrapError';
 import type { Store } from '../../typings/store';
+import type { CustomFunctions } from './funcs/customFuncs';
 
 export type VariablesMap = Map<string, VariableInstance>;
 
@@ -98,6 +99,7 @@ export type EvalResult = EvalValue | EvalError;
 
 export interface EvalContext {
     variables: VariablesMap;
+    customFunctions: CustomFunctions | undefined;
     warnings: WrappedError[];
     safeIntegerOverflow: boolean;
     store?: Store;
@@ -443,45 +445,37 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
 
     let args = expr.arguments.map(arg => evalAny(ctx, arg));
     const funcKey = funcName + ':' + args.map(arg => arg.type).join('#');
+    let findRes: FuncMatch | undefined;
 
-    if (!funcByArgs.has(funcKey)) {
-        const findRes = findBestMatchedFunc('function', funcName, args);
-        if ('expected' in findRes || 'type' in findRes && findRes.type === 'missing') {
-            const argsType = args.map(arg => typeToString(arg.type)).join(', ');
-            const prefix = `${funcName}(${argsToStr(args)})`;
-            const funcList = funcs.get(funcName) || [];
-            const firstFunc = funcList[0];
-            const hasOverloads = funcList.length > 1;
+    if (ctx.customFunctions) {
+        findRes = findBestMatchedFunc(ctx.customFunctions, funcName, args);
+    }
 
-            if (findRes.type === 'few' && args.length === 0 && hasOverloads) {
-                evalError(prefix, 'Function requires non empty argument list.');
-            } else if (firstFunc && (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch')) {
-                if (hasOverloads) {
-                    evalError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
-                } else {
-                    // eslint-disable-next-line no-lonely-if
-                    if (findRes.type === 'many' || findRes.type === 'few') {
-                        if (firstFunc.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
-                            evalError(prefix, `At least ${firstFunc.args.length} argument(s) expected.`);
-                        } else {
-                            evalError(prefix, `Exactly ${firstFunc.args.length} argument(s) expected.`);
-                        }
-                    } else {
-                        const expectedArgs = firstFunc.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
-                        evalError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
-                    }
-                }
-            } else {
-                evalError(prefix, `Unknown function name: ${funcName}.`);
+    if (!findRes || !('func' in findRes)) {
+        if (funcByArgs.has(funcKey)) {
+            findRes = {
+                func: funcByArgs.get(funcKey) as Func,
+                conversions: 0
+            };
+        } else {
+            const builtInFindRes = findBestMatchedFunc(funcs, funcName, args);
+
+            // Assign errors only there is no match error in user defined funcs
+            if ('func' in builtInFindRes || !findRes) {
+                findRes = builtInFindRes;
             }
+        }
+    }
+
+    if (findRes) {
+        if ('expected' in findRes || 'type' in findRes && findRes.type === 'missing') {
+            logFunctionMatchError(funcName, args, findRes);
         }
         func = findRes.func;
 
         if (findRes.conversions) {
             args = convertArgs(func, args);
         }
-    } else {
-        func = funcByArgs.get(funcKey);
     }
 
     if (!func) {
@@ -496,18 +490,46 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
     }
 }
 
+function logFunctionMatchError(funcName: string, args: EvalValue[], findRes: FuncMatchError): never {
+    const argsType = args.map(arg => typeToString(arg.type)).join(', ');
+    const prefix = `${funcName}(${argsToStr(args)})`;
+    const funcList = funcs.get(funcName) || [];
+    const firstFunc = funcList[0];
+    const hasOverloads = funcList.length > 1;
+
+    if (findRes.type === 'few' && args.length === 0 && hasOverloads) {
+        evalError(prefix, 'Function requires non empty argument list.');
+    } else if (firstFunc && (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch')) {
+        if (hasOverloads) {
+            evalError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
+        } else {
+            // eslint-disable-next-line no-lonely-if
+            if (findRes.type === 'many' || findRes.type === 'few') {
+                if (firstFunc.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
+                    evalError(prefix, `At least ${firstFunc.args.length} argument(s) expected.`);
+                } else {
+                    evalError(prefix, `Exactly ${firstFunc.args.length} argument(s) expected.`);
+                }
+            } else {
+                const expectedArgs = firstFunc.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
+                evalError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
+            }
+        }
+    } else {
+        evalError(prefix, `Unknown function name: ${funcName}.`);
+    }
+}
+
 function evalMethodExpression(ctx: EvalContext, expr: MethodExpression): EvalValue {
     const methodName = expr.method.name;
 
     let func: Func | undefined;
 
-    expr.arguments.unshift(expr.object);
-
-    let args = expr.arguments.map(arg => evalAny(ctx, arg));
+    let args = [expr.object, ...expr.arguments].map(arg => evalAny(ctx, arg));
     const methodKey = methodName + ':' + args.map(arg => arg.type).join('#');
 
     if (!methodByArgs.has(methodKey)) {
-        const findRes = findBestMatchedFunc('method', methodName, args);
+        const findRes = findBestMatchedFunc(methods, methodName, args);
         if ('expected' in findRes || 'type' in findRes && findRes.type === 'missing') {
             const argsType = args.slice(1).map(arg => typeToString(arg.type)).join(', ');
             const prefix = `${methodName}(${argsToStr(args.slice(1))})`;
@@ -577,15 +599,22 @@ export function evalAny(ctx: EvalContext, expr: Node): EvalValue {
     throw new Error('Unsupported expression');
 }
 
-export function evalExpression(vars: VariablesMap, store: Store | undefined, expr: Node, opts?: {
-    weekStartDay?: number;
-}): {
+export function evalExpression(
+    vars: VariablesMap,
+    customFunctions: CustomFunctions | undefined,
+    store: Store | undefined,
+    expr: Node,
+    opts?: {
+        weekStartDay?: number;
+    }
+): {
     result: EvalResult;
     warnings: WrappedError[];
 } {
     try {
         const ctx: EvalContext = {
             variables: vars,
+            customFunctions,
             warnings: [],
             safeIntegerOverflow: false,
             store,

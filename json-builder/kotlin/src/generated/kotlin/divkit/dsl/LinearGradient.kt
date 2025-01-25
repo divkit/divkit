@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, colors`.
  */
 @Generated
-class LinearGradient internal constructor(
+data class LinearGradient internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Background, TextGradient {
@@ -41,7 +41,7 @@ class LinearGradient internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Angle of gradient direction.
          * Default value: `0`.

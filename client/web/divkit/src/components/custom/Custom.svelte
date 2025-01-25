@@ -1,14 +1,15 @@
 <script lang="ts">
-    import { getContext, onMount } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
 
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivCustomData } from '../../types/custom';
     import type { CustomComponentDescription } from '../../../typings/custom';
     import type { ComponentContext } from '../../types/componentContext';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { wrapError } from '../../utils/wrapError';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import { wrapError } from '../../utils/wrapError';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivCustomData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -20,6 +21,8 @@
     let templateContent = '';
     // shadowrootmode is an unknown attribute in TS :(
     let templateAttrs: any = {};
+    let items: ComponentContext[] = [];
+
     $: if (
         typeof componentContext.json.custom_type === 'string' &&
         componentContext.json.custom_type &&
@@ -27,7 +30,7 @@
     ) {
         desc = rootCtx.customComponents.get(componentContext.json.custom_type)!;
         if (typeof desc.template === 'function') {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             const variables: Map<string, string | number | boolean | unknown[] | object> = new Map();
             for (const [key, varaible] of ctx.variables) {
                 variables.set(key, varaible.getValue());
@@ -62,17 +65,29 @@
         }
     }
 
-    $: items = (!hasItemsError && jsonItems || []).map((item, index) => {
-        return componentContext.produceChildContext(item, {
-            path: index
+    $: {
+        items.forEach(context => {
+            context.destroy();
         });
-    });
+
+        items = (!hasItemsError && jsonItems || []).map((item, index) => {
+            return componentContext.produceChildContext(item, {
+                path: index
+            });
+        });
+    }
 
     onMount(() => {
         if (customElem && 'divKitApiCallback' in customElem && typeof customElem.divKitApiCallback === 'function') {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             customElem.divKitApiCallback(ctx);
         }
+    });
+
+    onDestroy(() => {
+        items.forEach(context => {
+            context.destroy();
+        });
     });
 </script>
 
@@ -104,4 +119,8 @@
             {/if}
         </svelte:element>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

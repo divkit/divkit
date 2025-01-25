@@ -37,14 +37,14 @@
     import css from './Input.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivInputData, KeyboardType } from '../../types/input';
+    import type { DivInputData, InputEnterKeyType, KeyboardType } from '../../types/input';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { FixedLengthInputMask } from '../../utils/mask/fixedLengthInputMask';
     import type { MaybeMissing } from '../../expressions/json';
     import type { InputMask } from '../../types/input';
     import type { AlignmentHorizontal } from '../../types/alignment';
     import type { ComponentContext } from '../../types/componentContext';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { wrapError } from '../../utils/wrapError';
@@ -53,7 +53,6 @@
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { isNumber } from '../../utils/isNumber';
-    import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
@@ -64,9 +63,12 @@
     import { updateCurrencyMask } from '../../utils/updateCurrencyMask';
     import { CurrencyInputMask } from '../../utils/mask/currencyInputMask';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
-    import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
+    import { filterEnabledActions } from '../../utils/filterEnabledActions';
+    import Outer from '../utilities/Outer.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivInputData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -102,6 +104,11 @@
     let description = '';
     let isEnabled = true;
     let maxLength = Infinity;
+    let autocapitalization = 'off';
+    let enterKeyType: InputEnterKeyType = 'default';
+    let describedBy = '';
+    let mounted = false;
+    let validatorsFirstRun = true;
 
     $: origJson = componentContext.origJson;
 
@@ -120,6 +127,9 @@
         inputMode = undefined;
         isEnabled = true;
         maxLength = Infinity;
+        autocapitalization = 'off';
+        enterKeyType = 'default';
+        describedBy = '';
     }
 
     $: if (origJson) {
@@ -152,6 +162,9 @@
     $: jsonSelectAll = componentContext.getDerivedFromVars(componentContext.json.select_all_on_focus);
     $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
     $: jsonMaxLength = componentContext.getDerivedFromVars(componentContext.json.max_length);
+    $: jsonAutocapitalization = componentContext.getDerivedFromVars(componentContext.json.autocapitalization);
+    $: jsonEnterKeyType = componentContext.getDerivedFromVars(componentContext.json.enter_key_type);
+    $: jsonValidators = componentContext.getDerivedFromVars(componentContext.json.validators);
 
     $: if (variable) {
         hasError = false;
@@ -180,10 +193,16 @@
             valueVariable.setValue(val);
         }
         value = contentEditableValue = val;
+        runValidators();
     }
 
     $: if (inputMask && inputMask.rawValue !== $rawValueVariable) {
         runRawValueMask();
+        runValidators();
+    }
+
+    $: if ($jsonValidators && mounted) {
+        runValidators();
     }
 
     $: placeholder = $jsonHintText;
@@ -277,12 +296,29 @@
         }, $direction) : '';
     }
 
+    $: if ($jsonAutocapitalization === 'all_characters') {
+        autocapitalization = 'characters';
+    } else if ($jsonAutocapitalization === 'sentences') {
+        autocapitalization = 'sentences';
+    } else if ($jsonAutocapitalization === 'words') {
+        autocapitalization = 'words';
+    } else if ($jsonAutocapitalization === 'none' || $jsonAutocapitalization === 'auto') {
+        autocapitalization = 'off';
+    }
+
     $: if ($jsonAccessibility?.description) {
         description = $jsonAccessibility.description;
     } else {
         componentContext.logError(wrapError(new Error('Missing accessibility "description" for input'), {
             level: 'warn'
         }));
+    }
+
+    $: if (
+        $jsonEnterKeyType === 'default' || $jsonEnterKeyType === 'done' || $jsonEnterKeyType === 'go' ||
+        $jsonEnterKeyType === 'search' || $jsonEnterKeyType === 'send'
+    ) {
+        enterKeyType = $jsonEnterKeyType;
     }
 
     $: mods = {
@@ -311,9 +347,10 @@
     };
 
     function onInput(event: Event): void {
+        const input = event.target;
         let val = (isMultiline ?
-            (event.target as HTMLDivElement).innerText :
-            (event.target as HTMLInputElement).value
+            (input as HTMLDivElement).innerText :
+            (input as HTMLInputElement).value
         ) || '';
 
         if (val === '\n') {
@@ -322,6 +359,9 @@
 
         if (val.length > maxLength) {
             val = contentEditableValue = val.slice(0, maxLength);
+            if (input instanceof HTMLInputElement) {
+                input.value = val;
+            }
         }
 
         if (value !== val) {
@@ -330,16 +370,31 @@
             if (inputMask) {
                 runValueMask();
             }
+            runValidators();
         }
     }
 
-    function onKeydown(event: KeyboardEvent): void {
+    function blockOverflow(event: KeyboardEvent): void {
         if (
             value.length >= maxLength &&
             !ALLOWED_BLOCKED_MULTILINE_KEYS.has(event.key) &&
             !(event.ctrlKey || event.altKey || event.metaKey)
         ) {
             event.preventDefault();
+        }
+    }
+
+    function onKeyDown(event: KeyboardEvent): void {
+        if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+            return;
+        }
+
+        const actions = componentContext.json.enter_key_actions;
+        if (event.key === 'Enter' && Array.isArray(actions) && actions.length) {
+            const evalledActions = componentContext.getJsonWithVars(actions);
+            const filteredActions = evalledActions.filter(action => action.log_id).filter(filterEnabledActions);
+            event.preventDefault();
+            componentContext.execAnyActions(filteredActions);
         }
     }
 
@@ -429,14 +484,82 @@
         }
     }
 
+    function runValidators(): void {
+        const isFirstRun = validatorsFirstRun;
+        validatorsFirstRun = false;
+
+        const validators = componentContext.json.validators;
+        if (!Array.isArray(validators) || !validators.length) {
+            return;
+        }
+
+        const evalledValidators = componentContext.getJsonWithVars(validators);
+        const filtered = evalledValidators.filter(it => (it.type === 'regex' || it.type === 'expression') && it.label_id && it.variable);
+        const describeList: string[] = [];
+
+        filtered.forEach(validator => {
+            const variable = componentContext.getVariable(validator.variable as string);
+            if (!variable) {
+                return;
+            }
+
+            if (variable.getType() !== 'boolean') {
+                if (isFirstRun) {
+                    componentContext.logError(wrapError(new Error('Incorrect variable type for the validator'), {
+                        additional: {
+                            variable: validator.variable
+                        }
+                    }));
+                }
+                return;
+            }
+
+            let isValid = false;
+            if (value === '' && (validator.allow_empty === true || validator.allow_empty === 1)) {
+                isValid = true;
+            } else if (validator.type === 'regex') {
+                if (!validator.pattern || typeof validator.pattern !== 'string') {
+                    return;
+                }
+                try {
+                    const re = new RegExp('^' + validator.pattern + '$');
+                    isValid = re.test(value);
+                } catch (err) {
+                    if (isFirstRun) {
+                        componentContext.logError(wrapError(new Error('Failed to create a regular expression using the validator pattern'), {
+                            additional: {
+                                pattern: validator.pattern
+                            }
+                        }));
+                    }
+                    return;
+                }
+            } else if (validator.type === 'expression') {
+                isValid = validator.condition === true || validator.condition === 1;
+            } else {
+                return;
+            }
+
+            variable.setValue(isValid);
+
+            if (!isValid) {
+                const htmlId = rootCtx.getComponentId(validator.label_id as string);
+                if (htmlId) {
+                    describeList.push(htmlId);
+                }
+            }
+        });
+        describedBy = describeList.join(' ');
+    }
+
     $: if (input && componentContext.json) {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerFocusable(prevId, {
                 focus() {
                     if (input) {
@@ -448,6 +571,8 @@
     }
 
     onMount(() => {
+        mounted = true;
+
         if (input && inputMask) {
             if ($rawValueVariable) {
                 inputMask.overrideRawValue($rawValueVariable);
@@ -457,6 +582,8 @@
     });
 
     onDestroy(() => {
+        mounted = false;
+
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
             prevId = undefined;
@@ -501,16 +628,19 @@
                     <span
                         bind:this={input}
                         class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, multiline: true })}
-                        autocapitalize="off"
+                        autocapitalize={autocapitalization}
                         contenteditable="true"
                         role="textbox"
                         tabindex="0"
                         aria-label={description}
                         aria-multiline="true"
+                        enterkeyhint={enterKeyType === 'default' ? undefined : enterKeyType}
+                        aria-describedby={describedBy || undefined}
                         style={makeStyle(paddingStl)}
                         bind:innerText={contentEditableValue}
                         on:input={onInput}
-                        on:keydown={onKeydown}
+                        on:keydown={blockOverflow}
+                        on:keydown={onKeyDown}
                         on:paste={onPaste}
                         on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                         on:click={$jsonSelectAll ? onClick : undefined}
@@ -522,12 +652,13 @@
                     <span
                         bind:this={input}
                         class={genClassName('input__input', css, { multiline: true })}
-                        autocapitalize="off"
+                        autocapitalize={autocapitalization}
                         contenteditable="false"
                         role="textbox"
                         aria-label={description}
                         aria-disabled="true"
                         aria-multiline="true"
+                        aria-describedby={describedBy || undefined}
                         style={makeStyle(paddingStl)}
                         bind:innerText={contentEditableValue}
                     >
@@ -541,14 +672,17 @@
                 inputmode={inputMode}
                 class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, singleline: true })}
                 autocomplete="off"
-                autocapitalize="off"
+                autocapitalize={autocapitalization}
                 aria-label={description}
+                aria-describedby={describedBy || undefined}
                 style={makeStyle(paddingStl)}
                 disabled={!isEnabled}
                 maxlength={maxLength === Infinity ? undefined : maxLength}
                 {placeholder}
                 {value}
+                enterkeyhint={enterKeyType === 'default' ? undefined : enterKeyType}
                 on:input={onInput}
+                on:keydown={onKeyDown}
                 on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                 on:click={$jsonSelectAll ? onClick : undefined}
                 on:focus={focusHandler}
@@ -556,4 +690,8 @@
             >
         {/if}
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

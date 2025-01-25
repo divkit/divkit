@@ -1,27 +1,27 @@
 import 'package:collection/collection.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/converters/text_specific.dart';
 import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
-import 'package:divkit/src/utils/converters.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
-import 'package:divkit/src/core/action/action_converter.dart';
-import 'package:divkit/src/core/action/models/action.dart';
 
 class DivRangeHelper {
-  static Future<List<DivTextRangeModel>> getRangeItems(
+  static List<DivTextRangeModel> getRangeItems(
     String text,
     List<DivTextRange> divTextRange,
-    DivVariableContext context,
     TextStyle style,
     List<DivLineStyle> linesStyleList,
-  ) async {
+    double viewScale,
+    DivFontProvider fontProvider,
+  ) {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
-      final mapEntry = await _getRangeInputMapEntry(
+      final mapEntry = _getRangeInputMapEntry(
+        text.length,
         range,
         style,
-        context,
         linesStyleList,
+        viewScale,
+        fontProvider,
       );
       inputMap.addEntries([mapEntry]);
     }
@@ -43,78 +43,57 @@ class DivRangeHelper {
     );
   }
 
-  static Future<MapEntry<DivTextRangeInterval, DivTextRangeOptionModel>>
+  static MapEntry<DivTextRangeInterval, DivTextRangeOptionModel>
       _getRangeInputMapEntry(
+    int len,
     DivTextRange divTextRange,
     TextStyle style,
-    DivVariableContext context,
     List<DivLineStyle> linesStyleList,
-  ) async {
-    final start = await divTextRange.start.resolveValue(
-      context: context,
-    );
-    final end = await divTextRange.end.resolveValue(
-      context: context,
-    );
+    double viewScale,
+    DivFontProvider fontProvider,
+  ) {
+    final start = divTextRange.start.value;
+    final end = divTextRange.end?.value ?? len;
 
-    final topOffset = await divTextRange.topOffset?.resolveValue(
-      context: context,
-    );
+    final topOffset = divTextRange.topOffset?.value;
 
-    final strike = await divTextRange.strike?.resolveValue(
-          context: context,
-        ) ??
-        linesStyleList[1];
+    final strike = divTextRange.strike?.value ?? linesStyleList[1];
 
-    final underline = await divTextRange.underline?.resolveValue(
-          context: context,
-        ) ??
-        linesStyleList[0];
+    final underline = divTextRange.underline?.value ?? linesStyleList[0];
 
-    final textColor = await divTextRange.textColor?.resolveValue(
-      context: context,
-    );
+    final textColor = divTextRange.textColor?.value;
 
     Color? background;
-    await divTextRange.background?.map(
-      divSolidBackground: (divSolidBackground) async {
-        background = await divSolidBackground.color.resolveValue(
-          context: context,
-        );
+    divTextRange.background?.map(
+      divSolidBackground: (divSolidBackground) {
+        background = divSolidBackground.color.value;
       },
+      divCloudBackground: (_) {},
     );
 
-    final fontSize = await divTextRange.fontSize?.resolveValue(
-      context: context,
-    );
+    final fontFamily = divTextRange.fontFamily?.value;
 
-    final fontWeightValue = await divTextRange.fontWeightValue?.resolveValue(
-      context: context,
-    );
+    final fontAsset = fontProvider.resolve(fontFamily);
+
+    final fontSize = divTextRange.fontSize?.value;
+
+    final fontWeightValue = divTextRange.fontWeightValue?.value;
 
     FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
       (element) => element.value == fontWeightValue,
     );
-    fontWeight ??= await divTextRange.fontWeight?.resolve(
-      context: context,
-    );
+    fontWeight ??= divTextRange.fontWeight?.value.convert();
 
-    final letterSpacing = await divTextRange.letterSpacing?.resolveValue(
-      context: context,
-    );
+    final letterSpacing = divTextRange.letterSpacing?.value;
 
-    List<DivActionModel> actions = [];
-    List<DivAction>? actionsDto = [...?divTextRange.actions];
-    for (final action in actionsDto) {
-      final resAction = await action.resolve(
-        context: context,
-      );
-      if (resAction.enabled) {
-        actions.add(resAction);
-      }
-    }
+    final shadow = divTextRange.textShadow?.convertShadow(viewScale: viewScale);
+
     style = TextStyle(
+      package: fontAsset.package,
+      fontFamily: fontAsset.fontFamily,
+      fontFamilyFallback: fontAsset.fontFamilyFallback,
       color: textColor,
+      shadows: shadow != null ? [shadow] : null,
       fontSize: fontSize?.toDouble(),
       fontWeight: fontWeight,
       backgroundColor: background,
@@ -134,7 +113,7 @@ class DivRangeHelper {
       ),
       DivTextRangeOptionModel(
         style: style,
-        actions: actions,
+        actions: divTextRange.actions?.map((e) => e.convert()).toList() ?? [],
         topOffset: topOffset,
       ),
     );

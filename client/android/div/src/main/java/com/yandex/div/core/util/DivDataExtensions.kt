@@ -1,6 +1,9 @@
 package com.yandex.div.core.util
 
+import com.yandex.div.core.downloader.DivPatchApply
+import com.yandex.div.core.downloader.DivPatchMap
 import com.yandex.div.internal.util.compareWith
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
@@ -8,12 +11,14 @@ import com.yandex.div2.DivAbsoluteEdgeInsets
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivCornersRadius
+import com.yandex.div2.DivData
 import com.yandex.div2.DivDimension
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivPatch
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPoint
 import com.yandex.div2.DivRadialGradientCenter
@@ -544,4 +549,18 @@ internal fun DivInput.NativeInterface?.isConstant(): Boolean {
     }
 
     return color.isConstant()
+}
+
+fun DivData.applyPatch(patch: DivPatch): DivData? {
+    val patchMap = DivPatchMap(patch)
+    val states = DivPatchApply(patchMap).applyPatch(states, ExpressionResolver.EMPTY) ?: return null
+    return DivData(
+        logId = logId,
+        states = states,
+        timers = timers,
+        transitionAnimationSelector = transitionAnimationSelector,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        parsingErrors = parsingErrors,
+    )
 }

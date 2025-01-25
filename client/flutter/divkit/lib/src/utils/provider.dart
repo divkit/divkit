@@ -1,6 +1,22 @@
 import 'package:flutter/widgets.dart';
 
-/// Provides dependencies on any object in the element tree.
+/// Reads dependencies on a one-time basis.
+T? read<T>(BuildContext context) => DivKitProvider.read<T>(context);
+
+/// Subscribes to dependencies and triggers a rebuild when updating.
+T? watch<T>(BuildContext context) => DivKitProvider.watch<T>(context);
+
+/// Provides dependency on any object in the element tree.
+Widget provide<T>(
+  T value, {
+  required Widget child,
+}) =>
+    DivKitProvider(
+      value: value,
+      child: child,
+    );
+
+/// Provides dependency on any object in the element tree.
 class DivKitProvider<T> extends InheritedWidget {
   final T value;
 

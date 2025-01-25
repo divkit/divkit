@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.backbutton.BackKeyPressedHelper
+import com.yandex.div.core.view2.divs.gainAccessibilityFocus
 import com.yandex.div.core.widget.DivViewWrapper
 import java.lang.ref.WeakReference
 
@@ -106,7 +107,7 @@ internal class AccessibilityListDelegate(
     private fun focusChildren() {
         isItemsFocusActive = true
         recyclerView.makeInaccessibleAllOtherViews()
-        recyclerView.firstChild?.gainAccessibilityFocus()
+        recyclerView.firstChild?.unwrap.run { this?.gainAccessibilityFocus() }
     }
 
     private fun focusContainer() {
@@ -190,13 +191,6 @@ internal class AccessibilityListDelegate(
         // We find the first child by placement like accessibility service does.
         // Cause [ViewGroup.getChildAt(0)] doesn't return the first element on the screen.
         get() = children.minWithOrNull(compareBy(View::getTop, View::getLeft))
-
-    private fun View.gainAccessibilityFocus() {
-        unwrap.run {
-            performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
-            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED)
-        }
-    }
 
     private class ViewAccessibilityState(val view: WeakReference<View>, val accessibilityState: Int)
 }

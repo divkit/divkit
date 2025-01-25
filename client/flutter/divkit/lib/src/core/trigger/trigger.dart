@@ -1,6 +1,7 @@
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/divkit.dart';
 import 'package:equatable/equatable.dart';
+
+export 'trigger_converter.dart';
 
 class DivTriggerModel with EquatableMixin {
   final List<DivAction> actions;

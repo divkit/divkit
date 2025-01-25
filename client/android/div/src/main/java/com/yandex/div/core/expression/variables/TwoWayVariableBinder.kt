@@ -5,9 +5,11 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.core.VariableMutationHandler
 import javax.inject.Inject
 
 @DivScope
@@ -34,6 +36,18 @@ internal class TwoWayIntegerVariableBinder @Inject constructor(
     override fun Long.toStringValue() = toString()
 }
 
+@DivScope
+@Mockable
+internal class TwoWayBooleanVariableBinder @Inject constructor(
+    errorCollectors: ErrorCollectors,
+    expressionsRuntimeProvider: ExpressionsRuntimeProvider
+) : TwoWayVariableBinder<Boolean>(errorCollectors, expressionsRuntimeProvider) {
+
+    interface Callbacks : TwoWayVariableBinder.Callbacks<Boolean>
+
+    override fun Boolean.toStringValue(): String = toString()
+}
+
 @Mockable
 internal abstract class TwoWayVariableBinder<T>(
     private val errorCollectors: ErrorCollectors,
@@ -47,21 +61,30 @@ internal abstract class TwoWayVariableBinder<T>(
         fun setViewStateChangeListener(valueUpdater: (T) -> Unit)
     }
 
-    fun bindVariable(divView: Div2View, variableName: String, callbacks: Callbacks<T>): Disposable {
+    fun bindVariable(
+        bindingContext: BindingContext,
+        variableName: String,
+        callbacks: Callbacks<T>,
+        path: DivStatePath,
+    ): Disposable {
+        val divView = bindingContext.divView
         val data = divView.divData ?: return Disposable.NULL
 
         var pendingValue: T? = null
         val tag = divView.dataTag
-        var variable: Variable? = null
-        val variableController =
-            expressionsRuntimeProvider.getOrCreate(tag, data, divView).variableController
+        val variableController = bindingContext.runtimeStore?.let { runtimeStore ->
+            runtimeStore.getRuntimeWithOrNull(bindingContext.expressionResolver)?.variableController
+        } ?: expressionsRuntimeProvider.getOrCreate(tag, data, divView).variableController
+
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener
             pendingValue = value
-            (variable
-                ?: variableController.getMutableVariable(variableName)
-                    .also { variable = it })
-                ?.set(value.toStringValue())
+            VariableMutationHandler.setVariable(
+                divView,
+                variableName,
+                value.toStringValue(),
+                bindingContext.expressionResolver
+            )
         }
 
         return variableController.subscribeToVariableChange(

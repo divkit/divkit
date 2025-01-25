@@ -127,6 +127,7 @@ private final class GestureView: BlockView {
       action: #selector(handleSwipe(_:))
     )
     recognizer.direction = direction
+    recognizer.delegate = self
     return recognizer
   }
 }
@@ -134,5 +135,14 @@ private final class GestureView: BlockView {
 extension GestureView: VisibleBoundsTrackingContainer {
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [childView]
+  }
+}
+
+extension GestureView: UIGestureRecognizerDelegate {
+  func gestureRecognizer(
+    _: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
+  ) -> Bool {
+    true
   }
 }

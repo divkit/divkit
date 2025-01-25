@@ -52,6 +52,10 @@ extension DivState: DivBlockModeling {
        let previousState = getPreviousState(stateManagerItem: stateManagerItem),
        previousState.stateId != activeStateId,
        let previousDiv = previousState.div {
+      context.triggersStorage?
+        .disableTriggers(path: context.parentPath + id + previousState.stateId)
+      context.triggersStorage?.enableTriggers(path: context.parentPath + id + activeStateId)
+
       // state changed -> drop visibility cache for all children
       context.lastVisibleBoundsCache.dropVisibleBounds(prefix: context.parentPath)
       previousBlock = try previousDiv.value.makeBlock(
@@ -91,21 +95,27 @@ extension DivState: DivBlockModeling {
     let stateAlignment = activeStateDiv?
       .resolveAlignment(context, defaultAlignment: defaultStateAlignment)
       ?? defaultStateAlignment
+    let child = if animationOut == nil, animationIn == nil {
+      LayeredBlock.Child(
+        content: activeBlock,
+        alignment: stateAlignment
+      )
+    } else {
+      LayeredBlock.Child(
+        content: TransitioningBlock(
+          from: previousBlock,
+          to: activeBlock,
+          animationOut: animationOut,
+          animationIn: animationIn
+        ),
+        alignment: stateAlignment
+      )
+    }
 
     return LayeredBlock(
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
-      children: [
-        LayeredBlock.Child(
-          content: TransitioningBlock(
-            from: previousBlock,
-            to: activeBlock,
-            animationOut: animationOut,
-            animationIn: animationIn
-          ),
-          alignment: stateAlignment
-        ),
-      ]
+      children: [child]
     ).addingStateBlock(
       ids: stateManager.getVisibleIds(statePath: activeStatePath)
     )

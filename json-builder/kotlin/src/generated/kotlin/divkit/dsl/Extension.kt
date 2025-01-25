@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `id`.
  */
 @Generated
-class Extension internal constructor(
+data class Extension internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -39,7 +39,7 @@ class Extension internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Extension ID.
          */

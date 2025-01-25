@@ -27,7 +27,7 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithStringEnumPropertyTemplate?) -> DeserializationResult<EntityWithStringEnumProperty> {
-    let propertyValue = parent?.property?.resolveValue(context: context) ?? .noValue
+    let propertyValue = { parent?.property?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
@@ -40,7 +40,7 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithStringEnumProperty(
-      property: propertyNonNil
+      property: { propertyNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -49,16 +49,24 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var propertyValue: DeserializationResult<Expression<EntityWithStringEnumProperty.Property>> = parent?.property?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "property":
-        propertyValue = deserialize(__dictValue).merged(with: propertyValue)
-      case parent?.property?.link:
-        propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var propertyValue: DeserializationResult<Expression<EntityWithStringEnumProperty.Property>> = { parent?.property?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "property" {
+           propertyValue = deserialize(__dictValue).merged(with: propertyValue)
+          }
+        }()
+        _ = {
+         if key == parent?.property?.link {
+           propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
@@ -71,7 +79,7 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithStringEnumProperty(
-      property: propertyNonNil
+      property: { propertyNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
