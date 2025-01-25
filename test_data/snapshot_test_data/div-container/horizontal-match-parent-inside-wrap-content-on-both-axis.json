@@ -1,100 +1,101 @@
 {
-    "platforms": [
-      "android",
-      "web"
-    ],
-    "description": "match_parent inside wrap_content in horizontal container without known size should transform into the wrap_content with constrained",
-    "templates": {
-        "my-card": {
-            "type": "container",
-            "width": {
-                "type": "match_parent"
-            },
-            "height": {
-                "type": "match_parent"
-            },
-            "margins": {
-                "left": 5,
-                "right": 5,
-                "top": 5,
-                "bottom": 5
-            },
-            "background": [
-                {
-                    "type": "solid",
-                    "color": "#151515"
-                }
-            ],
-            "items": [
-                {
-                    "type": "container",
-                    "orientation": "vertical",
-                    "width": {
-                        "type": "wrap_content"
-                    },
-                    "height": {
-                        "type": "wrap_content"
-                    },
-                    "content_alignment_vertical": "space-between",
-                    "background": [
-                        {
-                            "type": "solid",
-                            "color": "#f0f"
-                        }
-                    ],
-                    "margins": {
-                        "left": 10,
-                        "right": 10,
-                        "top": 10,
-                        "bottom": 10
-                    },
-                    "items": [
-                        {
-                            "type": "text",
-                            "text_color": "#fff",
-                            "$text": "title_prop"
-                        },
-                        {
-                            "type": "text",
-                            "text_color": "#fff",
-                            "$text": "label_prop"
-                        }
-                    ]
-                }
-            ]
+  "description": "match_parent inside wrap_content in horizontal container without known size should transform into the wrap_content with constrained",
+  "platforms": [
+    "android",
+    "web",
+    "flutter"
+  ],
+  "templates": {
+    "my-card": {
+      "type": "container",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "left": 5,
+        "right": 5,
+        "top": 5,
+        "bottom": 5
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#151515"
         }
-    },
-    "card": {
-        "log_id": "div2_sample_card",
-        "states": [
+      ],
+      "items": [
+        {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "content_alignment_vertical": "space-between",
+          "background": [
             {
-                "state_id": 0,
-                "div": {
-                    "type": "container",
-                    "width": {
-                        "type": "wrap_content"
-                    },
-                    "background": [
-                        {
-                            "type": "solid",
-                            "color": "#ff0"
-                        }
-                    ],
-                    "orientation": "horizontal",
-                    "items": [
-                        {
-                            "type": "my-card",
-                            "title_prop": "Card title\nmore",
-                            "label_prop": "Label"
-                        },
-                        {
-                            "type": "my-card",
-                            "title_prop": "Card title",
-                            "label_prop": "Label"
-                        }
-                    ]
-                }
+              "type": "solid",
+              "color": "#f0f"
             }
-        ]
+          ],
+          "margins": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "text",
+              "text_color": "#fff",
+              "$text": "title_prop"
+            },
+            {
+              "type": "text",
+              "text_color": "#fff",
+              "$text": "label_prop"
+            }
+          ]
+        }
+      ]
     }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ff0"
+            }
+          ],
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "my-card",
+              "title_prop": "Card title\nmore",
+              "label_prop": "Label"
+            },
+            {
+              "type": "my-card",
+              "title_prop": "Card title",
+              "label_prop": "Label"
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

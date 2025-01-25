@@ -1,6 +1,5 @@
 import CoreFoundation
 import Foundation
-
 import VGSL
 
 // MARK: Utils
@@ -424,7 +423,7 @@ extension Dictionary where Key == String {
   }
 
   public func getObjCCompatibleBool(_ key: Key...) -> Bool? {
-    (try? self.getField(key, transform: { $0 as NSString }, validator: nil) as NSString)?.boolValue
+    (try? self.getField(key, transform: { ($0 as NSString).boolValue }, validator: nil))
       ?? (try? self.getField(key, transform: { $0 as Bool }, validator: nil) as Bool)
   }
 }

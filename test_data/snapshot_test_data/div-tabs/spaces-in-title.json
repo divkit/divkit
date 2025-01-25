@@ -1,84 +1,84 @@
 {
-    "description": "Spaces in tab title should be preserved",
-    "platforms": [
-        "android",
-        "ios",
-        "web"
-    ],
-    "templates": {},
-    "card": {
-        "log_id": "snapshot_test_card",
-        "states": [
+  "description": "Spaces in tab title should be preserved",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "tabs",
+          "paddings": {
+            "left": 4,
+            "right": 4,
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
             {
-                "state_id": 0,
-                "div": {
-                    "type": "tabs",
-                    "paddings": {
-                        "left": 4,
-                        "right": 4,
-                        "top": 8,
-                        "bottom": 8
-                    },
-                    "items": [
-                        {
-                            "title": "test test     test",
-                            "div": {
-                                "type": "text",
-                                "width": {
-                                    "type": "fixed",
-                                    "value": 100
-                                },
-                                "height": {
-                                    "type": "fixed",
-                                    "value": 100
-                                },
-                                "paddings": {
-                                    "left": 16,
-                                    "right": 16
-                                },
-                                "border": {
-                                    "corner_radius": 6
-                                },
-                                "background": [
-                                    {
-                                        "type": "solid",
-                                        "color": "#ffffff"
-                                    }
-                                ],
-                                "text": "Ул. Льва Толстого, 16"
-                            }
-                        },
-                        {
-                            "title": "test2",
-                            "div": {
-                                "type": "text",
-                                "width": {
-                                    "type": "fixed",
-                                    "value": 100
-                                },
-                                "height": {
-                                    "type": "fixed",
-                                    "value": 100
-                                },
-                                "paddings": {
-                                    "left": 16,
-                                    "right": 16
-                                },
-                                "border": {
-                                    "corner_radius": 6
-                                },
-                                "background": [
-                                    {
-                                        "type": "solid",
-                                        "color": "#ffffff"
-                                    }
-                                ],
-                                "text": "Ул. Льва Толстого, 16"
-                            }
-                        }
-                    ]
-                }
+              "title": "test test     test",
+              "div": {
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "paddings": {
+                  "left": 16,
+                  "right": 16
+                },
+                "border": {
+                  "corner_radius": 6
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff"
+                  }
+                ],
+                "text": "Ул. Льва Толстого, 16"
+              }
+            },
+            {
+              "title": "test2",
+              "div": {
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "paddings": {
+                  "left": 16,
+                  "right": 16
+                },
+                "border": {
+                  "corner_radius": 6
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff"
+                  }
+                ],
+                "text": "Ул. Льва Толстого, 16"
+              }
             }
-        ]
-    }
+          ]
+        }
+      }
+    ]
+  }
 }

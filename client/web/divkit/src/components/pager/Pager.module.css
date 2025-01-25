@@ -8,6 +8,7 @@
 
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    pointer-events: auto;
 }
 
 .pager__items::-webkit-scrollbar {
@@ -16,10 +17,13 @@
 
 .pager__item {
     display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
     max-width: 100%;
     max-height: 100%;
     overflow: hidden;
     scroll-snap-align: center;
+    pointer-events: none;
 }
 
 @supports (overflow: clip) {

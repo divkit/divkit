@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Sets margins without regard to screen properties.
-class DivAbsoluteEdgeInsets extends Resolvable with EquatableMixin {
+class DivAbsoluteEdgeInsets with EquatableMixin {
   const DivAbsoluteEdgeInsets({
     this.bottom = const ValueExpression(0),
     this.left = const ValueExpression(0),
@@ -57,34 +57,38 @@ class DivAbsoluteEdgeInsets extends Resolvable with EquatableMixin {
     }
     try {
       return DivAbsoluteEdgeInsets(
-        bottom: safeParseIntExpr(
-          json['bottom'],
-          fallback: 0,
-        )!,
-        left: safeParseIntExpr(
-          json['left'],
-          fallback: 0,
-        )!,
-        right: safeParseIntExpr(
-          json['right'],
-          fallback: 0,
-        )!,
-        top: safeParseIntExpr(
-          json['top'],
-          fallback: 0,
-        )!,
+        bottom: reqVProp<int>(
+          safeParseIntExpr(
+            json['bottom'],
+            fallback: 0,
+          ),
+          name: 'bottom',
+        ),
+        left: reqVProp<int>(
+          safeParseIntExpr(
+            json['left'],
+            fallback: 0,
+          ),
+          name: 'left',
+        ),
+        right: reqVProp<int>(
+          safeParseIntExpr(
+            json['right'],
+            fallback: 0,
+          ),
+          name: 'right',
+        ),
+        top: reqVProp<int>(
+          safeParseIntExpr(
+            json['top'],
+            fallback: 0,
+          ),
+          name: 'top',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivAbsoluteEdgeInsets resolve(DivVariableContext context) {
-    bottom.resolve(context);
-    left.resolve(context);
-    right.resolve(context);
-    top.resolve(context);
-    return this;
   }
 }

@@ -15,28 +15,12 @@ public interface DivTooltipRestrictor {
     /**
      * Allows all tooltips.
      */
-    DivTooltipRestrictor STUB = ((anchor, tooltip) -> true);
+    DivTooltipRestrictor STUB = ((div2View, anchor, tooltip, multiple) -> true);
 
     /**
      * Called when handling div-action://show_tooltip
      */
-    @Deprecated
-    boolean canShowTooltip(@NonNull View anchor, @NonNull DivTooltip tooltip);
-
-    /**
-     * Called when handling div-action://show_tooltip
-     */
-    @Deprecated
-    default boolean canShowTooltip(@NonNull Div2View div2View, @NonNull View anchor, @NonNull DivTooltip tooltip) {
-        return canShowTooltip(anchor, tooltip);
-    }
-
-    /**
-     * Called when handling div-action://show_tooltip
-     */
-    default boolean canShowTooltip(@NonNull Div2View div2View, @NonNull View anchor, @NonNull DivTooltip tooltip, boolean multiple) {
-        return canShowTooltip(div2View, anchor, tooltip);
-    }
+    boolean canShowTooltip(@NonNull Div2View div2View, @NonNull View anchor, @NonNull DivTooltip tooltip, boolean multiple);
 
     @Nullable
     default DivTooltipShownCallback getTooltipShownCallback() {
@@ -47,32 +31,15 @@ public interface DivTooltipRestrictor {
      * Notifies host about shown tooltip.
      */
     interface DivTooltipShownCallback {
-        /**
-         * Called when tooltip becomes visible to user.
-         */
-        @Deprecated
-        default void onDivTooltipShown(@NonNull View anchor, @NonNull DivTooltip tooltip) {}
 
         /**
          * Called when tooltip becomes visible to user.
          */
-        default void onDivTooltipShown(@NonNull Div2View div2View, @NonNull View anchor, @NonNull DivTooltip tooltip) {
-            onDivTooltipShown(anchor, tooltip);
-        }
+        void onDivTooltipShown(@NonNull Div2View div2View, @NonNull View anchor, @NonNull DivTooltip tooltip);
 
         /**
          * Called when tooltip is dismissed.
          */
-        @Deprecated
-        default void onDivTooltipDismissed(@NonNull View anchor, @NonNull DivTooltip tooltip) {}
-
-        /**
-         * Called when tooltip is dismissed.
-         */
-        default void onDivTooltipDismissed(@NonNull Div2View div2View,
-                                           @NonNull View anchor,
-                                           @NonNull DivTooltip tooltip) {
-            onDivTooltipDismissed(anchor, tooltip);
-        }
+        void onDivTooltipDismissed(@NonNull Div2View div2View, @NonNull View anchor, @NonNull DivTooltip tooltip);
     }
 }

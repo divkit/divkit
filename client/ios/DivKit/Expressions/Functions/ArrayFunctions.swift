@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 extension [String: Function] {
@@ -28,7 +27,7 @@ extension [String: Function] {
     addFunctions("Url", _getUrl)
     addFunctions("OptUrl", _getOptUrl)
 
-    addFunction("len", FunctionUnary<[AnyHashable], Int> { $0.count })
+    addFunction("len", FunctionUnary<DivArray, Int> { $0.count })
   }
 
   mutating func addArrayMethods() {
@@ -52,55 +51,55 @@ extension [String: Function] {
   }
 }
 
-private let _getArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
+private let _getArray = FunctionBinary<DivArray, Int, DivArray> {
   try $0.getArray(index: $1)
 }
 
-private let _getBoolean = FunctionBinary<[AnyHashable], Int, Bool> {
+private let _getBoolean = FunctionBinary<DivArray, Int, Bool> {
   try $0.getBoolean(index: $1)
 }
 
-private let _getColor = FunctionBinary<[AnyHashable], Int, Color> {
+private let _getColor = FunctionBinary<DivArray, Int, Color> {
   try $0.getColor(index: $1)
 }
 
-private let _getDict = FunctionBinary<[AnyHashable], Int, DivDictionary> {
+private let _getDict = FunctionBinary<DivArray, Int, DivDictionary> {
   try $0.getDict(index: $1)
 }
 
-private let _getInteger = FunctionBinary<[AnyHashable], Int, Int> {
+private let _getInteger = FunctionBinary<DivArray, Int, Int> {
   try $0.getInteger(index: $1)
 }
 
-private let _getNumber = FunctionBinary<[AnyHashable], Int, Double> {
+private let _getNumber = FunctionBinary<DivArray, Int, Double> {
   try $0.getNumber(index: $1)
 }
 
-private let _getString = FunctionBinary<[AnyHashable], Int, String> {
+private let _getString = FunctionBinary<DivArray, Int, String> {
   try $0.getString(index: $1)
 }
 
-private let _getUrl = FunctionBinary<[AnyHashable], Int, URL> {
+private let _getUrl = FunctionBinary<DivArray, Int, URL> {
   try $0.getUrl(index: $1)
 }
 
-private let _isEmpty = FunctionUnary<[AnyHashable], Bool> {
+private let _isEmpty = FunctionUnary<DivArray, Bool> {
   $0.isEmpty
 }
 
-private let _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
+private let _getOptArray = FunctionBinary<DivArray, Int, DivArray> {
   (try? $0.getArray(index: $1)) ?? []
 }
 
-private let _getOptBoolean = FunctionTernary<[AnyHashable], Int, Bool, Bool> {
+private let _getOptBoolean = FunctionTernary<DivArray, Int, Bool, Bool> {
   (try? $0.getBoolean(index: $1)) ?? $2
 }
 
 private let _getOptColor = OverloadedFunction(functions: [
-  FunctionTernary<[AnyHashable], Int, Color, Color> {
+  FunctionTernary<DivArray, Int, Color, Color> {
     (try? $0.getColor(index: $1)) ?? $2
   },
-  FunctionTernary<[AnyHashable], Int, String, Color> {
+  FunctionTernary<DivArray, Int, String, Color> {
     if let value = try? $0.getColor(index: $1) {
       return value
     }
@@ -108,27 +107,27 @@ private let _getOptColor = OverloadedFunction(functions: [
   },
 ])
 
-private let _getOptDict = FunctionBinary<[AnyHashable], Int, DivDictionary> {
+private let _getOptDict = FunctionBinary<DivArray, Int, DivDictionary> {
   (try? $0.getDict(index: $1)) ?? [:]
 }
 
-private let _getOptInteger = FunctionTernary<[AnyHashable], Int, Int, Int> {
+private let _getOptInteger = FunctionTernary<DivArray, Int, Int, Int> {
   (try? $0.getInteger(index: $1)) ?? $2
 }
 
-private let _getOptNumber = FunctionTernary<[AnyHashable], Int, Double, Double> {
+private let _getOptNumber = FunctionTernary<DivArray, Int, Double, Double> {
   (try? $0.getNumber(index: $1)) ?? $2
 }
 
-private let _getOptString = FunctionTernary<[AnyHashable], Int, String, String> {
+private let _getOptString = FunctionTernary<DivArray, Int, String, String> {
   (try? $0.getString(index: $1)) ?? $2
 }
 
 private let _getOptUrl = OverloadedFunction(functions: [
-  FunctionTernary<[AnyHashable], Int, URL, URL> {
+  FunctionTernary<DivArray, Int, URL, URL> {
     (try? $0.getUrl(index: $1)) ?? $2
   },
-  FunctionTernary<[AnyHashable], Int, String, URL> {
+  FunctionTernary<DivArray, Int, String, URL> {
     if let value = try? $0.getUrl(index: $1) {
       return value
     }
@@ -136,10 +135,10 @@ private let _getOptUrl = OverloadedFunction(functions: [
   },
 ])
 
-extension [AnyHashable] {
-  fileprivate func getArray(index: Int) throws -> [AnyHashable] {
+extension DivArray {
+  fileprivate func getArray(index: Int) throws -> DivArray {
     let value = try getValue(index: index)
-    guard let arrayValue = value as? [AnyHashable] else {
+    guard let arrayValue = value as? DivArray else {
       throw ExpressionError.incorrectType("Array", value)
     }
     return arrayValue

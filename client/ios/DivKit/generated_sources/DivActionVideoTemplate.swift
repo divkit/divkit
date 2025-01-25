@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionVideoTemplate: TemplateValue {
+public final class DivActionVideoTemplate: TemplateValue, Sendable {
   public typealias Action = DivActionVideo.Action
 
   public static let type: String = "video"

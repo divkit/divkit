@@ -3,10 +3,11 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
-    "item" : {
+    "item": {
       "type": "text",
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
@@ -30,8 +31,8 @@
         }
       },
       "paddings": {
-          "left": 5,
-          "top": 5
+        "left": 5,
+        "top": 5
       }
     }
   },

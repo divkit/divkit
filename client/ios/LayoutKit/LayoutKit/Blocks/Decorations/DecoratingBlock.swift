@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 final class DecoratingBlock: WrapperBlock {
@@ -26,6 +25,7 @@ final class DecoratingBlock: WrapperBlock {
   let tooltips: [BlockTooltip]
   let accessibilityElement: AccessibilityElement?
   let reuseId: String
+  let path: UIElementPath?
 
   init(
     child: Block,
@@ -44,7 +44,8 @@ final class DecoratingBlock: WrapperBlock {
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip] = [],
     accessibilityElement: AccessibilityElement? = nil,
-    reuseId: String? = nil
+    reuseId: String? = nil,
+    path: UIElementPath? = nil
   ) {
     self.child = child
     self.backgroundColor = backgroundColor
@@ -63,6 +64,7 @@ final class DecoratingBlock: WrapperBlock {
     self.tooltips = tooltips
     self.accessibilityElement = accessibilityElement
     self.reuseId = reuseId ?? DecoratingBlock.defaultReuseId
+    self.path = path
   }
 
   var intrinsicContentWidth: CGFloat {
@@ -148,7 +150,8 @@ extension DecoratingBlock {
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     accessibilityElement: AccessibilityElement? = nil,
-    reuseId: String? = nil
+    reuseId: String? = nil,
+    path: UIElementPath? = nil
   ) -> DecoratingBlock {
     DecoratingBlock(
       child: child ?? self.child,
@@ -167,7 +170,8 @@ extension DecoratingBlock {
       visibilityParams: visibilityParams ?? self.visibilityParams,
       tooltips: tooltips ?? self.tooltips,
       accessibilityElement: accessibilityElement ?? self.accessibilityElement,
-      reuseId: reuseId ?? self.reuseId
+      reuseId: reuseId ?? self.reuseId,
+      path: path ?? self.path
     )
   }
 }

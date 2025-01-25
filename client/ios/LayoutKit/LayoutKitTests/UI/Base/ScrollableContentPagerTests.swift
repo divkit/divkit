@@ -1,6 +1,5 @@
-import XCTest
-
 import LayoutKit
+import XCTest
 
 final class ScrollableContentPagerTests: XCTestCase {
   private var pager = ScrollableContentPager()

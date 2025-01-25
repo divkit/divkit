@@ -2,6 +2,7 @@ package com.yandex.div.lottie
 
 import android.animation.Animator
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
@@ -141,6 +142,7 @@ internal class LottieController(
     fun setComposition(composition: LottieComposition) {
         lottieDrawable.callback = gifImageView
         gifImageView.externalImage = lottieDrawable
+        gifImageView.imageTransformer = LottieImageTransformer(lottieDrawable)
         this.composition = composition
         ignoreUnschedule = true
         val isNewComposition = lottieDrawable.setComposition(composition)
@@ -159,6 +161,7 @@ internal class LottieController(
         composition = null
         lottieDrawable.clearComposition()
         gifImageView.externalImage = null
+        gifImageView.imageTransformer = null
         gifImageView.setImageDrawable(null)
     }
 
@@ -280,5 +283,11 @@ internal class LottieController(
             // This is necessary because lottieDrawable will get unscheduled and canceled when the drawable is set to null.
             lottieDrawable.resumeAnimation()
         }
+    }
+
+    inner class LottieImageTransformer(
+        private val externalDrawable: Drawable?
+    ) : LoadableImageView.ImageTransformer {
+        override fun transform(drawable: Drawable?): Drawable? = externalDrawable
     }
 }

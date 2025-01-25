@@ -1,10 +1,8 @@
 @testable import DivKit
-@testable import LayoutKit
-
-import XCTest
-
 import DivKitTestsSupport
+@testable import LayoutKit
 import VGSL
+import XCTest
 
 final class DivBaseExtensionsTests: XCTestCase {
   private let timer = TestTimerScheduler()
@@ -432,11 +430,7 @@ final class DivBaseExtensionsTests: XCTestCase {
 
     let secondBlock = try makeBlock(
       fromFile: "div-text-visibility-actions-visible",
-      context: DivBlockModelingContext(
-        cardId: "another_cardId",
-        stateManager: DivStateManager(),
-        imageHolderFactory: FakeImageHolderFactory()
-      )
+      context: DivBlockModelingContext(cardId: "another_card_id")
     )
     let view2 = secondBlock.reuse(
       view,

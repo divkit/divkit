@@ -9,6 +9,8 @@ struct DivStoredValue {
     case bool // invalid value, used for backward compatibility
     case color
     case url
+    case array
+    case dict
   }
 
   let name: String

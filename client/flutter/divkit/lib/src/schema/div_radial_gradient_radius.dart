@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_radial_gradient_relative_radius.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivRadialGradientRadius extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivRadialGradientRadius with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -89,14 +88,8 @@ class DivRadialGradientRadius extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivRadialGradientRadius resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

@@ -7,9 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.inputmethod.EditorInfo
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
+import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.internal.widget.SuperLineHeightEditText
@@ -18,8 +20,9 @@ import com.yandex.div2.DivInput
 @Mockable
 internal class DivInputView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null
-) : SuperLineHeightEditText(context, attrs),
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.divInputStyle
+) : SuperLineHeightEditText(context, attrs, defStyleAttr),
     DivHolderView<DivInput> by DivHolderViewMixin(),
     DivAnimator {
 

@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithoutProperties {
+public final class EntityWithoutProperties: Sendable {
   public static let type: String = "entity_without_properties"
 
   init() {}

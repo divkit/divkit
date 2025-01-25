@@ -8,11 +8,11 @@ describe('regression', () => {
         });
 
         it('Horizontal swipe', async function() {
-            await this.browser.$('span=Tab 2').then(elem => elem.click());
-    
+            await this.browser.$('button=Tab 2').then(elem => elem.click());
+
             await this.browser.assertView('swipe_right_tab_2', '#root');
 
-            await this.browser.$('span=Tab 0').then(elem => elem.click());
+            await this.browser.$('button=Tab 0').then(elem => elem.click());
 
             await this.browser.assertView('swipe_left_tab_0', '#root');
         });

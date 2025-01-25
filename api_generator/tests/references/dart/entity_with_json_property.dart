@@ -2,17 +2,17 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithJsonProperty extends Resolvable with EquatableMixin  {
+class EntityWithJsonProperty with EquatableMixin  {
   const EntityWithJsonProperty({
     this.jsonProperty = None,
   });
 
   static const type = "entity_with_json_property";
    // default value: None
-  final Map<String, dynamic> jsonProperty;
+  final Obj jsonProperty;
 
   @override
   List<Object?> get props => [
@@ -20,7 +20,7 @@ class EntityWithJsonProperty extends Resolvable with EquatableMixin  {
       ];
 
   EntityWithJsonProperty copyWith({
-      Map<String, dynamic>?  jsonProperty,
+      Obj?  jsonProperty,
   }) => EntityWithJsonProperty(
       jsonProperty: jsonProperty ?? this.jsonProperty,
     );
@@ -31,14 +31,11 @@ class EntityWithJsonProperty extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithJsonProperty(
-        jsonProperty: safeParseMap(json['json_property'], fallback: None,)!,
+        jsonProperty: reqProp<Obj>(safeParseMap(json['json_property'], fallback: None,), name: 'json_property',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithJsonProperty resolve(DivVariableContext context) {
-    return this;
   }
 }

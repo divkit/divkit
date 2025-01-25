@@ -69,5 +69,21 @@ describe('objectProperty', () => {
                 title: '2'
             }] });
         });
+
+        test('setEmpty', () => {
+            const obj = {
+                title: 'start'
+            };
+            setObjectProperty(obj, 'title', false);
+            expect(obj).toEqual({ title: false });
+        });
+
+        test('setEmpty2', () => {
+            const obj = {
+                title: 'start'
+            };
+            setObjectProperty(obj, 'title', undefined);
+            expect(obj).toEqual({ });
+        });
     });
 });

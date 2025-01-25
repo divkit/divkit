@@ -12,7 +12,7 @@ import com.yandex.div.evaluable.FunctionProvider
         "com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider"
     )
 )
-object BuiltinFunctionProvider : FunctionProvider {
+internal object BuiltinFunctionProvider : FunctionProvider {
 
     private val registry = FunctionRegistry()
 
@@ -63,6 +63,12 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(DoubleCeil)
         registry.register(DoubleFloor)
         registry.register(DoubleRound)
+
+        // Trigonometric functions
+        registry.register(Pi)
+        registry.register(DegreesToRadians)
+        registry.register(RadiansToDegrees)
+        registry.register(Sine)
 
         // Color functions
         registry.register(ColorAlphaComponentGetter)
@@ -273,6 +279,15 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetOptArrayFromArray)
         registry.register(GetOptDictFromArray)
         registry.register(GetArrayLength)
+        registry.registerMethod(ArrayGetArray)
+        registry.registerMethod(ArrayGetBoolean)
+        registry.registerMethod(ArrayGetColor)
+        registry.registerMethod(ArrayGetDict)
+        registry.registerMethod(ArrayGetInteger)
+        registry.registerMethod(ArrayGetNumber)
+        registry.registerMethod(ArrayGetString)
+        registry.registerMethod(ArrayGetUrl)
+        registry.registerMethod(ArrayIsEmpty)
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {

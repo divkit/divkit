@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivShadow {
+public final class DivShadow: Sendable {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 0.19
   public let blur: Expression<Int> // constraint: number >= 0; default value: 2
   public let color: Expression<Color> // default value: #000000

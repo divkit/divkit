@@ -26,12 +26,28 @@ open class LoadableImageView(
     defStyleAttr: Int = 0
 ) : AspectImageView(context, attrs, defStyleAttr), LoadableImage, DivExtendableView {
 
+    @Deprecated("Use imageTransform instead")
     internal var currentBitmapWithoutFilters: Bitmap? = null
     internal var loadReference: LoadReference? = null
 
     private var imageChangeCallback: (() -> Unit)? = null
 
+    private var sourceDrawable: Drawable? = null
+
+    var imageTransformer: ImageTransformer?
+        get() = _imageTransformer
+        set(value) {
+            _imageTransformer = value ?: ImageTransformer.NOP
+            sourceDrawable?.let { drawable ->
+                setImageDrawable(drawable)
+            }
+        }
+
+    private var _imageTransformer: ImageTransformer = ImageTransformer.NOP
+
     override var delegate: DivViewDelegate? = null
+
+    @Deprecated("Use imageTransform instead")
     var externalImage: Drawable? = null
         set(value) {
             field = value?.scaleAccordingToDensity()
@@ -76,31 +92,31 @@ open class LoadableImageView(
 
     @CallSuper
     override fun setImageDrawable(drawable: Drawable?) {
-        if (externalImage == null) {
-            super.setImageDrawable(drawable?.scaleAccordingToDensity())
+        sourceDrawable = drawable
+
+        if (externalImage != null) {
+            if (this.drawable !== externalImage) {
+                super.setImageDrawable(externalImage)
+            }
             imageChangeCallback?.invoke()
             return
         }
-        if (this.drawable !== externalImage) {
-            super.setImageDrawable(externalImage)
-        }
+
+        super.setImageDrawable(
+            _imageTransformer.transform(drawable)?.scaleAccordingToDensity()
+        )
+
         imageChangeCallback?.invoke()
     }
 
     @CallSuper
     override fun setImageBitmap(bm: Bitmap?) {
-        if (externalImage == null) {
-            if (shouldScaleAccordingToDensity()) {
-                bm?.density = DisplayMetrics.DENSITY_DEFAULT
-            }
-            super.setImageBitmap(bm)
-            imageChangeCallback?.invoke()
-            return
+        if (shouldScaleAccordingToDensity()) {
+            bm?.density = DisplayMetrics.DENSITY_DEFAULT
         }
-        if (this.drawable !== externalImage) {
-            super.setImageDrawable(externalImage)
-        }
-        imageChangeCallback?.invoke()
+        setImageDrawable(
+            BitmapDrawable(context.resources, bm)
+        )
     }
 
     override fun invalidateDrawable(dr: Drawable) {
@@ -144,6 +160,7 @@ open class LoadableImageView(
         this is BitmapDrawable -> this.apply {
             bitmap?.density = DisplayMetrics.DENSITY_DEFAULT
             setTargetDensity(context.resources.displayMetrics)
+
         }
 
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && this is AnimatedImageDrawable -> {
@@ -166,5 +183,19 @@ open class LoadableImageView(
 
     fun setImageChangeCallback(callback: (() -> Unit)? = null) {
         imageChangeCallback = callback
+    }
+
+    interface ImageTransformer {
+
+        fun transform(drawable: Drawable?): Drawable?
+
+        /**
+         * Returns the input object
+         */
+        object NOP : ImageTransformer {
+            override fun transform(drawable: Drawable?): Drawable? {
+                return drawable
+            }
+        }
     }
 }

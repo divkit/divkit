@@ -1,0 +1,175 @@
+{
+  "description": "Regex Input",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "ui_test_card",
+      "variables": [
+        {
+          "name": "input",
+          "type": "string",
+          "value": ""
+        },
+        {
+          "name": "regex",
+          "type": "string",
+          "value": "[a-zA-Z0-9]+"
+        },
+        {
+          "name": "allow_empty",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "length_check",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "content_check",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Conditions: length >= 8; regex = @{regex}"
+              },
+              {
+                "type": "text",
+                "text": "Allow empty: @{allow_empty}"
+              },
+              {
+                "id": "input",
+                "type": "input",
+                "text_variable": "input",
+                "paddings": {
+                  "start": 10,
+                  "end": 10,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "margins": {
+                  "start": 5,
+                  "end": 5,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#eeeeee"
+                  }
+                ],
+                "validators": [
+                  {
+                    "type": "regex",
+                    "pattern": ".{8,}",
+                    "allow_empty": "@{allow_empty}",
+                    "label_id": "length_warning",
+                    "variable": "length_check"
+                  },
+                  {
+                    "type": "regex",
+                    "pattern": "@{regex}",
+                    "allow_empty": "@{allow_empty}",
+                    "label_id": "content_warning",
+                    "variable": "content_check"
+                  }
+                ]
+              },
+              {
+                "id": "length_warning",
+                "type": "text",
+                "text": "Length validation failed",
+                "text_color": "#ff0000",
+                "visibility": "@{length_check ? 'invisible' : 'visible'}"
+              },
+              {
+                "id": "content_warning",
+                "type": "text",
+                "text": "Content validation failed",
+                "text_color": "#ff0000",
+                "visibility": "@{content_check ? 'invisible' : 'visible'}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=12345678",
+          "log_id": "change text to digits"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=regex&value=[a-zA-Z]%2B",
+          "log_id": "change regex"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=aAbBcC",
+          "log_id": "change text to 6 letters"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=aAbBcCdD",
+          "log_id": "change text to 8 letters"
+        }
+      ],
+      "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=",
+          "log_id": "change text to blank"
+        }
+      ],
+      "expected_screenshot": "step5.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=allow_empty&value=1",
+          "log_id": "allow empty"
+        }
+      ],
+      "expected_screenshot": "step6.png"
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 extension ContainerBlock.LayoutDirection: CustomDebugStringConvertible {
@@ -201,7 +200,7 @@ extension AnimationChanges: CustomDebugStringConvertible {
 
 extension BlockAnimation: CustomDebugStringConvertible {
   public var debugDescription: String {
-    "{ Animation changes:\(changes), KeyTimes: \(keyTimes.map(\.value)), Duration: \(duration.value) }"
+    "{ Animation changes:\(changes), KeyTimes: \(keyTimes.map(\.value)), Duration: \(duration) }"
   }
 }
 
@@ -474,7 +473,7 @@ extension BlockTooltip: CustomDebugStringConvertible {
     """
     BlockTooltip {
       id: \(id)
-      duration: \(duration.value)
+      duration: \(duration)
       offset: \(offset.x) x \(offset.y)
       position: \(position.rawValue)
       block: \(block.debugDescription.indented())

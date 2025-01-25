@@ -8,7 +8,7 @@ final class ExpressionResolverTests: XCTestCase {
   private var error: String?
 
   private var variables: DivVariables = [
-    "array_var": .array(["value", [true, 123, 123.45] as [AnyHashable]]),
+    "array_var": .array(["value", [true, 123, 123.45] as DivArray]),
     "boolean_var": .bool(true),
     "color_var": .color(color("#AABBCC")),
     "dict_var": .dict(["boolean": true, "integer": 1, "number": 1.0, "string": "value"]),
@@ -20,12 +20,14 @@ final class ExpressionResolverTests: XCTestCase {
   ]
 
   private lazy var expressionResolver = ExpressionResolver(
+    functionsProvider: FunctionsProvider(
+      persistentValuesStorage: DivPersistentValuesStorage()
+    ),
     variableValueProvider: { [unowned self] in
       let varibleName = DivVariableName(rawValue: $0)
       self.usedVariables.insert(varibleName)
       return self.variables[varibleName]?.typedValue()
     },
-    persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
       error = $0.description
       if !self.isErrorExpected {
@@ -187,6 +189,50 @@ final class ExpressionResolverTests: XCTestCase {
     XCTAssertTrue(value)
   }
 
+  func test_ResolveNumeric_BooleanFromInteger_False() {
+    let value: Bool = expressionResolver.resolveNumeric(expression("@{0}"))!
+    XCTAssertFalse(value)
+  }
+
+  func test_ResolveNumeric_BooleanFromInteger_True() {
+    let value: Bool = expressionResolver.resolveNumeric(expression("@{1}"))!
+    XCTAssertTrue(value)
+  }
+
+  func test_ResolveNumeric_BooleanFromInteger_Invalid() {
+    isErrorExpected = true
+
+    let value: Bool? = expressionResolver.resolveNumeric(expression("@{3}"))
+    XCTAssertNil(value)
+
+    XCTAssertEqual(
+      error,
+      "Invalid result type: expected Boolean, got Integer. Expression: @{3}"
+    )
+  }
+
+  func test_ResolveNumeric_BooleanFromNumber_False() {
+    let value: Bool = expressionResolver.resolveNumeric(expression("@{0.0}"))!
+    XCTAssertFalse(value)
+  }
+
+  func test_ResolveNumeric_BooleanFromNumber_True() {
+    let value: Bool = expressionResolver.resolveNumeric(expression("@{1.0}"))!
+    XCTAssertTrue(value)
+  }
+
+  func test_ResolveNumeric_BooleanFromNumber_Invalid() {
+    isErrorExpected = true
+
+    let value: Bool? = expressionResolver.resolveNumeric(expression("@{1.2}"))
+    XCTAssertNil(value)
+
+    XCTAssertEqual(
+      error,
+      "Invalid result type: expected Boolean, got Number. Expression: @{1.2}"
+    )
+  }
+
   func test_ResolveNumeric_IntegerAsNumber() {
     let value: Double? = expressionResolver.resolveNumeric(expression("@{integer_var}"))
     XCTAssertEqual(value, 123.0)
@@ -225,8 +271,8 @@ final class ExpressionResolverTests: XCTestCase {
 
   func test_ResolveArray_WithVariable() throws {
     XCTAssertEqual(
-      expressionResolver.resolveArray(expression("@{array_var}")) as! [AnyHashable],
-      ["value", [true, 123, 123.45] as [AnyHashable]]
+      expressionResolver.resolveArray(expression("@{array_var}")) as? DivArray,
+      ["value", [true, 123, 123.45] as DivArray]
     )
   }
 

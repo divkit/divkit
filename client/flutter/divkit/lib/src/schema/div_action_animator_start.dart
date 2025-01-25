@@ -4,11 +4,11 @@ import 'package:divkit/src/schema/div_animation_direction.dart';
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_count.dart';
 import 'package:divkit/src/schema/div_typed_value.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Launches the specified animator.
-class DivActionAnimatorStart extends Resolvable with EquatableMixin {
+class DivActionAnimatorStart with EquatableMixin {
   const DivActionAnimatorStart({
     required this.animatorId,
     this.direction,
@@ -91,9 +91,12 @@ class DivActionAnimatorStart extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionAnimatorStart(
-        animatorId: safeParseStr(
-          json['animator_id']?.toString(),
-        )!,
+        animatorId: reqProp<String>(
+          safeParseStr(
+            json['animator_id'],
+          ),
+          name: 'animator_id',
+        ),
         direction: safeParseStrEnumExpr(
           json['direction'],
           parse: DivAnimationDirection.fromJson,
@@ -101,37 +104,29 @@ class DivActionAnimatorStart extends Resolvable with EquatableMixin {
         duration: safeParseIntExpr(
           json['duration'],
         ),
-        endValue: safeParseObj(
-          DivTypedValue.fromJson(json['end_value']),
+        endValue: safeParseObject(
+          json['end_value'],
+          parse: DivTypedValue.fromJson,
         ),
         interpolator: safeParseStrEnumExpr(
           json['interpolator'],
           parse: DivAnimationInterpolator.fromJson,
         ),
-        repeatCount: safeParseObj(
-          DivCount.fromJson(json['repeat_count']),
+        repeatCount: safeParseObject(
+          json['repeat_count'],
+          parse: DivCount.fromJson,
         ),
         startDelay: safeParseIntExpr(
           json['start_delay'],
         ),
-        startValue: safeParseObj(
-          DivTypedValue.fromJson(json['start_value']),
+        startValue: safeParseObject(
+          json['start_value'],
+          parse: DivTypedValue.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionAnimatorStart resolve(DivVariableContext context) {
-    direction?.resolve(context);
-    duration?.resolve(context);
-    endValue?.resolve(context);
-    interpolator?.resolve(context);
-    repeatCount?.resolve(context);
-    startDelay?.resolve(context);
-    startValue?.resolve(context);
-    return this;
   }
 }

@@ -25,6 +25,8 @@ import com.yandex.div.core.DivCustomContainerChildFactory
 import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewConfig
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.ObserverList
+import com.yandex.div.core.actions.logError
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
@@ -122,7 +124,7 @@ class Div2View private constructor(
     private val loadReferences = mutableListOf<LoadReference>()
     private val overflowMenuListeners = mutableListOf<OverflowMenuSubscriber.Listener>()
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
-    private val persistentDivDataObservers = mutableListOf<PersistentDivDataObserver>()
+    private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
     private val propagatedAccessibilityModes = WeakHashMap<View, DivAccessibility.Mode>()
     private val bulkActionsHandler = BulkActionHandler()
@@ -141,6 +143,7 @@ class Div2View private constructor(
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
     internal var runtimeStore: RuntimeStore? = null
+    internal var inMiddleOfBind = false
 
     internal var bindingContext: BindingContext = BindingContext.createEmpty(this)
 
@@ -301,7 +304,7 @@ class Div2View private constructor(
             return false
         }
 
-        persistentDivDataObservers.forEach { it.onBeforeDivDataChanged() }
+        notifyBindStarted()
         bindOnAttachRunnable?.cancel()
 
         histogramReporter.onRenderStarted()
@@ -344,7 +347,7 @@ class Div2View private constructor(
 
         sendCreationHistograms()
         oldExpressionsRuntime = expressionsRuntime
-        persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
+        notifyBindEnded()
         return result
     }
 
@@ -363,7 +366,7 @@ class Div2View private constructor(
             reporter.onBindingFatalSameData()
             return false
         }
-        persistentDivDataObservers.forEach { it.onBeforeDivDataChanged() }
+        notifyBindStarted()
         bindOnAttachRunnable?.cancel()
 
         histogramReporter.onRenderStarted()
@@ -404,8 +407,21 @@ class Div2View private constructor(
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
         oldExpressionsRuntime = expressionsRuntime
-        persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
+        notifyBindEnded()
         return result
+    }
+
+    private fun notifyBindStarted() {
+        if (inMiddleOfBind) {
+            logError(RuntimeException("New binding started when previous not ended!"))
+        }
+        inMiddleOfBind = true
+        persistentDivDataObservers.forEach { it.onBeforeDivDataChanged() }
+    }
+
+    private fun notifyBindEnded() {
+        inMiddleOfBind = false
+        persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
     }
 
     fun applyPatch(patch: DivPatch): Boolean = synchronized(monitor) {
@@ -756,13 +772,13 @@ class Div2View private constructor(
      */
     internal fun addPersistentDivDataObserver(observer: PersistentDivDataObserver) {
         synchronized(monitor) {
-            persistentDivDataObservers.add(observer)
+            persistentDivDataObservers.addObserver(observer)
         }
     }
 
     internal fun removePersistentDivDataObserver(observer: PersistentDivDataObserver) {
         synchronized(monitor) {
-            persistentDivDataObservers.remove(observer)
+            persistentDivDataObservers.removeObserver(observer)
         }
     }
 
@@ -1016,11 +1032,11 @@ class Div2View private constructor(
     }
 
     override fun handleUri(uri: Uri) {
-        if (actionHandler?.handleUri(uri, this) == true) {
+        if (actionHandler?.handleActionUrl(uri, this) == true) {
             return
         }
 
-        div2Component.actionHandler.handleUri(uri, this)
+        div2Component.actionHandler.handleActionUrl(uri, this)
     }
 
     override fun setConfig(viewConfig: DivViewConfig) {

@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
-enum DivTransitionSelector implements Resolvable {
+enum DivTransitionSelector {
   none('none'),
   dataChange('data_change'),
   stateChange('state_change'),
@@ -74,11 +74,13 @@ enum DivTransitionSelector implements Resolvable {
           return DivTransitionSelector.anyChange;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivTransitionSelector: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivTransitionSelector resolve(DivVariableContext context) => this;
 }

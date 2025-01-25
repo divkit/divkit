@@ -2,6 +2,7 @@
   "description": "non-rectangular spanned grid",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

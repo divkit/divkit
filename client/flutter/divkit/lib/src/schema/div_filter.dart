@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_blur.dart';
 import 'package:divkit/src/schema/div_filter_rtl_mirror.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivFilter extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivFilter with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -87,14 +86,8 @@ class DivFilter extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivFilter resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCustom: DivBase {
+public final class DivCustom: DivBase, @unchecked Sendable {
   public static let type: String = "custom"
   public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?

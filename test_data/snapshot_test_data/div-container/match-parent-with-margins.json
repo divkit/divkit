@@ -1,80 +1,93 @@
 {
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "description": "match_parent should take free space after margins calculation",
   "card": {
     "log_id": "abc",
-    "states": [{
-      "state_id": 0,
-      "div": {
-        "type": "container",
-        "height": {
-          "type": "fixed",
-          "value": 300
-        },
-        "border": {
-          "stroke": {
-            "color": "#000",
-            "width": 1
-          }
-        },
-        "items": [
-          {
-            "type": "text",
-            "height": {
-              "type": "fixed",
-              "value": 50
-            },
-            "background": [{
-              "type": "solid",
-              "color": "#f00"
-            }],
-            "text": "height=50",
-            "font_size": 20
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 300
           },
-          {
-            "type": "container",
-            "height": {
-              "type": "match_parent"
-            },
-            "background": [{
-              "type": "solid",
-              "color": "#0f0"
-            }],
-            "items": [{
+          "border": {
+            "stroke": {
+              "color": "#000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
               "type": "text",
               "height": {
                 "type": "fixed",
                 "value": 50
               },
-              "text": "height=50 + parent height=match_parent"
-            }]
-          },
-          {
-            "type": "container",
-            "height": {
-              "type": "match_parent"
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#f00"
+                }
+              ],
+              "text": "height=50",
+              "font_size": 20
             },
-            "background": [{
-              "type": "solid",
-              "color": "#00f"
-            }],
-            "margins": {
-              "top": 150
-            },
-            "items": [{
-              "type": "text",
+            {
+              "type": "container",
               "height": {
-                "type": "fixed",
-                "value": 100
+                "type": "match_parent"
               },
-              "text": "height=100 + margin-top=150 + parent height=match_parent"
-            }]
-          }
-        ]
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0f0"
+                }
+              ],
+              "items": [
+                {
+                  "type": "text",
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "text": "height=50 + parent height=match_parent"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "height": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#00f"
+                }
+              ],
+              "margins": {
+                "top": 150
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "text": "height=100 + margin-top=150 + parent height=match_parent"
+                }
+              ]
+            }
+          ]
+        }
       }
-    }]
+    ]
   }
 }

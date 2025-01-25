@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivActionScrollDestinationTemplate: TemplateValue {
+public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
   case offsetDestinationTemplate(OffsetDestinationTemplate)
   case indexDestinationTemplate(IndexDestinationTemplate)
   case startDestinationTemplate(StartDestinationTemplate)

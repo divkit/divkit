@@ -1,8 +1,15 @@
+import {
+    describe,
+    expect,
+    test,
+    vi
+} from 'vitest';
+
 import { getCssFilter } from '../../src/utils/filters';
 
 describe('filters', () => {
-    it('getCssFilter with incorrect object', () => {
-        const logError = jest.fn();
+    test('getCssFilter with incorrect object', () => {
+        const logError = vi.fn();
 
         expect(getCssFilter([{
             type: 'blur',
@@ -11,8 +18,8 @@ describe('filters', () => {
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
-    it('getCssFilter with incorrect object 2', () => {
-        const logError = jest.fn();
+    test('getCssFilter with incorrect object 2', () => {
+        const logError = vi.fn();
 
         expect(getCssFilter([{
             type: undefined,
@@ -21,8 +28,8 @@ describe('filters', () => {
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
-    it('getCssFilter with incorrect object 3', () => {
-        const logError = jest.fn();
+    test('getCssFilter with incorrect object 3', () => {
+        const logError = vi.fn();
 
         expect(getCssFilter([{
             // @ts-expect-error Incorrect data
@@ -31,8 +38,8 @@ describe('filters', () => {
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
-    it('getCssFilter with incorrect object 4', () => {
-        const logError = jest.fn();
+    test('getCssFilter with incorrect object 4', () => {
+        const logError = vi.fn();
 
         expect(getCssFilter([{
             type: 'blur',
@@ -41,8 +48,8 @@ describe('filters', () => {
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
-    it('getCssFilter with correct blur', () => {
-        const logError = jest.fn();
+    test('getCssFilter with correct blur', () => {
+        const logError = vi.fn();
 
         expect(getCssFilter([{
             type: 'blur',

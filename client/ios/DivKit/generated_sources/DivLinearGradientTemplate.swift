@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivLinearGradientTemplate: TemplateValue {
+public final class DivLinearGradientTemplate: TemplateValue, Sendable {
   public static let type: String = "gradient"
   public let parent: String?
   public let angle: Field<Expression<Int>>? // constraint: number >= 0 && number <= 360; default value: 0

@@ -2,17 +2,17 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithArrayOfEnums extends Resolvable with EquatableMixin  {
+class EntityWithArrayOfEnums with EquatableMixin  {
   const EntityWithArrayOfEnums({
     required this.items,
   });
 
   static const type = "entity_with_array_of_enums";
    // at least 1 elements
-  final List<EntityWithArrayOfEnumsItem> items;
+  final Arr<EntityWithArrayOfEnumsItem> items;
 
   @override
   List<Object?> get props => [
@@ -20,7 +20,7 @@ class EntityWithArrayOfEnums extends Resolvable with EquatableMixin  {
       ];
 
   EntityWithArrayOfEnums copyWith({
-      List<EntityWithArrayOfEnumsItem>?  items,
+      Arr<EntityWithArrayOfEnumsItem>?  items,
   }) => EntityWithArrayOfEnums(
       items: items ?? this.items,
     );
@@ -31,19 +31,16 @@ class EntityWithArrayOfEnums extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithArrayOfEnums(
-        items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!,),)!,
+        items: reqProp<Arr<EntityWithArrayOfEnumsItem>>(safeParseObjects(json['items'],(v) => reqProp<EntityWithArrayOfEnumsItem>(safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,),), ), name: 'items',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  EntityWithArrayOfEnums resolve(DivVariableContext context) {
-    return this;
-  }
 }
 
-enum EntityWithArrayOfEnumsItem implements Resolvable {
+enum EntityWithArrayOfEnumsItem {
   first('first'),
   second('second');
 
@@ -94,8 +91,8 @@ enum EntityWithArrayOfEnumsItem implements Resolvable {
       }
       return null;
     } catch (e, st) {
+      logger.warning("Invalid type of EntityWithArrayOfEnumsItem: $json", error: e, stackTrace: st,);
       return null;
     }
   }
-  EntityWithArrayOfEnumsItem resolve(DivVariableContext context) => this;
 }

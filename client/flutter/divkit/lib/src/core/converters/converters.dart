@@ -20,27 +20,37 @@ extension DivSizeUnitConverter on DivSizeUnit {
 }
 
 extension DivDimensionConverter on DivDimension {
-  double convert({required double viewScale}) =>
-      (value.value) * (unit.value).asPx * viewScale;
+  double resolve(
+    DivVariableContext context, {
+    required double viewScale,
+  }) =>
+      (value.resolve(context)) * (unit.resolve(context)).asPx * viewScale;
 }
 
 extension DivFixedSizeConverter on DivFixedSize {
-  double convert({required double viewScale}) =>
-      (value.value) * (unit.value).asPx * viewScale;
+  double resolve(
+    DivVariableContext context, {
+    required double viewScale,
+  }) =>
+      (value.resolve(context)) * (unit.resolve(context)).asPx * viewScale;
 }
 
 extension DivWrapContentSizeConstraintSizeConverter
     on DivWrapContentSizeConstraintSize {
-  double convert({required double viewScale}) =>
-      (value.value) * (unit.value).asPx * viewScale;
+  double resolve(
+    DivVariableContext context, {
+    required double viewScale,
+  }) =>
+      (value.resolve(context)) * (unit.resolve(context)).asPx * viewScale;
 }
 
 extension DivPointConverter on DivPoint {
-  Offset convert({
+  Offset resolve(
+    DivVariableContext context, {
     required double viewScale,
   }) =>
       Offset(
-        x.convert(viewScale: viewScale),
-        y.convert(viewScale: viewScale),
+        x.resolve(context, viewScale: viewScale),
+        y.resolve(context, viewScale: viewScale),
       );
 }

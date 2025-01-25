@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ArrayVariableTemplate: TemplateValue {
+public final class ArrayVariableTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "array"
   public let parent: String?
   public let name: Field<String>?

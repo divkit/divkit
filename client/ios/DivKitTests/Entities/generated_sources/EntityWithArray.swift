@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithArray {
+public final class EntityWithArray: Sendable {
   public static let type: String = "entity_with_array"
   public let array: [Entity] // at least 1 elements
 

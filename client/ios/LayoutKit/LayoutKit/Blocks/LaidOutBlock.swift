@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import VGSL
 
 final class LaidOutBlock<T: BlockWithLayout>: Block {

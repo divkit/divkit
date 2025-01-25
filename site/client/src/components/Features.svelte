@@ -277,9 +277,11 @@
 
 <style>
     .features {
+        box-sizing: border-box;
         width: 100%;
         max-width: 1120px;
         margin: 30px auto;
+        padding: 0 10px;
         /* background: #333; */
 
         --caniuse-no-support: #f8886f;
@@ -361,8 +363,20 @@
         background: #ddd;
     }
 
+    @media (max-width: 700px) {
+        .features__link {
+            font-size: 20px;
+        }
+    }
+
     .features__title {
         font-size: 20px;
+    }
+
+    @media (max-width: 700px) {
+        .features__title {
+            font-size: 16px;
+        }
     }
 
     .features__content {

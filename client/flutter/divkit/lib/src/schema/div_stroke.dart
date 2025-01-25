@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_size_unit.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stroke.
-class DivStroke extends Resolvable with EquatableMixin {
+class DivStroke with EquatableMixin {
   const DivStroke({
     required this.color,
     this.unit = const ValueExpression(DivSizeUnit.dp),
@@ -47,29 +47,31 @@ class DivStroke extends Resolvable with EquatableMixin {
     }
     try {
       return DivStroke(
-        color: safeParseColorExpr(
-          json['color'],
-        )!,
-        unit: safeParseStrEnumExpr(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        )!,
-        width: safeParseDoubleExpr(
-          json['width'],
-          fallback: 1,
-        )!,
+        color: reqVProp<Color>(
+          safeParseColorExpr(
+            json['color'],
+          ),
+          name: 'color',
+        ),
+        unit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.dp,
+          ),
+          name: 'unit',
+        ),
+        width: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['width'],
+            fallback: 1,
+          ),
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivStroke resolve(DivVariableContext context) {
-    color.resolve(context);
-    unit.resolve(context);
-    width.resolve(context);
-    return this;
   }
 }

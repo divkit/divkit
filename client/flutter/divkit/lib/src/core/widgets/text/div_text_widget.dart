@@ -26,20 +26,13 @@ class DivTextWidget extends DivMappingWidget<DivText, DivTextModel> {
   }
 
   @override
-  DivTextModel value(BuildContext context) {
-    final divContext = read<DivContext>(context)!;
-    data.resolve(divContext.variables);
-    return data.bind(context);
-  }
+  DivTextModel value(BuildContext context) => data.resolve(context);
 
   @override
-  Stream<DivTextModel> stream(BuildContext context) {
-    final divContext = watch<DivContext>(context)!;
-    return divContext.variableManager.watch((values) {
-      data.resolve(values);
-      return data.bind(context);
-    });
-  }
+  Stream<DivTextModel> stream(BuildContext context) =>
+      watch<DivContext>(context)!.variableManager.watch(
+            (values) => data.resolve(context),
+          );
 
   @override
   Widget build(BuildContext context, DivTextModel model) {

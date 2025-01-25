@@ -82,5 +82,3 @@ open class DivViewController: UIViewController {
     divView.accessibilityIdentifier = identifier
   }
 }
-
-private let cardId: DivCardID = "DivViewCard"

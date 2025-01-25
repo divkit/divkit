@@ -19,6 +19,9 @@
             },
             "android": {
                 "version_added": "29.8.0"
+            },
+            "ios": {
+                "version_added": "30.31.0"
             }
         }
     }, {
@@ -52,6 +55,9 @@
             },
             "android": {
                 "version_added": "30.19.0"
+            },
+            "web": {
+                "version_added": "30.29.0"
             }
         }
     }, {
@@ -66,6 +72,14 @@
             },
             "web": {
                 "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "pager_layout_mode_wrap_content",
+        "name": "Pager <code>layout_mode</code> = <code>wrap_content</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.32.0"
             }
         }
     }]

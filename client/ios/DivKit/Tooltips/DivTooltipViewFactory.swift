@@ -13,7 +13,8 @@ public struct DivTooltipViewFactory {
   }
 
   #if os(iOS)
-  func makeView(div: Div, tooltipId: String) -> VisibleBoundsTrackingView {
+  @MainActor
+  func makeView(div: Div, tooltipId: String) async -> VisibleBoundsTrackingView {
     let view = DivView(divKitComponents: divKitComponents)
     let divData = DivData(
       logId: tooltipId,
@@ -23,20 +24,18 @@ public struct DivTooltipViewFactory {
       variableTriggers: nil,
       variables: nil
     )
-    Task {
-      await view.setSource(
-        DivViewSource(
-          kind: .divData(divData),
-          cardId: cardId,
-          additionalId: tooltipId
-        )
+    await view.setSource(
+      DivViewSource(
+        kind: .divData(divData),
+        cardId: cardId,
+        additionalId: tooltipId
       )
-    }
+    )
     return view
   }
 
   #else
-  func makeView(div _: Div, tooltipId _: String) -> ViewType {
+  func makeView(div _: Div, tooltipId _: String) async -> ViewType {
     self as AnyObject
   }
   #endif

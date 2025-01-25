@@ -1,7 +1,6 @@
 import CoreGraphics
 import Foundation
 import UIKit
-
 import VGSL
 
 extension SwipeContainerBlock {

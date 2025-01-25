@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:divkit/divkit.dart';
+import 'package:example/src/pages/settings.dart';
 
 import 'package:flutter/material.dart';
 
@@ -94,8 +95,11 @@ class PlaygroundAppRootActionHandler implements DivActionHandler {
         );
         break;
       case _activitySettings:
-        // TODO: settings tab for Flutter playground
-        showSnackBar('Action is not supported yet');
+        _navigationManager.push(
+          MaterialPageRoute(
+            builder: (_) => const SettingsPage(),
+          ),
+        );
         break;
       default:
         return false;

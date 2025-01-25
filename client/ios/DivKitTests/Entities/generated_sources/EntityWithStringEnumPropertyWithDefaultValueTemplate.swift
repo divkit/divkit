@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue {
+public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue, Sendable {
   public typealias Value = EntityWithStringEnumPropertyWithDefaultValue.Value
 
   public static let type: String = "entity_with_string_enum_property_with_default_value"

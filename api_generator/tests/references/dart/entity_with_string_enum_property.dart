@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithStringEnumProperty extends Resolvable with EquatableMixin  {
+class EntityWithStringEnumProperty with EquatableMixin  {
   const EntityWithStringEnumProperty({
     required this.property,
   });
@@ -30,20 +30,16 @@ class EntityWithStringEnumProperty extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithStringEnumProperty(
-        property: safeParseStrEnumExpr(json['property'], parse: EntityWithStringEnumPropertyProperty.fromJson,)!,
+        property: reqVProp<EntityWithStringEnumPropertyProperty>(safeParseStrEnumExpr(json['property'], parse: EntityWithStringEnumPropertyProperty.fromJson,), name: 'property',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  EntityWithStringEnumProperty resolve(DivVariableContext context) {
-    property.resolve(context);
-    return this;
-  }
 }
 
-enum EntityWithStringEnumPropertyProperty implements Resolvable {
+enum EntityWithStringEnumPropertyProperty {
   first('first'),
   second('second');
 
@@ -94,8 +90,8 @@ enum EntityWithStringEnumPropertyProperty implements Resolvable {
       }
       return null;
     } catch (e, st) {
+      logger.warning("Invalid type of EntityWithStringEnumPropertyProperty: $json", error: e, stackTrace: st,);
       return null;
     }
   }
-  EntityWithStringEnumPropertyProperty resolve(DivVariableContext context) => this;
 }

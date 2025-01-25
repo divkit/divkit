@@ -2,29 +2,30 @@ import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/converters/converters.dart';
 
 extension DivSizeConverter on DivSize {
-  DivSizeValue convert({
+  DivSizeValue resolve(
+    DivVariableContext context, {
     required double viewScale,
   }) =>
       map(
         divFixedSize: (fixed) => DivFixed(
-          fixed.convert(viewScale: viewScale),
+          fixed.resolve(context, viewScale: viewScale),
         ),
         divMatchParentSize: (flex) => DivMatchParent(
-          flex.weight?.value.toInt(),
+          flex.weight?.resolve(context).toInt(),
         ),
         divWrapContentSize: (wrapped) {
-          final constrained = wrapped.constrained?.value ?? false;
+          final constrained = wrapped.constrained?.resolve(context) ?? false;
 
           if (!constrained) {
             return DivWrapContent(
-              min: wrapped.minSize?.convert(viewScale: viewScale),
-              max: wrapped.maxSize?.convert(viewScale: viewScale),
+              min: wrapped.minSize?.resolve(context, viewScale: viewScale),
+              max: wrapped.maxSize?.resolve(context, viewScale: viewScale),
             );
           }
 
           return DivConstrained(
-            min: wrapped.minSize?.convert(viewScale: viewScale),
-            max: wrapped.maxSize?.convert(viewScale: viewScale),
+            min: wrapped.minSize?.resolve(context, viewScale: viewScale),
+            max: wrapped.maxSize?.resolve(context, viewScale: viewScale),
           );
         },
       );

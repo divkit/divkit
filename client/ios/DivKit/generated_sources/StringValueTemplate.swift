@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class StringValueTemplate: TemplateValue {
+public final class StringValueTemplate: TemplateValue, Sendable {
   public static let type: String = "string"
   public let parent: String?
   public let value: Field<Expression<String>>?

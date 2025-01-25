@@ -1,8 +1,6 @@
 @testable import LayoutKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class GalleryViewLayoutTests: XCTestCase {
   func test_ProducesEqualToModelBlocksCountNumberOfFrames() {

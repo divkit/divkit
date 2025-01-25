@@ -6,7 +6,7 @@ export function getFileSize(value: string, fileType: string): Promise<number> {
         return cached;
     }
 
-    if (fileType === 'image_preview' || !value) {
+    if (fileType === 'image_preview' || !value || value.startsWith('data:')) {
         return Promise.resolve(String(value || '').length);
     }
 
@@ -19,4 +19,19 @@ export function getFileSize(value: string, fileType: string): Promise<number> {
     cache.set(value, res);
 
     return res;
+}
+
+export function calcFileSizeMod(currentSize: number | undefined, warnLimit: number, errorLimit: number): string {
+    if (!currentSize || currentSize < 1) {
+        return '';
+    }
+
+    if (currentSize > errorLimit) {
+        return 'error';
+    }
+    if (currentSize > warnLimit) {
+        return 'warn';
+    }
+
+    return '';
 }

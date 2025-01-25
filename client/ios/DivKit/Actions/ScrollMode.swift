@@ -1,9 +1,14 @@
 import Foundation
 
 enum ScrollMode {
-  case forward(step: CGFloat, overflow: OverflowMode)
-  case backward(step: CGFloat, overflow: OverflowMode)
-  case position(step: CGFloat)
+  case forward(Int, overflow: OverflowMode)
+  case backward(Int, overflow: OverflowMode)
+  case position(Int)
   case start
   case end
+}
+
+enum OverflowMode {
+  case clamp
+  case ring
 }

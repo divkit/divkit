@@ -1,6 +1,5 @@
-import Foundation
-
 import DivKit
+import Foundation
 import LayoutKit
 
 public final class BlurExtensionHandler: DivExtensionHandler {

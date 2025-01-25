@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivImage: DivBase {
+public final class DivImage: DivBase, Sendable {
   public static let type: String = "image"
   public let accessibility: DivAccessibility?
   public let action: DivAction?
@@ -29,6 +29,8 @@ public final class DivImage: DivBase {
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highPriorityPreviewShow: Expression<Bool> // default value: false
+  public let hoverEndActions: [DivAction]?
+  public let hoverStartActions: [DivAction]?
   public let id: String?
   public let imageUrl: Expression<URL>
   public let layoutProvider: DivLayoutProvider?
@@ -37,6 +39,8 @@ public final class DivImage: DivBase {
   public let paddings: DivEdgeInsets?
   public let placeholderColor: Expression<Color> // default value: #14000000
   public let preloadRequired: Expression<Bool> // default value: false
+  public let pressEndActions: [DivAction]?
+  public let pressStartActions: [DivAction]?
   public let preview: Expression<String>?
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -161,6 +165,8 @@ public final class DivImage: DivBase {
     functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     highPriorityPreviewShow: Expression<Bool>? = nil,
+    hoverEndActions: [DivAction]? = nil,
+    hoverStartActions: [DivAction]? = nil,
     id: String? = nil,
     imageUrl: Expression<URL>,
     layoutProvider: DivLayoutProvider? = nil,
@@ -169,6 +175,8 @@ public final class DivImage: DivBase {
     paddings: DivEdgeInsets? = nil,
     placeholderColor: Expression<Color>? = nil,
     preloadRequired: Expression<Bool>? = nil,
+    pressEndActions: [DivAction]? = nil,
+    pressStartActions: [DivAction]? = nil,
     preview: Expression<String>? = nil,
     reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
@@ -212,6 +220,8 @@ public final class DivImage: DivBase {
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.highPriorityPreviewShow = highPriorityPreviewShow ?? .value(false)
+    self.hoverEndActions = hoverEndActions
+    self.hoverStartActions = hoverStartActions
     self.id = id
     self.imageUrl = imageUrl
     self.layoutProvider = layoutProvider
@@ -220,6 +230,8 @@ public final class DivImage: DivBase {
     self.paddings = paddings
     self.placeholderColor = placeholderColor ?? .value(Color.colorWithARGBHexCode(0x14000000))
     self.preloadRequired = preloadRequired ?? .value(false)
+    self.pressEndActions = pressEndActions
+    self.pressStartActions = pressStartActions
     self.preview = preview
     self.reuseId = reuseId
     self.rowSpan = rowSpan
@@ -297,67 +309,75 @@ extension DivImage: Equatable {
     guard
       lhs.height == rhs.height,
       lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow,
-      lhs.id == rhs.id
+      lhs.hoverEndActions == rhs.hoverEndActions
     else {
       return false
     }
     guard
-      lhs.imageUrl == rhs.imageUrl,
+      lhs.hoverStartActions == rhs.hoverStartActions,
+      lhs.id == rhs.id,
+      lhs.imageUrl == rhs.imageUrl
+    else {
+      return false
+    }
+    guard
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.longtapActions == rhs.longtapActions,
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
-      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.placeholderColor == rhs.placeholderColor
+      lhs.placeholderColor == rhs.placeholderColor,
+      lhs.preloadRequired == rhs.preloadRequired
     else {
       return false
     }
     guard
-      lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview,
-      lhs.reuseId == rhs.reuseId
+      lhs.pressEndActions == rhs.pressEndActions,
+      lhs.pressStartActions == rhs.pressStartActions,
+      lhs.preview == rhs.preview
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scale == rhs.scale
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tintColor == rhs.tintColor,
-      lhs.tintMode == rhs.tintMode,
-      lhs.tooltips == rhs.tooltips
+      lhs.tintMode == rhs.tintMode
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -395,6 +415,8 @@ extension DivImage: Serializable {
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["high_priority_preview_show"] = highPriorityPreviewShow.toValidSerializationValue()
+    result["hover_end_actions"] = hoverEndActions?.map { $0.toDictionary() }
+    result["hover_start_actions"] = hoverStartActions?.map { $0.toDictionary() }
     result["id"] = id
     result["image_url"] = imageUrl.toValidSerializationValue()
     result["layout_provider"] = layoutProvider?.toDictionary()
@@ -403,6 +425,8 @@ extension DivImage: Serializable {
     result["paddings"] = paddings?.toDictionary()
     result["placeholder_color"] = placeholderColor.toValidSerializationValue()
     result["preload_required"] = preloadRequired.toValidSerializationValue()
+    result["press_end_actions"] = pressEndActions?.map { $0.toDictionary() }
+    result["press_start_actions"] = pressStartActions?.map { $0.toDictionary() }
     result["preview"] = preview?.toValidSerializationValue()
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()

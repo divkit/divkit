@@ -1,7 +1,8 @@
 {
   "description": "State with clip_to_bounds and shadow",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "templates": {

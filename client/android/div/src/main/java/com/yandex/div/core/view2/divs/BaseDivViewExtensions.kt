@@ -10,6 +10,7 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
@@ -351,6 +352,7 @@ private fun View.getPivotValue(len: Int, divPivot: DivPivot, resolver: Expressio
 
 internal fun View.applyAlpha(alpha: Double) {
     this.alpha = alpha.toFloat()
+    (this as? DivBorderSupports)?.invalidateBorder()
 }
 
 internal fun DivContainer.isHorizontal(resolver: ExpressionResolver) =
@@ -537,6 +539,10 @@ internal fun View.applyDivActions(
     actions: List<DivAction>?,
     longTapActions: List<DivAction>?,
     doubleTapActions: List<DivAction>?,
+    hoverStartActions: List<DivAction>?,
+    hoverEndActions: List<DivAction>?,
+    pressStartActions: List<DivAction>?,
+    pressEndActions: List<DivAction>?,
     actionAnimation: DivAnimation,
     accessibility: DivAccessibility?,
 ) {
@@ -547,14 +553,21 @@ internal fun View.applyDivActions(
         actions
     }
     actionBinder.bindDivActions(context, this, tapActions, longTapActions, doubleTapActions,
-        actionAnimation, accessibility)
+        hoverStartActions, hoverEndActions, pressStartActions, pressEndActions, actionAnimation,
+        accessibility)
 }
 
 internal fun View.setAnimatedTouchListener(
     context: BindingContext,
     divAnimation: DivAnimation?,
     divGestureListener: DivGestureListener?
-) {
+) = setOnTouchListener(createAnimatedTouchListener(context, divAnimation, divGestureListener))
+
+internal fun View.createAnimatedTouchListener(
+    context: BindingContext,
+    divAnimation: DivAnimation?,
+    divGestureListener: DivGestureListener?
+): ((View, MotionEvent) -> Boolean)? {
     val animations = divAnimation?.asTouchListener(context.expressionResolver, this)
 
     // Avoid creating GestureDetector if unnecessary cause it's expensive.
@@ -562,14 +575,13 @@ internal fun View.setAnimatedTouchListener(
         ?.takeUnless { it.onSingleTapListener == null && it.onDoubleTapListener == null }
         ?.let { GestureDetectorCompat(context.divView.context, divGestureListener) }
 
-    if (animations != null || gestureDetector != null) {
-        //noinspection ClickableViewAccessibility
-        setOnTouchListener { v, event ->
+    return if (animations != null || gestureDetector != null) {
+        { v, event ->
             animations?.invoke(v, event)
             gestureDetector?.onTouchEvent(event) ?: false
         }
     } else {
-        setOnTouchListener(null)
+        null
     }
 }
 
@@ -733,14 +745,18 @@ internal fun ViewGroup.trackVisibilityActions(
     }
 }
 
-internal fun getTypefaceValue(fontWeight: DivFontWeight?, fontWeightValue: Long?): Int {
-    return fontWeightValue?.toInt() ?: when (fontWeight) {
+internal fun getTypefaceValue(fontWeight: DivFontWeight?, fontWeightValue: Int?): Int {
+    return fontWeightValue ?: when (fontWeight) {
         DivFontWeight.LIGHT -> 300
         DivFontWeight.REGULAR -> 400
         DivFontWeight.MEDIUM -> 500
         DivFontWeight.BOLD -> 700
         else -> 400
     }
+}
+
+internal fun getTypefaceValue(fontWeight: DivFontWeight?, fontWeightValue: Long?): Int {
+    return getTypefaceValue(fontWeight, fontWeightValue?.toIntSafely())
 }
 
 internal fun getTypeface(fontWeight: Int, typefaceProvider: DivTypefaceProvider): Typeface {
@@ -1005,7 +1021,7 @@ internal fun <T> T.bindClipChildren(
 internal fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
     needClipping = clip
     val parent = parent
-    if (parent is ViewGroup) {
-        parent.clipChildren = clip
+    if (!clip && parent is ViewGroup) {
+        parent.clipChildren = false
     }
 }

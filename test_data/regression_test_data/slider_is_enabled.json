@@ -1,0 +1,152 @@
+{
+  "card": {
+    "log_id": "slider",
+    "variables": [
+      {
+        "name": "thumb",
+        "type": "integer",
+        "value": 2
+      },
+      {
+        "name": "second_thumb",
+        "type": "integer",
+        "value": 9
+      },
+      {
+        "name": "is_slider_enabled",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "accessibility": {
+                "description": "Min - 0, max - 10"
+              },
+              "paddings": {
+                "left": 8,
+                "right": 8,
+                "top": 16
+              },
+              "is_enabled": "@{is_slider_enabled}",
+              "max_value": 10,
+              "min_value": 1,
+              "thumb_value_variable": "thumb",
+              "thumb_secondary_value_variable": "second_thumb",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "thumb_secondary_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "@{is_slider_enabled ? 'Disable' : 'Enable'}",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0077FF"
+                }
+              ],
+              "text_color": "#ffffff",
+              "border": {
+                "corner_radius": 8
+              },
+              "text_alignment_horizontal": "center",
+              "actions": [
+                {
+                  "log_id": "toogle_enabled",
+                  "url": "div-action://set_variable?name=is_slider_enabled&value=@{!is_slider_enabled}"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

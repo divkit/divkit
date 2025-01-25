@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue {
+public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, Sendable {
   public typealias Value = DivRadialGradientRelativeRadius.Value
 
   public static let type: String = "relative"

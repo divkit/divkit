@@ -1,10 +1,9 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Mirrors an image if the system uses RTL (Right-to-Left) text direction.
-class DivFilterRtlMirror extends Resolvable with EquatableMixin {
+class DivFilterRtlMirror with EquatableMixin {
   const DivFilterRtlMirror();
 
   static const type = "rtl_mirror";
@@ -22,7 +21,4 @@ class DivFilterRtlMirror extends Resolvable with EquatableMixin {
     }
     return const DivFilterRtlMirror();
   }
-
-  @override
-  DivFilterRtlMirror resolve(DivVariableContext context) => this;
 }

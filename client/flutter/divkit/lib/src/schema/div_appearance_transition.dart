@@ -4,11 +4,10 @@ import 'package:divkit/src/schema/div_appearance_set_transition.dart';
 import 'package:divkit/src/schema/div_fade_transition.dart';
 import 'package:divkit/src/schema/div_scale_transition.dart';
 import 'package:divkit/src/schema/div_slide_transition.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivAppearanceTransition extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivAppearanceTransition with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -137,14 +136,8 @@ class DivAppearanceTransition extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivAppearanceTransition resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

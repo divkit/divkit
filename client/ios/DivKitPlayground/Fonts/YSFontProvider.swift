@@ -1,6 +1,5 @@
-import UIKit
-
 import DivKit
+import UIKit
 
 final class YSFontProvider: DivFontProvider {
   static let mediumFontName = "YSText-Medium"

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPercentageSize {
+public final class DivPercentageSize: Sendable {
   public static let type: String = "percentage"
   public let value: Expression<Double> // constraint: number > 0
 

@@ -9,6 +9,7 @@ open class ScreenshotTestPluginExtension {
     var hostDir = "screenshots"
     var referencesDir = "src/androidTest/resources/screenshots"
     var screenshotDir = "outputs/connected_android_test_additional_output/debugAndroidTest/connected"
+    val collectedDir get() = "$hostDir/collected"
     val comparisonDir: String
         get() = "$hostDir/comparison"
 

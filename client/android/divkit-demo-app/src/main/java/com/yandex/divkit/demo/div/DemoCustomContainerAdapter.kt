@@ -11,7 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter.Companion.getDivChildFactory
+import com.yandex.div.core.DivCustomContainerViewAdapter.Companion.getDivChildFactory
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -20,6 +20,8 @@ import com.yandex.div2.DivCustom
 class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
 
     private val factories = mapOf(
+        "old_custom_card_1" to { context: Context -> context.createCustomText("hi, i'm old card") },
+        "old_custom_card_2" to { context: Context -> context.createCustomText("and i'm old as well!") },
         "new_custom_card_1" to { context: Context -> context.createCustomCard() },
         "new_custom_card_2" to { context: Context -> context.createCustomCard() },
         "new_custom_container_1" to { context: Context -> context.createCustomContainer() },
@@ -89,6 +91,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
     }
 
     private fun Context.createCustomCard(): View = Chronometer(this)
+
     private fun Context.createCustomContainer(): View = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
     }

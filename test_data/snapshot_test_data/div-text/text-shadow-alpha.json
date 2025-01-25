@@ -2,7 +2,9 @@
   "description": "Text that has shadow and alpha of block and font",
   "platforms": [
     "android",
-    "web"
+    "ios",
+    "web",
+    "flutter"
   ],
   "templates": {
     "text_block": {

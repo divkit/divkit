@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionArrayRemoveValue {
+public final class DivActionArrayRemoveValue: Sendable {
   public static let type: String = "array_remove_value"
   public let index: Expression<Int>
   public let variableName: Expression<String>

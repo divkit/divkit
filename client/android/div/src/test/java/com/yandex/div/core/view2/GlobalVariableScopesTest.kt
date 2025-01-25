@@ -6,7 +6,7 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.TestComponent
 import com.yandex.div.core.TestViewComponentBuilder
-import com.yandex.div.core.expression.variables.GlobalVariableController
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.data.DivParsingEnvironment
@@ -40,7 +40,7 @@ private const val CARD_WITH_VARIABLE = """
 
 @RunWith(RobolectricTestRunner::class)
 class GlobalVariableScopesTest {
-    private class ComponentHolder(variableController: GlobalVariableController? = null) {
+    private class ComponentHolder(variableController: DivVariableController? = null) {
         private val parsingEnvironment = DivParsingEnvironment({ e -> throw java.lang.AssertionError(e) })
         private val tag = DivDataTag("tag")
 
@@ -55,7 +55,7 @@ class GlobalVariableScopesTest {
         private val div2Context = Div2Context(
                 baseContext = activity,
                 configuration = DivConfiguration.Builder(divImageLoader)
-                        .globalVariableController(variableController)
+                        .divVariableController(variableController)
                         .build()
         )
         private val stateSwitcher = mock<DivStateSwitcher>()
@@ -69,12 +69,12 @@ class GlobalVariableScopesTest {
 
         private val div2View = Div2View(div2Context)
 
-        val variableController = component.globalVariableController
+        val variableController = component.divVariableController
     }
 
     @Test
     fun `global variables could be shared between contexts`() {
-        val sharedVariableController = GlobalVariableController()
+        val sharedVariableController = DivVariableController()
 
         val component1 = ComponentHolder(sharedVariableController)
         component1.variableController.putOrUpdate(Variable.StringVariable(VARIABLE_A, "default"))

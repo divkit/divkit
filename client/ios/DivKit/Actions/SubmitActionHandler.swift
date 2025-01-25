@@ -20,7 +20,7 @@ final class SubmitActionHandler {
     }
 
     let containerData = context.variablesStorage.getVariables(
-      cardId: context.path.cardId,
+      cardId: context.cardId,
       elementId: containerId
     ).map(
       key: { $0.rawValue },

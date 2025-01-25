@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-
 import VGSL
 
 public typealias CollectionHeaderModel = Block

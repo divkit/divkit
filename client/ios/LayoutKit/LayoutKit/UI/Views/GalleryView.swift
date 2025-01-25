@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 private typealias CellType = GenericCollectionViewCell
@@ -286,17 +285,21 @@ extension GalleryView: ScrollDelegate {
       break
     case let .autoPaging(inertionEnabled):
       guard !inertionEnabled else { return }
+      let startPage = layout.pageIndex(forContentOffset: scrollStartOffset)
       let isHorizontal = model.direction.isHorizontal
+
       let resultOffset: CGPoint
       if isHorizontal {
         let delta = CGPoint(x: targetContentOffset.pointee.x - scrollStartOffset, y: 0)
-        let absoluteDelta = CGPoint(x: min(bounds.width, abs(delta.x)), y: 0)
         let sign = CGPoint(x: delta.x == 0 ? 0 : delta.x / abs(delta.x), y: 1)
+        let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.x) - scrollStartOffset
+        let absoluteDelta = CGPoint(x: min(abs(maxDelta), abs(delta.x)), y: 0)
         resultOffset = CGPoint(x: scrollStartOffset + absoluteDelta.x * sign.x, y: 0)
       } else {
         let delta = CGPoint(x: 0, y: targetContentOffset.pointee.y - scrollStartOffset)
-        let absoluteDelta = CGPoint(x: 0, y: min(bounds.height, abs(delta.y)))
         let sign = CGPoint(x: 1, y: delta.y == 0 ? 0 : delta.y / abs(delta.y))
+        let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.y) - scrollStartOffset
+        let absoluteDelta = CGPoint(x: 0, y: min(abs(maxDelta), abs(delta.y)))
         resultOffset = CGPoint(x: 0, y: scrollStartOffset + absoluteDelta.y * sign.y)
       }
       targetContentOffset.pointee = resultOffset
@@ -308,9 +311,13 @@ extension GalleryView: ScrollDelegate {
     let contentPosition: GalleryViewState.Position
     if model.infiniteScroll, let newPosition = InfiniteScroll.getNewPosition(
       currentOffset: offset,
-      origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY }
+      origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY },
+      bufferSize: model.bufferSize,
+      boundsSize: model.direction.isHorizontal ? bounds.width : bounds.height,
+      alignment: model.alignment
     ) {
       offset = newPosition.offset
+      scrollStartOffset = offset
       contentPager.flatMap { compoundScrollDelegate.remove($0) }
       compoundScrollDelegate.remove(self)
       updateContentOffset(to: .offset(newPosition.offset), animated: false)

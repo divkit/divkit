@@ -97,6 +97,20 @@
         "compat": {
             "android": {
                 "version_added": "30.12.0"
+            },
+            "ios": {
+                "version_added": "30.33.0"
+            }
+        }
+    }, {
+        "id": "ext_shine",
+        "name": "<code>shine</code> extension",
+        "compat": {
+            "ios": {
+                "version_added": "30.29.0"
+            },
+            "android": {
+                "version_added": "30.33.0"
             }
         }
     }]

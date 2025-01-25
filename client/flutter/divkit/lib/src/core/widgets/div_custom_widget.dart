@@ -13,10 +13,9 @@ class DivCustomWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final divContext = watch<DivContext>(context)!;
-    data.resolve(divContext.variables);
 
-    final customResolver = divContext.customHandler;
     final type = data.customType;
+    final customResolver = divContext.customHandler;
 
     if (customResolver.isCustomTypeSupported(type)) {
       return DivBaseWidget(

@@ -1,8 +1,15 @@
+import {
+    describe,
+    expect,
+    test,
+    vi
+} from 'vitest';
+
 import { applyTemplate } from '../../src/utils/applyTemplate';
 
 describe('applyTemplate', () => {
     test('simple', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello'
@@ -23,7 +30,7 @@ describe('applyTemplate', () => {
     });
 
     test('param', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello',
@@ -47,7 +54,7 @@ describe('applyTemplate', () => {
     });
 
     test('not found', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello',
@@ -71,7 +78,7 @@ describe('applyTemplate', () => {
     });
 
     test('templateContext', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello'
@@ -96,7 +103,7 @@ describe('applyTemplate', () => {
     });
 
     test('override', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello',
@@ -122,7 +129,7 @@ describe('applyTemplate', () => {
     });
 
     test('override 2', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello',
@@ -148,7 +155,7 @@ describe('applyTemplate', () => {
     });
 
     test('inner object', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello',
@@ -179,7 +186,7 @@ describe('applyTemplate', () => {
     });
 
     test('inner object 2', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello',
@@ -210,7 +217,7 @@ describe('applyTemplate', () => {
     });
 
     test('inner object 3', () => {
-        const onError = jest.fn();
+        const onError = vi.fn();
 
         expect(applyTemplate({
             type: 'hello',

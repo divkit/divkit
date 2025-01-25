@@ -6,6 +6,10 @@
 
     <style name="Div.Text"/>
 
+    <style name="Div.Input">
+        <item name="android:imeOptions">flagNoFullscreen</item>
+    </style>
+
     <style name="Div.Image"/>
 
     <style name="Div.Tabs"/>
@@ -30,12 +34,14 @@
     </style>
 
     <style name="Div.Theme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@android:color/black</item>
-        <item name="colorPrimaryDark">@android:color/black</item>
-        <item name="colorAccent">@android:color/black</item>
+        <item name="colorPrimary">@color/div_accent_color</item>
+        <item name="colorPrimaryDark">@color/div_accent_color</item>
+        <item name="colorAccent">@color/div_accent_color</item>
         <item name="divTextStyle">@style/Div.Text</item>
         <item name="divImageStyle">@style/Div.Image</item>
+        <item name="divInputStyle">@style/Div.Input</item>
         <item name="divTabIndicatorLayoutStyle">@style/Div.Tabs.IndicatorTabLayout</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_drawable</item>
     </style>
 
     <style name="Div.Gallery" parent="android:Widget">

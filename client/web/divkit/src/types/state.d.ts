@@ -1,5 +1,6 @@
 import type { DivBaseData } from './base';
 import type { DivActionableData } from './actionable';
+import type { BooleanInt } from '../../typings/common';
 
 export interface State {
     state_id: string;
@@ -14,4 +15,5 @@ export interface DivStateData extends DivBaseData, DivActionableData {
     div_id?: string;
     default_state_id?: string;
     // transition_animation_selector
+    clip_to_bounds?: BooleanInt;
 }

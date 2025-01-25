@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPoint {
+public final class DivPoint: Sendable {
   public let x: DivDimension
   public let y: DivDimension
 

@@ -4,11 +4,11 @@ import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
 import 'package:divkit/src/schema/div_filter.dart';
 import 'package:divkit/src/schema/div_image_scale.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Background image.
-class DivImageBackground extends Resolvable with EquatableMixin {
+class DivImageBackground with EquatableMixin {
   const DivImageBackground({
     this.alpha = const ValueExpression(1.0),
     this.contentAlignmentHorizontal =
@@ -36,7 +36,7 @@ class DivImageBackground extends Resolvable with EquatableMixin {
   final Expression<DivAlignmentVertical> contentAlignmentVertical;
 
   /// Image filters.
-  final List<DivFilter>? filters;
+  final Arr<DivFilter>? filters;
 
   /// Image URL.
   final Expression<Uri> imageUrl;
@@ -64,7 +64,7 @@ class DivImageBackground extends Resolvable with EquatableMixin {
     Expression<double>? alpha,
     Expression<DivAlignmentHorizontal>? contentAlignmentHorizontal,
     Expression<DivAlignmentVertical>? contentAlignmentVertical,
-    List<DivFilter>? Function()? filters,
+    Arr<DivFilter>? Function()? filters,
     Expression<Uri>? imageUrl,
     Expression<bool>? preloadRequired,
     Expression<DivImageScale>? scale,
@@ -89,53 +89,63 @@ class DivImageBackground extends Resolvable with EquatableMixin {
     }
     try {
       return DivImageBackground(
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 1.0,
-        )!,
-        contentAlignmentHorizontal: safeParseStrEnumExpr(
-          json['content_alignment_horizontal'],
-          parse: DivAlignmentHorizontal.fromJson,
-          fallback: DivAlignmentHorizontal.center,
-        )!,
-        contentAlignmentVertical: safeParseStrEnumExpr(
-          json['content_alignment_vertical'],
-          parse: DivAlignmentVertical.fromJson,
-          fallback: DivAlignmentVertical.center,
-        )!,
-        filters: safeParseObj(
-          safeListMap(
-            json['filters'],
-            (v) => safeParseObj(
-              DivFilter.fromJson(v),
-            )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 1.0,
+          ),
+          name: 'alpha',
+        ),
+        contentAlignmentHorizontal: reqVProp<DivAlignmentHorizontal>(
+          safeParseStrEnumExpr(
+            json['content_alignment_horizontal'],
+            parse: DivAlignmentHorizontal.fromJson,
+            fallback: DivAlignmentHorizontal.center,
+          ),
+          name: 'content_alignment_horizontal',
+        ),
+        contentAlignmentVertical: reqVProp<DivAlignmentVertical>(
+          safeParseStrEnumExpr(
+            json['content_alignment_vertical'],
+            parse: DivAlignmentVertical.fromJson,
+            fallback: DivAlignmentVertical.center,
+          ),
+          name: 'content_alignment_vertical',
+        ),
+        filters: safeParseObjects(
+          json['filters'],
+          (v) => reqProp<DivFilter>(
+            safeParseObject(
+              v,
+              parse: DivFilter.fromJson,
+            ),
           ),
         ),
-        imageUrl: safeParseUriExpr(json['image_url'])!,
-        preloadRequired: safeParseBoolExpr(
-          json['preload_required'],
-          fallback: false,
-        )!,
-        scale: safeParseStrEnumExpr(
-          json['scale'],
-          parse: DivImageScale.fromJson,
-          fallback: DivImageScale.fill,
-        )!,
+        imageUrl: reqVProp<Uri>(
+          safeParseUriExpr(
+            json['image_url'],
+          ),
+          name: 'image_url',
+        ),
+        preloadRequired: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['preload_required'],
+            fallback: false,
+          ),
+          name: 'preload_required',
+        ),
+        scale: reqVProp<DivImageScale>(
+          safeParseStrEnumExpr(
+            json['scale'],
+            parse: DivImageScale.fromJson,
+            fallback: DivImageScale.fill,
+          ),
+          name: 'scale',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivImageBackground resolve(DivVariableContext context) {
-    alpha.resolve(context);
-    contentAlignmentHorizontal.resolve(context);
-    contentAlignmentVertical.resolve(context);
-    safeListResolve(filters, (v) => v.resolve(context));
-    imageUrl.resolve(context);
-    preloadRequired.resolve(context);
-    scale.resolve(context);
-    return this;
   }
 }

@@ -1,6 +1,6 @@
+@testable import DivKit
+import VGSL
 import XCTest
-
-import DivKit
 
 final class ExpressionResolverAnyTests: XCTestCase {
   private var isErrorExpected = false
@@ -9,10 +9,12 @@ final class ExpressionResolverAnyTests: XCTestCase {
   private var variables: DivVariables = [:]
 
   private lazy var expressionResolver = ExpressionResolver(
+    functionsProvider: FunctionsProvider(
+      persistentValuesStorage: DivPersistentValuesStorage()
+    ),
     variableValueProvider: { [unowned self] in
       self.variables[DivVariableName(rawValue: $0)]?.typedValue()
     },
-    persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
       error = $0.description
       if !self.isErrorExpected {
@@ -27,28 +29,28 @@ final class ExpressionResolverAnyTests: XCTestCase {
 
   func test_resolve_BooleanConst() {
     XCTAssertEqual(
-      expressionResolver.resolve("@{true}") as? AnyHashable,
+      expressionResolver.resolve("@{true}") as? Bool,
       true
     )
   }
 
   func test_resolve_IntegerConst() {
     XCTAssertEqual(
-      expressionResolver.resolve("@{123}") as? AnyHashable,
+      expressionResolver.resolve("@{123}") as? Int,
       123
     )
   }
 
   func test_resolve_NumberConst() {
     XCTAssertEqual(
-      expressionResolver.resolve("@{123.45}") as? AnyHashable,
+      expressionResolver.resolve("@{123.45}") as? Double,
       123.45
     )
   }
 
   func test_resolve_StringConst() {
     XCTAssertEqual(
-      expressionResolver.resolve("@{'string value'}") as? AnyHashable,
+      expressionResolver.resolve("@{'string value'}") as? String,
       "string value"
     )
   }
@@ -57,7 +59,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .bool(true)
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
+      expressionResolver.resolve("@{var}") as? Bool,
       true
     )
   }
@@ -66,7 +68,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .integer(123)
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
+      expressionResolver.resolve("@{var}") as? Int,
       123
     )
   }
@@ -75,7 +77,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .number(123.45)
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
+      expressionResolver.resolve("@{var}") as? Double,
       123.45
     )
   }
@@ -84,7 +86,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .string("string value")
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
+      expressionResolver.resolve("@{var}") as? String,
       "string value"
     )
   }
@@ -93,8 +95,8 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .array(["value", 123, true])
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
-      ["value", 123, true] as [AnyHashable]
+      expressionResolver.resolve("@{var}") as? DivArray,
+      ["value", 123, true]
     )
   }
 
@@ -102,8 +104,8 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .dict(["boolean": true, "integer": 123, "string": "value"])
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
-      ["boolean": true, "integer": 123, "string": "value"] as DivDictionary
+      expressionResolver.resolve("@{var}") as? DivDictionary,
+      ["boolean": true, "integer": 123, "string": "value"]
     )
   }
 
@@ -111,14 +113,14 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .color(color("#AABBCC"))
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
+      expressionResolver.resolve("@{var}") as? Color,
       color("#FFAABBCC")
     )
   }
 
   func test_resolve_ColorExpression() {
     XCTAssertEqual(
-      expressionResolver.resolve("@{argb(1.0, 0.5, 0.5, 0.5)}") as? AnyHashable,
+      expressionResolver.resolve("@{argb(1.0, 0.5, 0.5, 0.5)}") as? Color,
       color("#FF808080")
     )
   }
@@ -127,7 +129,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .url(url("https://some.url"))
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var}") as? AnyHashable,
+      expressionResolver.resolve("@{var}") as? URL,
       url("https://some.url")
     )
   }
@@ -136,7 +138,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .integer(2)
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var} + @{var} = @{var + var}") as? AnyHashable,
+      expressionResolver.resolve("@{var} + @{var} = @{var + var}") as? String,
       "2 + 2 = 4"
     )
   }
@@ -145,7 +147,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .string("string value")
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{'Value: @{var}'}") as? AnyHashable,
+      expressionResolver.resolve("@{'Value: @{var}'}") as? String,
       "Value: string value"
     )
   }
@@ -154,7 +156,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables["var"] = .string("value")
 
     XCTAssertEqual(
-      expressionResolver.resolve("@{var == '@{var}'}") as? AnyHashable,
+      expressionResolver.resolve("@{var == '@{var}'}") as? Bool,
       true
     )
   }

@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 public struct UserInterfaceAction: Equatable, Codable {
@@ -20,21 +19,6 @@ public struct UserInterfaceAction: Equatable, Codable {
 
     public var cardId: String {
       path.root
-    }
-
-    /// Deprecated.
-    public init(
-      action: JSONObject,
-      cardId: String,
-      source: DivActionSource,
-      url: URL?,
-      localValues: [String: AnyHashable] = [:]
-    ) {
-      self.action = action
-      self.path = UIElementPath(cardId)
-      self.source = source
-      self.url = url
-      self.localValues = localValues
     }
 
     public init(

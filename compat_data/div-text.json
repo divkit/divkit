@@ -62,6 +62,9 @@
         "compat": {
             "android": {
                 "version_added": "30.17.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
             }
         }
     }, {
@@ -109,6 +112,28 @@
             },
             "web": {
                 "version_added": "30.24.0"
+            }
+        }
+    }, {
+        "id": "text_image_indexing_direction",
+        "name": "<code>indexing_direction</code> property for the image of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.29.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
+            }
+        }
+    }, {
+        "id": "text_range_baseline_offset",
+        "name": "<code>baseline_offset</code> property for the range of a <code>text</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "30.33.0"
             }
         }
     }]

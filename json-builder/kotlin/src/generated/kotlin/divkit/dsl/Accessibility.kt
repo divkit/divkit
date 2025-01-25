@@ -34,6 +34,7 @@ data class Accessibility internal constructor(
         Properties(
             description = additive.description ?: properties.description,
             hint = additive.hint ?: properties.hint,
+            isChecked = additive.isChecked ?: properties.isChecked,
             mode = additive.mode ?: properties.mode,
             muteAfterAction = additive.muteAfterAction ?: properties.muteAfterAction,
             stateDescription = additive.stateDescription ?: properties.stateDescription,
@@ -50,6 +51,10 @@ data class Accessibility internal constructor(
          * A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
          */
         val hint: Property<String>?,
+        /**
+         * Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.
+         */
+        val isChecked: Property<Boolean>?,
         /**
          * The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
          * Default value: `default`.
@@ -75,6 +80,7 @@ data class Accessibility internal constructor(
             result.putAll(properties)
             result.tryPutProperty("description", description)
             result.tryPutProperty("hint", hint)
+            result.tryPutProperty("is_checked", isChecked)
             result.tryPutProperty("mode", mode)
             result.tryPutProperty("mute_after_action", muteAfterAction)
             result.tryPutProperty("state_description", stateDescription)
@@ -94,7 +100,7 @@ data class Accessibility internal constructor(
     /**
      * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
      * 
-     * Possible values: [none], [button], [image], [text], [edit_text], [header], [tab_bar], [list], [select], [auto].
+     * Possible values: [none], [button], [image], [text], [edit_text], [header], [tab_bar], [list], [select], [checkbox], [radio], [auto].
      */
     @Generated
     sealed interface Type
@@ -103,6 +109,7 @@ data class Accessibility internal constructor(
 /**
  * @param description Element description. It is used as the main description for screen reading applications.
  * @param hint A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
+ * @param isChecked Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.
  * @param mode The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
  * @param muteAfterAction Mutes the screen reader sound after interacting with the element.
  * @param stateDescription Description of the current state of an element. For example, in the description you can specify a selected date for a date selection element and an on/off state for a switch.
@@ -113,6 +120,7 @@ fun DivScope.accessibility(
     `use named arguments`: Guard = Guard.instance,
     description: String? = null,
     hint: String? = null,
+    isChecked: Boolean? = null,
     mode: Accessibility.Mode? = null,
     muteAfterAction: Boolean? = null,
     stateDescription: String? = null,
@@ -121,6 +129,7 @@ fun DivScope.accessibility(
     Accessibility.Properties(
         description = valueOrNull(description),
         hint = valueOrNull(hint),
+        isChecked = valueOrNull(isChecked),
         mode = valueOrNull(mode),
         muteAfterAction = valueOrNull(muteAfterAction),
         stateDescription = valueOrNull(stateDescription),
@@ -131,6 +140,7 @@ fun DivScope.accessibility(
 /**
  * @param description Element description. It is used as the main description for screen reading applications.
  * @param hint A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
+ * @param isChecked Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.
  * @param mode The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
  * @param muteAfterAction Mutes the screen reader sound after interacting with the element.
  * @param stateDescription Description of the current state of an element. For example, in the description you can specify a selected date for a date selection element and an on/off state for a switch.
@@ -141,6 +151,7 @@ fun DivScope.accessibilityProps(
     `use named arguments`: Guard = Guard.instance,
     description: String? = null,
     hint: String? = null,
+    isChecked: Boolean? = null,
     mode: Accessibility.Mode? = null,
     muteAfterAction: Boolean? = null,
     stateDescription: String? = null,
@@ -148,6 +159,7 @@ fun DivScope.accessibilityProps(
 ) = Accessibility.Properties(
     description = valueOrNull(description),
     hint = valueOrNull(hint),
+    isChecked = valueOrNull(isChecked),
     mode = valueOrNull(mode),
     muteAfterAction = valueOrNull(muteAfterAction),
     stateDescription = valueOrNull(stateDescription),
@@ -157,6 +169,7 @@ fun DivScope.accessibilityProps(
 /**
  * @param description Element description. It is used as the main description for screen reading applications.
  * @param hint A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
+ * @param isChecked Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.
  * @param mode The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
  * @param muteAfterAction Mutes the screen reader sound after interacting with the element.
  * @param stateDescription Description of the current state of an element. For example, in the description you can specify a selected date for a date selection element and an on/off state for a switch.
@@ -167,6 +180,7 @@ fun TemplateScope.accessibilityRefs(
     `use named arguments`: Guard = Guard.instance,
     description: ReferenceProperty<String>? = null,
     hint: ReferenceProperty<String>? = null,
+    isChecked: ReferenceProperty<Boolean>? = null,
     mode: ReferenceProperty<Accessibility.Mode>? = null,
     muteAfterAction: ReferenceProperty<Boolean>? = null,
     stateDescription: ReferenceProperty<String>? = null,
@@ -174,6 +188,7 @@ fun TemplateScope.accessibilityRefs(
 ) = Accessibility.Properties(
     description = description,
     hint = hint,
+    isChecked = isChecked,
     mode = mode,
     muteAfterAction = muteAfterAction,
     stateDescription = stateDescription,
@@ -183,6 +198,7 @@ fun TemplateScope.accessibilityRefs(
 /**
  * @param description Element description. It is used as the main description for screen reading applications.
  * @param hint A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
+ * @param isChecked Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.
  * @param mode The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
  * @param muteAfterAction Mutes the screen reader sound after interacting with the element.
  * @param stateDescription Description of the current state of an element. For example, in the description you can specify a selected date for a date selection element and an on/off state for a switch.
@@ -193,6 +209,7 @@ fun Accessibility.override(
     `use named arguments`: Guard = Guard.instance,
     description: String? = null,
     hint: String? = null,
+    isChecked: Boolean? = null,
     mode: Accessibility.Mode? = null,
     muteAfterAction: Boolean? = null,
     stateDescription: String? = null,
@@ -201,6 +218,7 @@ fun Accessibility.override(
     Accessibility.Properties(
         description = valueOrNull(description) ?: properties.description,
         hint = valueOrNull(hint) ?: properties.hint,
+        isChecked = valueOrNull(isChecked) ?: properties.isChecked,
         mode = valueOrNull(mode) ?: properties.mode,
         muteAfterAction = valueOrNull(muteAfterAction) ?: properties.muteAfterAction,
         stateDescription = valueOrNull(stateDescription) ?: properties.stateDescription,
@@ -211,6 +229,7 @@ fun Accessibility.override(
 /**
  * @param description Element description. It is used as the main description for screen reading applications.
  * @param hint A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
+ * @param isChecked Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.
  * @param mode The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
  * @param muteAfterAction Mutes the screen reader sound after interacting with the element.
  * @param stateDescription Description of the current state of an element. For example, in the description you can specify a selected date for a date selection element and an on/off state for a switch.
@@ -221,6 +240,7 @@ fun Accessibility.defer(
     `use named arguments`: Guard = Guard.instance,
     description: ReferenceProperty<String>? = null,
     hint: ReferenceProperty<String>? = null,
+    isChecked: ReferenceProperty<Boolean>? = null,
     mode: ReferenceProperty<Accessibility.Mode>? = null,
     muteAfterAction: ReferenceProperty<Boolean>? = null,
     stateDescription: ReferenceProperty<String>? = null,
@@ -229,6 +249,7 @@ fun Accessibility.defer(
     Accessibility.Properties(
         description = description ?: properties.description,
         hint = hint ?: properties.hint,
+        isChecked = isChecked ?: properties.isChecked,
         mode = mode ?: properties.mode,
         muteAfterAction = muteAfterAction ?: properties.muteAfterAction,
         stateDescription = stateDescription ?: properties.stateDescription,
@@ -239,6 +260,7 @@ fun Accessibility.defer(
 /**
  * @param description Element description. It is used as the main description for screen reading applications.
  * @param hint A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
+ * @param isChecked Shows the current status of the checkbox or toggle: `true` means it's selected, `false` means it isn't selected.
  * @param mode The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
  * @param muteAfterAction Mutes the screen reader sound after interacting with the element.
  * @param stateDescription Description of the current state of an element. For example, in the description you can specify a selected date for a date selection element and an on/off state for a switch.
@@ -248,6 +270,7 @@ fun Accessibility.evaluate(
     `use named arguments`: Guard = Guard.instance,
     description: ExpressionProperty<String>? = null,
     hint: ExpressionProperty<String>? = null,
+    isChecked: ExpressionProperty<Boolean>? = null,
     mode: ExpressionProperty<Accessibility.Mode>? = null,
     muteAfterAction: ExpressionProperty<Boolean>? = null,
     stateDescription: ExpressionProperty<String>? = null,
@@ -255,6 +278,7 @@ fun Accessibility.evaluate(
     Accessibility.Properties(
         description = description ?: properties.description,
         hint = hint ?: properties.hint,
+        isChecked = isChecked ?: properties.isChecked,
         mode = mode ?: properties.mode,
         muteAfterAction = muteAfterAction ?: properties.muteAfterAction,
         stateDescription = stateDescription ?: properties.stateDescription,

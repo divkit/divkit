@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Controls the timer.
-class DivActionTimer extends Resolvable with EquatableMixin {
+class DivActionTimer with EquatableMixin {
   const DivActionTimer({
     required this.action,
     required this.id,
@@ -47,28 +47,28 @@ class DivActionTimer extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionTimer(
-        action: safeParseStrEnumExpr(
-          json['action'],
-          parse: DivActionTimerAction.fromJson,
-        )!,
-        id: safeParseStrExpr(
-          json['id']?.toString(),
-        )!,
+        action: reqVProp<DivActionTimerAction>(
+          safeParseStrEnumExpr(
+            json['action'],
+            parse: DivActionTimerAction.fromJson,
+          ),
+          name: 'action',
+        ),
+        id: reqVProp<String>(
+          safeParseStrExpr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivActionTimer resolve(DivVariableContext context) {
-    action.resolve(context);
-    id.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionTimerAction implements Resolvable {
+enum DivActionTimerAction {
   start('start'),
   stop('stop'),
   pause('pause'),
@@ -162,11 +162,13 @@ enum DivActionTimerAction implements Resolvable {
           return DivActionTimerAction.reset;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivActionTimerAction: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivActionTimerAction resolve(DivVariableContext context) => this;
 }

@@ -1,6 +1,5 @@
-import SwiftUI
-
 import DivKit
+import SwiftUI
 
 @main
 struct DivKitPlaygroundApp: App {

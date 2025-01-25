@@ -14,6 +14,8 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.gesture.DivGestureExtensionHandler
+import com.yandex.div.gesture.ParsingErrorLoggerFactory
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
@@ -25,8 +27,9 @@ import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.markdown.DivMarkdownExtensionHandler
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
-import com.yandex.div.gesture.DivGestureExtensionHandler
-import com.yandex.div.gesture.ParsingErrorLoggerFactory
+import com.yandex.div.shimmer.DivShimmerExtensionHandler
+import com.yandex.div.shine.DivShineExtensionHandler
+import com.yandex.div.shine.DivShineLogger
 import com.yandex.div.video.ExoDivPlayerFactory
 import com.yandex.div.video.ExoPlayerVideoPreloader
 import com.yandex.div2.DivAction
@@ -41,6 +44,7 @@ import com.yandex.divkit.regression.ScenarioLogDelegate
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import org.json.JSONObject
+import java.lang.Exception
 
 fun divConfiguration(
     activity: Activity,
@@ -50,7 +54,6 @@ fun divConfiguration(
     val flagPreferenceProvider = Container.flagPreferenceProvider
     return DivConfiguration.Builder(Container.imageLoader)
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
-        .divCustomViewFactory(DemoDivCustomViewFactory())
         .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
@@ -72,7 +75,7 @@ fun divConfiguration(
         .enablePermanentDebugPanel(
             flagPreferenceProvider.getExperimentFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
         )
-        .tooltipRestrictor { _, _ -> true }
+        .tooltipRestrictor { _, _, _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
         .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(activity)))
@@ -86,6 +89,8 @@ fun divConfiguration(
         .extension(DivSizeProviderExtensionHandler())
         .extension(createDivSwipeGestureExtensionHandler())
         .extension(createMarkdownExtension(activity))
+        .extension(DivShimmerExtensionHandler())
+        .extension(createDivShineExtensionHandler())
         .divPlayerFactory(ExoDivPlayerFactory(activity))
         .divPlayerPreloader(ExoPlayerVideoPreloader(activity))
 }
@@ -94,6 +99,14 @@ fun createDivSwipeGestureExtensionHandler(): DivGestureExtensionHandler {
     return DivGestureExtensionHandler(
         parsingErrorLoggerFactory = object : ParsingErrorLoggerFactory {
             override fun create(key: String) = ParsingErrorLogger.ASSERT
+        }
+    )
+}
+
+fun createDivShineExtensionHandler(): DivShineExtensionHandler {
+    return DivShineExtensionHandler(
+        logger = object : DivShineLogger {
+            override fun logError(e: Exception) = ParsingErrorLogger.ASSERT.logError(e)
         }
     )
 }
@@ -121,18 +134,22 @@ fun divContext(
 }
 
 open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandler) : DivActionHandler() {
-    override fun handleUri(uri: Uri, view: DivViewFacade): Boolean {
-        if (super.handleUri(uri, view)) {
+    override fun handleActionUrl(uri: Uri?, view: DivViewFacade): Boolean {
+        if (super.handleActionUrl(uri, view)) {
             return true
         }
 
         KLog.d(TAG) { "layoutId=${view.divTag.id}" }
-        return uriHandlerDivkit.handleUri(uri)
+        return if (uri == null) {
+            false
+        } else {
+            uriHandlerDivkit.handleUri(uri)
+        }
     }
 
     override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
         return super.handleAction(action, view, resolver) || action.url != null &&
-                handleUri(action.url!!.evaluate(resolver), view)
+            handleActionUrl(action.url?.evaluate(resolver), view)
     }
 
     private companion object {

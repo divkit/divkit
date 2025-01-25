@@ -7,6 +7,10 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     VISIBILITY_BEACONS_ENABLED(
         "visibility_beacons_enabled"
     ),
+    SWIPE_OUT_BEACONS_ENABLED(
+        "swipe_out_beacons_enabled",
+        defaultValue = true
+    ),
     LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED(
         "longtap_actions_pass_to_child"
     ),

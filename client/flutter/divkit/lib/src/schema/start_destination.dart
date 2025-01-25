@@ -1,10 +1,9 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Specifies container's start as scroll destination.
-class StartDestination extends Resolvable with EquatableMixin {
+/// Specifies the start of the container as the scrolling end position.
+class StartDestination with EquatableMixin {
   const StartDestination();
 
   static const type = "start";
@@ -22,7 +21,4 @@ class StartDestination extends Resolvable with EquatableMixin {
     }
     return const StartDestination();
   }
-
-  @override
-  StartDestination resolve(DivVariableContext context) => this;
 }

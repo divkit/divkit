@@ -65,12 +65,7 @@ public interface HistogramBridge {
      * @param unit the unit of the duration, min, and max arguments
      * @param bucketCount the number of buckets
      */
-    default void recordTimeHistogram(@NonNull String name, long duration, long min, long max, @NonNull TimeUnit unit, int bucketCount) {
-        recordTimeHistogram(name, duration, min, max, unit, (long) bucketCount);
-    }
-
-    @Deprecated
-    void recordTimeHistogram(@NonNull String name, long duration, long min, long max, @NonNull TimeUnit unit, long bucketCount);
+    void recordTimeHistogram(@NonNull String name, long duration, long min, long max, @NonNull TimeUnit unit, int bucketCount);
 
     /**
      * Records a sample in a sparse histogram.

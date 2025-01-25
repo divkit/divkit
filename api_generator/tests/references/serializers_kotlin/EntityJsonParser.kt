@@ -23,7 +23,7 @@ internal class EntityJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): Entity {
-            val type: String = JsonPropertyParser.readString(data, "type")
+            val type: String = JsonPropertyParser.readString(context, data, "type")
             when (type) {
                 EntityWithArray.TYPE -> return Entity.WithArray(component.entityWithArrayJsonEntityParser.value.deserialize(context, data))
                 EntityWithArrayOfEnums.TYPE -> return Entity.WithArrayOfEnums(component.entityWithArrayOfEnumsJsonEntityParser.value.deserialize(context, data))
@@ -88,7 +88,7 @@ internal class EntityJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityTemplate {
-            val extendedType = JsonPropertyParser.readString(data, "type")
+            val extendedType = JsonPropertyParser.readString(context, data, "type")
             val parent = context.templates[extendedType] as? EntityTemplate
             val type = parent?.type ?: extendedType
             when (type) {

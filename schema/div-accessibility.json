@@ -27,7 +27,8 @@
       "$description": "translations.json#/div_accessibility_type",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "state_description": {
@@ -49,7 +50,9 @@
     "is_checked": {
       "$ref": "common.json#/boolean_int",
       "$description": "translations.json#/div_accessibility_is_checked",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "mode": {
       "type": "string",

@@ -1,7 +1,6 @@
-import UIKit
-
 import DivKit
 import LayoutKit
+import UIKit
 import VGSL
 
 public protocol InputAccessoryViewProvider {

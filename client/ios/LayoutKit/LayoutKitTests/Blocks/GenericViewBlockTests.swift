@@ -1,7 +1,6 @@
-import XCTest
-
 import LayoutKit
 import VGSL
+import XCTest
 
 final class GenericViewBlockTests: XCTestCase {
   func test_WhenSameContentViewSetForAnotherBlock_ContentIsUpdatedForLastBlock() throws {

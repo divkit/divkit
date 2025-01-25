@@ -7,4 +7,8 @@ export interface DivActionableData {
     longtap_actions?: Action[];
     doubletap_actions?: Action[];
     action_animation?: Animation;
+    hover_start_actions?: Action[];
+    hover_end_actions?: Action[];
+    press_start_actions?: Action[];
+    press_end_actions?: Action[];
 }

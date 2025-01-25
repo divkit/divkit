@@ -11,19 +11,21 @@ extension DivTooltip {
       return nil
     }
 
-    let tooltipViewFactory: TooltipViewFactory = Variable { [weak self] in
+    let tooltipViewFactory: TooltipViewFactory = { [weak self] in
       guard let self, let tooltipViewFactory = context.tooltipViewFactory else {
         return nil
       }
-      return tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
+      return await tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
     }
 
     return try BlockTooltip(
       id: id,
+      // Legacy behavior. Views should be created with tooltipViewFactory.
       block: div.value.makeBlock(context: context),
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
+      duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
+      useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
       tooltipViewFactory: tooltipViewFactory
     )
   }
@@ -49,11 +51,20 @@ extension [DivTooltip]? {
   func makeTooltips(
     context: DivBlockModelingContext
   ) throws -> [BlockTooltip] {
-    try self?.iterativeFlatMap { div, index in
-      let tooltipContext = context.modifying(
-        parentPath: context.parentPath + "tooltip" + index
+    let items = self ?? []
+    if !items.isEmpty, context.viewId.isTooltip {
+      context.errorsStorage.add(
+        DivBlockModelingError(
+          "Tooltip can not host another tooltips",
+          path: context.parentPath
+        )
       )
-      return try div.makeTooltip(context: tooltipContext)
-    } ?? []
+      return []
+    }
+
+    return try items.compactMap {
+      let tooltipContext = context.cloneForTooltip(tooltipId: $0.id)
+      return try $0.makeTooltip(context: tooltipContext)
+    }
   }
 }

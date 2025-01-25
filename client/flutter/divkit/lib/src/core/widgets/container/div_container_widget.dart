@@ -12,20 +12,13 @@ class DivContainerWidget
   });
 
   @override
-  DivContainerModel value(BuildContext context) {
-    final divContext = read<DivContext>(context)!;
-    data.resolve(divContext.variables);
-    return data.bind(context);
-  }
+  DivContainerModel value(BuildContext context) => data.resolve(context);
 
   @override
-  Stream<DivContainerModel> stream(BuildContext context) {
-    final divContext = watch<DivContext>(context)!;
-    return divContext.variableManager.watch((values) {
-      data.resolve(values);
-      return data.bind(context);
-    });
-  }
+  Stream<DivContainerModel> stream(BuildContext context) =>
+      watch<DivContext>(context)!.variableManager.watch(
+            (values) => data.resolve(context),
+          );
 
   @override
   Widget build(BuildContext context, DivContainerModel model) {

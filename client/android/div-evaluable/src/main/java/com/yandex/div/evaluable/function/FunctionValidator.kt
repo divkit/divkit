@@ -83,9 +83,19 @@ internal fun Function.withArgumentsValidation(args: List<EvaluableType>): Functi
     }
 }
 
-internal fun getFunctionArgumentsException(name: String, args: List<EvaluableType>): Exception {
+internal fun getFunctionArgumentsException(name: String, args: List<EvaluableType>, isMethod: Boolean = false): Exception {
+    if (isMethod) {
+        return getMethodArgumentsException(name, args)
+    }
     if (args.isEmpty()) {
         return EvaluableException("Function requires non empty argument list.")
     }
     return EvaluableException("Function has no matching overload for given argument types: ${args.toMessageFormat()}.")
+}
+
+internal fun getMethodArgumentsException(name: String, args: List<EvaluableType>): Exception {
+    if (args.size == 1) {
+        return EvaluableException("Method requires non empty argument list.")
+    }
+    return EvaluableException("Method has no matching overload for given argument types: ${args.subList(1, args.size).toMessageFormat()}.")
 }

@@ -18,19 +18,9 @@ void main() async {
     print('Running tests...');
     print('All groups: ${tests.length}');
     for (var k in tests.keys) {
-      if ({'functions_datetime_format'}.contains(k)) {
-        print("Skip unsupported group: $k");
-        continue;
-      }
-
       group(k, () {
         for (ExpressionTestCase test in tests[k]?.cases ?? []) {
-          if ({
-            '@{string.var.toString()}',
-            '@{string.var.toString()}',
-            '@{setDay(setMonth(parseUnixTime(0), 2), -1)}',
-            'variable name contains dot symbol',
-          }.contains(test.caseName)) {
+          if (!(test.availablePlatforms?.contains('flutter') ?? true)) {
             print("Skip unsupported test: ${test.caseName}");
             continue;
           }

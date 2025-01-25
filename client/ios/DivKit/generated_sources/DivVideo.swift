@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivVideo: DivBase {
+public final class DivVideo: DivBase, @unchecked Sendable {
   public static let type: String = "video"
   public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?

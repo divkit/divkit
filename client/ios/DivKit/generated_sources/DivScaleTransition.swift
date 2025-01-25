@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivScaleTransition: DivTransitionBase {
+public final class DivScaleTransition: DivTransitionBase, Sendable {
   public static let type: String = "scale"
   public let duration: Expression<Int> // constraint: number >= 0; default value: 200
   public let interpolator: Expression<DivAnimationInterpolator> // default value: ease_in_out

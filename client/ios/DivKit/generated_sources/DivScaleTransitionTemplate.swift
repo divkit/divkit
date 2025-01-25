@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivScaleTransitionTemplate: TemplateValue {
+public final class DivScaleTransitionTemplate: TemplateValue, Sendable {
   public static let type: String = "scale"
   public let parent: String?
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 200

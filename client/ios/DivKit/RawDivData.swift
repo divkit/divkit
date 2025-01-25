@@ -1,6 +1,6 @@
 import Serialization
 
-public struct RawDivData: Deserializable {
+public struct RawDivData: Deserializable, @unchecked Sendable {
   public let card: [String: Any]
   public let templates: [String: Any]
 

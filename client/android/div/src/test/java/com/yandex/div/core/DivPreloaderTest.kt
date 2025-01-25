@@ -28,9 +28,6 @@ import java.util.Arrays
 @RunWith(RobolectricTestRunner::class)
 class DivPreloaderTest {
 
-    private val divCustomViewAdapter = mock<DivCustomViewAdapter> {
-        on { preload(any(), any()) } doReturn DivPreloader.PreloadReference.EMPTY
-    }
     private val divCustomContainerViewAdapter = mock<DivCustomContainerViewAdapter> {
         on { preload(any(), any()) } doReturn DivPreloader.PreloadReference.EMPTY
     }
@@ -59,7 +56,6 @@ class DivPreloaderTest {
 
     private val underTest: DivPreloader = DivPreloader(
         divImagePreloader,
-        divCustomViewAdapter,
         divCustomContainerViewAdapter,
         extensionHandlersController,
         videoPreloader
@@ -86,7 +82,6 @@ class DivPreloaderTest {
     fun `preload div custom`() {
         underTest.preload(divCustom, mock())
 
-        verify(divCustomViewAdapter).preload(eq(custom), any())
         verify(divCustomContainerViewAdapter).preload(eq(custom), any())
     }
 
@@ -94,7 +89,6 @@ class DivPreloaderTest {
     fun `preload div custom in container`() {
         underTest.preload(divContainer, mock())
 
-        verify(divCustomViewAdapter).preload(eq(custom), any())
         verify(divCustomContainerViewAdapter).preload(eq(custom), any())
     }
 

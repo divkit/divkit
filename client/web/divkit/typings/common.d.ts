@@ -1,5 +1,15 @@
-import type { AnimatorDirection, AnimatorRepeatCount, Interpolation } from '../src/types/base';
 import type { Variable } from './variables';
+
+export type Interpolation = 'linear' | 'ease' | 'ease_in' | 'ease_out' | 'ease_in_out' | 'spring';
+
+export type AnimatorRepeatCount = {
+    type: 'infinity';
+} | {
+    type: 'fixed';
+    value: number;
+};
+
+export type AnimatorDirection = 'normal' | 'reverse' | 'alternate' | 'alternate_reverse';
 
 export type BooleanInt = 0 | 1 | false | true;
 
@@ -51,8 +61,21 @@ export interface DivUrlVariable {
     value: string;
 }
 
+export interface DivDictVariable {
+    type: 'dict';
+    name: string;
+    value: object;
+}
+
+export interface DivArrayVariable {
+    type: 'array';
+    name: string;
+    value: unknown[];
+}
+
 export type DivVariable = DivStrVariable | DivIntVariable | DivNumberVariable |
-    DivBooleanVariable | DivColorVariable | DivUrlVariable;
+    DivBooleanVariable | DivColorVariable | DivUrlVariable | DivDictVariable |
+    DivArrayVariable;
 
 export interface VariableTrigger {
     mode?: 'on_condition' | 'on_variable';
@@ -218,9 +241,53 @@ export interface ActionAnimatorStop {
     animator_id: string;
 }
 
+export interface ActionShowTooltip {
+    type: 'show_tooltip';
+    id: string;
+    multiple: boolean;
+}
+
+export interface ActionHideTooltip {
+    type: 'hide_tooltip';
+    id: string;
+}
+
+export interface ActionTimer {
+    type: 'timer';
+    id: string;
+    action: 'start' | 'stop' | 'pause' | 'resume' | 'cancel' | 'reset';
+}
+
+export interface ActionDownload {
+    type: 'download';
+    url: string;
+    on_fail_actions?: Action[];
+    on_success_actions?: Action[];
+}
+
+export interface ActionVideo {
+    type: 'video';
+    id: string;
+    action: 'start' | 'pause';
+}
+
+export interface ActionStore {
+    type: 'set_stored_value';
+    name: string;
+    value: TypedValue;
+    lifetime: number;
+}
+
+export interface ActionSetState {
+    type: 'set_state';
+    state_id: string;
+    // temporary
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
-    ActionAnimatorStart | ActionAnimatorStop;
+    ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
+    ActionVideo | ActionStore | ActionSetState;
 
 export interface ActionBase {
     log_id: string;

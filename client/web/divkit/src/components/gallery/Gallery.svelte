@@ -15,6 +15,7 @@
     import type { Size } from '../../types/sizes';
     import type { Style } from '../../types/general';
     import type { ComponentContext } from '../../types/componentContext';
+    import type { Variable } from '../../expressions/variable';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
@@ -29,6 +30,8 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { constStore } from '../../utils/constStore';
+    import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
 
@@ -38,6 +41,12 @@
     interface ChildInfo {
         size?: MaybeMissing<Size>;
         visibility?: string;
+    }
+
+    interface Item {
+        index: number;
+        hasGapBefore: boolean;
+        componentContext: ComponentContext;
     }
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -65,6 +74,13 @@
     let crossGridGap: string | undefined;
     let crossSpacing;
     let padding = '';
+    let lastPaddingSize: {
+        width: string;
+        height: string;
+        'margin-left'?: string;
+        'margin-right'?: string;
+        'margin-bottom'?: string;
+    } | undefined;
     let templateSizes: string[] = [];
     let childStore: Readable<ChildInfo[]>;
     let scrollerStyle: Style = {};
@@ -87,6 +103,10 @@
     }
 
     $: jsonItems = Array.isArray(componentContext.json.items) && componentContext.json.items || [];
+    // eslint-disable-next-line no-nested-ternary
+    $: jsonItemBuilderData = typeof componentContext.json.item_builder?.data === 'string' ? componentContext.getDerivedFromVars(
+        componentContext.json.item_builder?.data, undefined, true
+    ) : (componentContext.json.item_builder?.data ? constStore(componentContext.json.item_builder.data) : undefined);
 
     $: jsonColumnCount = componentContext.getDerivedFromVars(componentContext.json.column_count);
     $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
@@ -113,13 +133,35 @@
     let items: ComponentContext[] = [];
 
     $: {
+        let newItems: {
+            div: MaybeMissing<DivBaseData>;
+            id?: string | undefined;
+            vars?: Map<string, Variable> | undefined;
+        }[] = [];
+        if (
+            componentContext.json.item_builder &&
+            Array.isArray($jsonItemBuilderData) &&
+            Array.isArray(componentContext.json.item_builder.prototypes)
+        ) {
+            const builder = componentContext.json.item_builder;
+            newItems = getItemsFromItemBuilder($jsonItemBuilderData, rootCtx, componentContext, builder);
+        } else {
+            newItems = (Array.isArray(jsonItems) && jsonItems || []).map(it => {
+                return {
+                    div: it
+                };
+            });
+        }
+
         items.forEach(context => {
             context.destroy();
         });
 
-        items = jsonItems.map((item, index) => {
-            return componentContext.produceChildContext(item, {
-                path: index
+        items = newItems.map((item, index) => {
+            return componentContext.produceChildContext(item.div, {
+                path: index,
+                variables: item.vars,
+                id: item.id
             });
         });
     }
@@ -142,15 +184,23 @@
         columns = correctPositiveNumber($jsonColumnCount, columns);
     }
 
-    function rebuildItemsGrid(items: ComponentContext[], columns: number): ComponentContext[][] {
+    function rebuildItemsGrid(items: ComponentContext[], info: ChildInfo[], columns: number): Item[][] {
         let column = 0;
-        let res: ComponentContext[][] = [];
+        let res: Item[][] = [];
+        let wasFirstVisibleItem = [];
 
         for (let i = 0; i < items.length; ++i) {
             if (!res[column]) {
                 res[column] = [];
             }
-            res[column].push(items[i]);
+            res[column].push({
+                index: i,
+                hasGapBefore: wasFirstVisibleItem[column] && info[i].visibility !== 'gone',
+                componentContext: items[i]
+            });
+            if (!wasFirstVisibleItem[column] && info[i].visibility !== 'gone') {
+                wasFirstVisibleItem[column] = true;
+            }
             if (++column >= columns) {
                 column = 0;
             }
@@ -158,7 +208,6 @@
 
         return res;
     }
-    $: itemsGrid = rebuildItemsGrid(items, columns);
 
     $: {
         orientation = correctGeneralOrientation($jsonOrientation, orientation);
@@ -180,6 +229,17 @@
 
     $: {
         padding = correctEdgeInserts($jsonPaddings, $direction, padding);
+        const size = orientation === 'horizontal' ?
+            ($jsonPaddings?.end ?? $jsonPaddings?.[($direction === 'ltr' ? 'right' : 'left')] ?? 0) :
+            ($jsonPaddings?.bottom ?? 0);
+        const calcedSize = pxToEm(size);
+        lastPaddingSize = {
+            width: orientation === 'horizontal' ? calcedSize : '1px',
+            height: orientation === 'horizontal' ? '1px' : calcedSize,
+            'margin-right': orientation === 'horizontal' && $direction === 'ltr' ? '-' + calcedSize : undefined,
+            'margin-left': orientation === 'horizontal' && $direction === 'rtl' ? '-' + calcedSize : undefined,
+            'margin-bottom': orientation === 'vertical' ? '-' + calcedSize : undefined,
+        };
     }
 
     $: gridTemplate = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
@@ -197,13 +257,16 @@
         // Create a new array every time so it is not equal to the previous one
         childStore = derived(children, val => [...val]);
     }
+
+    $: itemsGrid = rebuildItemsGrid(items, $childStore, columns);
+
     $: {
         templateSizes = [];
         if (columns > 1) {
             // TODO: think about match_parent in this task DIVKIT-307
             templateSizes.push('auto');
         } else {
-            $childStore.forEach(childInfo => {
+            $childStore.forEach((childInfo, index) => {
                 if (childInfo.visibility === 'gone') {
                     return;
                 }
@@ -213,7 +276,12 @@
                 } else {
                     templateSizes.push('max-content');
                 }
+
+                if (index + 1 < $childStore.length) {
+                    templateSizes.push('auto');
+                }
             });
+            templateSizes.push('auto');
         }
     }
 
@@ -250,7 +318,6 @@
     };
 
     $: columnStyle = {
-        'grid-gap': gridGap,
         [gridTemplate]: joinTemplateSizes(templateSizes)
     };
 
@@ -302,7 +369,7 @@
         let res: HTMLElement[] = [];
         let maxLen = galleryItemsWrappers[0].children.length;
 
-        for (let j = 0; j < maxLen; ++j) {
+        for (let j = 0; j < maxLen; j += 2) {
             for (let i = 0; i < columns; ++i) {
                 const elem = galleryItemsWrappers[i].children[j] as HTMLElement;
                 if (elem) {
@@ -549,11 +616,21 @@
                     bind:this={galleryItemsWrappers[rowIndex]}
                 >
                     {#each itemsRow as item}
+                        {#if item.hasGapBefore}
+                            <div
+                                class={css.gallery__gap}
+                                style:width={orientation === 'horizontal' ? gridGap : undefined}
+                                style:height={orientation !== 'horizontal' ? gridGap : undefined}
+                            ></div>
+                        {/if}
+
                         <Unknown
-                            componentContext={item}
+                            componentContext={item.componentContext}
                             layoutParams={childLayoutParams}
                         />
                     {/each}
+
+                    <div style={makeStyle(lastPaddingSize)}></div>
                 </div>
             {/each}
         </div>

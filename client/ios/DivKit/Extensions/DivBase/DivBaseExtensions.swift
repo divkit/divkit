@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import LayoutKit
 import VGSL
 
@@ -192,7 +191,7 @@ extension DivBase {
     let expressionResolver = context.expressionResolver
     return BlockAlignment2D(
       horizontal: resolveAlignmentHorizontal(expressionResolver)?
-        .makeContentAlignment(uiLayoutDirection: context.layoutDirection)
+        .makeContentAlignment(layoutDirection: context.layoutDirection)
         ?? defaultAlignment.horizontal,
       vertical: resolveAlignmentVertical(expressionResolver)?.alignment
         ?? defaultAlignment.vertical
@@ -323,8 +322,14 @@ extension DivBase {
   }
 
   func resolveContentWidthTrait(_ context: DivBlockModelingContext) -> LayoutTrait {
-    resolveWidthTrait(context)
-      .trim(paddings.resolve(context).horizontalInsets)
+    resolveContentWidthTrait(context, paddings: paddings.resolve(context))
+  }
+
+  func resolveContentWidthTrait(
+    _ context: DivBlockModelingContext,
+    paddings: EdgeInsets
+  ) -> LayoutTrait {
+    resolveWidthTrait(context).trim(paddings.horizontalInsets)
   }
 
   func getTransformedHeight(_ context: DivBlockModelingContext) -> DivSize {
@@ -336,8 +341,14 @@ extension DivBase {
   }
 
   func resolveContentHeightTrait(_ context: DivBlockModelingContext) -> LayoutTrait {
-    resolveHeightTrait(context)
-      .trim(paddings.resolve(context).verticalInsets)
+    resolveContentHeightTrait(context, paddings: paddings.resolve(context))
+  }
+
+  func resolveContentHeightTrait(
+    _ context: DivBlockModelingContext,
+    paddings: EdgeInsets
+  ) -> LayoutTrait {
+    resolveHeightTrait(context).trim(paddings.verticalInsets)
   }
 }
 
@@ -358,6 +369,25 @@ extension LayoutTrait {
   }
 }
 
+extension DivAlignmentHorizontal {
+  fileprivate func makeContentAlignment(
+    layoutDirection: UserInterfaceLayoutDirection
+  ) -> Alignment {
+    switch self {
+    case .left:
+      .leading
+    case .right:
+      .trailing
+    case .start:
+      layoutDirection == .leftToRight ? .leading : .trailing
+    case .center:
+      .center
+    case .end:
+      layoutDirection == .rightToLeft ? .leading : .trailing
+    }
+  }
+}
+
 extension DivBorder {
   fileprivate func resolveBorder(_ expressionResolver: ExpressionResolver) -> BlockBorder? {
     guard let stroke else {
@@ -374,15 +404,20 @@ extension DivBorder {
     guard resolveHasShadow(expressionResolver) else {
       return nil
     }
-
-    return BlockShadow(
-      cornerRadii: resolveCornerRadii(expressionResolver),
-      blurRadius: CGFloat(shadow?.resolveBlur(expressionResolver) ?? 2),
-      offset: shadow?.offset.resolve(expressionResolver) ?? .zero,
-      opacity: (shadow?.resolveAlpha(expressionResolver)).map(Float.init)
-        ?? BlockShadow.Defaults.opacity,
-      color: shadow?.resolveColor(expressionResolver) ?? BlockShadow.Defaults.color
-    )
+    
+    let cornerRadii = resolveCornerRadii(expressionResolver)
+    
+    guard let shadow else {
+      return BlockShadow(
+        cornerRadii: cornerRadii,
+        blurRadius: 2,
+        offset: .zero,
+        opacity: BlockShadow.Defaults.opacity,
+        color: BlockShadow.Defaults.color
+      )
+    }
+    
+    return shadow.resolve(expressionResolver, cornerRadii: cornerRadii)
   }
 
   fileprivate func resolveCornerRadii(_ expressionResolver: ExpressionResolver) -> CornerRadii {

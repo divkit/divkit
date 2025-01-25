@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionShowTooltip {
+public final class DivActionShowTooltip: Sendable {
   public static let type: String = "show_tooltip"
   public let id: Expression<String>
   public let multiple: Expression<Bool>?

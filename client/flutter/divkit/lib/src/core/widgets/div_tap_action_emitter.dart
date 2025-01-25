@@ -41,70 +41,116 @@ class DivTapActionModel with EquatableMixin {
       ];
 }
 
-extension DivTapActionDataBinder on DivTapActionData {
-  DivTapActionModel bind(BuildContext context) {
-    final animationName = actionAnimation?.name.value;
+extension DivTapActionDataConverter on DivTapActionData {
+  DivTapActionModel resolve(BuildContext context) {
+    final divContext = read<DivContext>(context)!;
+    final variables = divContext.variables;
+
+    final animationName = actionAnimation?.name.resolve(variables);
     return DivTapActionModel(
-      actions: actions.map((e) => e.convert()).toList(),
-      longtapActions: longtapActions.map((e) => e.convert()).toList(),
+      actions: actions.map((e) => e.resolve(variables)).toList(),
+      longtapActions: longtapActions.map((e) => e.resolve(variables)).toList(),
       enabled: actions.isNotEmpty || longtapActions.isNotEmpty,
       enabledAnimation: !(animationName == DivAnimationName.noAnimation),
     );
   }
 }
 
-/// A wrapper for sending actions.
-class DivTapActionEmitter extends StatelessWidget {
+class DivTapActionEmitter extends StatefulWidget {
   final DivTapActionData? data;
-
   final Widget child;
 
   const DivTapActionEmitter({
-    super.key,
     this.data,
+    super.key,
     required this.child,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final data = this.data;
+  State<DivTapActionEmitter> createState() => _DivTapActionEmitterState();
+}
 
-    if (data != null) {
-      final divContext = watch<DivContext>(context)!;
-      final model = data.bind(context);
+/// A wrapper for sending actions.
+class _DivTapActionEmitterState extends State<DivTapActionEmitter> {
+  DivTapActionModel? value;
+  Stream<DivTapActionModel?>? stream;
 
-      return TapBuilder(
-        enabled: model.enabled,
-        onTap: () async {
-          for (final action in model.actions) {
-            await action.execute(divContext);
+  @override
+  void initState() {
+    super.initState();
+    value = widget.data?.resolve(context);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    stream ??= watch<DivContext>(context)!.variableManager.watch(
+          (values) => widget.data?.resolve(context),
+        );
+  }
+
+  @override
+  void didUpdateWidget(covariant DivTapActionEmitter oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.data != oldWidget.data) {
+      value = widget.data?.resolve(context);
+      stream = watch<DivContext>(context)!.variableManager.watch(
+            (values) => widget.data?.resolve(context),
+          );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => StreamBuilder<DivTapActionModel?>(
+        initialData: value,
+        stream: stream,
+        builder: (context, snapshot) {
+          final divContext = watch<DivContext>(context)!;
+          final model = snapshot.data;
+
+          if (model == null) {
+            return widget.child;
           }
-        },
-        onLongPress: () async {
-          for (final action in model.longtapActions) {
-            await action.execute(divContext);
-          }
-        },
-        builder: (context, pressed, hovered, child) {
-          if (!model.enabledAnimation) {
-            return child;
-          }
-          double opacity = 1.0;
-          if (pressed) {
-            opacity = 0.6;
-          } else if (hovered) {
-            opacity = 0.8;
-          }
-          return AnimatedOpacity(
-            opacity: opacity,
-            duration: const Duration(milliseconds: 100),
-            child: child,
+
+          return TapBuilder(
+            enabled: model.enabled,
+            onTap: () async {
+              for (final action in model.actions) {
+                await action.execute(divContext);
+              }
+            },
+            onLongPress: () async {
+              for (final action in model.longtapActions) {
+                await action.execute(divContext);
+              }
+            },
+            builder: (context, pressed, hovered, child) {
+              if (!model.enabledAnimation) {
+                return child;
+              }
+              double opacity = 1.0;
+              if (pressed) {
+                opacity = 0.6;
+              } else if (hovered) {
+                opacity = 0.8;
+              }
+              return AnimatedOpacity(
+                opacity: opacity,
+                duration: const Duration(milliseconds: 100),
+                child: child,
+              );
+            },
+            child: widget.child,
           );
         },
-        child: child,
       );
-    }
 
-    return child;
+  @override
+  void dispose() {
+    value = null;
+    stream = null;
+    super.dispose();
   }
 }

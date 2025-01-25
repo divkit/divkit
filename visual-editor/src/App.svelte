@@ -6,7 +6,7 @@
     import { LANGUAGE_CTX } from './lib/ctx/languageContext';
     import translations from './auto/lang.json';
     import ContextMenu from './lib/components/ContextMenu.svelte';
-    import type { CardLocale, EditorInstance, EditorOptions, GetTranslationKey, GetTranslationSuggest, Layout, Locale } from './lib';
+    import type { CardLocale, EditorInstance, EditorOptions, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, Layout, Locale } from './lib';
     import LayoutColumn from './lib/components/LayoutColumn.svelte';
     import { APP_CTX, type AppContext, type ContextMenuApi, type RendererApi, type ShowErrors } from './lib/ctx/appContext';
     import { editorFabric as editorFabricInternal } from './lib/data/editorWrapper';
@@ -55,6 +55,8 @@
     export let errorFileLimit = Infinity;
 
     export let rootConfigurable = false;
+
+    export let customFontFaces: FontFaceDesc[] = [];
 
     export let uploadFile: (file: File) => Promise<string> = loadFileAsBase64;
 
@@ -174,6 +176,7 @@
         warnFileLimit,
         errorFileLimit,
         rootConfigurable,
+        customFontFaces,
 
         rendererApi() {
             return rendererApi;

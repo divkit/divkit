@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { clamp } from '../../src/utils/clamp';
 
 describe('clamp', () => {

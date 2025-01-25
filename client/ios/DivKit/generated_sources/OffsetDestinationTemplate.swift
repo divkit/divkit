@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class OffsetDestinationTemplate: TemplateValue {
+public final class OffsetDestinationTemplate: TemplateValue, Sendable {
   public static let type: String = "offset"
   public let parent: String?
   public let value: Field<Expression<Int>>? // constraint: number >= 0

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivInputFilterTemplate: TemplateValue {
+public enum DivInputFilterTemplate: TemplateValue, Sendable {
   case divInputFilterRegexTemplate(DivInputFilterRegexTemplate)
   case divInputFilterExpressionTemplate(DivInputFilterExpressionTemplate)
 

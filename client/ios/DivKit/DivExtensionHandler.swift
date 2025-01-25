@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 
 /// The `DivExtensionHandler` protocol enables you to extend the functionality of an existing block

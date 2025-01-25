@@ -9,6 +9,7 @@ import indicatorIcon from '../../assets/components/indicator.svg?url';
 import separatorIcon from '../../assets/components/separator.svg?url';
 import galleryHorizontalIcon from '../../assets/components/gallery-horizontal.svg?url';
 import galleryVerticalIcon from '../../assets/components/gallery-vertical.svg?url';
+import switchIcon from '../../assets/components/switch.svg?url';
 import unknownIcon from '../../assets/components/unknown.svg?url';
 
 const MAP = {
@@ -18,7 +19,8 @@ const MAP = {
     gif: gifIcon,
     image: imageIcon,
     indicator: indicatorIcon,
-    separator: separatorIcon
+    separator: separatorIcon,
+    switch: switchIcon
 };
 
 const MAP_BY_ORIENTATION = {

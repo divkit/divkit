@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCircleShape {
+public final class DivCircleShape: Sendable {
   public static let type: String = "circle"
   public let backgroundColor: Expression<Color>?
   public let radius: DivFixedSize // default value: DivFixedSize(value: .value(10))

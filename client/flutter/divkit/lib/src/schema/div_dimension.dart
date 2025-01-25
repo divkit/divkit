@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_size_unit.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element dimension value.
-class DivDimension extends Resolvable with EquatableMixin {
+class DivDimension with EquatableMixin {
   const DivDimension({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -40,24 +40,24 @@ class DivDimension extends Resolvable with EquatableMixin {
     }
     try {
       return DivDimension(
-        unit: safeParseStrEnumExpr(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        )!,
-        value: safeParseDoubleExpr(
-          json['value'],
-        )!,
+        unit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.dp,
+          ),
+          name: 'unit',
+        ),
+        value: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivDimension resolve(DivVariableContext context) {
-    unit.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

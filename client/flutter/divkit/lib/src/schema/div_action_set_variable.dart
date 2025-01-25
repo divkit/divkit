@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_typed_value.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Assigns a value to the variable
-class DivActionSetVariable extends Resolvable with EquatableMixin {
+class DivActionSetVariable with EquatableMixin {
   const DivActionSetVariable({
     required this.value,
     required this.variableName,
@@ -38,22 +38,23 @@ class DivActionSetVariable extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionSetVariable(
-        value: safeParseObj(
-          DivTypedValue.fromJson(json['value']),
-        )!,
-        variableName: safeParseStrExpr(
-          json['variable_name']?.toString(),
-        )!,
+        value: reqProp<DivTypedValue>(
+          safeParseObject(
+            json['value'],
+            parse: DivTypedValue.fromJson,
+          ),
+          name: 'value',
+        ),
+        variableName: reqVProp<String>(
+          safeParseStrExpr(
+            json['variable_name'],
+          ),
+          name: 'variable_name',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionSetVariable resolve(DivVariableContext context) {
-    value.resolve(context);
-    variableName.resolve(context);
-    return this;
   }
 }

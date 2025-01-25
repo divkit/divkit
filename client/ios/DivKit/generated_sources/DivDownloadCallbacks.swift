@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDownloadCallbacks {
+public final class DivDownloadCallbacks: Sendable {
   public let onFailActions: [DivAction]?
   public let onSuccessActions: [DivAction]?
 

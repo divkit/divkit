@@ -2,7 +2,8 @@
   "description": "Intersected text ranges with top_offset (top_offset should work only once)",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "snapshot_test_card",

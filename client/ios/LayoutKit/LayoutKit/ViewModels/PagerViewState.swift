@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import VGSL
 
 public struct PagerViewState: ElementState, Equatable {

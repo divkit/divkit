@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { simpleCheckInput } from '../../src/utils/simpleCheckInput';
 
 describe('simpleCheckInput', () => {

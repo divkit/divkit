@@ -163,6 +163,10 @@
     let longTapActions: MaybeMissing<Action>[] = [];
     let focusActions: MaybeMissing<Action>[] = [];
     let blurActions: MaybeMissing<Action>[] = [];
+    let pressStartActions: MaybeMissing<Action>[] = [];
+    let pressEndActions: MaybeMissing<Action>[] = [];
+    let hoverStartActions: MaybeMissing<Action>[] = [];
+    let hoverEndActions: MaybeMissing<Action>[] = [];
 
     let actionAnimationList: MaybeMissing<AnyAnimation>[] = [];
     let actionAnimationTransition = '';
@@ -208,7 +212,7 @@
             [] :
             (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
         hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.id);
-        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.id);
+        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1);
 
         if (currentNode) {
             useAction(currentNode);
@@ -254,6 +258,10 @@
     $: jsonActions = componentContext.getDerivedFromVars(componentContext.json.actions);
     $: jsonDoubleTapActions = componentContext.getDerivedFromVars(componentContext.json.doubletap_actions);
     $: jsonLongTapActions = componentContext.getDerivedFromVars(componentContext.json.longtap_actions);
+    $: jsonPressStartActions = componentContext.getDerivedFromVars(componentContext.json.press_start_actions);
+    $: jsonPressEndActions = componentContext.getDerivedFromVars(componentContext.json.press_end_actions);
+    $: jsonHoverStartActions = componentContext.getDerivedFromVars(componentContext.json.hover_start_actions);
+    $: jsonHoverEndActions = componentContext.getDerivedFromVars(componentContext.json.hover_end_actions);
     $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
     $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
     $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
@@ -325,15 +333,16 @@
             if (border.corners_radius && typeof border.corners_radius === 'object') {
                 cornersRadius = correctBorderRadiusObject(border.corners_radius, cornersRadius);
                 newBorderStyle['border-radius'] = borderRadius(cornersRadius);
+                const biasedRadius: CornersRadius = {};
                 ([
                     'top-left',
                     'top-right',
                     'bottom-right',
                     'bottom-left'
                 ] as const).forEach(corner => {
-                    cornersRadius[corner] = (cornersRadius[corner] || 0) + 1;
+                    biasedRadius[corner] = (cornersRadius[corner] || 0) + 1;
                 });
-                newBorderElemStyle['--divkit-border-radius'] = borderRadius(cornersRadius);
+                newBorderElemStyle['--divkit-border-radius'] = borderRadius(biasedRadius);
             } else if (border.corner_radius) {
                 cornerRadius = correctNonNegativeNumber(border.corner_radius, cornerRadius);
                 cornersRadius = {
@@ -654,6 +663,10 @@
         let newLongTapActions = $jsonLongTapActions || [];
         let newFocusActions = $jsonFocus?.on_focus || [];
         let newBlurActions = $jsonFocus?.on_blur || [];
+        let newPressStartActions = $jsonPressStartActions || [];
+        let newPressEndActions = $jsonPressEndActions || [];
+        let newHoverStartActions = $jsonHoverStartActions || [];
+        let newHoverEndActions = $jsonHoverEndActions || [];
 
         if (componentContext.fakeElement) {
             newActions = [];
@@ -682,12 +695,40 @@
                 newBlurActions = [];
                 componentContext.logError(wrapError(new Error('BlurActions should be array')));
             }
+            if (!Array.isArray(newPressStartActions)) {
+                newPressStartActions = [];
+                componentContext.logError(wrapError(new Error('PressStartActions should be array')));
+            }
+            if (!Array.isArray(newPressEndActions)) {
+                newPressEndActions = [];
+                componentContext.logError(wrapError(new Error('PressEndActions should be array')));
+            }
+            if (!Array.isArray(newHoverStartActions)) {
+                newHoverStartActions = [];
+                componentContext.logError(wrapError(new Error('HoverStartActions should be array')));
+            }
+            if (!Array.isArray(newHoverEndActions)) {
+                newHoverEndActions = [];
+                componentContext.logError(wrapError(new Error('HoverEndActions should be array')));
+            }
         }
 
-        if ((newActions.length || newDoubleTapActions.length || newLongTapActions.length) && customActions) {
+        if ((
+            newActions.length ||
+            newDoubleTapActions.length ||
+            newLongTapActions.length ||
+            pressStartActions.length ||
+            pressEndActions.length ||
+            hoverStartActions.length ||
+            hoverEndActions.length
+        ) && customActions) {
             newActions = [];
             newDoubleTapActions = [];
             newLongTapActions = [];
+            pressStartActions = [];
+            pressEndActions = [];
+            hoverStartActions = [];
+            hoverEndActions = [];
             componentContext.logError(wrapError(new Error(`Cannot use action on component "${customActions}"`)));
         }
 
@@ -697,6 +738,10 @@
         longTapActions = newLongTapActions.filter(filterEnabledActions);
         focusActions = newFocusActions.filter(filterEnabledActions);
         blurActions = newBlurActions.filter(filterEnabledActions);
+        pressStartActions = newPressStartActions.filter(filterEnabledActions);
+        pressEndActions = newPressEndActions.filter(filterEnabledActions);
+        hoverStartActions = newHoverStartActions.filter(filterEnabledActions);
+        hoverEndActions = newHoverEndActions.filter(filterEnabledActions);
     }
 
     $: {
@@ -1077,9 +1122,14 @@
         {actions}
         {doubleTapActions}
         {longTapActions}
+        {pressStartActions}
+        {pressEndActions}
+        {hoverStartActions}
+        {hoverEndActions}
         {attrs}
         {hasInnerFocusable}
         isNativeActionAnimation={!actionAnimationList.length || hasNativeAnimation(actionAnimationList)}
+        customAccessibility={$jsonAccessibility}
         on:focus={focusHandler}
         on:blur={blurHandler}
     >

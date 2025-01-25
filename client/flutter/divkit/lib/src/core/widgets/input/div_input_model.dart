@@ -52,8 +52,8 @@ class DivInputModel with EquatableMixin {
       ];
 }
 
-extension DivInputBinder on DivInput {
-  DivInputModel bind(
+extension DivInputConverter on DivInput {
+  DivInputModel resolve(
     BuildContext context,
     TextEditingController controller,
   ) {
@@ -61,12 +61,12 @@ extension DivInputBinder on DivInput {
 
     final viewScale = divContext.scale.view;
     final textScale = divContext.scale.text;
-    final variables = divContext.variableManager;
+    final variables = divContext.variables;
 
-    final styleUnit = fontSizeUnit.value.asPx;
-    final lineHeight = this.lineHeight?.value;
-    final fontFamily = this.fontFamily?.value;
-    final fontSize = this.fontSize.value.toDouble() * textScale;
+    final styleUnit = fontSizeUnit.resolve(variables).asPx;
+    final lineHeight = this.lineHeight?.resolve(variables);
+    final fontFamily = this.fontFamily?.resolve(variables);
+    final fontSize = this.fontSize.resolve(variables).toDouble() * textScale;
 
     final fontAsset = divContext.fontProvider.resolve(fontFamily);
 
@@ -75,21 +75,21 @@ extension DivInputBinder on DivInput {
       fontFamily: fontAsset.fontFamily,
       fontFamilyFallback: fontAsset.fontFamilyFallback,
       fontSize: fontSize * styleUnit,
-      color: textColor.value,
+      color: textColor.resolve(variables),
       height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
-      fontWeight: fontWeight.value.convert(),
+      fontWeight: fontWeight.resolve(variables).convert(),
     );
 
     final hintStyle = style.copyWith(
-      color: hintColor.value,
+      color: hintColor.resolve(variables),
     );
 
-    final keyboardType = this.keyboardType.value;
-    if (variables.context.current[textVariable] != controller.text) {
-      controller.text = variables.context.current[textVariable] ?? '';
+    final keyboardType = this.keyboardType.resolve(variables);
+    if (variables.current[textVariable] != controller.text) {
+      controller.text = variables.current[textVariable] ?? '';
     }
 
-    final newFocusNodeId = focus?.nextFocusIds?.forward?.value;
+    final newFocusNodeId = focus?.nextFocusIds?.forward?.resolve(variables);
 
     final alignment = DivTextAlignmentConverter(
       textAlignmentVertical,
@@ -101,8 +101,8 @@ extension DivInputBinder on DivInput {
     return DivInputModel(
       textStyle: style,
       hintStyle: hintStyle,
-      hintText: hintText?.value,
-      maxLines: obscureText ? 1 : maxVisibleLines?.value,
+      hintText: hintText?.resolve(variables),
+      maxLines: obscureText ? 1 : maxVisibleLines?.resolve(variables),
       obscureText: obscureText,
       keyboardType: keyboardType.map(
         singleLineText: () => TextInputType.text,
@@ -116,10 +116,12 @@ extension DivInputBinder on DivInput {
       onForwardFocus: newFocusNodeId != null
           ? () => _onForwardFocus(divContext.buildContext, newFocusNodeId)
           : null,
-      onBlurActions: focus?.onBlur?.map((e) => e.convert()).toList() ?? [],
-      onFocusActions: focus?.onFocus?.map((e) => e.convert()).toList() ?? [],
-      textAlign: alignment.convertHorizontal(),
-      textAlignVertical: alignment.convertVertical(),
+      onBlurActions:
+          focus?.onBlur?.map((e) => e.resolve(variables)).toList() ?? [],
+      onFocusActions:
+          focus?.onFocus?.map((e) => e.resolve(variables)).toList() ?? [],
+      textAlign: alignment.resolveHorizontal(variables),
+      textAlignVertical: alignment.resolveVertical(variables),
     );
   }
 

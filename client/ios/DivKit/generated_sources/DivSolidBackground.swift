@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSolidBackground {
+public final class DivSolidBackground: Sendable {
   public static let type: String = "solid"
   public let color: Expression<Color>
 

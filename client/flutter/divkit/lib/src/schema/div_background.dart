@@ -5,11 +5,10 @@ import 'package:divkit/src/schema/div_linear_gradient.dart';
 import 'package:divkit/src/schema/div_nine_patch_background.dart';
 import 'package:divkit/src/schema/div_radial_gradient.dart';
 import 'package:divkit/src/schema/div_solid_background.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivBackground extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivBackground with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -162,14 +161,8 @@ class DivBackground extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivBackground resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

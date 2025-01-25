@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSelectTemplate: TemplateValue {
-  public final class OptionTemplate: TemplateValue {
+public final class DivSelectTemplate: TemplateValue, Sendable {
+  public final class OptionTemplate: TemplateValue, Sendable {
     public let text: Field<Expression<String>>?
     public let value: Field<Expression<String>>?
 

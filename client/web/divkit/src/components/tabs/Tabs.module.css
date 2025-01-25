@@ -1,3 +1,5 @@
+@value outer from "../Cls.module.css";
+
 .tabs {
     display: flex;
     flex-direction: column;
@@ -83,6 +85,11 @@
 
 .tabs__panel {
     display: none;
+    pointer-events: auto;
+}
+
+.tabs__panel .outer {
+    pointer-events: none;
 }
 
 .tabs__panel_visible {

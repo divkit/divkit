@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
-enum DivAlignmentVertical implements Resolvable {
+enum DivAlignmentVertical {
   top('top'),
   center('center'),
   bottom('bottom'),
@@ -74,11 +74,13 @@ enum DivAlignmentVertical implements Resolvable {
           return DivAlignmentVertical.baseline;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAlignmentVertical: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivAlignmentVertical resolve(DivVariableContext context) => this;
 }

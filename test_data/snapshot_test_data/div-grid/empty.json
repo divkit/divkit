@@ -1,7 +1,8 @@
 {
-  "description": "grid without items",
+  "description": "Grid without items",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "card": {

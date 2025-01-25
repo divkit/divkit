@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { getUrlSchema, isBuiltinSchema } from '../../src/utils/url';
 
 describe('getUrlSchema', () => {

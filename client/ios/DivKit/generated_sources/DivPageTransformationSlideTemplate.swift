@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPageTransformationSlideTemplate: TemplateValue {
+public final class DivPageTransformationSlideTemplate: TemplateValue, Sendable {
   public static let type: String = "slide"
   public let parent: String?
   public let interpolator: Field<Expression<DivAnimationInterpolator>>? // default value: ease_in_out

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivLayoutProvider {
+public final class DivLayoutProvider: Sendable {
   public let heightVariableName: String?
   public let widthVariableName: String?
 

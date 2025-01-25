@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class ColorValue extends Resolvable with EquatableMixin {
+class ColorValue with EquatableMixin {
   const ColorValue({
     required this.value,
   });
@@ -31,18 +31,16 @@ class ColorValue extends Resolvable with EquatableMixin {
     }
     try {
       return ColorValue(
-        value: safeParseColorExpr(
-          json['value'],
-        )!,
+        value: reqVProp<Color>(
+          safeParseColorExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  ColorValue resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

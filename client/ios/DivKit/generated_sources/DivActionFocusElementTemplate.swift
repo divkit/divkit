@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionFocusElementTemplate: TemplateValue {
+public final class DivActionFocusElementTemplate: TemplateValue, Sendable {
   public static let type: String = "focus_element"
   public let parent: String?
   public let elementId: Field<Expression<String>>?

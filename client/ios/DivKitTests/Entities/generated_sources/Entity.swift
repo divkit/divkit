@@ -8,7 +8,7 @@ import VGSL
 import enum DivKit.Expression
 
 @frozen
-public enum Entity {
+public enum Entity: Sendable {
   case entityWithArray(EntityWithArray)
   case entityWithArrayOfEnums(EntityWithArrayOfEnums)
   case entityWithArrayOfExpressions(EntityWithArrayOfExpressions)

@@ -1,10 +1,7 @@
 package com.yandex.div.internal.parser;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import kotlin.jvm.functions.Function1;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class JsonParsers {
 
@@ -19,35 +16,6 @@ public class JsonParsers {
 
     private JsonParsers() {
         /* do not initialize */
-    }
-
-    @Nullable
-    static JSONObject nullable(@Nullable JSONObject json) {
-        if (json == null || json == JSONObject.NULL) {
-            return null;
-        }
-
-        return json;
-    }
-
-    @Nullable
-    static <T> T optSafe(JSONObject json, String key) {
-        Object value = json.opt(key);
-        if (value == null || value == JSONObject.NULL) {
-            return null;
-        }
-
-        return (T) value;
-    }
-
-    @Nullable
-    static <T> T optSafe(JSONArray json, int index) {
-        Object value = json.opt(index);
-        if (value == null || value == JSONObject.NULL) {
-            return null;
-        }
-
-        return (T) value;
     }
 
     @NonNull

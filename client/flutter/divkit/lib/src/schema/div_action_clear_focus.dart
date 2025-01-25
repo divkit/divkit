@@ -1,10 +1,9 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 /// Removes focus from an element.
-class DivActionClearFocus extends Resolvable with EquatableMixin {
+class DivActionClearFocus with EquatableMixin {
   const DivActionClearFocus();
 
   static const type = "clear_focus";
@@ -22,7 +21,4 @@ class DivActionClearFocus extends Resolvable with EquatableMixin {
     }
     return const DivActionClearFocus();
   }
-
-  @override
-  DivActionClearFocus resolve(DivVariableContext context) => this;
 }

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivPivotTemplate: TemplateValue {
+public enum DivPivotTemplate: TemplateValue, Sendable {
   case divPivotFixedTemplate(DivPivotFixedTemplate)
   case divPivotPercentageTemplate(DivPivotPercentageTemplate)
 

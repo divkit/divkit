@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 final class DivTimerController {
@@ -55,6 +54,10 @@ final class DivTimerController {
     self.functionsStorage = functionsStorage
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter
+  }
+
+  deinit {
+    cancel()
   }
 
   func start() {

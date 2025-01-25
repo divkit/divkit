@@ -11,9 +11,9 @@
         }
       ],
       "preload_required": true,
-      "repeatable": false,
+      "repeatable": true,
       "autostart": false,
-      "muted": false,
+      "muted": true,
       "player_settings_payload": {
         "first_frame_hash": "HBgKAwRHj0ipl3t4WLBYeAg=",
         "first_frame_url": "https://avatars.mds.yandex.net/get-vh/6549758/2a00000186ffa4dca3d56545e0bc18edd031/orig",

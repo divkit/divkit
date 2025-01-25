@@ -1,7 +1,6 @@
 import CoreGraphics
 import Foundation
 import UIKit
-
 import VGSL
 
 extension DecoratingBlock {
@@ -48,7 +47,8 @@ extension DecoratingBlock {
       visibilityParams: visibilityParams,
       tooltips: tooltips,
       accessibility: accessibilityElement,
-      reuseId: reuseId
+      reuseId: reuseId,
+      path: path
     )
     view.configure(
       model: model,
@@ -122,6 +122,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let tooltips: [BlockTooltip]
     let accessibility: AccessibilityElement?
     let reuseId: String?
+    let path: UIElementPath?
 
     var hasResponsiveUI: Bool {
       actions.hasPayload || longTapActions.hasPayload || doubleTapActions.hasPayload
@@ -146,6 +147,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private(set) var childView: BlockView?
 
   private var contextMenuDelegate: NSObjectProtocol?
+
+  private var animationStartTime: Date?
+  private let animationMinimalDuration: TimeInterval = 0.125
 
   private var visibilityActionPerformers: VisibilityActionPerformers?
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
@@ -258,6 +262,20 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     longPressRecognizer?.isEnabled = model.shouldHandleLongTap
   }
 
+  private func checkTouchableArea() {
+    guard tapRecognizer != nil || doubleTapRecognizer != nil || longPressRecognizer != nil else {
+      return
+    }
+    guard !bounds.size.isApproximatelyEqualTo(.zero) else { return }
+    if bounds.width < 44 || bounds.height < 44 {
+      renderingDelegate?.reportRenderingError(
+        message: "Touchable view is too small: \(bounds.size), \(model.child)",
+        isWarning: true,
+        path: model.path ?? UIElementPath("")
+      )
+    }
+  }
+
   @available(*, unavailable)
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
@@ -322,6 +340,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
     blurView?.frame = bounds
 
+    checkTouchableArea()
+
     guard let view = childView else { return }
 
     let currentTransform = view.transform
@@ -368,7 +388,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     updateContentBackgroundColor(animated: false)
     updateContentAlpha(animated: false)
 
-    applyAccessibility(model.accessibility)
+    applyAccessibilityFromScratch(model.accessibility)
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
 
@@ -406,7 +426,26 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       return updateContentAlpha(animated: animated)
     }
 
-    perform(actionAnimation, animated: animated)
+    let startAnimation = DispatchWorkItem { [weak self] in
+      self?.perform(actionAnimation, animated: animated) {
+        self?.animationStartTime = nil
+      }
+      self?.animationStartTime = Date()
+    }
+
+    if let animationStartTime {
+      let remainingTime: TimeInterval = max(
+        0.0, animationMinimalDuration - Date().timeIntervalSince(animationStartTime)
+      )
+
+      DispatchQueue.main.asyncAfter(
+        deadline: DispatchTime.now() + remainingTime,
+        execute: startAnimation
+      )
+
+    } else {
+      startAnimation.perform()
+    }
   }
 
   private func updateContentAlpha(animated: Bool) {

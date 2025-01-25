@@ -84,6 +84,14 @@ object SelectEnumValue : EnumValue("select"),
     Accessibility.Type
 
 @Generated
+object CheckboxEnumValue : EnumValue("checkbox"),
+    Accessibility.Type
+
+@Generated
+object RadioEnumValue : EnumValue("radio"),
+    Accessibility.Type
+
+@Generated
 object AutoEnumValue : EnumValue("auto"),
     Accessibility.Type,
     Gallery.Scrollbar,
@@ -141,7 +149,7 @@ object StartEnumValue : EnumValue("start"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
     Gallery.CrossContentAlignment,
-    PageContentSize.Alignment,
+    Pager.ScrollAxisAlignment,
     Text.Truncate
 
 @Generated
@@ -179,7 +187,7 @@ object CenterEnumValue : EnumValue("center"),
     ContentAlignmentHorizontal,
     ContentAlignmentVertical,
     Gallery.CrossContentAlignment,
-    PageContentSize.Alignment,
+    Pager.ScrollAxisAlignment,
     TextAlignmentVertical,
     Tooltip.Position
 
@@ -195,7 +203,7 @@ object EndEnumValue : EnumValue("end"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
     Gallery.CrossContentAlignment,
-    PageContentSize.Alignment,
+    Pager.ScrollAxisAlignment,
     Text.Truncate
 
 @Generated
@@ -641,6 +649,14 @@ val DivScope.list: ListEnumValue
 @Generated
 val DivScope.select: SelectEnumValue
     get() = SelectEnumValue
+
+@Generated
+val DivScope.checkbox: CheckboxEnumValue
+    get() = CheckboxEnumValue
+
+@Generated
+val DivScope.radio: RadioEnumValue
+    get() = RadioEnumValue
 
 @Generated
 val DivScope.auto: AutoEnumValue

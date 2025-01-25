@@ -1,8 +1,6 @@
 @testable import LayoutKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class BlockTests_Layout: XCTestCase {
   func test_IntrinsicWidthOfTextBlock_EqualsTextWidth() {

@@ -29,11 +29,11 @@ import 'package:divkit/src/schema/div_video_source.dart';
 import 'package:divkit/src/schema/div_visibility.dart';
 import 'package:divkit/src/schema/div_visibility_action.dart';
 import 'package:divkit/src/schema/div_wrap_content_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Video.
-class DivVideo extends Resolvable with EquatableMixin implements DivBase {
+class DivVideo with EquatableMixin implements DivBase {
   const DivVideo({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
@@ -109,7 +109,7 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
 
   /// Declaration of animators that change variable values over time.
   @override
-  final List<DivAnimator>? animators;
+  final Arr<DivAnimator>? animators;
 
   /// Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
   final DivAspect? aspect;
@@ -120,14 +120,14 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
 
   /// Element background. It can contain multiple layers.
   @override
-  final List<DivBackground>? background;
+  final Arr<DivBackground>? background;
 
   /// Element stroke.
   @override
   final DivBorder border;
 
   /// Actions performed during video loading.
-  final List<DivAction>? bufferingActions;
+  final Arr<DivAction>? bufferingActions;
 
   /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
@@ -136,20 +136,20 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element disappears from the screen.
   @override
-  final List<DivDisappearAction>? disappearActions;
+  final Arr<DivDisappearAction>? disappearActions;
 
   /// Time interval from the video beginning to the current position in milliseconds.
   final String? elapsedTimeVariable;
 
   /// Actions performed after the video ends.
-  final List<DivAction>? endActions;
+  final Arr<DivAction>? endActions;
 
   /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
-  final List<DivExtension>? extensions;
+  final Arr<DivExtension>? extensions;
 
   /// Actions performed when playback can't be continued due to a player error.
-  final List<DivAction>? fatalActions;
+  final Arr<DivAction>? fatalActions;
 
   /// Parameters when focusing on an element or losing focus.
   @override
@@ -157,7 +157,7 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
 
   /// User functions.
   @override
-  final List<DivFunction>? functions;
+  final Arr<DivFunction>? functions;
 
   /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
@@ -185,10 +185,10 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
   final DivEdgeInsets paddings;
 
   /// Actions performed when playback is paused.
-  final List<DivAction>? pauseActions;
+  final Arr<DivAction>? pauseActions;
 
   /// Additional information that can be used in the player.
-  final Map<String, dynamic>? playerSettingsPayload;
+  final Obj? playerSettingsPayload;
 
   /// Enables video preloading.
   // default value: false
@@ -202,7 +202,7 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
   final Expression<bool> repeatable;
 
   /// Actions performed when video playback resumes.
-  final List<DivAction>? resumeActions;
+  final Arr<DivAction>? resumeActions;
 
   /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
   @override
@@ -221,11 +221,11 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
 
   /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
-  final List<DivAction>? selectedActions;
+  final Arr<DivAction>? selectedActions;
 
   /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
-  final List<DivTooltip>? tooltips;
+  final Arr<DivTooltip>? tooltips;
 
   /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
@@ -246,17 +246,17 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
   /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
-  final List<DivTransitionTrigger>? transitionTriggers;
+  final Arr<DivTransitionTrigger>? transitionTriggers;
 
   /// Triggers for changing variables within an element.
   @override
-  final List<DivTrigger>? variableTriggers;
+  final Arr<DivTrigger>? variableTriggers;
 
   /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
-  final List<DivVariable>? variables;
+  final Arr<DivVariable>? variables;
   // at least 1 elements
-  final List<DivVideoSource> videoSources;
+  final Arr<DivVideoSource> videoSources;
 
   /// Element visibility.
   // default value: DivVisibility.visible
@@ -269,7 +269,7 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
 
   /// Actions when an element appears on the screen.
   @override
-  final List<DivVisibilityAction>? visibilityActions;
+  final Arr<DivVisibilityAction>? visibilityActions;
 
   /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
@@ -332,48 +332,48 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
-    List<DivAnimator>? Function()? animators,
+    Arr<DivAnimator>? Function()? animators,
     DivAspect? Function()? aspect,
     Expression<bool>? autostart,
-    List<DivBackground>? Function()? background,
+    Arr<DivBackground>? Function()? background,
     DivBorder? border,
-    List<DivAction>? Function()? bufferingActions,
+    Arr<DivAction>? Function()? bufferingActions,
     Expression<int>? Function()? columnSpan,
-    List<DivDisappearAction>? Function()? disappearActions,
+    Arr<DivDisappearAction>? Function()? disappearActions,
     String? Function()? elapsedTimeVariable,
-    List<DivAction>? Function()? endActions,
-    List<DivExtension>? Function()? extensions,
-    List<DivAction>? Function()? fatalActions,
+    Arr<DivAction>? Function()? endActions,
+    Arr<DivExtension>? Function()? extensions,
+    Arr<DivAction>? Function()? fatalActions,
     DivFocus? Function()? focus,
-    List<DivFunction>? Function()? functions,
+    Arr<DivFunction>? Function()? functions,
     DivSize? height,
     String? Function()? id,
     DivLayoutProvider? Function()? layoutProvider,
     DivEdgeInsets? margins,
     Expression<bool>? muted,
     DivEdgeInsets? paddings,
-    List<DivAction>? Function()? pauseActions,
-    Map<String, dynamic>? Function()? playerSettingsPayload,
+    Arr<DivAction>? Function()? pauseActions,
+    Obj? Function()? playerSettingsPayload,
     Expression<bool>? preloadRequired,
     Expression<String>? Function()? preview,
     Expression<bool>? repeatable,
-    List<DivAction>? Function()? resumeActions,
+    Arr<DivAction>? Function()? resumeActions,
     Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     Expression<DivVideoScale>? scale,
-    List<DivAction>? Function()? selectedActions,
-    List<DivTooltip>? Function()? tooltips,
+    Arr<DivAction>? Function()? selectedActions,
+    Arr<DivTooltip>? Function()? tooltips,
     DivTransform? transform,
     DivChangeTransition? Function()? transitionChange,
     DivAppearanceTransition? Function()? transitionIn,
     DivAppearanceTransition? Function()? transitionOut,
-    List<DivTransitionTrigger>? Function()? transitionTriggers,
-    List<DivTrigger>? Function()? variableTriggers,
-    List<DivVariable>? Function()? variables,
-    List<DivVideoSource>? videoSources,
+    Arr<DivTransitionTrigger>? Function()? transitionTriggers,
+    Arr<DivTrigger>? Function()? variableTriggers,
+    Arr<DivVariable>? Function()? variables,
+    Arr<DivVideoSource>? videoSources,
     Expression<DivVisibility>? visibility,
     DivVisibilityAction? Function()? visibilityAction,
-    List<DivVisibilityAction>? Function()? visibilityActions,
+    Arr<DivVisibilityAction>? Function()? visibilityActions,
     DivSize? width,
   }) =>
       DivVideo(
@@ -465,10 +465,14 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
     }
     try {
       return DivVideo(
-        accessibility: safeParseObj(
-          DivAccessibility.fromJson(json['accessibility']),
-          fallback: const DivAccessibility(),
-        )!,
+        accessibility: reqProp<DivAccessibility>(
+          safeParseObject(
+            json['accessibility'],
+            parse: DivAccessibility.fromJson,
+            fallback: const DivAccessibility(),
+          ),
+          name: 'accessibility',
+        ),
         alignmentHorizontal: safeParseStrEnumExpr(
           json['alignment_horizontal'],
           parse: DivAlignmentHorizontal.fromJson,
@@ -477,295 +481,318 @@ class DivVideo extends Resolvable with EquatableMixin implements DivBase {
           json['alignment_vertical'],
           parse: DivAlignmentVertical.fromJson,
         ),
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 1.0,
-        )!,
-        animators: safeParseObj(
-          safeListMap(
-            json['animators'],
-            (v) => safeParseObj(
-              DivAnimator.fromJson(v),
-            )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 1.0,
+          ),
+          name: 'alpha',
+        ),
+        animators: safeParseObjects(
+          json['animators'],
+          (v) => reqProp<DivAnimator>(
+            safeParseObject(
+              v,
+              parse: DivAnimator.fromJson,
+            ),
           ),
         ),
-        aspect: safeParseObj(
-          DivAspect.fromJson(json['aspect']),
+        aspect: safeParseObject(
+          json['aspect'],
+          parse: DivAspect.fromJson,
         ),
-        autostart: safeParseBoolExpr(
-          json['autostart'],
-          fallback: false,
-        )!,
-        background: safeParseObj(
-          safeListMap(
-            json['background'],
-            (v) => safeParseObj(
-              DivBackground.fromJson(v),
-            )!,
+        autostart: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['autostart'],
+            fallback: false,
+          ),
+          name: 'autostart',
+        ),
+        background: safeParseObjects(
+          json['background'],
+          (v) => reqProp<DivBackground>(
+            safeParseObject(
+              v,
+              parse: DivBackground.fromJson,
+            ),
           ),
         ),
-        border: safeParseObj(
-          DivBorder.fromJson(json['border']),
-          fallback: const DivBorder(),
-        )!,
-        bufferingActions: safeParseObj(
-          safeListMap(
-            json['buffering_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        border: reqProp<DivBorder>(
+          safeParseObject(
+            json['border'],
+            parse: DivBorder.fromJson,
+            fallback: const DivBorder(),
+          ),
+          name: 'border',
+        ),
+        bufferingActions: safeParseObjects(
+          json['buffering_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         columnSpan: safeParseIntExpr(
           json['column_span'],
         ),
-        disappearActions: safeParseObj(
-          safeListMap(
-            json['disappear_actions'],
-            (v) => safeParseObj(
-              DivDisappearAction.fromJson(v),
-            )!,
+        disappearActions: safeParseObjects(
+          json['disappear_actions'],
+          (v) => reqProp<DivDisappearAction>(
+            safeParseObject(
+              v,
+              parse: DivDisappearAction.fromJson,
+            ),
           ),
         ),
         elapsedTimeVariable: safeParseStr(
-          json['elapsed_time_variable']?.toString(),
+          json['elapsed_time_variable'],
         ),
-        endActions: safeParseObj(
-          safeListMap(
-            json['end_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        endActions: safeParseObjects(
+          json['end_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        extensions: safeParseObj(
-          safeListMap(
-            json['extensions'],
-            (v) => safeParseObj(
-              DivExtension.fromJson(v),
-            )!,
+        extensions: safeParseObjects(
+          json['extensions'],
+          (v) => reqProp<DivExtension>(
+            safeParseObject(
+              v,
+              parse: DivExtension.fromJson,
+            ),
           ),
         ),
-        fatalActions: safeParseObj(
-          safeListMap(
-            json['fatal_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        fatalActions: safeParseObjects(
+          json['fatal_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        focus: safeParseObj(
-          DivFocus.fromJson(json['focus']),
+        focus: safeParseObject(
+          json['focus'],
+          parse: DivFocus.fromJson,
         ),
-        functions: safeParseObj(
-          safeListMap(
-            json['functions'],
-            (v) => safeParseObj(
-              DivFunction.fromJson(v),
-            )!,
+        functions: safeParseObjects(
+          json['functions'],
+          (v) => reqProp<DivFunction>(
+            safeParseObject(
+              v,
+              parse: DivFunction.fromJson,
+            ),
           ),
         ),
-        height: safeParseObj(
-          DivSize.fromJson(json['height']),
-          fallback: const DivSize.divWrapContentSize(
-            DivWrapContentSize(),
+        height: reqProp<DivSize>(
+          safeParseObject(
+            json['height'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divWrapContentSize(
+              DivWrapContentSize(),
+            ),
           ),
-        )!,
+          name: 'height',
+        ),
         id: safeParseStr(
-          json['id']?.toString(),
+          json['id'],
         ),
-        layoutProvider: safeParseObj(
-          DivLayoutProvider.fromJson(json['layout_provider']),
+        layoutProvider: safeParseObject(
+          json['layout_provider'],
+          parse: DivLayoutProvider.fromJson,
         ),
-        margins: safeParseObj(
-          DivEdgeInsets.fromJson(json['margins']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        muted: safeParseBoolExpr(
-          json['muted'],
-          fallback: false,
-        )!,
-        paddings: safeParseObj(
-          DivEdgeInsets.fromJson(json['paddings']),
-          fallback: const DivEdgeInsets(),
-        )!,
-        pauseActions: safeParseObj(
-          safeListMap(
-            json['pause_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        margins: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['margins'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'margins',
+        ),
+        muted: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['muted'],
+            fallback: false,
+          ),
+          name: 'muted',
+        ),
+        paddings: reqProp<DivEdgeInsets>(
+          safeParseObject(
+            json['paddings'],
+            parse: DivEdgeInsets.fromJson,
+            fallback: const DivEdgeInsets(),
+          ),
+          name: 'paddings',
+        ),
+        pauseActions: safeParseObjects(
+          json['pause_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         playerSettingsPayload: safeParseMap(
           json['player_settings_payload'],
         ),
-        preloadRequired: safeParseBoolExpr(
-          json['preload_required'],
-          fallback: false,
-        )!,
-        preview: safeParseStrExpr(
-          json['preview']?.toString(),
+        preloadRequired: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['preload_required'],
+            fallback: false,
+          ),
+          name: 'preload_required',
         ),
-        repeatable: safeParseBoolExpr(
-          json['repeatable'],
-          fallback: false,
-        )!,
-        resumeActions: safeParseObj(
-          safeListMap(
-            json['resume_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        preview: safeParseStrExpr(
+          json['preview'],
+        ),
+        repeatable: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['repeatable'],
+            fallback: false,
+          ),
+          name: 'repeatable',
+        ),
+        resumeActions: safeParseObjects(
+          json['resume_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
         reuseId: safeParseStrExpr(
-          json['reuse_id']?.toString(),
+          json['reuse_id'],
         ),
         rowSpan: safeParseIntExpr(
           json['row_span'],
         ),
-        scale: safeParseStrEnumExpr(
-          json['scale'],
-          parse: DivVideoScale.fromJson,
-          fallback: DivVideoScale.fit,
-        )!,
-        selectedActions: safeParseObj(
-          safeListMap(
-            json['selected_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        scale: reqVProp<DivVideoScale>(
+          safeParseStrEnumExpr(
+            json['scale'],
+            parse: DivVideoScale.fromJson,
+            fallback: DivVideoScale.fit,
+          ),
+          name: 'scale',
+        ),
+        selectedActions: safeParseObjects(
+          json['selected_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        tooltips: safeParseObj(
-          safeListMap(
-            json['tooltips'],
-            (v) => safeParseObj(
-              DivTooltip.fromJson(v),
-            )!,
+        tooltips: safeParseObjects(
+          json['tooltips'],
+          (v) => reqProp<DivTooltip>(
+            safeParseObject(
+              v,
+              parse: DivTooltip.fromJson,
+            ),
           ),
         ),
-        transform: safeParseObj(
-          DivTransform.fromJson(json['transform']),
-          fallback: const DivTransform(),
-        )!,
-        transitionChange: safeParseObj(
-          DivChangeTransition.fromJson(json['transition_change']),
+        transform: reqProp<DivTransform>(
+          safeParseObject(
+            json['transform'],
+            parse: DivTransform.fromJson,
+            fallback: const DivTransform(),
+          ),
+          name: 'transform',
         ),
-        transitionIn: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_in']),
+        transitionChange: safeParseObject(
+          json['transition_change'],
+          parse: DivChangeTransition.fromJson,
         ),
-        transitionOut: safeParseObj(
-          DivAppearanceTransition.fromJson(json['transition_out']),
+        transitionIn: safeParseObject(
+          json['transition_in'],
+          parse: DivAppearanceTransition.fromJson,
         ),
-        transitionTriggers: safeParseObj(
-          safeListMap(
-            json['transition_triggers'],
-            (v) => safeParseStrEnum(
+        transitionOut: safeParseObject(
+          json['transition_out'],
+          parse: DivAppearanceTransition.fromJson,
+        ),
+        transitionTriggers: safeParseObjects(
+          json['transition_triggers'],
+          (v) => reqProp<DivTransitionTrigger>(
+            safeParseStrEnum(
               v,
               parse: DivTransitionTrigger.fromJson,
-            )!,
+            ),
           ),
         ),
-        variableTriggers: safeParseObj(
-          safeListMap(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
+        variableTriggers: safeParseObjects(
+          json['variable_triggers'],
+          (v) => reqProp<DivTrigger>(
+            safeParseObject(
+              v,
+              parse: DivTrigger.fromJson,
+            ),
           ),
         ),
-        variables: safeParseObj(
-          safeListMap(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
+        variables: safeParseObjects(
+          json['variables'],
+          (v) => reqProp<DivVariable>(
+            safeParseObject(
+              v,
+              parse: DivVariable.fromJson,
+            ),
           ),
         ),
-        videoSources: safeParseObj(
-          safeListMap(
+        videoSources: reqProp<Arr<DivVideoSource>>(
+          safeParseObjects(
             json['video_sources'],
-            (v) => safeParseObj(
-              DivVideoSource.fromJson(v),
-            )!,
+            (v) => reqProp<DivVideoSource>(
+              safeParseObject(
+                v,
+                parse: DivVideoSource.fromJson,
+              ),
+            ),
           ),
-        )!,
-        visibility: safeParseStrEnumExpr(
-          json['visibility'],
-          parse: DivVisibility.fromJson,
-          fallback: DivVisibility.visible,
-        )!,
-        visibilityAction: safeParseObj(
-          DivVisibilityAction.fromJson(json['visibility_action']),
+          name: 'video_sources',
         ),
-        visibilityActions: safeParseObj(
-          safeListMap(
-            json['visibility_actions'],
-            (v) => safeParseObj(
-              DivVisibilityAction.fromJson(v),
-            )!,
+        visibility: reqVProp<DivVisibility>(
+          safeParseStrEnumExpr(
+            json['visibility'],
+            parse: DivVisibility.fromJson,
+            fallback: DivVisibility.visible,
+          ),
+          name: 'visibility',
+        ),
+        visibilityAction: safeParseObject(
+          json['visibility_action'],
+          parse: DivVisibilityAction.fromJson,
+        ),
+        visibilityActions: safeParseObjects(
+          json['visibility_actions'],
+          (v) => reqProp<DivVisibilityAction>(
+            safeParseObject(
+              v,
+              parse: DivVisibilityAction.fromJson,
+            ),
           ),
         ),
-        width: safeParseObj(
-          DivSize.fromJson(json['width']),
-          fallback: const DivSize.divMatchParentSize(
-            DivMatchParentSize(),
+        width: reqProp<DivSize>(
+          safeParseObject(
+            json['width'],
+            parse: DivSize.fromJson,
+            fallback: const DivSize.divMatchParentSize(
+              DivMatchParentSize(),
+            ),
           ),
-        )!,
+          name: 'width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivVideo resolve(DivVariableContext context) {
-    accessibility.resolve(context);
-    alignmentHorizontal?.resolve(context);
-    alignmentVertical?.resolve(context);
-    alpha.resolve(context);
-    safeListResolve(animators, (v) => v.resolve(context));
-    aspect?.resolve(context);
-    autostart.resolve(context);
-    safeListResolve(background, (v) => v.resolve(context));
-    border.resolve(context);
-    safeListResolve(bufferingActions, (v) => v.resolve(context));
-    columnSpan?.resolve(context);
-    safeListResolve(disappearActions, (v) => v.resolve(context));
-    safeListResolve(endActions, (v) => v.resolve(context));
-    safeListResolve(extensions, (v) => v.resolve(context));
-    safeListResolve(fatalActions, (v) => v.resolve(context));
-    focus?.resolve(context);
-    safeListResolve(functions, (v) => v.resolve(context));
-    height.resolve(context);
-    layoutProvider?.resolve(context);
-    margins.resolve(context);
-    muted.resolve(context);
-    paddings.resolve(context);
-    safeListResolve(pauseActions, (v) => v.resolve(context));
-    preloadRequired.resolve(context);
-    preview?.resolve(context);
-    repeatable.resolve(context);
-    safeListResolve(resumeActions, (v) => v.resolve(context));
-    reuseId?.resolve(context);
-    rowSpan?.resolve(context);
-    scale.resolve(context);
-    safeListResolve(selectedActions, (v) => v.resolve(context));
-    safeListResolve(tooltips, (v) => v.resolve(context));
-    transform.resolve(context);
-    transitionChange?.resolve(context);
-    transitionIn?.resolve(context);
-    transitionOut?.resolve(context);
-    safeListResolve(transitionTriggers, (v) => v.resolve(context));
-    safeListResolve(variableTriggers, (v) => v.resolve(context));
-    safeListResolve(variables, (v) => v.resolve(context));
-    safeListResolve(videoSources, (v) => v.resolve(context));
-    visibility.resolve(context);
-    visibilityAction?.resolve(context);
-    safeListResolve(visibilityActions, (v) => v.resolve(context));
-    width.resolve(context);
-    return this;
   }
 }

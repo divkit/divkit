@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDimensionTemplate: TemplateValue {
+public final class DivDimensionTemplate: TemplateValue, Sendable {
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
   public let value: Field<Expression<Double>>?
 

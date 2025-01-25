@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRadialGradientRelativeCenterTemplate: TemplateValue {
+public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, Sendable {
   public static let type: String = "relative"
   public let parent: String?
   public let value: Field<Expression<Double>>?

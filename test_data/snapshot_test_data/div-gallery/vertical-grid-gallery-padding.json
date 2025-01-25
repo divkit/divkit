@@ -2,9 +2,10 @@
   "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
   "platforms": [
     "android",
-    "web"
+    "ios",
+    "web",
+    "flutter"
   ],
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [

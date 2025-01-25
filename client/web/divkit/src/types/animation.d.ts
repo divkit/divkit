@@ -1,4 +1,4 @@
-import type { Interpolation } from './base';
+import type { Interpolation } from '../../typings/common';
 
 export type AnimationType = 'fade' | 'scale' | 'native' | 'no_animation' | 'translate';
 

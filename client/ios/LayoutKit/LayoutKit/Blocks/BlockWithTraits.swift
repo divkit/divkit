@@ -35,7 +35,7 @@ extension BlockWithWidthTrait {
     switch widthTrait {
     case .fixed, .weighted:
       0
-    case .intrinsic(constrained: _, minSize: let minSize, maxSize: _):
+    case let .intrinsic(_, minSize, _):
       minSize
     }
   }
@@ -68,7 +68,7 @@ extension BlockWithHeightTrait {
       size
     case .weighted:
       0
-    case .intrinsic(constrained: _, minSize: let minSize, maxSize: _):
+    case let .intrinsic(_, minSize, _):
       minSize
     }
   }

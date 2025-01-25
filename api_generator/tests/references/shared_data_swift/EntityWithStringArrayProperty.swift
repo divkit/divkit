@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithStringArrayProperty {
+public final class EntityWithStringArrayProperty: Sendable {
   public static let type: String = "entity_with_string_array_property"
   public let array: [Expression<String>] // at least 1 elements
 

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInfinityCount {
+public final class DivInfinityCount: Sendable {
   public static let type: String = "infinity"
 
   init() {}

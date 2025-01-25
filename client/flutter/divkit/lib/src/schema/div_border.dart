@@ -3,11 +3,11 @@
 import 'package:divkit/src/schema/div_corners_radius.dart';
 import 'package:divkit/src/schema/div_shadow.dart';
 import 'package:divkit/src/schema/div_stroke.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stroke around the element.
-class DivBorder extends Resolvable with EquatableMixin {
+class DivBorder with EquatableMixin {
   const DivBorder({
     this.cornerRadius,
     this.cornersRadius,
@@ -70,32 +70,29 @@ class DivBorder extends Resolvable with EquatableMixin {
         cornerRadius: safeParseIntExpr(
           json['corner_radius'],
         ),
-        cornersRadius: safeParseObj(
-          DivCornersRadius.fromJson(json['corners_radius']),
+        cornersRadius: safeParseObject(
+          json['corners_radius'],
+          parse: DivCornersRadius.fromJson,
         ),
-        hasShadow: safeParseBoolExpr(
-          json['has_shadow'],
-          fallback: false,
-        )!,
-        shadow: safeParseObj(
-          DivShadow.fromJson(json['shadow']),
+        hasShadow: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['has_shadow'],
+            fallback: false,
+          ),
+          name: 'has_shadow',
         ),
-        stroke: safeParseObj(
-          DivStroke.fromJson(json['stroke']),
+        shadow: safeParseObject(
+          json['shadow'],
+          parse: DivShadow.fromJson,
+        ),
+        stroke: safeParseObject(
+          json['stroke'],
+          parse: DivStroke.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivBorder resolve(DivVariableContext context) {
-    cornerRadius?.resolve(context);
-    cornersRadius?.resolve(context);
-    hasShadow.resolve(context);
-    shadow?.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

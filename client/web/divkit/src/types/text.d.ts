@@ -54,6 +54,16 @@ export interface TextRange extends TextStyles {
     border?: TextRangeBorder;
     background?: RangeBackground;
     alignment_vertical?: TextVerticalAlignment;
+    baseline_offset?: number;
+}
+
+export type TextIndexingDirection = 'normal' | 'reversed';
+
+export type TextImageAccessibilityType = 'none' | 'button' | 'image' | 'text' | 'auto';
+
+export interface TextImageAccessibility {
+    description?: string;
+    type?: TextImageAccessibilityType;
 }
 
 export interface TextImage {
@@ -65,6 +75,8 @@ export interface TextImage {
     tint_mode?: TintMode;
     preload_required?: BooleanInt;
     alignment_vertical?: TextVerticalAlignment;
+    indexing_direction?: TextIndexingDirection;
+    accessibility?: TextImageAccessibility;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

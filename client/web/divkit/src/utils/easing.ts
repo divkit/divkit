@@ -1,7 +1,7 @@
 import { linear, cubicIn, cubicOut, cubicInOut } from 'svelte/easing';
-import type { Interpolation } from '../types/base';
 import { ease } from './easings/ease';
 import { spring } from './easings/spring';
+import type { Interpolation } from '../../typings/common';
 
 export const EASING: Record<Interpolation, (t: number) => number> = {
     linear,

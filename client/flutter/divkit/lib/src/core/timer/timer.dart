@@ -65,7 +65,7 @@ class DivTimerModel with EquatableMixin {
               .updateVariable(valueVariable!, elapsed.inMilliseconds);
         }
         tickActions?.forEach(
-          (a) => a.resolve(context).convert().execute(divContext),
+          (a) => a.resolve(context).execute(divContext),
         );
       },
       onEnd: (elapsed) {
@@ -76,7 +76,7 @@ class DivTimerModel with EquatableMixin {
               .updateVariable(valueVariable!, elapsed.inMilliseconds);
         }
         endActions?.forEach(
-          (a) => a.resolve(context).convert().execute(divContext),
+          (a) => a.resolve(context).execute(divContext),
         );
       },
     );

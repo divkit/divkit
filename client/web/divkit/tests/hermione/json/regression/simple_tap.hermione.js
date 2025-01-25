@@ -8,9 +8,10 @@ describe('regression', () => {
         });
 
         it('Tap on text', async function() {
-            const elem = await this.browser.$('span=Click on me');
+            let elem = await this.browser.$('[role=button]');
             elem.click();
             await this.browser.assertView('first_tap', '#root');
+            elem = await this.browser.$('[role=button]');
             elem.click();
             await this.browser.assertView('second_tap', '#root');
 

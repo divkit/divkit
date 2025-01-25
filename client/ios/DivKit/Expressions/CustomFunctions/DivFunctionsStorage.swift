@@ -1,6 +1,7 @@
 import LayoutKit
 import VGSL
 
+@_spi(Internal)
 public final class DivFunctionsStorage {
   private var functions: [CustomFunction.Signature: CustomFunction] = [:]
   private var storages: [UIElementPath: DivFunctionsStorage] = [:]

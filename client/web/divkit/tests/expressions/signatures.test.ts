@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { type Func, funcs, methods } from '../../src/expressions/funcs/funcs';
 import { register } from '../../src/expressions/funcs';
 
@@ -47,7 +53,7 @@ describe('signatures', () => {
             describe(name, () => {
                 for (const item of contents.signatures) {
                     if (item.platforms.includes('web')) {
-                        it(item.name || (`${item.function_name}(${item.arguments.map((it: {
+                        test(item.name || (`${item.function_name}(${(item.arguments || []).map((it: {
                             type: string;
                         }) => it.type).join(', ')})`), () => {
                             runCase(item);

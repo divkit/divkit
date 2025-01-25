@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class NumberValueTemplate: TemplateValue {
+public final class NumberValueTemplate: TemplateValue, Sendable {
   public static let type: String = "number"
   public let parent: String?
   public let value: Field<Expression<Double>>?

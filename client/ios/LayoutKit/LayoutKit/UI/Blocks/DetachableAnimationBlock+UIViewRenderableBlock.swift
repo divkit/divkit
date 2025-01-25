@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 extension DetachableAnimationBlock {
@@ -139,8 +138,8 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     container.layoutIfNeeded()
 
     UIView.animate(
-      withDuration: animationChange.duration.value,
-      delay: animationChange.delay.value,
+      withDuration: animationChange.duration,
+      delay: animationChange.delay,
       options: [animationChange.timingFunction.cast()],
       animations: {
         animationContainer.frame = finishFrame
@@ -184,7 +183,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
     self.childView = nil
 
-    let minDelay = animationIn.sortedChronologically().first?.delay.value ?? 0
+    let minDelay = animationIn.sortedChronologically().first?.delay ?? 0
 
     let item = DispatchWorkItem { [weak self] in
       container.addSubview(childView)

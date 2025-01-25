@@ -27,6 +27,7 @@ internal class InputFocusTracker @Inject constructor(
             focused -> {
                 focusedInputTag = tag
                 lastFocused = WeakReference(view)
+                view.setSelection(view.length())
             }
             !focused -> {
                 focusedInputTag = null

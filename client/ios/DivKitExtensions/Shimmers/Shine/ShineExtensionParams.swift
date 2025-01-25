@@ -1,7 +1,6 @@
-import UIKit
-
-import LayoutKitInterface
 import DivKit
+import LayoutKitInterface
+import UIKit
 import VGSL
 
 struct ShineExtensionParams: Equatable {

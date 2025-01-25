@@ -1,6 +1,5 @@
 import Foundation
 import UIKit
-
 import VGSL
 
 extension PagerBlock {
@@ -18,6 +17,7 @@ extension PagerBlock {
     pagerView.configure(
       model: gallery,
       selectedActions: selectedActions,
+      alignment: alignment,
       layoutMode: layoutMode,
       state: state,
       observer: observer,
@@ -45,6 +45,7 @@ private final class PagerView: BlockView {
   func configure(
     model: GalleryViewModel,
     selectedActions: [[UserInterfaceAction]],
+    alignment: Alignment,
     layoutMode: PagerBlock.LayoutMode,
     state: PagerViewState,
     observer: ElementStateObserver?,
@@ -59,6 +60,7 @@ private final class PagerView: BlockView {
       PagerViewLayout(
         model: model,
         pageIndex: Int(round(galleryState.contentPosition.pageIndex ?? 1)),
+        alignment: alignment,
         layoutMode: layoutMode,
         boundsSize: boundsSize
       )
@@ -104,7 +106,7 @@ private final class PagerView: BlockView {
         selectedPageIndex: pageIndex
       ).sendFrom(self)
 
-      if selectedActions.count > pageIndex {
+      if selectedActions.count > pageIndex, pageIndex >= 0 {
         selectedActions[pageIndex].perform(sendingFrom: self)
       }
     }

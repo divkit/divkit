@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctContentAlignmentHorizontal } from '../../src/utils/correctContentAlignmentHorizontal';
 
 describe('correctContentAlignmentHorizontal', () => {

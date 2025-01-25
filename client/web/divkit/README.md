@@ -87,7 +87,7 @@ The package contains both of them.
 
 Node.js will automatically use the appropriate version.
 
-Webpack will use ES modules version.
+Webpack or other bundles will use ES modules version.
 
 For the direct CommonJS usage, this files can be used:
 
@@ -105,7 +105,7 @@ dist/esm/client-hydratable.mjs
 dist/esm/server.mjs
 ```
 
-ES modules can be used in the browser directly without any build:
+ES modules can be used in the browser directly without any build, but build is strongly encouraged.:
 
 ```html
 <script type="module">
@@ -130,7 +130,7 @@ ES modules can be used in the browser directly without any build:
 ```html
 <script src="./node_modules/@divkitframework/divkit/dist/browser/client.js"></script>
 <script>
-    window.Ya.Divkit.render({
+    window.Ya.DivKit.render({
         id: 'smth',
         target: document.querySelector('#root'),
         json: {
@@ -143,6 +143,9 @@ ES modules can be used in the browser directly without any build:
     });
 </script>
 ```
+
+> [!IMPORTANT]
+> Older versions of DivKit uses the syntax `Ya.Divkit`. It is now deprecated and should not be used.
 
 ### Usage with React
 
@@ -158,16 +161,16 @@ All modules have typescript definitions (client, client-hydratable and server), 
 
 Browser support
 ```
-chrome >= 58
-safari >= 11
-firefox >= 67
+chrome >= 67
+safari >= 14
+firefox >= 68
 ```
 
 However, some rare features require more modern browsers, for example, `aspect` for a `container` requires `aspect-ratio` support in css. Such requirements are described in the documentation.
 
 Node.js
 ```
-Node.js >= 8
+Node.js >= 10.4
 ```
 
 ### API: render
@@ -368,9 +371,9 @@ Custom components is supported not only on the client side, but also on the serv
 
 Object, optional.
 
-Additional external storage. The `getValue` and `setValue` methods should be implemented.
+Additional external storage. The `get` and `set` methods should be implemented.
 
-Please note that these methods must be synchronous! DivKit does not have asynchronous render methods, so any `getValue` function cannot be asynchronous. It is possible to process `setValue` asynchronously, but if the value from `getValue` is critical for you and cannot be read synchronously, you must read it before calling `render`.
+Please note that these methods must be synchronous! DivKit does not have asynchronous render methods, so any `get` function cannot be asynchronous. It is possible to process `set` asynchronously, but if the value from `get` is critical for you and cannot be read synchronously, you must read it before calling `render`.
 
 #### weekStartDay
 

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivColorAnimator: DivAnimatorBase {
+public final class DivColorAnimator: DivAnimatorBase, Sendable {
   public static let type: String = "color_animator"
   public let cancelActions: [DivAction]?
   public let direction: Expression<DivAnimationDirection> // default value: normal

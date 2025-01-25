@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivRadialGradientCenter {
+public enum DivRadialGradientCenter: Sendable {
   case divRadialGradientFixedCenter(DivRadialGradientFixedCenter)
   case divRadialGradientRelativeCenter(DivRadialGradientRelativeCenter)
 

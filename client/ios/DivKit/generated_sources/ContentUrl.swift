@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ContentUrl {
+public final class ContentUrl: Sendable {
   public static let type: String = "url"
   public let value: Expression<URL>
 

@@ -2,7 +2,9 @@
   "description": "Text with variables",
   "platforms": [
     "android",
-    "web"
+    "ios",
+    "web",
+    "flutter"
   ],
   "card": {
     "variables": [
@@ -13,23 +15,23 @@
       },
       {
         "name": "integer_var",
-        "type":  "integer",
-        "value":  220
+        "type": "integer",
+        "value": 220
       },
       {
         "name": "boolean_var",
-        "type":  "boolean",
-        "value":  true
+        "type": "boolean",
+        "value": true
       },
       {
         "name": "url_var",
-        "type":  "url",
-        "value":  "https://google.com"
+        "type": "url",
+        "value": "https://google.com"
       },
       {
         "name": "color_var",
-        "type":  "color",
-        "value":  "#fff"
+        "type": "color",
+        "value": "#fff"
       }
     ],
     "log_id": "snapshot_test_card",

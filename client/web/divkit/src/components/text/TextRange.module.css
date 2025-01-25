@@ -1,3 +1,5 @@
+@value text-range from "../Cls.module.css";
+
 .text-range {
     white-space: pre-wrap;
     color: inherit;
@@ -49,4 +51,8 @@
 
 .text-range__cloud-svg {
     display: none;
+}
+
+.text-range_relative-vertical-align {
+    position: relative;
 }

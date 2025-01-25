@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivAnimationTemplate: TemplateValue {
+public final class DivAnimationTemplate: TemplateValue, Sendable {
   public typealias Name = DivAnimation.Name
 
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 300

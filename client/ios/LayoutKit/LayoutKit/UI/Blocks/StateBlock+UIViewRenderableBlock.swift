@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 extension StateBlock {
@@ -67,6 +66,14 @@ private final class SubviewStorage: RenderingDelegate {
 
   func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView) {
     wrappedRenderingDelegate?.tooltipAnchorViewRemoved(anchorView: anchorView)
+  }
+
+  func reportRenderingError(message: String, isWarning: Bool, path: UIElementPath) {
+    wrappedRenderingDelegate?.reportRenderingError(
+      message: message,
+      isWarning: isWarning,
+      path: path
+    )
   }
 
   func getView(_ id: BlockViewID) -> DetachableAnimationBlockView? {
@@ -199,7 +206,7 @@ private final class StateBlockView: BlockView {
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    childView?.frame = bounds
+    childView?.setNonTransformedFrame(bounds)
   }
 
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

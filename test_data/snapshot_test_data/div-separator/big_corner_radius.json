@@ -1,49 +1,49 @@
 {
-    "description": "Corner radius that is bigger, then half of width/height",
-    "platforms": [
-      "android",
-      "ios",
-      "web"
-    ],
-    "card": {
-        "log_id": "div2_sample_card",
-        "states": [
+  "description": "Corner radius that is bigger, then half of width/height",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator",
+          "background": [
             {
-                "state_id": 0,
-                "div": {
-                    "type": "separator",
-                    "background": [
-                        {
-                            "type": "solid",
-                            "color": "#222222"
-                        }
-                    ],
-                    "border": {
-                        "corners_radius": {
-                            "top-left": 40,
-                            "top-right": 40
-                        }
-                    },
-                    "delimiter_style": {
-                        "color": "#222222"
-                    },
-                    "height": {
-                        "type": "fixed",
-                        "value": 40
-                    },
-                    "margins": {
-                        "bottom": 0,
-                        "left": 6,
-                        "top": 1
-                    },
-                    "width": {
-                        "type": "fixed",
-                        "value": 80
-                    }
-                }
+              "type": "solid",
+              "color": "#222222"
             }
-        ]
-    }
+          ],
+          "border": {
+            "corners_radius": {
+              "top-left": 40,
+              "top-right": 40
+            }
+          },
+          "delimiter_style": {
+            "color": "#222222"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 40
+          },
+          "margins": {
+            "bottom": 0,
+            "left": 6,
+            "top": 1
+          },
+          "width": {
+            "type": "fixed",
+            "value": 80
+          }
+        }
+      }
+    ]
   }
+}
   
   

@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Pages are stacked during animation overlapping one another.
-class DivPageTransformationOverlap extends Resolvable with EquatableMixin {
+class DivPageTransformationOverlap with EquatableMixin {
   const DivPageTransformationOverlap({
     this.interpolator =
         const ValueExpression(DivAnimationInterpolator.easeInOut),
@@ -83,45 +83,53 @@ class DivPageTransformationOverlap extends Resolvable with EquatableMixin {
     }
     try {
       return DivPageTransformationOverlap(
-        interpolator: safeParseStrEnumExpr(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        )!,
-        nextPageAlpha: safeParseDoubleExpr(
-          json['next_page_alpha'],
-          fallback: 1.0,
-        )!,
-        nextPageScale: safeParseDoubleExpr(
-          json['next_page_scale'],
-          fallback: 1.0,
-        )!,
-        previousPageAlpha: safeParseDoubleExpr(
-          json['previous_page_alpha'],
-          fallback: 1.0,
-        )!,
-        previousPageScale: safeParseDoubleExpr(
-          json['previous_page_scale'],
-          fallback: 1.0,
-        )!,
-        reversedStackingOrder: safeParseBoolExpr(
-          json['reversed_stacking_order'],
-          fallback: false,
-        )!,
+        interpolator: reqVProp<DivAnimationInterpolator>(
+          safeParseStrEnumExpr(
+            json['interpolator'],
+            parse: DivAnimationInterpolator.fromJson,
+            fallback: DivAnimationInterpolator.easeInOut,
+          ),
+          name: 'interpolator',
+        ),
+        nextPageAlpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['next_page_alpha'],
+            fallback: 1.0,
+          ),
+          name: 'next_page_alpha',
+        ),
+        nextPageScale: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['next_page_scale'],
+            fallback: 1.0,
+          ),
+          name: 'next_page_scale',
+        ),
+        previousPageAlpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['previous_page_alpha'],
+            fallback: 1.0,
+          ),
+          name: 'previous_page_alpha',
+        ),
+        previousPageScale: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['previous_page_scale'],
+            fallback: 1.0,
+          ),
+          name: 'previous_page_scale',
+        ),
+        reversedStackingOrder: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['reversed_stacking_order'],
+            fallback: false,
+          ),
+          name: 'reversed_stacking_order',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPageTransformationOverlap resolve(DivVariableContext context) {
-    interpolator.resolve(context);
-    nextPageAlpha.resolve(context);
-    nextPageScale.resolve(context);
-    previousPageAlpha.resolve(context);
-    previousPageScale.resolve(context);
-    reversedStackingOrder.resolve(context);
-    return this;
   }
 }

@@ -1,0 +1,80 @@
+{
+  "description": "Vertical pager with wrap_content layout mode and children with different heights.",
+  "platforms": [
+    "android",
+    "ios",
+    "flutter"
+  ],
+  "templates": {
+    "text_page_wrap_content": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "unit": "dp",
+        "value": 250
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "type": "wrap_content"
+          },
+          "item_spacing": {
+            "type": "fixed",
+            "value": 10
+          },
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 250
+          },
+          "height": {
+            "type": "fixed",
+            "value": 320
+          },
+          "items": [
+            {
+              "type": "text_page_wrap_content",
+              "height": {
+                "type": "fixed",
+                "unit": "dp",
+                "value": 100
+              },
+              "text": "For millions of years mankind lived just like animals"
+            },
+            {
+              "type": "text_page_wrap_content",
+              "height": {
+                "type": "fixed",
+                "unit": "dp",
+                "value": 150
+              },
+              "text": "Then something happened which unleashed the power of our imagination"
+            },
+            {
+              "type": "text_page_wrap_content",
+              "height": {
+                "type": "fixed",
+                "unit": "dp",
+                "value": 70
+              },
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

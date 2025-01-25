@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctBorderRadius } from '../../src/utils/correctBorderRadius';
 
 describe('correctBorderRadius', () => {

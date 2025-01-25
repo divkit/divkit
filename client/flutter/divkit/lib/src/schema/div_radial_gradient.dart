@@ -4,11 +4,11 @@ import 'package:divkit/src/schema/div_radial_gradient_center.dart';
 import 'package:divkit/src/schema/div_radial_gradient_radius.dart';
 import 'package:divkit/src/schema/div_radial_gradient_relative_center.dart';
 import 'package:divkit/src/schema/div_radial_gradient_relative_radius.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Radial gradient.
-class DivRadialGradient extends Resolvable with EquatableMixin {
+class DivRadialGradient with EquatableMixin {
   const DivRadialGradient({
     this.centerX =
         const DivRadialGradientCenter.divRadialGradientRelativeCenter(
@@ -48,7 +48,7 @@ class DivRadialGradient extends Resolvable with EquatableMixin {
 
   /// Colors. Gradient points are located at an equal distance from each other.
   // at least 2 elements
-  final Expression<List<Color>> colors;
+  final Expression<Arr<Color>> colors;
 
   /// Radius of the gradient transition.
   // default value: const DivRadialGradientRadius.divRadialGradientRelativeRadius(const DivRadialGradientRelativeRadius(value: ValueExpression(DivRadialGradientRelativeRadiusValue.farthestCorner,),),)
@@ -65,7 +65,7 @@ class DivRadialGradient extends Resolvable with EquatableMixin {
   DivRadialGradient copyWith({
     DivRadialGradientCenter? centerX,
     DivRadialGradientCenter? centerY,
-    Expression<List<Color>>? colors,
+    Expression<Arr<Color>>? colors,
     DivRadialGradientRadius? radius,
   }) =>
       DivRadialGradient(
@@ -83,59 +83,64 @@ class DivRadialGradient extends Resolvable with EquatableMixin {
     }
     try {
       return DivRadialGradient(
-        centerX: safeParseObj(
-          DivRadialGradientCenter.fromJson(json['center_x']),
-          fallback:
-              const DivRadialGradientCenter.divRadialGradientRelativeCenter(
-            DivRadialGradientRelativeCenter(
-              value: ValueExpression(
-                0.5,
+        centerX: reqProp<DivRadialGradientCenter>(
+          safeParseObject(
+            json['center_x'],
+            parse: DivRadialGradientCenter.fromJson,
+            fallback:
+                const DivRadialGradientCenter.divRadialGradientRelativeCenter(
+              DivRadialGradientRelativeCenter(
+                value: ValueExpression(
+                  0.5,
+                ),
               ),
             ),
           ),
-        )!,
-        centerY: safeParseObj(
-          DivRadialGradientCenter.fromJson(json['center_y']),
-          fallback:
-              const DivRadialGradientCenter.divRadialGradientRelativeCenter(
-            DivRadialGradientRelativeCenter(
-              value: ValueExpression(
-                0.5,
+          name: 'center_x',
+        ),
+        centerY: reqProp<DivRadialGradientCenter>(
+          safeParseObject(
+            json['center_y'],
+            parse: DivRadialGradientCenter.fromJson,
+            fallback:
+                const DivRadialGradientCenter.divRadialGradientRelativeCenter(
+              DivRadialGradientRelativeCenter(
+                value: ValueExpression(
+                  0.5,
+                ),
               ),
             ),
           ),
-        )!,
-        colors: safeParseObjExpr(
-          safeListMap(
+          name: 'center_y',
+        ),
+        colors: reqVProp<Arr<Color>>(
+          safeParseObjectsExpr(
             json['colors'],
-            (v) => safeParseColor(
-              v,
-            )!,
+            (v) => reqProp<Color>(
+              safeParseColor(v),
+            ),
           ),
-        )!,
-        radius: safeParseObj(
-          DivRadialGradientRadius.fromJson(json['radius']),
-          fallback:
-              const DivRadialGradientRadius.divRadialGradientRelativeRadius(
-            DivRadialGradientRelativeRadius(
-              value: ValueExpression(
-                DivRadialGradientRelativeRadiusValue.farthestCorner,
+          name: 'colors',
+        ),
+        radius: reqProp<DivRadialGradientRadius>(
+          safeParseObject(
+            json['radius'],
+            parse: DivRadialGradientRadius.fromJson,
+            fallback:
+                const DivRadialGradientRadius.divRadialGradientRelativeRadius(
+              DivRadialGradientRelativeRadius(
+                value: ValueExpression(
+                  DivRadialGradientRelativeRadiusValue.farthestCorner,
+                ),
               ),
             ),
           ),
-        )!,
+          name: 'radius',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivRadialGradient resolve(DivVariableContext context) {
-    centerX.resolve(context);
-    centerY.resolve(context);
-    colors.resolve(context);
-    radius.resolve(context);
-    return this;
   }
 }

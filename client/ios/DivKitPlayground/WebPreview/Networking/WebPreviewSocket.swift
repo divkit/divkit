@@ -5,7 +5,7 @@ final class WebPreviewSocket: NSObject {
   private var session: URLSession!
   private var task: URLSessionWebSocketTask?
 
-  private let responseSubject = CurrentValueSubject<[String: Any], Never>([:])
+  private let responseSubject = CurrentValueSubject<JsonDictionary, Never>([:])
 
   var responsePublisher: JsonPublisher {
     responseSubject.eraseToAnyPublisher()

@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithRequiredProperty extends Resolvable with EquatableMixin  {
+class EntityWithRequiredProperty with EquatableMixin  {
   const EntityWithRequiredProperty({
     required this.property,
   });
@@ -31,15 +31,11 @@ class EntityWithRequiredProperty extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithRequiredProperty(
-        property: safeParseStrExpr(json['property']?.toString(),)!,
+        property: reqVProp<String>(safeParseStrExpr(json['property'],), name: 'property',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithRequiredProperty resolve(DivVariableContext context) {
-    property.resolve(context);
-    return this;
   }
 }

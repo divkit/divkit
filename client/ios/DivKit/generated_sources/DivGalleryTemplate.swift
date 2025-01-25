@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivGalleryTemplate: TemplateValue {
+public final class DivGalleryTemplate: TemplateValue, Sendable {
   public typealias CrossContentAlignment = DivGallery.CrossContentAlignment
 
   public typealias Orientation = DivGallery.Orientation

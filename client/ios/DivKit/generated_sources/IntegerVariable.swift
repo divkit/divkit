@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class IntegerVariable {
+public final class IntegerVariable: Sendable {
   public static let type: String = "integer"
   public let name: String
   public let value: Int

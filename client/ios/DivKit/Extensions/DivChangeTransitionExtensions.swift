@@ -1,3 +1,4 @@
+import Foundation
 import LayoutKit
 
 extension DivChangeTransition {
@@ -7,8 +8,8 @@ extension DivChangeTransition {
     switch self {
     case let .divChangeBoundsTransition(transition):
       ChangeBoundsTransition(
-        duration: Duration(milliseconds: transition.resolveDuration(expressionResolver)),
-        delay: Delay(milliseconds: transition.resolveStartDelay(expressionResolver)),
+        duration: TimeInterval(milliseconds: transition.resolveDuration(expressionResolver)),
+        delay: TimeInterval(milliseconds: transition.resolveStartDelay(expressionResolver)),
         timingFunction: transition.resolveInterpolator(expressionResolver)
           .asTimingFunction()
       )

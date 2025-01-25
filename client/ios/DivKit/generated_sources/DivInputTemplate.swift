@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputTemplate: TemplateValue {
-  public final class NativeInterfaceTemplate: TemplateValue {
+public final class DivInputTemplate: TemplateValue, Sendable {
+  public final class NativeInterfaceTemplate: TemplateValue, Sendable {
     public let color: Field<Expression<Color>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

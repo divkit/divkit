@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class DivSerializationTests: XCTestCase {
   func test_Serialize_Type() {

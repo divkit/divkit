@@ -1,8 +1,6 @@
 @testable import LayoutKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class UIViewRenderable_AccessibilityTests: XCTestCase {
   func test_textBlockAccessibilityApplied() {

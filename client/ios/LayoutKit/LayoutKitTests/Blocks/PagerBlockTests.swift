@@ -1,7 +1,6 @@
-import XCTest
-
 import LayoutKit
 import VGSL
+import XCTest
 
 final class PagerBlockTests: XCTestCase {
   func test_WhenFixedHeight_IntrinsicContentHeightReturnsFixedHeight() {
@@ -48,6 +47,7 @@ private func makePagerBlock(
 ) -> PagerBlock {
   try! PagerBlock(
     pagerPath: nil,
+    alignment: .center,
     layoutMode: .neighbourPageSize(10),
     gallery: GalleryViewModel(
       items: [

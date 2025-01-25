@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 extension CalcExpression {
@@ -7,7 +6,7 @@ extension CalcExpression {
     case variable(String)
     case infix(String)
     case prefix(String)
-    case postfix(String)
+    case ternary
     case function(String)
     case method(String)
 
@@ -15,7 +14,7 @@ extension CalcExpression {
       switch self {
       case .variable:
         "variable"
-      case .prefix, .infix, .postfix:
+      case .infix, .prefix, .ternary:
         "operator"
       case .function:
         "function"
@@ -29,10 +28,11 @@ extension CalcExpression {
       case let .variable(name),
            let .infix(name),
            let .prefix(name),
-           let .postfix(name),
            let .function(name),
            let .method(name):
         name
+      case .ternary:
+        "?:"
       }
     }
 
@@ -40,7 +40,7 @@ extension CalcExpression {
       switch self {
       case .prefix:
         "\(name)\(formatArgForError(args[0]))"
-      case .infix, .postfix, .variable:
+      case .infix, .ternary, .variable:
         name
       case .function:
         formatFunction(args)

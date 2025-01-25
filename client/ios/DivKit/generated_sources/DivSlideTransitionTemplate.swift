@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSlideTransitionTemplate: TemplateValue {
+public final class DivSlideTransitionTemplate: TemplateValue, Sendable {
   public typealias Edge = DivSlideTransition.Edge
 
   public static let type: String = "slide"

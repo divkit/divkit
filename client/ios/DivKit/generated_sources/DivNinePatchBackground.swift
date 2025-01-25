@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivNinePatchBackground {
+public final class DivNinePatchBackground: Sendable {
   public static let type: String = "nine_patch_image"
   public let imageUrl: Expression<URL>
   public let insets: DivAbsoluteEdgeInsets

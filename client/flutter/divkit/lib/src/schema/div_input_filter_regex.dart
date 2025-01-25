@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Filter based on regular expressions.
-class DivInputFilterRegex extends Resolvable with EquatableMixin {
+class DivInputFilterRegex with EquatableMixin {
   const DivInputFilterRegex({
     required this.pattern,
   });
@@ -34,18 +34,16 @@ class DivInputFilterRegex extends Resolvable with EquatableMixin {
     }
     try {
       return DivInputFilterRegex(
-        pattern: safeParseStrExpr(
-          json['pattern']?.toString(),
-        )!,
+        pattern: reqVProp<String>(
+          safeParseStrExpr(
+            json['pattern'],
+          ),
+          name: 'pattern',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivInputFilterRegex resolve(DivVariableContext context) {
-    pattern.resolve(context);
-    return this;
   }
 }

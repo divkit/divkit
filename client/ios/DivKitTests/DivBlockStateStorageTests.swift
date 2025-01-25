@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import LayoutKit
+import XCTest
 
 final class DivBlockStateStorageTests: XCTestCase {
   private var storage: DivBlockStateStorage!
@@ -183,5 +181,5 @@ private func path(cardId: String, path: String) -> UIElementPath {
 }
 
 private func divStatePath(_ path: String) -> UIElementPath {
-  DivStatePath.makeDivStatePath(from: path)!.rawValue
+  DivStatePath.makeDivStatePath(from: path).rawValue
 }

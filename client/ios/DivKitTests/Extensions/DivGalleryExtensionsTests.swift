@@ -1,7 +1,6 @@
-import XCTest
-
 @testable import DivKit
 import LayoutKit
+import XCTest
 
 final class DivGalleryExtensionsTests: XCTestCase {
   func test_WhenContextContainsGalleryState_RestoresIt() throws {

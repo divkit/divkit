@@ -32,12 +32,7 @@
     },
     "download_callbacks": {
       "$ref": "div-download-callbacks.json",
-      "$description": "translations.json#/div_action_base_download_callbacks",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_action_base_download_callbacks"
     },
     "typed": {
       "$ref": "div-action-typed.json"

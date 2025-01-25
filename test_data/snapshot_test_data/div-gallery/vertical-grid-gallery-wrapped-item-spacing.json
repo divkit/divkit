@@ -2,7 +2,9 @@
   "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
   "platforms": [
     "android",
-    "web"
+    "ios",
+    "web",
+    "flutter"
   ],
   "templates": {
     "wrapper": {

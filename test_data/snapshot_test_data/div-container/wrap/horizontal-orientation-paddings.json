@@ -2,7 +2,9 @@
   "description": "Horizontal container with layout_mode = wrap and paddings",
   "platforms": [
     "android",
-    "web"
+    "ios",
+    "web",
+    "flutter"
   ],
   "templates": {
     "item": {
@@ -64,7 +66,6 @@
               "type": "item",
               "width": {
                 "type": "match_parent"
-
               },
               "text": "match_parent"
             },

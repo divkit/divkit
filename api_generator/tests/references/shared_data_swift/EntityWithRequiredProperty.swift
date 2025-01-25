@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithRequiredProperty {
+public final class EntityWithRequiredProperty: Sendable {
   public static let type: String = "entity_with_required_property"
   public let property: Expression<String> // at least 1 char
 

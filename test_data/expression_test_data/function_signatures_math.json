@@ -15,7 +15,12 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "div(number, number) number",
@@ -32,7 +37,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "mod(integer, integer) integer",
@@ -49,7 +59,12 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "mod(number, number) number",
@@ -66,7 +81,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "mul(vararg integer) integer",
@@ -80,7 +100,12 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "mul(vararg number) number",
@@ -94,7 +119,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "sub(vararg integer) integer",
@@ -108,7 +138,12 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "sub(vararg number) number",
@@ -122,7 +157,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "sum(vararg integer) integer",
@@ -136,7 +176,12 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "sum(vararg number) number",
@@ -150,7 +195,12 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     },
     {
       "name": "maxInteger() integer",
@@ -160,7 +210,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -170,8 +221,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -181,8 +233,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -192,8 +245,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -210,8 +264,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -228,8 +283,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -246,8 +302,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -264,8 +321,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -281,8 +339,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -298,8 +357,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -315,8 +375,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -332,8 +393,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -349,8 +411,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -366,8 +429,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -383,8 +447,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -404,8 +469,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -425,8 +491,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     }
   ]

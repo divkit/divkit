@@ -1,13 +1,14 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Accessibility settings.
-class DivAccessibility extends Resolvable with EquatableMixin {
+class DivAccessibility with EquatableMixin {
   const DivAccessibility({
     this.description,
     this.hint,
+    this.isChecked,
     this.mode = const ValueExpression(DivAccessibilityMode.default_),
     this.muteAfterAction = const ValueExpression(false),
     this.stateDescription,
@@ -19,6 +20,9 @@ class DivAccessibility extends Resolvable with EquatableMixin {
 
   /// A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver settings on iOS, a tooltip is played after `description`.
   final Expression<String>? hint;
+
+  /// Indicates the current status of the checkbox or radio button. `true` is selected, `false` is not selected.
+  final Expression<bool>? isChecked;
 
   /// The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
   // default value: DivAccessibilityMode.default_
@@ -39,6 +43,7 @@ class DivAccessibility extends Resolvable with EquatableMixin {
   List<Object?> get props => [
         description,
         hint,
+        isChecked,
         mode,
         muteAfterAction,
         stateDescription,
@@ -48,6 +53,7 @@ class DivAccessibility extends Resolvable with EquatableMixin {
   DivAccessibility copyWith({
     Expression<String>? Function()? description,
     Expression<String>? Function()? hint,
+    Expression<bool>? Function()? isChecked,
     Expression<DivAccessibilityMode>? mode,
     Expression<bool>? muteAfterAction,
     Expression<String>? Function()? stateDescription,
@@ -57,6 +63,7 @@ class DivAccessibility extends Resolvable with EquatableMixin {
         description:
             description != null ? description.call() : this.description,
         hint: hint != null ? hint.call() : this.hint,
+        isChecked: isChecked != null ? isChecked.call() : this.isChecked,
         mode: mode ?? this.mode,
         muteAfterAction: muteAfterAction ?? this.muteAfterAction,
         stateDescription: stateDescription != null
@@ -74,47 +81,49 @@ class DivAccessibility extends Resolvable with EquatableMixin {
     try {
       return DivAccessibility(
         description: safeParseStrExpr(
-          json['description']?.toString(),
+          json['description'],
         ),
         hint: safeParseStrExpr(
-          json['hint']?.toString(),
+          json['hint'],
         ),
-        mode: safeParseStrEnumExpr(
-          json['mode'],
-          parse: DivAccessibilityMode.fromJson,
-          fallback: DivAccessibilityMode.default_,
-        )!,
-        muteAfterAction: safeParseBoolExpr(
-          json['mute_after_action'],
-          fallback: false,
-        )!,
+        isChecked: safeParseBoolExpr(
+          json['is_checked'],
+        ),
+        mode: reqVProp<DivAccessibilityMode>(
+          safeParseStrEnumExpr(
+            json['mode'],
+            parse: DivAccessibilityMode.fromJson,
+            fallback: DivAccessibilityMode.default_,
+          ),
+          name: 'mode',
+        ),
+        muteAfterAction: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['mute_after_action'],
+            fallback: false,
+          ),
+          name: 'mute_after_action',
+        ),
         stateDescription: safeParseStrExpr(
-          json['state_description']?.toString(),
+          json['state_description'],
         ),
-        type: safeParseStrEnum(
-          json['type'],
-          parse: DivAccessibilityType.fromJson,
-          fallback: DivAccessibilityType.auto,
-        )!,
+        type: reqProp<DivAccessibilityType>(
+          safeParseStrEnum(
+            json['type'],
+            parse: DivAccessibilityType.fromJson,
+            fallback: DivAccessibilityType.auto,
+          ),
+          name: 'type',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivAccessibility resolve(DivVariableContext context) {
-    description?.resolve(context);
-    hint?.resolve(context);
-    mode.resolve(context);
-    muteAfterAction.resolve(context);
-    stateDescription?.resolve(context);
-    type.resolve(context);
-    return this;
-  }
 }
 
-enum DivAccessibilityType implements Resolvable {
+enum DivAccessibilityType {
   none('none'),
   button('button'),
   image('image'),
@@ -124,6 +133,8 @@ enum DivAccessibilityType implements Resolvable {
   tabBar('tab_bar'),
   list('list'),
   select('select'),
+  checkbox('checkbox'),
+  radio('radio'),
   auto('auto');
 
   final String value;
@@ -147,6 +158,10 @@ enum DivAccessibilityType implements Resolvable {
 
   bool get isSelect => this == select;
 
+  bool get isCheckbox => this == checkbox;
+
+  bool get isRadio => this == radio;
+
   bool get isAuto => this == auto;
 
   T map<T>({
@@ -159,6 +174,8 @@ enum DivAccessibilityType implements Resolvable {
     required T Function() tabBar,
     required T Function() list,
     required T Function() select,
+    required T Function() checkbox,
+    required T Function() radio,
     required T Function() auto,
   }) {
     switch (this) {
@@ -180,6 +197,10 @@ enum DivAccessibilityType implements Resolvable {
         return list();
       case DivAccessibilityType.select:
         return select();
+      case DivAccessibilityType.checkbox:
+        return checkbox();
+      case DivAccessibilityType.radio:
+        return radio();
       case DivAccessibilityType.auto:
         return auto();
     }
@@ -195,6 +216,8 @@ enum DivAccessibilityType implements Resolvable {
     T Function()? tabBar,
     T Function()? list,
     T Function()? select,
+    T Function()? checkbox,
+    T Function()? radio,
     T Function()? auto,
     required T Function() orElse,
   }) {
@@ -217,6 +240,10 @@ enum DivAccessibilityType implements Resolvable {
         return list?.call() ?? orElse();
       case DivAccessibilityType.select:
         return select?.call() ?? orElse();
+      case DivAccessibilityType.checkbox:
+        return checkbox?.call() ?? orElse();
+      case DivAccessibilityType.radio:
+        return radio?.call() ?? orElse();
       case DivAccessibilityType.auto:
         return auto?.call() ?? orElse();
     }
@@ -248,20 +275,26 @@ enum DivAccessibilityType implements Resolvable {
           return DivAccessibilityType.list;
         case 'select':
           return DivAccessibilityType.select;
+        case 'checkbox':
+          return DivAccessibilityType.checkbox;
+        case 'radio':
+          return DivAccessibilityType.radio;
         case 'auto':
           return DivAccessibilityType.auto;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAccessibilityType: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivAccessibilityType resolve(DivVariableContext context) => this;
 }
 
-enum DivAccessibilityMode implements Resolvable {
+enum DivAccessibilityMode {
   default_('default'),
   merge('merge'),
   exclude('exclude');
@@ -322,11 +355,13 @@ enum DivAccessibilityMode implements Resolvable {
           return DivAccessibilityMode.exclude;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivAccessibilityMode: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivAccessibilityMode resolve(DivVariableContext context) => this;
 }

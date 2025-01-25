@@ -1,7 +1,6 @@
 import CoreGraphics
 import CoreText
 import Foundation
-
 import VGSL
 
 public final class TextBlock: BlockWithTraits {
@@ -31,10 +30,10 @@ public final class TextBlock: BlockWithTraits {
   public let canSelect: Bool
   public let tightenWidth: Bool
   public let additionalTextInsets: EdgeInsets
+  public let truncationToken: NSAttributedString?
+  public let truncationImages: [InlineImage]
 
   let attachments: [TextAttachment]
-  let truncationToken: NSAttributedString?
-  let truncationImages: [InlineImage]
   let truncationAttachments: [TextAttachment]
 
   private var cachedIntrinsicWidth: CGFloat?
@@ -145,7 +144,8 @@ public final class TextBlock: BlockWithTraits {
         text.heightForWidth(
           width,
           maxNumberOfLines: maxIntrinsicNumberOfLines,
-          minNumberOfHiddenLines: minNumberOfHiddenLines
+          minNumberOfHiddenLines: minNumberOfHiddenLines,
+          truncationToken: truncationToken
         ) + additionalTextInsets.vertical.sum
       )
       let result = clamp(height, min: minSize, max: maxSize)

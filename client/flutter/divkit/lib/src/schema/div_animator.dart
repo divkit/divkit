@@ -3,10 +3,9 @@
 import 'package:divkit/src/schema/div_animator_base.dart';
 import 'package:divkit/src/schema/div_color_animator.dart';
 import 'package:divkit/src/schema/div_number_animator.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivAnimator extends Resolvable with EquatableMixin {
+class DivAnimator with EquatableMixin {
   final DivAnimatorBase value;
   final int _index;
 
@@ -88,14 +87,8 @@ class DivAnimator extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivAnimator resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

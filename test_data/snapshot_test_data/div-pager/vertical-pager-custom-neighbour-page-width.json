@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Vertical pager with custom neighbour page width",
   "platforms": [
     "android",
     "ios",
@@ -16,7 +16,195 @@
           "color": "#AAAAAA",
           "type": "solid"
         }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 240
+      },
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "layout_mode": {
+        "type": "fixed",
+        "neighbour_page_width": {
+          "value": 10
+        }
+      },
+      "items": [
+        {
+          "type": "text_page_match_parent_height",
+          "text": "First page\nneighbour_page_width = 10\nNeighbour page visible part = 20"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Middle page\nneighbour_page_width = 10"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Last page\nneighbour_page_width = 10\nNeighbour page visible part = 20"
+        }
       ]
+    },
+    "scale": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "item_builder": {
+        "data": [
+          {
+            "style": "scale"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          },
+          {
+            "style": "mark"
+          }
+        ],
+        "prototypes": [
+          {
+            "selector": "@{getStringFromDict(it, 'style') == 'scale'}",
+            "div": {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 2
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "delimiter_style": {
+                "orientation": "vertical",
+                "color": "#AAAAAA"
+              },
+              "alignment_horizontal": "center"
+            }
+          },
+          {
+            "selector": "@{getStringFromDict(it, 'style') == 'mark'}",
+            "div": {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 6
+              },
+              "height": {
+                "type": "fixed",
+                "value": 1
+              },
+              "margins": {
+                "top": "@{index * 10}"
+              },
+              "delimiter_style": {
+                "color": "#000000"
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "card": {
@@ -25,42 +213,40 @@
       {
         "state_id": 0,
         "div": {
-          "type": "pager",
-          "layout_mode": {
-            "type": "fixed",
-            "neighbour_page_width": {
-              "type": "fixed",
-              "value": 10
-            }
-          },
-          "orientation": "vertical",
-          "height": {
-            "type": "fixed",
-            "value": 200
-          },
-          "border": {
-            "stroke": {
-              "color": "#BBFF0000",
-              "width": 1
-            },
-            "corner_radius": 10
-          },
-          "item_spacing": {
-            "type": "fixed",
-            "value": 10
-          },
+          "type": "container",
+          "orientation": "horizontal",
           "items": [
             {
-              "type": "text_page_match_parent_height",
-              "text": "For millions of years mankind lived just like animals"
+              "type": "container",
+              "width": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "test_pager",
+                  "default_item": 0,
+                  "margins": {
+                    "bottom": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 1,
+                  "margins": {
+                    "bottom": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 2
+                }
+              ]
             },
             {
-              "type": "text_page_match_parent_height",
-              "text": "Then something happened which unleashed the power of our imagination"
-            },
-            {
-              "type": "text_page_match_parent_height",
-              "text": "We learned to talk"
+              "type": "scale",
+              "margins": {
+                "left": 16
+              }
             }
           ]
         }

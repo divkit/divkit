@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivStrokeTemplate: TemplateValue {
+public final class DivStrokeTemplate: TemplateValue, Sendable {
   public let color: Field<Expression<Color>>?
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
   public let width: Field<Expression<Double>>? // constraint: number >= 0; default value: 1

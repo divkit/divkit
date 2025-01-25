@@ -4,10 +4,9 @@ import 'package:divkit/src/schema/div_currency_input_mask.dart';
 import 'package:divkit/src/schema/div_fixed_length_input_mask.dart';
 import 'package:divkit/src/schema/div_input_mask_base.dart';
 import 'package:divkit/src/schema/div_phone_input_mask.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivInputMask extends Resolvable with EquatableMixin {
+class DivInputMask with EquatableMixin {
   final DivInputMaskBase value;
   final int _index;
 
@@ -113,14 +112,8 @@ class DivInputMask extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivInputMask resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionScrollTo {
+public final class DivActionScrollTo: Sendable {
   public static let type: String = "scroll_to"
   public let animated: Expression<Bool> // default value: true
   public let destination: DivActionScrollDestination

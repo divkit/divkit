@@ -221,11 +221,11 @@ data class Text internal constructor(
          */
         val height: Property<Size>?,
         /**
-         * Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
+         * Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
          */
         val hoverEndActions: Property<List<Action>>?,
         /**
-         * Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+         * Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
          */
         val hoverStartActions: Property<List<Action>>?,
         /**
@@ -270,11 +270,11 @@ data class Text internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * Actions performed when an element is released.
+         * Actions performed after clicking/tapping an element.
          */
         val pressEndActions: Property<List<Action>>?,
         /**
-         * Actions performed when an element is pressed.
+         * Actions performed at the start of a click/tap on an element.
          */
         val pressStartActions: Property<List<Action>>?,
         /**
@@ -573,9 +573,9 @@ data class Text internal constructor(
              */
             val height: Property<FixedSize>?,
             /**
-             * Defines direction in `start` parameter:
-            `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-            `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+             * Defines the direction in the `start` parameter:
+            – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+            – `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
              * Default value: `normal`.
              */
             val indexingDirection: Property<IndexingDirection>?,
@@ -625,9 +625,9 @@ data class Text internal constructor(
         }
 
         /**
-         * Defines direction in `start` parameter:
-        `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-        `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+         * Defines the direction in the `start` parameter:
+        – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+        – `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
          * 
          * Possible values: [normal], [reversed].
          */
@@ -702,6 +702,7 @@ data class Text internal constructor(
                 actions = additive.actions ?: properties.actions,
                 alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
                 background = additive.background ?: properties.background,
+                baselineOffset = additive.baselineOffset ?: properties.baselineOffset,
                 border = additive.border ?: properties.border,
                 end = additive.end ?: properties.end,
                 fontFamily = additive.fontFamily ?: properties.fontFamily,
@@ -728,13 +729,18 @@ data class Text internal constructor(
              */
             val actions: Property<List<Action>>?,
             /**
-             * Vertical text alignment within the row.
+             * Vertical text alignment within the row. Ignored when a baseline offset is specified.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
              * Character range background.
              */
             val background: Property<TextRangeBackground>?,
+            /**
+             * Character baseline vertial offset. If set, vertical alignment is ignored.
+             * Default value: `0`.
+             */
+            val baselineOffset: Property<Double>?,
             /**
              * Character range border.
              */
@@ -777,7 +783,7 @@ data class Text internal constructor(
              */
             val lineHeight: Property<Int>?,
             /**
-             * A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+             * A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
              */
             val mask: Property<TextRangeMask>?,
             /**
@@ -812,6 +818,7 @@ data class Text internal constructor(
                 result.tryPutProperty("actions", actions)
                 result.tryPutProperty("alignment_vertical", alignmentVertical)
                 result.tryPutProperty("background", background)
+                result.tryPutProperty("baseline_offset", baselineOffset)
                 result.tryPutProperty("border", border)
                 result.tryPutProperty("end", end)
                 result.tryPutProperty("font_family", fontFamily)
@@ -863,8 +870,8 @@ data class Text internal constructor(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -875,8 +882,8 @@ data class Text internal constructor(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1073,8 +1080,8 @@ fun DivScope.text(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1085,8 +1092,8 @@ fun DivScope.text(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1281,8 +1288,8 @@ fun DivScope.textProps(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1293,8 +1300,8 @@ fun DivScope.textProps(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1489,8 +1496,8 @@ fun TemplateScope.textRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1501,8 +1508,8 @@ fun TemplateScope.textRefs(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1699,8 +1706,8 @@ fun Text.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -1711,8 +1718,8 @@ fun Text.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -2041,8 +2048,8 @@ fun Text.evaluate(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -2053,8 +2060,8 @@ fun Text.evaluate(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -2252,8 +2259,8 @@ fun Component<Text>.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
- * @param hoverEndActions Actions performed when hovering over an element ends. Available on platforms with pointing device support (mouse, stylus, etc).
- * @param hoverStartActions Actions performed when hovering over an element. Available on platforms with pointing device support (mouse, stylus, etc).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
  * @param layoutProvider Provides data on the actual size of the element.
@@ -2264,8 +2271,8 @@ fun Component<Text>.override(
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
- * @param pressEndActions Actions performed when an element is released.
- * @param pressStartActions Actions performed when an element is pressed.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -2706,9 +2713,9 @@ fun Text.Ellipsis.asList() = listOf(this)
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2747,9 +2754,9 @@ fun DivScope.textImage(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2786,9 +2793,9 @@ fun DivScope.textImageProps(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2825,9 +2832,9 @@ fun TemplateScope.textImageRefs(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2866,9 +2873,9 @@ fun Text.Image.override(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2906,9 +2913,9 @@ fun Text.Image.defer(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2945,8 +2952,9 @@ fun Text.Image.asList() = listOf(this)
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -2957,7 +2965,7 @@ fun Text.Image.asList() = listOf(this)
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -2971,6 +2979,7 @@ fun DivScope.textRange(
     actions: List<Action>? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
+    baselineOffset: Double? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
@@ -2993,6 +3002,7 @@ fun DivScope.textRange(
         actions = valueOrNull(actions),
         alignmentVertical = valueOrNull(alignmentVertical),
         background = valueOrNull(background),
+        baselineOffset = valueOrNull(baselineOffset),
         border = valueOrNull(border),
         end = valueOrNull(end),
         fontFamily = valueOrNull(fontFamily),
@@ -3015,8 +3025,9 @@ fun DivScope.textRange(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3027,7 +3038,7 @@ fun DivScope.textRange(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3041,6 +3052,7 @@ fun DivScope.textRangeProps(
     actions: List<Action>? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
+    baselineOffset: Double? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
@@ -3062,6 +3074,7 @@ fun DivScope.textRangeProps(
     actions = valueOrNull(actions),
     alignmentVertical = valueOrNull(alignmentVertical),
     background = valueOrNull(background),
+    baselineOffset = valueOrNull(baselineOffset),
     border = valueOrNull(border),
     end = valueOrNull(end),
     fontFamily = valueOrNull(fontFamily),
@@ -3083,8 +3096,9 @@ fun DivScope.textRangeProps(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3095,7 +3109,7 @@ fun DivScope.textRangeProps(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3109,6 +3123,7 @@ fun TemplateScope.textRangeRefs(
     actions: ReferenceProperty<List<Action>>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
+    baselineOffset: ReferenceProperty<Double>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
     fontFamily: ReferenceProperty<String>? = null,
@@ -3130,6 +3145,7 @@ fun TemplateScope.textRangeRefs(
     actions = actions,
     alignmentVertical = alignmentVertical,
     background = background,
+    baselineOffset = baselineOffset,
     border = border,
     end = end,
     fontFamily = fontFamily,
@@ -3151,8 +3167,9 @@ fun TemplateScope.textRangeRefs(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3163,7 +3180,7 @@ fun TemplateScope.textRangeRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3177,6 +3194,7 @@ fun Text.Range.override(
     actions: List<Action>? = null,
     alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
+    baselineOffset: Double? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
@@ -3199,6 +3217,7 @@ fun Text.Range.override(
         actions = valueOrNull(actions) ?: properties.actions,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         background = valueOrNull(background) ?: properties.background,
+        baselineOffset = valueOrNull(baselineOffset) ?: properties.baselineOffset,
         border = valueOrNull(border) ?: properties.border,
         end = valueOrNull(end) ?: properties.end,
         fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
@@ -3221,8 +3240,9 @@ fun Text.Range.override(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -3233,7 +3253,7 @@ fun Text.Range.override(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3247,6 +3267,7 @@ fun Text.Range.defer(
     actions: ReferenceProperty<List<Action>>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
+    baselineOffset: ReferenceProperty<Double>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
     fontFamily: ReferenceProperty<String>? = null,
@@ -3269,6 +3290,7 @@ fun Text.Range.defer(
         actions = actions ?: properties.actions,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = background ?: properties.background,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
         border = border ?: properties.border,
         end = end ?: properties.end,
         fontFamily = fontFamily ?: properties.fontFamily,
@@ -3290,7 +3312,8 @@ fun Text.Range.defer(
 )
 
 /**
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
@@ -3310,6 +3333,7 @@ fun Text.Range.defer(
 fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
+    baselineOffset: ExpressionProperty<Double>? = null,
     end: ExpressionProperty<Int>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontFeatureSettings: ExpressionProperty<String>? = null,
@@ -3329,6 +3353,7 @@ fun Text.Range.evaluate(
         actions = properties.actions,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = properties.background,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
         border = properties.border,
         end = end ?: properties.end,
         fontFamily = fontFamily ?: properties.fontFamily,

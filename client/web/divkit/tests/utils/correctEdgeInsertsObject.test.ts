@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctEdgeInsertsObject } from '../../src/utils/correctEdgeInsertsObject';
 
 describe('correctEdgeInsertsObject', () => {

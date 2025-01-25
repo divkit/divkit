@@ -13,6 +13,7 @@
     }
 
     const AVAIL_SET_STORED_TYPES = new Set(['string', 'integer', 'number', 'url', 'color', 'boolean']);
+    const AVAIL_SET_STORED_ALL_TYPES = new Set(['string', 'integer', 'number', 'url', 'color', 'boolean', 'array', 'dict']);
 </script>
 
 <script lang="ts">
@@ -43,7 +44,8 @@
         DivVariable,
         Direction,
         ActionMenuItem,
-        VariableTrigger
+        VariableTrigger,
+        DownloadCallbacks
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
@@ -52,7 +54,7 @@
     import type { VideoElements } from '../types/video';
     import type { Patch } from '../types/patch';
     import type { ComponentContext } from '../types/componentContext';
-    import type { Store, StoreTypes } from '../../typings/store';
+    import type { Store, StoreAllTypes, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
@@ -87,6 +89,7 @@
     import { filterEnabledActions } from '../utils/filterEnabledActions';
     import { ENABLED_CTX, type EnabledCtxValue } from '../context/enabled';
     import { createAnimator, type AnimatorInstance } from '../utils/animators';
+    import { getStateContext, getTooltipContext } from '../utils/componentUtils';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -227,10 +230,13 @@
         ownerNode: HTMLElement;
         desc: MaybeMissing<Tooltip>;
         timeoutId: number | null;
+        componentContext: ComponentContext | undefined;
     }[] = [];
+    const shownTooltips = new Set<string>();
     let menu: {
         items: MaybeMissing<ActionMenuItem>[];
         node: HTMLElement;
+        componentContext: ComponentContext | undefined;
     } | undefined;
 
     const timeouts: number[] = [];
@@ -500,31 +506,39 @@
         return '';
     }
 
-    async function setState(stateId: string | null): Promise<void> {
-        if (!process.env.ENABLE_COMPONENT_STATE && process.env.ENABLE_COMPONENT_STATE !== undefined) {
-            throw new Error('State is not supported');
-        }
-
+    async function setState(
+        stateId: string | null | undefined,
+        componentContext: ComponentContext | undefined
+    ): Promise<void> {
         if (!stateId) {
             throw new Error('Missing state id');
         }
 
-        let state: StateInterface = stateInterface;
         let parts = stateId.split('/');
+        const tooltipCtx = parts.length % 2 === 0 && getTooltipContext(componentContext);
+        let ctx: ComponentContext | undefined = tooltipCtx || rootComponentContext;
 
-        parts = ['root', ...parts];
-        if (parts.length < 2 || parts.length % 2 !== 0) {
-            throw new Error('Incorrect state id format');
+        if (!tooltipCtx) {
+            if (ctx.states?.root) {
+                ctx = await ctx.states.root(parts[0]);
+                if (!ctx) {
+                    return;
+                }
+                parts = parts.slice(1);
+            } else {
+                return;
+            }
         }
 
         for (let i = 0; i < parts.length; i += 2) {
             const divId = parts[i];
             const selectedStateId = parts[i + 1];
 
-            let childState = state.getChild(divId);
-            if (childState) {
-                await childState.setState(selectedStateId);
-                state = childState;
+            if (ctx.states?.[divId]) {
+                ctx = await ctx.states?.[divId](selectedStateId);
+                if (!ctx) {
+                    return;
+                }
             } else {
                 return;
             }
@@ -604,8 +618,8 @@
     }
 
     function callVideoAction(
-        id: string | null,
-        action: string | null,
+        id: string | null | undefined,
+        action: string | null | undefined,
         componentContext?: ComponentContext
     ): void {
         const log = (componentContext?.logError || logError);
@@ -644,8 +658,8 @@
     }
 
     function callDownloadAction(
-        url: string | null,
-        action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
+        url: string | null | undefined,
+        callbacks: MaybeMissing<DownloadCallbacks | undefined>,
         componentContext?: ComponentContext
     ): void {
         const log = (componentContext?.logError || logError);
@@ -699,7 +713,7 @@
                                 }
                             }));
                             execAnyActions(json.patch?.on_failed_actions);
-                            execAnyActions(action.download_callbacks?.on_fail_actions);
+                            execAnyActions(callbacks?.on_fail_actions);
                             return;
                         }
                     }
@@ -710,7 +724,7 @@
                         }
                     });
                     execAnyActions(json.patch?.on_applied_actions);
-                    execAnyActions(action.download_callbacks?.on_success_actions);
+                    execAnyActions(callbacks?.on_success_actions);
                 }
             }).catch(err => {
                 log(wrapError(new Error('Failed to download the patch'), {
@@ -719,7 +733,7 @@
                         originalError: err
                     }
                 }));
-                execAnyActions(action.download_callbacks?.on_fail_actions);
+                execAnyActions(callbacks?.on_fail_actions);
             });
         } else {
             log(wrapError(new Error('Missing url in download action'), {
@@ -730,7 +744,11 @@
         }
     }
 
-    function callShowTooltip(id: string | null, multiple: string | null, componentContext?: ComponentContext): void {
+    function callShowTooltip(
+        id: string | null | undefined,
+        multiple: string | boolean | null | undefined,
+        componentContext?: ComponentContext
+    ): void {
         const log = (componentContext?.logError || logError);
 
         if (!id) {
@@ -746,15 +764,17 @@
             }));
             return;
         }
-        if (multiple !== 'true' && tooltips.some(it => it.desc.id === id)) {
+        if ((multiple !== 'true' && multiple !== true) && shownTooltips.has(id)) {
             return;
         }
+        shownTooltips.add(id);
 
         const info = {
             internalId: ++tooltipCounter,
             ownerNode: item.onwerNode,
             desc: item.tooltip,
-            timeoutId: 0
+            timeoutId: 0,
+            componentContext
         };
         tooltips = [...tooltips, info];
 
@@ -767,7 +787,7 @@
         }
     }
 
-    function callHideTooltip(id: string | null, componentContext?: ComponentContext): void {
+    function callHideTooltip(id: string | null | undefined, componentContext?: ComponentContext): void {
         const log = (componentContext?.logError || logError);
 
         if (!id) {
@@ -788,10 +808,10 @@
 
     function callSetStoredValue(
         componentContext: ComponentContext | undefined,
-        name: string | null,
-        value: string | null,
-        type: string | null,
-        lifetime: string | null
+        name: string | null | undefined,
+        value: object | string | bigint | number | boolean | null | undefined,
+        type: string | null | undefined,
+        lifetime: string | number | null | undefined
     ): void {
         const log = componentContext?.logError || logError;
         if (!store) {
@@ -799,24 +819,37 @@
             return;
         }
 
-        let val: string | number | boolean | null = value;
+        let val = value;
 
         if (!name || !val || !type || !lifetime) {
             log(wrapError(new Error('Missing required params for set_stored_value')));
             return;
         }
-        if (!AVAIL_SET_STORED_TYPES.has(type)) {
+        if (!AVAIL_SET_STORED_ALL_TYPES.has(type)) {
             log(wrapError(new Error('Incorrect stored type')));
             return;
         }
 
-        if (type === 'integer' || type === 'number') {
-            val = Number(val);
-        } else if (type === 'boolean') {
+        if (type === 'boolean') {
             val = val === 'true' || val === '1';
         }
 
-        store.setValue(name, type as StoreTypes, val, Number(lifetime));
+        if (store.set) {
+            store.set(name, type as StoreAllTypes, val, Number(lifetime));
+        } else if (store.setValue) {
+            if (!AVAIL_SET_STORED_TYPES.has(type)) {
+                log(wrapError(new Error('Incorrect stored type')));
+                return;
+            }
+            if (typeof val !== 'string' && typeof val !== 'number' && typeof val !== 'boolean') {
+                log(wrapError(new Error('Incorrect stored value')));
+                return;
+            }
+            if (type === 'integer' || type === 'number') {
+                val = Number(val);
+            }
+            store.setValue(name, type as StoreTypes, val, Number(lifetime));
+        }
     }
 
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
@@ -865,7 +898,7 @@
 
                 switch (parts[1]) {
                     case 'set_state':
-                        await setState(params.get('state_id'));
+                        await setState(params.get('state_id'), componentContext);
                         break;
                     case 'set_current_item':
                     case 'set_previous_item':
@@ -932,7 +965,7 @@
                         callVideoAction(params.get('id'), params.get('action'), componentContext);
                         break;
                     case 'download':
-                        callDownloadAction(params.get('url'), action, componentContext);
+                        callDownloadAction(params.get('url'), action.download_callbacks, componentContext);
                         break;
                     case 'show_tooltip':
                         callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
@@ -1111,6 +1144,49 @@
 
                     break;
                 }
+                case 'show_tooltip': {
+                    callShowTooltip(actionTyped.id, actionTyped.multiple, componentContext);
+                    break;
+                }
+                case 'hide_tooltip': {
+                    callHideTooltip(actionTyped.id, componentContext);
+                    break;
+                }
+                case 'timer': {
+                    if (timersController) {
+                        timersController.execTimerAction(actionTyped.id, actionTyped.action);
+                    } else {
+                        log(wrapError(new Error('Incorrect timer action'), {
+                            additional: {
+                                id: actionTyped.id,
+                                action: actionTyped.action
+                            }
+                        }));
+                    }
+                    break;
+                }
+                case 'download': {
+                    callDownloadAction(actionTyped.url, actionTyped, componentContext);
+                    break;
+                }
+                case 'video': {
+                    callVideoAction(actionTyped.id, actionTyped.action, componentContext);
+                    break;
+                }
+                case 'set_stored_value': {
+                    callSetStoredValue(
+                        componentContext,
+                        actionTyped.name,
+                        actionTyped.value?.value,
+                        actionTyped.value?.type,
+                        actionTyped.lifetime
+                    );
+                    break;
+                }
+                case 'set_state': {
+                    await setState(actionTyped.state_id, componentContext);
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {
@@ -1170,7 +1246,8 @@
             } else if (opts.node && Array.isArray(action.menu_items) && action.menu_items.length) {
                 menu = {
                     items: action.menu_items,
-                    node: opts.node
+                    node: opts.node,
+                    componentContext: opts.componentContext
                 };
             }
         }
@@ -1472,7 +1549,7 @@
     function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
             variables: mergeMaps(variables, componentContext.variables),
-            processExpressions<T>(t: T) {
+            processExpressions: function<T>(t: T) {
                 return getJsonWithVars(
                     logError,
                     t
@@ -1480,7 +1557,7 @@
             },
             execAction,
             logError,
-            getComponentProperty<T>(property: string): T {
+            getComponentProperty: function<T>(property: string): T {
                 return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
             },
             direction
@@ -1488,20 +1565,20 @@
     }
 
     function produceComponentContext(from?: ComponentContext | undefined): ComponentContext {
-        const res: ComponentContext = {
+        const ctx: ComponentContext = {
             id: '',
             json: {} as DivBaseData,
             path: [],
             templateContext: {},
             logError(error) {
                 error.additional = error.additional || {};
-                error.additional.path = res.path.join('/');
+                error.additional.path = ctx.path.join('/');
                 if (process.env.DEVTOOL) {
-                    error.additional.json = res.json;
-                    error.additional.origJson = res.origJson;
+                    error.additional.json = ctx.json;
+                    error.additional.origJson = ctx.origJson;
 
                     const fullpath: ComponentContext[] = [];
-                    let temp = res;
+                    let temp = ctx;
                     while (temp.parent) {
                         fullpath.push(temp);
                         temp = temp.parent;
@@ -1512,7 +1589,7 @@
             },
             execAnyActions(actions, opts = {}) {
                 return execAnyActions(actions, {
-                    componentContext: res,
+                    componentContext: ctx,
                     processUrls: opts.processUrls,
                     node: opts.node,
                     logType: opts.logType
@@ -1520,30 +1597,30 @@
             },
             getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
                 return getDerivedFromVars(
-                    res.logError,
+                    ctx.logError,
                     jsonProp,
-                    mergeMaps(res.variables, additionalVars),
+                    mergeMaps(ctx.variables, additionalVars),
                     keepComplex,
-                    res.customFunctions
+                    ctx.customFunctions
                 );
             },
             getJsonWithVars(jsonProp, additionalVars, keepComplex = false) {
                 return getJsonWithVars(
-                    res.logError,
+                    ctx.logError,
                     jsonProp,
-                    mergeMaps(res.variables, additionalVars),
+                    mergeMaps(ctx.variables, additionalVars),
                     keepComplex,
-                    res.customFunctions
+                    ctx.customFunctions
                 );
             },
             evalExpression(store, expr, opts) {
-                return evalExpression(mergeMaps(variables, res.variables), res.customFunctions, store, expr, opts);
+                return evalExpression(mergeMaps(variables, ctx.variables), ctx.customFunctions, store, expr, opts);
             },
             produceChildContext(div, opts = {}) {
-                const componentContext = produceComponentContext(res);
+                const componentContext = produceComponentContext(ctx);
 
                 let childJson: MaybeMissing<DivBaseData> = div;
-                let childContext: TemplateContext = res.templateContext;
+                let childContext: TemplateContext = ctx.templateContext;
 
                 const {
                     templateContext: childProcessedContext,
@@ -1571,6 +1648,9 @@
                 if (div.type && !opts.isRootState) {
                     componentContext.path.push(div.type);
                 }
+                if (opts.isTooltipRoot) {
+                    componentContext.isTooltipRoot = true;
+                }
 
                 let localVars: Map<string, Variable> | undefined;
 
@@ -1584,7 +1664,7 @@
                     });
                 }
                 componentContext.variables = mergeMaps(
-                    res.variables,
+                    ctx.variables,
                     mergeMaps(localVars, opts.variables)
                 );
 
@@ -1597,7 +1677,7 @@
                                 checkCustomFunction(desc);
                             } catch (err: unknown) {
                                 // Only Error thrown here
-                                res.logError(wrapError(err as Error));
+                                ctx.logError(wrapError(err as Error));
                                 return;
                             }
                             const fn = desc as DivFunction;
@@ -1607,10 +1687,10 @@
                         }
                     });
                 }
-                componentContext.customFunctions = mergeCustomFunctions(res.customFunctions, localCustomFunctions);
+                componentContext.customFunctions = mergeCustomFunctions(ctx.customFunctions, localCustomFunctions);
 
                 if (Array.isArray(childProcessedJson.animators)) {
-                    res.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
+                    ctx.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
                         (acc, item) => {
                             if (item.id) {
                                 acc[item.id] = item;
@@ -1631,13 +1711,13 @@
                 return componentContext;
             },
             getVariable(varName, type) {
-                const variable = (res.variables || variables).get(varName);
+                const variable = ctx.variables?.get(varName) || variables.get(varName);
 
                 if (variable) {
                     const foundType = variable.getType();
 
                     if (type && foundType !== type) {
-                        res.logError(wrapError(new Error(`Variable should have type "${type}"`), {
+                        ctx.logError(wrapError(new Error(`Variable should have type "${type}"`), {
                             additional: {
                                 name: varName,
                                 foundType
@@ -1650,34 +1730,49 @@
                 return variable;
             },
             getAnimator(name) {
-                return res.animators?.[name] || res.parent?.getAnimator(name) || undefined;
+                return ctx.animators?.[name] || ctx.parent?.getAnimator(name) || undefined;
+            },
+            registerState(stateId, setState) {
+                const stateCtx = getStateContext(ctx.parent);
+
+                if (stateCtx) {
+                    stateCtx.states = stateCtx.states || {};
+                    stateCtx.states[stateId] = setState;
+                }
+            },
+            unregisterState(stateId) {
+                const stateCtx = getStateContext(ctx.parent);
+
+                if (stateCtx?.states) {
+                    delete stateCtx.states[stateId];
+                }
             },
             destroy() {
-                const set = componentContextMap.get(res.id);
+                const set = componentContextMap.get(ctx.id);
                 if (set) {
-                    set.delete(res);
+                    set.delete(ctx);
                     if (!set.size) {
-                        componentContextMap.delete(res.id);
+                        componentContextMap.delete(ctx.id);
                     }
                 }
             },
         };
 
         if (from) {
-            res.parent = from;
-            res.path = from.path.slice();
+            ctx.parent = from;
+            ctx.path = from.path.slice();
 
             if (from.fakeElement) {
-                res.fakeElement = true;
+                ctx.fakeElement = true;
             }
         } else {
-            res.json = {
+            ctx.json = {
                 type: 'root'
             };
-            res.isRootState = true;
+            ctx.isRootState = true;
         }
 
-        return res;
+        return ctx;
     }
 
     function registerTimeout(timeout: number): void {
@@ -1733,45 +1828,7 @@
         }
     });
 
-    const stateInterface: StateInterface = {
-        setState(_stateId: string): Promise<void> {
-            throw new Error('Not implemented');
-        },
-        getChild(id: string): StateInterface | undefined {
-            if (childStateMap && childStateMap.has(id)) {
-                return childStateMap.get(id);
-            }
-
-            logError(wrapError(new Error('Missing state block with id'), {
-                additional: {
-                    id
-                }
-            }));
-
-            return undefined;
-        }
-    };
-
-    let childStateMap: Map<string, StateInterface> | null = null;
     setContext<StateCtxValue>(STATE_CTX, {
-        registerInstance(id: string, block: StateInterface) {
-            if (!childStateMap) {
-                childStateMap = new Map();
-            }
-
-            if (childStateMap.has(id)) {
-                logError(wrapError(new Error('Duplicate state with id'), {
-                    additional: {
-                        id
-                    }
-                }));
-            } else {
-                childStateMap.set(id, block);
-            }
-        },
-        unregisterInstance(id: string) {
-            childStateMap?.delete(id);
-        },
         runVisibilityTransition(
             _json: DivBaseData,
             _componentContext: ComponentContext,
@@ -1976,25 +2033,20 @@
     const rootComponentContext = produceComponentContext();
     let rootStateComponentContext: ComponentContext | undefined;
     $: if (states && !hasError && !hsaIdError) {
-        const rootStateDiv = (
-            process.env.ENABLE_COMPONENT_STATE ||
-            process.env.ENABLE_COMPONENT_STATE === undefined
-        ) ?
-            {
-                type: 'state',
-                id: 'root',
-                width: {
-                    type: 'match_parent',
-                },
-                height: {
-                    type: 'match_parent',
-                },
-                states: states.map(state => ({
-                    state_id: state.state_id.toString(),
-                    div: state.div
-                }))
-            } :
-            states[0].div;
+        const rootStateDiv: DivBaseData = {
+            type: 'state',
+            id: 'root',
+            width: {
+                type: 'match_parent',
+            },
+            height: {
+                type: 'match_parent',
+            },
+            states: states.map(state => ({
+                state_id: state.state_id.toString(),
+                div: state.div
+            }))
+        } as DivBaseData;
 
         rootStateComponentContext = rootComponentContext.produceChildContext(rootStateDiv, {
             isRootState: true
@@ -2079,7 +2131,7 @@
                     ownerNode={item.ownerNode}
                     data={item.desc}
                     internalId={item.internalId}
-                    parentComponentContext={rootStateComponentContext}
+                    parentComponentContext={item.componentContext || rootStateComponentContext}
                 />
             {/each}
         {/if}
@@ -2088,7 +2140,7 @@
             <Menu
                 ownerNode={menu.node}
                 items={menu.items}
-                parentComponentContext={rootStateComponentContext}
+                parentComponentContext={menu.componentContext || rootStateComponentContext}
                 on:close={() => menu = undefined}
             />
         {/if}

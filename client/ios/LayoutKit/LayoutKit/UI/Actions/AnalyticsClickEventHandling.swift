@@ -1,5 +1,4 @@
 import UIKit
-
 import VGSL
 
 public protocol AnalyticsTouchEventHandling {

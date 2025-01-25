@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivIndicatorTemplate: TemplateValue {
+public final class DivIndicatorTemplate: TemplateValue, Sendable {
   public typealias Animation = DivIndicator.Animation
 
   public static let type: String = "indicator"

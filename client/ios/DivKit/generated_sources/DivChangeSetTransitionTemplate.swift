@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivChangeSetTransitionTemplate: TemplateValue {
+public final class DivChangeSetTransitionTemplate: TemplateValue, Sendable {
   public static let type: String = "set"
   public let parent: String?
   public let items: Field<[DivChangeTransitionTemplate]>? // at least 1 elements

@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionTimer {
+public final class DivActionTimer: Sendable {
   @frozen
-  public enum Action: String, CaseIterable {
+  public enum Action: String, CaseIterable, Sendable {
     case start = "start"
     case stop = "stop"
     case pause = "pause"

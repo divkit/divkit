@@ -1,8 +1,6 @@
 @testable import DivKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 final class DivDataPatchExtensionsTests: XCTestCase {
   private var callbacksCount = 0

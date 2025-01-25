@@ -1,16 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`filters getCssFilter with correct blur 1`] = `"blur(0.2em)"`;
+exports[`filters > getCssFilter with correct blur 1`] = `"blur(0.2em)"`;
 
-exports[`filters getCssFilter with correct blur 2`] = `[]`;
+exports[`filters > getCssFilter with correct blur 2`] = `[]`;
 
-exports[`filters getCssFilter with incorrect object 1`] = `""`;
+exports[`filters > getCssFilter with incorrect object 1`] = `""`;
 
-exports[`filters getCssFilter with incorrect object 2`] = `[]`;
+exports[`filters > getCssFilter with incorrect object 2`] = `[]`;
 
-exports[`filters getCssFilter with incorrect object 2 1`] = `""`;
+exports[`filters > getCssFilter with incorrect object 2 1`] = `""`;
 
-exports[`filters getCssFilter with incorrect object 2 2`] = `
+exports[`filters > getCssFilter with incorrect object 2 2`] = `
 [
   [
     [Error: Unknown filter],
@@ -18,9 +18,9 @@ exports[`filters getCssFilter with incorrect object 2 2`] = `
 ]
 `;
 
-exports[`filters getCssFilter with incorrect object 3 1`] = `""`;
+exports[`filters > getCssFilter with incorrect object 3 1`] = `""`;
 
-exports[`filters getCssFilter with incorrect object 3 2`] = `
+exports[`filters > getCssFilter with incorrect object 3 2`] = `
 [
   [
     [Error: Unknown filter],
@@ -28,6 +28,6 @@ exports[`filters getCssFilter with incorrect object 3 2`] = `
 ]
 `;
 
-exports[`filters getCssFilter with incorrect object 4 1`] = `""`;
+exports[`filters > getCssFilter with incorrect object 4 1`] = `""`;
 
-exports[`filters getCssFilter with incorrect object 4 2`] = `[]`;
+exports[`filters > getCssFilter with incorrect object 4 2`] = `[]`;

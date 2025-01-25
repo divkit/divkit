@@ -1,5 +1,6 @@
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/converters/content_alignment.dart';
+import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
@@ -19,8 +20,9 @@ class DivContainerModel with EquatableMixin {
       ];
 }
 
-extension DivContainerBinder on DivContainer {
-  DivContainerModel bind(BuildContext context) {
+extension DivContainerConvert on DivContainer {
+  DivContainerModel resolve(BuildContext context) {
+    final variables = read<DivContext>(context)!.variables;
     final children = items?.map((e) => DivWidget(e)).toList();
     return DivContainerModel(
       contentAlignment: DivContentAlignmentConverter(
@@ -28,7 +30,7 @@ extension DivContainerBinder on DivContainer {
         contentAlignmentVertical,
         contentAlignmentHorizontal,
         layoutMode,
-      ).convert(),
+      ).resolve(variables),
       children: children ?? [],
     );
   }

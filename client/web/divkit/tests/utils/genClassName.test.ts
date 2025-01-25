@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { genClassName } from '../../src/utils/genClassName';
 
 describe('genClassName', () => {

@@ -1,26 +1,32 @@
 {
-  "description": "Integer value in string property (div-text.text)",
+  "description": "Integer value in string property is not valid (div-text.text)",
   "card": {
     "log_id": "test",
     "states": [
       {
         "state_id": 0,
         "div": {
-          "type": "text",
-          "text": 123
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": 123
+            }
+          ]
         }
       }
     ]
   },
   "expected": {
+    "error_count": 1,
     "card": {
       "log_id": "test",
       "states": [
         {
           "state_id": 0,
           "div": {
-            "type": "text",
-            "text": "123"
+            "type": "container",
+            "items": []
           }
         }
       ]

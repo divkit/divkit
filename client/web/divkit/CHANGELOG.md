@@ -1,3 +1,59 @@
+## 31.0.0 (January 27, 2025)
+
+* Breaking change. Api `Ya.Divkit` in window is now deprecated, and the `Ya.DivKit` should be used (please note the big letter "K" instead of the small "K").
+* Breaking change. Browsers/Node,js now require BigInt support (Chrome 58 -> 67, Safari 11 -> 14, Firefox 67 -> 68, Node.js 8 -> 10.4). Integer values in markup expressions now always use BigInt. `subscribe` and other methods for integer variables now always return BigInt values.
+* Breaking change. Components with actions (not links) are now rendered using a `button`. This may change the default tap animation in iOS and other minor updates.
+* Breaking change. Store methods `getValue` / `setValue` are now deprecated. Provide methods `get` / `set` instead.
+* Breaking change. The build was redone using Vite/Rollup. This changes the situation a bit: there is no longer a css map, and the ESM file versions are no longer minimized. Browser and CJS versions with global variables are still minimized.
+* Breaking change. The logic of the `multiple` parameter for `tooltips` has been brought into line with other platforms, now tooltips without `multiple` are shown no more than once, and with - as many as you like (but no more than one at a time).
+* Breaking change. Tooltips are modal by default.
+* Breaking change: `doubletap_actions` now prevents `actions` from being called (to match Android behaviour).
+* Breaking change: non-interactive elements will now ignore clicks (to better match the native behavior of DivKit).
+* Added `getStoredArrayValue` and `getStoredDictValue` functions.
+* Added support for the `longtap_actions` on the non-touch platforms (desktop).
+* Added support for the `set_state` typed action.
+* Added support for the `set_stored_value` typed action.
+* Changed `doubletap_actions` detect logic.
+* Fixed `array` and `dict` variable types in d.ts.
+
+
+## 30.33.0 (January 20, 2025)
+
+* Added `download` typed action support.
+* Added `is_enabled` property support for the `slider`.
+* Added new functions: `pi`, `toRadians`, `toDegrees`, `sin`, `cos` and `atan`.
+* Added support for the `baseline_offset` property in `text` component.
+* Added support for the typed `timer` action.
+* Added support for the typed `video` action.
+* Disabled extra crop on `transition_in` / `transition_out` / `transition_change` animations.
+* Fixed a bug where the `tooltip` and `menu` used the global context instead of the component context (invoking actions, variable references, etc.).
+* Fixed the `pager` layout with `item_spacing` = 0.
+* The layout of the `pager` elements with overflow has been fixed.
+
+
+## 30.31.0 (December 16, 2024)
+
+* Added support for `accessibility` property in images of `text`.
+* Added support for `indexing_direction` in `images` inside `text`.
+* Added support for the `clip_to_bounds` property in the `state`.
+* Added support for the `press_start_actions`, `press_end_actions`, `hover_start_actions` and `hover_end_actions`.
+* Added suuport for the `item_buildr` in the `gallery` component.
+* Change the `max_length` implementation for the `imput` component to provide a better experience for mobile users.
+* Fixed `paddings` logic in the end of the `gallery`.
+* Fixed a bug with modification of the original json when processing `corners_radius`.
+* Fixed access to card-level variables and global variables "through" local variables.
+* Fixed an unhandled error when the `switch` component was created without required variable.
+* Fixed the `action_animation` bug, which took effect for components without `actions`.
+* Fixed the logic of layout the `video` using the width and height of `match_parent`.
+* Fixed types for the package.
+
+
+## 30.30.0 (December 9, 2024)
+
+* Added limited support for the `accessibility->type` property (only `button`, `image`, `checkbox` and `radio` values is supported). Added support for the `accessibility->is_checked` property.
+* Added typed actions `show_tooltip` and `hide_tooltip`.
+
+
 ## 30.29.0 (December 2, 2024)
 
 * Added support for local `functions` in all components.

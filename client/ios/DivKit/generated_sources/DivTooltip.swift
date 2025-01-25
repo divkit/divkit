@@ -4,9 +4,9 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTooltip {
+public final class DivTooltip: Sendable {
   @frozen
-  public enum Position: String, CaseIterable {
+  public enum Position: String, CaseIterable, Sendable {
     case left = "left"
     case topLeft = "top-left"
     case top = "top"

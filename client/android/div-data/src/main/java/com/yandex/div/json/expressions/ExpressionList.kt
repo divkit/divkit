@@ -67,7 +67,7 @@ class ConstantExpressionList<T : Any>(
 
 internal class MutableExpressionList<T : Any>(
     private val key: String,
-    internal val expressions: List<Expression<T>>,
+    private val expressions: List<Expression<T>>,
     private val listValidator: ListValidator<T>,
     private val logger: ParsingErrorLogger,
 ) : ExpressionList<T> {
@@ -134,5 +134,10 @@ internal class MutableExpressionList<T : Any>(
 
     override fun equals(other: Any?): Boolean {
         return other is MutableExpressionList<*> && expressions == other.expressions
+    }
+
+    @JvmName("getExpressionsInternal")
+    internal fun getExpressions(): List<Expression<T>> {
+        return expressions
     }
 }

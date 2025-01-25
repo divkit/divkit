@@ -25,7 +25,8 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
     final child = factories[div.customType]?.call(div, divContext);
     if (child == null) {
       throw Exception(
-          'Unsupported DivCustom with custom_type: ${div.customType}');
+        'Unsupported DivCustom with custom_type: ${div.customType}',
+      );
     }
     return child;
   }
@@ -82,11 +83,8 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
     final actions = props?['actions'] as List;
     final actionList = <DivActionModel>[];
     for (var action in actions) {
-      final actionModel = DivAction.fromJson(action)
-          ?.resolve(
-            context.variables,
-          )
-          .convert();
+      final actionModel =
+          DivAction.fromJson(action)?.resolve(context.variables);
       if (actionModel != null) {
         actionList.add(actionModel);
       }

@@ -4,11 +4,10 @@ import 'package:divkit/src/schema/end_destination.dart';
 import 'package:divkit/src/schema/index_destination.dart';
 import 'package:divkit/src/schema/offset_destination.dart';
 import 'package:divkit/src/schema/start_destination.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivActionScrollDestination extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivActionScrollDestination with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -137,14 +136,8 @@ class DivActionScrollDestination extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivActionScrollDestination resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

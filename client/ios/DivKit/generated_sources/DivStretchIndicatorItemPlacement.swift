@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivStretchIndicatorItemPlacement {
+public final class DivStretchIndicatorItemPlacement: Sendable {
   public static let type: String = "stretch"
   public let itemSpacing: DivFixedSize // default value: DivFixedSize(value: .value(5))
   public let maxVisibleItems: Expression<Int> // constraint: number > 0; default value: 10

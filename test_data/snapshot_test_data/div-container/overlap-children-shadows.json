@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "shadow_in_overlap_container",
@@ -18,7 +19,7 @@
             "value": 60
           },
           "width": {
-            "type":"fixed",
+            "type": "fixed",
             "value": 60
           },
           "items": [

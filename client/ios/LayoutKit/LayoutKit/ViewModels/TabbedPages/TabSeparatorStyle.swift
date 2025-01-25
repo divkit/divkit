@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import VGSL
 
 #if canImport(UIKit)

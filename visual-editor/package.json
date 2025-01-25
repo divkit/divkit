@@ -1,6 +1,6 @@
 {
   "name": "@divkitframework/visual-editor",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Visual editor for DivKit",
   "keywords": [
     "server-driven-ui",
@@ -36,7 +36,7 @@
     "@codemirror/state": "6.4.1",
     "@codemirror/theme-one-dark": "6.1.2",
     "@codemirror/view": "6.27.0",
-    "@divkitframework/divkit": "30.26.0",
+    "@divkitframework/divkit": "30.30.0-canary-0ac7ad5f4ccce7713c18ef8bde4ad0b62ea13068",
     "@rollup/plugin-typescript": "11.1.6",
     "@sveltejs/vite-plugin-svelte": "3.1.1",
     "@tsconfig/svelte": "5.0.4",

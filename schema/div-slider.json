@@ -149,6 +149,15 @@
           "platforms": [
             "web"
           ]
+        },
+        "is_enabled": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "$description": "translations.json#/div_slider_is_enabled",
+          "platforms": [
+            "android",
+            "web"
+          ]
         }
       }
     }

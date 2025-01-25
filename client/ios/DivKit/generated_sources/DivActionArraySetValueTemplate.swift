@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionArraySetValueTemplate: TemplateValue {
+public final class DivActionArraySetValueTemplate: TemplateValue, Sendable {
   public static let type: String = "array_set_value"
   public let parent: String?
   public let index: Field<Expression<Int>>?

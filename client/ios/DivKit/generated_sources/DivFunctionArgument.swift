@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFunctionArgument {
+public final class DivFunctionArgument: Sendable {
   public let name: String
   public let type: DivEvaluableType
 

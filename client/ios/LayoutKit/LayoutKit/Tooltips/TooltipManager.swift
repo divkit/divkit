@@ -65,7 +65,7 @@ extension TooltipManager {
 public class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
     public let id: String
-    public let duration: Duration
+    public let duration: TimeInterval
     public let view: VisibleBoundsTrackingView
   }
 
@@ -95,38 +95,41 @@ public class DefaultTooltipManager: TooltipManager {
   public func showTooltip(info: TooltipInfo) {
     setupTooltipWindow()
 
-    guard let tooltipWindow else { return }
-
-    let windowBounds = tooltipWindow.bounds.inset(by: tooltipWindow.safeAreaInsets)
-    guard !showingTooltips.keys.contains(info.id),
-          let tooltip = existingAnchorViews.compactMap({
-            $0?.makeTooltip(id: info.id, in: windowBounds)
-          }).first
+    guard let tooltipWindow,
+          !showingTooltips.keys.contains(info.id)
     else { return }
 
-    let view = TooltipContainerView(
-      tooltipView: tooltip.view,
-      tooltipID: tooltip.id,
-      handleAction: handleAction,
-      onCloseAction: { [weak self] in
-        self?.showingTooltips.removeValue(forKey: tooltip.id)
-        self?.tooltipWindow?.isHidden = true
+    let windowBounds = tooltipWindow.bounds.inset(by: tooltipWindow.safeAreaInsets)
+
+    Task { @MainActor in
+      guard let tooltip = await existingAnchorViews.compactMap(
+        concurrencyLimit: 1,
+        transform: { await $0?.makeTooltip(id: info.id, in: windowBounds) }
+      ).first else { return }
+      let view = TooltipContainerView(
+        tooltipView: tooltip.view,
+        handleAction: handleAction,
+        onCloseAction: { [weak self] in
+          self?.showingTooltips.removeValue(forKey: tooltip.id)
+          self?.tooltipWindow?.isHidden = true
+        }
+      )
+      // Passing the statusBarStyle control to `rootViewController` of the main window
+      let vc = ProxyViewController(
+        viewController: UIApplication.shared.delegate?.window??
+          .rootViewController ?? UIViewController()
+      )
+      vc.view = view
+      // Window won't rotate if `rootViewController` is not set
+      tooltipWindow.rootViewController = vc
+      tooltipWindow.isHidden = false
+      tooltipWindow.makeKeyAndVisible()
+      view.frame = tooltipWindow.bounds
+      showingTooltips[info.id] = view
+      if !tooltip.duration.isZero {
+        try await Task.sleep(nanoseconds: UInt64(tooltip.duration.nanoseconds))
+        hideTooltip(id: tooltip.id)
       }
-    )
-    // Passing the statusBarStyle control to `rootViewController` of the main window
-    let vc = ProxyViewController(
-      viewController: UIApplication.shared.delegate?.window??
-        .rootViewController ?? UIViewController()
-    )
-    vc.view = view
-    // Window won't rotate if `rootViewController` is not set
-    tooltipWindow.rootViewController = vc
-    tooltipWindow.isHidden = false
-    tooltipWindow.makeKeyAndVisible()
-    view.frame = tooltipWindow.bounds
-    showingTooltips[info.id] = view
-    if !tooltip.duration.value.isZero {
-      after(tooltip.duration.value, block: { self.hideTooltip(id: tooltip.id) })
     }
   }
 
@@ -182,31 +185,32 @@ public class DefaultTooltipManager: TooltipManager {
 }
 
 extension TooltipAnchorView {
+  @MainActor
   fileprivate func makeTooltip(
     id: String,
     in constraint: CGRect
-  ) -> DefaultTooltipManager.Tooltip? {
-    tooltips
-      .first { $0.id == id }
-      .flatMap {
-        let tooltip = $0
-        let targetRect = window != nil ?
-          convert(bounds, to: nil) :
-          frame
+  ) async -> DefaultTooltipManager.Tooltip? {
+    guard let tooltip = tooltips.first(where: { $0.id == id }) else {
+      return nil
+    }
 
-        return DefaultTooltipManager.Tooltip(
-          id: tooltip.id,
-          duration: tooltip.duration,
-          view: {
-            let tooltipView = tooltip.tooltipViewFactory?.value ?? tooltip.block.makeBlockView()
-            tooltipView.frame = tooltip.calculateFrame(
-              targeting: targetRect,
-              constrainedBy: constraint
-            )
-            return tooltipView
-          }()
-        )
-      }
+    let tooltipView = await tooltip.tooltipViewFactory?() ?? tooltip.block.makeBlockView()
+
+    let targetRect = window != nil ?
+      convert(bounds, to: nil) :
+      frame
+
+    tooltipView.frame = tooltip.calculateFrame(
+      targeting: targetRect,
+      constrainedBy: constraint,
+      useLegacyWidth: tooltip.useLegacyWidth
+    )
+
+    return DefaultTooltipManager.Tooltip(
+      id: tooltip.id,
+      duration: tooltip.duration,
+      view: tooltipView
+    )
   }
 }
 

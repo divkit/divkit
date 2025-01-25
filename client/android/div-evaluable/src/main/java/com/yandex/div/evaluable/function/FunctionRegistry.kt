@@ -82,6 +82,6 @@ internal class FunctionRegistry : FunctionProvider {
 
         return overloaded.singleOrNull {
             it.matchesArgumentsWithCast(args) == Function.MatchResult.Ok
-        } ?: throw getFunctionArgumentsException(name, args)
+        } ?: throw getFunctionArgumentsException(name, args, isMethod)
     }
 }

@@ -5,11 +5,11 @@ import 'package:divkit/src/schema/div_timer.dart';
 import 'package:divkit/src/schema/div_transition_selector.dart';
 import 'package:divkit/src/schema/div_trigger.dart';
 import 'package:divkit/src/schema/div_variable.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Root structure.
-class DivData extends Resolvable with EquatableMixin {
+class DivData with EquatableMixin {
   const DivData({
     required this.logId,
     required this.states,
@@ -25,20 +25,20 @@ class DivData extends Resolvable with EquatableMixin {
 
   /// A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
   // at least 1 elements
-  final List<DivDataState> states;
+  final Arr<DivDataState> states;
 
   /// List of timers.
-  final List<DivTimer>? timers;
+  final Arr<DivTimer>? timers;
 
   /// Events that trigger transition animations.
   // default value: DivTransitionSelector.none
   final Expression<DivTransitionSelector> transitionAnimationSelector;
 
   /// Triggers for changing variables.
-  final List<DivTrigger>? variableTriggers;
+  final Arr<DivTrigger>? variableTriggers;
 
   /// Declaration of variables that can be used in an element.
-  final List<DivVariable>? variables;
+  final Arr<DivVariable>? variables;
 
   @override
   List<Object?> get props => [
@@ -52,11 +52,11 @@ class DivData extends Resolvable with EquatableMixin {
 
   DivData copyWith({
     String? logId,
-    List<DivDataState>? states,
-    List<DivTimer>? Function()? timers,
+    Arr<DivDataState>? states,
+    Arr<DivTimer>? Function()? timers,
     Expression<DivTransitionSelector>? transitionAnimationSelector,
-    List<DivTrigger>? Function()? variableTriggers,
-    List<DivVariable>? Function()? variables,
+    Arr<DivTrigger>? Function()? variableTriggers,
+    Arr<DivVariable>? Function()? variables,
   }) =>
       DivData(
         logId: logId ?? this.logId,
@@ -78,64 +78,68 @@ class DivData extends Resolvable with EquatableMixin {
     }
     try {
       return DivData(
-        logId: safeParseStr(
-          json['log_id']?.toString(),
-        )!,
-        states: safeParseObj(
-          safeListMap(
+        logId: reqProp<String>(
+          safeParseStr(
+            json['log_id'],
+          ),
+          name: 'log_id',
+        ),
+        states: reqProp<Arr<DivDataState>>(
+          safeParseObjects(
             json['states'],
-            (v) => safeParseObj(
-              DivDataState.fromJson(v),
-            )!,
+            (v) => reqProp<DivDataState>(
+              safeParseObject(
+                v,
+                parse: DivDataState.fromJson,
+              ),
+            ),
           ),
-        )!,
-        timers: safeParseObj(
-          safeListMap(
-            json['timers'],
-            (v) => safeParseObj(
-              DivTimer.fromJson(v),
-            )!,
+          name: 'states',
+        ),
+        timers: safeParseObjects(
+          json['timers'],
+          (v) => reqProp<DivTimer>(
+            safeParseObject(
+              v,
+              parse: DivTimer.fromJson,
+            ),
           ),
         ),
-        transitionAnimationSelector: safeParseStrEnumExpr(
-          json['transition_animation_selector'],
-          parse: DivTransitionSelector.fromJson,
-          fallback: DivTransitionSelector.none,
-        )!,
-        variableTriggers: safeParseObj(
-          safeListMap(
-            json['variable_triggers'],
-            (v) => safeParseObj(
-              DivTrigger.fromJson(v),
-            )!,
+        transitionAnimationSelector: reqVProp<DivTransitionSelector>(
+          safeParseStrEnumExpr(
+            json['transition_animation_selector'],
+            parse: DivTransitionSelector.fromJson,
+            fallback: DivTransitionSelector.none,
+          ),
+          name: 'transition_animation_selector',
+        ),
+        variableTriggers: safeParseObjects(
+          json['variable_triggers'],
+          (v) => reqProp<DivTrigger>(
+            safeParseObject(
+              v,
+              parse: DivTrigger.fromJson,
+            ),
           ),
         ),
-        variables: safeParseObj(
-          safeListMap(
-            json['variables'],
-            (v) => safeParseObj(
-              DivVariable.fromJson(v),
-            )!,
+        variables: safeParseObjects(
+          json['variables'],
+          (v) => reqProp<DivVariable>(
+            safeParseObject(
+              v,
+              parse: DivVariable.fromJson,
+            ),
           ),
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivData resolve(DivVariableContext context) {
-    safeListResolve(states, (v) => v.resolve(context));
-    safeListResolve(timers, (v) => v.resolve(context));
-    transitionAnimationSelector.resolve(context);
-    safeListResolve(variableTriggers, (v) => v.resolve(context));
-    safeListResolve(variables, (v) => v.resolve(context));
-    return this;
-  }
 }
 
-class DivDataState extends Resolvable with EquatableMixin {
+class DivDataState with EquatableMixin {
   const DivDataState({
     required this.div,
     required this.stateId,
@@ -170,20 +174,23 @@ class DivDataState extends Resolvable with EquatableMixin {
     }
     try {
       return DivDataState(
-        div: safeParseObj(
-          Div.fromJson(json['div']),
-        )!,
-        stateId: safeParseInt(
-          json['state_id'],
-        )!,
+        div: reqProp<Div>(
+          safeParseObject(
+            json['div'],
+            parse: Div.fromJson,
+          ),
+          name: 'div',
+        ),
+        stateId: reqProp<int>(
+          safeParseInt(
+            json['state_id'],
+          ),
+          name: 'state_id',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivDataState resolve(DivVariableContext context) {
-    return this;
   }
 }

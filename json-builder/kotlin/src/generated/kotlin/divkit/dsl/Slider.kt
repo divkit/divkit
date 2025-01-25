@@ -50,6 +50,7 @@ data class Slider internal constructor(
             functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            isEnabled = additive.isEnabled ?: properties.isEnabled,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             maxValue = additive.maxValue ?: properties.maxValue,
@@ -144,6 +145,11 @@ data class Slider internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Enables or disables toggling values by clicking or swiping.
+         * Default value: `true`.
+         */
+        val isEnabled: Property<Boolean>?,
         /**
          * Provides data on the actual size of the element.
          */
@@ -294,6 +300,7 @@ data class Slider internal constructor(
             result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("is_enabled", isEnabled)
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("max_value", maxValue)
@@ -470,6 +477,7 @@ data class Slider internal constructor(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
@@ -520,6 +528,7 @@ fun DivScope.slider(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
@@ -568,6 +577,7 @@ fun DivScope.slider(
         functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        isEnabled = valueOrNull(isEnabled),
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         maxValue = valueOrNull(maxValue),
@@ -618,6 +628,7 @@ fun DivScope.slider(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
@@ -668,6 +679,7 @@ fun DivScope.sliderProps(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
@@ -715,6 +727,7 @@ fun DivScope.sliderProps(
     functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    isEnabled = valueOrNull(isEnabled),
     layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     maxValue = valueOrNull(maxValue),
@@ -764,6 +777,7 @@ fun DivScope.sliderProps(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
@@ -814,6 +828,7 @@ fun TemplateScope.sliderRefs(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
@@ -861,6 +876,7 @@ fun TemplateScope.sliderRefs(
     functions = functions,
     height = height,
     id = id,
+    isEnabled = isEnabled,
     layoutProvider = layoutProvider,
     margins = margins,
     maxValue = maxValue,
@@ -910,6 +926,7 @@ fun TemplateScope.sliderRefs(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
@@ -960,6 +977,7 @@ fun Slider.override(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
@@ -1008,6 +1026,7 @@ fun Slider.override(
         functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        isEnabled = valueOrNull(isEnabled) ?: properties.isEnabled,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         maxValue = valueOrNull(maxValue) ?: properties.maxValue,
@@ -1058,6 +1077,7 @@ fun Slider.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
@@ -1108,6 +1128,7 @@ fun Slider.defer(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
@@ -1156,6 +1177,7 @@ fun Slider.defer(
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        isEnabled = isEnabled ?: properties.isEnabled,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         maxValue = maxValue ?: properties.maxValue,
@@ -1196,6 +1218,7 @@ fun Slider.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1209,6 +1232,7 @@ fun Slider.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    isEnabled: ExpressionProperty<Boolean>? = null,
     maxValue: ExpressionProperty<Int>? = null,
     minValue: ExpressionProperty<Int>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -1230,6 +1254,7 @@ fun Slider.evaluate(
         functions = properties.functions,
         height = properties.height,
         id = properties.id,
+        isEnabled = isEnabled ?: properties.isEnabled,
         layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         maxValue = maxValue ?: properties.maxValue,
@@ -1280,6 +1305,7 @@ fun Slider.evaluate(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
@@ -1330,6 +1356,7 @@ fun Component<Slider>.override(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
@@ -1379,6 +1406,7 @@ fun Component<Slider>.override(
         functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        isEnabled = valueOrNull(isEnabled),
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         maxValue = valueOrNull(maxValue),
@@ -1429,6 +1457,7 @@ fun Component<Slider>.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
@@ -1479,6 +1508,7 @@ fun Component<Slider>.defer(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
@@ -1528,6 +1558,7 @@ fun Component<Slider>.defer(
         functions = functions,
         height = height,
         id = id,
+        isEnabled = isEnabled,
         layoutProvider = layoutProvider,
         margins = margins,
         maxValue = maxValue,
@@ -1568,6 +1599,7 @@ fun Component<Slider>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1581,6 +1613,7 @@ fun Component<Slider>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    isEnabled: ExpressionProperty<Boolean>? = null,
     maxValue: ExpressionProperty<Int>? = null,
     minValue: ExpressionProperty<Int>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -1603,6 +1636,7 @@ fun Component<Slider>.evaluate(
         functions = null,
         height = null,
         id = null,
+        isEnabled = isEnabled,
         layoutProvider = null,
         margins = null,
         maxValue = maxValue,

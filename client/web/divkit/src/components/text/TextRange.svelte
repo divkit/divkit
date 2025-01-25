@@ -28,6 +28,7 @@
     export let singleline = false;
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
     export let cloudBg = false;
+    export let customLineHeight: number | null = null;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const direction = rootCtx.direction;
@@ -46,6 +47,7 @@
         width: number;
         corner_radius?: number;
     } | null = null;
+    let verticalAlign: number | undefined = undefined;
 
     $: if (componentContext.json) {
         decoration = 'none';
@@ -56,6 +58,7 @@
         fontFamily = '';
         color = '';
         border = null;
+        verticalAlign = undefined;
     }
 
     $: {
@@ -136,19 +139,30 @@
 
     $: shadow = textStyles.text_shadow ? shadowToCssFilter(textStyles.text_shadow, fontSize) : undefined;
 
+    $: {
+        if (typeof textStyles.baseline_offset === 'number') {
+            verticalAlign = textStyles.baseline_offset;
+        }
+    }
+
+    $: customVerticalAlign = typeof textStyles.baseline_offset === 'number' ? undefined : textStyles.alignment_vertical;
+
     $: mods = {
         singleline,
         decoration,
-        align: textStyles.alignment_vertical,
-        cloud: hasCloudBg
+        align: customVerticalAlign,
+        cloud: hasCloudBg,
+        'relative-vertical-align': Boolean(customLineHeight && verticalAlign)
     };
 
     $: style = {
         'font-size': pxToEm((fontSize * 10) / rootFontSize),
-        'line-height': textStyles.alignment_vertical ? 'normal' : lineHeight,
+        'line-height': customVerticalAlign ? 'normal' : lineHeight,
         'letter-spacing': letterSpacing,
         'font-weight': fontWeight,
         'font-family': fontFamily,
+        'vertical-align': (customLineHeight || verticalAlign === undefined) ? undefined : pxToEm(verticalAlign * 10 / fontSize),
+        top: (customLineHeight && verticalAlign !== undefined) ? pxToEm(-verticalAlign * 10 / fontSize) : undefined,
         margin: cloudPadding ?
             edgeInsertsToCss(edgeInsertsMultiply(cloudPadding, -10 / fontSize), $direction) :
             undefined,

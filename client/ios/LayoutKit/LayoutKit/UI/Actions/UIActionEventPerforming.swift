@@ -1,7 +1,6 @@
 import UIKit
 
 public protocol UIActionEventPerforming {
-  func perform(uiActionEvents events: [UIActionEvent], from sender: AnyObject)
   func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject)
 }
 
@@ -20,6 +19,10 @@ public final class UIActionEvent: AppActionEventProtocol {
     self.uiAction = uiAction
   }
 
+  public var payload: UserInterfaceAction.Payload {
+    uiAction.payload
+  }
+
   public func makeHandler(responder: UIResponder) -> Handler? {
     (responder as? UIActionEventPerforming)?.perform(uiActionEvent:from:)
   }
@@ -28,12 +31,6 @@ public final class UIActionEvent: AppActionEventProtocol {
 extension [UIActionEvent]: AppActionEventProtocol {
   public func makeHandler(responder: UIResponder) -> Handler? {
     (responder as? UIActionEventPerforming)?.perform(uiActionEvents:from:)
-  }
-}
-
-extension UIActionEvent {
-  public var payload: UserInterfaceAction.Payload {
-    uiAction.payload
   }
 }
 

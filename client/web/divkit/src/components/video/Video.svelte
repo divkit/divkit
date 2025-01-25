@@ -37,6 +37,7 @@
     let poster: string | undefined = undefined;
     let scale = 'fit';
     let aspectPaddingBottom = '0';
+    let isAbsolute = false;
     let elapsedVariableUnsubscriber: Unsubscriber | undefined;
 
     $: if (componentContext.json) {
@@ -46,6 +47,7 @@
         preload = false;
         poster = undefined;
         scale = 'fit';
+        isAbsolute = false;
     }
 
     $: elapsedVariableName = componentContext.json.elapsed_time_variable;
@@ -76,6 +78,8 @@
     $: jsonPreview = componentContext.getDerivedFromVars(componentContext.json.preview);
     $: jsonScale = componentContext.getDerivedFromVars(componentContext.json.scale);
     $: jsonAspect = componentContext.getDerivedFromVars(componentContext.json.aspect);
+    $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
+    $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
 
     $: {
         sources = correctVideoSource($jsonSource, sources);
@@ -106,8 +110,10 @@
         const newRatio = $jsonAspect?.ratio;
         if (newRatio && isPositiveNumber(newRatio)) {
             aspectPaddingBottom = (100 / Number(newRatio)).toFixed(2);
+            isAbsolute = true;
         } else {
             aspectPaddingBottom = '0';
+            isAbsolute = (!$jsonWidth || $jsonWidth.type === 'match_parent') && $jsonHeight?.type === 'match_parent';
         }
     }
 
@@ -150,7 +156,7 @@
     }
 
     $: mods = {
-        aspect: aspectPaddingBottom !== '0'
+        absolute: isAbsolute
     };
 
     $: style = {
@@ -210,7 +216,7 @@
         {layoutParams}
         heightByAspect={aspectPaddingBottom !== '0'}
     >
-        {#if mods.aspect}
+        {#if aspectPaddingBottom !== '0'}
             <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
                 <video
                     bind:this={videoElem}

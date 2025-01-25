@@ -89,24 +89,14 @@
     },
     "visibility_action": {
       "$ref": "div-visibility-action.json",
-      "$description": "translations.json#/div_base_visibility_action",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_visibility_action"
     },
     "visibility_actions": {
       "type": "array",
       "items": {
         "$ref": "div-visibility-action.json"
       },
-      "$description": "translations.json#/div_base_visibility_actions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_visibility_actions"
     },
     "disappear_actions": {
       "type": "array",

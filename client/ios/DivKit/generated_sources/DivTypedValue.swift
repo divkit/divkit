@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivTypedValue {
+public enum DivTypedValue: Sendable {
   case stringValue(StringValue)
   case integerValue(IntegerValue)
   case numberValue(NumberValue)

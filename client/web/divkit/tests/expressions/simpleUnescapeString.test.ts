@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { simpleUnescapeString } from '../../src/expressions/simpleUnescapeString';
 
 describe('simpleUnescapeString', () => {

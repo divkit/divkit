@@ -1,0 +1,56 @@
+{
+  "description": "Visibility action triggered in container",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "snapshot_test_card",
+      "variables": [
+        {
+          "name": "message",
+          "type": "string",
+          "value": "Visibility action will trigger in 2 seconds"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "paddings": {
+              "left": 10,
+              "right": 10,
+              "top": 10,
+              "bottom": 10
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "@{message}",
+                "font_size": 18,
+                "visibility_actions": [
+                  {
+                    "log_id": "text/visible",
+                    "url": "div-action://set_variable?name=message&value=Triggered!",
+                    "visibility_duration": 2000
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "delay": 2000,
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

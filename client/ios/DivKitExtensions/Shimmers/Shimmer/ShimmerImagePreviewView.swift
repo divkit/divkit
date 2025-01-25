@@ -1,4 +1,5 @@
 import UIKit
+import VGSLFundamentals
 
 final class ShimmerImagePreviewView: UIView {
   private static let animationKey = "ShimmerEffect"
@@ -30,6 +31,24 @@ final class ShimmerImagePreviewView: UIView {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+
+    if let cornerRadius = style.cornerRadius {
+      if let unifiedRadius = cornerRadius.unifiedRadius {
+        let radius = clamp(
+          unifiedRadius,
+          min: 0,
+          max: bounds.size.minDimension.half
+        )
+
+        layer.cornerRadius = radius
+        layer.masksToBounds = true
+      } else {
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = .roundedRect(size: bounds.size, cornerRadii: cornerRadius)
+        layer.mask = maskLayer
+        layer.maskedCorners = .allCorners
+      }
+    }
 
     gradientLayer.frame = ShimmerGradientGeometry.frameScaledToAspectFill(for: bounds)
     animation.apply(style: style)

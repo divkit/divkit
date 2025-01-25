@@ -1,0 +1,103 @@
+{
+  "description": "Gallery with scroll_mode=paging and paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "item": {
+        "type": "text",
+        "text": "",
+        "height": {
+          "type": "fixed",
+          "value": 100
+        },
+        "border": {
+          "corner_radius": 10
+        }
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "gallery",
+            "id": "gallery",
+            "orientation": "horizontal",
+            "scroll_mode": "paging",
+            "item_spacing": 10,
+            "paddings": {
+              "left": 20,
+              "right": 40
+            },
+            "items": [
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#49a5a5",
+                    "type": "solid"
+                  }
+                ]
+              },
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#49a141",
+                    "type": "solid"
+                  }
+                ]
+              },
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#4975a5",
+                    "type": "solid"
+                  }
+                ]
+              },
+              {
+                "type": "item",
+                "background": [
+                  {
+                    "color": "#11e5a5",
+                    "type": "solid"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=gallery",
+          "log_id": "scroll_forward"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_end?id=gallery",
+          "log_id": "scroll_to_end"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    }
+  ]
+}

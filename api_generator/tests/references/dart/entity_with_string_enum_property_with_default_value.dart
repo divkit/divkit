@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithStringEnumPropertyWithDefaultValue extends Resolvable with EquatableMixin  {
+class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin  {
   const EntityWithStringEnumPropertyWithDefaultValue({
     this.value = const ValueExpression(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
@@ -31,20 +31,16 @@ class EntityWithStringEnumPropertyWithDefaultValue extends Resolvable with Equat
     }
     try {
       return EntityWithStringEnumPropertyWithDefaultValue(
-        value: safeParseStrEnumExpr(json['value'], parse: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson, fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second,)!,
+        value: reqVProp<EntityWithStringEnumPropertyWithDefaultValueValue>(safeParseStrEnumExpr(json['value'], parse: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson, fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second,), name: 'value',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  EntityWithStringEnumPropertyWithDefaultValue resolve(DivVariableContext context) {
-    value?.resolve(context);
-    return this;
-  }
 }
 
-enum EntityWithStringEnumPropertyWithDefaultValueValue implements Resolvable {
+enum EntityWithStringEnumPropertyWithDefaultValueValue {
   first('first'),
   second('second'),
   third('third');
@@ -106,8 +102,8 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue implements Resolvable {
       }
       return null;
     } catch (e, st) {
+      logger.warning("Invalid type of EntityWithStringEnumPropertyWithDefaultValueValue: $json", error: e, stackTrace: st,);
       return null;
     }
   }
-  EntityWithStringEnumPropertyWithDefaultValueValue resolve(DivVariableContext context) => this;
 }

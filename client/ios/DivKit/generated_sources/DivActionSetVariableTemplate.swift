@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionSetVariableTemplate: TemplateValue {
+public final class DivActionSetVariableTemplate: TemplateValue, Sendable {
   public static let type: String = "set_variable"
   public let parent: String?
   public let value: Field<DivTypedValueTemplate>?

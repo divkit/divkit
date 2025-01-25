@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivActionCopyToClipboardContent {
+public enum DivActionCopyToClipboardContent: Sendable {
   case contentText(ContentText)
   case contentUrl(ContentUrl)
 

@@ -1,0 +1,354 @@
+{
+  "description": "Ranges with text baseline offset",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "font_size": 12,
+      "font_weight": "medium",
+      "text_color": "#586E75"
+    },
+    "test_text": {
+      "type": "text",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#002B36"
+    }
+  },
+  "card": {
+    "log_id": "text_baseline_offset",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FDF6E3"
+            }
+          ],
+          "items": [
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with baseline offset"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "baseline_offset": 8
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with negative baseline offset"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "baseline_offset": -8
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Text with line height, range with baseline offset"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "line_height": 24,
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "baseline_offset": 8
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with baseline offset and line height"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "line_height": 24,
+                  "baseline_offset": 8
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Text with line height, range with baseline offset and line height"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "line_height": 32,
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "baseline_offset": 8,
+                  "line_height": 24
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with baseline offset and font size"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "font_size": 10,
+                  "baseline_offset": 4
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Range with baseline offset, font size and vertical alignment"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "font_size": 10,
+                  "baseline_offset": -2,
+                  "alignment_vertical": "top"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Overlapping ranges with baseline offset and font size"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 21,
+                  "font_size": 10
+                },
+                {
+                  "start": 6,
+                  "end": 17,
+                  "baseline_offset": 4
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Overlapping ranges with baseline offset, font size and vertical alignment"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 21,
+                  "font_size": 10
+                },
+                {
+                  "start": 6,
+                  "end": 17,
+                  "baseline_offset": 4
+                },
+                {
+                  "start": 12,
+                  "end": 21,
+                  "alignment_vertical": "top"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Overlapping ranges with baseline offset, font size, vertical alignment and line height"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 5,
+                  "line_height": 24
+                },
+                {
+                  "start": 6,
+                  "end": 21,
+                  "font_size": 10
+                },
+                {
+                  "start": 6,
+                  "end": 17,
+                  "baseline_offset": 4
+                },
+                {
+                  "start": 12,
+                  "end": 21,
+                  "alignment_vertical": "top"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 4
+              },
+              "text": "Multiline text with baseline offsets"
+            },
+            {
+              "type": "test_text",
+              "margins": {
+                "bottom": 12
+              },
+              "background_color": "#FFFFFF",
+              "text": "Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet",
+              "ranges": [
+                {
+                  "start": 12,
+                  "end": 17,
+                  "baseline_offset": 8
+                },
+                {
+                  "start": 72,
+                  "end": 75,
+                  "baseline_offset": 8
+                },
+                {
+                  "start": 99,
+                  "end": 102,
+                  "baseline_offset": -8
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

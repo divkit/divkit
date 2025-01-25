@@ -2,11 +2,13 @@
   "description": "Pager with wrap_content width and children with different width have width of the widest initially visible child.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web",
+    "flutter"
   ],
   "templates": {
     "block": {
-      "type": "container",
+      "type": "text",
       "background": [
         {
           "type": "solid",
@@ -19,6 +21,18 @@
       },
       "height": {
         "type": "match_parent"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
       }
     }
   },
@@ -42,25 +56,33 @@
             "value": 4
           },
           "layout_mode": {
-            "type": "fixed",
-            "neighbour_page_width": {
-              "type": "fixed",
-              "value": 20
+            "type": "percentage",
+            "page_width": {
+              "value": 60
             }
           },
           "default_item": 1,
+          "border": {
+            "stroke": {
+              "color": "#FF0000",
+              "width": 1
+            }
+          },
           "items": [
             {
               "type": "block",
-              "block_width": 140
+              "block_width": 200,
+              "text": "Width = 200"
             },
             {
               "type": "block",
-              "block_width": 60
+              "block_width": 120,
+              "text": "Pager width is equal to widest page width"
             },
             {
               "type": "block",
-              "block_width": 100
+              "block_width": 140,
+              "text": "Width = 140"
             }
           ]
         }

@@ -38,6 +38,9 @@ final class CustomFunction: SimpleFunction {
       args
     )
     let resolver = ExpressionResolver(
+      functionsProvider: FunctionsProvider(
+        persistentValuesStorage: DivPersistentValuesStorage()
+      ),
       variableValueProvider: { [weak self] name in
         if let argument = matchedArguments[name] {
           return argument
@@ -50,7 +53,6 @@ final class CustomFunction: SimpleFunction {
         )
         return nil
       },
-      persistentValuesStorage: DivPersistentValuesStorage(),
       errorTracker: context.errorTracker
     )
 

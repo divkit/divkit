@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivBorderTemplate: TemplateValue {
+public final class DivBorderTemplate: TemplateValue, Sendable {
   public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
   public let cornersRadius: Field<DivCornersRadiusTemplate>?
   public let hasShadow: Field<Expression<Bool>>? // default value: false

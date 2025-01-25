@@ -52,4 +52,5 @@
     height: 100%;
     margin: 0;
     appearance: none;
+    pointer-events: auto;
 }

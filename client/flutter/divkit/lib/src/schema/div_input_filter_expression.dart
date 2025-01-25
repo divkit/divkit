@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Filter based on [calculated expressions](https://divkit.tech/docs/en/concepts/expressions).
-class DivInputFilterExpression extends Resolvable with EquatableMixin {
+class DivInputFilterExpression with EquatableMixin {
   const DivInputFilterExpression({
     required this.condition,
   });
@@ -34,18 +34,16 @@ class DivInputFilterExpression extends Resolvable with EquatableMixin {
     }
     try {
       return DivInputFilterExpression(
-        condition: safeParseBoolExpr(
-          json['condition'],
-        )!,
+        condition: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['condition'],
+          ),
+          name: 'condition',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivInputFilterExpression resolve(DivVariableContext context) {
-    condition.resolve(context);
-    return this;
   }
 }

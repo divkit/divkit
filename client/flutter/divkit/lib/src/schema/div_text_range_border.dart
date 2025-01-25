@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_stroke.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Character range border.
-class DivTextRangeBorder extends Resolvable with EquatableMixin {
+class DivTextRangeBorder with EquatableMixin {
   const DivTextRangeBorder({
     this.cornerRadius,
     this.stroke,
@@ -45,19 +45,14 @@ class DivTextRangeBorder extends Resolvable with EquatableMixin {
         cornerRadius: safeParseIntExpr(
           json['corner_radius'],
         ),
-        stroke: safeParseObj(
-          DivStroke.fromJson(json['stroke']),
+        stroke: safeParseObject(
+          json['stroke'],
+          parse: DivStroke.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivTextRangeBorder resolve(DivVariableContext context) {
-    cornerRadius?.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

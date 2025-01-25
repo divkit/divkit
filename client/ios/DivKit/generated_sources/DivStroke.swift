@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivStroke {
+public final class DivStroke: Sendable {
   public let color: Expression<Color>
   public let unit: Expression<DivSizeUnit> // default value: dp
   public let width: Expression<Double> // constraint: number >= 0; default value: 1

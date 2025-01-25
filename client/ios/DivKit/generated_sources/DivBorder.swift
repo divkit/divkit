@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivBorder {
+public final class DivBorder: Sendable {
   public let cornerRadius: Expression<Int>? // constraint: number >= 0
   public let cornersRadius: DivCornersRadius?
   public let hasShadow: Expression<Bool> // default value: false

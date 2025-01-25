@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_fixed_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed width value of the visible part of a neighbouring page.
-class DivNeighbourPageSize extends Resolvable with EquatableMixin {
+class DivNeighbourPageSize with EquatableMixin {
   const DivNeighbourPageSize({
     required this.neighbourPageWidth,
   });
@@ -35,18 +35,17 @@ class DivNeighbourPageSize extends Resolvable with EquatableMixin {
     }
     try {
       return DivNeighbourPageSize(
-        neighbourPageWidth: safeParseObj(
-          DivFixedSize.fromJson(json['neighbour_page_width']),
-        )!,
+        neighbourPageWidth: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['neighbour_page_width'],
+            parse: DivFixedSize.fromJson,
+          ),
+          name: 'neighbour_page_width',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivNeighbourPageSize resolve(DivVariableContext context) {
-    neighbourPageWidth.resolve(context);
-    return this;
   }
 }

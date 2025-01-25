@@ -2,11 +2,11 @@
 
 import 'package:divkit/src/schema/div_pivot.dart';
 import 'package:divkit/src/schema/div_pivot_percentage.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Transformation of the element.
-class DivTransform extends Resolvable with EquatableMixin {
+class DivTransform with EquatableMixin {
   const DivTransform({
     this.pivotX = const DivPivot.divPivotPercentage(
       DivPivotPercentage(
@@ -62,40 +62,41 @@ class DivTransform extends Resolvable with EquatableMixin {
     }
     try {
       return DivTransform(
-        pivotX: safeParseObj(
-          DivPivot.fromJson(json['pivot_x']),
-          fallback: const DivPivot.divPivotPercentage(
-            DivPivotPercentage(
-              value: ValueExpression(
-                50,
+        pivotX: reqProp<DivPivot>(
+          safeParseObject(
+            json['pivot_x'],
+            parse: DivPivot.fromJson,
+            fallback: const DivPivot.divPivotPercentage(
+              DivPivotPercentage(
+                value: ValueExpression(
+                  50,
+                ),
               ),
             ),
           ),
-        )!,
-        pivotY: safeParseObj(
-          DivPivot.fromJson(json['pivot_y']),
-          fallback: const DivPivot.divPivotPercentage(
-            DivPivotPercentage(
-              value: ValueExpression(
-                50,
+          name: 'pivot_x',
+        ),
+        pivotY: reqProp<DivPivot>(
+          safeParseObject(
+            json['pivot_y'],
+            parse: DivPivot.fromJson,
+            fallback: const DivPivot.divPivotPercentage(
+              DivPivotPercentage(
+                value: ValueExpression(
+                  50,
+                ),
               ),
             ),
           ),
-        )!,
+          name: 'pivot_y',
+        ),
         rotation: safeParseDoubleExpr(
           json['rotation'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivTransform resolve(DivVariableContext context) {
-    pivotX.resolve(context);
-    pivotY.resolve(context);
-    rotation?.resolve(context);
-    return this;
   }
 }

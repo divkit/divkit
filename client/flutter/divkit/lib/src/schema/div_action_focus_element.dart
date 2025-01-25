@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Requests focus for an element. May require a user action on the web.
-class DivActionFocusElement extends Resolvable with EquatableMixin {
+class DivActionFocusElement with EquatableMixin {
   const DivActionFocusElement({
     required this.elementId,
   });
@@ -32,18 +32,16 @@ class DivActionFocusElement extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionFocusElement(
-        elementId: safeParseStrExpr(
-          json['element_id']?.toString(),
-        )!,
+        elementId: reqVProp<String>(
+          safeParseStrExpr(
+            json['element_id'],
+          ),
+          name: 'element_id',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionFocusElement resolve(DivVariableContext context) {
-    elementId.resolve(context);
-    return this;
   }
 }

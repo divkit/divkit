@@ -4,9 +4,16 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPager: DivBase {
+public final class DivPager: DivBase, Sendable {
   @frozen
-  public enum Orientation: String, CaseIterable {
+  public enum ItemAlignment: String, CaseIterable, Sendable {
+    case start = "start"
+    case center = "center"
+    case end = "end"
+  }
+
+  @frozen
+  public enum Orientation: String, CaseIterable, Sendable {
     case horizontal = "horizontal"
     case vertical = "vertical"
   }
@@ -20,6 +27,7 @@ public final class DivPager: DivBase {
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let crossAxisAlignment: Expression<ItemAlignment> // default value: start
   public let defaultItem: Expression<Int> // constraint: number >= 0; default value: 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
@@ -40,6 +48,7 @@ public final class DivPager: DivBase {
   public let restrictParentScroll: Expression<Bool> // default value: false
   public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
+  public let scrollAxisAlignment: Expression<ItemAlignment> // default value: center
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
@@ -70,6 +79,10 @@ public final class DivPager: DivBase {
     resolver.resolveNumeric(columnSpan)
   }
 
+  public func resolveCrossAxisAlignment(_ resolver: ExpressionResolver) -> ItemAlignment {
+    resolver.resolveEnum(crossAxisAlignment) ?? ItemAlignment.start
+  }
+
   public func resolveDefaultItem(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumeric(defaultItem) ?? 0
   }
@@ -92,6 +105,10 @@ public final class DivPager: DivBase {
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(rowSpan)
+  }
+
+  public func resolveScrollAxisAlignment(_ resolver: ExpressionResolver) -> ItemAlignment {
+    resolver.resolveEnum(scrollAxisAlignment) ?? ItemAlignment.center
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
@@ -122,6 +139,7 @@ public final class DivPager: DivBase {
     background: [DivBackground]?,
     border: DivBorder?,
     columnSpan: Expression<Int>?,
+    crossAxisAlignment: Expression<ItemAlignment>?,
     defaultItem: Expression<Int>?,
     disappearActions: [DivDisappearAction]?,
     extensions: [DivExtension]?,
@@ -142,6 +160,7 @@ public final class DivPager: DivBase {
     restrictParentScroll: Expression<Bool>?,
     reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
+    scrollAxisAlignment: Expression<ItemAlignment>?,
     selectedActions: [DivAction]?,
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
@@ -164,6 +183,7 @@ public final class DivPager: DivBase {
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
+    self.crossAxisAlignment = crossAxisAlignment ?? .value(.start)
     self.defaultItem = defaultItem ?? .value(0)
     self.disappearActions = disappearActions
     self.extensions = extensions
@@ -184,6 +204,7 @@ public final class DivPager: DivBase {
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
     self.reuseId = reuseId
     self.rowSpan = rowSpan
+    self.scrollAxisAlignment = scrollAxisAlignment ?? .value(.center)
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform
@@ -220,82 +241,88 @@ extension DivPager: Equatable {
     guard
       lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.defaultItem == rhs.defaultItem
+      lhs.crossAxisAlignment == rhs.crossAxisAlignment
     else {
       return false
     }
     guard
+      lhs.defaultItem == rhs.defaultItem,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.functions == rhs.functions,
-      lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.infiniteScroll == rhs.infiniteScroll,
-      lhs.itemBuilder == rhs.itemBuilder,
-      lhs.itemSpacing == rhs.itemSpacing
+      lhs.itemBuilder == rhs.itemBuilder
     else {
       return false
     }
     guard
+      lhs.itemSpacing == rhs.itemSpacing,
       lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutMode == rhs.layoutMode
     else {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.pageTransformation == rhs.pageTransformation,
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.reuseId == rhs.reuseId
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
+      lhs.scrollAxisAlignment == rhs.scrollAxisAlignment
+    else {
+      return false
+    }
+    guard
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -317,6 +344,7 @@ extension DivPager: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["cross_axis_alignment"] = crossAxisAlignment.toValidSerializationValue()
     result["default_item"] = defaultItem.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
@@ -337,6 +365,7 @@ extension DivPager: Serializable {
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
     result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
+    result["scroll_axis_alignment"] = scrollAxisAlignment.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()

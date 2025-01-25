@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_size_unit.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// It sets margins.
-class DivEdgeInsets extends Resolvable with EquatableMixin {
+class DivEdgeInsets with EquatableMixin {
   const DivEdgeInsets({
     this.bottom = const ValueExpression(0),
     this.end,
@@ -80,48 +80,52 @@ class DivEdgeInsets extends Resolvable with EquatableMixin {
     }
     try {
       return DivEdgeInsets(
-        bottom: safeParseIntExpr(
-          json['bottom'],
-          fallback: 0,
-        )!,
+        bottom: reqVProp<int>(
+          safeParseIntExpr(
+            json['bottom'],
+            fallback: 0,
+          ),
+          name: 'bottom',
+        ),
         end: safeParseIntExpr(
           json['end'],
         ),
-        left: safeParseIntExpr(
-          json['left'],
-          fallback: 0,
-        )!,
-        right: safeParseIntExpr(
-          json['right'],
-          fallback: 0,
-        )!,
+        left: reqVProp<int>(
+          safeParseIntExpr(
+            json['left'],
+            fallback: 0,
+          ),
+          name: 'left',
+        ),
+        right: reqVProp<int>(
+          safeParseIntExpr(
+            json['right'],
+            fallback: 0,
+          ),
+          name: 'right',
+        ),
         start: safeParseIntExpr(
           json['start'],
         ),
-        top: safeParseIntExpr(
-          json['top'],
-          fallback: 0,
-        )!,
-        unit: safeParseStrEnumExpr(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        )!,
+        top: reqVProp<int>(
+          safeParseIntExpr(
+            json['top'],
+            fallback: 0,
+          ),
+          name: 'top',
+        ),
+        unit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.dp,
+          ),
+          name: 'unit',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivEdgeInsets resolve(DivVariableContext context) {
-    bottom.resolve(context);
-    end?.resolve(context);
-    left.resolve(context);
-    right.resolve(context);
-    start?.resolve(context);
-    top.resolve(context);
-    unit.resolve(context);
-    return this;
   }
 }

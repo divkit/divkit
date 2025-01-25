@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivInputFilter {
+public enum DivInputFilter: Sendable {
   case divInputFilterRegex(DivInputFilterRegex)
   case divInputFilterExpression(DivInputFilterExpression)
 

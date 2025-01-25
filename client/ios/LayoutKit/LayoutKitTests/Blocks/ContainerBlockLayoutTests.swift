@@ -1,8 +1,6 @@
 @testable import LayoutKit
-
-import XCTest
-
 import VGSL
+import XCTest
 
 extension ContainerBlockLayout {
   fileprivate init(

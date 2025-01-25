@@ -23,18 +23,18 @@ class DivVisibilityActionModel with EquatableMixin {
 }
 
 extension DivVisibilityConverter on DivVisibilityAction {
-  DivVisibilityActionModel convert() {
+  DivVisibilityActionModel resolve(DivVariableContext context) {
     return DivVisibilityActionModel(
       divAction: DivActionModel(
-        enabled: isEnabled.value,
-        url: url?.value,
+        enabled: isEnabled.resolve(context),
+        url: url?.resolve(context),
         typedAction: typed,
         payload: payload,
-        downloadCallbacks: downloadCallbacks?.convert(),
-        logId: logId.value,
+        downloadCallbacks: downloadCallbacks?.resolve(context),
+        logId: logId.resolve(context),
       ),
-      visibilityDuration: visibilityDuration.value,
-      visibilityPercentage: visibilityPercentage.value,
+      visibilityDuration: visibilityDuration.resolve(context),
+      visibilityPercentage: visibilityPercentage.resolve(context),
     );
   }
 }

@@ -84,7 +84,7 @@
               "font_weight": "medium",
               "text_color": "#000000",
               "text_variable": "input_variable",
-              "hint_text": "Supported JSON formats:\n- Card-only: \n    '{ \"states\": [ ... ] }' \n- Card with templates: \n    '{ \"card\": { ... }, \"templates\": { ... } }'",
+              "hint_text": "Supported Data:\n• Link to file :\n    'http://link.to/file.json'\n• Card-only: \n    '{ \"states\": [ ... ] }' \n• Card with templates: \n    '{ \"card\": { ... }, \"templates\": { ... } }'",
               "hint_color": "#88000000",
               "highlight_color": "#1DFF9000",
               "line_height": 24,
@@ -137,6 +137,7 @@
                     },
                     {
                       "type": "button_image",
+                      "alpha": 0.3,
                       "image_url": "divkit-asset://application/images/qr_code_scanner.png",
                       "margins": {
                         "left": 12
@@ -150,6 +151,7 @@
                     },
                     {
                       "type": "button_image",
+                      "alpha": 0.3,
                       "image_url": "divkit-asset://application/images/folder_open.png",
                       "margins": {
                         "left": 12

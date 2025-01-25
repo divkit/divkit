@@ -11,6 +11,8 @@ import org.json.JSONObject
 
 internal object JsonTopologicalSorting {
 
+    private val TYPE_VALIDATOR = ValueValidator<String> { it.isNotEmpty() }
+
     /**
      * Performs sorting of json objects that describes any of following relationship:
      *
@@ -83,9 +85,9 @@ internal object JsonTopologicalSorting {
         dependencies: MutableList<String>
     ) {
         val parent = if (requireParent) {
-            readParent(context, logger, json)
+            readParent(context, json)
         } else {
-            readOptionalParent(context, logger, json)
+            readOptionalParent(context, json)
         }
         parent?.let { dependencies.add(it) }
 
@@ -111,12 +113,12 @@ internal object JsonTopologicalSorting {
         }
     }
 
-    private fun readParent(context: ParsingContext, logger: ParsingErrorLogger, json: JSONObject): String {
-        return JsonPropertyParser.read<String>(context, logger, json, "type", { it.isNotEmpty() })
+    private fun readParent(context: ParsingContext, json: JSONObject): String {
+        return JsonPropertyParser.read(context, json, "type", TYPE_VALIDATOR)
     }
 
-    private fun readOptionalParent(context: ParsingContext, logger: ParsingErrorLogger, json: JSONObject): String? {
-        return JsonPropertyParser.readOptional<String>(context, logger, json, "type", { it.isNotEmpty() })
+    private fun readOptionalParent(context: ParsingContext, json: JSONObject): String? {
+        return JsonPropertyParser.readOptional(context, json, "type", TYPE_VALIDATOR)
     }
 
     private fun processType(

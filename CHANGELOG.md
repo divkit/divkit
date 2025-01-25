@@ -1,3 +1,212 @@
+## 31.0.0
+
+# Android Client:
+* Removed method `DivKitConfiguration.Builder.histogramConfiguration(HistogramConfiguration)`. Use `DivKitConfiguration.Builder.histogramConfiguration(Provider<HistogramConfiguration>)` instead.
+* Removed method `HistogramBridgerecordTimeHistogram(String, Long, Long, Long, TimeUnit, Long)`. Use `HistogramBridgerecordTimeHistogram(String, Long, Long, Long, TimeUnit, Int)` instead.
+* Removed constructor `Div2Context(Activity, DivConfiguration)`. Use `Div2Context(ContextThemeWrapper, DivConfiguration)`, `Div2Context(ContextThemeWrapper, DivConfiguration, Int)` or `Div2Context(ContextThemeWrapper, DivConfiguration, Int, lifecycleOwner?)` instead.
+* Removed property `Div2Context.globalVariableController`. Use `Div2Context.variableController` instead.
+* Removed method `Div2Context.warmUp2()`. Use `Div2Context.warmUp()` instead.
+* Removed method `Div2Context.resetVisibilityCounters()`. Use `Div2Context.reset(Div2Context.RESET_VISIBILITY_COUNTERS)` instead.
+* Removed class `GlobalVariableController`. Use `DivVariableController` instead.
+* Removed method `DivConfiguration.Builder.globalVariableController(GlobalVariableController)`. Use `DivConfiguration.Builder.variableController(DivVariableController)` instead.
+* Removed property `DivConfiguration.globalVariableController`. Use `DivConfiguration.variableController` instead.
+* Removed class `DivAutoLogger`.
+* Removed method `DivConfiguration.Builder.autoLogger(Any)`.
+* Removed method `DivConfiguration.Builder.divLogger(Any)`.
+* Removed class `DivCustomViewAdapter`.
+* Removed method `DivConfiguration.Builder.divCustomViewAdapter(DivCustomViewAdapter)`. Use `DivConfiguration.Builder.divCustomContainerViewAdapter(DivCustomContainerViewAdapter)` instead.
+* Removed class `DivCustomViewFactory`.
+* Removed method `DivConfiguration.Builder.divCustomViewFactory(DivCustomViewFactory)`. Use `DivConfiguration.Builder.divCustomContainerViewAdapter(DivCustomContainerViewAdapter)` instead.
+* Removed method `DivConfiguration.getDivVisibilityChangeListener()`. Use `DivConfiguration.getDivVisibilityChangeListeners()` instead.
+* Removed method `DivCustomContainerChildFactory.bindChildView(View, Div, DivStatePath, Div2View, ExpressionResolver)`. Use `DivCustomContainerChildFactory.bindChildView(View, Int, Div, DivStatePath, Div2View, ExpressionResolver)` instead.
+* Removed method `DivTypefaceProvider.getRegularLegacy()`. Use `DivTypefaceProvider.getRegular()` instead.
+* Removed method `DivTooltipRestrictor.canShowTooltip(View, DivTooltip)`. Use `DivTooltipRestrictor.canShowTooltip(Div2View, View, DivTooltip, Boolean)` instead.
+* Removed method `DivTooltipRestrictor.canShowTooltip(Div2View, View, DivTooltip)`. Use `DivTooltipRestrictor.canShowTooltip(Div2View, View, DivTooltip, Boolean)` instead.
+* Removed method `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipShown(View, DivTooltip)`. Use `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipShown(Div2View, View, DivTooltip)` instead.
+* Removed method `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipDismissed(View, DivTooltip)`. Use `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipDismissed(Div2View, View, DivTooltip)` instead.
+* Removed constructor `DivPreloader(DivImagePreloader?, DivCustomViewAdapter?, List<DivExtensionHandler>)`. Use `DivPreloader(DivConfiguration)` or `DivPreloader(Div2Context)` instead.
+* Removed method `DivImagePreloader.preload(Div, ExpressionResolver, DivImagePreloader.Callback)`. Use `DivPreloader.preload(Div, ExpressionResolver, DivPreloader.Callback)` instead.
+* Removed method `ViewPreCreationProfile.FixedPreCreationProfile(...)`. Use constructor `ViewPreCreationProfile(...)` instead.
+* Removed class `LinearLayoutWithCenteredDividers`.
+* Removed interface `MainTemplateProvider`. Use `CachingTemplateProvider` instead.
+* Removed method `DivActionHandler.handleUri(Uri, DivViewFacade)`. Use `DivActionHandler.handleActionUrl(Uri?, DivViewFacade)` instead.
+* Removed extension method `DivVideo.createPreview(ExpressionResolver)`.
+* Marked as internal class `BuiltinFunctionProvider`.
+* Fix text appearance of ranges that overlap each other.
+* Removed custom XML attributes of `AspectImageView`.
+* Set cursor at the last position on focus action.
+* Supported `layout_mode` `wrap_content` in `pager`.
+
+# iOS Client:
+* Breaking change. From now the default tooltip width is `match_parent` (previously was `wrap_content` which did not match the default `div-base` behavior).
+* Removed `DivActionHandler.handleDivActionUrl` method.
+* Removed `DivActionLogger` protocol. Use `DivReporter` instead.
+* Removed `DivActionURLHandler` public initializer.
+* Removed `DivActionURLHandler.PerformTimerAction` typealias.
+* Removed `DivActionURLHandler.UpdateCardAction` typealias.
+* Removed `DivBlockModelingContext.showToolip` property.
+* Removed `DivFlagsInfo.imageLoadingOptimizationEnabled`. This feature is already enabled by default.
+* Removed `DivKitComponents.UpdateCardAction` typealias.
+* Removed `DivTriggersStorage` public initializer. This class in not intended to be constructed outside DivKit. Use `DivKitComponents.triggersStorage` instead.
+* Removed `DivVariableUpdater` protocol.
+* Removed `DivVariablesStorage.ChangeEvent.newValues` property. Use `DivVariablesStorage` to access new values directly.
+* Removed `DivVisibilityCounting` protocol.
+* Removed `ExpressionResolver` public initializers. This class is not intended to be constructed outside DivKit.
+* Removed `ExpressionResolver.VariableTracker` typealias.
+* Removed `UIActionEventPerforming.perform(uiActionEvents:from:)` protocol requirement.
+* Removed `updateCardAction` argument from `DivKitComponents` initializer. Observe `updateCardSignal` property instead.
+* Removed `UserInterfaceAction.DivActionParams` initializer with `cardId` argument. Use another initializer with `path` argument instead.
+* Removed `Delay` and `Duration` types.
+* Changed return type of `DivStatePath.makeDivStatePath` method to non-optional.
+* Class `DivLastVisibleBoundsCache` marked with `@_spi(Internal)`.
+* Class `DivLayoutProviderHandler` marked with `@_spi(Internal)`.
+* Class `DivVisibilityCounter` marked with `@_spi(Internal)`.
+* Class `SizeProviderExtensionHandler` marked with `@_spi(Legacy)`. Use `div-base.layout_provider` API instead.
+* `ShowTooltipAction` typealias moved from `DivActionURLHandler` to `DivActionHandler`.
+* `DivActionHandler` initializer marked with `@_spi(Legacy)`.
+* `DivBlockModelingContext` initializer marked with `@_spi(Internal)`, removed some arguments. You should not create `DivBlockModelingContext` in your code. Use `DivKitComponents.makeContext` if you really need to.
+* Struct `DivBlockStateStorage.ChangeEvent` becomes internal.
+* Struct `IdAndCardId` becomes internal.
+* Method `DivVariablesStorage.makeVariables` marked with `@_spi(Legacy)`.
+* `DivData` marked as `Sendable`.
+* Added `DivFlagsInfo.useUrlHandlerForVisibilityActions`.
+* Added Xcode 16.2 / iOS 18.2 compatibility.
+* Supported `baseline_offset` for `range` in `div-text`.
+* Fixed `div-state` switching in tooltips.
+
+# Web Client:
+* Breaking change. Api `Ya.Divkit` in window is now deprecated, and the `Ya.DivKit` should be used (please note the big letter "K" instead of the small "K").
+* Breaking change. Browsers/Node,js now require BigInt support (Chrome 58 -> 67, Safari 11 -> 14, Firefox 67 -> 68, Node.js 8 -> 10.4). Integer values in markup expressions now always use BigInt. `subscribe` and other methods for integer variables now always return BigInt values.
+* Breaking change. Components with actions (not links) are now rendered using a `button`. This may change the default tap animation in iOS and other minor updates.
+* Breaking change. Store methods `getValue` / `setValue` are now deprecated. Provide methods `get` / `set` instead.
+* Breaking change. The build was redone using Vite/Rollup. This changes the situation a bit: there is no longer a css map, and the ESM file versions are no longer minimized. Browser and CJS versions with global variables are still minimized.
+* Breaking change. The logic of the `multiple` parameter for `tooltips` has been brought into line with other platforms, now tooltips without `multiple` are shown no more than once, and with - as many as you like (but no more than one at a time).
+* Breaking change. Tooltips are modal by default.
+* Breaking change: `doubletap_actions` now prevents `actions` from being called (to match Android behaviour).
+* Breaking change: non-interactive elements will now ignore clicks (to better match the native behavior of DivKit).
+* Added `getStoredArrayValue` and `getStoredDictValue` functions.
+* Added support for the `longtap_actions` on the non-touch platforms (desktop).
+* Added support for the `set_state` typed action.
+* Added support for the `set_stored_value` typed action.
+* Changed `doubletap_actions` detect logic.
+* Fixed `array` and `dict` variable types in d.ts.
+
+# Schema
+* Changed `div-action-download.url` property type to `url`.
+
+
+## 30.33.0
+
+# Android Client:
+* Add `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
+* Added `ImageTransformer` for `LoadableImageView`.
+* Added `shine` extension.
+* Added support for `press_start_actions`, `press_end_actions`, `hover_start_actions` and `hover_end_actions`.
+* Deprecated `externalImage` in `LoadableImageView` use `ImageTransformer` instead.
+* Fixed NPE at transition animation end.
+* Fixed crash during svg image loading.
+* Fixed end padding applying along the scroll axis in `pager`.
+* Fixed issue when `Div2View` skips drawing if layout contains text with autoellipsize enabled.
+* Fixed offscreen pages drawing in `pager`.
+* Lighten R8 rules.
+* Save Disposable in DivActionBinder to prevent subscription leak.
+
+# iOS Client:
+* Added `atan` function.
+* Added `getStoredArrayValue`, `getStoredDictValue` functions.
+* Added `match_parent` width support for tooltips.
+* Added `tan`, `asin`, `acos` functions.
+* Added arrays and dictionaries support for `set_stored_value` action.
+* Added reporting of "Touchable view is too small" warnings from DecoratingBlock's view.
+* AnimatableView and AnimatableViewFactory are deprecated. Use AsyncSourceAnimatableView and AsyncSourceAnimatableViewFactory instead. The new protocols allow you to process an animation source asynchronously.
+* Fixed animation of stateview subviews.
+* Fixed ternary operator parsing.
+* Made `showTooltip(info:)` method in `DefaultTooltipManager` present a tooltip view asynchronously, which fixes the issues with its visibility-actions.
+* Pager infinite scroll logic was changed, some bugs were fixed.
+* Set minimum animation time.
+* Supported corner_radius param in shimmer extension.
+* Supported empty cells in a row in `div-grid`.
+
+# Web Client:
+* Added `download` typed action support.
+* Added `is_enabled` property support for the `slider`.
+* Added new functions: `pi`, `toRadians`, `toDegrees`, `sin`, `cos` and `atan`.
+* Added support for the `baseline_offset` property in `text` component.
+* Added support for the typed `timer` action.
+* Added support for the typed `video` action.
+* Disabled extra crop on `transition_in` / `transition_out` / `transition_change` animations.
+* Fixed a bug where the `tooltip` and `menu` used the global context instead of the component context (invoking actions, variable references, etc.).
+* Fixed the `pager` layout with `item_spacing` = 0.
+* The layout of the `pager` elements with overflow has been fixed.
+
+
+## 30.32.0
+
+# Android Client:
+* Added `baseline_offset` property for text ranges.
+* Added `pi`, `toRadians`, `toDegrees`, `sin` functions.
+* Fixed alpha in div wasn't applied to shadow.
+* Fixed empty URL beacon sending.
+
+# iOS Client:
+* Added `cos` function.
+* Added `pi`, `sin`, `toRadians`, `toDegrees` functions.
+* Added `scroll_by`/`scroll_to` actions support.
+* Added `set_stored_value` action support.
+* Supported wrap-content `layout_mode` in `div-pager`.
+* Trunсation token is taken into account when calculating the height of the text block.
+
+
+## 30.31.0
+
+# Android Client:
+* Fixed updating variables by `layout_provider` for recycled views in `gallery`.
+* Supported `is_enabled` property in `slider`.
+* Supported array methods: `getInteger`, `getNumber`, `getString`, `getBoolean`, `getColor`, `getUrl`, `getArray`, `getDict`, `isEmpty`.
+* Use neutral accent colors to ensure they contrast well with any theme.
+* Fix border drawing of transient views.
+
+# iOS Client:
+* Added `set_state` action support.
+* Added `step` parameter support in `set_next_item`/`set_previous_item` actions.
+* Added empty `div-grid` support.
+* AnimatableView and AnimatableViewFactory are deprecated. Use AsyncSourceAnimatableView and AsyncSourceAnimatableViewFactory instead. The new protocols allow you to process an animation source asynchronously.
+* Fixed layout of items with constrained size in overlapped `div-container`.
+* Fixed paddings in `div-container`.
+* Fixed size calculation of `div-container` with paddings and aspect height.
+* Restricted integer/number as string parsing.
+
+# Web Client:
+* Added support for `accessibility` property in images of `text`.
+* Added support for `indexing_direction` in `images` inside `text`.
+* Added support for the `clip_to_bounds` property in the `state`.
+* Added support for the `press_start_actions`, `press_end_actions`, `hover_start_actions` and `hover_end_actions`.
+* Added suuport for the `item_buildr` in the `gallery` component.
+* Change the `max_length` implementation for the `imput` component to provide a better experience for mobile users.
+* Fixed `paddings` logic in the end of the `gallery`.
+* Fixed a bug with modification of the original json when processing `corners_radius`.
+* Fixed access to card-level variables and global variables "through" local variables.
+* Fixed an unhandled error when the `switch` component was created without required variable.
+* Fixed the `action_animation` bug, which took effect for components without `actions`.
+* Fixed the logic of layout the `video` using the width and height of `match_parent`.
+* Fixed types for the package.
+
+
+## 30.30.0
+
+# Android Client:
+* Fixed border clipping of views placed in transient container.
+* Postpone trigger execution until the end of the bind process. Otherwise, actions for displaying tooltips may not work properly.
+
+# iOS Client:
+* Fixed `div-gallery` paddings and page size calculation.
+* Fixed number to boolean conversion.
+
+# Web Client:
+* Added limited support for the `accessibility->type` property (only `button`, `image`, `checkbox` and `radio` values is supported). Added support for the `accessibility->is_checked` property.
+* Added typed actions `show_tooltip` and `hide_tooltip`.
+
+
 ## 30.29.0
 
 # Android Client:
@@ -191,7 +400,7 @@
 
 # Android Client:
 * Added implementation for local `variable_trigger` field.
-* Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables. 
+* Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables.
 * Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts.
 * Added support of variable animators.
 * Added support of `scope_id` property for `set_variable` actions.
@@ -499,7 +708,7 @@
 * Remove focus from focused `input` if some clickable div were clicked.
 * Removed `z`/`Z` patterns restriction from datetime formatting functions.
 * Added `max_length` property support for `input`.
-* Fixed crash by `gallery` when count of `items` was less then `column_count`. 
+* Fixed crash by `gallery` when count of `items` was less then `column_count`.
 * Supported `font_feature_settings` property for `div-text`.
 
 # iOS Client:

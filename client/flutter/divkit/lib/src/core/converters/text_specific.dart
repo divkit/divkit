@@ -38,21 +38,23 @@ extension TextDecorationConverter on DivLineStyle {
 }
 
 extension DivShadowConverter on DivShadow {
-  BoxShadow? convertBoxShadow({
+  BoxShadow? resolveBoxShadow(
+    DivVariableContext context, {
     required double viewScale,
   }) =>
       BoxShadow(
-        color: color.value.withOpacity(alpha.value),
-        blurRadius: blur.value.toDouble() * viewScale,
-        offset: offset.convert(viewScale: viewScale),
+        color: color.resolve(context).withOpacity(alpha.resolve(context)),
+        blurRadius: blur.resolve(context).toDouble() * viewScale,
+        offset: offset.resolve(context, viewScale: viewScale),
       );
 
-  Shadow? convertShadow({
+  Shadow? resolveShadow(
+    DivVariableContext context, {
     required double viewScale,
   }) =>
       Shadow(
-        color: color.value.withOpacity(alpha.value),
-        blurRadius: blur.value.toDouble() * viewScale,
-        offset: offset.convert(viewScale: viewScale),
+        color: color.resolve(context).withOpacity(alpha.resolve(context)),
+        blurRadius: blur.resolve(context).toDouble() * viewScale,
+        offset: offset.resolve(context, viewScale: viewScale),
       );
 }

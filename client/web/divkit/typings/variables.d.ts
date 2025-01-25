@@ -6,18 +6,22 @@ type Unsubscriber = () => void;
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 export type VariableValue = string | number | bigint | boolean | null | undefined | object | unknown[];
 
-export declare class Variable<ValueType = any, TypeName = VariableType> {
-    constructor(name: string, value: ValueType);
+export declare class Variable<
+    ValueType extends ConvertedSetValue = any,
+    TypeName = VariableType,
+    ConvertedSetValue = ValueType
+> {
+    constructor(name: string, value: ConvertedSetValue);
     getName(): string;
     subscribe(cb: Subscriber<ValueType>): Unsubscriber;
     set(val: string): void;
-    setValue(val: ValueType): void;
+    setValue(val: ConvertedSetValue): void;
     getValue(): ValueType;
     getType(): TypeName;
 }
 
 export declare class StringVariable extends Variable<string, 'string'> {}
-export declare class IntegerVariable extends Variable<number | bigint, 'integer'> {}
+export declare class IntegerVariable extends Variable<bigint, 'integer', bigint | number> {}
 export declare class NumberVariable extends Variable<number, 'number'> {}
 export declare class BooleanVariable extends Variable<number, 'boolean'> {}
 export declare class ColorVariable extends Variable<string, 'color'> {}

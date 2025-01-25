@@ -8,7 +8,7 @@
     position: relative;
 }
 
-.video_aspect .video__video {
+.video_absolute .video__video {
     position: absolute;
     top: 0;
     left: 0;

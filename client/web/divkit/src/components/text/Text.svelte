@@ -69,6 +69,8 @@
             svgFilterId: string;
             preloadRequired: boolean;
             verticalAlign: TextVerticalAlignment | undefined;
+            description: string;
+            a11yAttrs?: Record<string, unknown>;
         };
     })[] = [];
     let hasCloudBg = false;
@@ -307,7 +309,7 @@
         images.forEach((image, index) => {
             if (image.start !== undefined && image.url && image.start <= content.length) {
                 list.push({
-                    index: image.start,
+                    index: image.indexing_direction === 'reversed' ? text.length - image.start : image.start,
                     image: image as typeof image & {
                         start: number;
                         url: string;
@@ -385,6 +387,15 @@
                     usedTintColors.push([color, tintMode]);
                 }
 
+                const a11yAttrs: Record<string, unknown> = {};
+                const type = item.image.accessibility?.type;
+                const description = item.image.accessibility?.description || '';
+                if ((type === 'button' || type === 'image') && description) {
+                    a11yAttrs.role = type;
+                } else if (!description || type === 'none') {
+                    a11yAttrs['aria-hidden'] = 'true';
+                }
+
                 newRenderList.push({
                     image: {
                         url: item.image.url,
@@ -393,7 +404,9 @@
                         wrapperStyle,
                         svgFilterId,
                         preloadRequired: Boolean(item.image.preload_required),
-                        verticalAlign: item.image.alignment_vertical
+                        verticalAlign: item.image.alignment_vertical,
+                        description,
+                        a11yAttrs
                     }
                 });
             }
@@ -457,7 +470,7 @@
 </script>
 
 <Outer
-    cls="{genClassName('text', css, mods)} {selectable ? '' : rootCss.root__unselectable}"
+    cls="{genClassName('text', css, mods)} {selectable ? rootCss.root__selectable : rootCss.root__unselectable}"
     {componentContext}
     {layoutParams}
 >
@@ -516,6 +529,7 @@
                             textStyles={item.textStyles}
                             {singleline}
                             actions={item.actions}
+                            {customLineHeight}
                         />
                     {/if}
                 {:else if item.image}
@@ -530,8 +544,8 @@
                         src={item.image.url}
                         loading={item.image.preloadRequired ? 'eager' : 'lazy'}
                         decoding="async"
-                        aria-hidden="true"
-                        alt=""
+                        alt={item.image.description}
+                        {...item.image.a11yAttrs}
                         style={makeStyle({
                             height: item.image.height,
                             filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
@@ -547,6 +561,7 @@
                 rootFontSize={fontSize}
                 textStyles={$jsonRootTextStyles}
                 {singleline}
+                {customLineHeight}
             />
         {/if}
     </span>

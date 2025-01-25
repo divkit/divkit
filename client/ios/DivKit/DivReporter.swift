@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 
 /// The ``DivReporter`` protocol allows you to learn about actions and errors that occur in the

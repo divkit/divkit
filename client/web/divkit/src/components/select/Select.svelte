@@ -44,6 +44,7 @@
     let letterSpacing = '';
     let textColor = '#000';
     let description = '';
+    let prevWarnValue: string | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -100,7 +101,8 @@
             selectText = (typeof item.text === 'string' ? item.text : item.value) || '';
         } else {
             selectText = '';
-            if ($valueVariable) {
+            if ($valueVariable && prevWarnValue !== $valueVariable) {
+                prevWarnValue = $valueVariable;
                 componentContext.logError(wrapError(new Error('Value from the variable was not found in the selection items for "select"')));
             }
         }

@@ -16,7 +16,8 @@
     import Actions2Prop from './Actions2Prop.svelte';
     import VideoSourcesProp from './VideoSourcesProp.svelte';
     import VariableNameProp from './VariableNameProp.svelte';
-  import SelectOptionsProp from './SelectOptionsProp.svelte';
+    import SelectOptionsProp from './SelectOptionsProp.svelte';
+    import SelectFontFamilyProp from './SelectFontFamilyProp.svelte';
 
     export let item: ComponentProperty;
     export let value;
@@ -65,6 +66,7 @@
     <FileProp
         {item}
         {value}
+        {processedJson}
         on:change
         on:showMore
     />
@@ -167,6 +169,12 @@
     />
 {:else if item.type === 'select-options'}
     <SelectOptionsProp
+        {item}
+        {value}
+        on:change
+    />
+{:else if item.type === 'select-font-family'}
+    <SelectFontFamilyProp
         {item}
         {value}
         on:change

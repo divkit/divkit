@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// An arbitrary object in JSON format.
-class DictVariable extends Resolvable with EquatableMixin {
+class DictVariable with EquatableMixin {
   const DictVariable({
     required this.name,
     required this.value,
@@ -16,7 +16,7 @@ class DictVariable extends Resolvable with EquatableMixin {
   final String name;
 
   /// Value.
-  final Map<String, dynamic> value;
+  final Obj value;
 
   @override
   List<Object?> get props => [
@@ -26,7 +26,7 @@ class DictVariable extends Resolvable with EquatableMixin {
 
   DictVariable copyWith({
     String? name,
-    Map<String, dynamic>? value,
+    Obj? value,
   }) =>
       DictVariable(
         name: name ?? this.name,
@@ -41,20 +41,22 @@ class DictVariable extends Resolvable with EquatableMixin {
     }
     try {
       return DictVariable(
-        name: safeParseStr(
-          json['name']?.toString(),
-        )!,
-        value: safeParseMap(
-          json['value'],
-        )!,
+        name: reqProp<String>(
+          safeParseStr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        value: reqProp<Obj>(
+          safeParseMap(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DictVariable resolve(DivVariableContext context) {
-    return this;
   }
 }

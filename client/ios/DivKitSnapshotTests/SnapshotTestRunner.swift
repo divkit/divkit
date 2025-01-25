@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 @testable import LayoutKit
 import Testing
 import UIKit
@@ -27,13 +27,13 @@ final class SnapshotTestRunner {
     blocksState: [IdAndCardId: ElementState] = [:],
     extensions: [DivExtensionHandler] = []
   ) async throws {
-    let jsonDict = try #require(makeJsonDict(from: file.absolutePath))
+    let jsonDict = try #require(readJson(path: file.absolutePath))
 
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
       fontProvider: YSFontProvider(),
       imageHolderFactory: TestImageHolderFactory(),
-      layoutDirection: getLayoutDirection(from: jsonDict)
+      layoutDirection: getLayoutDirection(jsonDict)
     )
     for (id, state) in blocksState {
       divKitComponents.blockStateStorage.setState(id: id.id, cardId: id.cardId, state: state)
@@ -82,9 +82,16 @@ final class SnapshotTestRunner {
     manager: DefaultTooltipManager,
     check: CheckAction
   ) async throws {
-    guard let tooltipView = manager.tooltipWindow?.subviews.first else {
-      try check(nil)
-      return
+    guard let tooltipWindow = manager.tooltipWindow else {
+      return try check(nil)
+    }
+
+    while !tooltipWindow.isKeyWindow {
+      await Task.yield()
+    }
+
+    guard let tooltipView = tooltipWindow.subviews.first else {
+      return try check(nil)
     }
 
     tooltipView.forceLayout()
@@ -97,8 +104,10 @@ final class SnapshotTestRunner {
     try check(tooltipView)
   }
 
-  private func getLayoutDirection(from jsonDict: [String: Any]) -> UserInterfaceLayoutDirection {
-    let configuration = try? jsonDict.getField("configuration") as [String: Any]
+  private func getLayoutDirection(
+    _ json: [String: any Sendable]
+  ) -> UserInterfaceLayoutDirection {
+    let configuration = try? json.getField("configuration") as [String: any Sendable]
     guard configuration?["layout_direction"] as? String == "rtl" else {
       return .leftToRight
     }
@@ -152,13 +161,13 @@ final class SnapshotTestRunner {
 
     try SnapshotTestKit.compareSnapshot(
       image,
-      referenceURL: referenceFileURL(screen: screen, caseName: caseName, stepName: stepName),
-      mode: mode,
-      file: file
+      referenceFileUrl: referenceFileUrl(screen: screen, caseName: caseName, stepName: stepName),
+      resultFolderUrl: resultsFolderUrl(screen: screen, caseName: caseName, stepName: stepName),
+      mode: mode
     )
   }
 
-  private func referenceFileURL(
+  private func referenceFileUrl(
     screen: Screen,
     caseName: String,
     stepName: String?
@@ -167,20 +176,37 @@ final class SnapshotTestRunner {
     if let stepName {
       stepDescription = "_" + stepName
     }
-    return URL(fileURLWithPath: ReferenceSet.path, isDirectory: true)
+    return URL(fileURLWithPath: ReferenceSet.referenceSnapshotsPath, isDirectory: true)
       .appendingPathComponent(file.subdirectory)
       .appendingPathComponent(
         "\(caseName)_\(Int(screen.size.width))@\(Int(screen.scale))x\(stepDescription).png",
         isDirectory: false
       )
   }
+
+  private func resultsFolderUrl(
+    screen: Screen,
+    caseName: String,
+    stepName: String?
+  ) -> URL {
+    var stepDescription = ""
+    if let stepName {
+      stepDescription = "_" + stepName
+    }
+    return URL(fileURLWithPath: ReferenceSet.resultSnapshotsPath, isDirectory: true)
+      .appendingPathComponent(file.subdirectory)
+      .appendingPathComponent(
+        "\(caseName)_\(Int(screen.size.width))@\(Int(screen.scale))x\(stepDescription)",
+        isDirectory: true
+      )
+  }
 }
 
-private func makeJsonDict(from path: String) -> [String: Any]? {
+private func readJson(path: String) -> [String: any Sendable]? {
   guard let data = FileManager.default.contents(atPath: path) else {
     return nil
   }
-  return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+  return (try? JSONSerialization.jsonObject(with: data)) as? [String: any Sendable]
 }
 
 private final class TestImageHolderFactory: DivImageHolderFactory {

@@ -44,24 +44,6 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
             .createView(div, divView.bindingContext.getFor(expressionResolver), divStatePath)
     }
 
-    @Deprecated(
-        message = """
-           This method is deprecated because it is impossible to resolve local variables without the 
-           child index inside the container. Please use the method implementation with childIndex. 
-        """,
-        replaceWith = ReplaceWith("DivCustomContainerChildFactory.bindChildView")
-    )
-    fun bindChildView(
-        childView: View,
-        div: Div,
-        divStatePath: DivStatePath,
-        divView: Div2View,
-        expressionResolver: ExpressionResolver,
-    ) {
-        divView.div2Component.divBinder
-            .bind(divView.bindingContext.getFor(expressionResolver), childView, div, divStatePath)
-    }
-
     /**
      * Call to bind child div view.
      */

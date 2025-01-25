@@ -1,5 +1,4 @@
 @testable import DivKit
-
 import XCTest
 
 final class DivActionIntentTests: XCTestCase {
@@ -98,9 +97,10 @@ final class DivActionIntentTests: XCTestCase {
   }
 
   func test_SetNextItem() {
-    switch makeIntent("div-action://set_next_item?id=div_id&overflow=ring") {
-    case let .setNextItem(id, overflow):
+    switch makeIntent("div-action://set_next_item?id=div_id&step=3&overflow=ring") {
+    case let .setNextItem(id, step, overflow):
       XCTAssertEqual("div_id", id)
+      XCTAssertEqual(3, step)
       XCTAssertEqual(.ring, overflow)
     default:
       XCTFail("Invalid intent")
@@ -108,9 +108,10 @@ final class DivActionIntentTests: XCTestCase {
   }
 
   func test_SetPreviousItem() {
-    switch makeIntent("div-action://set_previous_item?id=div_id&overflow=clamp") {
-    case let .setPreviousItem(id, overflow):
+    switch makeIntent("div-action://set_previous_item?id=div_id&step=3&overflow=clamp") {
+    case let .setPreviousItem(id, step, overflow):
       XCTAssertEqual("div_id", id)
+      XCTAssertEqual(3, step)
       XCTAssertEqual(.clamp, overflow)
     default:
       XCTFail("Invalid intent")
@@ -139,6 +140,20 @@ final class DivActionIntentTests: XCTestCase {
       XCTAssertEqual("var", value.name)
       XCTAssertEqual("true", value.value)
       XCTAssertEqual(.boolean, value.type)
+      XCTAssertEqual(100, value.lifetimeInSec)
+    default:
+      XCTFail("Invalid intent")
+    }
+  }
+
+  func test_SetStoredValue_Bool() {
+    switch makeIntent(
+      "div-action://set_stored_value?name=var&value=true&type=bool&lifetime=100"
+    ) {
+    case let .setStoredValue(value):
+      XCTAssertEqual("var", value.name)
+      XCTAssertEqual("true", value.value)
+      XCTAssertEqual(.bool, value.type)
       XCTAssertEqual(100, value.lifetimeInSec)
     default:
       XCTFail("Invalid intent")

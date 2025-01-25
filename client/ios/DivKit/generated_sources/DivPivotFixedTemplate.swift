@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPivotFixedTemplate: TemplateValue {
+public final class DivPivotFixedTemplate: TemplateValue, Sendable {
   public static let type: String = "pivot-fixed"
   public let parent: String?
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp

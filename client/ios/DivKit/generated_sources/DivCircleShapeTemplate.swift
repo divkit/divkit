@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCircleShapeTemplate: TemplateValue {
+public final class DivCircleShapeTemplate: TemplateValue, Sendable {
   public static let type: String = "circle"
   public let parent: String?
   public let backgroundColor: Field<Expression<Color>>?

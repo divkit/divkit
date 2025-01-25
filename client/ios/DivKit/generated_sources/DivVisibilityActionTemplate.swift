@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivVisibilityActionTemplate: TemplateValue {
+public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendable {
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
   public let isEnabled: Field<Expression<Bool>>? // default value: true
   public let logId: Field<Expression<String>>?

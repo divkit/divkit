@@ -2,7 +2,7 @@ import CoreGraphics
 import QuartzCore
 
 extension CornerRadii {
-  var unifiedRadius: CGFloat? {
+  public var unifiedRadius: CGFloat? {
     let differentRadiuses = [
       topLeft,
       topRight,
@@ -16,7 +16,7 @@ extension CornerRadii {
     }
   }
 
-  var maskedCorners: CACornerMask {
+  public var maskedCorners: CACornerMask {
     CACornerMask()
       .union(topLeft != 0 ? .layerMinXMinYCorner : [])
       .union(topRight != 0 ? .layerMaxXMinYCorner : [])

@@ -2,7 +2,7 @@ package com.yandex.div.core.util.text
 
 import android.graphics.Canvas
 import android.text.Layout
-import android.text.SpannableStringBuilder
+import android.text.Spannable
 import android.text.Spanned
 import android.view.View
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -17,10 +17,11 @@ internal class DivTextRangesBackgroundHelper(
     internal fun invalidateSpansCache() = spans.clear()
     internal fun addBackgroundSpan(span: DivBackgroundSpan) = spans.add(span)
     internal fun hasBackgroundSpan(): Boolean = spans.isNotEmpty()
-    internal fun hasSameSpan(spannable: SpannableStringBuilder, backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
+    internal fun hasSameSpan(text: CharSequence, backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
+        val spannedText = text as? Spannable ?: return false
         return spans.any { span ->
             span.border == backgroundSpan.border && span.background == backgroundSpan.background
-                && end == spannable.getSpanEnd(span) && start == spannable.getSpanStart(span)
+                && end == spannedText.getSpanEnd(span) && start == spannedText.getSpanStart(span)
         }
     }
 

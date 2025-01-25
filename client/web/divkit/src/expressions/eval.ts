@@ -27,7 +27,6 @@ import { BOOLEAN, DATETIME, INTEGER, NUMBER, STRING } from './const';
 import { register } from './funcs';
 import { Variable as VariableInstance, variableToValue } from './variable';
 import { toBigInt } from './bigint';
-import { wrapError } from '../utils/wrapError';
 import type { Store } from '../../typings/store';
 import type { CustomFunctions } from './funcs/customFuncs';
 
@@ -64,7 +63,7 @@ export interface NumberValue extends EvalValueBase {
 
 export interface IntegerValue extends EvalValueBase {
     type: 'integer';
-    value: number | bigint;
+    value: bigint;
 }
 
 export interface BooleanValue extends EvalValueBase {
@@ -101,21 +100,20 @@ export interface EvalContext {
     variables: VariablesMap;
     customFunctions: CustomFunctions | undefined;
     warnings: WrappedError[];
-    safeIntegerOverflow: boolean;
     store?: Store;
     weekStartDay: number;
 }
 
 register();
 
-function evalStringLiteral(ctx: EvalContext, expr: StringLiteral): EvalValue {
+function evalStringLiteral(_ctx: EvalContext, expr: StringLiteral): EvalValue {
     return {
         type: STRING,
         value: expr.value
     };
 }
 
-function evalNumberLiteral(ctx: EvalContext, expr: NumberLiteral): EvalValue {
+function evalNumberLiteral(_ctx: EvalContext, expr: NumberLiteral): EvalValue {
     return {
         type: NUMBER,
         value: expr.value
@@ -131,7 +129,7 @@ function evalIntegerLiteral(ctx: EvalContext, expr: IntegerLiteral): EvalValue {
     };
 }
 
-function evalBooleanLiteral(ctx: EvalContext, expr: BooleanLiteral): EvalValue {
+function evalBooleanLiteral(_ctx: EvalContext, expr: BooleanLiteral): EvalValue {
     return {
         type: BOOLEAN,
         value: expr.value ? 1 : 0
@@ -156,7 +154,7 @@ function evalUnary(ctx: EvalContext, expr: UnaryExpression): EvalValue {
             const mul = expr.operator === '+' ? 1 : -1;
 
             if (val.type === INTEGER) {
-                const value = (val.value as bigint) * (toBigInt(mul) as bigint);
+                const value = val.value * toBigInt(mul);
 
                 checkIntegerOverflow(ctx, value);
 
@@ -274,7 +272,10 @@ function evalBinaryEquality<T extends EvalValue>(operator: EqualityOperator, lef
 }
 
 function evalBinaryCompare<T extends EvalValue>(operator: CompareOperator, left: T, right: T): EvalValue {
-    if (left.type !== NUMBER && left.type !== INTEGER && left.type !== DATETIME) {
+    if (
+        left.type !== NUMBER && left.type !== INTEGER && left.type !== DATETIME ||
+        right.type !== NUMBER && right.type !== INTEGER && right.type !== DATETIME
+    ) {
         evalError(
             `${valToPreview(left)} ${operator} ${valToPreview(right)}`,
             `Operator '${operator}' cannot be applied to ${typeToString(left.type)} type.`
@@ -282,8 +283,8 @@ function evalBinaryCompare<T extends EvalValue>(operator: CompareOperator, left:
     }
 
     let res: boolean;
-    const leftVal = (left.type === DATETIME ? left.value.getTime() : left.value) as number;
-    const rightVal = (right.type === DATETIME ? right.value.getTime() : right.value) as number;
+    const leftVal = left.type === DATETIME ? left.value.getTime() : left.value;
+    const rightVal = right.type === DATETIME ? right.value.getTime() : right.value;
 
     if (operator === '>') {
         res = leftVal > rightVal;
@@ -616,18 +617,11 @@ export function evalExpression(
             variables: vars,
             customFunctions,
             warnings: [],
-            safeIntegerOverflow: false,
             store,
             weekStartDay: opts?.weekStartDay || 0
         };
 
         const result = evalAny(ctx, expr);
-
-        if (ctx.safeIntegerOverflow) {
-            ctx.warnings.push(wrapError(new Error('Safe integer overflow, values may lose accuracy.'), {
-                level: 'warn'
-            }));
-        }
 
         return {
             result,

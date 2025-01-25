@@ -23,17 +23,16 @@ internal class EntityWithOptionalPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithOptionalProperty {
-            val logger = context.logger
             return EntityWithOptionalProperty(
-                property = JsonExpressionParser.readOptionalExpression(context, logger, data, "property", TYPE_HELPER_STRING),
+                property = JsonExpressionParser.readOptionalExpression(context, data, "property", TYPE_HELPER_STRING),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalProperty): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "property", value = value.property)
-            data.write(key = "type", value = EntityWithOptionalProperty.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "property", value.property)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalProperty.TYPE)
             return data
         }
     }
@@ -44,19 +43,18 @@ internal class EntityWithOptionalPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithOptionalPropertyTemplate?, data: JSONObject): EntityWithOptionalPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithOptionalPropertyTemplate(
-                property = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "property", TYPE_HELPER_STRING, allowOverride, parent?.property),
+                property = JsonFieldParser.readOptionalFieldWithExpression(context, data, "property", TYPE_HELPER_STRING, allowOverride, parent?.property),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalPropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "property", field = value.property)
-            data.write(key = "type", value = EntityWithOptionalProperty.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "property", value.property)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalProperty.TYPE)
           return data
         }
     }
@@ -67,9 +65,8 @@ internal class EntityWithOptionalPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithOptionalPropertyTemplate, data: JSONObject): EntityWithOptionalProperty {
-            val logger = context.logger
             return EntityWithOptionalProperty(
-                property = JsonFieldResolver.resolveOptionalExpression(context, logger, template.property, data, "property", TYPE_HELPER_STRING),
+                property = JsonFieldResolver.resolveOptionalExpression(context, template.property, data, "property", TYPE_HELPER_STRING),
             )
         }
     }

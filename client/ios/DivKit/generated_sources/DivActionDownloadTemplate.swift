@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionDownloadTemplate: TemplateValue {
+public final class DivActionDownloadTemplate: TemplateValue, Sendable {
   public static let type: String = "download"
   public let parent: String?
   public let onFailActions: Field<[DivActionTemplate]>?

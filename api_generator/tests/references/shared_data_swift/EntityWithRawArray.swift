@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithRawArray {
+public final class EntityWithRawArray: @unchecked Sendable {
   public static let type: String = "entity_with_raw_array"
   public let array: Expression<[Any]>
 

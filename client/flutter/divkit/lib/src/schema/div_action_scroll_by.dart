@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Scrolls scrollable container from current position by `item_count` or by `offset`, if both provided scroll action will be combined, negative numbers associated with backward scroll.
-class DivActionScrollBy extends Resolvable with EquatableMixin {
+/// Scrolls the container by `item_count` or `offset` starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.
+class DivActionScrollBy with EquatableMixin {
   const DivActionScrollBy({
     this.animated = const ValueExpression(true),
     required this.id,
@@ -15,24 +15,24 @@ class DivActionScrollBy extends Resolvable with EquatableMixin {
 
   static const type = "scroll_by";
 
-  /// If `true` (default value) scroll will be animated, else not.
+  /// Enables scrolling animation.
   // default value: true
   final Expression<bool> animated;
 
-  /// Identifier of the view that is going to be manipulated.
+  /// ID of the element where the action should be performed.
   final Expression<String> id;
 
-  /// Count of container items to scroll, negative value is associated with backward scroll.
+  /// Number of container elements to scroll through. For scrolling back, use negative values.
   // default value: 0
   final Expression<int> itemCount;
 
-  /// Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.
+  /// Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
   // default value: 0
   final Expression<int> offset;
 
-  /// Specifies how navigation will occur when the boundary elements are reached:
-  /// • `clamp` — Transition will stop at the boundary element (default value);
-  /// • `ring` — Transition will be to the beginning or the end depending on the current element.
+  /// Defines navigation behavior at boundary elements:
+  /// • `clamp`: Stop navigation at the boundary element (default)
+  /// • `ring`: Navigate to the start or end, depending on the current element.
   // default value: DivActionScrollByOverflow.clamp
   final Expression<DivActionScrollByOverflow> overflow;
 
@@ -68,44 +68,50 @@ class DivActionScrollBy extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionScrollBy(
-        animated: safeParseBoolExpr(
-          json['animated'],
-          fallback: true,
-        )!,
-        id: safeParseStrExpr(
-          json['id']?.toString(),
-        )!,
-        itemCount: safeParseIntExpr(
-          json['item_count'],
-          fallback: 0,
-        )!,
-        offset: safeParseIntExpr(
-          json['offset'],
-          fallback: 0,
-        )!,
-        overflow: safeParseStrEnumExpr(
-          json['overflow'],
-          parse: DivActionScrollByOverflow.fromJson,
-          fallback: DivActionScrollByOverflow.clamp,
-        )!,
+        animated: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['animated'],
+            fallback: true,
+          ),
+          name: 'animated',
+        ),
+        id: reqVProp<String>(
+          safeParseStrExpr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
+        itemCount: reqVProp<int>(
+          safeParseIntExpr(
+            json['item_count'],
+            fallback: 0,
+          ),
+          name: 'item_count',
+        ),
+        offset: reqVProp<int>(
+          safeParseIntExpr(
+            json['offset'],
+            fallback: 0,
+          ),
+          name: 'offset',
+        ),
+        overflow: reqVProp<DivActionScrollByOverflow>(
+          safeParseStrEnumExpr(
+            json['overflow'],
+            parse: DivActionScrollByOverflow.fromJson,
+            fallback: DivActionScrollByOverflow.clamp,
+          ),
+          name: 'overflow',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivActionScrollBy resolve(DivVariableContext context) {
-    animated.resolve(context);
-    id.resolve(context);
-    itemCount.resolve(context);
-    offset.resolve(context);
-    overflow.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionScrollByOverflow implements Resolvable {
+enum DivActionScrollByOverflow {
   clamp('clamp'),
   ring('ring');
 
@@ -155,11 +161,13 @@ enum DivActionScrollByOverflow implements Resolvable {
           return DivActionScrollByOverflow.ring;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivActionScrollByOverflow: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivActionScrollByOverflow resolve(DivVariableContext context) => this;
 }

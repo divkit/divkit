@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A floating-point variable.
-class NumberVariable extends Resolvable with EquatableMixin {
+class NumberVariable with EquatableMixin {
   const NumberVariable({
     required this.name,
     required this.value,
@@ -41,20 +41,22 @@ class NumberVariable extends Resolvable with EquatableMixin {
     }
     try {
       return NumberVariable(
-        name: safeParseStr(
-          json['name']?.toString(),
-        )!,
-        value: safeParseDouble(
-          json['value'],
-        )!,
+        name: reqProp<String>(
+          safeParseStr(
+            json['name'],
+          ),
+          name: 'name',
+        ),
+        value: reqProp<double>(
+          safeParseDouble(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  NumberVariable resolve(DivVariableContext context) {
-    return this;
   }
 }

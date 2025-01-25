@@ -32,7 +32,6 @@
 //
 
 import Foundation
-
 import VGSL
 
 struct CalcExpression {
@@ -65,7 +64,7 @@ enum Subexpression {
     switch self {
     case let .symbol(symbol, args) where args.isEmpty:
       switch symbol {
-      case .infix, .prefix, .postfix:
+      case .infix, .prefix:
         false
       default:
         true
@@ -104,7 +103,7 @@ enum Subexpression {
 // MARK: Expression parsing
 
 // Workaround for horribly slow Substring.UnicodeScalarView perf
-struct UnicodeScalarView {
+fileprivate struct UnicodeScalarView {
   typealias Index = String.UnicodeScalarView.Index
 
   private let characters: String.UnicodeScalarView
@@ -157,15 +156,13 @@ struct UnicodeScalarView {
   }
 
   /// Returns the remaining characters
-  fileprivate var unicodeScalars: Substring.UnicodeScalarView {
+  var unicodeScalars: Substring.UnicodeScalarView {
     characters[startIndex..<endIndex]
   }
 }
 
-private typealias _UnicodeScalarView = UnicodeScalarView
-
 extension String {
-  fileprivate init(_ unicodeScalarView: _UnicodeScalarView) {
+  fileprivate init(_ unicodeScalarView: DivKit.UnicodeScalarView) {
     self.init(unicodeScalarView.unicodeScalars)
   }
 }
@@ -439,7 +436,7 @@ extension UnicodeScalarView {
     throw ExpressionError("Closing ' expected.")
   }
 
-  fileprivate mutating func parseSubexpression(
+  mutating func parseSubexpression(
     upTo delimiters: [String]
   ) throws -> Subexpression {
     var stack: [Subexpression] = []
@@ -452,52 +449,33 @@ extension UnicodeScalarView {
       let rhs = stack[i + 1]
       if lhs.isOperand {
         if rhs.isOperand {
-          guard case let .symbol(.postfix(op), args) = lhs else {
-            // Cannot follow an operand
-            throw ExpressionError.unexpectedToken("\(rhs)")
-          }
-          // Assume postfix operator was actually an infix operator
-          stack[i] = args[0]
-          stack.insert(.symbol(.infix(op), []), at: i + 1)
-          try collapseStack(from: i)
-        } else if case let .symbol(symbol, _) = rhs {
-          switch symbol {
-          case _ where stack.count <= i + 2, .postfix:
-            stack[i...i + 1] = [.symbol(.postfix(symbol.name), [lhs])]
-            try collapseStack(from: 0)
-          default:
-            let rhs = stack[i + 2]
-            if rhs.isOperand {
-              if stack.count > i + 3 {
-                switch stack[i + 3] {
-                case let .symbol(.infix(op2), _),
-                     let .symbol(.prefix(op2), _),
-                     let .symbol(.postfix(op2), _):
-                  guard stack.count > i + 4,
-                        takesPrecedence(symbol.name, over: op2)
-                  else {
-                    fallthrough
-                  }
-                default:
-                  try collapseStack(from: i + 2)
-                  return
+          throw ExpressionError.unexpectedToken("\(rhs)")
+        }
+        if case let .symbol(symbol, _) = rhs {
+          let rhs = stack[i + 2]
+          if rhs.isOperand {
+            if stack.count > i + 3 {
+              switch stack[i + 3] {
+              case let .symbol(.infix(op2), _),
+                   let .symbol(.prefix(op2), _):
+                guard stack.count > i + 4,
+                      takesPrecedence(symbol.name, over: op2)
+                else {
+                  fallthrough
                 }
-              }
-              if symbol.name == ":", // ternary
-                 case let .symbol(.infix(_), args) = lhs {
-                stack[i...i + 2] = [.symbol(.infix("?:"), [args[0], args[1], rhs])]
-              } else {
-                stack[i...i + 2] = [.symbol(.infix(symbol.name), [lhs, rhs])]
-              }
-              let from = symbol.name == "?" ? i : 0
-              try collapseStack(from: from)
-            } else if case let .symbol(symbol2, _) = rhs {
-              if case .prefix = symbol2 {
+              default:
                 try collapseStack(from: i + 2)
-              } else {
-                stack[i + 2] = .symbol(.prefix(symbol2.name), [])
-                try collapseStack(from: i + 2)
+                return
               }
+            }
+            stack[i...i + 2] = [.symbol(.infix(symbol.name), [lhs, rhs])]
+            try collapseStack(from: 0)
+          } else if case let .symbol(symbol2, _) = rhs {
+            if case .prefix = symbol2 {
+              try collapseStack(from: i + 2)
+            } else {
+              stack[i + 2] = .symbol(.prefix(symbol2.name), [])
+              try collapseStack(from: i + 2)
             }
           }
         }
@@ -511,6 +489,17 @@ extension UnicodeScalarView {
           try collapseStack(from: i + 1)
         }
       }
+    }
+    
+    func collapseStackToSingleExpression() throws -> Subexpression {
+      try collapseStack(from: 0)
+      if let first = stack.first {
+        if first.isOperand {
+          return first
+        }
+        throw ExpressionError("Operand expected")
+      }
+      throw ExpressionError("Empty expression")
     }
 
     func scanArguments() throws -> [Subexpression] {
@@ -539,6 +528,16 @@ extension UnicodeScalarView {
       switch expression {
       case let .symbol(.infix(name), _):
         switch name {
+        // ternary ?: operator
+        case "?":
+          let arg0 = try collapseStackToSingleExpression()
+          let arg1 = try parseSubexpression(upTo: [":"])
+          guard scanCharacter(":") else {
+            throw ExpressionError(": expected.")
+          }
+          let arg2 = try parseSubexpression(upTo: delimiters)
+          stack[stack.count - 1] = .symbol(.ternary, [arg0, arg1, arg2])
+        // method call
         case ".":
           guard let lastSymbol = stack.last else {
             throw ExpressionError.unexpectedToken(".")
@@ -549,6 +548,7 @@ extension UnicodeScalarView {
           var args = try scanArguments()
           args.insert(lastSymbol, at: 0)
           stack[stack.count - 1] = makeMethod(methodName, args)
+        // function or method args
         case "(":
           switch stack.last {
           case let .symbol(.variable(name), _)?:
@@ -558,7 +558,7 @@ extension UnicodeScalarView {
               // function()
               stack[stack.count - 1] = makeFunction(name, args)
             } else {
-              // variable.function()
+              // variable.method()
               let variableName = parts.dropLast().joined(separator: ".")
               args.insert(makeVariable(variableName), at: 0)
               stack[stack.count - 1] = makeMethod(String(parts.last!), args)
@@ -574,18 +574,13 @@ extension UnicodeScalarView {
           followedByWhitespace = skipWhitespace()
         default:
           switch (precededByWhitespace, followedByWhitespace) {
-          case (true, true), (false, false):
-            stack.append(expression)
           case (true, false):
             stack.append(.symbol(.prefix(name), []))
-          case (false, true):
-            stack.append(.symbol(.postfix(name), []))
+          default:
+            stack.append(expression)
           }
           operandPosition = true
         }
-      case let .symbol(.variable(name), _) where !operandPosition:
-        operandPosition = true
-        stack.append(.symbol(.infix(name), []))
       default:
         operandPosition = false
         stack.append(expression)
@@ -600,16 +595,7 @@ extension UnicodeScalarView {
       self = start
       throw ExpressionError.unexpectedToken(junk)
     }
-    try collapseStack(from: 0)
-    switch stack.first {
-    case let result?:
-      if result.isOperand {
-        return result
-      }
-      throw ExpressionError("Operand expected")
-    case nil:
-      throw ExpressionError("Empty expression")
-    }
+    return try collapseStackToSingleExpression()
   }
 }
 

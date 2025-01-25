@@ -3,13 +3,11 @@
 import 'package:divkit/src/schema/div_action_typed.dart';
 import 'package:divkit/src/schema/div_download_callbacks.dart';
 import 'package:divkit/src/schema/div_sight_action.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Actions performed when an element becomes visible.
-class DivVisibilityAction extends Resolvable
-    with EquatableMixin
-    implements DivSightAction {
+class DivVisibilityAction with EquatableMixin implements DivSightAction {
   const DivVisibilityAction({
     this.downloadCallbacks,
     this.isEnabled = const ValueExpression(true),
@@ -44,7 +42,7 @@ class DivVisibilityAction extends Resolvable
 
   /// Additional parameters, passed to the host application.
   @override
-  final Map<String, dynamic>? payload;
+  final Obj? payload;
 
   /// Referer URL for logging.
   @override
@@ -88,7 +86,7 @@ class DivVisibilityAction extends Resolvable
     Expression<bool>? isEnabled,
     Expression<String>? logId,
     Expression<int>? logLimit,
-    Map<String, dynamic>? Function()? payload,
+    Obj? Function()? payload,
     Expression<Uri>? Function()? referer,
     String? Function()? scopeId,
     DivActionTyped? Function()? typed,
@@ -120,56 +118,64 @@ class DivVisibilityAction extends Resolvable
     }
     try {
       return DivVisibilityAction(
-        downloadCallbacks: safeParseObj(
-          DivDownloadCallbacks.fromJson(json['download_callbacks']),
+        downloadCallbacks: safeParseObject(
+          json['download_callbacks'],
+          parse: DivDownloadCallbacks.fromJson,
         ),
-        isEnabled: safeParseBoolExpr(
-          json['is_enabled'],
-          fallback: true,
-        )!,
-        logId: safeParseStrExpr(
-          json['log_id']?.toString(),
-        )!,
-        logLimit: safeParseIntExpr(
-          json['log_limit'],
-          fallback: 1,
-        )!,
+        isEnabled: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['is_enabled'],
+            fallback: true,
+          ),
+          name: 'is_enabled',
+        ),
+        logId: reqVProp<String>(
+          safeParseStrExpr(
+            json['log_id'],
+          ),
+          name: 'log_id',
+        ),
+        logLimit: reqVProp<int>(
+          safeParseIntExpr(
+            json['log_limit'],
+            fallback: 1,
+          ),
+          name: 'log_limit',
+        ),
         payload: safeParseMap(
           json['payload'],
         ),
-        referer: safeParseUriExpr(json['referer']),
+        referer: safeParseUriExpr(
+          json['referer'],
+        ),
         scopeId: safeParseStr(
-          json['scope_id']?.toString(),
+          json['scope_id'],
         ),
-        typed: safeParseObj(
-          DivActionTyped.fromJson(json['typed']),
+        typed: safeParseObject(
+          json['typed'],
+          parse: DivActionTyped.fromJson,
         ),
-        url: safeParseUriExpr(json['url']),
-        visibilityDuration: safeParseIntExpr(
-          json['visibility_duration'],
-          fallback: 800,
-        )!,
-        visibilityPercentage: safeParseIntExpr(
-          json['visibility_percentage'],
-          fallback: 50,
-        )!,
+        url: safeParseUriExpr(
+          json['url'],
+        ),
+        visibilityDuration: reqVProp<int>(
+          safeParseIntExpr(
+            json['visibility_duration'],
+            fallback: 800,
+          ),
+          name: 'visibility_duration',
+        ),
+        visibilityPercentage: reqVProp<int>(
+          safeParseIntExpr(
+            json['visibility_percentage'],
+            fallback: 50,
+          ),
+          name: 'visibility_percentage',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivVisibilityAction resolve(DivVariableContext context) {
-    downloadCallbacks?.resolve(context);
-    isEnabled.resolve(context);
-    logId.resolve(context);
-    logLimit.resolve(context);
-    referer?.resolve(context);
-    typed?.resolve(context);
-    url?.resolve(context);
-    visibilityDuration.resolve(context);
-    visibilityPercentage.resolve(context);
-    return this;
   }
 }

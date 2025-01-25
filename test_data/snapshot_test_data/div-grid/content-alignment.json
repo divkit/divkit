@@ -61,15 +61,25 @@
         "value": 45
       },
       "items": [
-        { "type": "50x15_black_with_margins" },
-        { "type": "50x15_black_with_margins" },
-        { "type": "50x15_black_with_margins" },
-        { "type": "50x15_black_with_margins" }
+        {
+          "type": "50x15_black_with_margins"
+        },
+        {
+          "type": "50x15_black_with_margins"
+        },
+        {
+          "type": "50x15_black_with_margins"
+        },
+        {
+          "type": "50x15_black_with_margins"
+        }
       ],
-      "background": [{
-        "color": "#AAA",
-        "type": "solid"
-      }]
+      "background": [
+        {
+          "color": "#AAA",
+          "type": "solid"
+        }
+      ]
     }
   },
   "card": {

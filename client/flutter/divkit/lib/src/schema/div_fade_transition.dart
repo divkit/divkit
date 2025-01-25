@@ -2,13 +2,11 @@
 
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/schema/div_transition_base.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Transparency animation.
-class DivFadeTransition extends Resolvable
-    with EquatableMixin
-    implements DivTransitionBase {
+class DivFadeTransition with EquatableMixin implements DivTransitionBase {
   const DivFadeTransition({
     this.alpha = const ValueExpression(0.0),
     this.duration = const ValueExpression(200),
@@ -67,35 +65,39 @@ class DivFadeTransition extends Resolvable
     }
     try {
       return DivFadeTransition(
-        alpha: safeParseDoubleExpr(
-          json['alpha'],
-          fallback: 0.0,
-        )!,
-        duration: safeParseIntExpr(
-          json['duration'],
-          fallback: 200,
-        )!,
-        interpolator: safeParseStrEnumExpr(
-          json['interpolator'],
-          parse: DivAnimationInterpolator.fromJson,
-          fallback: DivAnimationInterpolator.easeInOut,
-        )!,
-        startDelay: safeParseIntExpr(
-          json['start_delay'],
-          fallback: 0,
-        )!,
+        alpha: reqVProp<double>(
+          safeParseDoubleExpr(
+            json['alpha'],
+            fallback: 0.0,
+          ),
+          name: 'alpha',
+        ),
+        duration: reqVProp<int>(
+          safeParseIntExpr(
+            json['duration'],
+            fallback: 200,
+          ),
+          name: 'duration',
+        ),
+        interpolator: reqVProp<DivAnimationInterpolator>(
+          safeParseStrEnumExpr(
+            json['interpolator'],
+            parse: DivAnimationInterpolator.fromJson,
+            fallback: DivAnimationInterpolator.easeInOut,
+          ),
+          name: 'interpolator',
+        ),
+        startDelay: reqVProp<int>(
+          safeParseIntExpr(
+            json['start_delay'],
+            fallback: 0,
+          ),
+          name: 'start_delay',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivFadeTransition resolve(DivVariableContext context) {
-    alpha.resolve(context);
-    duration.resolve(context);
-    interpolator.resolve(context);
-    startDelay.resolve(context);
-    return this;
   }
 }

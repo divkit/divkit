@@ -2,11 +2,11 @@
 
 import 'package:divkit/src/schema/div_shape.dart';
 import 'package:divkit/src/schema/div_stroke.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Drawable of a simple geometric shape.
-class DivShapeDrawable extends Resolvable with EquatableMixin {
+class DivShapeDrawable with EquatableMixin {
   const DivShapeDrawable({
     required this.color,
     required this.shape,
@@ -50,26 +50,27 @@ class DivShapeDrawable extends Resolvable with EquatableMixin {
     }
     try {
       return DivShapeDrawable(
-        color: safeParseColorExpr(
-          json['color'],
-        )!,
-        shape: safeParseObj(
-          DivShape.fromJson(json['shape']),
-        )!,
-        stroke: safeParseObj(
-          DivStroke.fromJson(json['stroke']),
+        color: reqVProp<Color>(
+          safeParseColorExpr(
+            json['color'],
+          ),
+          name: 'color',
+        ),
+        shape: reqProp<DivShape>(
+          safeParseObject(
+            json['shape'],
+            parse: DivShape.fromJson,
+          ),
+          name: 'shape',
+        ),
+        stroke: safeParseObject(
+          json['stroke'],
+          parse: DivStroke.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivShapeDrawable resolve(DivVariableContext context) {
-    color.resolve(context);
-    shape.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

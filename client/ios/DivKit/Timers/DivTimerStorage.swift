@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import VGSL
 
@@ -7,7 +6,7 @@ final class DivTimerStorage {
   private let variablesStorage: DivVariablesStorage
   private let functionsStorage: DivFunctionsStorage
   private let actionHandler: DivActionHandler
-  private let updateCard: DivActionURLHandler.UpdateCardAction
+  private let updateCard: DivActionHandler.UpdateCardAction
   private let timerScheduler = TimerScheduler()
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
@@ -19,7 +18,7 @@ final class DivTimerStorage {
     variablesStorage: DivVariablesStorage,
     functionsStorage: DivFunctionsStorage,
     actionHandler: DivActionHandler,
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
+    updateCard: @escaping DivActionHandler.UpdateCardAction,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter
   ) {

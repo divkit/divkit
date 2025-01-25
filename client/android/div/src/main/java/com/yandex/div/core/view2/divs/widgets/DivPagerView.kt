@@ -45,6 +45,13 @@ internal class DivPagerView @JvmOverloads constructor(
             field = value
         }
 
+    internal var changePageCallbackForOffScreenPages: ViewPager2.OnPageChangeCallback? = null
+        set(value) {
+            field?.let(viewPager::unregisterOnPageChangeCallback)
+            value?.let(viewPager::registerOnPageChangeCallback)
+            field = value
+        }
+
     internal var pagerSelectedActionsDispatcher: PagerSelectedActionsDispatcher? = null
         set(value) {
             field?.detach(viewPager)

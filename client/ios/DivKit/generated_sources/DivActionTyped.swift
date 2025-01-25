@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivActionTyped {
+public enum DivActionTyped: Sendable {
   case divActionAnimatorStart(DivActionAnimatorStart)
   case divActionAnimatorStop(DivActionAnimatorStop)
   case divActionArrayInsertValue(DivActionArrayInsertValue)

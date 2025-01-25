@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { calcAdditionalPaddings, calcItemsGap } from '../../src/utils/container';
 
 describe('container', () => {
@@ -22,7 +28,7 @@ describe('container', () => {
         left: 0
     };
 
-    it('calcAdditionalPaddings', () => {
+    test('calcAdditionalPaddings', () => {
         expect(calcAdditionalPaddings('horizontal', null, null)).toEqual({});
 
         expect(calcAdditionalPaddings('horizontal', {
@@ -67,7 +73,7 @@ describe('container', () => {
         });
     });
 
-    it('calcAdditionalPaddings with margins', () => {
+    test('calcAdditionalPaddings with margins', () => {
         expect(calcAdditionalPaddings('horizontal', {
             style: separatorStyle,
             show_at_start: true,
@@ -117,7 +123,7 @@ describe('container', () => {
         });
     });
 
-    it('calcItemsGap', () => {
+    test('calcItemsGap', () => {
         expect(calcItemsGap('horizontal', null, null)).toBe('0 0');
 
         expect(calcItemsGap('horizontal', {
@@ -159,7 +165,7 @@ describe('container', () => {
         })).toBe('2em 0');
     });
 
-    it('calcItemsGap with margins', () => {
+    test('calcItemsGap with margins', () => {
         expect(calcItemsGap('horizontal', {
             style: separatorStyle,
             show_between: true,

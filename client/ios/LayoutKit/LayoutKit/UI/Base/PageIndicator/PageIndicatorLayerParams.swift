@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import VGSL
 
 struct PageIndicatorLayerParams {

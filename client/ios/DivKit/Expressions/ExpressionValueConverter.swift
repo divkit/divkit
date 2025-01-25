@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSL
 
 enum ExpressionValueConverter {
@@ -11,6 +10,15 @@ enum ExpressionValueConverter {
     switch T.self {
     case is String.Type:
       return stringify(anyValue) as? T
+    case is Bool.Type:
+      if let numberValue = anyValue as? NSNumber {
+        if numberValue == 0 {
+          return false as? T
+        } else if numberValue == 1 {
+          return true as? T
+        }
+      }
+      return nil
     case let numericType as _Numeric.Type:
       if anyValue is Bool {
         return nil
@@ -47,7 +55,7 @@ enum ExpressionValueConverter {
       dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
       dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
       return dateFormatter.string(from: date)
-    case let array as [AnyHashable]:
+    case let array as DivArray:
       return "[\(array.map { formatValue($0) }.joined(separator: ","))]"
     case let dict as DivDictionary:
       let properties = dict
@@ -125,7 +133,7 @@ func formatTypeForError(_ type: Any.Type) -> String {
     "Color"
   case is Date.Type:
     "DateTime"
-  case is [AnyHashable].Type:
+  case is DivArray.Type:
     "Array"
   case is DivDictionary.Type, is [AnyHashable: AnyHashable].Type:
     "Dict"

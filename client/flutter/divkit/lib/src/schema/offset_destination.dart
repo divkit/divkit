@@ -1,17 +1,17 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Specifies position measured in `dp` from container's start as scroll destination. Applicable only in `gallery`.
-class OffsetDestination extends Resolvable with EquatableMixin {
+/// Specifies the position measured in `dp` from the container start as the scrolling end position. Only applies in `gallery`.
+class OffsetDestination with EquatableMixin {
   const OffsetDestination({
     required this.value,
   });
 
   static const type = "offset";
 
-  /// Position in `dp`.
+  /// Position measured in `dp`.
   // constraint: number >= 0
   final Expression<int> value;
 
@@ -35,18 +35,16 @@ class OffsetDestination extends Resolvable with EquatableMixin {
     }
     try {
       return OffsetDestination(
-        value: safeParseIntExpr(
-          json['value'],
-        )!,
+        value: reqVProp<int>(
+          safeParseIntExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  OffsetDestination resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

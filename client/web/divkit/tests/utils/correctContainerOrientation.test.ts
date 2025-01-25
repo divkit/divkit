@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { correctContainerOrientation } from '../../src/utils/correctContainerOrientation';
 
 describe('correctContainerOrientation', () => {

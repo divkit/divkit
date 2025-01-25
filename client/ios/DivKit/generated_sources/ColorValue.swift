@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class ColorValue {
+public final class ColorValue: Sendable {
   public static let type: String = "color"
   public let value: Expression<Color>
 

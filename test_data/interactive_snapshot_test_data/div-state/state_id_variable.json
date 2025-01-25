@@ -1,0 +1,85 @@
+{
+  "description": "Change states using state_id_variable",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "test",
+      "variables": [
+        {
+          "name": "state_id_var",
+          "type": "string",
+          "value": "state2"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text": "Variable: @{state_id_var}"
+              },
+              {
+                "type": "state",
+                "id": "states",
+                "state_id_variable": "state_id_var",
+                "states": [
+                  {
+                    "state_id": "state1",
+                    "div": {
+                      "type": "text",
+                      "text": "First State"
+                    }
+                  },
+                  {
+                    "state_id": "state2",
+                    "div": {
+                      "type": "text",
+                      "text": "Second state"
+                    }
+                  },
+                  {
+                    "state_id": "state3",
+                    "div": {
+                      "type": "text",
+                      "text": "Third state"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "state3",
+          "url": "div-action://set_state?state_id=0/states/state3"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "state2",
+          "url": "div-action://set_variable?name=state_id_var&value=state2"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

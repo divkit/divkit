@@ -9,11 +9,11 @@ final class FunctionSignaturesTests: XCTestCase {
 }
 
 private func makeTestCases() -> [(String, SignatureTestCase)] {
-  try! Bundle(for: DivKitTests.self)
+  Bundle(for: DivKitTests.self)
     .urls(forResourcesWithExtension: "json", subdirectory: "expression_test_data")!
     .flatMap { url in
       let fileName = url.lastPathComponent
-      let testCases = try JSONDecoder()
+      let testCases = try! JSONDecoder()
         .decode(TestCases.self, from: Data(contentsOf: url))
         .signatures ?? []
       return testCases
@@ -134,7 +134,7 @@ extension ArgumentSignature: Swift.Equatable {
 private func parseType(_ type: String) -> Any.Type {
   switch type {
   case "array":
-    [AnyHashable].self
+    DivArray.self
   case "boolean":
     Bool.self
   case "color":
@@ -142,7 +142,7 @@ private func parseType(_ type: String) -> Any.Type {
   case "datetime":
     Date.self
   case "dict":
-    [String: AnyHashable].self
+    DivDictionary.self
   case "integer":
     Int.self
   case "number":

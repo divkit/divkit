@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 
 @frozen
-public enum EnumWithDefaultTypeTemplate: TemplateValue {
+public enum EnumWithDefaultTypeTemplate: TemplateValue, Sendable {
   case withDefaultTemplate(WithDefaultTemplate)
   case withoutDefaultTemplate(WithoutDefaultTemplate)
 

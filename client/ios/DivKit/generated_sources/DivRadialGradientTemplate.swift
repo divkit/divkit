@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivRadialGradientTemplate: TemplateValue {
+public final class DivRadialGradientTemplate: TemplateValue, Sendable {
   public static let type: String = "radial_gradient"
   public let parent: String?
   public let centerX: Field<DivRadialGradientCenterTemplate>? // default value: .divRadialGradientRelativeCenter(DivRadialGradientRelativeCenter(value: .value(0.5)))

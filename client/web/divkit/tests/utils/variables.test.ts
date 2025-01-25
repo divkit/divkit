@@ -1,3 +1,9 @@
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import type { WrappedError } from '../../typings/common';
 import { prepareVars } from '../../src/expressions/json';
 import { IntegerVariable } from '../../src/expressions/variable';

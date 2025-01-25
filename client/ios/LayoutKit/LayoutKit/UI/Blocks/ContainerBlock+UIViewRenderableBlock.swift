@@ -1,7 +1,6 @@
 import CoreGraphics
 import Foundation
 import UIKit
-
 import VGSL
 
 extension ContainerBlock {
@@ -98,7 +97,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
       return
     }
 
-    applyAccessibility(model.accessibility)
+    applyAccessibilityFromScratch(model.accessibility)
     modelAndLastLayoutSize = (model: model, lastLayoutSize: nil)
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate

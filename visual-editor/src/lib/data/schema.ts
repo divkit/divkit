@@ -347,7 +347,7 @@ export function getPropsList(desc: any, componentJson: any, subpath = '', mergeA
 export function resolveAllOf(prop: any): Schema {
     let res = prop;
 
-    if (prop.allOf) {
+    if (prop?.allOf) {
         res = {};
         [...prop.allOf, filterProp(prop, 'allOf')].forEach(it => {
             let obj = it;
@@ -414,7 +414,7 @@ export function getPropsElement(name: string, prop: Schema, componentJson: any, 
             list = Array.isArray(list) ? list.map((it2, index) => {
                 if (resolvedAnyOf) {
                     const selected = resolvedAnyOf.find(it3 =>
-                        it3?.properties?.type?.enum?.[0] === it2.type
+                        resolveAllOf(it3)?.properties?.type?.enum?.[0] === it2.type
                     );
 
                     const list: object[] = [{
@@ -423,10 +423,15 @@ export function getPropsElement(name: string, prop: Schema, componentJson: any, 
                         desc: prop,
                         prop: subpath + '[' + index + '].type',
                         value: it2.type,
-                        options: resolvedAnyOf.map(it => ({
-                            name: it?.properties?.type?.enum?.[0],
-                            value: it?.properties?.type?.enum?.[0]
-                        })),
+                        options: resolvedAnyOf.map(it => {
+                            const resolved = resolveAllOf(it);
+                            const type = resolved?.properties?.type?.enum?.[0];
+
+                            return {
+                                name: type,
+                                value: type
+                            };
+                        }),
                         // todo desc
                         description: prop.description
                     }];

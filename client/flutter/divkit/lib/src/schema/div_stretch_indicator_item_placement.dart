@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_fixed_size.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
-class DivStretchIndicatorItemPlacement extends Resolvable with EquatableMixin {
+class DivStretchIndicatorItemPlacement with EquatableMixin {
   const DivStretchIndicatorItemPlacement({
     this.itemSpacing = const DivFixedSize(
       value: ValueExpression(
@@ -48,28 +48,29 @@ class DivStretchIndicatorItemPlacement extends Resolvable with EquatableMixin {
     }
     try {
       return DivStretchIndicatorItemPlacement(
-        itemSpacing: safeParseObj(
-          DivFixedSize.fromJson(json['item_spacing']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              5,
+        itemSpacing: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['item_spacing'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                5,
+              ),
             ),
           ),
-        )!,
-        maxVisibleItems: safeParseIntExpr(
-          json['max_visible_items'],
-          fallback: 10,
-        )!,
+          name: 'item_spacing',
+        ),
+        maxVisibleItems: reqVProp<int>(
+          safeParseIntExpr(
+            json['max_visible_items'],
+            fallback: 10,
+          ),
+          name: 'max_visible_items',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivStretchIndicatorItemPlacement resolve(DivVariableContext context) {
-    itemSpacing.resolve(context);
-    maxVisibleItems.resolve(context);
-    return this;
   }
 }

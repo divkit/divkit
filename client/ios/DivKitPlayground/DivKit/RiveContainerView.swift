@@ -66,12 +66,12 @@ final class RiveContainerView: UIView {
   }
 }
 
-extension RiveContainerView: AnimatableView {
+extension RiveContainerView: AsyncSourceAnimatableView {
   func play() {
     riveViewModel?.play(loop: loop)
   }
 
-  func setSource(_ source: AnimationSourceType) {
+  func setSourceAsync(_ source: AnimationSourceType) async {
     if let source = source as? RiveAnimationSourceType {
       switch source {
       case let .data(data):

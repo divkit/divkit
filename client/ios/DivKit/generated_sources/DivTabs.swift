@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivTabs: DivBase {
-  public final class Item {
+public final class DivTabs: DivBase, Sendable {
+  public final class Item: Sendable {
     public let div: Div
     public let title: Expression<String>
     public let titleClickAction: DivAction?
@@ -25,7 +25,7 @@ public final class DivTabs: DivBase {
     }
   }
 
-  public final class TabTitleDelimiter {
+  public final class TabTitleDelimiter: Sendable {
     public let height: DivFixedSize // default value: DivFixedSize(value: .value(12))
     public let imageUrl: Expression<URL>
     public let width: DivFixedSize // default value: DivFixedSize(value: .value(12))
@@ -45,9 +45,9 @@ public final class DivTabs: DivBase {
     }
   }
 
-  public final class TabTitleStyle {
+  public final class TabTitleStyle: Sendable {
     @frozen
-    public enum AnimationType: String, CaseIterable {
+    public enum AnimationType: String, CaseIterable, Sendable {
       case slide = "slide"
       case fade = "fade"
       case none = "none"

@@ -1,0 +1,108 @@
+{
+  "description": "Currency input mask",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "ui_test_card",
+      "variables": [
+        {
+          "name": "input",
+          "type": "string",
+          "value": "1234567"
+        },
+        {
+          "name": "raw_input",
+          "type": "string",
+          "value": "12345"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "value": "en-US"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Locale: @{locale}; raw text: @{raw_input}"
+              },
+              {
+                "type": "input",
+                "text_variable": "input",
+                "paddings": {
+                  "start": 10,
+                  "end": 10,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "margins": {
+                  "start": 5,
+                  "end": 5,
+                  "top": 5,
+                  "bottom": 5
+                },
+                "background": [
+                  {
+                    "type":"solid",
+                    "color": "#eeeeee"
+                  }
+                ],
+                "mask": {
+                  "type": "currency",
+                  "raw_text_variable": "raw_input",
+                  "locale": "@{locale}"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=locale&value=ru-RU",
+          "log_id": "change locale"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=1234567890",
+          "log_id": "set bigger number"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=locale&value=en-US",
+          "log_id": "change locale back"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    }
+  ]
+}

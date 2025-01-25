@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Extension that affects an element.
-class DivExtension extends Resolvable with EquatableMixin {
+class DivExtension with EquatableMixin {
   const DivExtension({
     required this.id,
     this.params,
@@ -14,7 +14,7 @@ class DivExtension extends Resolvable with EquatableMixin {
   final String id;
 
   /// Additional extension parameters.
-  final Map<String, dynamic>? params;
+  final Obj? params;
 
   @override
   List<Object?> get props => [
@@ -24,7 +24,7 @@ class DivExtension extends Resolvable with EquatableMixin {
 
   DivExtension copyWith({
     String? id,
-    Map<String, dynamic>? Function()? params,
+    Obj? Function()? params,
   }) =>
       DivExtension(
         id: id ?? this.id,
@@ -39,20 +39,19 @@ class DivExtension extends Resolvable with EquatableMixin {
     }
     try {
       return DivExtension(
-        id: safeParseStr(
-          json['id']?.toString(),
-        )!,
+        id: reqProp<String>(
+          safeParseStr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
         params: safeParseMap(
           json['params'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivExtension resolve(DivVariableContext context) {
-    return this;
   }
 }

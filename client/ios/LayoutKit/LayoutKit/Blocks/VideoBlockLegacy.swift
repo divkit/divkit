@@ -1,7 +1,6 @@
 import AVFoundation
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 public final class VideoBlockLegacy: BlockWithTraits {

@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import VGSL
 
 public final class GridBlock: BlockWithTraits, BlockWithLayout {
@@ -177,7 +176,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
 
     var result = makeLayout(constrainedTo: CGSize(width: width, height: .infinity)).size.height
 
-    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
+    if case let .intrinsic(_, minSize, maxSize) = heightTrait {
       result = clamp(result, min: minSize, max: maxSize)
     }
 

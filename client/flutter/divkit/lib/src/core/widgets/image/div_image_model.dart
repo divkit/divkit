@@ -37,27 +37,28 @@ class DivImageModel with EquatableMixin {
       ];
 }
 
-extension DivImageBinder on DivImage {
-  DivImageModel bind(BuildContext context) {
+extension DivImageConverer on DivImage {
+  DivImageModel resolve(BuildContext context) {
     final divContext = read<DivContext>(context)!;
-
+    final variables = divContext.variables;
     final viewScale = divContext.scale.view;
 
     final alignment = DivAlignmentConverter(
       contentAlignmentVertical,
       contentAlignmentHorizontal,
-    ).convert();
+    ).resolve(variables);
 
     final filter = DivFilters.combine(
+      variables,
       filters: filters ?? [],
       viewScale: viewScale,
     );
 
     return DivImageModel(
-      src: imageUrl.value.toString(),
-      fit: scale.value.convert(),
-      color: tintColor?.value,
-      colorBlendMode: tintMode.value.convert(),
+      src: imageUrl.resolve(variables).toString(),
+      fit: scale.resolve(variables).convert(),
+      color: tintColor?.resolve(variables),
+      colorBlendMode: tintMode.resolve(variables).convert(),
       contentAlignment: alignment ?? Alignment.center,
       blurRadius: filter.blurRadius == null
           ? null

@@ -1,14 +1,5 @@
 import Foundation
-
 import VGSL
-
-public typealias DivDictionary = [String: AnyHashable]
-
-extension DivDictionary {
-  static func make(from dict: [String: Any]) -> DivDictionary? {
-    NSDictionary(dictionary: dict) as? DivDictionary
-  }
-}
 
 @frozen
 public enum DivVariableValue: Hashable {
@@ -19,7 +10,7 @@ public enum DivVariableValue: Hashable {
   case color(Color)
   case url(URL)
   case dict(DivDictionary)
-  case array([AnyHashable])
+  case array(DivArray)
 
   @inlinable
   public func typedValue<T>() -> T? {
@@ -59,7 +50,7 @@ public enum DivVariableValue: Hashable {
       self = .url(value)
     case let value as DivDictionary:
       self = .dict(value)
-    case let value as [AnyHashable]:
+    case let value as DivArray:
       self = .array(value)
     default:
       DivKitLogger.error("Unsupported variable value: \(value)")

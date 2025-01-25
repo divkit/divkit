@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionSetStoredValueTemplate: TemplateValue {
+public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
   public static let type: String = "set_stored_value"
   public let parent: String?
   public let lifetime: Field<Expression<Int>>?

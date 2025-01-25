@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionSetState {
+public final class DivActionSetState: Sendable {
   public static let type: String = "set_state"
   public let stateId: Expression<String>
   public let temporary: Expression<Bool> // default value: true

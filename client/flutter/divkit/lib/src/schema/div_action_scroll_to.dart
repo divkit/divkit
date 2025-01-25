@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_action_scroll_destination.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-/// Scrolls or switches container to given destination provided by `destination`.
-class DivActionScrollTo extends Resolvable with EquatableMixin {
+/// Scrolls to a position or switches to the container element specified by the `destination` parameter.
+class DivActionScrollTo with EquatableMixin {
   const DivActionScrollTo({
     this.animated = const ValueExpression(true),
     required this.destination,
@@ -14,18 +14,18 @@ class DivActionScrollTo extends Resolvable with EquatableMixin {
 
   static const type = "scroll_to";
 
-  /// If `true` (default value) scroll will be animated, else not.
+  /// Enables scrolling animation.
   // default value: true
   final Expression<bool> animated;
 
-  /// Specifies destination of scroll:
-  /// • `index` - scroll or switch to item with index provided by `value`;
-  /// • `offset` - scroll to position measured in `dp` from container's start and provided by `value`. Applicable only in `gallery`;
-  /// • `start` - scrolls to start of container;
-  /// • `end` - scrolls to end of container..
+  /// Defines the scrolling end position:
+  /// • `index`: Scroll to the element with the index provided in `value`
+  /// • `offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;
+  /// • `start`: Scroll to the container start;
+  /// • `end`: Scroll to the container end.
   final DivActionScrollDestination destination;
 
-  /// Identifier of the view that is going to be manipulated.
+  /// ID of the element where the action should be performed.
   final Expression<String> id;
 
   @override
@@ -54,27 +54,30 @@ class DivActionScrollTo extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionScrollTo(
-        animated: safeParseBoolExpr(
-          json['animated'],
-          fallback: true,
-        )!,
-        destination: safeParseObj(
-          DivActionScrollDestination.fromJson(json['destination']),
-        )!,
-        id: safeParseStrExpr(
-          json['id']?.toString(),
-        )!,
+        animated: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['animated'],
+            fallback: true,
+          ),
+          name: 'animated',
+        ),
+        destination: reqProp<DivActionScrollDestination>(
+          safeParseObject(
+            json['destination'],
+            parse: DivActionScrollDestination.fromJson,
+          ),
+          name: 'destination',
+        ),
+        id: reqVProp<String>(
+          safeParseStrExpr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionScrollTo resolve(DivVariableContext context) {
-    animated.resolve(context);
-    destination.resolve(context);
-    id.resolve(context);
-    return this;
   }
 }

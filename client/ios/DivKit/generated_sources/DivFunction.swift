@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFunction {
+public final class DivFunction: Sendable {
   public let arguments: [DivFunctionArgument]
   public let body: String
   public let name: String // regex: ^[a-zA-Z_][a-zA-Z0-9_]*$

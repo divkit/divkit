@@ -9,17 +9,12 @@ function getDuration(ctx: EvalContext, milliseconds: IntegerValue, delimiter: nu
         throw new Error('Expecting non-negative number of milliseconds.');
     }
 
-    let val: number | bigint = (toBigInt(milliseconds.value) as bigint) /
-        (toBigInt(delimiter) as bigint);
+    let val = toBigInt(milliseconds.value) / toBigInt(delimiter);
 
     checkIntegerOverflow(ctx, val);
 
-    if (typeof val === 'number') {
-        val = Math.floor(val);
-    }
-
     if (whole) {
-        val = (toBigInt(val) as bigint) % (toBigInt(whole) as bigint);
+        val = toBigInt(val) % toBigInt(whole);
     }
 
     return {

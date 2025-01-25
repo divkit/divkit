@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 extension Block {
@@ -28,7 +27,8 @@ extension Block {
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool,
     accessibilityElement: AccessibilityElement? = nil,
-    reuseId: String?
+    reuseId: String?,
+    path: UIElementPath?
   ) -> Block {
     let hasAlpha = alpha != nil && alpha?.isApproximatelyEqualTo(1) != true
     let anythingToApplyExceptBoundary =
@@ -72,7 +72,8 @@ extension Block {
         visibilityParams: visibilityParams ?? block.visibilityParams,
         tooltips: [tooltips, block.tooltips].compactMap { $0 }.flatMap { $0 },
         accessibilityElement: accessibilityElement,
-        reuseId: reuseId
+        reuseId: reuseId,
+        path: path
       )
     }
 
@@ -97,7 +98,8 @@ extension Block {
       visibilityParams: visibilityParams,
       tooltips: tooltips ?? [],
       accessibilityElement: accessibilityElement,
-      reuseId: reuseId
+      reuseId: reuseId,
+      path: path
     )
   }
 
@@ -126,7 +128,8 @@ extension Block {
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
-    reuseId: String? = nil
+    reuseId: String? = nil,
+    path: UIElementPath? = nil
   ) -> Block {
     let decoratedBlock = applyDecoratingBlockProperties(
       boundary: boundary,
@@ -144,7 +147,8 @@ extension Block {
       tooltips: tooltips,
       forceWrapping: forceWrapping,
       accessibilityElement: accessibilityElement,
-      reuseId: reuseId
+      reuseId: reuseId,
+      path: path
     )
     return decoratedBlock.shaded(with: shadow)
   }

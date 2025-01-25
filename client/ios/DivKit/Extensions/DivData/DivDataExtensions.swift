@@ -19,21 +19,30 @@ extension DivData: DivBlockModeling {
 
     let stateId = String(state.stateId)
     let statePath = DivStatePath(rawValue: UIElementPath(stateId))
-    let div = state.div
+    let stateBlockPath: DivStatePath
+    let parentDivStatePath: DivStatePath
+    if let tooltipId = context.viewId.additionalId {
+      stateBlockPath = DivStatePath(rawValue: UIElementPath(tooltipId))
+      parentDivStatePath = stateBlockPath + stateId
+    } else {
+      stateBlockPath = DivData.rootPath
+      parentDivStatePath = statePath
+    }
 
     let divContext = context.modifying(
-      cardLogId: context.cardLogId ?? logId,
+      cardLogId: logId,
       parentPath: context.parentPath + stateId,
-      parentDivStatePath: statePath
+      parentDivStatePath: parentDivStatePath
     )
 
+    let div = state.div
     stateManager.updateBlockIdsWithStateChangeTransition(
       statePath: statePath,
       div: div
     )
     let block = try div.value.makeBlock(context: divContext)
     stateManager.setState(
-      stateBlockPath: DivData.rootPath,
+      stateBlockPath: stateBlockPath,
       stateID: DivStateID(rawValue: stateId)
     )
     return block

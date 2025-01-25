@@ -54,6 +54,29 @@
         "android",
         "web"
       ]
+    },
+    "mode": {
+      "$ref": "div-tooltip-mode.json",
+      "default_value": "{ \"type\": \"modal\" }",
+      "$description": "translations.json#/div_tooltip_mode",
+      "platforms": [
+      ]
+    },
+    "tap_outside_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_tooltip_tap_outside_actions",
+      "platforms": [
+      ]
+    },
+    "close_by_tap_outside": {
+      "type": "boolean",
+      "$description": "translations.json#/div_tooltip_close_by_tap_outside",
+      "default_value": "true",
+      "platforms": [
+      ]
     }
   },
   "required": [

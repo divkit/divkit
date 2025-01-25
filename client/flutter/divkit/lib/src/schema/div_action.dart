@@ -2,11 +2,11 @@
 
 import 'package:divkit/src/schema/div_action_typed.dart';
 import 'package:divkit/src/schema/div_download_callbacks.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// It defines an action when clicking on an element.
-class DivAction extends Resolvable with EquatableMixin {
+class DivAction with EquatableMixin {
   const DivAction({
     this.downloadCallbacks,
     this.isEnabled = const ValueExpression(true),
@@ -35,10 +35,10 @@ class DivAction extends Resolvable with EquatableMixin {
   final Expression<Uri>? logUrl;
 
   /// Context menu.
-  final List<DivActionMenuItem>? menuItems;
+  final Arr<DivActionMenuItem>? menuItems;
 
   /// Additional parameters, passed to the host application.
-  final Map<String, dynamic>? payload;
+  final Obj? payload;
 
   /// Referer URL for logging.
   final Expression<Uri>? referer;
@@ -73,8 +73,8 @@ class DivAction extends Resolvable with EquatableMixin {
     Expression<bool>? isEnabled,
     Expression<String>? logId,
     Expression<Uri>? Function()? logUrl,
-    List<DivActionMenuItem>? Function()? menuItems,
-    Map<String, dynamic>? Function()? payload,
+    Arr<DivActionMenuItem>? Function()? menuItems,
+    Obj? Function()? payload,
     Expression<Uri>? Function()? referer,
     String? Function()? scopeId,
     Expression<DivActionTarget>? Function()? target,
@@ -105,62 +105,64 @@ class DivAction extends Resolvable with EquatableMixin {
     }
     try {
       return DivAction(
-        downloadCallbacks: safeParseObj(
-          DivDownloadCallbacks.fromJson(json['download_callbacks']),
+        downloadCallbacks: safeParseObject(
+          json['download_callbacks'],
+          parse: DivDownloadCallbacks.fromJson,
         ),
-        isEnabled: safeParseBoolExpr(
-          json['is_enabled'],
-          fallback: true,
-        )!,
-        logId: safeParseStrExpr(
-          json['log_id']?.toString(),
-        )!,
-        logUrl: safeParseUriExpr(json['log_url']),
-        menuItems: safeParseObj(
-          safeListMap(
-            json['menu_items'],
-            (v) => safeParseObj(
-              DivActionMenuItem.fromJson(v),
-            )!,
+        isEnabled: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['is_enabled'],
+            fallback: true,
+          ),
+          name: 'is_enabled',
+        ),
+        logId: reqVProp<String>(
+          safeParseStrExpr(
+            json['log_id'],
+          ),
+          name: 'log_id',
+        ),
+        logUrl: safeParseUriExpr(
+          json['log_url'],
+        ),
+        menuItems: safeParseObjects(
+          json['menu_items'],
+          (v) => reqProp<DivActionMenuItem>(
+            safeParseObject(
+              v,
+              parse: DivActionMenuItem.fromJson,
+            ),
           ),
         ),
         payload: safeParseMap(
           json['payload'],
         ),
-        referer: safeParseUriExpr(json['referer']),
+        referer: safeParseUriExpr(
+          json['referer'],
+        ),
         scopeId: safeParseStr(
-          json['scope_id']?.toString(),
+          json['scope_id'],
         ),
         target: safeParseStrEnumExpr(
           json['target'],
           parse: DivActionTarget.fromJson,
         ),
-        typed: safeParseObj(
-          DivActionTyped.fromJson(json['typed']),
+        typed: safeParseObject(
+          json['typed'],
+          parse: DivActionTyped.fromJson,
         ),
-        url: safeParseUriExpr(json['url']),
+        url: safeParseUriExpr(
+          json['url'],
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivAction resolve(DivVariableContext context) {
-    downloadCallbacks?.resolve(context);
-    isEnabled.resolve(context);
-    logId.resolve(context);
-    logUrl?.resolve(context);
-    safeListResolve(menuItems, (v) => v.resolve(context));
-    referer?.resolve(context);
-    target?.resolve(context);
-    typed?.resolve(context);
-    url?.resolve(context);
-    return this;
-  }
 }
 
-class DivActionMenuItem extends Resolvable with EquatableMixin {
+class DivActionMenuItem with EquatableMixin {
   const DivActionMenuItem({
     this.action,
     this.actions,
@@ -171,7 +173,7 @@ class DivActionMenuItem extends Resolvable with EquatableMixin {
   final DivAction? action;
 
   /// Multiple actions when clicking on a menu item.
-  final List<DivAction>? actions;
+  final Arr<DivAction>? actions;
 
   /// Menu item title.
   final Expression<String> text;
@@ -185,7 +187,7 @@ class DivActionMenuItem extends Resolvable with EquatableMixin {
 
   DivActionMenuItem copyWith({
     DivAction? Function()? action,
-    List<DivAction>? Function()? actions,
+    Arr<DivAction>? Function()? actions,
     Expression<String>? text,
   }) =>
       DivActionMenuItem(
@@ -202,36 +204,34 @@ class DivActionMenuItem extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionMenuItem(
-        action: safeParseObj(
-          DivAction.fromJson(json['action']),
+        action: safeParseObject(
+          json['action'],
+          parse: DivAction.fromJson,
         ),
-        actions: safeParseObj(
-          safeListMap(
-            json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        actions: safeParseObjects(
+          json['actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        text: safeParseStrExpr(
-          json['text']?.toString(),
-        )!,
+        text: reqVProp<String>(
+          safeParseStrExpr(
+            json['text'],
+          ),
+          name: 'text',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivActionMenuItem resolve(DivVariableContext context) {
-    action?.resolve(context);
-    safeListResolve(actions, (v) => v.resolve(context));
-    text.resolve(context);
-    return this;
-  }
 }
 
-enum DivActionTarget implements Resolvable {
+enum DivActionTarget {
   self('_self'),
   blank('_blank');
 
@@ -281,11 +281,13 @@ enum DivActionTarget implements Resolvable {
           return DivActionTarget.blank;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivActionTarget: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivActionTarget resolve(DivVariableContext context) => this;
 }

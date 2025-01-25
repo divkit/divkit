@@ -41,7 +41,10 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_press_start_actions",
-      "platforms": []
+      "platforms": [
+        "web",
+        "android"
+      ]
     },
     "press_end_actions": {
       "type": "array",
@@ -49,7 +52,10 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_press_end_actions",
-      "platforms": []
+      "platforms": [
+        "web",
+        "android"
+      ]
     },
     "hover_start_actions": {
       "type": "array",
@@ -57,7 +63,10 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_hover_start_actions",
-      "platforms": []
+      "platforms": [
+        "web",
+        "android"
+      ]
     },
     "hover_end_actions": {
       "type": "array",
@@ -65,7 +74,10 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_actionable_hover_end_actions",
-      "platforms": []
+      "platforms": [
+        "web",
+        "android"
+      ]
     },
     "action_animation": {
       "$ref": "div-animation.json",

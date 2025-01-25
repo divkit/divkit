@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Relative radius of the gradient transition.
-class DivRadialGradientRelativeRadius extends Resolvable with EquatableMixin {
+class DivRadialGradientRelativeRadius with EquatableMixin {
   const DivRadialGradientRelativeRadius({
     required this.value,
   });
@@ -34,24 +34,22 @@ class DivRadialGradientRelativeRadius extends Resolvable with EquatableMixin {
     }
     try {
       return DivRadialGradientRelativeRadius(
-        value: safeParseStrEnumExpr(
-          json['value'],
-          parse: DivRadialGradientRelativeRadiusValue.fromJson,
-        )!,
+        value: reqVProp<DivRadialGradientRelativeRadiusValue>(
+          safeParseStrEnumExpr(
+            json['value'],
+            parse: DivRadialGradientRelativeRadiusValue.fromJson,
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivRadialGradientRelativeRadius resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
-  }
 }
 
-enum DivRadialGradientRelativeRadiusValue implements Resolvable {
+enum DivRadialGradientRelativeRadiusValue {
   nearestCorner('nearest_corner'),
   farthestCorner('farthest_corner'),
   nearestSide('nearest_side'),
@@ -123,12 +121,13 @@ enum DivRadialGradientRelativeRadiusValue implements Resolvable {
           return DivRadialGradientRelativeRadiusValue.farthestSide;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivRadialGradientRelativeRadiusValue: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivRadialGradientRelativeRadiusValue resolve(DivVariableContext context) =>
-      this;
 }

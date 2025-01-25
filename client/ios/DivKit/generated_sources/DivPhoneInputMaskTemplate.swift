@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPhoneInputMaskTemplate: TemplateValue {
+public final class DivPhoneInputMaskTemplate: TemplateValue, Sendable {
   public static let type: String = "phone"
   public let parent: String?
   public let rawTextVariable: Field<String>?

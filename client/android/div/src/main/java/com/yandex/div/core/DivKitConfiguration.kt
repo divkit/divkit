@@ -83,12 +83,6 @@ class DivKitConfiguration private constructor(
             return this
         }
 
-        @Deprecated("Use histogramConfiguration(configuration: Provider<HistogramConfiguration>")
-        fun histogramConfiguration(configuration: HistogramConfiguration): Builder {
-            histogramConfiguration = Provider { configuration }
-            return this
-        }
-
         fun histogramConfiguration(configuration: Provider<HistogramConfiguration>): Builder {
             histogramConfiguration = configuration
             return this

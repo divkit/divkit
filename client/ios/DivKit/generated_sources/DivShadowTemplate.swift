@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivShadowTemplate: TemplateValue {
+public final class DivShadowTemplate: TemplateValue, Sendable {
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 0.19
   public let blur: Field<Expression<Int>>? // constraint: number >= 0; default value: 2
   public let color: Field<Expression<Color>>? // default value: #000000

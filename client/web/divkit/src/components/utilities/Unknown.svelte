@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import type { SvelteComponent } from 'svelte';
+    import type { ComponentType } from 'svelte';
     import type { ComponentContext } from '../../types/componentContext';
     import type { LayoutParams } from '../../types/layoutParams';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
@@ -12,7 +12,7 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    let component: typeof SvelteComponent | undefined;
+    let component: ComponentType | undefined;
 
     $: {
         const childJson = componentContext.json;

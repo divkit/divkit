@@ -35,7 +35,7 @@
                 "version_added": "29.4.0"
             },
             "ios": {
-                "version_added": "29.9.0"
+                "version_added": "30.31.0"
             },
             "web": {
                 "version_added": "29.10.0"
@@ -50,6 +50,9 @@
             },
             "android": {
                 "version_added": "30.19.0"
+            },
+            "web": {
+                "version_added": "30.31.0"
             }
         }
     }]

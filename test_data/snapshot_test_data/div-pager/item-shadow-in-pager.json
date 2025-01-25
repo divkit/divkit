@@ -2,7 +2,8 @@
   "description": "Shadow on items in pager are cropped by page by default.",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "coupons_card",
@@ -13,14 +14,13 @@
           "layout_mode": {
             "type": "percentage",
             "page_width": {
-              "type": "percentage",
-              "value": 91.4
+              "value": 90
             }
           },
           "items": [
             {
               "type": "coupon_item",
-              "title": "test"
+              "title": "Shadow above and below item is drawn, shadow to the left and to the right of item is cropped."
             },
             {
               "type": "coupon_item",
@@ -45,7 +45,12 @@
             "left": 16,
             "right": 16
           },
-          "orientation": "horizontal"
+          "orientation": "horizontal",
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          }
         },
         "state_id": 0
       }
@@ -64,10 +69,16 @@
           },
           "height": {
             "type": "fixed",
-            "value": 36
+            "value": 50
           },
           "text_alignment_horizontal": "center",
-          "text_alignment_vertical": "center"
+          "text_alignment_vertical": "center",
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          }
         }
       ],
       "border": {

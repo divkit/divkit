@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_size_unit.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// The size of an element adjusts to its contents.
-class DivWrapContentSize extends Resolvable with EquatableMixin {
+class DivWrapContentSize with EquatableMixin {
   const DivWrapContentSize({
     this.constrained,
     this.maxSize,
@@ -53,28 +53,23 @@ class DivWrapContentSize extends Resolvable with EquatableMixin {
         constrained: safeParseBoolExpr(
           json['constrained'],
         ),
-        maxSize: safeParseObj(
-          DivWrapContentSizeConstraintSize.fromJson(json['max_size']),
+        maxSize: safeParseObject(
+          json['max_size'],
+          parse: DivWrapContentSizeConstraintSize.fromJson,
         ),
-        minSize: safeParseObj(
-          DivWrapContentSizeConstraintSize.fromJson(json['min_size']),
+        minSize: safeParseObject(
+          json['min_size'],
+          parse: DivWrapContentSizeConstraintSize.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivWrapContentSize resolve(DivVariableContext context) {
-    constrained?.resolve(context);
-    maxSize?.resolve(context);
-    minSize?.resolve(context);
-    return this;
-  }
 }
 
-class DivWrapContentSizeConstraintSize extends Resolvable with EquatableMixin {
+class DivWrapContentSizeConstraintSize with EquatableMixin {
   const DivWrapContentSizeConstraintSize({
     this.unit = const ValueExpression(DivSizeUnit.dp),
     required this.value,
@@ -112,24 +107,24 @@ class DivWrapContentSizeConstraintSize extends Resolvable with EquatableMixin {
     }
     try {
       return DivWrapContentSizeConstraintSize(
-        unit: safeParseStrEnumExpr(
-          json['unit'],
-          parse: DivSizeUnit.fromJson,
-          fallback: DivSizeUnit.dp,
-        )!,
-        value: safeParseIntExpr(
-          json['value'],
-        )!,
+        unit: reqVProp<DivSizeUnit>(
+          safeParseStrEnumExpr(
+            json['unit'],
+            parse: DivSizeUnit.fromJson,
+            fallback: DivSizeUnit.dp,
+          ),
+          name: 'unit',
+        ),
+        value: reqVProp<int>(
+          safeParseIntExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivWrapContentSizeConstraintSize resolve(DivVariableContext context) {
-    unit.resolve(context);
-    value.resolve(context);
-    return this;
   }
 }

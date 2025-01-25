@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 extension ContainerBlock: ImageRenderableBlock {

@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivVariableTemplate: TemplateValue {
+public enum DivVariableTemplate: TemplateValue, Sendable {
   case stringVariableTemplate(StringVariableTemplate)
   case numberVariableTemplate(NumberVariableTemplate)
   case integerVariableTemplate(IntegerVariableTemplate)

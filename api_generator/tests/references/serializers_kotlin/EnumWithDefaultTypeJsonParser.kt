@@ -23,7 +23,7 @@ internal class EnumWithDefaultTypeJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EnumWithDefaultType {
-            val type: String = JsonPropertyParser.readString(data, "type")
+            val type: String = JsonPropertyParser.readString(context, data, "type")
             when (type) {
                 WithDefault.TYPE -> return EnumWithDefaultType.WithDefaultCase(component.withDefaultJsonEntityParser.value.deserialize(context, data))
                 WithoutDefault.TYPE -> return EnumWithDefaultType.WithoutDefaultCase(component.withoutDefaultJsonEntityParser.value.deserialize(context, data))
@@ -54,7 +54,7 @@ internal class EnumWithDefaultTypeJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EnumWithDefaultTypeTemplate {
-            val extendedType = JsonPropertyParser.readString(data, "type")
+            val extendedType = JsonPropertyParser.readString(context, data, "type")
             val parent = context.templates[extendedType] as? EnumWithDefaultTypeTemplate
             val type = parent?.type ?: extendedType
             when (type) {

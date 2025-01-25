@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivPointTemplate: TemplateValue {
+public final class DivPointTemplate: TemplateValue, Sendable {
   public let x: Field<DivDimensionTemplate>?
   public let y: Field<DivDimensionTemplate>?
 

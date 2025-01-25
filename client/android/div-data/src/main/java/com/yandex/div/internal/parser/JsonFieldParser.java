@@ -4,15 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.internal.template.Field;
 import com.yandex.div.internal.template.FieldKt;
-import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.ParsingException;
 import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
-
-import kotlin.OptIn;
+import com.yandex.div.serialization.Serializer;
 import kotlin.Lazy;
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONObject;
 
@@ -40,45 +39,41 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<V> readField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<V> fallback
     ) {
-        return readField(context, logger, json, key, overridable, fallback, doNotConvert(), alwaysValid());
+        return readField(context, json, key, overridable, fallback, doNotConvert(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<V> readField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<V> fallback,
             @NonNull final Function1<R, V> converter
     ) {
-        return readField(context, logger, json, key, overridable, fallback, converter, alwaysValid());
+        return readField(context, json, key, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<V> readField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<V> fallback,
             @NonNull final ValueValidator<V> validator
     ) {
-        return readField(context, logger, json, key, overridable, fallback, doNotConvert(), validator);
+        return readField(context, json, key, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
     public static <R, V> Field<V> readField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -87,11 +82,11 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> validator
     ) {
         try {
-            V value = JsonPropertyParser.read(context, logger, json, key, converter, validator);
+            V value = JsonPropertyParser.read(context, json, key, converter, validator);
             return new Field.Value<>(overridable, value);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             Field<V> referenceOrFallback = referenceOrFallback(overridable, reference, fallback);
             if (referenceOrFallback != null) {
                 return referenceOrFallback;
@@ -104,7 +99,6 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<V> readField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -112,11 +106,11 @@ public class JsonFieldParser {
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
         try {
-            V result = JsonPropertyParser.read(context, logger, json, key, deserializer);
+            V result = JsonPropertyParser.read(context, json, key, deserializer);
             return new Field.Value<>(overridable, result);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             Field<V> referenceOrFallback = referenceOrFallback(overridable, reference, fallback);
             if (referenceOrFallback != null) {
                 return referenceOrFallback;
@@ -129,45 +123,41 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<V> fallback
     ) {
-        return readOptionalField(context, logger, json, key, overridable, fallback, doNotConvert(), alwaysValid());
+        return readOptionalField(context, json, key, overridable, fallback, doNotConvert(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<V> fallback,
             @NonNull final Function1<R, V> converter
     ) {
-        return readOptionalField(context, logger, json, key, overridable, fallback, converter, alwaysValid());
+        return readOptionalField(context, json, key, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<V> fallback,
             @NonNull final ValueValidator<V> validator
     ) {
-        return readOptionalField(context, logger, json, key, overridable, fallback, doNotConvert(), validator);
+        return readOptionalField(context, json, key, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
     public static <R, V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -175,11 +165,11 @@ public class JsonFieldParser {
             @NonNull final Function1<R, V> converter,
             @NonNull final ValueValidator<V> validator
     ) {
-        V opt = JsonPropertyParser.readOptional(context, logger, json, key, converter, validator);
+        V opt = JsonPropertyParser.readOptional(context, json, key, converter, validator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         }
-        String reference = readReference(context, logger, json, key);
+        String reference = readReference(context, json, key);
         if (reference != null) {
             return new Field.Reference<>(overridable, reference);
         } else if (fallback != null) {
@@ -192,18 +182,17 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<V> fallback,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        V opt = JsonPropertyParser.readOptional(context, logger, json, key, deserializer);
+        V opt = JsonPropertyParser.readOptional(context, json, key, deserializer);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         }
-        String reference = readReference(context, logger, json, key);
+        String reference = readReference(context, json, key);
         if (reference != null) {
             return new Field.Reference<>(overridable, reference);
         } else if (fallback != null) {
@@ -216,7 +205,6 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -224,13 +212,12 @@ public class JsonFieldParser {
             @Nullable final Field<Expression<V>> fallback
     ) {
         return readFieldWithExpression(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -239,13 +226,12 @@ public class JsonFieldParser {
             @NonNull final Function1<R, V> converter
     ) {
         return readFieldWithExpression(
-                context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -254,13 +240,12 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> validator
     ) {
         return readFieldWithExpression(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), validator);
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
     public static <R, V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -271,13 +256,13 @@ public class JsonFieldParser {
     ) {
         try {
             Expression<V> expression = JsonExpressionParser.readExpression(
-                    context, logger, json, key, typeHelper, converter, validator);
+                    context, json, key, typeHelper, converter, validator);
             return new Field.Value<>(overridable, expression);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             Field<Expression<V>> referenceOrFallback = referenceOrFallback(
                     overridable,
-                    readReference(context, logger, json, key),
+                    readReference(context, json, key),
                     fallback);
             if (referenceOrFallback != null) {
                 return referenceOrFallback;
@@ -290,7 +275,6 @@ public class JsonFieldParser {
     @NonNull
     public static Field<Expression<String>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull TypeHelper<String> typeHelper,
@@ -298,13 +282,12 @@ public class JsonFieldParser {
             @Nullable final Field<Expression<String>> fallback
     ) {
         return readOptionalFieldWithExpression(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), alwaysValidString());
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), alwaysValidString());
     }
 
     @NonNull
     public static <R, V> Field<Expression<V>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull TypeHelper<V> typeHelper,
@@ -313,13 +296,12 @@ public class JsonFieldParser {
             @NonNull final Function1<R, V> converter
     ) {
         return readOptionalFieldWithExpression(
-                context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<Expression<V>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull TypeHelper<V> typeHelper,
@@ -328,13 +310,12 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> validator
     ) {
         return readOptionalFieldWithExpression(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), validator);
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
     public static <R, V> Field<Expression<V>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull TypeHelper<V> typeHelper,
@@ -344,11 +325,11 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> validator
     ) {
         Expression<V> opt = JsonExpressionParser.readOptionalExpression(
-                context, logger, json, key, typeHelper, converter, validator, null);
+                context, json, key, typeHelper, converter, validator, null);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         } else {
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             if (reference != null) {
                 return new Field.Reference<>(overridable, reference);
             } else if (fallback != null) {
@@ -362,7 +343,6 @@ public class JsonFieldParser {
     @NonNull
     public static <R, V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -370,13 +350,12 @@ public class JsonFieldParser {
             @NonNull final Function1<R, V> converter
     ) {
         return readListField(
-                context, logger, json, key, overridable, fallback, converter, alwaysValidList(), alwaysValid());
+                context, json, key, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -385,13 +364,12 @@ public class JsonFieldParser {
             @NonNull final ListValidator<V> listValidator
     ) {
         return readListField(
-                context, logger, json, key, overridable, fallback, converter, listValidator, alwaysValid());
+                context, json, key, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -402,11 +380,11 @@ public class JsonFieldParser {
     ) {
         try {
             List<V> opt = JsonPropertyParser.readList(
-                    context, logger, json, key, converter, listValidator, itemValidator);
+                    context, json, key, converter, listValidator, itemValidator);
             return new Field.Value<>(overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             Field<List<V>> result = referenceOrFallback(overridable, reference, fallback);
             if (result != null) {
                 return result;
@@ -419,7 +397,6 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -428,11 +405,11 @@ public class JsonFieldParser {
     ) {
         try {
             List<V> opt = JsonPropertyParser.readList(
-                    context, logger, json, key, deserializer);
+                    context, json, key, deserializer);
             return new Field.Value<>(overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             Field<List<V>> result = referenceOrFallback(overridable, reference, fallback);
             if (result != null) {
                 return result;
@@ -445,7 +422,6 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -455,11 +431,11 @@ public class JsonFieldParser {
     ) {
         try {
             List<V> opt = JsonPropertyParser.readList(
-                    context, logger, json, key, deserializer, listValidator);
+                    context, json, key, deserializer, listValidator);
             return new Field.Value<>(overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             Field<List<V>> result = referenceOrFallback(overridable, reference, fallback);
             if (result != null) {
                 return result;
@@ -472,7 +448,6 @@ public class JsonFieldParser {
     @NonNull
     public static <R, V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -480,13 +455,12 @@ public class JsonFieldParser {
             @NonNull final Function1<R, V> converter
     ) {
         return readOptionalListField(
-                context, logger, json, key, overridable, fallback, converter, alwaysValidList(), alwaysValid());
+                context, json, key, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -495,13 +469,12 @@ public class JsonFieldParser {
             @NonNull final ListValidator<V> listValidator
     ) {
         return readOptionalListField(
-                context, logger, json, key, overridable, fallback, converter, listValidator, alwaysValid());
+                context, json, key, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -510,13 +483,12 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> itemValidator
     ) {
         return readOptionalListField(
-                context, logger, json, key, overridable, fallback, doNotConvert(), listValidator, itemValidator);
+                context, json, key, overridable, fallback, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
     public static <R, V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -526,11 +498,11 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> itemValidator
     ) {
         List<V> opt = JsonPropertyParser.readOptionalList(
-                context, logger, json, key, converter, listValidator, itemValidator);
+                context, json, key, converter, listValidator, itemValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         } else {
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             if (reference != null) {
                 return new Field.Reference<>(overridable, reference);
             } else if (fallback != null) {
@@ -544,18 +516,17 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
             @Nullable final Field<List<V>> fallback,
             @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        List<V> opt = JsonPropertyParser.readOptionalList(context, logger, json, key, deserializer);
+        List<V> opt = JsonPropertyParser.readOptionalList(context, json, key, deserializer);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         } else {
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             if (reference != null) {
                 return new Field.Reference<>(overridable, reference);
             } else if (fallback != null) {
@@ -569,7 +540,6 @@ public class JsonFieldParser {
     @NonNull
     public static <V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
@@ -578,11 +548,11 @@ public class JsonFieldParser {
             @NonNull final ListValidator<V> listValidator
     ) {
         List<V> opt = JsonPropertyParser.readOptionalList(
-                context, logger, json, key, deserializer, listValidator);
+                context, json, key, deserializer, listValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         } else {
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             if (reference != null) {
                 return new Field.Reference<>(overridable, reference);
             } else if (fallback != null) {
@@ -596,7 +566,6 @@ public class JsonFieldParser {
     @NonNull
     public static <R, V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -605,13 +574,12 @@ public class JsonFieldParser {
             @NonNull final Function1<R, V> converter
     ) {
         return readExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValidList(), alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -621,13 +589,12 @@ public class JsonFieldParser {
             @NonNull final ListValidator<V> listValidator
     ) {
         return readExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, converter, listValidator, alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -636,13 +603,12 @@ public class JsonFieldParser {
             @NonNull final ListValidator<V> listValidator
     ) {
         return readExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -652,13 +618,12 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> itemValidator
     ) {
         return readExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator);
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
     public static <R, V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -669,11 +634,11 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> itemValidator
     ) {
         ExpressionList<V> opt = JsonExpressionParser.readOptionalExpressionList(
-                context, logger, json, key, typeHelper, converter, listValidator, itemValidator);
+                context, json, key, typeHelper, converter, listValidator, itemValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         } else {
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             if (reference != null) {
                 return new Field.Reference<>(overridable, reference);
             } else if (fallback != null) {
@@ -687,7 +652,6 @@ public class JsonFieldParser {
     @NonNull
     public static <R, V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -696,13 +660,12 @@ public class JsonFieldParser {
             @NonNull final Function1<R, V> converter
     ) {
         return readOptionalExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValidList(), alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
     public static <R, V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -712,13 +675,12 @@ public class JsonFieldParser {
             @NonNull final ListValidator<V> listValidator
     ) {
         return readOptionalExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, converter, listValidator, alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -727,13 +689,12 @@ public class JsonFieldParser {
             @NonNull final ListValidator<V> listValidator
     ) {
         return readOptionalExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid());
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid());
     }
 
     @NonNull
     public static <V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -743,13 +704,12 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> itemValidator
     ) {
         return readOptionalExpressionListField(
-                context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator);
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
     public static <R, V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             @NonNull final TypeHelper<V> typeHelper,
@@ -760,11 +720,11 @@ public class JsonFieldParser {
             @NonNull final ValueValidator<V> itemValidator
     ) {
         ExpressionList<V> opt = JsonExpressionParser.readOptionalExpressionList(
-                context, logger, json, key, typeHelper, converter, listValidator, itemValidator);
+                context, json, key, typeHelper, converter, listValidator, itemValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         } else {
-            String reference = readReference(context, logger, json, key);
+            String reference = readReference(context, json, key);
             if (reference != null) {
                 return new Field.Reference<>(overridable, reference);
             } else if (fallback != null) {
@@ -778,11 +738,10 @@ public class JsonFieldParser {
     @Nullable
     public static String readReference(
             @NonNull final ParsingContext context,
-            @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key
     ) {
-        return JsonPropertyParser.readOptional(context, logger, json, '$' + key, IS_NOT_EMPTY);
+        return JsonPropertyParser.readOptional(context, json, '$' + key, IS_NOT_EMPTY);
     }
 
     @Nullable
@@ -798,6 +757,128 @@ public class JsonFieldParser {
             return FieldKt.clone(fallback, overridable);
         } else {
             return overridable ? Field.Companion.nullField(overridable) : null;
+        }
+    }
+
+    public static <V> void writeField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<V> field
+    ) {
+        writeField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<V> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.write(context, jsonObject, key, ((Field.Value<V>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<V> field,
+            @NonNull final Lazy<Serializer<JSONObject, V>> serializer
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.write(context, jsonObject, key, ((Field.Value<V>) field).value, serializer);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<List<V>> field
+    ) {
+        writeListField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<List<V>> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.writeList(context, jsonObject, key, ((Field.Value<List<V>>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<List<V>> field,
+            @NonNull final Lazy<Serializer<JSONObject, V>> serializer
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonPropertyParser.writeList(context, jsonObject, key, ((Field.Value<List<V>>) field).value, serializer);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeExpressionField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<Expression<V>> field
+    ) {
+        writeExpressionField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeExpressionField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<Expression<V>> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonExpressionParser.writeExpression(
+                    context, jsonObject, key, ((Field.Value<Expression<V>>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+        }
+    }
+
+    public static <V> void writeExpressionListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<ExpressionList<V>> field
+    ) {
+        writeExpressionListField(context, jsonObject, key, field, doNotConvert());
+    }
+
+    public static <R, V> void writeExpressionListField(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @Nullable final Field<ExpressionList<V>> field,
+            @NonNull final Function1<V, R> converter
+    ) {
+        if (field instanceof Field.Value<?>) {
+            JsonExpressionParser.writeExpressionList(
+                    context, jsonObject, key, ((Field.Value<ExpressionList<V>>) field).value, converter);
+        } else if (field instanceof Field.Reference<?>) {
+            JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
         }
     }
 }

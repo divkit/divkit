@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Fixed number of repetitions.
-class DivFixedCount extends Resolvable with EquatableMixin {
+class DivFixedCount with EquatableMixin {
   const DivFixedCount({
     required this.value,
   });
@@ -35,18 +35,16 @@ class DivFixedCount extends Resolvable with EquatableMixin {
     }
     try {
       return DivFixedCount(
-        value: safeParseIntExpr(
-          json['value'],
-        )!,
+        value: reqVProp<int>(
+          safeParseIntExpr(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivFixedCount resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

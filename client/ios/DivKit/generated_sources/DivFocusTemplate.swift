@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivFocusTemplate: TemplateValue {
-  public final class NextFocusIdsTemplate: TemplateValue {
+public final class DivFocusTemplate: TemplateValue, Sendable {
+  public final class NextFocusIdsTemplate: TemplateValue, Sendable {
     public let down: Field<Expression<String>>?
     public let forward: Field<Expression<String>>?
     public let left: Field<Expression<String>>?

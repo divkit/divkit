@@ -1,10 +1,10 @@
-import type { EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
+import type { EvalContext, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
 import type { Node, Variable } from './ast';
 import type { VariablesMap } from './eval';
 import { walk } from './walk';
 import { parseColor, type ParsedColor } from '../utils/correctColor';
 import { padLeft } from '../utils/padLeft';
-import { hasBigInt, MAX_INT, MIN_INT, toBigInt } from './bigint';
+import { MAX_INT, MIN_INT, toBigInt } from './bigint';
 import { NUMBER } from './const';
 
 export function valToInternal(val: EvalValue): EvalValue {
@@ -83,30 +83,13 @@ export function typeToString(type: string): string {
     return type.charAt(0).toUpperCase() + type.substring(1);
 }
 
-export function roundInteger(ctx: EvalContext, val: number | bigint): number | bigint {
-    if (hasBigInt) {
-        return toBigInt(val);
-    }
-
-    if (val < 0) {
-        const res = -Math.floor(-val as number);
-        if (res === 0) {
-            // -0 => 0
-            return 0;
-        }
-        return res;
-    }
-
-    return Math.floor(val as number);
+export function roundInteger(_ctx: EvalContext, val: bigint): bigint {
+    return toBigInt(val);
 }
 
-export function checkIntegerOverflow(ctx: EvalContext, val: number | bigint): void {
+export function checkIntegerOverflow(_ctx: EvalContext, val: number | bigint): void {
     if (val < MIN_INT || val > MAX_INT) {
         throw new Error('Integer overflow.');
-    }
-
-    if (!hasBigInt && (val > Number.MAX_SAFE_INTEGER || val < Number.MIN_SAFE_INTEGER)) {
-        ctx.safeIntegerOverflow = true;
     }
 }
 

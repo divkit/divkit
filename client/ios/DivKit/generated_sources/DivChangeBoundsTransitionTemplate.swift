@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivChangeBoundsTransitionTemplate: TemplateValue {
+public final class DivChangeBoundsTransitionTemplate: TemplateValue, Sendable {
   public static let type: String = "change_bounds"
   public let parent: String?
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 200

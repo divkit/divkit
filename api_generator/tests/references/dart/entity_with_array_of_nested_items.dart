@@ -3,17 +3,17 @@
 import 'package:equatable/equatable.dart';
 
 import 'entity.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 
-class EntityWithArrayOfNestedItems extends Resolvable with EquatableMixin  {
+class EntityWithArrayOfNestedItems with EquatableMixin  {
   const EntityWithArrayOfNestedItems({
     required this.items,
   });
 
   static const type = "entity_with_array_of_nested_items";
    // at least 1 elements
-  final List<EntityWithArrayOfNestedItemsItem> items;
+  final Arr<EntityWithArrayOfNestedItemsItem> items;
 
   @override
   List<Object?> get props => [
@@ -21,7 +21,7 @@ class EntityWithArrayOfNestedItems extends Resolvable with EquatableMixin  {
       ];
 
   EntityWithArrayOfNestedItems copyWith({
-      List<EntityWithArrayOfNestedItemsItem>?  items,
+      Arr<EntityWithArrayOfNestedItemsItem>?  items,
   }) => EntityWithArrayOfNestedItems(
       items: items ?? this.items,
     );
@@ -32,20 +32,17 @@ class EntityWithArrayOfNestedItems extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithArrayOfNestedItems(
-        items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!,),)!,
+        items: reqProp<Arr<EntityWithArrayOfNestedItemsItem>>(safeParseObjects(json['items'],(v) => reqProp<EntityWithArrayOfNestedItemsItem>(safeParseObject(v, parse: EntityWithArrayOfNestedItemsItem.fromJson,),), ), name: 'items',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithArrayOfNestedItems resolve(DivVariableContext context) {
-    return this;
   }
 }
 
 
-class EntityWithArrayOfNestedItemsItem extends Resolvable with EquatableMixin  {
+class EntityWithArrayOfNestedItemsItem with EquatableMixin  {
   const EntityWithArrayOfNestedItemsItem({
     required this.entity,
     required this.property,
@@ -74,17 +71,12 @@ class EntityWithArrayOfNestedItemsItem extends Resolvable with EquatableMixin  {
     }
     try {
       return EntityWithArrayOfNestedItemsItem(
-        entity: safeParseObj(Entity.fromJson(json['entity']),)!,
-        property: safeParseStrExpr(json['property']?.toString(),)!,
+        entity: reqProp<Entity>(safeParseObject(json['entity'], parse: Entity.fromJson,), name: 'entity',),
+        property: reqVProp<String>(safeParseStrExpr(json['property'],), name: 'property',),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithArrayOfNestedItemsItem resolve(DivVariableContext context) {
-    entity.resolve(context);
-    property.resolve(context);
-    return this;
   }
 }

@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_pivot_fixed.dart';
 import 'package:divkit/src/schema/div_pivot_percentage.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivPivot extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivPivot with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -87,14 +86,8 @@ class DivPivot extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivPivot resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

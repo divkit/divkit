@@ -23,17 +23,16 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
-            val logger = context.logger
             return EntityWithStringEnumPropertyWithDefaultValue(
-                value = JsonExpressionParser.readOptionalExpression(context, logger, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
+                value = JsonExpressionParser.readOptionalExpression(context, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithStringEnumPropertyWithDefaultValue): JSONObject {
             val data = JSONObject()
-            data.write(key = "type", value = EntityWithStringEnumPropertyWithDefaultValue.TYPE)
-            data.writeExpression(key = "value", value = value.value, converter = EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithStringEnumPropertyWithDefaultValue.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "value", value.value, EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
             return data
         }
     }
@@ -44,19 +43,18 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValueTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithStringEnumPropertyWithDefaultValueTemplate(
-                value = JsonFieldParser.readOptionalFieldWithExpression(context, logger, data, "value", TYPE_HELPER_VALUE, allowOverride, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING),
+                value = JsonFieldParser.readOptionalFieldWithExpression(context, data, "value", TYPE_HELPER_VALUE, allowOverride, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithStringEnumPropertyWithDefaultValueTemplate): JSONObject {
             val data = JSONObject()
-            data.write(key = "type", value = EntityWithStringEnumPropertyWithDefaultValue.TYPE)
-            data.writeFieldWithExpression(key = "value", field = value.value, converter = EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithStringEnumPropertyWithDefaultValue.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "value", value.value, EntityWithStringEnumPropertyWithDefaultValue.Value.TO_STRING)
           return data
         }
     }
@@ -67,9 +65,8 @@ internal class EntityWithStringEnumPropertyWithDefaultValueJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithStringEnumPropertyWithDefaultValueTemplate, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
-            val logger = context.logger
             return EntityWithStringEnumPropertyWithDefaultValue(
-                value = JsonFieldResolver.resolveOptionalExpression(context, logger, template.value, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
+                value = JsonFieldResolver.resolveOptionalExpression(context, template.value, data, "value", TYPE_HELPER_VALUE, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, VALUE_DEFAULT_VALUE) ?: VALUE_DEFAULT_VALUE,
             )
         }
     }

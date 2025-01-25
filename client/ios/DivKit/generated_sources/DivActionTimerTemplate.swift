@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionTimerTemplate: TemplateValue {
+public final class DivActionTimerTemplate: TemplateValue, Sendable {
   public typealias Action = DivActionTimer.Action
 
   public static let type: String = "timer"

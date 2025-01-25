@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 /// Entity with simple properties.
-class EntityWithSimpleProperties extends Resolvable with EquatableMixin  {
+class EntityWithSimpleProperties with EquatableMixin  {
   const EntityWithSimpleProperties({
     this.boolean,
     this.booleanInt,
@@ -85,26 +85,15 @@ class EntityWithSimpleProperties extends Resolvable with EquatableMixin  {
         booleanInt: safeParseBoolExpr(json['boolean_int'],),
         color: safeParseColorExpr(json['color'],),
         dNum: safeParseDoubleExpr(json['dNum'],),
-        id: safeParseInt(json['id'], fallback: 0,)!,
-        integer: safeParseIntExpr(json['integer'], fallback: 0,)!,
+        id: reqProp<int>(safeParseInt(json['id'], fallback: 0,), name: 'id',),
+        integer: reqVProp<int>(safeParseIntExpr(json['integer'], fallback: 0,), name: 'integer',),
         positiveInteger: safeParseIntExpr(json['positive_integer'],),
-        string: safeParseStrExpr(json['string']?.toString(),),
-        url: safeParseUriExpr(json['url']),
+        string: safeParseStrExpr(json['string'],),
+        url: safeParseUriExpr(json['url'],),
       );
     } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  EntityWithSimpleProperties resolve(DivVariableContext context) {
-    boolean?.resolve(context);
-    booleanInt?.resolve(context);
-    color?.resolve(context);
-    dNum?.resolve(context);
-    integer?.resolve(context);
-    positiveInteger?.resolve(context);
-    string?.resolve(context);
-    url?.resolve(context);
-    return this;
   }
 }

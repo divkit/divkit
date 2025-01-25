@@ -1,5 +1,4 @@
 import CoreGraphics
-
 import LayoutKit
 import VGSL
 
@@ -14,6 +13,7 @@ extension DivContainer: DivBlockModeling {
       customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
         resolveAccessibilityDescription(containerContext)
       },
+      applyPaddings: false,
       clipToBounds: resolveClipToBounds(containerContext.expressionResolver)
     )
   }
@@ -24,29 +24,36 @@ extension DivContainer: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
-    let orientation = resolveOrientation(expressionResolver)
-    let block: Block = switch orientation {
+    let params = DivContainerParams(
+      orientation: resolveOrientation(expressionResolver),
+      paddings: paddings?.resolve(context) ?? .zero,
+      aspectRatio: aspect.resolveAspectRatio(expressionResolver),
+      clipToBounds: resolveClipToBounds(expressionResolver)
+    )
+    var block: Block = switch params.orientation {
     case .overlap:
-      try makeOverlapBlock(context: context)
+      try makeOverlapBlock(context: context, params: params)
     case .horizontal, .vertical:
       try makeContainerBlock(
         context: context,
-        orientation: orientation,
+        params: params,
         layoutMode: resolveLayoutMode(expressionResolver)
       )
     }
 
-    let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
-    if let aspectRatio {
-      if block.calculateWidthFirst {
-        return block.aspectRatio(aspectRatio)
-      }
+    block = block.addingEdgeInsets(params.paddings, clipsToBounds: params.clipToBounds)
+
+    if let aspectRatio = params.aspectRatio, block.calculateWidthFirst {
+      block = block.aspectRatio(aspectRatio)
     }
 
     return block
   }
 
-  private func makeOverlapBlock(context: DivBlockModelingContext) throws -> LayeredBlock {
+  private func makeOverlapBlock(
+    context: DivBlockModelingContext,
+    params: DivContainerParams
+  ) throws -> Block {
     let expressionResolver = context.expressionResolver
     let defaultAlignment = BlockAlignment2D(
       horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment,
@@ -63,23 +70,20 @@ extension DivContainer: DivBlockModeling {
       }
     )
 
-    let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
-    let layeredBlock = LayeredBlock(
-      widthTrait: resolveContentWidthTrait(context),
-      heightTrait: resolveContentHeightTrait(context, aspectRatio: aspectRatio),
+    return LayeredBlock(
+      widthTrait: resolveContentWidthTrait(context, paddings: params.paddings),
+      heightTrait: resolveContentHeightTrait(context, params: params),
       children: children
     )
-
-    return layeredBlock
   }
 
   private func makeContainerBlock(
     context: DivBlockModelingContext,
-    orientation: Orientation,
+    params: DivContainerParams,
     layoutMode: LayoutMode
-  ) throws -> ContainerBlock {
+  ) throws -> Block {
     let expressionResolver = context.expressionResolver
-    let layoutDirection = orientation.layoutDirection
+    let layoutDirection = params.orientation.layoutDirection
 
     let divContentAlignmentVertical = resolveContentAlignmentVertical(expressionResolver)
     let divContentAlignmentHorizontal = resolveContentAlignmentHorizontal(expressionResolver)
@@ -117,32 +121,30 @@ extension DivContainer: DivBlockModeling {
       }
     )
 
-    let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
-    let containerBlock = try ContainerBlock(
+    let paddings = params.paddings
+    return try ContainerBlock(
       blockLayoutDirection: context.layoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode.system,
-      widthTrait: resolveContentWidthTrait(context),
-      heightTrait: resolveContentHeightTrait(context, aspectRatio: aspectRatio),
+      widthTrait: resolveContentWidthTrait(context, paddings: paddings),
+      heightTrait: resolveContentHeightTrait(context, params: params),
       axialAlignment: axialAlignment,
       crossAlignment: crossAlignment,
       children: children,
       separator: resolveSeparator(context),
       lineSeparator: resolveLineSeparator(context),
-      clipContent: resolveClipToBounds(expressionResolver)
+      clipContent: params.clipToBounds && paddings == .zero
     )
-
-    return containerBlock
   }
 
   private func resolveContentHeightTrait(
     _ context: DivBlockModelingContext,
-    aspectRatio: CGFloat?
+    params: DivContainerParams
   ) -> LayoutTrait {
-    if aspectRatio != nil {
+    if params.aspectRatio != nil {
       return .resizable
     }
-    return resolveContentHeightTrait(context)
+    return resolveContentHeightTrait(context, paddings: params.paddings)
   }
 
   private func resolveSeparator(
@@ -201,9 +203,12 @@ extension DivBase {
   ) -> ContainerBlock.CrossAlignment? {
     let expressionResolver = context.expressionResolver
     switch direction {
-    case .horizontal: return resolveAlignmentVertical(expressionResolver)?.crossAlignment
-    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?
-      .makeCrossAlignment(uiLayoutDirection: context.layoutDirection)
+    case .horizontal:
+      return resolveAlignmentVertical(expressionResolver)?.crossAlignment
+    case .vertical:
+      return resolveAlignmentHorizontal(expressionResolver)?.makeCrossAlignment(
+        layoutDirection: context.layoutDirection
+      )
     }
   }
 }
@@ -234,34 +239,20 @@ extension DivAlignmentHorizontal {
     }
   }
 
-  func makeCrossAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> ContainerBlock
-    .CrossAlignment {
+  fileprivate func makeCrossAlignment(
+    layoutDirection: UserInterfaceLayoutDirection
+  ) -> ContainerBlock.CrossAlignment {
     switch self {
     case .left:
       .leading
     case .right:
       .trailing
     case .start:
-      uiLayoutDirection == .leftToRight ? .leading : .trailing
+      layoutDirection == .leftToRight ? .leading : .trailing
     case .center:
       .center
     case .end:
-      uiLayoutDirection == .rightToLeft ? .leading : .trailing
-    }
-  }
-
-  func makeContentAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> Alignment {
-    switch self {
-    case .left:
-      .leading
-    case .right:
-      .trailing
-    case .start:
-      uiLayoutDirection == .leftToRight ? .leading : .trailing
-    case .center:
-      .center
-    case .end:
-      uiLayoutDirection == .rightToLeft ? .leading : .trailing
+      layoutDirection == .rightToLeft ? .leading : .trailing
     }
   }
 }
@@ -281,7 +272,7 @@ extension DivAlignmentVertical {
     }
   }
 
-  var crossAlignment: ContainerBlock.CrossAlignment {
+  fileprivate var crossAlignment: ContainerBlock.CrossAlignment {
     switch self {
     case .top:
       .leading
@@ -421,4 +412,11 @@ fileprivate func makeAxialAlignment(
       return .spaceEvenly
     }
   }
+}
+
+private struct DivContainerParams {
+  let orientation: DivContainer.Orientation
+  let paddings: EdgeInsets
+  let aspectRatio: CGFloat?
+  let clipToBounds: Bool
 }

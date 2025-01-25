@@ -2,13 +2,13 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 
 import 'with_default.dart';
 import 'without_default.dart';
 
-class EnumWithDefaultType extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class EnumWithDefaultType with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -70,11 +70,10 @@ class EnumWithDefaultType extends Resolvable with EquatableMixin {
         return EnumWithDefaultType.withDefault(WithDefault.fromJson(json)!,);
       case WithoutDefault.type :
         return EnumWithDefaultType.withoutDefault(WithoutDefault.fromJson(json)!,);
-    }
+      }
       return null;
-    } catch (e, st) {
+    } catch (_) {
       return null;
     }
   }
-  EnumWithDefaultType resolve(DivVariableContext context) { value.resolve(context); return this; }
 }

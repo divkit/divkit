@@ -2,11 +2,10 @@
 
 import 'package:divkit/src/schema/div_circle_shape.dart';
 import 'package:divkit/src/schema/div_rounded_rectangle_shape.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-class DivShape extends Resolvable with EquatableMixin {
-  final Resolvable value;
+class DivShape with EquatableMixin {
+  final Object value;
   final int _index;
 
   @override
@@ -87,14 +86,8 @@ class DivShape extends Resolvable with EquatableMixin {
           );
       }
       return null;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
-  }
-
-  @override
-  DivShape resolve(DivVariableContext context) {
-    value.resolve(context);
-    return this;
   }
 }

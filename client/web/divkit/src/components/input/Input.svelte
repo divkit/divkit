@@ -104,7 +104,7 @@
     let description = '';
     let isEnabled = true;
     let maxLength = Infinity;
-    let autocapitalization = 'off';
+    let autocapitalization: 'characters' | 'off' | 'on' | 'none' | 'sentences' | 'words' = 'off';
     let enterKeyType: InputEnterKeyType = 'default';
     let describedBy = '';
     let mounted = false;
@@ -358,7 +358,7 @@
         }
 
         if (val.length > maxLength) {
-            val = contentEditableValue = val.slice(0, maxLength);
+            val = contentEditableValue = value;
             if (input instanceof HTMLInputElement) {
                 input.value = val;
             }
@@ -564,6 +564,7 @@
                 focus() {
                     if (input) {
                         input.focus();
+                        setCursorPosition(value.length);
                     }
                 }
             });

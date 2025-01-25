@@ -1,5 +1,4 @@
 import Foundation
-
 import LayoutKit
 import Serialization
 import VGSL
@@ -18,6 +17,22 @@ public protocol DivActionBase: Serializable {
 }
 
 extension DivActionBase {
+  func resolveInfo(
+    _ expressionResolver: ExpressionResolver,
+    path: UIElementPath,
+    source: UserInterfaceAction.DivActionSource
+  ) -> DivActionInfo {
+    DivActionInfo(
+      path: path,
+      logId: resolveLogId(expressionResolver) ?? "",
+      url: resolveUrl(expressionResolver),
+      logUrl: resolveLogUrl(expressionResolver),
+      referer: resolveReferer(expressionResolver),
+      source: source,
+      payload: payload
+    )
+  }
+
   func makeDivActionPayload(
     path: UIElementPath,
     source: UserInterfaceAction.DivActionSource,

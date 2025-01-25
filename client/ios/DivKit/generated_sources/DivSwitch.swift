@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSwitch: DivBase {
+public final class DivSwitch: DivBase, Sendable {
   public static let type: String = "switch"
   public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?

@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_action.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// A trigger that causes an action when activated.
-class DivTrigger extends Resolvable with EquatableMixin {
+class DivTrigger with EquatableMixin {
   const DivTrigger({
     required this.actions,
     required this.condition,
@@ -14,7 +14,7 @@ class DivTrigger extends Resolvable with EquatableMixin {
 
   /// Action when a trigger is activated.
   // at least 1 elements
-  final List<DivAction> actions;
+  final Arr<DivAction> actions;
 
   /// Condition for activating a trigger. For example, `liked && subscribed`.
   final Expression<bool> condition;
@@ -33,7 +33,7 @@ class DivTrigger extends Resolvable with EquatableMixin {
       ];
 
   DivTrigger copyWith({
-    List<DivAction>? actions,
+    Arr<DivAction>? actions,
     Expression<bool>? condition,
     Expression<DivTriggerMode>? mode,
   }) =>
@@ -51,38 +51,41 @@ class DivTrigger extends Resolvable with EquatableMixin {
     }
     try {
       return DivTrigger(
-        actions: safeParseObj(
-          safeListMap(
+        actions: reqProp<Arr<DivAction>>(
+          safeParseObjects(
             json['actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+            (v) => reqProp<DivAction>(
+              safeParseObject(
+                v,
+                parse: DivAction.fromJson,
+              ),
+            ),
           ),
-        )!,
-        condition: safeParseBoolExpr(
-          json['condition'],
-        )!,
-        mode: safeParseStrEnumExpr(
-          json['mode'],
-          parse: DivTriggerMode.fromJson,
-          fallback: DivTriggerMode.onCondition,
-        )!,
+          name: 'actions',
+        ),
+        condition: reqVProp<bool>(
+          safeParseBoolExpr(
+            json['condition'],
+          ),
+          name: 'condition',
+        ),
+        mode: reqVProp<DivTriggerMode>(
+          safeParseStrEnumExpr(
+            json['mode'],
+            parse: DivTriggerMode.fromJson,
+            fallback: DivTriggerMode.onCondition,
+          ),
+          name: 'mode',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivTrigger resolve(DivVariableContext context) {
-    safeListResolve(actions, (v) => v.resolve(context));
-    condition.resolve(context);
-    mode.resolve(context);
-    return this;
-  }
 }
 
-enum DivTriggerMode implements Resolvable {
+enum DivTriggerMode {
   onCondition('on_condition'),
   onVariable('on_variable');
 
@@ -132,11 +135,13 @@ enum DivTriggerMode implements Resolvable {
           return DivTriggerMode.onVariable;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivTriggerMode: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivTriggerMode resolve(DivVariableContext context) => this;
 }

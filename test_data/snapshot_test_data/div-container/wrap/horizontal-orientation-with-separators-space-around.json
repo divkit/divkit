@@ -2,7 +2,9 @@
   "description": "The first/last separator with the space-around should be in the center of the empty space",
   "platforms": [
     "android",
-    "web"
+    "ios",
+    "web",
+    "flutter"
   ],
   "templates": {
     "item_text": {

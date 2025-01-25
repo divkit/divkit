@@ -5,18 +5,16 @@ final class FocusElementActionHandler {
     guard let elementId = action.resolveElementId(context.expressionResolver) else {
       return
     }
-    let cardId = context.path.cardId
 
+    let cardId = context.cardId
     if let previousCard = context.blockStateStorage.getFocusedElement()?.cardId,
        previousCard != cardId {
       context.updateCard(.state(previousCard))
     }
 
-    let element = IdAndCardId(id: elementId, cardId: cardId)
-
     context.blockStateStorage.setFocused(
       isFocused: true,
-      element: element
+      element: IdAndCardId(id: elementId, cardId: cardId)
     )
     context.updateCard(.state(cardId))
   }

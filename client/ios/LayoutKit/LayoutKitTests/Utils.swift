@@ -1,7 +1,6 @@
 import Foundation
-import XCTest
-
 import VGSL
+import XCTest
 
 public final class TestTimer: TimerType {
   public let timeInterval: TimeInterval

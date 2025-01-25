@@ -1,6 +1,5 @@
 import CoreGraphics
 import Foundation
-
 import VGSL
 
 #if os(iOS)
@@ -114,11 +113,13 @@ extension Block {
   }
 
   public func size(forResizableBlockSize resizableBlockSize: CGSize) -> CGSize {
-    sizeFor(
-      widthOfHorizontallyResizableBlock: resizableBlockSize.width,
-      heightOfVerticallyResizableBlock: resizableBlockSize.height,
-      constrainedWidth: .infinity,
-      constrainedHeight: .infinity
+    let width = resizableBlockSize.width
+    let height = resizableBlockSize.height
+    return sizeFor(
+      widthOfHorizontallyResizableBlock: width,
+      heightOfVerticallyResizableBlock: height,
+      constrainedWidth: isHorizontallyConstrained ? width : .infinity,
+      constrainedHeight: isVerticallyConstrained ? height : .infinity
     )
   }
 

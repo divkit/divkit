@@ -290,6 +290,7 @@
 
     :global(.custom-variables__spoiler) {
         flex: 1 1 auto;
+        min-width: 0;
     }
 
     .custom-variables__title {
@@ -299,8 +300,7 @@
     }
 
     .custom-variables__name {
-        flex: 0 0 auto;
-        max-width: 50%;
+        flex: 0 2 auto;
         overflow: hidden;
         text-overflow: ellipsis;
     }

@@ -40,6 +40,12 @@ export interface ActionDesc {
     args?: ActionArg[];
 }
 
+export interface FontFaceDesc {
+    value: string;
+    text: Record<string, string>;
+    cssValue: string;
+}
+
 export type TankerMeta = Record<string, Record<string, string>>;
 
 export interface Meta {
@@ -120,6 +126,7 @@ export interface DivProEditorOptions {
     warnFileLimit?: number;
     errorFileLimit?: number;
     rootConfigurable?: boolean;
+    customFontFaces?: FontFaceDesc[];
 }
 
 export interface DivProEditorInstance {
@@ -198,6 +205,7 @@ export const DivProEditor = {
                 warnFileLimit: opts.warnFileLimit,
                 errorFileLimit: opts.errorFileLimit,
                 rootConfigurable: opts.rootConfigurable,
+                customFontFaces: opts.customFontFaces,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,

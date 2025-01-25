@@ -598,8 +598,8 @@ class KotlinSerializerGenerator:
         template_type = entity_enumeration.prefixed_declaration_for(mode=GenerationMode.TEMPLATE)
         default_entity_decl = utils.capitalize_camel_case(str(entity_enumeration.default_entity_declaration))
 
-        read_type_expr = 'JsonPropertyParser.readString(data, "type")'
-        read_type_opt_expr = 'JsonPropertyParser.readOptionalString(context.logger, data, "type")'
+        read_type_expr = 'JsonPropertyParser.readString(context, data, "type")'
+        read_type_opt_expr = 'JsonPropertyParser.readOptionalString(context, data, "type")'
 
         result = Text()
         result += f'class {ENTITY_PARSER_NAME}('
@@ -651,8 +651,8 @@ class KotlinSerializerGenerator:
         template_type = entity_enumeration.prefixed_declaration_for(mode=GenerationMode.TEMPLATE)
         default_entity_decl = utils.capitalize_camel_case(str(entity_enumeration.default_entity_declaration))
 
-        read_type_expr = 'JsonPropertyParser.readString(data, "type")'
-        read_type_opt_expr = 'JsonPropertyParser.readOptionalString(context.logger, data, "type")'
+        read_type_expr = 'JsonPropertyParser.readString(context, data, "type")'
+        read_type_opt_expr = 'JsonPropertyParser.readOptionalString(context, data, "type")'
 
         result = Text()
         result += f'class {TEMPLATE_PARSER_NAME}('

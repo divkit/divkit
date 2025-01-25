@@ -1,5 +1,4 @@
 @testable import LayoutKit
-
 import XCTest
 
 final class BlockTooltipTests: XCTestCase {
@@ -42,7 +41,6 @@ final class BlockTooltipTests: XCTestCase {
   func test_TooltipWindowClose() {
     let tooltipView = TooltipContainerView(
       tooltipView: TestView(),
-      tooltipID: "Tooltip",
       handleAction: { _ in },
       onCloseAction: {}
     )

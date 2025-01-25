@@ -1,4 +1,4 @@
-import type { Interpolation } from '../types/base';
+import type { Interpolation } from '../../typings/common';
 
 export function correctCSSInterpolator(
     interpolator: string | undefined,

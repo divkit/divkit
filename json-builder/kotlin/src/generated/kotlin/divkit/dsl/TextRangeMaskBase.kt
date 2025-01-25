@@ -36,7 +36,7 @@ data class TextRangeMaskBase internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+         * Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
          * Default value: `true`.
          */
         val isEnabled: Property<Boolean>?,
@@ -51,7 +51,7 @@ data class TextRangeMaskBase internal constructor(
 }
 
 /**
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun DivScope.textRangeMaskBase(
@@ -64,7 +64,7 @@ fun DivScope.textRangeMaskBase(
 )
 
 /**
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun DivScope.textRangeMaskBaseProps(
@@ -75,7 +75,7 @@ fun DivScope.textRangeMaskBaseProps(
 )
 
 /**
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TemplateScope.textRangeMaskBaseRefs(
@@ -86,7 +86,7 @@ fun TemplateScope.textRangeMaskBaseRefs(
 )
 
 /**
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskBase.override(
@@ -99,7 +99,7 @@ fun TextRangeMaskBase.override(
 )
 
 /**
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskBase.defer(
@@ -112,7 +112,7 @@ fun TextRangeMaskBase.defer(
 )
 
 /**
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskBase.evaluate(

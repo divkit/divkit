@@ -7,6 +7,7 @@ import { registerInterval } from './interval';
 import { registerDict } from './dict';
 import { registerArray } from './array';
 import { registerStored } from './stored';
+import { registerTrigonometry } from './trigonometry';
 
 export function register(): void {
     registerStd();
@@ -18,4 +19,5 @@ export function register(): void {
     registerDict();
     registerArray();
     registerStored();
+    registerTrigonometry();
 }

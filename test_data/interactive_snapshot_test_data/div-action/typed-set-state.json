@@ -1,7 +1,9 @@
 {
   "description": "Typed action set_state switches one state to another and back",
   "platforms": [
-    "android"
+    "android",
+    "ios",
+    "web"
   ],
   "div_data": {
     "card": {

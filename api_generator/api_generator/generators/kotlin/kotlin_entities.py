@@ -286,7 +286,6 @@ class KotlinEntity(Entity):
         result += '    @Throws(ParsingException::class)'
         result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {entity_type} {{'
         if self.instance_properties_kotlin:
-            result += '        val logger = context.logger'
             if self.errors_collector_enabled:
                 result += '        @Suppress("NAME_SHADOWING") val context = context.collectingErrors()'
             result += f'        return {entity_type}('
@@ -319,7 +318,6 @@ class KotlinEntity(Entity):
         result += '    @Throws(ParsingException::class)'
         result += f'    override fun deserialize(context: ParsingContext, parent: {template_type}?, data: JSONObject): {template_type} {{'
         if self.instance_properties_kotlin:
-            result += '        val logger = context.logger'
             result += '        val allowOverride = context.allowPropertyOverride'
             result += '        @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()'
             result += f'        return {template_type}('
@@ -351,7 +349,6 @@ class KotlinEntity(Entity):
         result += '    @Throws(ParsingException::class)'
         result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: JSONObject): {entity_type} {{'
         if self.instance_properties_kotlin:
-            result += '        val logger = context.logger'
             result += f'        return {entity_type}('
             for property in self.instance_properties_kotlin:
                 result += self.property_resolving_declaration(property, mode=GenerationMode.TEMPLATE).indented(indent_width=12)
@@ -435,7 +432,7 @@ class KotlinEntity(Entity):
         )
         if validator and isinstance(property_type, Array) and mode.is_template:
             validator = validator + '.cast()'
-        arg_list = ['context', 'logger', 'data', key, type_helper, template_args, deserializer, transform, validator]
+        arg_list = ['context', 'data', key, type_helper, template_args, deserializer, transform, validator]
         if isinstance(property_type, Array):
             arg_list.append(cast(KotlinPropertyType, property_type.property_type).validator_arg(
                 property_name=property.name + '_item',
@@ -453,17 +450,23 @@ class KotlinEntity(Entity):
         return Text(f'{property.declaration_name} = {deserialization_expr}{property.default_value_coalescing(mode)},')
 
     def property_serialization_declaration(self, property: KotlinProperty, mode: GenerationMode) -> Text:
-        field_prefix = 'Field' if mode.is_template and not property.is_static else ''
-        if property.use_expression_type:
-            expression_prefix = '' if mode.is_template else EXPRESSION_TYPE_NAME
-            expression_suffix = 'WithExpression' if mode.is_template else ''
+        if mode.is_template and not property.is_static:
+            receiver = 'JsonFieldParser'
         else:
-            expression_prefix = ''
-            if property.supports_expressions and \
-                    cast(KotlinPropertyType, property.property_type).is_array_of_expressions:
-                expression_prefix = EXPRESSION_LIST_TYPE_NAME
+            receiver = 'JsonExpressionParser' if property.supports_expressions else 'JsonPropertyParser'
+
+        if property.supports_expressions:
+            expression_suffix = 'Expression'
+        else:
             expression_suffix = ''
+
         property_type = cast(KotlinPropertyType, property.property_type)
+        if isinstance(property_type, Array):
+            collection_suffix = 'List'
+        else:
+            collection_suffix = ''
+
+        field_suffix = 'Field' if mode.is_template and not property.is_static else ''
 
         if property.is_static:
             value_prefix = self.resolved_prefixed_declaration
@@ -472,23 +475,19 @@ class KotlinEntity(Entity):
 
         if mode.is_template:
             serializer_name = property.template_serializer_name_declaration
-            value_suffix = ''
             if serializer_name is not None:
-                serialization_transform = f', converter = component.{serializer_name}.value.asConverter(context)'
+                serialization_transform = f', component.{serializer_name}'
             else:
-                serialization_transform = property_type.serialization_transform(string_enum_prefixed=True)
+                serialization_transform = property_type.serialization_transform(string_enum_prefixed=True, with_arg_name=False)
         else:
             serializer_name = property.entity_serializer_name_declaration
             if serializer_name is not None:
-                value_prefix = f'component.{serializer_name}.value.serialize(context, {value_prefix}'
-                value_suffix = ')'
+                serialization_transform = f', component.{serializer_name}'
             else:
-                value_suffix = ''
-            serialization_transform = property_type.serialization_transform(string_enum_prefixed=True)
+                serialization_transform = property_type.serialization_transform(string_enum_prefixed=True, with_arg_name=False)
 
-        value_arg_name = 'field' if mode.is_template and not property.is_static else 'value'
-        args = f'key = "{property.dict_field}", {value_arg_name} = {value_prefix}.{property.declaration_name}{value_suffix}{serialization_transform}'
-        return Text(f'data.write{expression_prefix}{field_prefix}{expression_suffix}({args})')
+        args = f'context, data, "{property.dict_field}", {value_prefix}.{property.declaration_name}{serialization_transform}'
+        return Text(f'{receiver}.write{expression_suffix}{collection_suffix}{field_suffix}({args})')
 
     def property_resolving_declaration(self, property: KotlinProperty, mode: GenerationMode) -> Text:
         optionality_prefix = 'Optional' if property.parsed_value_is_optional else ''
@@ -520,8 +519,7 @@ class KotlinEntity(Entity):
             with_template_validators=False
         )
 
-        context = 'context'
-        arg_list = [context, 'logger', f'template.{property.declaration_name}', 'data',
+        arg_list = ['context', f'template.{property.declaration_name}', 'data',
                     f'"{property.dict_field}"', type_helper, resolver, value_deserializer, transform, validator]
         if isinstance(property_type, Array):
             arg_list.append(cast(KotlinPropertyType, property_type.property_type).validator_arg(
@@ -1526,8 +1524,9 @@ class KotlinPropertyType(PropertyType):
         else:
             return ''
 
-    def serialization_transform(self, string_enum_prefixed: bool) -> str:
-        prefix = ', converter = '
+    def serialization_transform(self, string_enum_prefixed: bool, with_arg_name: bool = True) -> str:
+        arg_name_decl = 'converter = ' if with_arg_name else ''
+        prefix = f', {arg_name_decl}'
         if isinstance(self, String):
             return f'{prefix}SPANNED_TO_HTML' if self.formatted else ''
         elif isinstance(self, Url):
@@ -1541,7 +1540,7 @@ class KotlinPropertyType(PropertyType):
         elif isinstance(self, Color):
             return f'{prefix}COLOR_INT_TO_STRING'
         elif isinstance(self, Array):
-            return cast(KotlinPropertyType, self.property_type).serialization_transform(string_enum_prefixed)
+            return cast(KotlinPropertyType, self.property_type).serialization_transform(string_enum_prefixed, with_arg_name)
         else:
             return ''
 

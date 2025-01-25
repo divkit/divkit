@@ -1,6 +1,4 @@
 import Foundation
-
-import Foundation
 import VGSL
 
 public final class DivPersistentValuesStorage {
@@ -53,6 +51,10 @@ public final class DivPersistentValuesStorage {
       return nil
     }
     return value
+  }
+
+  func reset() {
+    storage.value = StoredValues(items: [:])
   }
 
   private func removeOutdatedStoredValues() {
@@ -114,6 +116,20 @@ extension DivStoredValue {
     case .url:
       if let value = URL(string: value) {
         .url(value)
+      } else {
+        nil
+      }
+    case .array:
+      if let rawValue = try? JSONSerialization.jsonObject(jsonString: value) as? [Any],
+         let array = DivArray.fromAny(rawValue) {
+        .array(array)
+      } else {
+        nil
+      }
+    case .dict:
+      if let rawValue = try? JSONSerialization.jsonObject(jsonString: value) as? [String: Any],
+         let dict = DivDictionary.fromAny(rawValue) {
+        .dict(dict)
       } else {
         nil
       }

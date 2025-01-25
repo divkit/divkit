@@ -4,8 +4,8 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithComplexPropertyWithDefaultValue {
-  public final class Property {
+public final class EntityWithComplexPropertyWithDefaultValue: Sendable {
+  public final class Property: Sendable {
     public let value: Expression<String>
 
     public func resolveValue(_ resolver: ExpressionResolver) -> String? {

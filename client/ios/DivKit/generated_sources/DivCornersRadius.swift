@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivCornersRadius {
+public final class DivCornersRadius: Sendable {
   public let bottomLeft: Expression<Int>? // constraint: number >= 0
   public let bottomRight: Expression<Int>? // constraint: number >= 0
   public let topLeft: Expression<Int>? // constraint: number >= 0

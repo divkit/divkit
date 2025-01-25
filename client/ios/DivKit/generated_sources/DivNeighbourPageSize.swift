@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivNeighbourPageSize {
+public final class DivNeighbourPageSize: Sendable {
   public static let type: String = "fixed"
   public let neighbourPageWidth: DivFixedSize
 

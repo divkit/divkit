@@ -7,7 +7,7 @@ import VGSL
 
 import enum DivKit.Expression
 
-public final class EntityWithRawArrayTemplate: TemplateValue {
+public final class EntityWithRawArrayTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "entity_with_raw_array"
   public let parent: String?
   public let array: Field<Expression<[Any]>>?

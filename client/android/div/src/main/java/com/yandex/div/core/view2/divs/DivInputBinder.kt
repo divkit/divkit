@@ -34,6 +34,7 @@ import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTE
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -284,7 +285,7 @@ internal class DivInputBinder @Inject constructor(
     ) {
         val callback = { _: Any ->
             val enterKeyType = div.enterKeyType.evaluate(resolver)
-            this.imeOptions = getImeAction(enterKeyType)
+            this.imeOptions += getImeAction(enterKeyType)
 
             val actions = div.enterKeyActions
             if (!actions.isNullOrEmpty()) {
@@ -304,7 +305,7 @@ internal class DivInputBinder @Inject constructor(
 
     private fun getImeAction(type: DivInput.EnterKeyType): Int {
         return when (type) {
-            DivInput.EnterKeyType.DEFAULT -> EditorInfo.IME_NULL
+            DivInput.EnterKeyType.DEFAULT -> EditorInfo.IME_ACTION_UNSPECIFIED
             DivInput.EnterKeyType.SEND -> EditorInfo.IME_ACTION_SEND
             DivInput.EnterKeyType.DONE -> EditorInfo.IME_ACTION_DONE
             DivInput.EnterKeyType.SEARCH -> EditorInfo.IME_ACTION_SEARCH

@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSelect: DivBase {
-  public final class Option {
+public final class DivSelect: DivBase, Sendable {
+  public final class Option: Sendable {
     public let text: Expression<String>?
     public let value: Expression<String>
 

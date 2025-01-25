@@ -4,8 +4,8 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithPropertyWithDefaultValue {
-  public final class Nested {
+public final class EntityWithPropertyWithDefaultValue: Sendable {
+  public final class Nested: Sendable {
     public let int: Expression<Int> // constraint: number >= 0; default value: 0
     public let nonOptional: Expression<String>
     public let url: Expression<URL> // valid schemes: [https]; default value: https://yandex.ru

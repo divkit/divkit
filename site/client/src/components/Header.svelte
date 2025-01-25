@@ -3,6 +3,7 @@
     import LanguageSelector from './LanguageSelector.svelte';
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import LinksPopup from './LinksPopup.svelte';
+    import { isFeatures } from '../data/session';
 
     const {l10n, lang} = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -34,13 +35,13 @@
                 <li class="header__item">
                     <a class="header__link" href="https://github.com/divkit/divkit" target="_blank" rel="noopener noreferrer">
                         <div class="header__icon header__icon_github"></div>
-                        GitHub
+                        <span class="header__text">GitHub</span>
                     </a>
                 </li>
                 <li class="header__item">
                     <a class="header__link" href={$lang === 'ru' ? 'https://t.me/divkit_community_ru' : 'https://t.me/divkit_community_en'} target="_blank" rel="noopener noreferrer">
                         <div class="header__icon header__icon_telegram"></div>
-                        {$l10n('telegram')}
+                        <span class="header__text">{$l10n('telegram')}</span>
                     </a>
                 </li>
             </ul>
@@ -53,7 +54,8 @@
             <ul class="header__subnav-links">
                 <li class="header__subnav-item">
                     <a href="/playground" class="header__subnav-logo">
-                        {$l10n('playground')}
+                        <span class="header__big-text">{$l10n('playground')}</span>
+                        <span class="header__small-text">{$l10n('playgroundShort')}</span>
                     </a>
                 </li>
                 <li class="header__subnav-item">
@@ -68,27 +70,30 @@
                 </li>
                 <li class="header__subnav-item">
                     <a class="header__subnav-link" href="/features">
-                        {$l10n('featureSupport')}
+                        <span class="header__big-text">{$l10n('featureSupport')}</span>
+                        <span class="header__small-text">{$l10n('featureSupportSmall')}</span>
                     </a>
                 </li>
             </ul>
         </div>
 
-        <div class="header__subnav-right">
-            <ul class="header__subnav-links">
-                <li class="header__subnav-item">
-                    <button
-                        class="header__subnav-link"
-                        on:click={() => linksPopupShown = !linksPopupShown}
-                        bind:this={linksButton}
-                    >{$l10n('share')}</button>
+        {#if !$isFeatures}
+            <div class="header__subnav-right">
+                <ul class="header__subnav-links">
+                    <li class="header__subnav-item">
+                        <button
+                            class="header__subnav-link"
+                            on:click={() => linksPopupShown = !linksPopupShown}
+                            bind:this={linksButton}
+                        >{$l10n('share')}</button>
 
-                    {#if linksPopupShown}
-                        <LinksPopup bind:node={linksPopup} on:close={() => linksPopupShown = false} />
-                    {/if}
-                </li>
-            </ul>
-        </div>
+                        {#if linksPopupShown}
+                            <LinksPopup bind:node={linksPopup} on:close={() => linksPopupShown = false} />
+                        {/if}
+                    </li>
+                </ul>
+            </div>
+        {/if}
     </nav>
 </div>
 
@@ -104,6 +109,7 @@
         display: block;
         width: 160px;
         height: 41px;
+        flex: 0 0 auto;
         background: no-repeat 50% 50% url(../assets/logo.svg);
     }
 
@@ -121,6 +127,13 @@
         margin-right: 24px;
         padding: 0;
         list-style: none;
+    }
+
+    @media (max-width: 700px) {
+        .header__links {
+            gap: 8px;
+            margin-right: 8px;
+        }
     }
 
     .header__link {
@@ -160,6 +173,10 @@
         background: var(--bg-secondary);
     }
 
+    .header__subnav-left {
+        min-width: 0;
+    }
+
     .header__subnav-logo {
         font-size: 20px;
         color: inherit;
@@ -178,9 +195,23 @@
         display: flex;
         align-items: baseline;
         gap: 20px;
+        min-width: 0;
         margin: 0;
         padding: 0;
         list-style: none;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+        .header__subnav-links {
+            gap: 6px;
+        }
+    }
+
+    .header__subnav-item {
+        min-width: 20px;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .header__subnav-link {
@@ -198,5 +229,30 @@
 
     .header__subnav-link:hover {
         color: red;
+    }
+
+    @media (max-width: 700px) {
+        .header__text {
+            position: absolute;
+            overflow: hidden;
+            clip: rect(1px 1px 1px 1px);
+            font-weight: 400;
+            height: 1px;
+            width: 1px;
+        }
+    }
+
+    .header__small-text {
+        display: none;
+    }
+
+    @media (max-width: 700px) {
+        .header__big-text {
+            display: none;
+        }
+
+        .header__small-text {
+            display: inline;
+        }
     }
 </style>

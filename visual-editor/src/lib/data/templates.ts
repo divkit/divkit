@@ -140,6 +140,15 @@ export const namedTemplates: Record<string, TemplateDescription> = {
                 }],
                 enableSources: true
             }, {
+                name: 'props.font_family',
+                prop: 'font_family',
+                type: 'select-font-family',
+                show: {
+                    prop: '$fontFamily',
+                    equal: 'yes'
+                },
+                enableSources: true
+            }, {
                 name: 'props.text_color',
                 prop: 'text_color',
                 type: 'color',
@@ -261,6 +270,15 @@ export const namedTemplates: Record<string, TemplateDescription> = {
                     name: 'props.font_weight_bold',
                     value: 'bold'
                 }],
+                enableSources: true
+            }, {
+                name: 'props.font_family',
+                prop: 'font_family',
+                type: 'select-font-family',
+                show: {
+                    prop: '$fontFamily',
+                    equal: 'yes'
+                },
                 enableSources: true
             }, {
                 name: 'props.text_color',

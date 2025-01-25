@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionHideTooltipTemplate: TemplateValue {
+public final class DivActionHideTooltipTemplate: TemplateValue, Sendable {
   public static let type: String = "hide_tooltip"
   public let parent: String?
   public let id: Field<Expression<String>>?

@@ -7,7 +7,6 @@ import com.yandex.div.core.DivPreloader.PreloadReference
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.extension.DivExtensionController
-import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
@@ -19,38 +18,28 @@ import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 
 @PublicApi
 @Mockable
 class DivPreloader internal constructor(
     private val imagePreloader: DivImagePreloader?,
-    private val customViewAdapter: DivCustomViewAdapter?,
     private val customContainerViewAdapter: DivCustomContainerViewAdapter,
     private val extensionController: DivExtensionController,
     private val videoPreloader: DivPlayerPreloader,
 ) {
 
+    constructor(configuration: DivConfiguration) : this(
+        imagePreloader = DivImagePreloader(configuration.imageLoader),
+        customContainerViewAdapter = configuration.divCustomContainerViewAdapter,
+        extensionController = DivExtensionController(configuration.extensionHandlers),
+        videoPreloader = configuration.divPlayerPreloader
+    )
+
     constructor(context: Div2Context) : this(
         imagePreloader = context.div2Component.imagePreloader,
-        customViewAdapter = context.div2Component.divCustomViewAdapter,
         customContainerViewAdapter = context.div2Component.divCustomContainerViewAdapter,
         extensionController = context.div2Component.extensionController,
         videoPreloader = context.div2Component.divVideoPreloader
-    )
-
-    @Deprecated("Use DivPreloader(Div2Context) instead")
-    constructor(
-        imagePreloader: DivImagePreloader?,
-        customViewAdapter: DivCustomViewAdapter?,
-        extensionHandlers: List<DivExtensionHandler>
-    ) : this(
-        imagePreloader = imagePreloader,
-        customViewAdapter = customViewAdapter,
-        customContainerViewAdapter = DivCustomContainerViewAdapter.STUB,
-        extensionController = DivExtensionController(extensionHandlers),
-        videoPreloader = DivPlayerPreloader.STUB,
     )
 
     fun preload(div: Div, resolver: ExpressionResolver, callback: Callback = NO_CALLBACK): Ticket {
@@ -114,7 +103,6 @@ class DivPreloader internal constructor(
 
         override fun visit(data: Div.Custom, resolver: ExpressionResolver) {
             data.value.items?.forEach { visit(it, resolver) }
-            customViewAdapter?.preload(data.value, callback)?.let { ticket.addReference(it) }
             customContainerViewAdapter.preload(data.value, callback).also { ticket.addReference(it) }
             defaultVisit(data, resolver)
         }

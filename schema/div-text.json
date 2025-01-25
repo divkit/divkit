@@ -33,6 +33,16 @@
             "web"
           ]
         },
+        "baseline_offset": {
+          "type": "number",
+          "$description": "translations.json#/div_text_range_baseline_offset",
+          "default_value": "0",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
         "font_size": {
           "$ref": "common.json#/non_negative_integer",
           "$description": "translations.json#/div_font_size"
@@ -116,6 +126,7 @@
           "$description": "translations.json#/div_text_range_shadow",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },
@@ -197,7 +208,8 @@
             }
           },
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "alignment_vertical": {
@@ -218,7 +230,8 @@
           "default_value": "normal",
           "$description": "translations.json#/div_text_image_indexing_direction",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         }
       },
@@ -240,36 +253,21 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "$description": "translations.json#/div_text_ellipsis_actions",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_ellipsis_actions"
         },
         "ranges": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/range"
           },
-          "$description": "translations.json#/div_text_ellipsis_ranges",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_ellipsis_ranges"
         },
         "images": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/image"
           },
-          "$description": "translations.json#/div_text_ellipsis_images",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_ellipsis_images"
         }
       },
       "required": [
@@ -489,6 +487,7 @@
           "$description": "translations.json#/div_text_shadow",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         }

@@ -23,17 +23,16 @@ internal class EntityWithOptionalComplexPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithOptionalComplexProperty {
-            val logger = context.logger
             return EntityWithOptionalComplexProperty(
-                property = JsonPropertyParser.readOptional(context, logger, data, "property", component.entityWithOptionalComplexPropertyPropertyJsonEntityParser),
+                property = JsonPropertyParser.readOptional(context, data, "property", component.entityWithOptionalComplexPropertyPropertyJsonEntityParser),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexProperty): JSONObject {
             val data = JSONObject()
-            data.write(key = "property", value = component.entityWithOptionalComplexPropertyPropertyJsonEntityParser.value.serialize(context, value.property))
-            data.write(key = "type", value = EntityWithOptionalComplexProperty.TYPE)
+            JsonPropertyParser.write(context, data, "property", value.property, component.entityWithOptionalComplexPropertyPropertyJsonEntityParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalComplexProperty.TYPE)
             return data
         }
     }
@@ -44,19 +43,18 @@ internal class EntityWithOptionalComplexPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithOptionalComplexPropertyTemplate?, data: JSONObject): EntityWithOptionalComplexPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithOptionalComplexPropertyTemplate(
-                property = JsonFieldParser.readOptionalField(context, logger, data, "property", allowOverride, parent?.property, component.entityWithOptionalComplexPropertyPropertyJsonTemplateParser),
+                property = JsonFieldParser.readOptionalField(context, data, "property", allowOverride, parent?.property, component.entityWithOptionalComplexPropertyPropertyJsonTemplateParser),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexPropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeField(key = "property", field = value.property, converter = component.entityWithOptionalComplexPropertyPropertyJsonTemplateParser.value.asConverter(context))
-            data.write(key = "type", value = EntityWithOptionalComplexProperty.TYPE)
+            JsonFieldParser.writeField(context, data, "property", value.property, component.entityWithOptionalComplexPropertyPropertyJsonTemplateParser)
+            JsonPropertyParser.write(context, data, "type", EntityWithOptionalComplexProperty.TYPE)
           return data
         }
     }
@@ -67,9 +65,8 @@ internal class EntityWithOptionalComplexPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithOptionalComplexPropertyTemplate, data: JSONObject): EntityWithOptionalComplexProperty {
-            val logger = context.logger
             return EntityWithOptionalComplexProperty(
-                property = JsonFieldResolver.resolveOptional(context, logger, template.property, data, "property", component.entityWithOptionalComplexPropertyPropertyJsonTemplateResolver, component.entityWithOptionalComplexPropertyPropertyJsonEntityParser),
+                property = JsonFieldResolver.resolveOptional(context, template.property, data, "property", component.entityWithOptionalComplexPropertyPropertyJsonTemplateResolver, component.entityWithOptionalComplexPropertyPropertyJsonEntityParser),
             )
         }
     }
@@ -85,16 +82,15 @@ internal class EntityWithOptionalComplexPropertyPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithOptionalComplexProperty.Property {
-            val logger = context.logger
             return EntityWithOptionalComplexProperty.Property(
-                value = JsonExpressionParser.readExpression(context, logger, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
+                value = JsonExpressionParser.readExpression(context, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexProperty.Property): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "value", value = value.value, converter = URI_TO_STRING)
+            JsonExpressionParser.writeExpression(context, data, "value", value.value, URI_TO_STRING)
             return data
         }
     }
@@ -105,18 +101,17 @@ internal class EntityWithOptionalComplexPropertyPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate?, data: JSONObject): EntityWithOptionalComplexPropertyTemplate.PropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithOptionalComplexPropertyTemplate.PropertyTemplate(
-                value = JsonFieldParser.readFieldWithExpression(context, logger, data, "value", TYPE_HELPER_URI, allowOverride, parent?.value, ANY_TO_URI),
+                value = JsonFieldParser.readFieldWithExpression(context, data, "value", TYPE_HELPER_URI, allowOverride, parent?.value, ANY_TO_URI),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "value", field = value.value, converter = URI_TO_STRING)
+            JsonFieldParser.writeExpressionField(context, data, "value", value.value, URI_TO_STRING)
           return data
         }
     }
@@ -127,9 +122,8 @@ internal class EntityWithOptionalComplexPropertyPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate, data: JSONObject): EntityWithOptionalComplexProperty.Property {
-            val logger = context.logger
             return EntityWithOptionalComplexProperty.Property(
-                value = JsonFieldResolver.resolveExpression(context, logger, template.value, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
+                value = JsonFieldResolver.resolveExpression(context, template.value, data, "value", TYPE_HELPER_URI, ANY_TO_URI),
             )
         }
     }

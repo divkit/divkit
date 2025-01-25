@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import DivKit
+import XCTest
 
 final class TemplateToTypeTests: XCTestCase {
   private func performTestCase(

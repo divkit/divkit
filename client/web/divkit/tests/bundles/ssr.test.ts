@@ -1,3 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import {
+    describe,
+    expect,
+    test
+} from 'vitest';
+
 import { render } from '@divkitframework/divkit';
 
 const path = require('path');
@@ -19,7 +26,7 @@ function scanDir(dir: string, list: string[]): void {
         } else if (file.endsWith('.json')) {
             const contents = require(path.resolve(dir, file));
             if (!contents.platforms || contents.platforms.includes('web')) {
-                it(file.replace('.json', ''), () => {
+                test(file.replace('.json', ''), () => {
                     expect(typeof render({
                         id: 'test',
                         json: contents

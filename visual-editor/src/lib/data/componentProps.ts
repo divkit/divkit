@@ -22,7 +22,8 @@ export const supportedComponents = new Set([
     'slider',
     'input',
     'select',
-    'video'
+    'video',
+    'switch'
 ]);
 
 export const containerComponents = new Set([
@@ -121,6 +122,7 @@ export interface VideoSourcesProperty extends BaseProperty {
 export interface FileProperty extends BaseProperty {
     type: 'file';
     subtype: 'image' | 'gif' | 'lottie' | 'image_preview';
+    generateFromVideoProperty?: string;
 }
 
 export interface AlignmentProperty extends BaseProperty {
@@ -166,12 +168,16 @@ export interface SelectOptionsProperty extends BaseProperty {
     type: 'select-options';
 }
 
+export interface SelectFontFamily extends BaseProperty {
+    type: 'select-font-family';
+}
+
 export type ComponentProperty = RadioProperty | IntegerProperty | BooleanProperty | SelectProperty |
     PercentProperty | RotationProperty | StringProperty |
     ColorProperty | FileProperty | GroupProperty | SplitProperty | AlignmentProperty |
     MarginsPaddingsProperty | Background2Property | TextAlignProperty | TextStylesProperty |
     Actions2Property | VideoSourcesProperty | NumberProperty | VariableNameProperty |
-    SelectOptionsProperty;
+    SelectOptionsProperty | SelectFontFamily;
 
 export type SiblingComponentProperty = ComponentProperty & {
     related?: {
@@ -435,6 +441,15 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             }],
             enableSources: true
         }, {
+            name: 'props.font_family',
+            prop: 'font_family',
+            type: 'select-font-family',
+            show: {
+                prop: '$fontFamily',
+                equal: 'yes'
+            },
+            enableSources: true
+        }, {
             name: 'props.text_color',
             prop: 'text_color',
             type: 'color',
@@ -545,6 +560,7 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             name: 'props.preview',
             prop: 'preview',
             type: 'file',
+            generateFromVideoProperty: 'video_sources',
             subtype: 'image_preview',
             enableSources: true
         }, {
@@ -818,6 +834,36 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             name: 'props.hint_text',
             prop: 'hint_text',
             type: 'string',
+            enableSources: true
+        }]
+    }],
+    switch: [...BASE_COMPONENT_PROPS, {
+        type: 'group',
+        title: 'a11yProps.title',
+        list: [{
+            name: 'props.a11y_description',
+            prop: 'accessibility.description',
+            type: 'string',
+            enableSources: true
+        }]
+    }, {
+        type: 'group',
+        title: 'switchProps.title',
+        list: [{
+            name: 'props.text_variable',
+            prop: 'is_on_variable',
+            type: 'variable-name',
+            required: true
+        }, {
+            name: 'props.is_enabled',
+            prop: 'is_enabled',
+            type: 'boolean',
+            default: true,
+            enableSources: true
+        }, {
+            name: 'props.on_color',
+            prop: 'on_color',
+            type: 'color',
             enableSources: true
         }]
     }]

@@ -46,12 +46,6 @@ public interface DivTypefaceProvider {
                 return DivTypefaceProvider.super.getTypefaceFor(weight);
             }
         }
-
-        @Nullable
-        @Override
-        public Typeface getRegularLegacy() {
-            return null;
-        }
     };
 
     /**
@@ -92,17 +86,5 @@ public interface DivTypefaceProvider {
         } else {
             return getBold();
         }
-    }
-
-    /**
-     * Returns typeface for text elements that require regular font.
-     * Also includes italic variant. To be used only in legacy elements.
-     *
-     * @deprecated Use {@link #getRegular()} instead for non-italic font.
-     */
-    @Nullable
-    @Deprecated
-    default Typeface getRegularLegacy() {
-        return getRegular();
     }
 }

@@ -2,12 +2,6 @@
   "templates": {
     "button": {
       "type": "text",
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "wrap_content"
-      },
       "paddings": {
         "left": 16,
         "top": 16,
@@ -57,9 +51,6 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "height": {
-            "type": "wrap_content"
-          },
           "items": [
             {
               "type": "button",
@@ -73,21 +64,27 @@
                     "x": {
                       "value": 0
                     },
-                    "y":  {
+                    "y": {
                       "value": 4
                     }
                   },
                   "div": {
                     "type": "container",
                     "orientation": "overlap",
+                    "width": {
+                      "type": "wrap_content"
+                    },
                     "items": [
                       {
                         "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
                         "paddings": {
-                          "left": 16,
-                          "top": 16,
-                          "right": 16,
-                          "bottom": 16
+                          "left": 20,
+                          "top": 20,
+                          "right": 20,
+                          "bottom": 20
                         },
                         "items": [
                           {
@@ -119,15 +116,17 @@
                         "type": "image",
                         "width": {
                           "type": "fixed",
-                          "value": 20
+                          "value": 44
                         },
                         "height": {
                           "type": "fixed",
-                          "value": 20
+                          "value": 44
                         },
-                        "margins": {
-                          "left": 8,
-                          "top": 8
+                        "paddings": {
+                          "left": 12,
+                          "right": 12,
+                          "top": 12,
+                          "bottom": 12
                         },
                         "action": {
                           "log_id": "hide_tooltip",
@@ -161,17 +160,14 @@
                     "x": {
                       "value": 0
                     },
-                    "y":  {
+                    "y": {
                       "value": 4
                     }
                   },
                   "div": {
                     "type": "container",
-                    "paddings": {
-                      "left": 16,
-                      "top": 16,
-                      "right": 16,
-                      "bottom": 16
+                    "width": {
+                      "type": "wrap_content"
                     },
                     "items": [
                       {

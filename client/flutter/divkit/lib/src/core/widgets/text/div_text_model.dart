@@ -37,42 +37,44 @@ class DivTextModel with EquatableMixin {
       ];
 }
 
-extension DivTextBinder on DivText {
-  DivTextModel bind(BuildContext context) {
+extension DivTextConverter on DivText {
+  DivTextModel resolve(BuildContext context) {
     final divContext = read<DivContext>(context)!;
 
+    final variables = divContext.variables;
     final textScale = divContext.scale.text;
     final viewScale = divContext.scale.view;
 
     final alignment = DivAlignmentConverter(
       textAlignmentVertical,
       textAlignmentHorizontal,
-    ).convert();
+    ).resolve(variables);
 
     final textAlign = DivTextAlignmentConverter(
       textAlignmentVertical,
       textAlignmentHorizontal,
-    ).convertHorizontal();
+    ).resolveHorizontal(variables);
 
-    final autoEllipsize = this.autoEllipsize?.value ?? false;
-    final fontFamily = this.fontFamily?.value;
+    final autoEllipsize = this.autoEllipsize?.resolve(variables) ?? false;
+    final fontFamily = this.fontFamily?.resolve(variables);
 
-    final fontSize =
-        this.fontSize.value.toDouble() * fontSizeUnit.value.asPx * textScale;
+    final fontSize = this.fontSize.resolve(variables).toDouble() *
+        fontSizeUnit.resolve(variables).asPx *
+        textScale;
 
-    final lineHeight = this.lineHeight?.value.toDouble();
+    final lineHeight = this.lineHeight?.resolve(variables).toDouble();
 
-    final letterSpacing = this.letterSpacing.value;
-    final underline = this.underline.value;
+    final letterSpacing = this.letterSpacing.resolve(variables);
+    final underline = this.underline.resolve(variables);
 
-    final strike = this.strike.value;
-    final shadow = textShadow?.convertShadow(viewScale: viewScale);
+    final strike = this.strike.resolve(variables);
+    final shadow = textShadow?.resolveShadow(variables, viewScale: viewScale);
 
-    final fontWeightValue = this.fontWeightValue?.value;
+    final fontWeightValue = this.fontWeightValue?.resolve(variables);
     FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
       (w) => w.value == fontWeightValue,
     );
-    fontWeight ??= this.fontWeight.value.convert();
+    fontWeight ??= this.fontWeight.resolve(variables).convert();
 
     final linesStyleList = [
       underline,
@@ -88,9 +90,11 @@ extension DivTextBinder on DivText {
       fontFamily: fontAsset.fontFamily,
       shadows: shadow != null ? [shadow] : null,
       height: lineHeight != null
-          ? (lineHeight * fontSizeUnit.value.asPx) * viewScale / fontSize
+          ? (lineHeight * fontSizeUnit.resolve(variables).asPx) *
+              viewScale /
+              fontSize
           : null,
-      color: textColor.value,
+      color: textColor.resolve(variables),
       fontWeight: fontWeight,
       letterSpacing: letterSpacing,
       decoration: TextDecoration.combine(
@@ -99,13 +103,14 @@ extension DivTextBinder on DivText {
           strike.asLineThrough,
         ],
       ),
-      decorationColor: textColor.value,
+      decorationColor: textColor.resolve(variables),
       overflow: autoEllipsize ? TextOverflow.ellipsis : null,
     );
 
-    final text = this.text.value;
+    final text = this.text.resolve(variables);
 
     final rangesList = DivRangeHelper.getRangeItems(
+      variables,
       text,
       ranges ?? [],
       style,
@@ -114,7 +119,7 @@ extension DivTextBinder on DivText {
       divContext.fontProvider,
     );
 
-    final maxLines = this.maxLines?.value;
+    final maxLines = this.maxLines?.resolve(variables);
 
     return DivTextModel(
       ranges: rangesList,

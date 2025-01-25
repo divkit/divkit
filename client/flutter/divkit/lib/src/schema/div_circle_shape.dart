@@ -2,11 +2,11 @@
 
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_stroke.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Circle.
-class DivCircleShape extends Resolvable with EquatableMixin {
+class DivCircleShape with EquatableMixin {
   const DivCircleShape({
     this.backgroundColor,
     this.radius = const DivFixedSize(
@@ -60,28 +60,26 @@ class DivCircleShape extends Resolvable with EquatableMixin {
         backgroundColor: safeParseColorExpr(
           json['background_color'],
         ),
-        radius: safeParseObj(
-          DivFixedSize.fromJson(json['radius']),
-          fallback: const DivFixedSize(
-            value: ValueExpression(
-              10,
+        radius: reqProp<DivFixedSize>(
+          safeParseObject(
+            json['radius'],
+            parse: DivFixedSize.fromJson,
+            fallback: const DivFixedSize(
+              value: ValueExpression(
+                10,
+              ),
             ),
           ),
-        )!,
-        stroke: safeParseObj(
-          DivStroke.fromJson(json['stroke']),
+          name: 'radius',
+        ),
+        stroke: safeParseObject(
+          json['stroke'],
+          parse: DivStroke.fromJson,
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivCircleShape resolve(DivVariableContext context) {
-    backgroundColor?.resolve(context);
-    radius.resolve(context);
-    stroke?.resolve(context);
-    return this;
   }
 }

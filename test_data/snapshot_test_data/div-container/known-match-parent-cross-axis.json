@@ -3,10 +3,10 @@
   "platforms": [
     "android",
     "ios",
-    "web"
+    "web",
+    "flutter"
   ],
   "templates": {
-
   },
   "card": {
     "log_id": "div2_sample_card",
@@ -16,14 +16,14 @@
         "div": {
           "type": "container",
           "orientation": "vertical",
-          "width":{
+          "width": {
             "type": "wrap_content"
           },
           "items": [
             {
               "type": "text",
               "text": "Text1_match",
-              "width":{
+              "width": {
                 "type": "match_parent"
               },
               "paddings": {
@@ -34,7 +34,7 @@
               },
               "alignment_vertical": "center",
               "border": {
-                "stroke":{
+                "stroke": {
                   "color": "#000"
                 }
               }
@@ -42,7 +42,7 @@
             {
               "type": "text",
               "text": "Text1_wrap",
-              "width":{
+              "width": {
                 "type": "wrap_content",
                 "value": 200
               },
@@ -54,7 +54,7 @@
               },
               "alignment_vertical": "center",
               "border": {
-                "stroke":{
+                "stroke": {
                   "color": "#000"
                 }
               }

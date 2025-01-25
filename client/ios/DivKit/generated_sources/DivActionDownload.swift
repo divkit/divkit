@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivActionDownload {
+public final class DivActionDownload: Sendable {
   public static let type: String = "download"
   public let onFailActions: [DivAction]?
   public let onSuccessActions: [DivAction]?

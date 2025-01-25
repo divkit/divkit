@@ -23,17 +23,16 @@ internal class EntityWithStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, data: JSONObject): EntityWithStringEnumProperty {
-            val logger = context.logger
             return EntityWithStringEnumProperty(
-                property = JsonExpressionParser.readExpression(context, logger, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
+                property = JsonExpressionParser.readExpression(context, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithStringEnumProperty): JSONObject {
             val data = JSONObject()
-            data.writeExpression(key = "property", value = value.property, converter = EntityWithStringEnumProperty.Property.TO_STRING)
-            data.write(key = "type", value = EntityWithStringEnumProperty.TYPE)
+            JsonExpressionParser.writeExpression(context, data, "property", value.property, EntityWithStringEnumProperty.Property.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithStringEnumProperty.TYPE)
             return data
         }
     }
@@ -44,19 +43,18 @@ internal class EntityWithStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun deserialize(context: ParsingContext, parent: EntityWithStringEnumPropertyTemplate?, data: JSONObject): EntityWithStringEnumPropertyTemplate {
-            val logger = context.logger
             val allowOverride = context.allowPropertyOverride
             @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()
             return EntityWithStringEnumPropertyTemplate(
-                property = JsonFieldParser.readFieldWithExpression(context, logger, data, "property", TYPE_HELPER_PROPERTY, allowOverride, parent?.property, EntityWithStringEnumProperty.Property.FROM_STRING),
+                property = JsonFieldParser.readFieldWithExpression(context, data, "property", TYPE_HELPER_PROPERTY, allowOverride, parent?.property, EntityWithStringEnumProperty.Property.FROM_STRING),
             )
         }
 
         @Throws(ParsingException::class)
         override fun serialize(context: ParsingContext, value: EntityWithStringEnumPropertyTemplate): JSONObject {
             val data = JSONObject()
-            data.writeFieldWithExpression(key = "property", field = value.property, converter = EntityWithStringEnumProperty.Property.TO_STRING)
-            data.write(key = "type", value = EntityWithStringEnumProperty.TYPE)
+            JsonFieldParser.writeExpressionField(context, data, "property", value.property, EntityWithStringEnumProperty.Property.TO_STRING)
+            JsonPropertyParser.write(context, data, "type", EntityWithStringEnumProperty.TYPE)
           return data
         }
     }
@@ -67,9 +65,8 @@ internal class EntityWithStringEnumPropertyJsonParser(
 
         @Throws(ParsingException::class)
         override fun resolve(context: ParsingContext, template: EntityWithStringEnumPropertyTemplate, data: JSONObject): EntityWithStringEnumProperty {
-            val logger = context.logger
             return EntityWithStringEnumProperty(
-                property = JsonFieldResolver.resolveExpression(context, logger, template.property, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
+                property = JsonFieldResolver.resolveExpression(context, template.property, data, "property", TYPE_HELPER_PROPERTY, EntityWithStringEnumProperty.Property.FROM_STRING),
             )
         }
     }

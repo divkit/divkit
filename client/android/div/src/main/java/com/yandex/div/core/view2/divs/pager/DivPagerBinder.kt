@@ -2,7 +2,7 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.util.SparseArray
 import android.view.View
-import android.view.ViewTreeObserver
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +14,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
-import com.yandex.div.core.util.isLayoutRtl
+import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
@@ -25,14 +25,12 @@ import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindItemBuilder
 import com.yandex.div.core.view2.divs.bindStates
-import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter.Companion.OFFSET_TO_REAL_ITEM
 import com.yandex.div.core.view2.divs.toPxF
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.widget.PageItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
@@ -63,14 +61,17 @@ internal class DivPagerBinder @Inject constructor(
         val resolver = context.expressionResolver
         val oldDiv = view.div
         if (div === oldDiv) {
-            val adapter = view.viewPager.adapter as? DivPagerAdapter ?: return
+            val pager = view.viewPager
+            val adapter = pager.adapter as? DivPagerAdapter ?: return
             if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, context)) {
-                view.pageTransformer?.onItemsCountChanged()
                 view.pagerOnItemsCountChange?.onItemsUpdated()
+                pager.doOnNextLayout { pager.requestTransform() }
             }
             view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
             return
         }
+
+        val recyclerView = view.getRecyclerView() ?: return
 
         baseBinder.bindView(context, view, div, oldDiv)
 
@@ -92,12 +93,7 @@ internal class DivPagerBinder @Inject constructor(
         view.pagerOnItemsCountChange?.onItemsUpdated()
         view.clipToPage = divView.div2Component.isPagerPageClipEnabled
 
-        val reusableObserver = { _: Any ->
-            val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
-            view.orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
-            view.applyDecorations(div, resolver, isHorizontal)
-            view.updatePageTransformer(div, resolver, pageTranslations)
-        }
+        val reusableObserver = { _: Any -> view.applyDecorations(div, resolver, pageTranslations, adapter) }
 
         view.addSubscription(div.paddings?.left?.observe(resolver, reusableObserver))
         view.addSubscription(div.paddings?.right?.observe(resolver, reusableObserver))
@@ -106,16 +102,16 @@ internal class DivPagerBinder @Inject constructor(
         view.addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
         view.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
         view.addSubscription(div.orientation.observeAndGet(resolver, reusableObserver))
+        view.addSubscription(view.viewPager.observeSizeChange(reusableObserver))
 
         when (val mode = div.layoutMode) {
             is DivPagerLayoutMode.NeighbourPageSize -> {
                 view.addSubscription(mode.value.neighbourPageWidth.value.observe(resolver, reusableObserver))
                 view.addSubscription(mode.value.neighbourPageWidth.unit.observe(resolver, reusableObserver))
             }
-            is DivPagerLayoutMode.PageSize -> {
+            is DivPagerLayoutMode.PageSize ->
                 view.addSubscription(mode.value.pageWidth.value.observe(resolver, reusableObserver))
-                view.addSubscription(observeWidthChange(view.viewPager, reusableObserver))
-            }
+            is DivPagerLayoutMode.PageContentSize -> Unit
         }
 
         view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
@@ -127,7 +123,7 @@ internal class DivPagerBinder @Inject constructor(
         view.changePageCallbackForLogger = DivPagerPageChangeCallback(
             bindingContext = context,
             divPager = div,
-            recyclerView = view.viewPager.getChildAt(0) as RecyclerView,
+            recyclerView = recyclerView,
             items = adapter.itemsToShow,
             pagerView = view,
         )
@@ -148,8 +144,6 @@ internal class DivPagerBinder @Inject constructor(
                 null
             }
         })
-
-        view.addInitialRelayout()
 
         view.bindItemBuilder(context, div)
         if (a11yEnabled) {
@@ -186,100 +180,116 @@ internal class DivPagerBinder @Inject constructor(
         }
     }
 
-    private fun DivPagerView.updatePageTransformer(
+    private fun DivPagerView.applyDecorations(
         div: DivPager,
         resolver: ExpressionResolver,
-        pageTranslations: SparseArray<Float>
+        pageTranslations: SparseArray<Float>,
+        adapter: DivPagerAdapter,
     ) {
-        pageTransformer = DivPagerPageTransformer(this, div, resolver, pageTranslations)
-    }
+        val recyclerView = getRecyclerView() ?: return
 
-    private fun DivPagerView.applyDecorations(div: DivPager, resolver: ExpressionResolver, isHorizontal: Boolean) {
+        val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
+        orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
+
+        changePageCallbackForOffScreenPages = null
+
+        if (!isActuallyLaidOut) return
+
         val metrics = resources.displayMetrics
-        viewPager.setItemDecoration(
-            PageItemDecoration(
-                layoutMode = div.layoutMode,
-                metrics = metrics,
-                resolver = resolver,
-                paddingLeft = evaluateLeftPadding(div, resolver, isHorizontal),
-                paddingRight = evaluateRightPadding(div, resolver, isHorizontal),
-                paddingTop = div.paddings?.top?.evaluate(resolver).dpToPxF(metrics),
-                paddingBottom = div.paddings?.bottom?.evaluate(resolver).dpToPxF(metrics),
-                parentSize = if (isHorizontal) viewPager.width else viewPager.height,
-                itemSpacing = div.itemSpacing.toPxF(metrics, resolver),
-                orientation = if (isHorizontal) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL,
+        val parentSize = if (isHorizontal) viewPager.width else viewPager.height
+        val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
+        val infiniteScroll = div.infiniteScroll.evaluate(resolver)
+        val paddings = DivPagerPaddingsHolder(div.paddings, resolver, this, metrics, isHorizontal)
+
+        val sizeProvider = when (val layoutMode = div.layoutMode) {
+            is DivPagerLayoutMode.PageSize -> PercentagePageSizeProvider(layoutMode.value, resolver, parentSize)
+            is DivPagerLayoutMode.NeighbourPageSize -> {
+                NeighbourPageSizeProvider(
+                    layoutMode.value,
+                    resolver,
+                    metrics,
+                    parentSize,
+                    itemSpacing,
+                    infiniteScroll,
+                    paddings
+                )
+            }
+            is DivPagerLayoutMode.PageContentSize -> WrapContentPageSizeProvider(recyclerView, isHorizontal)
+        }
+
+        val decoration = if (sizeProvider is FixedPageSizeProvider) {
+            FixedPageSizeOffScreenPagesController(
+                this,
+                parentSize,
+                itemSpacing,
+                sizeProvider,
+                paddings,
+                infiniteScroll,
+                adapter
             )
+            FixedPageSizeItemDecoration(paddings, sizeProvider, isHorizontal)
+        } else {
+            WrapContentPageSizeOffScreenPagesController(
+                this,
+                parentSize,
+                itemSpacing,
+                sizeProvider,
+                paddings,
+                adapter
+            )
+            WrapContentPageSizeItemDecoration(parentSize, paddings, isHorizontal)
+        }
+
+        viewPager.setItemDecoration(decoration)
+
+        val offsetProvider = DivPagerPageOffsetProvider(
+            parentSize,
+            itemSpacing,
+            sizeProvider,
+            paddings,
+            infiniteScroll,
+            adapter
         )
-
-        val neighbourItemIsShown = when (val mode = div.layoutMode) {
-            is DivPagerLayoutMode.PageSize -> mode.value.pageWidth.value.evaluate(resolver) < 100
-            is DivPagerLayoutMode.NeighbourPageSize -> mode.value.neighbourPageWidth.value.evaluate(resolver) > 0
-            is DivPagerLayoutMode.PageContentSize -> true
-        }
-        if (neighbourItemIsShown && viewPager.offscreenPageLimit != 1) {
-            viewPager.offscreenPageLimit = 1
-        }
+        pageTransformer = DivPagerPageTransformer(
+            recyclerView,
+            resolver,
+            pageTranslations,
+            parentSize,
+            div.pageTransformation,
+            offsetProvider,
+            isHorizontal
+        )
     }
 
-    private fun DivPagerView.evaluateRightPadding(
-        div: DivPager,
-        resolver: ExpressionResolver,
-        isHorizontal: Boolean
-    ): Float {
-        val metrics = resources.displayMetrics
-        val isLayoutRtl = isLayoutRtl()
-        val paddings = div.paddings
+    private fun ViewPager2.observeSizeChange(observer: (_: Any) -> Unit): Disposable {
+        return object : Disposable, View.OnLayoutChangeListener {
+            private var oldSize = 0
 
-        return when {
-            paddings == null -> 0.0f
-            isHorizontal && isLayoutRtl && paddings.start != null -> paddings.start?.evaluate(resolver).dpToPxF(metrics)
-            isHorizontal && !isLayoutRtl && paddings.end != null -> paddings.end?.evaluate(resolver).dpToPxF(metrics)
-            else -> paddings.right.evaluate(resolver).dpToPxF(metrics)
-        }
-    }
+            private fun getSize() = if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) width else height
 
-    private fun DivPagerView.evaluateLeftPadding(
-        div: DivPager,
-        resolver: ExpressionResolver,
-        isHorizontal: Boolean
-    ): Float {
-        val metrics = resources.displayMetrics
-        val isLayoutRtl = isLayoutRtl()
-        val paddings = div.paddings
-
-        return when {
-            paddings == null -> 0.0f
-            isHorizontal && isLayoutRtl && paddings.end != null -> paddings.end?.evaluate(resolver).dpToPxF(metrics)
-            isHorizontal && !isLayoutRtl && paddings.start != null ->
-                paddings.start?.evaluate(resolver).dpToPxF(metrics)
-            else -> paddings.left.evaluate(resolver).dpToPxF(metrics)
-        }
-    }
-
-    private fun observeWidthChange(view: View, observer: (_: Any) -> Unit) = object : Disposable, View.OnLayoutChangeListener {
-        var oldWidth = view.width
-
-        init {
-            view.addOnLayoutChangeListener(this)
-            // First onLayoutChange triggered too late.
-            // Used for set layout paddings before user actions
-            view.doOnPreDraw {
-                observer.invoke(view.width)
+            init {
+                addOnLayoutChangeListener(this)
+                // First onLayoutChange triggered too late.
+                // Used for set layout paddings before user actions
+                doOnPreDraw { updateSize() }
             }
-        }
 
-        override fun close() {
-            view.removeOnLayoutChangeListener(this)
-        }
-
-        override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int,
-                                    oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
-            val newWidth = v.width
-            if (oldWidth == newWidth) {
-                return
+            override fun close() {
+                removeOnLayoutChangeListener(this)
             }
-            oldWidth = newWidth
-            observer.invoke(newWidth)
+
+            override fun onLayoutChange(
+                v: View, left: Int, top: Int, right: Int, bottom: Int,
+                oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
+            ) = updateSize()
+
+            private fun updateSize() {
+                val newSize = getSize()
+                if (oldSize == newSize) return
+
+                oldSize = newSize
+                observer.invoke(newSize)
+            }
         }
     }
 
@@ -294,22 +304,9 @@ internal class DivPagerBinder @Inject constructor(
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, context.expressionResolver) {
             (viewPager.adapter as DivPagerAdapter?)?.setItems(builder.build(context.expressionResolver))
-            pageTransformer?.onItemsCountChanged()
             pagerOnItemsCountChange?.onItemsUpdated()
             getRecyclerView()?.scrollToPosition(currentItem)
-        }
-    }
-
-    private fun DivPagerView.addInitialRelayout() {
-        if (isWrapContentAlongCrossAxis()) {
-            viewTreeObserver.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        requestLayout()
-                    }
-                }
-            )
+            viewPager.doOnNextLayout { viewPager.requestTransform() }
         }
     }
 }

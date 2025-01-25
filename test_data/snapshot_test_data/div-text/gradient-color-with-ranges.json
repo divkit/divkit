@@ -2,7 +2,8 @@
   "description": "Gradient color with ranges",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "flutter"
   ],
   "card": {
     "log_id": "text",

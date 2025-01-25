@@ -13,8 +13,9 @@
       "result_type": "boolean",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -30,8 +31,9 @@
       "result_type": "boolean",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -47,8 +49,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -64,8 +67,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -81,8 +85,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -98,8 +103,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -115,8 +121,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -132,8 +139,9 @@
       "result_type": "color",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -149,8 +157,9 @@
       "result_type": "url",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -170,8 +179,9 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -191,8 +201,9 @@
       "result_type": "number",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -212,8 +223,9 @@
       "result_type": "string",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -233,8 +245,9 @@
       "result_type": "url",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -254,8 +267,9 @@
       "result_type": "url",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -275,8 +289,9 @@
       "result_type": "color",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -296,8 +311,9 @@
       "result_type": "color",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -317,8 +333,9 @@
       "result_type": "boolean",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -338,9 +355,10 @@
       ],
       "result_type": "string",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -360,9 +378,10 @@
       ],
       "result_type": "number",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -382,9 +401,10 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -404,9 +424,10 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -426,9 +447,10 @@
       ],
       "result_type": "color",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -449,8 +471,9 @@
       "result_type": "url",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -474,9 +497,10 @@
       ],
       "result_type": "string",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -500,9 +524,10 @@
       ],
       "result_type": "number",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -526,9 +551,10 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -552,9 +578,10 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -578,9 +605,10 @@
       ],
       "result_type": "color",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -604,9 +632,10 @@
       ],
       "result_type": "color",
       "platforms": [
-        "web",
+        "android",
         "ios",
-        "android"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -631,8 +660,9 @@
       "result_type": "url",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -657,8 +687,9 @@
       "result_type": "url",
       "platforms": [
         "android",
+        "ios",
         "web",
-        "ios"
+        "flutter"
       ]
     },
     {
@@ -680,7 +711,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -702,7 +734,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -724,7 +757,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -746,7 +780,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -768,7 +803,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -790,7 +826,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -812,7 +849,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -834,7 +872,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -860,7 +899,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -886,7 +926,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -912,7 +953,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -938,7 +980,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -964,7 +1007,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -990,7 +1034,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1016,7 +1061,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1042,7 +1088,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1064,7 +1111,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1086,7 +1134,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1107,7 +1156,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1128,7 +1178,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1149,7 +1200,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1170,7 +1222,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1191,7 +1244,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1212,7 +1266,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1233,7 +1288,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1254,7 +1310,8 @@
       "platforms": [
         "android",
         "ios",
-        "web"
+        "web",
+        "flutter"
       ]
     },
     {
@@ -1269,7 +1326,9 @@
       ],
       "result_type": "array",
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -1284,7 +1343,9 @@
       ],
       "result_type": "dict",
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     }
   ]

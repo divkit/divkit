@@ -1,15 +1,15 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
-class DictValue extends Resolvable with EquatableMixin {
+class DictValue with EquatableMixin {
   const DictValue({
     required this.value,
   });
 
   static const type = "dict";
-  final Map<String, dynamic> value;
+  final Obj value;
 
   @override
   List<Object?> get props => [
@@ -17,7 +17,7 @@ class DictValue extends Resolvable with EquatableMixin {
       ];
 
   DictValue copyWith({
-    Map<String, dynamic>? value,
+    Obj? value,
   }) =>
       DictValue(
         value: value ?? this.value,
@@ -31,17 +31,16 @@ class DictValue extends Resolvable with EquatableMixin {
     }
     try {
       return DictValue(
-        value: safeParseMap(
-          json['value'],
-        )!,
+        value: reqProp<Obj>(
+          safeParseMap(
+            json['value'],
+          ),
+          name: 'value',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DictValue resolve(DivVariableContext context) {
-    return this;
   }
 }

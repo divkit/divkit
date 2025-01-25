@@ -4,26 +4,23 @@ import android.content.Context;
 import android.os.Build;
 import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
-
 import com.yandex.div.core.DivCustomContainerViewAdapter;
-import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
-import com.yandex.div.internal.viewpool.AdvanceViewPool;
-import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.div.core.view2.DivImagePreloader;
+import com.yandex.div.internal.viewpool.AdvanceViewPool;
 import com.yandex.div.internal.viewpool.PseudoViewPool;
 import com.yandex.div.internal.viewpool.ViewCreator;
 import com.yandex.div.internal.viewpool.ViewPool;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
+import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.yatagan.Binds;
 import com.yandex.yatagan.Module;
 import com.yandex.yatagan.Provides;
@@ -98,12 +95,11 @@ abstract public class Div2Module {
     @NonNull
     public static DivPreloader provideDivPreloader(
             @NonNull DivImagePreloader imagePreloader,
-            @NonNull DivCustomViewAdapter customViewAdapter,
             @NonNull DivCustomContainerViewAdapter customContainerViewAdapter,
             @NonNull DivPlayerPreloader videoPreloader,
             @NonNull DivExtensionController extensionController
       ) {
-        return new DivPreloader(imagePreloader, customViewAdapter,
+        return new DivPreloader(imagePreloader,
           customContainerViewAdapter, extensionController, videoPreloader
         );
     }

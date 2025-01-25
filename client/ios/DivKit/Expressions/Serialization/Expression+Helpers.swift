@@ -1,5 +1,4 @@
 import Foundation
-
 import Serialization
 import VGSL
 
@@ -43,14 +42,6 @@ func cast<T>(_ value: Any) -> T? {
 
   if T.self == Int.self, let doubleValue = value as? Double {
     return Int(doubleValue) as? T
-  }
-
-  if T.self == String.self {
-    if let intValue = value as? Int {
-      return String(intValue) as? T
-    } else if let doubleValue = value as? Double {
-      return String(doubleValue) as? T
-    }
   }
 
   return nil

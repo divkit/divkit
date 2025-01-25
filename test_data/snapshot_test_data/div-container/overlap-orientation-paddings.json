@@ -2,7 +2,9 @@
   "description": "Overlap container with paddings",
   "platforms": [
     "android",
-    "web"
+    "ios",
+    "web",
+    "flutter"
   ],
   "templates": {
     "test_container": {

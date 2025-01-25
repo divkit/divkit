@@ -1,11 +1,11 @@
 // Generated code. Do not modify.
 
 import 'package:divkit/src/schema/div_action_copy_to_clipboard_content.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Copies data to the clipboard.
-class DivActionCopyToClipboard extends Resolvable with EquatableMixin {
+class DivActionCopyToClipboard with EquatableMixin {
   const DivActionCopyToClipboard({
     required this.content,
   });
@@ -33,18 +33,17 @@ class DivActionCopyToClipboard extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionCopyToClipboard(
-        content: safeParseObj(
-          DivActionCopyToClipboardContent.fromJson(json['content']),
-        )!,
+        content: reqProp<DivActionCopyToClipboardContent>(
+          safeParseObject(
+            json['content'],
+            parse: DivActionCopyToClipboardContent.fromJson,
+          ),
+          name: 'content',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionCopyToClipboard resolve(DivVariableContext context) {
-    content.resolve(context);
-    return this;
   }
 }

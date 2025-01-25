@@ -5,7 +5,7 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivPageTransformation {
+public enum DivPageTransformation: Sendable {
   case divPageTransformationSlide(DivPageTransformationSlide)
   case divPageTransformationOverlap(DivPageTransformationOverlap)
 

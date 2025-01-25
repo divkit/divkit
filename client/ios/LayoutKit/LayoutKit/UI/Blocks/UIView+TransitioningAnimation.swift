@@ -1,7 +1,6 @@
 import CoreGraphics
 import Foundation
 import UIKit
-
 import VGSL
 
 extension UIView {
@@ -87,8 +86,8 @@ extension UIView {
     animations.map { animation in
       (
         block: { self.setValue(animation.end, for: animation.kind) },
-        duration: animation.duration.value,
-        delay: animation.delay.value,
+        duration: animation.duration,
+        delay: animation.delay,
         options: [
           .allowUserInteraction,
           animation.timingFunction.cast(),

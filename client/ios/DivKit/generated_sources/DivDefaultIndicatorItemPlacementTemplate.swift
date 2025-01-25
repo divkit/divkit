@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue {
+public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, Sendable {
   public static let type: String = "default"
   public let parent: String?
   public let spaceBetweenCenters: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(15))

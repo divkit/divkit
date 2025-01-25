@@ -1,17 +1,17 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Stops the specified animator.
-class DivActionAnimatorStop extends Resolvable with EquatableMixin {
+class DivActionAnimatorStop with EquatableMixin {
   const DivActionAnimatorStop({
     required this.animatorId,
   });
 
   static const type = "animator_stop";
 
-  /// The identifier of the animator being stopped.
+  /// ID of the animator to be stopped.
   final String animatorId;
 
   @override
@@ -34,17 +34,16 @@ class DivActionAnimatorStop extends Resolvable with EquatableMixin {
     }
     try {
       return DivActionAnimatorStop(
-        animatorId: safeParseStr(
-          json['animator_id']?.toString(),
-        )!,
+        animatorId: reqProp<String>(
+          safeParseStr(
+            json['animator_id'],
+          ),
+          name: 'animator_id',
+        ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivActionAnimatorStop resolve(DivVariableContext context) {
-    return this;
   }
 }

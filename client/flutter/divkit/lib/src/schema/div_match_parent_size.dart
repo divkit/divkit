@@ -1,10 +1,10 @@
 // Generated code. Do not modify.
 
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Element size adjusts to a parent element.
-class DivMatchParentSize extends Resolvable with EquatableMixin {
+class DivMatchParentSize with EquatableMixin {
   const DivMatchParentSize({
     this.weight,
   });
@@ -39,14 +39,9 @@ class DivMatchParentSize extends Resolvable with EquatableMixin {
           json['weight'],
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivMatchParentSize resolve(DivVariableContext context) {
-    weight?.resolve(context);
-    return this;
   }
 }

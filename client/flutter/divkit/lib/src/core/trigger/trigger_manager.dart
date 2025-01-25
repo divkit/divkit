@@ -41,14 +41,14 @@ class DefaultDivTriggerManager extends DivTriggerManager {
               onCondition: () async {
                 if (!trigger.prevConditionResult && condition) {
                   for (final action in trigger.actions) {
-                    action.resolve(context).convert().execute(divContext);
+                    action.resolve(context).execute(divContext);
                   }
                 }
               },
               onVariable: () async {
                 if (condition) {
                   for (final action in trigger.actions) {
-                    action.resolve(context).convert().execute(divContext);
+                    action.resolve(context).execute(divContext);
                   }
                 }
               },

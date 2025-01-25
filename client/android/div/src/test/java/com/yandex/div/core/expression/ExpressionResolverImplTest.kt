@@ -1,6 +1,6 @@
 package com.yandex.div.core.expression
 
-import com.yandex.div.core.expression.variables.GlobalVariableController
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.data.Variable
@@ -63,14 +63,14 @@ class ExpressionResolverImplTest {
 
     private val failFastLogger = ParsingErrorLogger { e -> throw e }
     private val silentLogger = ParsingErrorLogger { e -> e.printStackTrace() }
-    private val globalVariableController = GlobalVariableController().apply {
+    private val variableController = DivVariableController().apply {
         declare(*globalVariables.values.toTypedArray())
     }
     private val externalVariables = VariableControllerImpl().apply {
         variables.values.forEach {
             declare(it)
         }
-        addSource(globalVariableController.variableSource)
+        addSource(variableController.variableSource)
     }
 
     private val evaluationContext = EvaluationContext(
@@ -422,7 +422,7 @@ class ExpressionResolverImplTest {
         mutableExpression.observeAndGet(underTest) {
             declaredValue = it
         }
-        globalVariableController.declare(Variable.IntegerVariable("none_var", 56))
+        variableController.declare(Variable.IntegerVariable("none_var", 56))
         Assert.assertEquals(56, declaredValue)
     }
 

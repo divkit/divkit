@@ -16,7 +16,7 @@ enum EqualityOperators: String, CaseIterable {
         makeFunction() as FunctionBinary<RGBAColor, RGBAColor, Bool>,
         makeFunction() as FunctionBinary<URL, URL, Bool>,
         makeFunction() as FunctionBinary<DivDictionary, DivDictionary, Bool>,
-        makeFunction() as FunctionBinary<[AnyHashable], [AnyHashable], Bool>,
+        makeFunction() as FunctionBinary<DivArray, DivArray, Bool>,
       ],
       makeError: {
         ExpressionError.unsupportedType(op: rawValue, args: $0)

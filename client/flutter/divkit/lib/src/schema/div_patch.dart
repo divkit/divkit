@@ -2,11 +2,11 @@
 
 import 'package:divkit/src/schema/div.dart';
 import 'package:divkit/src/schema/div_action.dart';
-import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing.dart';
 import 'package:equatable/equatable.dart';
 
 /// Edits the element.
-class DivPatch extends Resolvable with EquatableMixin {
+class DivPatch with EquatableMixin {
   const DivPatch({
     required this.changes,
     this.mode = const ValueExpression(DivPatchMode.partial),
@@ -16,7 +16,7 @@ class DivPatch extends Resolvable with EquatableMixin {
 
   /// Element changes.
   // at least 1 elements
-  final List<DivPatchChange> changes;
+  final Arr<DivPatchChange> changes;
 
   /// Procedure for applying changes:
   /// • `transactional` — if an error occurs during application of at least one element, the changes aren't applied.
@@ -25,10 +25,10 @@ class DivPatch extends Resolvable with EquatableMixin {
   final Expression<DivPatchMode> mode;
 
   /// Actions to perform after changes are applied.
-  final List<DivAction>? onAppliedActions;
+  final Arr<DivAction>? onAppliedActions;
 
   /// Actions to perform if there’s an error when applying changes in transaction mode.
-  final List<DivAction>? onFailedActions;
+  final Arr<DivAction>? onFailedActions;
 
   @override
   List<Object?> get props => [
@@ -39,10 +39,10 @@ class DivPatch extends Resolvable with EquatableMixin {
       ];
 
   DivPatch copyWith({
-    List<DivPatchChange>? changes,
+    Arr<DivPatchChange>? changes,
     Expression<DivPatchMode>? mode,
-    List<DivAction>? Function()? onAppliedActions,
-    List<DivAction>? Function()? onFailedActions,
+    Arr<DivAction>? Function()? onAppliedActions,
+    Arr<DivAction>? Function()? onFailedActions,
   }) =>
       DivPatch(
         changes: changes ?? this.changes,
@@ -63,52 +63,53 @@ class DivPatch extends Resolvable with EquatableMixin {
     }
     try {
       return DivPatch(
-        changes: safeParseObj(
-          safeListMap(
+        changes: reqProp<Arr<DivPatchChange>>(
+          safeParseObjects(
             json['changes'],
-            (v) => safeParseObj(
-              DivPatchChange.fromJson(v),
-            )!,
+            (v) => reqProp<DivPatchChange>(
+              safeParseObject(
+                v,
+                parse: DivPatchChange.fromJson,
+              ),
+            ),
           ),
-        )!,
-        mode: safeParseStrEnumExpr(
-          json['mode'],
-          parse: DivPatchMode.fromJson,
-          fallback: DivPatchMode.partial,
-        )!,
-        onAppliedActions: safeParseObj(
-          safeListMap(
-            json['on_applied_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+          name: 'changes',
+        ),
+        mode: reqVProp<DivPatchMode>(
+          safeParseStrEnumExpr(
+            json['mode'],
+            parse: DivPatchMode.fromJson,
+            fallback: DivPatchMode.partial,
+          ),
+          name: 'mode',
+        ),
+        onAppliedActions: safeParseObjects(
+          json['on_applied_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
-        onFailedActions: safeParseObj(
-          safeListMap(
-            json['on_failed_actions'],
-            (v) => safeParseObj(
-              DivAction.fromJson(v),
-            )!,
+        onFailedActions: safeParseObjects(
+          json['on_failed_actions'],
+          (v) => reqProp<DivAction>(
+            safeParseObject(
+              v,
+              parse: DivAction.fromJson,
+            ),
           ),
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
   }
-
-  @override
-  DivPatch resolve(DivVariableContext context) {
-    safeListResolve(changes, (v) => v.resolve(context));
-    mode.resolve(context);
-    safeListResolve(onAppliedActions, (v) => v.resolve(context));
-    safeListResolve(onFailedActions, (v) => v.resolve(context));
-    return this;
-  }
 }
 
-enum DivPatchMode implements Resolvable {
+enum DivPatchMode {
   transactional('transactional'),
   partial('partial');
 
@@ -158,16 +159,18 @@ enum DivPatchMode implements Resolvable {
           return DivPatchMode.partial;
       }
       return null;
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning(
+        "Invalid type of DivPatchMode: $json",
+        error: e,
+        stackTrace: st,
+      );
       return null;
     }
   }
-
-  @override
-  DivPatchMode resolve(DivVariableContext context) => this;
 }
 
-class DivPatchChange extends Resolvable with EquatableMixin {
+class DivPatchChange with EquatableMixin {
   const DivPatchChange({
     required this.id,
     this.items,
@@ -177,7 +180,7 @@ class DivPatchChange extends Resolvable with EquatableMixin {
   final String id;
 
   /// Elements to be inserted. If the parameter isn't specified, the element will be removed.
-  final List<Div>? items;
+  final Arr<Div>? items;
 
   @override
   List<Object?> get props => [
@@ -187,7 +190,7 @@ class DivPatchChange extends Resolvable with EquatableMixin {
 
   DivPatchChange copyWith({
     String? id,
-    List<Div>? Function()? items,
+    Arr<Div>? Function()? items,
   }) =>
       DivPatchChange(
         id: id ?? this.id,
@@ -202,25 +205,25 @@ class DivPatchChange extends Resolvable with EquatableMixin {
     }
     try {
       return DivPatchChange(
-        id: safeParseStr(
-          json['id']?.toString(),
-        )!,
-        items: safeParseObj(
-          safeListMap(
-            json['items'],
-            (v) => safeParseObj(
-              Div.fromJson(v),
-            )!,
+        id: reqProp<String>(
+          safeParseStr(
+            json['id'],
+          ),
+          name: 'id',
+        ),
+        items: safeParseObjects(
+          json['items'],
+          (v) => reqProp<Div>(
+            safeParseObject(
+              v,
+              parse: Div.fromJson,
+            ),
           ),
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      logger.warning("Parsing error", error: e, stackTrace: st);
       return null;
     }
-  }
-
-  @override
-  DivPatchChange resolve(DivVariableContext context) {
-    return this;
   }
 }

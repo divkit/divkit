@@ -2,6 +2,7 @@
   "description": "non-rectangular grid",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {
