@@ -136,6 +136,20 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "function_name": "cos",
+      "doc": "Calculates the cos of an argument represented in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }
