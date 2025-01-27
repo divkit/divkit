@@ -863,6 +863,10 @@
     "en": "Events that trigger transition animations.",
     "ru": "События, при которых сработают анимации переходов. Вместо него используйте `transition_triggers`."
   },
+  "div_data_functions": {
+    "en": "User functions.",
+    "ru": "Пользовательские функции."
+  },
   "div_data_variable_triggers": {
     "en": "Triggers for changing variables.",
     "ru": "Триггеры изменения переменных."

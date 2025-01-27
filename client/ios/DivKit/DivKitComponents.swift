@@ -339,6 +339,7 @@ public final class DivKitComponents {
   public func setCardData(divData: DivData, cardId: DivCardID) {
     setTimers(divData: divData, cardId: cardId)
     setVariablesAndTriggers(divData: divData, cardId: cardId)
+    functionsStorage.set(cardId: cardId, functions: divData.functions ?? [])
   }
 
   public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {

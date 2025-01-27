@@ -123,6 +123,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
     }
   }
 
+  public let functions: Field<[DivFunctionTemplate]>?
   public let logId: Field<String>?
   public let states: Field<[StateTemplate]>? // at least 1 elements
   public let timers: Field<[DivTimerTemplate]>?
@@ -132,6 +133,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
+      functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       logId: dictionary.getOptionalField("log_id"),
       states: dictionary.getOptionalArray("states", templateToType: templateToType),
       timers: dictionary.getOptionalArray("timers", templateToType: templateToType),
@@ -142,6 +144,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
   }
 
   init(
+    functions: Field<[DivFunctionTemplate]>? = nil,
     logId: Field<String>? = nil,
     states: Field<[StateTemplate]>? = nil,
     timers: Field<[DivTimerTemplate]>? = nil,
@@ -149,6 +152,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
     variableTriggers: Field<[DivTriggerTemplate]>? = nil,
     variables: Field<[DivVariableTemplate]>? = nil
   ) {
+    self.functions = functions
     self.logId = logId
     self.states = states
     self.timers = timers
@@ -158,6 +162,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDataTemplate?) -> DeserializationResult<DivData> {
+    let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let logIdValue = { parent?.logId?.resolveValue(context: context) ?? .noValue }()
     let statesValue = { parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue }()
     let timersValue = { parent?.timers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -165,6 +170,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
     let variableTriggersValue = { parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let variablesValue = { parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
       statesValue.errorsOrWarnings?.map { .nestedObjectError(field: "states", error: $0) },
       timersValue.errorsOrWarnings?.map { .nestedObjectError(field: "timers", error: $0) },
@@ -185,6 +191,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivData(
+      functions: { functionsValue.value }(),
       logId: { logIdNonNil }(),
       states: { statesNonNil }(),
       timers: { timersValue.value }(),
@@ -199,6 +206,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
+    var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var logIdValue: DeserializationResult<String> = { parent?.logId?.value() ?? .noValue }()
     var statesValue: DeserializationResult<[DivData.State]> = .noValue
     var timersValue: DeserializationResult<[DivTimer]> = .noValue
@@ -210,6 +218,11 @@ public final class DivDataTemplate: TemplateValue, Sendable {
       // Otherwise the compiler will allocate stack for each intermediate variable
       // upfront even when we don't actually visit a relevant branch
       for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "functions" {
+           functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
+          }
+        }()
         _ = {
           if key == "log_id" {
            logIdValue = deserialize(__dictValue).merged(with: logIdValue)
@@ -238,6 +251,11 @@ public final class DivDataTemplate: TemplateValue, Sendable {
         _ = {
           if key == "variables" {
            variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
+          }
+        }()
+        _ = {
+         if key == parent?.functions?.link {
+           functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
           }
         }()
         _ = {
@@ -273,12 +291,14 @@ public final class DivDataTemplate: TemplateValue, Sendable {
       }
     }()
     if let parent = parent {
+      _ = { functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { statesValue = statesValue.merged(with: { parent.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) }) }()
       _ = { timersValue = timersValue.merged(with: { parent.timers?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { variableTriggersValue = variableTriggersValue.merged(with: { parent.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
       statesValue.errorsOrWarnings?.map { .nestedObjectError(field: "states", error: $0) },
       timersValue.errorsOrWarnings?.map { .nestedObjectError(field: "timers", error: $0) },
@@ -299,6 +319,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivData(
+      functions: { functionsValue.value }(),
       logId: { logIdNonNil }(),
       states: { statesNonNil }(),
       timers: { timersValue.value }(),
@@ -317,6 +338,7 @@ public final class DivDataTemplate: TemplateValue, Sendable {
     let merged = try mergedWithParent(templates: templates)
 
     return DivDataTemplate(
+      functions: merged.functions?.tryResolveParent(templates: templates),
       logId: merged.logId,
       states: try merged.states?.resolveParent(templates: templates),
       timers: merged.timers?.tryResolveParent(templates: templates),

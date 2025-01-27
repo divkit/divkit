@@ -72,6 +72,16 @@
         "ios"
       ]
     },
+    "functions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-function.json"
+      },
+      "platforms": [
+        "ios"
+      ],
+      "$description": "translations.json#/div_data_functions"
+    },
     "variables": {
       "type": "array",
       "items": {
