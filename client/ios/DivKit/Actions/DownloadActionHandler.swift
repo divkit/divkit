@@ -14,8 +14,7 @@ final class DownloadActionHandler {
   }
 
   func handle(_ action: DivActionDownload, context: DivActionHandlingContext) {
-    guard let urlString = action.resolveUrl(context.expressionResolver),
-          let url = URL(string: urlString) else {
+    guard let url = action.resolveUrl(context.expressionResolver) else {
       return
     }
 
