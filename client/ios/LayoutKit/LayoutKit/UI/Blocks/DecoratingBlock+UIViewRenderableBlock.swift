@@ -242,6 +242,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     if tapRecognizer == nil {
       tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
     }
+    tapRecognizer?.cancelsTouchesInView = false
 
     if model.shouldHandleDoubleTap, doubleTapRecognizer == nil {
       let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
