@@ -40,8 +40,4 @@ final class DebugBlock: WrapperBlock, LayoutCachingDefaultImpl {
   func getImageHolders() -> [any VGSLUI.ImageHolder] {
     []
   }
-
-  func updated(withStates _: LayoutKit.BlocksState) throws -> Self {
-    self
-  }
 }
