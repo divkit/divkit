@@ -52,6 +52,7 @@ const editor = window.editor = DivProEditor.init({
         },
         cssValue: 'monospace'
     }],
+    directionSelector: true,
     card: {
         json: JSON.stringify({
             card: {

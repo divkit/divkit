@@ -236,6 +236,7 @@ export interface AppContext {
     errorFileLimit: number;
     rootConfigurable: boolean;
     customFontFaces: FontFaceDesc[];
+    directionSelector: boolean;
 
     rendererApi: () => RendererApi;
     setRendererApi(api: RendererApi): void;

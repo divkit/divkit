@@ -58,6 +58,8 @@
 
     export let customFontFaces: FontFaceDesc[] = [];
 
+    export let directionSelector = false;
+
     export let uploadFile: (file: File) => Promise<string> = loadFileAsBase64;
 
     export let editorFabric: (opts: EditorOptions) => EditorInstance = editorFabricInternal;
@@ -177,6 +179,7 @@
         errorFileLimit,
         rootConfigurable,
         customFontFaces,
+        directionSelector,
 
         rendererApi() {
             return rendererApi;

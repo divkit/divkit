@@ -127,6 +127,8 @@ export class State {
         };
     });
 
+    direction = writable<'ltr' | 'rtl'>('ltr');
+
     private getTranslationKey: GetTranslationKey | undefined;
 
     constructor({

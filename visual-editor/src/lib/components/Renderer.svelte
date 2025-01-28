@@ -71,7 +71,8 @@
         locale,
         readOnly,
         tree,
-        sources
+        sources,
+        direction
     } = state;
 
     setRendererApi({
@@ -1084,7 +1085,12 @@
         instance = undefined;
     }
 
-    function rerender(divjson: DivJson, tanker: TankerMeta, locale: string, theme: string): void {
+    $: if ($direction && instance) {
+        instance.$destroy();
+        instance = undefined;
+    }
+
+    function rerender(divjson: DivJson, tanker: TankerMeta, locale: string, theme: string, direction: 'ltr' | 'rtl'): void {
         const updateTanker = () => {
             if (!globalVariablesController) {
                 return;
@@ -1177,6 +1183,8 @@
                     ['size_provider', SizeProvider],
                     ['lottie', Lottie],
                 ]),
+                //@ts-expect-error Wrong types
+                direction,
                 typefaceProvider(fontFamily) {
                     return customFontFaces.find(it => it.value === fontFamily)?.value || '';
                 },
@@ -1251,7 +1259,7 @@
     }
 
     $: if ($divjsonStore.object.card?.states?.[0]?.div && rootPreview && $locale !== undefined) {
-        rerender($divjsonStore.object, $tanker, $locale, theme);
+        rerender($divjsonStore.object, $tanker, $locale, theme, $direction);
     }
 
     let cancelCurrent = () => {};
