@@ -80,22 +80,26 @@ abstract class CompareScreenshotsTask : DefaultTask() {
 
             loadExplicitScreenshotMatchMap(referenceOverrides)
 
-            val successful = processNewScreenshots(
-                referenceOverrides,
-                screenshotDirFile,
-                deviceReferenceDir,
-                comparableCategories.get()
-            ) && processSkippedReferences(
-                screenshotDirFile,
-                deviceReferenceDir,
-                comparableCategories.get()
-            ) && processDifferentScreenshots(
-                referenceOverrides,
-                comparator,
-                screenshotDirFile,
-                deviceReferenceDir,
-                comparableCategories.get()
-            )
+            val successful = listOf(
+                processNewScreenshots(
+                    referenceOverrides,
+                    screenshotDirFile,
+                    deviceReferenceDir,
+                    comparableCategories.get()
+                ),
+                processSkippedReferences(
+                    screenshotDirFile,
+                    deviceReferenceDir,
+                    comparableCategories.get()
+                ),
+                processDifferentScreenshots(
+                    referenceOverrides,
+                    comparator,
+                    screenshotDirFile,
+                    deviceReferenceDir,
+                    comparableCategories.get()
+                )
+            ).all { it }
 
             if (!successful) {
                 throw GradleException("error processing images, see log messages above")
