@@ -57,6 +57,6 @@ class DivStateComparatorTest {
 
     private fun readDiv(resource: String, stateId: Long = 0) : DivData {
         val state = DivData.State(UnitTestData(DIV_STATE_DIR, resource).div, stateId)
-        return DivData("log_id", listOf(state))
+        return DivData(logId = "log_id", states = listOf(state))
     }
 }
