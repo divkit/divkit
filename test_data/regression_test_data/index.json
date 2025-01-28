@@ -2309,7 +2309,8 @@
     {
       "title": "Regex input filter",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
@@ -2334,7 +2335,8 @@
     {
       "title": "Expression input filter",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"

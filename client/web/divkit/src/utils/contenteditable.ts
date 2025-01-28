@@ -14,7 +14,7 @@ function countNodeChars(node: Node): number {
     return res;
 }
 
-export function calcSelectionOffset(container: HTMLElement): number {
+export function calcSelectionOffset(container: HTMLElement, type: 'start' | 'end'): number {
     try {
         let res = 0;
         const sel = window.getSelection();
@@ -24,11 +24,8 @@ export function calcSelectionOffset(container: HTMLElement): number {
         const range = sel.getRangeAt(0);
         let node: Node | undefined;
         if (range) {
-            if (!range.collapsed) {
-                return 0;
-            }
-            res += range.endOffset;
-            node = range.endContainer;
+            res += type === 'end' ? range.endOffset : range.startOffset;
+            node = type === 'end' ? range.endContainer : range.startContainer;
         }
 
         if (node instanceof HTMLElement) {
@@ -66,16 +63,13 @@ export function calcSelectionOffset(container: HTMLElement): number {
     }
 }
 
-export function setSelectionOffset(node: Node, offset: number): void {
+export function setSelectionOffset(node: Node, range: Range, type: 'start' | 'end', offset: number): void {
     if (node.nodeType === STRING_NODE_TYPE) {
         try {
-            const sel = window.getSelection();
-            if (sel) {
-                sel.removeAllRanges();
-                const range = document.createRange();
+            if (type === 'start') {
                 range.setStart(node, offset);
+            } else {
                 range.setEnd(node, offset);
-                sel.addRange(range);
             }
         } catch (err) {}
         return;
@@ -100,7 +94,7 @@ export function setSelectionOffset(node: Node, offset: number): void {
         const child = node.childNodes[i];
         const count = countNodeChars(child);
         if (offset <= count) {
-            setSelectionOffset(child, offset);
+            setSelectionOffset(child, range, type, offset);
             return;
         }
         offset -= count;

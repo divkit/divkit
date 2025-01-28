@@ -51,6 +51,18 @@ export interface InputValidatorExpression extends InputValidatorBase {
 
 export type InputValidator = InputValidatorRegex | InputValidatorExpression;
 
+export interface InputFilterRegex {
+    type: 'regex';
+    pattern: string;
+}
+
+export interface InputFilterExpression {
+    type: 'expression';
+    condition: BooleanInt;
+}
+
+export type InputFilter = InputFilterRegex | InputFilterExpression;
+
 export interface DivInputData extends DivBaseData {
     type: 'input';
 
@@ -59,6 +71,7 @@ export interface DivInputData extends DivBaseData {
     font_family?: string;
     font_weight?: FontWeight;
     font_weight_value?: number;
+    filters?: InputFilter[];
     text_color?: string;
     text_variable: string;
     text_alignment_horizontal?: AlignmentHorizontal;
