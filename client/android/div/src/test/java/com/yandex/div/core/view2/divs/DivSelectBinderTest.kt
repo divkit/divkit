@@ -6,6 +6,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.util.textString
 import com.yandex.div.internal.widget.SelectView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -103,9 +104,9 @@ class DivSelectBinderTest : DivBinderTest() {
     }
 
     private inline fun SelectView.assertTextApplied(expectedText: String, body: () -> Unit) {
-        Assert.assertNotEquals(text, expectedText)
+        Assert.assertNotEquals(textString, expectedText)
         body()
-        Assert.assertEquals(text, expectedText)
+        Assert.assertEquals(textString, expectedText)
     }
 
     companion object {
