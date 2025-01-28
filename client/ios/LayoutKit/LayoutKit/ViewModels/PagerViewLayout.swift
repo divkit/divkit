@@ -121,6 +121,10 @@ extension GalleryViewModel {
     fitting size: CGSize?,
     alignment: Alignment
   ) -> [PagerViewLayout.Page] {
+    guard let firstFrame = frames.first, let lastFrame = frames.last else {
+      return []
+    }
+
     let bound = (size ?? .zero).dimension(in: direction)
     let contentSize = contentSize(
       for: frames,
@@ -128,21 +132,27 @@ extension GalleryViewModel {
       pageIndex: 0
     ).dimension(in: direction)
 
-    var lastOrigin = 0.0
+    let firstFrameOrigin = firstFrame.origin.dimension(in: direction)
+    let lastFrameOffset = lastGap(
+      forSize: size,
+      elementMainAxisSize: lastFrame.size.dimension(in: direction)
+    )
+    var frameOrigin = 0.0
     let origins = frames.enumerated().map { index, frame -> CGFloat in
       guard index > 0 else { return 0.0 }
 
       if index == frames.count - 1, transformation?.style != .overlap {
-        return max(contentSize - bound, lastOrigin)
+        return max(contentSize - bound, frameOrigin)
       }
 
       let alignmentOffset = alignment.offset(
-        forAvailableSpace: bound,
-        contentSize: frame.size.dimension(in: direction)
+        availableSpace: bound,
+        contentSize: frame.size.dimension(in: direction),
+        firstFrameOffset: firstFrameOrigin,
+        lastFrameOffset: lastFrameOffset
       )
-
-      lastOrigin = frame.origin.dimension(in: direction) - alignmentOffset
-      return max(0, lastOrigin)
+      frameOrigin = frame.origin.dimension(in: direction) - alignmentOffset
+      return max(0, frameOrigin)
     }
 
     return (0..<frames.count).map { index in
@@ -237,28 +247,22 @@ extension GalleryViewModel {
       )
     }
 
-    let crossInsets = self.crossInsets(forSize: size)
+    let crossInsets = crossInsets(forSize: size)
     let maxElementHeight = size.height - crossInsets.sum
-
     let minY = crossInsets.leading
-    let gaps = self.gaps(forSize: size, elementMainAxisSize: pageWidths.first)
-
+    let gaps = gaps(forSize: size, elementMainAxisSize: pageWidths.first)
     var x = gaps[0]
-
     return zip3(items, pageWidths, gaps.dropFirst()).map { item, width, gap in
       let block = item.content
-
       let height = block.isVerticallyResizable ?
         maxElementHeight :
         block.heightOfVerticallyNonResizableBlock(forWidth: width)
-
       let frame = CGRect(
         x: x,
         y: item.crossAlignment.origin(of: height, minimum: minY, maximum: minY + maxElementHeight),
         width: width,
         height: height
       )
-
       x = frame.maxX + gap
       return frame
     }
@@ -343,6 +347,22 @@ extension Alignment {
       floor((minimum + maximum - dimension) / 2)
     case .trailing:
       maximum - dimension
+    }
+  }
+  
+  fileprivate func offset(
+    availableSpace: CGFloat,
+    contentSize: CGFloat,
+    firstFrameOffset: CGFloat,
+    lastFrameOffset: CGFloat
+  ) -> CGFloat {
+    switch self {
+    case .leading:
+      firstFrameOffset
+    case .center:
+      ((availableSpace - contentSize) * 0.5).roundedToScreenScale
+    case .trailing:
+      availableSpace - contentSize - lastFrameOffset
     }
   }
 }
