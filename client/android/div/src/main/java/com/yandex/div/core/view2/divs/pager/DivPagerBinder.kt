@@ -203,17 +203,8 @@ internal class DivPagerBinder @Inject constructor(
 
         val sizeProvider = when (val layoutMode = div.layoutMode) {
             is DivPagerLayoutMode.PageSize -> PercentagePageSizeProvider(layoutMode.value, resolver, parentSize)
-            is DivPagerLayoutMode.NeighbourPageSize -> {
-                NeighbourPageSizeProvider(
-                    layoutMode.value,
-                    resolver,
-                    metrics,
-                    parentSize,
-                    itemSpacing,
-                    infiniteScroll,
-                    paddings
-                )
-            }
+            is DivPagerLayoutMode.NeighbourPageSize ->
+                NeighbourPageSizeProvider(layoutMode.value, resolver, metrics, parentSize, itemSpacing)
             is DivPagerLayoutMode.PageContentSize -> WrapContentPageSizeProvider(recyclerView, isHorizontal)
         }
 

@@ -64,7 +64,7 @@
         },
         {
           "type": "text_page_match_parent_height",
-          "text": "Middle page\nneighbour_page_width = 10\npaddings = 40\nNeighbour pages visible part = 20"
+          "text": "Middle page\nneighbour_page_width = 10\npaddings = 40\nNeighbour pages visible part = 10"
         },
         {
           "type": "text_page_match_parent_height",
