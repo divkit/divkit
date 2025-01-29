@@ -173,6 +173,9 @@
             },
             "ios": {
                 "version_added": "30.31.0"
+            },
+            "web": {
+                "version_added": "31.0.0"
             }
         }
     }, {
@@ -206,6 +209,9 @@
             },
             "ios": {
                 "version_added": "30.32.0"
+            },
+            "web": {
+                "version_added": "31.0.0"
             }
         }
     }, {
