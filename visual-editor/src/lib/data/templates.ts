@@ -37,6 +37,7 @@ export const namedTemplates: Record<string, TemplateDescription> = {
                 name: 'props.preview',
                 prop: 'preview',
                 type: 'file',
+                generateFromLottieProperty: 'lottie_params.lottie_url',
                 subtype: 'image_preview',
                 enableSources: true
             }, {

@@ -83,6 +83,7 @@
         onHide = props.onHide;
         disabled = props.disabled || false;
         generateFromVideo = props.generateFromVideo;
+        generateFromLottie = props.generateFromLottie;
         showError = false;
         isShown = true;
         loadFileSize();
@@ -118,6 +119,7 @@
     let onHide: (() => void) | undefined;
     let disabled = false;
     let generateFromVideo: VideoSource[] | undefined;
+    let generateFromLottie: string | undefined;
     let dialog: ContextDialog | undefined;
 
     $: showFileSelect = !value.url;
@@ -258,34 +260,93 @@
     }
 
     function generatePreview(): void {
-        if (!generateFromVideo) {
-            return;
-        }
+        if (generateFromLottie) {
+            Promise.all([
+                import('../../data/lottieApi'),
+                fetch(generateFromLottie)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('Response is not ok');
+                        }
+                        return res.json();
+                    })
+            ])
+                .then(([{ loadAnimation }, json]) => {
+                    if (!json.w || !json.h) {
+                        throw new Error('Incorrect json');
+                    }
 
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-            return;
-        }
+                    const wrapper = document.createElement('div');
+                    wrapper.style.width = json.w + 'px';
+                    wrapper.style.height = json.h + 'px';
 
-        const video = document.createElement('video');
-        for (const item of generateFromVideo) {
-            if (
-                item.url && typeof item.url === 'string' &&
-                item.mime_type && typeof item.mime_type === 'string'
-            ) {
-                const source = document.createElement('source');
-                source.setAttribute('src', item.url);
-                source.setAttribute('type', item.mime_type);
-                video.appendChild(source);
+                    return new Promise((resolve, reject) => {
+                        const animItem = loadAnimation({
+                            container: wrapper,
+                            animationData: json,
+                            renderer: 'svg',
+                            loop: false,
+                            autoplay: false
+                        });
+                        const svg = wrapper.querySelector<SVGImageElement>('svg');
+                        if (!svg) {
+                            reject(new Error('Missing svg context'));
+                            return;
+                        }
+                        const svgUrl = new XMLSerializer().serializeToString(svg);
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        if (!ctx) {
+                            reject(new Error('Missing canvas context'));
+                            return;
+                        }
+                        canvas.width = json.w;
+                        canvas.height = json.h;
+                        const img = new Image();
+                        img.onload = () => {
+                            ctx.drawImage(img, 0, 0);
+                            value.url = canvas.toDataURL();
+                            resolve(value.url);
+                        };
+                        img.onerror = () => {
+                            reject(new Error('Failed to load an image'));
+                        };
+                        img.src = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(svgUrl);
+                        animItem.addEventListener('error', () => {
+                            reject(new Error('Lottie error'));
+                        });
+                    });
+                })
+                .catch(() => {
+                    // todo
+                });
+        } else if (generateFromVideo) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                return;
             }
+
+            const video = document.createElement('video');
+            for (const item of generateFromVideo) {
+                if (
+                    item.url && typeof item.url === 'string' &&
+                    item.mime_type && typeof item.mime_type === 'string'
+                ) {
+                    const source = document.createElement('source');
+                    source.setAttribute('src', item.url);
+                    source.setAttribute('type', item.mime_type);
+                    video.appendChild(source);
+                }
+            }
+            video.requestVideoFrameCallback((_now, meta) => {
+                canvas.width = meta.width;
+                canvas.height = meta.height;
+                ctx.drawImage(video, 0, 0);
+                value.url = canvas.toDataURL();
+            });
+            // todo on error
         }
-        video.requestVideoFrameCallback((_now, meta) => {
-            canvas.width = meta.width;
-            canvas.height = meta.height;
-            ctx.drawImage(video, 0, 0);
-            value.url = canvas.toDataURL();
-        });
     }
 </script>
 
@@ -376,10 +437,10 @@
                             </button>
                         {/if}
 
-                        {#if generateFromVideo && hasRequestVideoFrame}
+                        {#if generateFromVideo && hasRequestVideoFrame || generateFromLottie}
                             <button
                                 class="file2-dialog__text-inline-button file2-dialog__generate"
-                                title={$l10nString('file.generate_from_video')}
+                                title={generateFromVideo ? $l10nString('file.generate_from_video') : $l10nString('file.generate_from_lottie')}
                                 on:click={generatePreview}
                             >
                                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->

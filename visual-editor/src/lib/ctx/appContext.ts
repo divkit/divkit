@@ -86,6 +86,7 @@ export interface File2DialogShowProps {
     target: HTMLElement;
     disabled?: boolean;
     generateFromVideo?: VideoSource[];
+    generateFromLottie?: string;
     callback: File2DialogCallback;
     onHide?(): void;
 }
