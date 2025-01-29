@@ -149,7 +149,7 @@ object StartEnumValue : EnumValue("start"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
     Gallery.CrossContentAlignment,
-    Pager.ScrollAxisAlignment,
+    Pager.ItemAlignment,
     Text.Truncate
 
 @Generated
@@ -187,7 +187,7 @@ object CenterEnumValue : EnumValue("center"),
     ContentAlignmentHorizontal,
     ContentAlignmentVertical,
     Gallery.CrossContentAlignment,
-    Pager.ScrollAxisAlignment,
+    Pager.ItemAlignment,
     TextAlignmentVertical,
     Tooltip.Position
 
@@ -203,7 +203,7 @@ object EndEnumValue : EnumValue("end"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
     Gallery.CrossContentAlignment,
-    Pager.ScrollAxisAlignment,
+    Pager.ItemAlignment,
     Text.Truncate
 
 @Generated

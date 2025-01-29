@@ -44,6 +44,7 @@ data class Pager internal constructor(
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
+            crossAxisAlignment = additive.crossAxisAlignment ?: properties.crossAxisAlignment,
             defaultItem = additive.defaultItem ?: properties.defaultItem,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
@@ -115,6 +116,11 @@ data class Pager internal constructor(
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
         val columnSpan: Property<Int>?,
+        /**
+         * Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
+         * Default value: `start`.
+         */
+        val crossAxisAlignment: Property<ItemAlignment>?,
         /**
          * Ordinal number of the pager element that will be opened by default.
          * Default value: `0`.
@@ -202,10 +208,10 @@ data class Pager internal constructor(
          */
         val rowSpan: Property<Int>?,
         /**
-         * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+         * Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
          * Default value: `center`.
          */
-        val scrollAxisAlignment: Property<ScrollAxisAlignment>?,
+        val scrollAxisAlignment: Property<ItemAlignment>?,
         /**
          * List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
          */
@@ -272,6 +278,7 @@ data class Pager internal constructor(
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
+            result.tryPutProperty("cross_axis_alignment", crossAxisAlignment)
             result.tryPutProperty("default_item", defaultItem)
             result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
@@ -311,20 +318,18 @@ data class Pager internal constructor(
     }
 
     /**
+     * Possible values: [start], [center], [end].
+     */
+    @Generated
+    sealed interface ItemAlignment
+
+    /**
      * Pager orientation.
      * 
      * Possible values: [horizontal], [vertical].
      */
     @Generated
     sealed interface Orientation
-
-    /**
-     * Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
-     * 
-     * Possible values: [start], [center], [end].
-     */
-    @Generated
-    sealed interface ScrollAxisAlignment
 }
 
 /**
@@ -336,6 +341,7 @@ data class Pager internal constructor(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
@@ -356,7 +362,7 @@ data class Pager internal constructor(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -382,6 +388,7 @@ fun DivScope.pager(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    crossAxisAlignment: Pager.ItemAlignment? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
@@ -402,7 +409,7 @@ fun DivScope.pager(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
-    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
+    scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -426,6 +433,7 @@ fun DivScope.pager(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        crossAxisAlignment = valueOrNull(crossAxisAlignment),
         defaultItem = valueOrNull(defaultItem),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
@@ -472,6 +480,7 @@ fun DivScope.pager(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
@@ -492,7 +501,7 @@ fun DivScope.pager(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -518,6 +527,7 @@ fun DivScope.pagerProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    crossAxisAlignment: Pager.ItemAlignment? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
@@ -538,7 +548,7 @@ fun DivScope.pagerProps(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
-    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
+    scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -561,6 +571,7 @@ fun DivScope.pagerProps(
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
+    crossAxisAlignment = valueOrNull(crossAxisAlignment),
     defaultItem = valueOrNull(defaultItem),
     disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
@@ -606,6 +617,7 @@ fun DivScope.pagerProps(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
@@ -626,7 +638,7 @@ fun DivScope.pagerProps(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -652,6 +664,7 @@ fun TemplateScope.pagerRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    crossAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
@@ -672,7 +685,7 @@ fun TemplateScope.pagerRefs(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
-    scrollAxisAlignment: ReferenceProperty<Pager.ScrollAxisAlignment>? = null,
+    scrollAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -695,6 +708,7 @@ fun TemplateScope.pagerRefs(
     background = background,
     border = border,
     columnSpan = columnSpan,
+    crossAxisAlignment = crossAxisAlignment,
     defaultItem = defaultItem,
     disappearActions = disappearActions,
     extensions = extensions,
@@ -740,6 +754,7 @@ fun TemplateScope.pagerRefs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
@@ -760,7 +775,7 @@ fun TemplateScope.pagerRefs(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -786,6 +801,7 @@ fun Pager.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    crossAxisAlignment: Pager.ItemAlignment? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
@@ -806,7 +822,7 @@ fun Pager.override(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
-    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
+    scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -830,6 +846,7 @@ fun Pager.override(
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
+        crossAxisAlignment = valueOrNull(crossAxisAlignment) ?: properties.crossAxisAlignment,
         defaultItem = valueOrNull(defaultItem) ?: properties.defaultItem,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
@@ -876,6 +893,7 @@ fun Pager.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
@@ -896,7 +914,7 @@ fun Pager.override(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -922,6 +940,7 @@ fun Pager.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    crossAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
@@ -942,7 +961,7 @@ fun Pager.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
-    scrollAxisAlignment: ReferenceProperty<Pager.ScrollAxisAlignment>? = null,
+    scrollAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -966,6 +985,7 @@ fun Pager.defer(
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        crossAxisAlignment = crossAxisAlignment ?: properties.crossAxisAlignment,
         defaultItem = defaultItem ?: properties.defaultItem,
         disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
@@ -1008,13 +1028,14 @@ fun Pager.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param visibility Element visibility.
  */
 @Generated
@@ -1024,13 +1045,14 @@ fun Pager.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    crossAxisAlignment: ExpressionProperty<Pager.ItemAlignment>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     infiniteScroll: ExpressionProperty<Boolean>? = null,
     orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
-    scrollAxisAlignment: ExpressionProperty<Pager.ScrollAxisAlignment>? = null,
+    scrollAxisAlignment: ExpressionProperty<Pager.ItemAlignment>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Pager = Pager(
     Pager.Properties(
@@ -1042,6 +1064,7 @@ fun Pager.evaluate(
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        crossAxisAlignment = crossAxisAlignment ?: properties.crossAxisAlignment,
         defaultItem = defaultItem ?: properties.defaultItem,
         disappearActions = properties.disappearActions,
         extensions = properties.extensions,
@@ -1088,6 +1111,7 @@ fun Pager.evaluate(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
@@ -1108,7 +1132,7 @@ fun Pager.evaluate(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1134,6 +1158,7 @@ fun Component<Pager>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    crossAxisAlignment: Pager.ItemAlignment? = null,
     defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
@@ -1154,7 +1179,7 @@ fun Component<Pager>.override(
     restrictParentScroll: Boolean? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
-    scrollAxisAlignment: Pager.ScrollAxisAlignment? = null,
+    scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -1179,6 +1204,7 @@ fun Component<Pager>.override(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        crossAxisAlignment = valueOrNull(crossAxisAlignment),
         defaultItem = valueOrNull(defaultItem),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
@@ -1225,6 +1251,7 @@ fun Component<Pager>.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
@@ -1245,7 +1272,7 @@ fun Component<Pager>.override(
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1271,6 +1298,7 @@ fun Component<Pager>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    crossAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
@@ -1291,7 +1319,7 @@ fun Component<Pager>.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
-    scrollAxisAlignment: ReferenceProperty<Pager.ScrollAxisAlignment>? = null,
+    scrollAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1316,6 +1344,7 @@ fun Component<Pager>.defer(
         background = background,
         border = border,
         columnSpan = columnSpan,
+        crossAxisAlignment = crossAxisAlignment,
         defaultItem = defaultItem,
         disappearActions = disappearActions,
         extensions = extensions,
@@ -1358,13 +1387,14 @@ fun Component<Pager>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param scrollAxisAlignment Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
+ * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param visibility Element visibility.
  */
 @Generated
@@ -1374,13 +1404,14 @@ fun Component<Pager>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    crossAxisAlignment: ExpressionProperty<Pager.ItemAlignment>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     infiniteScroll: ExpressionProperty<Boolean>? = null,
     orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
-    scrollAxisAlignment: ExpressionProperty<Pager.ScrollAxisAlignment>? = null,
+    scrollAxisAlignment: ExpressionProperty<Pager.ItemAlignment>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Pager> = Component(
     template = template,
@@ -1393,6 +1424,7 @@ fun Component<Pager>.evaluate(
         background = null,
         border = null,
         columnSpan = columnSpan,
+        crossAxisAlignment = crossAxisAlignment,
         defaultItem = defaultItem,
         disappearActions = null,
         extensions = null,
@@ -1440,7 +1472,7 @@ operator fun Component<Pager>.plus(additive: Pager.Properties): Component<Pager>
 fun Pager.asList() = listOf(this)
 
 @Generated
-fun Pager.Orientation.asList() = listOf(this)
+fun Pager.ItemAlignment.asList() = listOf(this)
 
 @Generated
-fun Pager.ScrollAxisAlignment.asList() = listOf(this)
+fun Pager.Orientation.asList() = listOf(this)
