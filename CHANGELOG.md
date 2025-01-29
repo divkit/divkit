@@ -1,3 +1,23 @@
+## 31.1.0
+
+# Android Client:
+* Supported `cross_axis_alignment` in `pager`.
+
+# iOS Client:
+* Added `download` action handler.
+* Fixed `pager` paddings.
+* Fixed a bug where short taps on a button did not animate.
+* When rendering grid view, the min_size property for height is now respected.
+
+# Web Client:
+* Added support for switching states in the `tooltip`.
+* Added support for the `filters` property in the `input` component.
+* Added support for the functions `tan`, `asin`, `acos`.
+* Fixed types for the `direction` property.
+* The `focus_element` action has been changed to move the cursor to the end of the `input` component (to match the behavior of native clients).
+* The requirement for a unique `id` for visibility change transitions has been removed (this change corresponds to the current behavior of the Android client).
+
+
 ## 31.0.0
 
 # Android Client:
