@@ -145,6 +145,11 @@ internal class DivPagerBinder @Inject constructor(
             }
         })
 
+        view.addSubscription(div.crossAxisAlignment.observeAndGet(resolver) {
+            adapter.crossAxisAlignment = it
+            view.requestLayout()
+        })
+
         view.bindItemBuilder(context, div)
         if (a11yEnabled) {
             view.enableAccessibility()
