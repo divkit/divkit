@@ -6,7 +6,7 @@ public final class DivTriggersStorage {
   private final class Item {
     final class Trigger {
       let divTrigger: DivTrigger
-      var condition: Bool?
+      var condition = false
 
       init(_ divTrigger: DivTrigger) {
         self.divTrigger = divTrigger
@@ -63,26 +63,32 @@ public final class DivTriggersStorage {
     path: UIElementPath,
     triggers: [DivTrigger]
   ) {
-    lock.withLock {
-      guard triggersByPath[path] == nil else {
-        return
+    let item = lock.withLock {
+      if let item = triggersByPath[path] {
+        return item
       }
 
       let newItem = Item(triggers.map { Item.Trigger($0) })
       if !newItem.triggers.isEmpty {
         triggersByPath[path] = newItem
+        disposablesByPath[path] = variablesStorage
+          .getNearestStorage(path)
+          .addObserver { [weak self] event in
+            self?.runActions(
+              path: path,
+              item: newItem,
+              changedVariablesNames: event.changedVariables
+            )
+          }
       }
+      return newItem
     }
-  }
 
-  func initializeIfNeeded(cardId: DivCardID) {
-    lock.withLock {
-      for (path, item) in triggersByPath {
-        if path.cardId == cardId {
-          initialize(path: path, item: item)
-        }
-      }
-    }
+    runActions(
+      path: path,
+      item: item,
+      changedVariablesNames: nil
+    )
   }
 
   func reset() {
@@ -142,51 +148,13 @@ public final class DivTriggersStorage {
     }
   }
 
-  private func initialize(path: UIElementPath, item: Item) {
-    if disposablesByPath[path] == nil {
-      disposablesByPath[path] = variablesStorage
-        .getNearestStorage(path)
-        .addObserver { [weak self] event in
-          self?.runActions(
-            path: path,
-            item: item,
-            changedVariablesNames: event.changedVariables
-          )
-        }
-    }
-
-    let nonInitializedTriggers = item.triggers
-      .filter { $0.condition == nil }
-
-    runActions(
-      path: path,
-      active: item.active,
-      triggers: nonInitializedTriggers,
-      changedVariablesNames: nil
-    )
-  }
-
   private func runActions(
     path: UIElementPath,
     item: Item,
     changedVariablesNames: Set<DivVariableName>?
   ) {
-    runActions(
-      path: path,
-      active: item.active,
-      triggers: item.triggers,
-      changedVariablesNames: changedVariablesNames
-    )
-  }
-
-  private func runActions(
-    path: UIElementPath,
-    active: Bool,
-    triggers: [Item.Trigger],
-    changedVariablesNames: Set<DivVariableName>?
-  ) {
-    guard active else { return }
-    for trigger in triggers {
+    guard item.active else { return }
+    for trigger in item.triggers {
       let triggerVariablesNames = trigger.divTrigger.condition.variablesNames
       if triggerVariablesNames.isEmpty {
         // conditions without variables is considered to be invalid
@@ -197,7 +165,7 @@ public final class DivTriggersStorage {
         continue
       }
 
-      let oldCondition = trigger.condition ?? false
+      let oldCondition = trigger.condition
       let expressionResolver = ExpressionResolver(
         path: path,
         variablesStorage: variablesStorage,
@@ -205,12 +173,11 @@ public final class DivTriggersStorage {
         persistentValuesStorage: persistentValuesStorage,
         reporter: reporter
       )
-      let newCondition = trigger.divTrigger.resolveCondition(expressionResolver) ?? false
-      trigger.condition = newCondition
-      if !newCondition {
+      trigger.condition = trigger.divTrigger.resolveCondition(expressionResolver) ?? false
+      if !trigger.condition {
         continue
       }
-      if changedVariablesNames == nil, newCondition, oldCondition {
+      if changedVariablesNames == nil, trigger.condition, oldCondition {
         continue
       }
       if trigger.divTrigger.resolveMode(expressionResolver) == .onCondition, oldCondition {

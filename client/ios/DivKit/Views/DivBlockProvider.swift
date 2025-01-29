@@ -172,11 +172,9 @@ final class DivBlockProvider {
       self.divData = nil
       return
     }
-
     if !id.isTooltip {
       divKitComponents.setCardData(divData: divData, cardId: cardId)
     }
-
     self.divData = divData
   }
 
@@ -227,7 +225,6 @@ final class DivBlockProvider {
       for error in context.errorsStorage.errors {
         divKitComponents.reporter.reportError(cardId: cardId, error: error)
       }
-      divKitComponents.triggersStorage.initializeIfNeeded(cardId: cardId)
     } catch {
       divKitComponents.reporter.reportError(
         cardId: cardId,
