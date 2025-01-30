@@ -57,6 +57,7 @@
 * Removed custom XML attributes of `AspectImageView`.
 * Set cursor at the last position on focus action.
 * Supported `layout_mode` `wrap_content` in `pager`.
+* Fixed combination of line heights set for whole text and specific ranges.
 
 # iOS Client:
 * Breaking change. From now the default tooltip width is `match_parent` (previously was `wrap_content` which did not match the default `div-base` behavior).

@@ -4,7 +4,8 @@ import android.graphics.Paint
 import android.text.Spanned
 import android.text.style.LineHeightSpan
 import androidx.annotation.Px
-import kotlin.math.roundToInt
+import androidx.core.text.getSpans
+import kotlin.math.max
 
 private const val NOT_SET = Int.MAX_VALUE
 
@@ -13,9 +14,8 @@ private const val NOT_SET = Int.MAX_VALUE
  * Adds top offset to a first line of range text that span belongs to.
  */
 internal class LineHeightWithTopOffsetSpan(
-    @field:Px private val topOffset: Int,
-    @field:Px private val lineHeight: Int,
-    @field:Px private val textLineHeight: Int = 0,
+    @Px private val topOffset: Int,
+    @Px private val lineHeight: Int,
     private val topOffsetStart: Int,
     private val topOffsetEnd: Int,
 ) : LineHeightSpan {
@@ -38,19 +38,19 @@ internal class LineHeightWithTopOffsetSpan(
         val spanStart = spanned.getSpanStart(this)
         val spanEnd = spanned.getSpanEnd(this)
 
+        if (start > spanEnd || spanStart > end) return
+
         if (fontMetricsSaved) {
             restoreFontMetrics(fm)
-        } else if (start >= spanStart) {
+        } else {
             fontMetricsSaved = true
             saveFontMetrics(fm)
         }
-        if (start <= spanEnd && spanStart <= end) {  // segment intersection
-            if (start >= spanStart && end <= spanEnd) {
-                applyLineHeight(fm)
-            } else if (lineHeight > textLineHeight) {
-                applyLineHeight(fm)
-            }
-        }
+
+        val maxLineHeight = spanned.getSpans<LineHeightWithTopOffsetSpan>(start, end)
+            .fold(lineHeight) { result, span -> max(result, span.lineHeight) }
+        applyLineHeight(maxLineHeight, fm)
+
         if (topOffsetStart == spanStart && topOffsetStart in start..end) {
             applyTopOffset(fm)
         }
@@ -60,7 +60,7 @@ internal class LineHeightWithTopOffsetSpan(
         }
     }
 
-    private fun applyLineHeight(fm: Paint.FontMetricsInt) {
+    private fun applyLineHeight(lineHeight: Int, fm: Paint.FontMetricsInt) {
         if (lineHeight <= 0) {
             return
         }
@@ -69,9 +69,14 @@ internal class LineHeightWithTopOffsetSpan(
         val topAscent = fm.top - fm.ascent
         val bottomDescent = fm.bottom - fm.descent
         if (originLineHeight >= 0) {
-            val ratio: Float = targetLineHeight * 1.0f / originLineHeight
-            fm.descent = (fm.descent * ratio).roundToInt()
-            fm.ascent = fm.descent - targetLineHeight
+            val extraHeight = targetLineHeight - originLineHeight
+            if (extraHeight < 0) {
+                fm.ascent = (fm.ascent - extraHeight / 2).coerceAtMost(0)
+                fm.descent = (fm.ascent + targetLineHeight).coerceAtLeast(0)
+            } else {
+                fm.descent = (fm.descent + extraHeight / 2).coerceAtLeast(0)
+                fm.ascent = (fm.descent - targetLineHeight).coerceAtMost(0)
+            }
             fm.top = fm.ascent + topAscent
             fm.bottom = fm.descent + bottomDescent
         }

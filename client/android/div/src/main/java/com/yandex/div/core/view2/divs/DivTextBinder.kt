@@ -85,7 +85,6 @@ internal class DivTextBinder @Inject constructor(
         view.bindTextAlignment(div, oldDiv, expressionResolver)
         view.bindFontSize(div, oldDiv, expressionResolver)
         view.bindFontFeatureSettings(div, oldDiv, expressionResolver)
-        view.bindLineHeight(context, div, oldDiv, expressionResolver)
         view.bindTextColor(div, oldDiv, expressionResolver)
         view.bindUnderline(div, oldDiv, expressionResolver)
         view.bindStrikethrough(div, oldDiv, expressionResolver)
@@ -307,37 +306,6 @@ internal class DivTextBinder @Inject constructor(
         fontWeightValue: Long?
     ) {
         typeface = typefaceResolver.getTypeface(fontFamily, fontWeight, fontWeightValue)
-    }
-
-    //endregion
-
-    //region Line Height
-
-    private fun DivLineHeightTextView.bindLineHeight(
-        context: BindingContext,
-        newDiv: DivText,
-        oldDiv: DivText?,
-        resolver: ExpressionResolver,
-    ) {
-        if (newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight)
-            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)) {
-            return
-        }
-
-        applyLineHeight(newDiv.lineHeight?.evaluate(resolver), newDiv.fontSizeUnit.evaluate(resolver))
-
-        if (newDiv.lineHeight.isConstantOrNull() && newDiv.fontSizeUnit.isConstant()) {
-            return
-        }
-
-        val callback = { _: Any ->
-            applyLineHeight(newDiv.lineHeight?.evaluate(resolver), newDiv.fontSizeUnit.evaluate(resolver))
-            if (newDiv.ranges != null || newDiv.images != null) {
-                applyRichText(context, newDiv)
-            }
-        }
-        addSubscription(newDiv.lineHeight?.observe(resolver, callback))
-        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
     }
 
     //endregion
@@ -669,11 +637,13 @@ internal class DivTextBinder @Inject constructor(
         oldDiv: DivText?,
     ) {
         if (newDiv.ranges == null && newDiv.images == null) {
-            bindPlainText(newDiv, oldDiv, bindingContext.expressionResolver)
+            bindPlainText(bindingContext, newDiv, oldDiv)
         } else {
             bindRichText(bindingContext, newDiv)
         }
     }
+
+    //region Text Color
 
     private fun DivLineHeightTextView.bindRichText(
         bindingContext: BindingContext,
@@ -737,31 +707,41 @@ internal class DivTextBinder @Inject constructor(
      * to bind [DivText.text] as quick as possible.
      */
     private fun DivLineHeightTextView.bindPlainText(
+        bindingContext: BindingContext,
         newDiv: DivText,
-        oldDiv: DivText?,
-        resolver: ExpressionResolver
+        oldDiv: DivText?
     ) {
-        if (newDiv.text.equalsToConstant(oldDiv?.text)) {
+        if (newDiv.text.equalsToConstant(oldDiv?.text)
+            && newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight)
+            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)) {
             return
         }
 
-        applyPlainText(newDiv.text.evaluate(resolver))
-        applyHyphenation(newDiv.text.evaluate(resolver))
+        val resolver = bindingContext.expressionResolver
 
-        if (newDiv.text.isConstant() && newDiv.text.isConstant()) {
+        val text = newDiv.text.evaluate(resolver)
+        applyPlainText(bindingContext, newDiv)
+        applyHyphenation(text)
+
+        if (newDiv.text.isConstant()
+            && newDiv.lineHeight.isConstantOrNull()
+            && newDiv.fontSizeUnit.isConstantOrNull()) {
             return
         }
 
-        addSubscription(
-            newDiv.text.observe(resolver) { text ->
-                applyPlainText(text)
-                applyHyphenation(text)
-            }
-        )
+        val callback = { _: Any ->
+            val newText = newDiv.text.evaluate(resolver)
+            applyPlainText(bindingContext, newDiv)
+            applyHyphenation(newText)
+        }
+
+        addSubscription(newDiv.text.observe(resolver, callback))
+        addSubscription(newDiv.lineHeight?.observe(resolver, callback))
+        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
     }
 
-    private fun TextView.applyPlainText(text: String) {
-        this.text = text
+    private fun TextView.applyPlainText(bindingContext: BindingContext, divText: DivText) {
+        this.text = spannedTextBuilder.buildPlainText(bindingContext, this, divText)
     }
 
     private fun TextView.applyHyphenation(text: String) {
@@ -879,14 +859,11 @@ internal class DivTextBinder @Inject constructor(
             return
         }
 
-        spannedTextBuilder.buildText(
+        spannedTextBuilder.buildEllipsis(
             bindingContext = bindingContext,
             textView = this,
             divText = newDiv,
-            text = ellipsis.text.evaluate(bindingContext.expressionResolver),
-            ranges = ellipsis.ranges,
-            images = ellipsis.images,
-            actions = ellipsis.actions
+            ellipsis
         ) { ellipsis ->
             this.ellipsis = ellipsis
         }
