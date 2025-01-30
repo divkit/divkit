@@ -1,5 +1,5 @@
 import { derived, get, writable } from 'svelte/store';
-import type { DivJson } from '@divkitframework/divkit/typings/common';
+import type { DivJson, VariableTrigger } from '@divkitframework/divkit/typings/common';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import { parseExpression, walkExpression } from '@divkitframework/divkit/client-devtool';
@@ -28,6 +28,7 @@ import { RemoveLeafCommand } from './commands/removeLeaf';
 export class State {
     palette = writable<PaletteItem[]>([]);
     customVariables = writable<Variable[]>([]);
+    variableTriggers = writable<VariableTrigger[]>();
     timers = writable<Timer[]>([]);
     tanker = writable<TankerMeta>({});
     rootLogId = writable('div2_sample_card');
@@ -360,6 +361,8 @@ export class State {
             this.customVariables.set([]);
         }
 
+        this.variableTriggers.set(Array.isArray(json.card?.variable_triggers) ? json.card.variable_triggers : []);
+
         if (Array.isArray(json.card?.timers)) {
             this.timers.set((json.card.timers as JsonTimer[]).filter(it => it.id).map(it => {
                 return {
@@ -502,6 +505,13 @@ export class State {
             card.variables = variables;
         } else {
             delete card.variables;
+        }
+
+        const triggers = get(this.variableTriggers);
+        if (triggers.length) {
+            card.variable_triggers = triggers;
+        } else {
+            delete card.variable_triggers;
         }
 
         const timersList = get(this.timers);
