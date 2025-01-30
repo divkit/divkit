@@ -165,7 +165,7 @@ public final class DivKitComponents {
       reporter: reporter,
       idToPath: idToPath,
       animatorController: animatorController,
-      flags: .default
+      flags: flagsInfo
     )
 
     triggersStorage = DivTriggersStorage(
