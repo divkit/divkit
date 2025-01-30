@@ -96,7 +96,7 @@ class Div2Context @MainThread private constructor(
         configuration: DivConfiguration,
         @StyleRes themeId: Int,
         mask: Int,
-        marker: DefaultConstructorMarker
+        marker: DefaultConstructorMarker?
     ) : this(baseContext, configuration, themeId, lifecycleOwner = null)
 
     init {
