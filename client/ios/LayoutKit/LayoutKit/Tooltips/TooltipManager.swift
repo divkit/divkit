@@ -66,6 +66,8 @@ public class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
     public let id: String
     public let duration: TimeInterval
+    public let closeByTapOutside: Bool
+    public let tapOutsideActions: [UserInterfaceAction]
     public let view: VisibleBoundsTrackingView
   }
 
@@ -108,6 +110,8 @@ public class DefaultTooltipManager: TooltipManager {
       ).first else { return }
       let view = TooltipContainerView(
         tooltipView: tooltip.view,
+        closeByTapOutside: tooltip.closeByTapOutside,
+        tapOutsideActions: tooltip.tapOutsideActions,
         handleAction: handleAction,
         onCloseAction: { [weak self] in
           self?.showingTooltips.removeValue(forKey: tooltip.id)
@@ -209,6 +213,8 @@ extension TooltipAnchorView {
     return DefaultTooltipManager.Tooltip(
       id: tooltip.id,
       duration: tooltip.duration,
+      closeByTapOutside: tooltip.closeByTapOutside,
+      tapOutsideActions: tooltip.tapOutsideActions,
       view: tooltipView
     )
   }

@@ -2500,6 +2500,30 @@
       "file": "tooltips/tooltips.json"
     },
     {
+      "title": "Tooltips with tap outside properties",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap on first button",
+        "Try to tap outside of tooltip",
+        "Close tooltip by cross button",
+        "Tap on second button",
+        "Tap outside of tooltip"
+      ],
+      "expected_results": [
+        "First tooltip is shown",
+        "First tooltip isn't closed by tapping outside of the tooltip",
+        "First tooltip is closed",
+        "Second tooltip is shown",
+        "Label text changed to `Outside actions called: true`, label text color is green"
+      ],
+      "file": "tooltips-with-tap-outside-properties.json"
+    },
+    {
       "title": "Tooltip on different positions",
       "platforms": [
         "ios"

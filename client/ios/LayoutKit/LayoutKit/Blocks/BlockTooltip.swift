@@ -28,6 +28,8 @@ public struct BlockTooltip: Equatable {
   public let position: Position
   public let useLegacyWidth: Bool
   public let tooltipViewFactory: TooltipViewFactory?
+  public let closeByTapOutside: Bool
+  public let tapOutsideActions: [UserInterfaceAction]
 
   public init(
     id: String,
@@ -36,7 +38,9 @@ public struct BlockTooltip: Equatable {
     offset: CGPoint,
     position: BlockTooltip.Position,
     useLegacyWidth: Bool = true,
-    tooltipViewFactory: TooltipViewFactory? = nil
+    tooltipViewFactory: TooltipViewFactory? = nil,
+    closeByTapOutside: Bool = true,
+    tapOutsideActions: [UserInterfaceAction] = []
   ) {
     self.id = id
     self.block = block
@@ -45,6 +49,8 @@ public struct BlockTooltip: Equatable {
     self.position = position
     self.useLegacyWidth = useLegacyWidth
     self.tooltipViewFactory = tooltipViewFactory
+    self.closeByTapOutside = closeByTapOutside
+    self.tapOutsideActions = tapOutsideActions
   }
 
   public static func ==(lhs: BlockTooltip, rhs: BlockTooltip) -> Bool {
@@ -53,6 +59,8 @@ public struct BlockTooltip: Equatable {
       lhs.offset == rhs.offset &&
       lhs.position == rhs.position &&
       lhs.useLegacyWidth == rhs.useLegacyWidth &&
-      lhs.block.equals(rhs.block)
+      lhs.block.equals(rhs.block) &&
+      lhs.closeByTapOutside == rhs.closeByTapOutside &&
+      lhs.tapOutsideActions == rhs.tapOutsideActions
   }
 }
