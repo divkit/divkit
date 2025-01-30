@@ -5,6 +5,7 @@
 
 # iOS Client:
 * Added `download` action handler.
+* Fixed `DivFlagsInfo.useUrlHandlerForVisibilityActions` behavior.
 * Fixed `pager` paddings.
 * Fixed a bug where short taps on a button did not animate.
 * When rendering grid view, the min_size property for height is now respected.
