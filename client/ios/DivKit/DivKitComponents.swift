@@ -174,6 +174,7 @@ public final class DivKitComponents {
       blockStateStorage: blockStateStorage,
       actionHandler: actionHandler,
       persistentValuesStorage: persistentValuesStorage,
+      flagsInfo: flagsInfo,
       reporter: reporter
     )
 

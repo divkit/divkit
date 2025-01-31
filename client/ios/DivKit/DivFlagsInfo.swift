@@ -30,17 +30,29 @@ public struct DivFlagsInfo {
   /// streched to the full width of the window.
   public let useTooltipLegacyWidth: Bool
 
+  /// Allows the usage of delayed trigger initialization in case the target div requires
+  /// existence of nested objects (timers, tooltips, etc)
+  ///
+  /// `true` - `DivTriggerStorage.set` call initializes the triggers automatically,
+  /// however this is **legacy** behaviour
+  ///
+  /// `false` - `DivTriggerStorage` requires you to call `set` and `initialize`
+  /// methods before expecing it's correct functioning
+  public let initializeTriggerOnSet: Bool
+
   /// Creates an instance of `DivFlagsInfo`.
   public init(
     useUrlHandlerForVisibilityActions: Bool = false,
     imageBlurPreferMetal: Bool = true,
     imageTintPreferMetal: Bool = true,
-    useTooltipLegacyWidth: Bool = false
+    useTooltipLegacyWidth: Bool = false,
+    initializeTriggerOnSet: Bool = true
   ) {
     self.useUrlHandlerForVisibilityActions = useUrlHandlerForVisibilityActions
     self.imageBlurPreferMetal = imageBlurPreferMetal
     self.imageTintPreferMetal = imageTintPreferMetal
     self.useTooltipLegacyWidth = useTooltipLegacyWidth
+    self.initializeTriggerOnSet = initializeTriggerOnSet
   }
 
   /// The default instance of `DivFlagsInfo`.

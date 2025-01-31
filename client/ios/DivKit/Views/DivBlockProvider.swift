@@ -225,6 +225,9 @@ final class DivBlockProvider {
       for error in context.errorsStorage.errors {
         divKitComponents.reporter.reportError(cardId: cardId, error: error)
       }
+      if !divKitComponents.flagsInfo.initializeTriggerOnSet {
+        divKitComponents.triggersStorage.initialize(cardId: cardId)
+      }
     } catch {
       divKitComponents.reporter.reportError(
         cardId: cardId,
