@@ -45,10 +45,16 @@ internal class DivPagerView @JvmOverloads constructor(
             field = value
         }
 
-    internal var changePageCallbackForOffScreenPages: ViewPager2.OnPageChangeCallback? = null
+    internal var changePageCallbackForOffScreenPages: OffScreenPagesUpdateCallback? = null
         set(value) {
-            field?.let(viewPager::unregisterOnPageChangeCallback)
-            value?.let(viewPager::registerOnPageChangeCallback)
+            field?.let {
+                viewPager.unregisterOnPageChangeCallback(it)
+                getRecyclerView()?.removeOnLayoutChangeListener(it)
+            }
+            value?.let {
+                viewPager.registerOnPageChangeCallback(it)
+                getRecyclerView()?.addOnLayoutChangeListener(it)
+            }
             field = value
         }
 
@@ -158,5 +164,12 @@ internal class DivPagerView @JvmOverloads constructor(
 
     internal fun interface OnItemsUpdatedCallback {
         fun onItemsUpdated()
+    }
+
+    internal abstract class OffScreenPagesUpdateCallback : ViewPager2.OnPageChangeCallback(), OnLayoutChangeListener {
+        override fun onLayoutChange(
+            v: View?, left: Int, top: Int, right: Int, bottom: Int,
+            oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
+        ) = Unit
     }
 }
