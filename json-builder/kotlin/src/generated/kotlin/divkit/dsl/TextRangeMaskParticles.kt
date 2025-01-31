@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * A mask to hide text (spoiler) that looks like randomly distributed particles (telegram alike).
+ * A mask to hide text (spoiler). Looks like randomly distributed particles, same as in Telegram.
  * 
  * Can be created using the method [textRangeMaskParticles].
  * 
@@ -46,26 +46,26 @@ data class TextRangeMaskParticles internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Color of particles on the mask.
+         * The color of particles on the mask.
          */
         val color: Property<Color>?,
         /**
-         * Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.
+         * The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
          * Default value: `0.8`.
          */
         val density: Property<Double>?,
         /**
-         * Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).
+         * Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
          * Default value: `false`.
          */
         val isAnimated: Property<Boolean>?,
         /**
-         * Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+         * Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
          * Default value: `true`.
          */
         val isEnabled: Property<Boolean>?,
         /**
-         * Size of a single particle on a mask.
+         * The size of a single particle on the mask.
          * Default value: `{"type":"fixed","value":1}`.
          */
         val particleSize: Property<FixedSize>?,
@@ -84,11 +84,11 @@ data class TextRangeMaskParticles internal constructor(
 }
 
 /**
- * @param color Color of particles on the mask.
- * @param density Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.
- * @param isAnimated Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
- * @param particleSize Size of a single particle on a mask.
+ * @param color The color of particles on the mask.
+ * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
+ * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ * @param particleSize The size of a single particle on the mask.
  */
 @Generated
 fun DivScope.textRangeMaskParticles(
@@ -109,11 +109,11 @@ fun DivScope.textRangeMaskParticles(
 )
 
 /**
- * @param color Color of particles on the mask.
- * @param density Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.
- * @param isAnimated Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
- * @param particleSize Size of a single particle on a mask.
+ * @param color The color of particles on the mask.
+ * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
+ * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ * @param particleSize The size of a single particle on the mask.
  */
 @Generated
 fun DivScope.textRangeMaskParticlesProps(
@@ -132,11 +132,11 @@ fun DivScope.textRangeMaskParticlesProps(
 )
 
 /**
- * @param color Color of particles on the mask.
- * @param density Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.
- * @param isAnimated Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
- * @param particleSize Size of a single particle on a mask.
+ * @param color The color of particles on the mask.
+ * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
+ * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ * @param particleSize The size of a single particle on the mask.
  */
 @Generated
 fun TemplateScope.textRangeMaskParticlesRefs(
@@ -155,11 +155,11 @@ fun TemplateScope.textRangeMaskParticlesRefs(
 )
 
 /**
- * @param color Color of particles on the mask.
- * @param density Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.
- * @param isAnimated Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
- * @param particleSize Size of a single particle on a mask.
+ * @param color The color of particles on the mask.
+ * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
+ * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ * @param particleSize The size of a single particle on the mask.
  */
 @Generated
 fun TextRangeMaskParticles.override(
@@ -180,11 +180,11 @@ fun TextRangeMaskParticles.override(
 )
 
 /**
- * @param color Color of particles on the mask.
- * @param density Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.
- * @param isAnimated Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
- * @param particleSize Size of a single particle on a mask.
+ * @param color The color of particles on the mask.
+ * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
+ * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ * @param particleSize The size of a single particle on the mask.
  */
 @Generated
 fun TextRangeMaskParticles.defer(
@@ -205,10 +205,10 @@ fun TextRangeMaskParticles.defer(
 )
 
 /**
- * @param color Color of particles on the mask.
- * @param density Density of particles on the mask, interpreted as a probability of a particle to spawn in a given point on the mask.
- * @param isAnimated Defines whether particles on the mask will be animated or not. Animation looks like smooth random particle movements (telegram alike).
- * @param isEnabled Controls mask state: if set to `true` mask will hide specified part of the text, otherwise the text will be shown.
+ * @param color The color of particles on the mask.
+ * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
+ * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskParticles.evaluate(

@@ -573,9 +573,9 @@ data class Text internal constructor(
              */
             val height: Property<FixedSize>?,
             /**
-             * Defines direction in `start` parameter:
-            `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-            `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+             * Defines the direction in the `start` parameter:
+            – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+            – `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
              * Default value: `normal`.
              */
             val indexingDirection: Property<IndexingDirection>?,
@@ -625,9 +625,9 @@ data class Text internal constructor(
         }
 
         /**
-         * Defines direction in `start` parameter:
-        `normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-        `reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+         * Defines the direction in the `start` parameter:
+        – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+        – `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
          * 
          * Possible values: [normal], [reversed].
          */
@@ -729,7 +729,7 @@ data class Text internal constructor(
              */
             val actions: Property<List<Action>>?,
             /**
-             * Vertical text alignment within the row.
+             * Vertical text alignment within the row. Ignored when a baseline offset is specified.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
@@ -783,7 +783,7 @@ data class Text internal constructor(
              */
             val lineHeight: Property<Int>?,
             /**
-             * A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+             * A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
              */
             val mask: Property<TextRangeMask>?,
             /**
@@ -2713,9 +2713,9 @@ fun Text.Ellipsis.asList() = listOf(this)
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2754,9 +2754,9 @@ fun DivScope.textImage(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2793,9 +2793,9 @@ fun DivScope.textImageProps(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2832,9 +2832,9 @@ fun TemplateScope.textImageRefs(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2873,9 +2873,9 @@ fun Text.Image.override(
 /**
  * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2913,9 +2913,9 @@ fun Text.Image.defer(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
- * @param indexingDirection Defines direction in `start` parameter:
-`normal` - regular indexation for strings ([0, 1, 2, ..., N]). Use to insert an image by index relative to the begging of a string.
-`reversed` - indexation from the end towards the begging of a string ([N, ..., 2, 1, 0]). Use to insert an image by index relative to the end of a string.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2952,7 +2952,7 @@ fun Text.Image.asList() = listOf(this)
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -2965,7 +2965,7 @@ fun Text.Image.asList() = listOf(this)
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3025,7 +3025,7 @@ fun DivScope.textRange(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3038,7 +3038,7 @@ fun DivScope.textRange(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3096,7 +3096,7 @@ fun DivScope.textRangeProps(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3109,7 +3109,7 @@ fun DivScope.textRangeProps(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3167,7 +3167,7 @@ fun TemplateScope.textRangeRefs(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3180,7 +3180,7 @@ fun TemplateScope.textRangeRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3240,7 +3240,7 @@ fun Text.Range.override(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param background Character range background.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param border Character range border.
@@ -3253,7 +3253,7 @@ fun Text.Range.override(
  * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
- * @param mask A mask that hides a part of text, text can be revealed by disabling mask through `is_enabled` property.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
@@ -3312,7 +3312,7 @@ fun Text.Range.defer(
 )
 
 /**
- * @param alignmentVertical Vertical text alignment within the row.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
  * @param baselineOffset Character baseline vertial offset. If set, vertical alignment is ignored.
  * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
