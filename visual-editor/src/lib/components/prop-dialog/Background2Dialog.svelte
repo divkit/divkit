@@ -25,7 +25,13 @@
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state } = getContext<AppContext>(APP_CTX);
-    const { palette, paletteEnabled, previewThemeStore } = state;
+    const {
+        palette,
+        paletteEnabled,
+        previewThemeStore,
+        highlightMode,
+        highlightGradientAngle
+    } = state;
 
     $: if (isShown && !readOnly && callback) {
         callback(value);
@@ -110,6 +116,15 @@
         isShown = false;
     }
 
+    function onAngleFocus(): void {
+        highlightMode.set('gradient');
+        highlightGradientAngle.set((value as GradientBackground).angle || 0);
+    }
+
+    function onAngleBlur(): void {
+        highlightMode.set('');
+    }
+
     function onAngleChange(event: CustomEvent<{
         value: string;
     }>): void {
@@ -120,6 +135,7 @@
         }
 
         value.angle = newAngle;
+        highlightGradientAngle.set(newAngle);
     }
 
     function onStopsCountChange(event: CustomEvent<{
@@ -334,6 +350,8 @@
                                             max={360}
                                             disabled={readOnly}
                                             on:change={onAngleChange}
+                                            on:focus={onAngleFocus}
+                                            on:blur={onAngleBlur}
                                         />
                                     </label>
                                 </div>

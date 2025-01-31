@@ -72,6 +72,7 @@ export class State {
     highlightLeaf = writable<TreeLeaf[] | null>(null);
     highlightElem = writable<HTMLElement[] | null>(null);
     highlightMode = writable<HighlightMode>('');
+    highlightGradientAngle = writable(0);
     highlightRanges = writable<Range[] | null>(null);
     selectedRanges = writable<Range[] | null>(null);
     highlightLoc = writable<Loc | null>(null);

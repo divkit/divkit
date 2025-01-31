@@ -40,6 +40,7 @@
     import { Truthy } from '../utils/truthy';
     import type { TankerMeta } from '../../lib';
     import { getRotationFromMatrix } from '../utils/getRotationFromMatrix';
+    import { rectAngleIntersection } from '../utils/rectAngleIntersection';
 
     export let viewport: string;
     export let theme: 'light' | 'dark';
@@ -66,6 +67,7 @@
         highlightLeaf,
         highlightElem,
         highlightMode,
+        highlightGradientAngle,
         highlightRanges,
         rendererErrors,
         locale,
@@ -187,6 +189,7 @@
         rotation: number;
         emptyFileType: string;
         insets?: string;
+        gradientAngle?: string;
         visibleText?: string;
         grid?: {
             columns: number[];
@@ -248,6 +251,7 @@
         bestDragTarget: BestDragTarget | null,
         showInplaceEditor: boolean,
         highlightMode: HighlightMode,
+        highlightGradientAngle: number,
         isDistanceMode: boolean,
         isResize: boolean,
         gridResize: {
@@ -341,6 +345,7 @@
                 }
 
                 let insets;
+                let gradientAngle;
                 if (highlightMode && elem === selectedElem) {
                     if (highlightMode === 'margins') {
                         insets = [
@@ -368,6 +373,9 @@
                             `v ${-(elem.offsetHeight - paddingTop - paddingBottom)}`,
                             'Z'
                         ].join(' ');
+                    } else if (highlightMode === 'gradient') {
+                        const points = rectAngleIntersection(elem.offsetWidth, elem.offsetHeight, highlightGradientAngle / 180 * Math.PI);
+                        gradientAngle = `M ${marginLeft + points.from.x} ${marginTop + points.from.y} L ${marginLeft + points.to.x} ${marginTop + points.to.y}`;
                     }
                 }
 
@@ -410,6 +418,7 @@
                     rotation: clone === elem ? componentCloneRotation : calcRotationRad(elem) / Math.PI * 180,
                     emptyFileType,
                     insets,
+                    gradientAngle,
                     visibleText: elem === clone ? componentCloneText : '',
                     grid: gridProps && (gridResize || {
                         columns: sizesToFall(gridProps.columns.slice(0, gridProps.columns.length - 1)),
@@ -518,6 +527,7 @@
             bestDragTarget,
             showInplaceEditor,
             $highlightMode,
+            $highlightGradientAngle,
             isDistanceMode,
             isResize,
             gridResize
@@ -532,6 +542,7 @@
             bestDragTarget,
             showInplaceEditor,
             $highlightMode,
+            $highlightGradientAngle,
             isDistanceMode,
             isResize,
             gridResize
@@ -3268,6 +3279,24 @@
                                     </div>
                                 {/if}
 
+                                {#if highlight.gradientAngle}
+                                    <svg
+                                        class="renderer__highlight-gradient-angle"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width={highlight.widthNum + highlight.margins.left + highlight.margins.right}
+                                        height={highlight.heightNum + highlight.margins.top + highlight.margins.bottom}
+                                        style:top="{-highlight.margins.top}px"
+                                        style:left="{-highlight.margins.left}px"
+                                    >
+                                        <path
+                                            d={highlight.gradientAngle}
+                                            stroke-width="3"
+                                            stroke-dasharray="12 12"
+                                            style="stroke:var(--accent-purple)"
+                                        ></path>
+                                    </svg>
+                                {/if}
+
                                 {#if highlight.permanent && !highlight.isRoot && !highlight.insets && !$readOnly}
                                     <div class="renderer__highlight-border-bottom-right"
                                         on:pointerdown|stopPropagation|preventDefault={event => onResize(event, 'down-right')}
@@ -3667,6 +3696,11 @@
     }
 
     .renderer__highlight-insets {
+        position: relative;
+        display: block;
+    }
+
+    .renderer__highlight-gradient-angle {
         position: relative;
         display: block;
     }

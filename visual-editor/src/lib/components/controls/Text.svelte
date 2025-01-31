@@ -200,6 +200,8 @@
             on:input={onChange}
             on:focus={onFocus}
             on:blur={onBlur}
+            on:focus
+            on:blur
         >
     {:else}
         <input
@@ -223,6 +225,8 @@
             on:input={onChange}
             on:focus={onFocus}
             on:blur={onBlur}
+            on:focus
+            on:blur
         >
     {/if}
 
