@@ -27,7 +27,8 @@ internal class DivPagerPageLayout(
         if (childCount == 0) return super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val lp = getChildAt(0).layoutParams
         val isHorizontal = orientationProvider() == ViewPager2.ORIENTATION_HORIZONTAL
-        if (isHorizontal) {
+        if (isHorizontal && (!isUnspecified(widthMeasureSpec) || MeasureSpec.getSize(widthMeasureSpec) != 0) &&
+            (!isUnspecified(heightMeasureSpec) || MeasureSpec.getSize(heightMeasureSpec) != 0)) {
             minimumHeight = getMinimumSize(heightMeasureSpec)
         } else {
             minimumWidth = getMinimumSize(widthMeasureSpec)
