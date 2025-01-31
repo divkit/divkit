@@ -19,8 +19,6 @@ import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 
 @PublicApi
 @Mockable
@@ -38,6 +36,14 @@ class DivPreloader internal constructor(
         customContainerViewAdapter = context.div2Component.divCustomContainerViewAdapter,
         extensionController = context.div2Component.extensionController,
         videoPreloader = context.div2Component.divVideoPreloader
+    )
+
+    constructor(configuration: DivConfiguration) : this(
+        imagePreloader = DivImagePreloader(configuration.imageLoader),
+        customViewAdapter = configuration.divCustomViewAdapter,
+        customContainerViewAdapter = configuration.divCustomContainerViewAdapter,
+        extensionController = DivExtensionController(configuration.extensionHandlers),
+        videoPreloader = configuration.divPlayerPreloader
     )
 
     @Deprecated("Use DivPreloader(Div2Context) instead")

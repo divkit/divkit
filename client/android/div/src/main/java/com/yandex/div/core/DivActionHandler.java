@@ -87,7 +87,7 @@ public class DivActionHandler {
     @CallSuper
     @Deprecated
     public boolean handleUri(@NonNull Uri uri, @NonNull DivViewFacade view) {
-        return handleActionUrl(uri, view, view.getExpressionResolver());
+        return handleActionUrl(uri, view);
     }
 
     /**
@@ -325,7 +325,7 @@ public class DivActionHandler {
      * @param view calling DivView
      * @return TRUE if uri was handled
      */
-    public final boolean handleActionUrl(@Nullable Uri uri, @NonNull DivViewFacade view) {
+    public boolean handleActionUrl(@Nullable Uri uri, @NonNull DivViewFacade view) {
         return handleActionUrl(uri, view, view.getExpressionResolver());
     }
 

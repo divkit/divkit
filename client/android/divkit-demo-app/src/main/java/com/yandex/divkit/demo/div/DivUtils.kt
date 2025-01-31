@@ -8,12 +8,15 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivKit
+import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.gesture.DivGestureExtensionHandler
+import com.yandex.div.gesture.ParsingErrorLoggerFactory
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
@@ -24,12 +27,10 @@ import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.markdown.DivMarkdownExtensionHandler
-import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
-import com.yandex.div.gesture.DivGestureExtensionHandler
-import com.yandex.div.gesture.ParsingErrorLoggerFactory
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.shine.DivShineExtensionHandler
 import com.yandex.div.shine.DivShineLogger
+import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.video.ExoDivPlayerFactory
 import com.yandex.div.video.ExoPlayerVideoPreloader
 import com.yandex.div2.DivAction
@@ -44,7 +45,6 @@ import com.yandex.divkit.regression.ScenarioLogDelegate
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import org.json.JSONObject
-import java.lang.Exception
 
 fun divConfiguration(
     activity: Activity,
@@ -76,7 +76,7 @@ fun divConfiguration(
         .enablePermanentDebugPanel(
             flagPreferenceProvider.getExperimentFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
         )
-        .tooltipRestrictor { _, _ -> true }
+        .tooltipRestrictor(DivTooltipRestrictor.STUB)
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
         .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(activity)))

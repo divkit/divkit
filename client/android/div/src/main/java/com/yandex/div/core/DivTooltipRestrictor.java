@@ -15,13 +15,15 @@ public interface DivTooltipRestrictor {
     /**
      * Allows all tooltips.
      */
-    DivTooltipRestrictor STUB = ((anchor, tooltip) -> true);
+    DivTooltipRestrictor STUB = new DivTooltipRestrictor() {};
 
     /**
      * Called when handling div-action://show_tooltip
      */
     @Deprecated
-    boolean canShowTooltip(@NonNull View anchor, @NonNull DivTooltip tooltip);
+    default boolean canShowTooltip(@NonNull View anchor, @NonNull DivTooltip tooltip) {
+        return true;
+    }
 
     /**
      * Called when handling div-action://show_tooltip

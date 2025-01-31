@@ -70,7 +70,7 @@ public interface HistogramBridge {
     }
 
     @Deprecated
-    void recordTimeHistogram(@NonNull String name, long duration, long min, long max, @NonNull TimeUnit unit, long bucketCount);
+    default void recordTimeHistogram(@NonNull String name, long duration, long min, long max, @NonNull TimeUnit unit, long bucketCount) {}
 
     /**
      * Records a sample in a sparse histogram.
