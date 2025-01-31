@@ -12,13 +12,6 @@ public enum DivKitLogger {
     }
   }
 
-  static func failure(_ message: String) {
-    if isEnabled {
-      error(message)
-      assertionFailure(message)
-    }
-  }
-
   public static func warning(_ message: String) {
     if isEnabled {
       print("[DivKit] [WARNING] \(message)")

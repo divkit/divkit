@@ -161,7 +161,7 @@ extension URL {
     case "reset":
       return .reset
     default:
-      DivKitLogger.failure("Unknown action '\(action)' for timer.")
+      DivKitLogger.error("Unknown action '\(action)' for timer.")
       return nil
     }
   }
@@ -176,7 +176,7 @@ extension URL {
     case "pause":
       return .pause
     default:
-      DivKitLogger.failure("Unknown action '\(action)' for video.")
+      DivKitLogger.error("Unknown action '\(action)' for video.")
       return nil
     }
   }
@@ -191,7 +191,7 @@ extension URL {
     case "ring":
       return .ring
     default:
-      DivKitLogger.failure("Unknown overflow: '\(overflow)'.")
+      DivKitLogger.error("Unknown overflow: '\(overflow)'.")
       return .clamp
     }
   }

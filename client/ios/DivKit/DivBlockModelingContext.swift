@@ -326,7 +326,7 @@ extension [DivExtensionHandler] {
     for extensionHandler in self {
       let id = extensionHandler.id
       if extensionsHandlersDictionary[id] != nil {
-        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
+        DivKitLogger.error("Duplicate DivExtensionHandler for: \(id)")
         continue
       }
       extensionsHandlersDictionary[id] = extensionHandler

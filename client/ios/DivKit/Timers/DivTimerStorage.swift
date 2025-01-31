@@ -129,7 +129,7 @@ final class DivTimerStorage {
     }
 
     guard let timer = timers[key] else {
-      DivKitLogger.failure("Timer \(timerId) not found for card \(cardId)")
+      DivKitLogger.error("Timer \(timerId) not found for card \(cardId)")
       return nil
     }
 
