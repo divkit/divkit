@@ -58,6 +58,23 @@ internal class SpannedTextBuilder @Inject constructor(
     private val tempPaint = Paint()
     private val debugFontMetrics = false
 
+    fun buildPlainText(
+        bindingContext: BindingContext,
+        textView: TextView,
+        divText: DivText
+    ): Spanned {
+        return buildText(
+            bindingContext,
+            textView,
+            divText,
+            divText.text.evaluate(bindingContext.expressionResolver),
+            null,
+            null,
+            null,
+            null
+        )
+    }
+
     fun buildText(
         bindingContext: BindingContext,
         textView: TextView,
@@ -68,6 +85,7 @@ internal class SpannedTextBuilder @Inject constructor(
             bindingContext,
             textView,
             divText,
+            divText.text.evaluate(bindingContext.expressionResolver),
             divText.ranges,
             divText.images,
             divText.actions,
@@ -94,7 +112,25 @@ internal class SpannedTextBuilder @Inject constructor(
             textConsumer)
     }
 
-    fun buildText(
+    fun buildEllipsis(
+        bindingContext: BindingContext,
+        textView: TextView,
+        divText: DivText,
+        ellipsis: DivText.Ellipsis,
+        textConsumer: TextConsumer? = null
+    ): Spanned {
+
+        return buildText(bindingContext,
+            textView,
+            divText,
+            ellipsis.text.evaluate(bindingContext.expressionResolver),
+            ellipsis.ranges,
+            ellipsis.images,
+            ellipsis.actions,
+            textConsumer)
+    }
+
+    private fun buildText(
         bindingContext: BindingContext,
         textView: TextView,
         divText: DivText,
@@ -118,7 +154,13 @@ internal class SpannedTextBuilder @Inject constructor(
             spannedText.setSpan(LineMetricsSpan(), 0, spannedText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
-        if (spans.isEmpty() && sortedImages.isEmpty()) {
+        val hasAdditionalRanges = ranges?.any { range ->
+            range.actions != null
+                || range.background != null
+                || range.border != null
+        } ?: false
+
+        if (spans.isEmpty() && sortedImages.isEmpty() && !hasAdditionalRanges) {
             textConsumer?.invoke(spannedText)
             return spannedText
         }
@@ -132,13 +174,13 @@ internal class SpannedTextBuilder @Inject constructor(
             addSpan(textView, spannedText, textData, span)
         }
 
-        ranges?.forEach { range ->
-            val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(textLength)
-            val end = range.end?.evaluate(resolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
-            range.actions?.let { actions ->
-                addActionSpan(bindingContext, textView, spannedText, start, end, actions)
+        if (hasAdditionalRanges) {
+            ranges?.forEach { range ->
+                val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(textLength)
+                val end = range.end?.evaluate(resolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
+                addActionSpan(bindingContext, textView, spannedText, start, end, range.actions)
+                addDecorationSpan(bindingContext, textView, spannedText, start, end, range.border, range.background)
             }
-            addDecorationSpan(bindingContext, textView, spannedText, start, end, range.border, range.background)
         }
 
         actions?.let {
@@ -185,25 +227,35 @@ internal class SpannedTextBuilder @Inject constructor(
         textData: TextData,
         ranges: List<DivText.Range>?,
     ): List<SpanData> {
-        if (ranges.isNullOrEmpty()) return emptyList()
+        if (textData.lineHeight == null && ranges.isNullOrEmpty()) return emptyList()
 
         val resolver = bindingContext.expressionResolver
         val textLength = textData.textLength
 
+        val rangeCount = ranges?.size ?: 0
         val boundSet = sortedSetOf<Int>()
-        val overlappingSpans = mutableListOf<SpanData>()
-        ranges.forEach { range ->
+        val overlappingSpans = ArrayList<SpanData>(rangeCount + 1)
+
+        ranges?.forEach { range ->
             val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(textLength)
             val end = range.end?.evaluate(resolver)?.toIntSafely()?.coerceAtMost(textLength) ?: textLength
             if (start < end) {
-                boundSet += start
-                boundSet += end
-                overlappingSpans += createSpanData(context, bindingContext, textData, range, start, end)
+                val span = createSpanData(context, bindingContext, textData, range, start, end)
+                if (!span.isEmpty()) {
+                    boundSet += start
+                    boundSet += end
+                    overlappingSpans += span
+                }
             }
         }
-
-        if (overlappingSpans.isEmpty()) return emptyList()
         overlappingSpans.sort()
+
+        textData.lineHeight?.let { lineHeight ->
+            boundSet += 0
+            boundSet += textLength
+            overlappingSpans.add(0, SpanData.lineHeight(start = 0, end = textLength, lineHeight))
+        }
+        if (overlappingSpans.isEmpty()) return emptyList()
 
         val bounds = boundSet.toList()
         val sequentialSpans = mutableListOf<SpanData>()
@@ -302,7 +354,12 @@ internal class SpannedTextBuilder @Inject constructor(
         }
 
         span.letterSpacing?.let { letterSpacing ->
-            spannedText.setSpan(LetterSpacingSpan(letterSpacing.toFloat()), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannedText.setSpan(
+                LetterSpacingSpan(letterSpacing.toFloat()),
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
 
         span.strike?.let { strike ->
@@ -353,7 +410,6 @@ internal class SpannedTextBuilder @Inject constructor(
                 LineHeightWithTopOffsetSpan(
                     topOffset = span.topOffset ?: 0,
                     lineHeight = span.lineHeight ?: 0,
-                    textLineHeight = textData.lineHeight ?: 0,
                     topOffsetStart = span.topOffsetStart ?: start,
                     topOffsetEnd = span.topOffsetEnd ?: end
                 ),
@@ -374,8 +430,10 @@ internal class SpannedTextBuilder @Inject constructor(
         spannedText: Spannable,
         start: Int,
         end: Int,
-        actions: List<DivAction>
+        actions: List<DivAction>?
     ) {
+        if (actions.isNullOrEmpty()) return
+
         textView.movementMethod = LinkMovementMethod.getInstance()
         spannedText.setSpan(
             PerformActionSpan(bindingContext, actions),
@@ -503,7 +561,7 @@ internal class SpannedTextBuilder @Inject constructor(
         return SpanData(
             start = start,
             end = end,
-            alignmentVertical = range.alignmentVertical?.evaluate(resolver) ?: DivTextAlignmentVertical.BASELINE,
+            alignmentVertical = range.alignmentVertical?.evaluate(resolver),
             baselineOffset = range.baselineOffset.evaluate(resolver).unitToPx(displayMetrics, fontSizeUnit),
             fontFamily = range.fontFamily?.evaluate(resolver),
             fontFeatureSettings = range.fontFeatureSettings?.evaluate(resolver),

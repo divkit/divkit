@@ -2,6 +2,7 @@
   "tests": [
     {
       "title": "Copy to clipboard",
+      "case_id": 13,
       "tags": [
         "DivAction"
       ],
@@ -17,6 +18,7 @@
     },
     {
       "title": "Focus action",
+      "case_id": 14,
       "platforms": [
         "web"
       ],
@@ -34,6 +36,7 @@
     },
     {
       "title": "Clear focus actions",
+      "case_id": 165,
       "platforms": [
         "ios"
       ],
@@ -56,6 +59,7 @@
     },
     {
       "title": "Focus action",
+      "case_id": 14,
       "platforms": [
         "ios"
       ],
@@ -109,6 +113,7 @@
     },
     {
       "title": "Hover and press",
+      "case_id": 208,
       "tags": [
         "DivAction"
       ],
@@ -131,6 +136,7 @@
     },
     {
       "title": "Tab swipe",
+      "case_id": 16,
       "automated": [
         "web"
       ],
@@ -150,6 +156,7 @@
     },
     {
       "title": "Tab swipe restricted",
+      "case_id": 17,
       "automated": [
         "web"
       ],
@@ -169,6 +176,7 @@
     },
     {
       "title": "Gallery scroll",
+      "case_id": 18,
       "automated": [
         "web"
       ],
@@ -188,6 +196,7 @@
     },
     {
       "title": "Incompletely filled gallery throws taps",
+      "case_id": 19,
       "tags": [
         "DivGallery"
       ],
@@ -201,6 +210,7 @@
     },
     {
       "title": "Paged gallery scroll",
+      "case_id": 20,
       "automated": [
         "web"
       ],
@@ -220,6 +230,7 @@
     },
     {
       "title": "Gallery item actions",
+      "case_id": 21,
       "tags": [
         "DivGallery"
       ],
@@ -236,6 +247,7 @@
     },
     {
       "title": "Gallery item actions typed",
+      "case_id": 172,
       "platforms": [
         "android",
         "ios"
@@ -258,6 +270,7 @@
     },
     {
       "title": "Gallery default item states",
+      "case_id": 22,
       "automated": [
         "web"
       ],
@@ -275,6 +288,7 @@
     },
     {
       "title": "Gallery paging default item states",
+      "case_id": 23,
       "automated": [
         "web"
       ],
@@ -294,6 +308,7 @@
     },
     {
       "title": "Zoomable gallery",
+      "case_id": 24,
       "tags": [
         "DivGallery"
       ],
@@ -304,6 +319,7 @@
     },
     {
       "title": "Gallery bottom multiline",
+      "case_id": 25,
       "platforms": [
         "android",
         "ios"
@@ -315,6 +331,7 @@
     },
     {
       "title": "Gallery bottom multiline selected actions",
+      "case_id": 26,
       "platforms": [
         "android",
         "ios"
@@ -326,6 +343,7 @@
     },
     {
       "title": "Gallery bottom singleline",
+      "case_id": 27,
       "platforms": [
         "android",
         "ios"
@@ -337,6 +355,7 @@
     },
     {
       "title": "Gallery top multiline",
+      "case_id": 28,
       "tags": [
         "DivGallery"
       ],
@@ -344,6 +363,7 @@
     },
     {
       "title": "Pager scroll",
+      "case_id": 29,
       "automated": [
         "web"
       ],
@@ -363,6 +383,7 @@
     },
     {
       "title": "Pager item actions",
+      "case_id": 30,
       "automated": [
         "web"
       ],
@@ -373,6 +394,7 @@
     },
     {
       "title": "Pager selected actions",
+      "case_id": 31,
       "tags": [
         "DivPager"
       ],
@@ -380,6 +402,7 @@
     },
     {
       "title": "Pager default item states",
+      "case_id": 32,
       "automated": [
         "web"
       ],
@@ -390,6 +413,7 @@
     },
     {
       "title": "Pager with infinite scroll",
+      "case_id": 144,
       "platforms": [
         "ios",
         "android"
@@ -402,6 +426,7 @@
     },
     {
       "title": "Action animations",
+      "case_id": 33,
       "tags": [
         "DivAnimation"
       ],
@@ -416,6 +441,7 @@
     },
     {
       "title": "Recommendation slider",
+      "case_id": 1,
       "tags": [
         "Slider"
       ],
@@ -433,6 +459,7 @@
     },
     {
       "title": "Slider with two pointers",
+      "case_id": 12,
       "tags": [
         "Slider"
       ],
@@ -450,6 +477,7 @@
     },
     {
       "title": "Slider preferences",
+      "case_id": 34,
       "tags": [
         "Slider"
       ],
@@ -463,6 +491,7 @@
     },
     {
       "title": "Disabled slider",
+      "case_id": 182,
       "platforms": [
         "android",
         "web"
@@ -482,6 +511,7 @@
     },
     {
       "title": "Root state switching",
+      "case_id": 35,
       "automated": [
         "web"
       ],
@@ -1018,6 +1048,7 @@
     },
     {
       "title": "Div with corner radius and shadow set is clipped during transition animation",
+      "case_id": 184,
       "tags": [
         "Animations"
       ],
@@ -1032,26 +1063,32 @@
     },
     {
       "title": "State transition any change",
+      "case_id": 42,
       "file": "animations/transition/state_transition_any_change.json"
     },
     {
       "title": "State transition data change",
+      "case_id": 44,
       "file": "animations/transition/state_transition_data_change.json"
     },
     {
       "title": "State transition state change",
+      "case_id": 45,
       "file": "animations/transition/state_transition_state_change.json"
     },
     {
       "title": "Inner state transition any change",
+      "case_id": 46,
       "file": "animations/transition/inner_state_transition_any_change.json"
     },
     {
       "title": "Inner state transition data change",
+      "case_id": 46,
       "file": "animations/transition/inner_state_transition_data_change.json"
     },
     {
       "title": "Disappear transition of div with shadow",
+      "case_id": 171,
       "platforms": [
         "android",
         "ios",
@@ -1141,6 +1178,7 @@
     },
     {
       "title": "For the reverse animation of the action, a direct interpolator is used",
+      "case_id": 51,
       "platforms": [
         "android",
         "web"
@@ -1152,6 +1190,7 @@
     },
     {
       "title": "Simple variable animator",
+      "case_id": 178,
       "platforms": [
         "android",
         "ios",
@@ -1173,6 +1212,7 @@
     },
     {
       "title": "Repeating variable animator",
+      "case_id": 177,
       "platforms": [
         "android",
         "ios",
@@ -1194,6 +1234,7 @@
     },
     {
       "title": "Infinite variable animator",
+      "case_id": 174,
       "platforms": [
         "android",
         "ios",
@@ -1214,6 +1255,7 @@
     },
     {
       "title": "Infinite alternating variable animator",
+      "case_id": 173,
       "platforms": [
         "android",
         "ios",
@@ -1234,6 +1276,7 @@
     },
     {
       "title": "Visibility actions in gallery",
+      "case_id": 52,
       "automated": [
         "web"
       ],
@@ -1252,6 +1295,7 @@
     },
     {
       "title": "Disappear actions in gallery",
+      "case_id": 54,
       "automated": [
         "web"
       ],
@@ -1276,6 +1320,7 @@
     },
     {
       "title": "Visibility actions in pager",
+      "case_id": 55,
       "automated": [
         "web"
       ],
@@ -1295,6 +1340,7 @@
     },
     {
       "title": "Visibility actions performed and logged in pager",
+      "case_id": 56,
       "automated": [
         "web"
       ],
@@ -1314,6 +1360,7 @@
     },
     {
       "title": "Visibility action for child of item in gallery",
+      "case_id": 57,
       "automated": [
         "android"
       ],
@@ -1354,6 +1401,7 @@
     },
     {
       "title": "Actions is_enabled",
+      "case_id": 59,
       "automated": [
         "android",
         "web"
@@ -1375,6 +1423,7 @@
     },
     {
       "title": "Send select Pager using Div2View.tryLogVisibility",
+      "case_id": 209,
       "automated": [
         "web"
       ],
@@ -1398,6 +1447,7 @@
     },
     {
       "title": "Visibility actions for default_item",
+      "case_id": 60,
       "automated": [
         "web"
       ],
@@ -1415,6 +1465,7 @@
     },
     {
       "title": "Nested visibility actions",
+      "case_id": 61,
       "automated": [
         "web"
       ],
@@ -1433,6 +1484,7 @@
     },
     {
       "title": "Visibility action in visible block",
+      "case_id": 62,
       "platforms": [
         "ios"
       ],
@@ -1453,6 +1505,7 @@
     },
     {
       "title": "Visibility actions in DivState",
+      "case_id": 63,
       "platforms": [
         "ios"
       ],
@@ -1476,6 +1529,7 @@
     },
     {
       "title": "Variables in gallery",
+      "case_id": 64,
       "tags": [
         "DivGallery"
       ],
@@ -1510,6 +1564,7 @@
     },
     {
       "title": "Variables in pager",
+      "case_id": 65,
       "tags": [
         "DivPager"
       ],
@@ -1538,6 +1593,7 @@
     },
     {
       "title": "Variables in tabs",
+      "case_id": 66,
       "tags": [
         "DivTabs"
       ],
@@ -1579,6 +1635,7 @@
     },
     {
       "title": "Visibility in div-base",
+      "case_id": 67,
       "automated": [
         "web"
       ],
@@ -1593,6 +1650,7 @@
     },
     {
       "title": "Showing animation on image loaded",
+      "case_id": 68,
       "tags": [
         "Animations"
       ],
@@ -1603,6 +1661,7 @@
     },
     {
       "title": "Variables in DivIndicator",
+      "case_id": 69,
       "tags": [
         "DivIndicator"
       ],
@@ -1610,6 +1669,7 @@
     },
     {
       "title": "Variables in DivImage",
+      "case_id": 153,
       "platforms": [
         "ios"
       ],
@@ -1639,6 +1699,7 @@
     },
     {
       "title": "Variables triggers",
+      "case_id": 71,
       "automated": [
         "web"
       ],
@@ -1658,6 +1719,7 @@
     },
     {
       "title": "Variable triggers (modes)",
+      "case_id": 72,
       "tags": [
         "Triggers"
       ],
@@ -1673,6 +1735,7 @@
     },
     {
       "title": "Variable triggers (closures)",
+      "case_id": 73,
       "tags": [
         "DivInput",
         "Slider",
@@ -1687,6 +1750,7 @@
     },
     {
       "title": "Local variables",
+      "case_id": 155,
       "automated": [
         "android"
       ],
@@ -1706,6 +1770,7 @@
     },
     {
       "title": "Sequential animations",
+      "case_id": 74,
       "steps": [
         "Click on image"
       ],
@@ -1716,6 +1781,7 @@
     },
     {
       "title": "Animations of switching tabs headers",
+      "case_id": 164,
       "platforms": [
         "android"
       ],
@@ -1737,6 +1803,7 @@
     },
     {
       "title": "Text copying",
+      "case_id": 75,
       "tags": [
         "DivText"
       ],
@@ -1751,6 +1818,7 @@
     },
     {
       "title": "Nested change bounds transitions",
+      "case_id": 77,
       "automated": [
         "web"
       ],
@@ -1766,6 +1834,7 @@
     },
     {
       "title": "Text input",
+      "case_id": 78,
       "tags": [
         "DivInput"
       ],
@@ -1780,6 +1849,7 @@
     },
     {
       "title": "Text input (single line)",
+      "case_id": 79,
       "tags": [
         "DivInput"
       ],
@@ -1795,6 +1865,7 @@
     },
     {
       "title": "Text input max_length",
+      "case_id": 163,
       "tags": [
         "DivInput"
       ],
@@ -1809,6 +1880,7 @@
     },
     {
       "title": "Text input (enter key)",
+      "case_id": 170,
       "platforms": [
         "ios",
         "web",
@@ -1831,6 +1903,7 @@
     },
     {
       "title": "Select",
+      "case_id": 80,
       "tags": [
         "DivSelect"
       ],
@@ -1845,6 +1918,7 @@
     },
     {
       "title": "Select with default item",
+      "case_id": 81,
       "tags": [
         "DivSelect"
       ],
@@ -1859,6 +1933,7 @@
     },
     {
       "title": "Manage VideoCustom",
+      "case_id": 210,
       "platforms": [
         "android"
       ],
@@ -1879,6 +1954,7 @@
     },
     {
       "title": "State transition trigger",
+      "case_id": 82,
       "steps": [
         "Press 'To liked'"
       ],
@@ -1891,6 +1967,7 @@
     },
     {
       "title": "Data transition trigger",
+      "case_id": 211,
       "platforms": [
         "android"
       ],
@@ -1906,6 +1983,7 @@
     },
     {
       "title": "Actions logging",
+      "case_id": 83,
       "platforms": [
         "android",
         "web"
@@ -1928,6 +2006,7 @@
     },
     {
       "title": "Lottie animations",
+      "case_id": 86,
       "platforms": [
         "android",
         "ios",
@@ -1940,6 +2019,7 @@
     },
     {
       "title": "Lottie gallery",
+      "case_id": 87,
       "platforms": [
         "android",
         "ios",
@@ -1952,6 +2032,7 @@
     },
     {
       "title": "Lottie cycled animations",
+      "case_id": 154,
       "platforms": [
         "android",
         "ios",
@@ -1967,6 +2048,7 @@
     },
     {
       "title": "States default state",
+      "case_id": 88,
       "automated": [
         "web"
       ],
@@ -1974,10 +2056,12 @@
     },
     {
       "title": "Tabs item actions",
+      "case_id": 89,
       "file": "tabs-item-actions.json"
     },
     {
       "title": "Image Shimmer Preview",
+      "case_id": 143,
       "file": "image_shimmer_preview.json",
       "platforms": [
         "android",
@@ -1989,6 +2073,7 @@
     },
     {
       "title": "Custom container",
+      "case_id": 92,
       "platforms": [
         "android",
         "web"
@@ -1997,6 +2082,7 @@
     },
     {
       "title": "Custom card",
+      "case_id": 93, 
       "platforms": [
         "android",
         "web"
@@ -2005,6 +2091,7 @@
     },
     {
       "title": "Rive animations",
+      "case_id": 150,
       "platforms": [
         "ios"
       ],
@@ -2309,7 +2396,8 @@
     {
       "title": "Regex input filter",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
@@ -2334,7 +2422,8 @@
     {
       "title": "Expression input filter",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
@@ -2498,6 +2587,30 @@
       "file": "tooltips/tooltips.json"
     },
     {
+      "title": "Tooltips with tap outside properties",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap on first button",
+        "Try to tap outside of tooltip",
+        "Close tooltip by cross button",
+        "Tap on second button",
+        "Tap outside of tooltip"
+      ],
+      "expected_results": [
+        "First tooltip is shown",
+        "First tooltip isn't closed by tapping outside of the tooltip",
+        "First tooltip is closed",
+        "Second tooltip is shown",
+        "Label text changed to `Outside actions called: true`, label text color is green"
+      ],
+      "file": "tooltips-with-tap-outside-properties.json"
+    },
+    {
       "title": "Tooltip on different positions",
       "platforms": [
         "ios"
@@ -2518,6 +2631,7 @@
     },
     {
       "title": "Switching state in the tooltip",
+      "case_id": 207,
       "platforms": [
         "ios",
         "web"
@@ -2539,6 +2653,7 @@
     },
     {
       "title": "Persistent values storage",
+      "case_id": 145,
       "platforms": [
         "ios",
         "web",
@@ -2558,6 +2673,7 @@
     },
     {
       "title": "Persistent values storage with typed actions",
+      "case_id": 206,
       "tags": [
         "TypedActions"
       ],
@@ -2584,6 +2700,7 @@
     },
     {
       "title": "Patch container",
+      "case_id": 118,
       "tags": [
         "patch"
       ],
@@ -2604,6 +2721,7 @@
     },
     {
       "title": "Patch container typed action",
+      "case_id": 191,
       "platforms": [
         "android",
         "web"
@@ -2624,6 +2742,7 @@
     },
     {
       "title": "Patch container internal items",
+      "case_id": 119,
       "tags": [
         "patch"
       ],
@@ -2644,6 +2763,7 @@
     },
     {
       "title": "Patch gallery with typed action",
+      "case_id": 192,
       "platforms":  [
         "android",
         "web"
@@ -2662,6 +2782,7 @@
     },
     {
       "title": "Patch gallery",
+      "case_id": 120,
       "tags": [
         "patch"
       ],
@@ -2675,6 +2796,7 @@
     },
     {
       "title": "Patch gallery internal items",
+      "case_id": 121,
       "tags": [
         "patch"
       ],
@@ -2688,6 +2810,7 @@
     },
     {
       "title": "Patch grid",
+      "case_id": 122,
       "platforms": [
         "ios"
       ],
@@ -2708,6 +2831,7 @@
     },
     {
       "title": "Patch grid internal items",
+      "case_id": 123,
       "automated": [
         "android"
       ],
@@ -2724,6 +2848,7 @@
     },
     {
       "title": "Patch pager",
+      "case_id": 124,
       "platforms": [
         "ios"
       ],
@@ -2744,6 +2869,7 @@
     },
     {
       "title": "Patch pager internal items",
+      "case_id": 125,
       "tags": [
         "patch"
       ],
@@ -2757,6 +2883,7 @@
     },
     {
       "title": "Patch state partial",
+      "case_id": 126,
       "platforms": [
         "ios"
       ],
@@ -2779,6 +2906,7 @@
     },
     {
       "title": "Patch state transactional broken",
+      "case_id": 127,
       "platforms": [
         "ios"
       ],
@@ -2800,6 +2928,7 @@
     },
     {
       "title": "Patch state transactional success",
+      "case_id": 128,
       "platforms": [
         "ios"
       ],
@@ -2822,6 +2951,7 @@
     },
     {
       "title": "Patch tabs partial",
+      "case_id": 129,
       "tags": [
         "patch"
       ],
@@ -2836,6 +2966,7 @@
     },
     {
       "title": "Patch tabs transactional broken",
+      "case_id": 130,
       "tags": [
         "patch"
       ],
@@ -2850,6 +2981,7 @@
     },
     {
       "title": "Patch tabs transactional success",
+      "case_id": 132,
       "tags": [
         "patch"
       ],
@@ -2864,6 +2996,7 @@
     },
     {
       "title": "Track visibility action from patch",
+      "case_id": 160,
       "tags": [
         "patch"
       ],
@@ -2882,9 +3015,9 @@
       ],
       "file": "patch/patchable_card_with_visibility_actions.json"
     },
-
     {
       "title": "Patch root div",
+      "case_id": 176,
       "tags": [
         "patch"
       ],
@@ -2897,9 +3030,9 @@
       ],
       "file": "patch/root.json"
     },
-
     {
       "title": "Patch on_applied_actions",
+      "case_id": 167,
       "tags": [
         "patch"
       ],
@@ -2918,9 +3051,9 @@
       ],
       "file": "patch/actions_applied.json"
     },
-
     {
       "title": "Patch on_failed_actions",
+      "case_id": 168,
       "tags": [
         "patch"
       ],
@@ -2938,9 +3071,9 @@
       ],
       "file": "patch/actions_failed.json"
     },
-
     {
       "title": "State with variable binding",
+      "case_id": 133,
       "tags": [
         "DivState"
       ],
@@ -2959,6 +3092,7 @@
     },
     {
       "title": "Multiple state switching with different root state",
+      "case_id": 175,
       "tags": [
         "DivState"
       ],
@@ -2973,6 +3107,7 @@
     },
     {
       "title": "Input inside pager",
+      "case_id": 134,
       "tags": [
         "DivPager",
         "DivInput"
@@ -2987,6 +3122,7 @@
     },
     {
       "title": "Input keyboard types",
+      "case_id": 157,
       "platforms": [
         "android",
         "ios",
@@ -3002,6 +3138,7 @@
     },
     {
       "title": "Slider vertical scroll interruption",
+      "case_id": 135,
       "automated": [
         "android"
       ],
@@ -3018,6 +3155,7 @@
     },
     {
       "title": "Slider horizontal scroll interruption",
+      "case_id": 136,
       "automated": [
         "android"
       ],
@@ -3034,6 +3172,7 @@
     },
     {
       "title": "Gesture (extension)",
+      "case_id": 137,
       "platforms": [
         "android",
         "ios",
@@ -3058,6 +3197,7 @@
     },
     {
       "title": "Rebind container",
+      "case_id": 205,
       "platforms": [
         "android"
       ],
@@ -3081,6 +3221,7 @@
     },
     {
       "title": "Rebind grid",
+      "case_id": 204,
       "platforms": [
         "android"
       ],
@@ -3104,6 +3245,7 @@
     },
     {
       "title": "Rebind gallery",
+      "case_id": 203,
       "platforms": [
         "android"
       ],
@@ -3127,6 +3269,7 @@
     },
     {
       "title": "Rebind pager",
+      "case_id": 202,
       "platforms": [
         "android"
       ],
@@ -3150,6 +3293,7 @@
     },
     {
       "title": "Rebind tabs",
+      "case_id": 201,
       "platforms": [
         "android"
       ],
@@ -3173,6 +3317,7 @@
     },
     {
       "title": "Container with item_builder",
+      "case_id": 138,
       "platforms": [
         "ios",
         "web",
@@ -3189,6 +3334,7 @@
     },
     {
       "title": "Container with item_builder and id for each item",
+      "case_id": 193,
       "platforms": [
         "ios",
         "web",
@@ -3205,6 +3351,7 @@
     },
     {
       "title": "Input password",
+      "case_id": 139,
       "platforms": [
         "web",
         "android"
@@ -3224,6 +3371,7 @@
     },
     {
       "title": "Disabled input",
+      "case_id": 141,
       "platforms": [
         "ios",
         "android",
@@ -3244,6 +3392,7 @@
     },
     {
       "title": "Vector scale",
+      "case_id": 187,
       "platforms": [
         "android",
         "web"
@@ -3262,6 +3411,7 @@
     },
     {
       "title": "Rebind custom",
+      "case_id": 200,
       "platforms": [
         "android"
       ],
@@ -3283,6 +3433,7 @@
     },
     {
       "title": "Pager page transformation",
+      "case_id": 156,
       "tags": [
         "DivPager",
         "scroll"
@@ -3303,6 +3454,7 @@
     },
     {
       "title": "Pager accessibility scroll",
+      "case_id": 195,
       "tags": [
         "DivPager",
         "Accessibility"
@@ -3320,6 +3472,7 @@
     },
     {
       "title": "Indicator with pager with invisible items",
+      "case_id": 185,
       "tags": [
         "DivPager",
         "DivIndicator"
@@ -3339,6 +3492,7 @@
     },
     {
       "title": "Indicator with pager with invisible items and infinite scroll",
+      "case_id": 186,
       "tags": [
         "DivPager",
         "DivIndicator"
@@ -3362,6 +3516,7 @@
     },
     {
       "title": "Shine (extension)",
+      "case_id": 181,
       "platforms": [
         "android",
         "ios"
@@ -3385,6 +3540,7 @@
     },
     {
       "title": "Input focus",
+      "case_id": 199,
       "platforms": [
         "android",
         "ios",

@@ -123,6 +123,7 @@ export interface FileProperty extends BaseProperty {
     type: 'file';
     subtype: 'image' | 'gif' | 'lottie' | 'image_preview';
     generateFromVideoProperty?: string;
+    generateFromLottieProperty?: string;
 }
 
 export interface AlignmentProperty extends BaseProperty {

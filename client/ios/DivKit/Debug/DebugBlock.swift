@@ -3,7 +3,6 @@ import LayoutKit
 import VGSL
 
 final class DebugBlock: WrapperBlock, LayoutCachingDefaultImpl {
-  
   let child: Block
 
   let errorCollector: DebugErrorCollector
@@ -26,7 +25,7 @@ final class DebugBlock: WrapperBlock, LayoutCachingDefaultImpl {
       showDebugInfo: showDebugInfo
     )
   }
-  
+
   func equals(_ other: any LayoutKit.Block) -> Bool {
     if self === other { return true }
     guard let other = other as? DebugBlock else { return false }
@@ -38,10 +37,6 @@ final class DebugBlock: WrapperBlock, LayoutCachingDefaultImpl {
   }
 
   func getImageHolders() -> [any VGSLUI.ImageHolder] {
-    []
-  }
-
-  func updated(withStates _: LayoutKit.BlocksState) throws -> Self {
-    self
+    child.getImageHolders()
   }
 }

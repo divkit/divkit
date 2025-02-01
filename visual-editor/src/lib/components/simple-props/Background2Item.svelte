@@ -11,7 +11,13 @@
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state, background2Dialog } = getContext<AppContext>(APP_CTX);
-    const { palette, previewThemeStore, readOnly } = state;
+    const {
+        palette,
+        previewThemeStore,
+        readOnly,
+        highlightMode,
+        highlightGradientAngle
+    } = state;
 
     const dispatch = createEventDispatcher();
 
@@ -96,12 +102,24 @@
         } else if (value.type === 'gradient') {
             isSelfUpdate = true;
             value.angle = Number(secondVal);
+            highlightGradientAngle.set(value.angle);
             dispatch('change');
         } else if (value.type === 'image') {
             isSelfUpdate = true;
             value.alpha = Number(secondVal) / 100;
             dispatch('change');
         }
+    }
+
+    function onSecondValFocus(): void {
+        if (value.type === 'gradient') {
+            highlightMode.set('gradient');
+            highlightGradientAngle.set(value.angle || 0);
+        }
+    }
+
+    function onSecondValBlur(): void {
+        highlightMode.set('');
     }
 
     function onPreviewClick(): void {
@@ -198,6 +216,8 @@
             {max}
             bind:value={secondVal}
             on:input={rebuildVal}
+            on:focus={onSecondValFocus}
+            on:blur={onSecondValBlur}
             title={$l10nString(`background.${value.type}_second_title`)}
         >
 

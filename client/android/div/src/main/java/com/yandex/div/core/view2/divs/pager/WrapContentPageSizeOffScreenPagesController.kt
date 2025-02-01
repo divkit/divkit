@@ -1,12 +1,11 @@
 package com.yandex.div.core.view2.divs.pager
 
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import android.view.View
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import kotlin.math.max
 
 internal class WrapContentPageSizeOffScreenPagesController(
     private val parent: DivPagerView,
-    private val parentSize: Int,
     private val itemSpacing: Float,
     private val pageSizeProvider: DivPagerPageSizeProvider,
     private val paddings: DivPagerPaddingsHolder,
@@ -19,49 +18,57 @@ internal class WrapContentPageSizeOffScreenPagesController(
         sidePagesCount = calcSidePagesCount()
         parent.setOffScreenPages()
 
-        parent.changePageCallbackForOffScreenPages = object: OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                val count = calcSidePagesCount()
-                if (count <= sidePagesCount)  return
+        parent.changePageCallbackForOffScreenPages = object: DivPagerView.OffScreenPagesUpdateCallback() {
 
-                sidePagesCount = count
-                parent.setOffScreenPages()
-            }
+            override fun onPageSelected(position: Int) = updateOffScreenPages()
+
+            override fun onLayoutChange(
+                v: View?, left: Int, top: Int, right: Int, bottom: Int,
+                oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
+            ) = updateOffScreenPages()
         }
     }
 
     private fun calcSidePagesCount(): Int {
+        var prevSpace = pageSizeProvider.getPrevNeighbourSize(parent.currentItem) ?: return 1
         var countLeft = 0
-        var leftSpace = parentSize - pageSize(parent.currentItem) / 2f
-        var rightSpace = leftSpace
         var page = parent.currentItem - 1
-        while (leftSpace > 0 && page > 0) {
-            leftSpace -= pageSize(page)
+        while (prevSpace > 0 && page > 0) {
             countLeft++
+            prevSpace -= pageSize(page) ?: break
             page--
         }
-        if (leftSpace > paddings.left && page == 0) {
+        if (prevSpace > paddings.left && page == 0) {
             countLeft++
         }
 
+        var nextSpace = pageSizeProvider.getNextNeighbourSize(parent.currentItem) ?: return countLeft.coerceAtLeast(1)
         var countRight = 0
         page = parent.currentItem + 1
-        while (rightSpace > 0 && page < adapter.itemCount - 1) {
-            rightSpace -= pageSize(page)
+        while (nextSpace > 0 && page < adapter.itemCount - 1) {
             countRight++
+            nextSpace -= pageSize(page) ?: break
             page++
         }
-        if (rightSpace > paddings.right && page == adapter.itemCount - 1) {
+        if (nextSpace > paddings.right && page == adapter.itemCount - 1) {
             countRight++
         }
 
-        return max(countLeft, countRight)
+        return max(countLeft, countRight).coerceAtLeast(1)
     }
 
-    private fun pageSize(page: Int) = pageSizeProvider.getItemSize(page) + itemSpacing
+    private fun pageSize(page: Int) = pageSizeProvider.getItemSize(page)?.let { it + itemSpacing }
 
     private fun DivPagerView.setOffScreenPages() {
         getRecyclerView()?.setItemViewCacheSize(sidePagesCount * 2 + 3)
         viewPager.offscreenPageLimit = sidePagesCount
+    }
+
+    private fun updateOffScreenPages() {
+        val count = calcSidePagesCount()
+        if (count <= sidePagesCount)  return
+
+        sidePagesCount = count
+        parent.setOffScreenPages()
     }
 }

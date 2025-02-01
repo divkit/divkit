@@ -249,6 +249,7 @@
 		8CD907BB2A4C8AF3001C4B7B /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */; };
 		8CE488642B76F64D00BDDAB9 /* parsing_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8CE488632B76F64D00BDDAB9 /* parsing_test_data */; };
 		8CE488662B76F6BA00BDDAB9 /* DivDataParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE488652B76F6BA00BDDAB9 /* DivDataParsingTests.swift */; };
+		8CEA0FDB2D4BD39D007812B8 /* DivTimerStorageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0FDA2D4BD393007812B8 /* DivTimerStorageTest.swift */; };
 		8CF1296128B0018E00351F65 /* UrlInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296028B0018E00351F65 /* UrlInputView.swift */; };
 		8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296228B0021F00351F65 /* UserPreferences.swift */; };
 		8CF1296528B0036F00351F65 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296428B0036F00351F65 /* Styles.swift */; };
@@ -611,6 +612,7 @@
 		8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		8CE488632B76F64D00BDDAB9 /* parsing_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = parsing_test_data; path = ../../../test_data/parsing_test_data; sourceTree = "<group>"; };
 		8CE488652B76F6BA00BDDAB9 /* DivDataParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivDataParsingTests.swift; sourceTree = "<group>"; };
+		8CEA0FDA2D4BD393007812B8 /* DivTimerStorageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTimerStorageTest.swift; sourceTree = "<group>"; };
 		8CF1296028B0018E00351F65 /* UrlInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlInputView.swift; sourceTree = "<group>"; };
 		8CF1296228B0021F00351F65 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		8CF1296428B0036F00351F65 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
@@ -1421,6 +1423,7 @@
 			isa = PBXGroup;
 			children = (
 				E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */,
+				8CEA0FDA2D4BD393007812B8 /* DivTimerStorageTest.swift */,
 				E945FC45293E1CA80066C3EA /* Utils.swift */,
 			);
 			path = Timers;
@@ -1985,6 +1988,7 @@
 				8C23F43329DDB3810069F3F7 /* EntityWithStringEnumProperty.swift in Sources */,
 				8C22BBC02B037BA20076BAEB /* WithDefault.swift in Sources */,
 				8C23F43B29DDB3810069F3F7 /* ArrayTests.swift in Sources */,
+				8CEA0FDB2D4BD39D007812B8 /* DivTimerStorageTest.swift in Sources */,
 				8C22BBBA2B037BA20076BAEB /* WithoutDefaultTemplate.swift in Sources */,
 				7EE2ED6E2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift in Sources */,
 				8CC357F92BFE24B4001C2CFE /* FontFeatureSettingsParserTests.swift in Sources */,

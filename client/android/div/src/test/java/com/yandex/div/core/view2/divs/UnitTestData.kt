@@ -15,7 +15,7 @@ class UnitTestData(
 ) {
 
     val data: DivData
-        get() = DivData("id", listOf(DivData.State(div, 0)))
+        get() = DivData(logId = "id", states = listOf(DivData.State(div, 0)))
 
     private var _div: Div? = null
     val div: Div

@@ -1,3 +1,13 @@
+## 31.1.0 (February 3, 2025)
+
+* Added support for switching states in the `tooltip`.
+* Added support for the `filters` property in the `input` component.
+* Added support for the functions `tan`, `asin`, `acos`.
+* Fixed types for the `direction` property.
+* The `focus_element` action has been changed to move the cursor to the end of the `input` component (to match the behavior of native clients).
+* The requirement for a unique `id` for visibility change transitions has been removed (this change corresponds to the current behavior of the Android client).
+
+
 ## 31.0.0 (January 27, 2025)
 
 * Breaking change. Api `Ya.Divkit` in window is now deprecated, and the `Ya.DivKit` should be used (please note the big letter "K" instead of the small "K").

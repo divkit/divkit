@@ -53,6 +53,26 @@ internal data class SpanData(
         )
     }
 
+    fun isEmpty(): Boolean {
+        return alignmentVertical == null
+            && baselineOffset == DEFAULT_BASELINE_OFFSET
+            && fontFamily == null
+            && fontFeatureSettings == null
+            && fontSize == null
+            && fontSizeUnit == DEFAULT_FONT_SIZE_UNIT
+            && fontWeight == null
+            && fontWeightValue == null
+            && letterSpacing == null
+            && lineHeight == null
+            && strike == null
+            && textColor == null
+            && textShadow == null
+            && topOffset == null
+            && topOffsetStart == null
+            && topOffsetEnd == null
+            && underline == null
+    }
+
     override fun compareTo(other: SpanData): Int {
         return start - other.start
     }
@@ -76,6 +96,30 @@ internal data class SpanData(
                 fontWeightValue = null,
                 letterSpacing = null,
                 lineHeight = null,
+                strike = null,
+                textColor = null,
+                textShadow = null,
+                topOffset = null,
+                topOffsetStart = null,
+                topOffsetEnd = null,
+                underline = null,
+            )
+        }
+
+        internal fun lineHeight(start: Int, end: Int, lineHeight: Int): SpanData {
+            return SpanData(
+                start = start,
+                end = end,
+                alignmentVertical = null,
+                baselineOffset = DEFAULT_BASELINE_OFFSET,
+                fontFamily = null,
+                fontFeatureSettings = null,
+                fontSize = null,
+                fontSizeUnit = DEFAULT_FONT_SIZE_UNIT,
+                fontWeight = null,
+                fontWeightValue = null,
+                letterSpacing = null,
+                lineHeight = lineHeight,
                 strike = null,
                 textColor = null,
                 textShadow = null,

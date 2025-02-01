@@ -847,6 +847,10 @@
     "en": "State ID.",
     "ru": "Идентификатор состояния."
   },
+  "div_data_functions": {
+    "en": "User functions.",
+    "ru": "Пользовательские функции."
+  },
   "div_data_log_id": {
     "en": "Logging ID.",
     "ru": "Идентификатор для логирования."
@@ -2551,6 +2555,10 @@
     "en": "Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.",
     "ru": "Анимация исчезания подсказки. По умолчанию подсказка будет исчезать постепенно со смещением от якорной точки на 10 dp."
   },
+  "div_tooltip_close_by_tap_outside": {
+    "en": "Allows dismissing tooltip by tapping outside of it.",
+    "ru": "Позволяет закрывать подсказку при нажатии за её пределами."
+  },
   "div_tooltip_div": {
     "en": "An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.",
     "ru": "Элемент, который будет показан в подсказке. Если внутри элемента есть подсказки, они не будут показываться."
@@ -2567,21 +2575,13 @@
     "en": "Tooltip modes.",
     "ru": "Режимы подсказки."
   },
-  "div_tooltip_mode_non_modal": {
-    "en": "Non-modal mode. Clicks outside pass through to underlying elements. Does not restrict focus to the tooltip. Back button on Android and back gesture on iOS do not close the tooltip.",
-    "ru": "Немодальный режим. Клик за пределами обрабатывается элементами под подсказкой. Не ограничивает фокус в пределах подсказки. Кнопка назад на android и жест назад на ios не закрывают подсказку."
-  },
   "div_tooltip_mode_modal": {
     "en": "Modal mode. Clicks outside do not pass through to underlying elements. Restricts focus to the tooltip. Back button on Android and back gesture on iOS close the tooltip.",
     "ru": "Модальный режим. Клик за пределами не проходит сквозь и не доступен элементам под подсказкой. Ограничивает фокус в пределах подсказки. Кнопка назад на android и жест назад на ios закрывают подсказку"
   },
-  "div_tooltip_tap_outside_actions": {
-    "en": "Specifies actions triggered by tapping outside the tooltip.",
-    "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
-  },
-  "div_tooltip_close_by_tap_outside": {
-    "en": "Allows dismissing tooltip by tapping outside of it.",
-    "ru": "Позволяет закрывать подсказку при нажатии за её пределами."
+  "div_tooltip_mode_non_modal": {
+    "en": "Non-modal mode. Clicks outside pass through to underlying elements. Does not restrict focus to the tooltip. Back button on Android and back gesture on iOS do not close the tooltip.",
+    "ru": "Немодальный режим. Клик за пределами обрабатывается элементами под подсказкой. Не ограничивает фокус в пределах подсказки. Кнопка назад на android и жест назад на ios не закрывают подсказку."
   },
   "div_tooltip_offset": {
     "en": "Shift relative to an anchor point.",
@@ -2590,6 +2590,10 @@
   "div_tooltip_position": {
     "en": "The position of a tooltip relative to an element it belongs to.",
     "ru": "Положение подсказки относительно элемента, к которому она относится."
+  },
+  "div_tooltip_tap_outside_actions": {
+    "en": "Specifies actions triggered by tapping outside the tooltip.",
+    "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
   },
   "div_transform": {
     "en": "Transformation of the element.",

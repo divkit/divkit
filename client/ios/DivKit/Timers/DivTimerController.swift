@@ -73,7 +73,7 @@ final class DivTimerController {
       reporter: reporter
     )
     guard divTimer.parametersAreValid(expressionResolver) else {
-      DivKitLogger.failure("Timer '\(divTimer.id)' is not valid.")
+      DivKitLogger.error("Timer '\(divTimer.id)' is not valid.")
       return
     }
     state = .started
@@ -234,7 +234,7 @@ final class DivTimerController {
 
 extension DivTimer {
   fileprivate func getDuration(_ expressionResolver: ExpressionResolver) -> Int? {
-    let duration = self.resolveDuration(expressionResolver)
+    let duration = resolveDuration(expressionResolver)
     guard duration > 0 else {
       return nil
     }
@@ -242,25 +242,26 @@ extension DivTimer {
   }
 
   fileprivate func getTickInterval(_ expressionResolver: ExpressionResolver) -> Int? {
-    guard let divTickInterval = self.resolveTickInterval(expressionResolver),
-          divTickInterval > 0 else {
+    guard let tickInterval = resolveTickInterval(expressionResolver),
+          tickInterval > 0 else {
       return nil
     }
-    return divTickInterval
+    return tickInterval
   }
 
   fileprivate func parametersAreValid(_ expressionResolver: ExpressionResolver) -> Bool {
-    let duration = self.resolveDuration(expressionResolver)
+    let duration = resolveDuration(expressionResolver)
     if duration > 0 {
       return true
     }
-    guard let tickInterval = self.resolveTickInterval(expressionResolver), tickInterval > 0 else {
-      DivKitLogger.failure("Timer '\(self.id)' parameters is not valid: tick_interval not set")
+    guard let tickInterval = resolveTickInterval(expressionResolver), tickInterval > 0 else {
+      DivKitLogger.error("Timer '\(self.id)' parameters is not valid: tick_interval not set")
       return false
     }
-    if self.tickActions == nil, self.valueVariable == nil {
-      DivKitLogger
-        .failure("Timer '\(self.id)' parameters is not valid: set tickActions or valueVariable")
+    if tickActions == nil, valueVariable == nil {
+      DivKitLogger.error(
+        "Timer '\(self.id)' parameters is not valid: set tickActions or valueVariable"
+      )
       return false
     }
     return true

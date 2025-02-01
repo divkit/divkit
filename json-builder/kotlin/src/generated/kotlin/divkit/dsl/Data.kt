@@ -42,6 +42,10 @@ data class Data internal constructor(
          */
         val states: Property<List<State>>?,
         /**
+         * User functions.
+         */
+        val functions: Property<List<Function>>?,
+        /**
          * List of timers.
          */
         val timers: Property<List<Timer>>?,
@@ -65,6 +69,7 @@ data class Data internal constructor(
             result.putAll(properties)
             result.tryPutProperty("log_id", logId)
             result.tryPutProperty("states", states)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("timers", timers)
             result.tryPutProperty("transition_animation_selector", transitionAnimationSelector)
             result.tryPutProperty("variable_triggers", variableTriggers)
@@ -118,6 +123,7 @@ data class Data internal constructor(
 /**
  * @param logId Logging ID.
  * @param states A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
+ * @param functions User functions.
  * @param timers List of timers.
  * @param transitionAnimationSelector Events that trigger transition animations.
  * @param variableTriggers Triggers for changing variables.
@@ -128,6 +134,7 @@ fun DivScope.data(
     logId: String,
     states: List<Data.State>,
     `use named arguments`: Guard = Guard.instance,
+    functions: List<Function>? = null,
     timers: List<Timer>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
@@ -136,6 +143,7 @@ fun DivScope.data(
     Data.Properties(
         logId = valueOrNull(logId),
         states = valueOrNull(states),
+        functions = valueOrNull(functions),
         timers = valueOrNull(timers),
         transitionAnimationSelector = valueOrNull(transitionAnimationSelector),
         variableTriggers = valueOrNull(variableTriggers),
@@ -146,6 +154,7 @@ fun DivScope.data(
 /**
  * @param logId Logging ID.
  * @param states A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
+ * @param functions User functions.
  * @param timers List of timers.
  * @param transitionAnimationSelector Events that trigger transition animations.
  * @param variableTriggers Triggers for changing variables.
@@ -156,6 +165,7 @@ fun DivScope.dataProps(
     `use named arguments`: Guard = Guard.instance,
     logId: String? = null,
     states: List<Data.State>? = null,
+    functions: List<Function>? = null,
     timers: List<Timer>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
@@ -163,6 +173,7 @@ fun DivScope.dataProps(
 ) = Data.Properties(
     logId = valueOrNull(logId),
     states = valueOrNull(states),
+    functions = valueOrNull(functions),
     timers = valueOrNull(timers),
     transitionAnimationSelector = valueOrNull(transitionAnimationSelector),
     variableTriggers = valueOrNull(variableTriggers),
@@ -172,6 +183,7 @@ fun DivScope.dataProps(
 /**
  * @param logId Logging ID.
  * @param states A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
+ * @param functions User functions.
  * @param timers List of timers.
  * @param transitionAnimationSelector Events that trigger transition animations.
  * @param variableTriggers Triggers for changing variables.
@@ -182,6 +194,7 @@ fun TemplateScope.dataRefs(
     `use named arguments`: Guard = Guard.instance,
     logId: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<Data.State>>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     timers: ReferenceProperty<List<Timer>>? = null,
     transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     variableTriggers: ReferenceProperty<List<Trigger>>? = null,
@@ -189,6 +202,7 @@ fun TemplateScope.dataRefs(
 ) = Data.Properties(
     logId = logId,
     states = states,
+    functions = functions,
     timers = timers,
     transitionAnimationSelector = transitionAnimationSelector,
     variableTriggers = variableTriggers,
@@ -198,6 +212,7 @@ fun TemplateScope.dataRefs(
 /**
  * @param logId Logging ID.
  * @param states A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
+ * @param functions User functions.
  * @param timers List of timers.
  * @param transitionAnimationSelector Events that trigger transition animations.
  * @param variableTriggers Triggers for changing variables.
@@ -208,6 +223,7 @@ fun Data.override(
     `use named arguments`: Guard = Guard.instance,
     logId: String? = null,
     states: List<Data.State>? = null,
+    functions: List<Function>? = null,
     timers: List<Timer>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
@@ -216,6 +232,7 @@ fun Data.override(
     Data.Properties(
         logId = valueOrNull(logId) ?: properties.logId,
         states = valueOrNull(states) ?: properties.states,
+        functions = valueOrNull(functions) ?: properties.functions,
         timers = valueOrNull(timers) ?: properties.timers,
         transitionAnimationSelector = valueOrNull(transitionAnimationSelector) ?: properties.transitionAnimationSelector,
         variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
@@ -226,6 +243,7 @@ fun Data.override(
 /**
  * @param logId Logging ID.
  * @param states A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
+ * @param functions User functions.
  * @param timers List of timers.
  * @param transitionAnimationSelector Events that trigger transition animations.
  * @param variableTriggers Triggers for changing variables.
@@ -236,6 +254,7 @@ fun Data.defer(
     `use named arguments`: Guard = Guard.instance,
     logId: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<Data.State>>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     timers: ReferenceProperty<List<Timer>>? = null,
     transitionAnimationSelector: ReferenceProperty<TransitionSelector>? = null,
     variableTriggers: ReferenceProperty<List<Trigger>>? = null,
@@ -244,6 +263,7 @@ fun Data.defer(
     Data.Properties(
         logId = logId ?: properties.logId,
         states = states ?: properties.states,
+        functions = functions ?: properties.functions,
         timers = timers ?: properties.timers,
         transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
         variableTriggers = variableTriggers ?: properties.variableTriggers,
@@ -262,6 +282,7 @@ fun Data.evaluate(
     Data.Properties(
         logId = properties.logId,
         states = properties.states,
+        functions = properties.functions,
         timers = properties.timers,
         transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
         variableTriggers = properties.variableTriggers,

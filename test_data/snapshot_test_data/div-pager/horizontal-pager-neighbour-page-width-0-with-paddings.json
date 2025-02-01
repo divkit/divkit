@@ -63,7 +63,7 @@
         },
         {
           "type": "text_page_fixed_height",
-          "text": "Middle page\nneighbour_page_width = 0\npaddings = 20\nNeighbour pages visible part = 10"
+          "text": "Middle page\nneighbour_page_width = 0\npaddings = 20\nNeighbour pages are not shown"
         },
         {
           "type": "text_page_fixed_height",

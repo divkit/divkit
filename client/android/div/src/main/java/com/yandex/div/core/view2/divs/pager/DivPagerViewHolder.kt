@@ -1,32 +1,33 @@
 package com.yandex.div.core.view2.divs.pager
 
-import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import android.view.Gravity
 import com.yandex.div.R
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnEveryDetach
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
-import com.yandex.div.core.view2.animations.DivComparator
-import com.yandex.div.core.view2.divs.getChildPathUnit
-import com.yandex.div.core.view2.divs.resolvePath
-import com.yandex.div.core.view2.divs.resolveRuntime
-import com.yandex.div.core.view2.divs.widgets.DivHolderView
-import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
-import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
+import com.yandex.div.core.view2.divs.DivCollectionViewHolder
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div2.DivBase
+import com.yandex.div2.DivPager.ItemAlignment
+import javax.inject.Provider
 
 internal class DivPagerViewHolder(
     private val parentContext: BindingContext,
-    private val frameLayout: ViewGroup,
-    private val divBinder: DivBinder,
-    private val viewCreator: DivViewCreator,
-    private val path: DivStatePath,
+    private val pageLayout: DivPagerPageLayout,
+    divBinder: DivBinder,
+    viewCreator: DivViewCreator,
+    path: DivStatePath,
     private val accessibilityEnabled: Boolean,
-) : RecyclerView.ViewHolder(frameLayout) {
+    private val isHorizontal: Boolean,
+    private val crossAxisAlignment: Provider<ItemAlignment>,
+) : DivCollectionViewHolder(pageLayout, parentContext, divBinder, viewCreator, path) {
 
     init {
         itemView.doOnEveryDetach { view ->
@@ -36,57 +37,41 @@ internal class DivPagerViewHolder(
         }
     }
 
-    private var oldDiv: Div? = null
-    private val childrenPaths = mutableMapOf<String, DivStatePath>()
+    override fun bind(bindingContext: BindingContext, div: Div, position: Int) {
+        super.bind(bindingContext, div, position)
 
-    fun bind(bindingContext: BindingContext, div: Div, position: Int) {
-        val resolver = bindingContext.expressionResolver
-
-        if (frameLayout.tryRebindRecycleContainerChildren(bindingContext.divView, div)) {
-            oldDiv = div
-            return
-        }
-
-        val divView = frameLayout.getChildAt(0)
-            ?.takeIf { oldDiv != null }
-            ?.takeIf { child ->
-                (child as? DivHolderView<*>)?.bindingContext?.expressionResolver?.let {
-                    DivComparator.areDivsReplaceable(oldDiv, div, it, resolver)
-                } == true
-            } ?: createChildView(bindingContext, div)
+        (pageLayout.child?.layoutParams as? DivLayoutParams)
+            ?.setCrossAxisAlignment(div.value(), bindingContext.expressionResolver)
 
         if (accessibilityEnabled) {
-            frameLayout.setTag(R.id.div_pager_item_clip_id, position)
-        }
-        oldDiv = div
-
-        val id = div.value().getChildPathUnit(position)
-        val childPath = childrenPaths.getOrPut(id) { div.value().resolvePath(id, path) }
-
-        if (parentContext.expressionResolver != bindingContext.expressionResolver) {
-            resolveRuntime(
-                runtimeStore = bindingContext.runtimeStore,
-                div = div.value(),
-                childPath.fullPath,
-                resolver = resolver,
-                parentResolver = parentContext.expressionResolver,
-            )
-        }
-
-        divBinder.bind(bindingContext, divView, div, childPath)
-        bindingContext.runtimeStore?.showWarningIfNeeded(div.value())
-    }
-
-    private fun createChildView(bindingContext: BindingContext, div: Div): View {
-        oldDiv?.let {
-            KLog.d(TAG) { "Pager holder reuse failed" }
-        }
-
-        frameLayout.releaseAndRemoveChildren(bindingContext.divView)
-        return viewCreator.create(div, bindingContext.expressionResolver).also {
-            frameLayout.addView(it)
+            pageLayout.setTag(R.id.div_pager_item_clip_id, position)
         }
     }
+
+    private fun DivLayoutParams.setCrossAxisAlignment(div: DivBase, resolver: ExpressionResolver) {
+        val childAlignment = if (isHorizontal) div.alignmentVertical else div.alignmentHorizontal
+        val alignment = childAlignment?.evaluate(resolver) ?: crossAxisAlignment.get()
+
+        gravity = if (isHorizontal) {
+            when (alignment) {
+                ItemAlignment.CENTER, DivAlignmentVertical.CENTER -> Gravity.CENTER
+                ItemAlignment.END, DivAlignmentVertical.BOTTOM -> Gravity.BOTTOM
+                else -> Gravity.TOP
+            }
+        } else {
+            when (alignment) {
+                ItemAlignment.CENTER, DivAlignmentHorizontal.CENTER -> Gravity.CENTER
+                ItemAlignment.END, DivAlignmentHorizontal.END -> Gravity.END
+                DivAlignmentHorizontal.LEFT -> Gravity.LEFT
+                DivAlignmentHorizontal.RIGHT -> Gravity.RIGHT
+                else -> Gravity.START
+            }
+        }
+
+        pageLayout.requestLayout()
+    }
+
+    override fun logReuseError() = KLog.d(TAG) { "Pager holder reuse failed" }
 
     companion object {
         const val TAG = "DivPagerViewHolder"

@@ -101,6 +101,7 @@ internal class DivPagerBinder @Inject constructor(
         view.addSubscription(div.paddings?.bottom?.observe(resolver, reusableObserver))
         view.addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
         view.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
+        view.addSubscription(div.scrollAxisAlignment.observe(resolver, reusableObserver))
         view.addSubscription(div.orientation.observeAndGet(resolver, reusableObserver))
         view.addSubscription(view.viewPager.observeSizeChange(reusableObserver))
 
@@ -143,6 +144,11 @@ internal class DivPagerBinder @Inject constructor(
             } else {
                 null
             }
+        })
+
+        view.addSubscription(div.crossAxisAlignment.observeAndGet(resolver) {
+            adapter.crossAxisAlignment = it
+            view.requestLayout()
         })
 
         view.bindItemBuilder(context, div)
@@ -199,10 +205,19 @@ internal class DivPagerBinder @Inject constructor(
         val parentSize = if (isHorizontal) viewPager.width else viewPager.height
         val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
         val infiniteScroll = div.infiniteScroll.evaluate(resolver)
-        val paddings = DivPagerPaddingsHolder(div.paddings, resolver, this, metrics, isHorizontal)
+        val scrollAxisAlignment = div.scrollAxisAlignment.evaluate(resolver)
+        val paddings = DivPagerPaddingsHolder(div.paddings, resolver, this, metrics, isHorizontal, scrollAxisAlignment)
 
         val sizeProvider = when (val layoutMode = div.layoutMode) {
-            is DivPagerLayoutMode.PageSize -> PercentagePageSizeProvider(layoutMode.value, resolver, parentSize)
+            is DivPagerLayoutMode.PageSize -> {
+                PercentagePageSizeProvider(
+                    layoutMode.value,
+                    resolver,
+                    parentSize,
+                    paddings,
+                    scrollAxisAlignment,
+                )
+            }
             is DivPagerLayoutMode.NeighbourPageSize -> {
                 NeighbourPageSizeProvider(
                     layoutMode.value,
@@ -210,11 +225,12 @@ internal class DivPagerBinder @Inject constructor(
                     metrics,
                     parentSize,
                     itemSpacing,
-                    infiniteScroll,
-                    paddings
+                    paddings,
+                    scrollAxisAlignment,
                 )
             }
-            is DivPagerLayoutMode.PageContentSize -> WrapContentPageSizeProvider(recyclerView, isHorizontal)
+            is DivPagerLayoutMode.PageContentSize ->
+                WrapContentPageSizeProvider(recyclerView, isHorizontal, parentSize, paddings, scrollAxisAlignment)
         }
 
         val decoration = if (sizeProvider is FixedPageSizeProvider) {
@@ -227,28 +243,21 @@ internal class DivPagerBinder @Inject constructor(
                 infiniteScroll,
                 adapter
             )
-            FixedPageSizeItemDecoration(paddings, sizeProvider, isHorizontal)
+            FixedPageSizeItemDecoration(paddings, sizeProvider)
         } else {
-            WrapContentPageSizeOffScreenPagesController(
-                this,
-                parentSize,
-                itemSpacing,
-                sizeProvider,
-                paddings,
-                adapter
-            )
-            WrapContentPageSizeItemDecoration(parentSize, paddings, isHorizontal)
+            WrapContentPageSizeOffScreenPagesController(this, itemSpacing, sizeProvider, paddings, adapter)
+            WrapContentPageSizeItemDecoration(parentSize, paddings, scrollAxisAlignment)
         }
 
         viewPager.setItemDecoration(decoration)
 
         val offsetProvider = DivPagerPageOffsetProvider(
-            parentSize,
             itemSpacing,
             sizeProvider,
             paddings,
             infiniteScroll,
-            adapter
+            adapter,
+            scrollAxisAlignment,
         )
         pageTransformer = DivPagerPageTransformer(
             recyclerView,

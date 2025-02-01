@@ -30,6 +30,7 @@ public final class DivTriggersStorage {
   private let actionHandler: DivActionHandler?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
+  private let flagsInfo: DivFlagsInfo
   private let disposePool = AutodisposePool()
 
   init(
@@ -38,6 +39,7 @@ public final class DivTriggersStorage {
     blockStateStorage: DivBlockStateStorage,
     actionHandler: DivActionHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
+    flagsInfo: DivFlagsInfo,
     reporter: DivReporter? = nil
   ) {
     self.variablesStorage = variablesStorage
@@ -45,6 +47,7 @@ public final class DivTriggersStorage {
     self.actionHandler = actionHandler
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter ?? DefaultDivReporter()
+    self.flagsInfo = flagsInfo
 
     blockStateStorage.stateUpdates.addObserver { [weak self] stateEvent in
       self?.handleStateEvent(stateEvent)
@@ -71,11 +74,14 @@ public final class DivTriggersStorage {
       let newItem = Item(triggers.map { Item.Trigger($0) })
       if !newItem.triggers.isEmpty {
         triggersByPath[path] = newItem
+        if flagsInfo.initializeTriggerOnSet {
+          initialize(path: path, item: newItem)
+        }
       }
     }
   }
 
-  func initializeIfNeeded(cardId: DivCardID) {
+  func initialize(cardId: DivCardID) {
     lock.withLock {
       for (path, item) in triggersByPath {
         if path.cardId == cardId {

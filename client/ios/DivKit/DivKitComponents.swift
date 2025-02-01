@@ -165,7 +165,7 @@ public final class DivKitComponents {
       reporter: reporter,
       idToPath: idToPath,
       animatorController: animatorController,
-      flags: .default
+      flags: flagsInfo
     )
 
     triggersStorage = DivTriggersStorage(
@@ -174,6 +174,7 @@ public final class DivKitComponents {
       blockStateStorage: blockStateStorage,
       actionHandler: actionHandler,
       persistentValuesStorage: persistentValuesStorage,
+      flagsInfo: flagsInfo,
       reporter: reporter
     )
 
@@ -339,6 +340,7 @@ public final class DivKitComponents {
   public func setCardData(divData: DivData, cardId: DivCardID) {
     setTimers(divData: divData, cardId: cardId)
     setVariablesAndTriggers(divData: divData, cardId: cardId)
+    functionsStorage.set(cardId: cardId, functions: divData.functions ?? [])
   }
 
   public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {

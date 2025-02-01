@@ -131,7 +131,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
     let animationContainer = UIView()
     animationContainer.frame = startFrame
-    animationContainer.clipsToBounds = true
+    animationContainer.clipsToBounds = false
     animationContainer.addSubview(childView)
 
     container.addSubview(animationContainer)

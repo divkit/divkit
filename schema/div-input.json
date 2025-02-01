@@ -63,7 +63,8 @@
           "type": "array",
           "$description": "translations.json#/div_input_filters",
           "platforms": [
-            "ios"
+            "ios",
+            "web"
           ],
           "items": {
             "$ref": "div-input-filter.json"

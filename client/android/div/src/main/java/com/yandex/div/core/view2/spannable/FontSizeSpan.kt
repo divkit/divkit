@@ -18,8 +18,12 @@ internal class FontSizeSpan(
     override fun updateMeasureState(paint: TextPaint) {
         if (lineHeight == 0) {
             paint.textSize = fontSize.toFloat()
+        } else if (lineHeight < paint.textSize) {
+            val scale = fontSize.toFloat() / lineHeight
+            paint.textScaleX = scale
+            paint.textSize = lineHeight.toFloat()
         } else {
-            val scale = fontSize / paint.textSize
+            val scale = fontSize.toFloat() / paint.textSize
             paint.textScaleX = scale
         }
     }

@@ -4,6 +4,8 @@ import VGSL
 
 public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private let tooltipView: VisibleBoundsTrackingView
+  private let closeByTapOutside: Bool
+  private let tapOutsideActions: [UserInterfaceAction]
   private let handleAction: (LayoutKit.UIActionEvent) -> Void
   private let onCloseAction: Action
 
@@ -12,17 +14,26 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
   public init(
     tooltipView: VisibleBoundsTrackingView,
+    closeByTapOutside: Bool,
+    tapOutsideActions: [UserInterfaceAction],
     handleAction: @escaping (LayoutKit.UIActionEvent) -> Void,
     onCloseAction: @escaping Action
   ) {
     self.tooltipView = tooltipView
+    self.closeByTapOutside = closeByTapOutside
+    self.tapOutsideActions = tapOutsideActions
     self.handleAction = handleAction
     self.onCloseAction = onCloseAction
     let tooltipBounds = tooltipView.bounds
     onVisibleBoundsChanged = { [weak tooltipView] in
       tooltipView?.onVisibleBoundsChanged(from: .zero, to: tooltipBounds)
     }
+    
     super.init(frame: .zero)
+    
+    let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    addGestureRecognizer(tapRecognizer)
+    
     addSubview(tooltipView)
   }
 
@@ -30,11 +41,14 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   required init?(coder _: NSCoder) {
     fatalError()
   }
-
-  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    if let touch = touches.first {
-      let point = touch.location(in: self)
-      if !tooltipView.point(inside: tooltipView.convert(point, from: self), with: event) {
+  
+  @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+    let point = sender.location(in: self)
+    let isPointInsideTooltip = tooltipView.point(inside: tooltipView.convert(point, from: self), with: nil)
+    if !isPointInsideTooltip {
+      performTapOutsideActions()
+      
+      if closeByTapOutside {
         close()
       }
     }
@@ -65,5 +79,12 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     removeFromParentAnimated(completion: {
       self.onCloseAction()
     })
+  }
+  
+  private func performTapOutsideActions() {
+    let uiActionEvents = tapOutsideActions.map {
+      UIActionEvent(uiAction: $0, originalSender: self)
+    }
+    perform(uiActionEvents: uiActionEvents, from: self)
   }
 }

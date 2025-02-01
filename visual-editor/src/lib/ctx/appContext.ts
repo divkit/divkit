@@ -86,6 +86,7 @@ export interface File2DialogShowProps {
     target: HTMLElement;
     disabled?: boolean;
     generateFromVideo?: VideoSource[];
+    generateFromLottie?: string;
     callback: File2DialogCallback;
     onHide?(): void;
 }
@@ -236,6 +237,7 @@ export interface AppContext {
     errorFileLimit: number;
     rootConfigurable: boolean;
     customFontFaces: FontFaceDesc[];
+    directionSelector: boolean;
 
     rendererApi: () => RendererApi;
     setRendererApi(api: RendererApi): void;

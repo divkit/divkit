@@ -26,7 +26,9 @@ extension DivTooltip {
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
-      tooltipViewFactory: tooltipViewFactory
+      tooltipViewFactory: tooltipViewFactory,
+      closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
+      tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? []
     )
   }
 }

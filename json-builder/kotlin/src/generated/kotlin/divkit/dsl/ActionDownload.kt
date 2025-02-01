@@ -54,7 +54,7 @@ data class ActionDownload internal constructor(
         /**
          * Link for receiving changes.
          */
-        val url: Property<String>?,
+        val url: Property<Url>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -77,7 +77,7 @@ fun DivScope.actionDownload(
     `use named arguments`: Guard = Guard.instance,
     onFailActions: List<Action>? = null,
     onSuccessActions: List<Action>? = null,
-    url: String? = null,
+    url: Url? = null,
 ): ActionDownload = ActionDownload(
     ActionDownload.Properties(
         onFailActions = valueOrNull(onFailActions),
@@ -96,7 +96,7 @@ fun DivScope.actionDownloadProps(
     `use named arguments`: Guard = Guard.instance,
     onFailActions: List<Action>? = null,
     onSuccessActions: List<Action>? = null,
-    url: String? = null,
+    url: Url? = null,
 ) = ActionDownload.Properties(
     onFailActions = valueOrNull(onFailActions),
     onSuccessActions = valueOrNull(onSuccessActions),
@@ -113,7 +113,7 @@ fun TemplateScope.actionDownloadRefs(
     `use named arguments`: Guard = Guard.instance,
     onFailActions: ReferenceProperty<List<Action>>? = null,
     onSuccessActions: ReferenceProperty<List<Action>>? = null,
-    url: ReferenceProperty<String>? = null,
+    url: ReferenceProperty<Url>? = null,
 ) = ActionDownload.Properties(
     onFailActions = onFailActions,
     onSuccessActions = onSuccessActions,
@@ -130,7 +130,7 @@ fun ActionDownload.override(
     `use named arguments`: Guard = Guard.instance,
     onFailActions: List<Action>? = null,
     onSuccessActions: List<Action>? = null,
-    url: String? = null,
+    url: Url? = null,
 ): ActionDownload = ActionDownload(
     ActionDownload.Properties(
         onFailActions = valueOrNull(onFailActions) ?: properties.onFailActions,
@@ -149,7 +149,7 @@ fun ActionDownload.defer(
     `use named arguments`: Guard = Guard.instance,
     onFailActions: ReferenceProperty<List<Action>>? = null,
     onSuccessActions: ReferenceProperty<List<Action>>? = null,
-    url: ReferenceProperty<String>? = null,
+    url: ReferenceProperty<Url>? = null,
 ): ActionDownload = ActionDownload(
     ActionDownload.Properties(
         onFailActions = onFailActions ?: properties.onFailActions,
@@ -164,7 +164,7 @@ fun ActionDownload.defer(
 @Generated
 fun ActionDownload.evaluate(
     `use named arguments`: Guard = Guard.instance,
-    url: ExpressionProperty<String>? = null,
+    url: ExpressionProperty<Url>? = null,
 ): ActionDownload = ActionDownload(
     ActionDownload.Properties(
         onFailActions = properties.onFailActions,

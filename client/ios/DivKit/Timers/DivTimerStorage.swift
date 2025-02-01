@@ -7,12 +7,13 @@ final class DivTimerStorage {
   private let functionsStorage: DivFunctionsStorage
   private let actionHandler: DivActionHandler
   private let updateCard: DivActionHandler.UpdateCardAction
-  private let timerScheduler = TimerScheduler()
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
+  private let scheduler: Scheduling
+  private let timeMeasuringFactory: () -> TimeMeasuring
 
-  private var cardsTimers = [DivCardID: [DivTimer]]()
-  private var timerControllers = [String: DivTimerController]()
+  private var timers = [UIElementPath: DivTimer]()
+  private var controllers = [UIElementPath: DivTimerController]()
 
   init(
     variablesStorage: DivVariablesStorage,
@@ -20,7 +21,9 @@ final class DivTimerStorage {
     actionHandler: DivActionHandler,
     updateCard: @escaping DivActionHandler.UpdateCardAction,
     persistentValuesStorage: DivPersistentValuesStorage,
-    reporter: DivReporter
+    reporter: DivReporter,
+    scheduler: Scheduling = TimerScheduler(),
+    timeMeasuringFactory: @escaping () -> TimeMeasuring = { TimeIntervalMeasuring() }
   ) {
     self.variablesStorage = variablesStorage
     self.functionsStorage = functionsStorage
@@ -28,13 +31,21 @@ final class DivTimerStorage {
     self.updateCard = updateCard
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter
+    self.scheduler = scheduler
+    self.timeMeasuringFactory = timeMeasuringFactory
   }
 
-  func set(
-    cardId: DivCardID,
-    timers: [DivTimer]
-  ) {
-    cardsTimers[cardId] = timers
+  func set(cardId: DivCardID, timers: [DivTimer]) {
+    reset(cardId: cardId)
+
+    for timer in timers {
+      let key = cardId.path + timer.id
+      if self.timers[key] == nil {
+        self.timers[key] = timer
+      } else {
+        DivKitLogger.error("Duplicate timer \(timer.id) in card \(cardId)")
+      }
+    }
   }
 
   func perform(_ cardId: DivCardID, _ timerId: String, _ action: DivTimerAction) {
@@ -55,85 +66,87 @@ final class DivTimerStorage {
   }
 
   func start(cardId: DivCardID, timerId: String) {
-    if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      timer.start()
+    if let controller = getController(cardId: cardId, timerId: timerId) {
+      controller.start()
     }
   }
 
   func stop(cardId: DivCardID, timerId: String) {
-    if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      timer.stop()
+    if let controller = getController(cardId: cardId, timerId: timerId) {
+      controller.stop()
     }
   }
 
   func pause(cardId: DivCardID, timerId: String) {
-    if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      timer.pause()
+    if let controller = getController(cardId: cardId, timerId: timerId) {
+      controller.pause()
     }
   }
 
   func resume(cardId: DivCardID, timerId: String) {
-    if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      timer.resume()
+    if let controller = getController(cardId: cardId, timerId: timerId) {
+      controller.resume()
     }
   }
 
   func cancel(cardId: DivCardID, timerId: String) {
-    if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      timer.cancel()
+    if let controller = getController(cardId: cardId, timerId: timerId) {
+      controller.cancel()
     }
   }
 
   func reset(cardId: DivCardID, timerId: String) {
-    if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      timer.reset()
+    if let controller = getController(cardId: cardId, timerId: timerId) {
+      controller.reset()
     }
   }
 
   func reset() {
-    for (_, timer) in timerControllers {
-      timer.cancel()
+    timers = [:]
+
+    for (_, controller) in controllers {
+      controller.cancel()
     }
-    timerControllers.removeAll()
+    controllers = [:]
   }
 
   func reset(cardId: DivCardID) {
-    for (key, timer) in timerControllers {
-      if key.starts(with: cardId.rawValue) {
-        timer.cancel()
+    timers = timers.filter { key, _ in key.cardId != cardId }
+
+    let oldControllers = controllers
+    for (key, controller) in oldControllers {
+      if key.cardId == cardId {
+        controller.cancel()
+        controllers.removeValue(forKey: key)
       }
     }
-    timerControllers = timerControllers.filter { !$0.key.starts(with: cardId.rawValue) }
   }
 
-  private func getTimer(cardId: DivCardID, timerId: String) -> DivTimerController? {
-    guard let timers = cardsTimers[cardId],
-          let divTimer = timers.filter({ $0.id == timerId }).first else {
-      DivKitLogger.failure("Timer with id:'\(timerId)' not found for cardId:'\(cardId)'")
+  private func getController(cardId: DivCardID, timerId: String) -> DivTimerController? {
+    let key = cardId.path + timerId
+    if let controller = controllers[key] {
+      return controller
+    }
+
+    guard let timer = timers[key] else {
+      DivKitLogger.error("Timer \(timerId) not found for card \(cardId)")
       return nil
     }
-    let key = makeControllerKey(cardId: cardId, divTimer: divTimer)
-    if let timer = timerControllers[key] {
-      return timer
-    }
-    let timer = makeTimer(cardId: cardId, divTimer: divTimer)
-    timerControllers[key] = timer
-    return timer
+
+    let controller = makeController(cardId: cardId, timer: timer)
+    controllers[key] = controller
+    return controller
   }
 
-  private func makeControllerKey(cardId: DivCardID, divTimer: DivTimer) -> String {
-    "\(cardId)_\(divTimer.id)"
-  }
-
-  private func makeTimer(
+  private func makeController(
     cardId: DivCardID,
-    divTimer: DivTimer
+    timer: DivTimer
   ) -> DivTimerController {
     DivTimerController(
       cardId: cardId,
-      divTimer: divTimer,
-      timerScheduler: timerScheduler,
-      timeMeasuring: TimeIntervalMeasuring(),
+      divTimer: timer,
+      timerScheduler: scheduler,
+      timeMeasuring: timeMeasuringFactory(),
       runActions: { [weak self] actions in
         self?.runActions(cardId: cardId, actions: actions)
       },

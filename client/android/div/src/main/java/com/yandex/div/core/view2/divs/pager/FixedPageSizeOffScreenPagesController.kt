@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs.pager
 
 import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import kotlin.math.ceil
 import kotlin.math.max
@@ -53,7 +52,7 @@ internal class FixedPageSizeOffScreenPagesController(
 
         setOffScreenPages(pager.currentItem)
 
-        parent.changePageCallbackForOffScreenPages = object: OnPageChangeCallback() {
+        parent.changePageCallbackForOffScreenPages = object: DivPagerView.OffScreenPagesUpdateCallback() {
             override fun onPageSelected(position: Int) = setOffScreenPages(position)
         }
     }

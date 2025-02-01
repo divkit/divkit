@@ -39,6 +39,8 @@
         "props.align_right": "Справа",
         "props.align_top": "Сверху",
         "props.align_bottom": "Снизу",
+        "props.align_start": "В начале",
+        "props.align_end": "В конце",
         "props.alpha": "Непрозрачность",
         "props.rotation": "Поворот",
         "props.insets": "Отступы",
@@ -164,6 +166,7 @@
         "redo": "Вернуть",
         "previewSize": "Размер окна предварительного просмотра",
         "previewLang": "Выбранный язык для отображения",
+        "previewDirection": "Направление ввода текст",
         "components.image": "Картинка",
         "components.gif": "Gif-картинка",
         "components.text": "Текст",
@@ -233,6 +236,7 @@
         "file.insert_image": "Вставить изображение",
         "file.too_big": "Слишком большой файл",
         "file.generate_from_video": "Сгенерировать из видео",
+        "file.generate_from_lottie": "Сгенерировать из анимации",
         "link.placeholder": "Введите адрес ссылки",
         "textStyle": "Стилизация",
         "commands.add_component": "Добавление компонента",
@@ -297,7 +301,9 @@
         "timersTickInterval": "Периодический интервал",
         "timersValueVariable": "Переменная",
         "timersTickActions": "Периодические действия",
-        "timersEndActions": "Действия при окончании"
+        "timersEndActions": "Действия при окончании",
+        "rtl.switchToRtl": "Включить написание справа-налево",
+        "rtl.switchToLTR": "Включить написание слева-направо"
     },
     "en": {
         "collapse": "Collapse",
@@ -339,6 +345,8 @@
         "props.align_right": "Right",
         "props.align_top": "Top",
         "props.align_bottom": "Bottom",
+        "props.align_start": "Start",
+        "props.align_end": "End",
         "props.alpha": "Alpha",
         "props.rotation": "Rotation",
         "props.insets": "Margins and paddings",
@@ -464,6 +472,7 @@
         "redo": "Redo",
         "previewSize": "Preview size",
         "previewLang": "Preview language",
+        "previewDirection": "Text direction",
         "components.image": "Image",
         "components.gif": "Gif-image",
         "components.text": "Text",
@@ -533,6 +542,7 @@
         "file.insert_image": "Insert image",
         "file.too_big": "The file is too large",
         "file.generate_from_video": "Generate from video",
+        "file.generate_from_lottie": "Generate from animation",
         "link.placeholder": "Input link address",
         "textStyle": "Styles",
         "commands.add_component": "Component addition",
@@ -597,6 +607,8 @@
         "timersTickInterval": "Tick interval",
         "timersValueVariable": "Value variable",
         "timersTickActions": "Tick actions",
-        "timersEndActions": "End actions"
+        "timersEndActions": "End actions",
+        "rtl.switchToRTL": "Turn on RTL layout",
+        "rtl.switchToLTR": "Turn on LTR layout"
     }
 }

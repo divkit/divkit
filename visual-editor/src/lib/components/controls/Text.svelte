@@ -26,6 +26,7 @@
     export let error = '';
     export let title = '';
     export let generateFromVideo: VideoSource[] | undefined = undefined;
+    export let generateFromLottie: string | undefined = undefined;
 
     const dispatch = createEventDispatcher();
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
@@ -145,6 +146,7 @@
             },
             disabled,
             generateFromVideo,
+            generateFromLottie,
             callback(val) {
                 value = val.url;
 
@@ -198,6 +200,8 @@
             on:input={onChange}
             on:focus={onFocus}
             on:blur={onBlur}
+            on:focus
+            on:blur
         >
     {:else}
         <input
@@ -221,6 +225,8 @@
             on:input={onChange}
             on:focus={onFocus}
             on:blur={onBlur}
+            on:focus
+            on:blur
         >
     {/if}
 

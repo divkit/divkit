@@ -11,6 +11,7 @@ import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div2.DivPager
 
 internal class DivPagerAdapter(
     items: List<DivItemBuilderResult>,
@@ -40,6 +41,8 @@ internal class DivPagerAdapter(
 
     var orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
+    var crossAxisAlignment = DivPager.ItemAlignment.START
+
     var infiniteScrollEnabled = false
         set(value) {
             if (field == value) return
@@ -57,8 +60,18 @@ internal class DivPagerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
         val view = DivPagerPageLayout(bindingContext.divView.context) { orientation }
-        return DivPagerViewHolder(bindingContext, view, divBinder, viewCreator, path, accessibilityEnabled)
+        return DivPagerViewHolder(
+            bindingContext,
+            view,
+            divBinder,
+            viewCreator,
+            path,
+            accessibilityEnabled,
+            isHorizontal,
+        ) { crossAxisAlignment }
     }
+
+    private val isHorizontal get() = orientation == ViewPager2.ORIENTATION_HORIZONTAL
 
     override fun getItemCount() = itemsToShow.size
 
@@ -66,7 +79,7 @@ internal class DivPagerAdapter(
         val item = itemsToShow[position]
         holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position)
         pageTranslations[position]?.let {
-            if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
+            if (isHorizontal) {
                 holder.itemView.translationX = it
             } else {
                 holder.itemView.translationY = it

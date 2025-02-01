@@ -109,6 +109,8 @@
     let describedBy = '';
     let mounted = false;
     let validatorsFirstRun = true;
+    let selectionStart = 0;
+    let selectionEnd = 0;
 
     $: origJson = componentContext.origJson;
 
@@ -130,6 +132,8 @@
         autocapitalization = 'off';
         enterKeyType = 'default';
         describedBy = '';
+        selectionStart = 0;
+        selectionEnd = 0;
     }
 
     $: if (origJson) {
@@ -165,6 +169,7 @@
     $: jsonAutocapitalization = componentContext.getDerivedFromVars(componentContext.json.autocapitalization);
     $: jsonEnterKeyType = componentContext.getDerivedFromVars(componentContext.json.enter_key_type);
     $: jsonValidators = componentContext.getDerivedFromVars(componentContext.json.validators);
+    $: jsonFilters = componentContext.getDerivedFromVars(componentContext.json.filters);
 
     $: if (variable) {
         hasError = false;
@@ -346,6 +351,38 @@
         padding: verticalPadding
     };
 
+    function checkFilters(val: string): boolean {
+        if (!Array.isArray($jsonFilters) || !val) {
+            return true;
+        }
+
+        for (const filter of $jsonFilters) {
+            if (!filter) {
+                continue;
+            }
+            if (filter.type === 'regex') {
+                try {
+                    const re = new RegExp('^' + (filter.pattern || '') + '$');
+                    if (!re.test(val)) {
+                        return false;
+                    }
+                } catch (err) {
+                    componentContext.logError(wrapError(new Error('Failed to create a regex'), {
+                        additional: {
+                            originalError: String(err)
+                        }
+                    }));
+                    return true;
+                }
+            } else if (filter.type === 'expression') {
+                if (!filter.condition) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     function onInput(event: Event): void {
         const input = event.target;
         let val = (isMultiline ?
@@ -365,12 +402,22 @@
         }
 
         if (value !== val) {
-            value = contentEditableValue = val;
-            valueVariable.setValue(val);
-            if (inputMask) {
-                runValueMask();
+            if (checkFilters(val)) {
+                value = contentEditableValue = val;
+                valueVariable.setValue(val);
+                if (inputMask) {
+                    runValueMask();
+                }
+                runValidators();
+            } else {
+                value = contentEditableValue = val;
+                if (input instanceof HTMLInputElement) {
+                    input.value = val;
+                }
+                tick().then(() => {
+                    setCursorPosition(selectionStart, selectionEnd);
+                });
             }
-            runValidators();
         }
     }
 
@@ -385,6 +432,9 @@
     }
 
     function onKeyDown(event: KeyboardEvent): void {
+        selectionStart = getSelectionStart() || 0;
+        selectionEnd = getSelectionEnd() || 0;
+
         if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
             return;
         }
@@ -432,19 +482,35 @@
         }
     }
 
+    function getSelectionStart(): number | undefined {
+        if (input instanceof HTMLInputElement) {
+            return input.selectionStart === null ? undefined : input.selectionStart;
+        }
+
+        return calcSelectionOffset(input, 'start');
+    }
+
     function getSelectionEnd(): number | undefined {
         if (input instanceof HTMLInputElement) {
             return input.selectionEnd === null ? undefined : input.selectionEnd;
         }
 
-        return calcSelectionOffset(input);
+        return calcSelectionOffset(input, 'end');
     }
 
-    function setCursorPosition(cursorPosition: number): void {
+    function setCursorPosition(start: number, end: number): void {
         if (input instanceof HTMLInputElement) {
-            input.selectionStart = input.selectionEnd = cursorPosition;
+            input.selectionStart = start;
+            input.selectionEnd = end;
         } else {
-            setSelectionOffset(input, cursorPosition);
+            const sel = window.getSelection();
+            if (sel) {
+                sel.removeAllRanges();
+                const range = document.createRange();
+                setSelectionOffset(input, range, 'start', start);
+                setSelectionOffset(input, range, 'end', end);
+                sel.addRange(range);
+            }
         }
     }
 
@@ -453,7 +519,10 @@
             return;
         }
 
-        inputMask.applyChangeFrom(value, getSelectionEnd());
+        const start = getSelectionStart() || 0;
+        const end = getSelectionEnd() || 0;
+
+        inputMask.applyChangeFrom(value, end === start ? end : 0);
 
         rawValueVariable.set(inputMask.rawValue);
         $valueVariable = value = contentEditableValue = inputMask.value;
@@ -462,7 +531,7 @@
         await tick();
 
         if (document.activeElement === input) {
-            setCursorPosition(cursorPosition);
+            setCursorPosition(cursorPosition, cursorPosition);
         }
     }
 
@@ -480,7 +549,7 @@
         await tick();
 
         if (document.activeElement === input) {
-            setCursorPosition(cursorPosition);
+            setCursorPosition(cursorPosition, cursorPosition);
         }
     }
 
@@ -564,7 +633,7 @@
                 focus() {
                     if (input) {
                         input.focus();
-                        setCursorPosition(value.length);
+                        setCursorPosition(value.length, value.length);
                     }
                 }
             });

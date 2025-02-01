@@ -100,6 +100,17 @@ final class CustomFunctionTests: XCTestCase {
     variablesStorage.set(cardId: "card_id", variables: variables)
   }
 
+  func test_SetCustomFunction() {
+    functionsStorage.set(cardId: path.cardId, functions: [incrementFunction])
+
+    XCTAssertTrue(
+      functionsStorage.getStorage(
+        path: path,
+        contains: "increment"
+      ) != nil
+    )
+  }
+
   func test_InvokeCustomFunc_WithStringVariableArgument_ReturnsInteger() {
     functionsStorage.setIfNeeded(path: path, functions: [stringLenFunction])
 

@@ -69,6 +69,7 @@
       },
       "$description": "translations.json#/div_tooltip_tap_outside_actions",
       "platforms": [
+        "ios"
       ]
     },
     "close_by_tap_outside": {
@@ -76,6 +77,7 @@
       "$description": "translations.json#/div_tooltip_close_by_tap_outside",
       "default_value": "true",
       "platforms": [
+        "ios"
       ]
     }
   },

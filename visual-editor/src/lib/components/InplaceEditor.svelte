@@ -48,7 +48,7 @@
         link2Dialog,
         textAlign2Dialog
     } = getContext<AppContext>(APP_CTX);
-    const { palette, selectedLeaf, previewThemeStore } = state;
+    const { palette, selectedLeaf, previewThemeStore, direction } = state;
 
     const dispatch = createEventDispatcher();
 
@@ -1001,7 +1001,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-    class="inplace-editor"
+    class="inplace-editor inplace-editor_direction_{$direction}"
     class:inplace-editor_disabled={disabled}
     bind:this={root}
     on:click|stopPropagation
@@ -1200,12 +1200,22 @@
         background-image: url(../../assets/alignLeft2.svg);
     }
 
+    .inplace-editor_direction_ltr .inplace-editor__select-icon_align_start,
+    .inplace-editor_direction_rtl .inplace-editor__select-icon_align_end {
+        background-image: url(../../assets/alignLeftLogical2.svg);
+    }
+
     .inplace-editor__select-icon_align_center {
         background-image: url(../../assets/alignCenter2.svg);
     }
 
     .inplace-editor__select-icon_align_right {
         background-image: url(../../assets/alignRight2.svg);
+    }
+
+    .inplace-editor_direction_ltr .inplace-editor__select-icon_align_end,
+    .inplace-editor_direction_rtl .inplace-editor__select-icon_align_start {
+        background-image: url(../../assets/alignRightLogical2.svg);
     }
 
     .inplace-editor__select {
@@ -1235,7 +1245,9 @@
         word-break: break-word;
     }
 
-    .inplace-editor__content_align_left {
+    .inplace-editor__content_align_left,
+    .inplace-editor_direction_ltr .inplace-editor__content_align_start,
+    .inplace-editor_direction_rtl .inplace-editor__content_align_end {
         text-align: left;
     }
 
@@ -1243,7 +1255,9 @@
         text-align: center;
     }
 
-    .inplace-editor__content_align_right {
+    .inplace-editor__content_align_right,
+    .inplace-editor_direction_ltr .inplace-editor__content_align_end,
+    .inplace-editor_direction_rtl .inplace-editor__content_align_start {
         text-align: right;
     }
 

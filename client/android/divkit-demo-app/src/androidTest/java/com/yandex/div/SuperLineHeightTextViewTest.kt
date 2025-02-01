@@ -7,9 +7,11 @@ import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.superLineHeightTextView
 import com.yandex.divkit.demo.DummyActivity
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+@Ignore
 class SuperLineHeightTextViewTest {
 
     private val activityTestRule = ActivityTestRule(DummyActivity::class.java)

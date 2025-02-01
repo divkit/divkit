@@ -3,10 +3,10 @@ package com.yandex.div.core.view2.divs.pager
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.view.ViewGroup.LayoutParams
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeUnspecifiedSpec
 import com.yandex.div.internal.widget.DivLayoutParams
 
@@ -27,10 +27,18 @@ internal class DivPagerPageLayout(
         if (childCount == 0) return super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val lp = getChildAt(0).layoutParams
         val isHorizontal = orientationProvider() == ViewPager2.ORIENTATION_HORIZONTAL
+        if (isHorizontal && (!isUnspecified(widthMeasureSpec) || MeasureSpec.getSize(widthMeasureSpec) != 0) &&
+            (!isUnspecified(heightMeasureSpec) || MeasureSpec.getSize(heightMeasureSpec) != 0)) {
+            minimumHeight = getMinimumSize(heightMeasureSpec)
+        } else {
+            minimumWidth = getMinimumSize(widthMeasureSpec)
+        }
         val widthSpec = getSpec(lp.width, widthMeasureSpec, isHorizontal)
         val heightSpec = getSpec(lp.height, heightMeasureSpec, !isHorizontal)
         super.onMeasure(widthSpec, heightSpec)
     }
+
+    private fun getMinimumSize(parentSpec: Int) = if (isUnspecified(parentSpec)) 0 else MeasureSpec.getSize(parentSpec)
 
     override fun dispatchDraw(canvas: Canvas) {
         drawChildrenShadows(canvas)

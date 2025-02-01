@@ -10,10 +10,10 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.textString
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
-import java.lang.AssertionError
 import org.json.JSONObject
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,8 +53,8 @@ class LocalTriggersTest {
 
         setVariableValue(ACTIVE_TRIGGER_VARIABLE_VALUE)
 
-        Assert.assertEquals(ACTIVE_TRIGGER_TEXT, firstStateText.text)
-        Assert.assertEquals(INACTIVE_TRIGGER_TEXT, secondStateText.text)
+        assertTextShown(ACTIVE_TRIGGER_TEXT, firstStateText)
+        assertTextShown(INACTIVE_TRIGGER_TEXT, secondStateText)
     }
 
     @Test
@@ -64,8 +64,8 @@ class LocalTriggersTest {
         setState(2)
         setVariableValue(ACTIVE_TRIGGER_VARIABLE_VALUE)
 
-        Assert.assertEquals(INACTIVE_TRIGGER_TEXT, firstStateText.text)
-        Assert.assertEquals(ACTIVE_TRIGGER_TEXT, secondStateText.text)
+        assertTextShown(INACTIVE_TRIGGER_TEXT, firstStateText)
+        assertTextShown(ACTIVE_TRIGGER_TEXT, secondStateText)
     }
 
     @Test
@@ -75,8 +75,8 @@ class LocalTriggersTest {
         setVariableValue(ACTIVE_TRIGGER_VARIABLE_VALUE)
         setState(2)
 
-        Assert.assertEquals(ACTIVE_TRIGGER_TEXT, firstStateText.text)
-        Assert.assertEquals(ACTIVE_TRIGGER_TEXT, secondStateText.text)
+        assertTextShown(ACTIVE_TRIGGER_TEXT, firstStateText)
+        assertTextShown(ACTIVE_TRIGGER_TEXT, secondStateText)
     }
 
     @Test
@@ -93,8 +93,8 @@ class LocalTriggersTest {
         setVariableValue(ACTIVE_TRIGGER_VARIABLE_VALUE)
 
         // Created with state 1, only triggers from state 1 should be triggered
-        Assert.assertEquals(ACTIVE_TRIGGER_TEXT, firstStateText.text)
-        Assert.assertEquals(INACTIVE_TRIGGER_TEXT, secondStateText.text)
+        assertTextShown(ACTIVE_TRIGGER_TEXT, firstStateText)
+        assertTextShown(INACTIVE_TRIGGER_TEXT, secondStateText)
     }
 
     @Test
@@ -110,8 +110,8 @@ class LocalTriggersTest {
         setVariableValue(ACTIVE_TRIGGER_VARIABLE_VALUE)
 
         // Created with state 2, only triggers from state 2 should be triggered
-        Assert.assertEquals(INACTIVE_TRIGGER_TEXT, firstStateText.text)
-        Assert.assertEquals(ACTIVE_TRIGGER_TEXT, secondStateText.text)
+        assertTextShown(INACTIVE_TRIGGER_TEXT, firstStateText)
+        assertTextShown(ACTIVE_TRIGGER_TEXT, secondStateText)
     }
 
     private fun setState(stateNum: Int) {
@@ -131,6 +131,10 @@ class LocalTriggersTest {
             logId = Expression.constant("id"),
             url = Expression.constant(uri))
         )
+    }
+
+    private fun assertTextShown(expected: String, view: TextView) {
+        Assert.assertEquals(expected, view.textString)
     }
 }
 private val testJsonWithTwoStates = """

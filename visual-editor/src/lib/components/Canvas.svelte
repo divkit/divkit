@@ -19,7 +19,7 @@
     import { encodeBackground } from '../utils/encodeBackground';
 
     const { l10n, l10nString, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { cardLocales, state, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
+    const { cardLocales, state, directionSelector, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
     const {
         paletteEnabled,
         currentUndoStore,
@@ -28,7 +28,8 @@
         rendererWarningsOnly,
         locale,
         previewThemeStore,
-        themeStore
+        themeStore,
+        direction
     } = state;
 
     const VIEWPORT_LIST = [
@@ -180,6 +181,17 @@
             </CanvasButton>
         {/if}
 
+        {#if directionSelector}
+            <CanvasButton
+                title={$l10n($direction === 'ltr' ? 'rtl.switchToRTL' : 'rtl.switchToLTR')}
+                on:click={() => $direction = ($direction === 'ltr' ? 'rtl' : 'ltr')}
+            >
+                <div class="canvas__rtl-button">
+                    {$direction === 'ltr' ? 'LTR' : 'RTL'}
+                </div>
+            </CanvasButton>
+        {/if}
+
         {#if cardLocales.length}
             <Select
                 bind:value={$locale}
@@ -295,5 +307,9 @@
         display: flex;
         align-items: center;
         padding: 0 4px;
+    }
+
+    .canvas__rtl-button {
+        padding: 0 12px;
     }
 </style>

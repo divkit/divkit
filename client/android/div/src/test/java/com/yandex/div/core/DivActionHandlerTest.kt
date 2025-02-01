@@ -49,7 +49,7 @@ class DivActionHandlerTest {
 
     init {
         divView.setData(
-            DivData("id", listOf(DivData.State(Div.Container(DivContainer()), 0))),
+            DivData(logId = "id", states = listOf(DivData.State(Div.Container(DivContainer()), 0))),
             DivDataTag("id")
         )
     }

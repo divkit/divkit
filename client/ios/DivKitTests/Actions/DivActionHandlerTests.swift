@@ -346,7 +346,7 @@ final class DivActionHandlerTests: XCTestCase {
         onSuccessActions: [
           divAction(url: "result://success"),
         ],
-        url: .value("https://download.url")
+        url: .value(url("https://download.url"))
       )
     ))
 
@@ -369,7 +369,7 @@ final class DivActionHandlerTests: XCTestCase {
         onSuccessActions: [
           divAction(url: "result://success"),
         ],
-        url: .value("https://download.url")
+        url: .value(url("https://download.url"))
       )
     ))
 
@@ -386,7 +386,7 @@ final class DivActionHandlerTests: XCTestCase {
         onFailActions: [
           divAction(url: "result://error"),
         ],
-        url: .value("https://download.url")
+        url: .value(url("https://download.url"))
       )
     ))
 

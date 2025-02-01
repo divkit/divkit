@@ -8,16 +8,16 @@ public final class DivActionDownload: Sendable {
   public static let type: String = "download"
   public let onFailActions: [DivAction]?
   public let onSuccessActions: [DivAction]?
-  public let url: Expression<String>
+  public let url: Expression<URL>
 
-  public func resolveUrl(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(url)
+  public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
+    resolver.resolveUrl(url)
   }
 
   init(
     onFailActions: [DivAction]? = nil,
     onSuccessActions: [DivAction]? = nil,
-    url: Expression<String>
+    url: Expression<URL>
   ) {
     self.onFailActions = onFailActions
     self.onSuccessActions = onSuccessActions

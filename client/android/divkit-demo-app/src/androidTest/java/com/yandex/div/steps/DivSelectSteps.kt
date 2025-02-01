@@ -9,6 +9,7 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
+import com.yandex.div.internal.util.textString
 import com.yandex.div.view.click
 import com.yandex.div.view.tap
 import com.yandex.divkit.demo.DummyActivity
@@ -65,7 +66,7 @@ class DivSelectSteps : DivTestAssetSteps() {
     private fun prepareTimerIdlingResource(): IdlingResource =
         step("Prepare timer idling resource") {
             timerInteraction.stealView().asIdlingResource {
-                (this as TextView).text == TIMER_FINISHED_TEXT
+                (this as TextView).textString == TIMER_FINISHED_TEXT
             }
         }
 

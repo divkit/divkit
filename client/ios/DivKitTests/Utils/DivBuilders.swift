@@ -36,6 +36,7 @@ func divData(
   states: [DivData.State]
 ) -> DivData {
   DivData(
+    functions: nil,
     logId: logId,
     states: states,
     timers: nil,

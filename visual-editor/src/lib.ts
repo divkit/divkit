@@ -127,6 +127,8 @@ export interface DivProEditorOptions {
     errorFileLimit?: number;
     rootConfigurable?: boolean;
     customFontFaces?: FontFaceDesc[];
+    directionSelector?: boolean;
+    direction?: 'ltr' | 'rtl';
 }
 
 export interface DivProEditorInstance {
@@ -155,6 +157,7 @@ export const DivProEditor = {
         state.readOnly.set(opts.readOnly || false);
         state.themeStore.set(opts.theme || 'light');
         state.locale.set(opts.cardLocales?.[0]?.id || '');
+        state.direction.set(opts.direction || 'ltr');
 
         if (Array.isArray(json?.card?.variables)) {
             const localPalette = json.card.variables.find((it?: JsonVariable) => it?.type === 'dict' && it.name === 'local_palette');
@@ -206,6 +209,7 @@ export const DivProEditor = {
                 errorFileLimit: opts.errorFileLimit,
                 rootConfigurable: opts.rootConfigurable,
                 customFontFaces: opts.customFontFaces,
+                directionSelector: opts.directionSelector,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,

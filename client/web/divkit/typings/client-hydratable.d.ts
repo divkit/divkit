@@ -9,7 +9,8 @@ import type {
     Customization,
     DivExtensionClass,
     TypefaceProvider,
-    FetchInit
+    FetchInit,
+    Direction
 } from './common';
 import type { CustomComponentDescription } from './custom';
 import type { Store } from './store';
@@ -35,6 +36,7 @@ export function render(opts: {
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    direction?: Direction;
     store?: Store;
     weekStartDay?: number;
 }): DivkitInstance;

@@ -384,7 +384,8 @@ export function getPropsElement(name: string, prop: Schema, componentJson: any, 
         prop.type === 'integer' ||
         prop.type === 'array' ||
         prop.type === 'object' && (prop.properties || prop.additionalProperties) ||
-        prop.anyOf;
+        prop.anyOf ||
+        prop.__editor === 'boolean';
 
     if (!res) {
         return;
@@ -538,7 +539,7 @@ export function getPropsElement(name: string, prop: Schema, componentJson: any, 
         };
     }
 
-    if (prop.format === 'boolean') {
+    if (prop.format === 'boolean' || prop.__editor === 'boolean') {
         return {
             type: 'checkbox',
             name,
