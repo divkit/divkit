@@ -2,6 +2,7 @@
 
 # Android Client:
 * Supported `cross_axis_alignment` in `pager`.
+* Supported `scroll_axis_alignment` in `pager`.
 
 # iOS Client:
 * Added `download` action handler.
