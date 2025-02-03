@@ -4,10 +4,8 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTimer
-import java.util.Timer
 
 internal class TimerController(
     val divTimer: DivTimer,
@@ -48,11 +46,8 @@ internal class TimerController(
 
     fun onAttach(
         view: Div2View,
-        timer: Timer
     ) {
         div2View = view
-
-        ticker.attachToTimer(timer)
 
         if (savedForBackground) {
             ticker.restoreState(fromPreviousPoint = true)
@@ -70,7 +65,6 @@ internal class TimerController(
         div2View = null
 
         ticker.saveState()
-        ticker.detachFromTimer()
 
         savedForBackground = true
     }
@@ -93,28 +87,22 @@ internal class TimerController(
     private fun onTick(time: Long) {
         updateTimerVariable(time)
 
-        UiThreadHandler.executeOnMainThread {
-            div2View?.let {
-                divActionBinder.handleActions(it, it.expressionResolver, tickActions, DivActionReason.TIMER)
-            }
+        div2View?.let {
+            divActionBinder.handleActions(it, it.expressionResolver, tickActions, DivActionReason.TIMER)
         }
     }
 
     private fun onEnd(time: Long) {
         updateTimerVariable(time)
 
-        UiThreadHandler.executeOnMainThread {
-            div2View?.let {
-                divActionBinder.handleActions(it, it.expressionResolver, endActions, DivActionReason.TIMER)
-            }
+        div2View?.let {
+            divActionBinder.handleActions(it, it.expressionResolver, endActions, DivActionReason.TIMER)
         }
     }
 
     private fun updateTimerVariable(value: Long) {
         if (valueVariable != null) {
-            UiThreadHandler.executeOnMainThread {
-                div2View?.setVariable(valueVariable, value.toString())
-            }
+            div2View?.setVariable(valueVariable, value.toString())
         }
     }
 

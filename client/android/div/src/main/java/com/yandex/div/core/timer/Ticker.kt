@@ -1,11 +1,9 @@
 package com.yandex.div.core.timer
 
+import android.os.SystemClock
 import com.yandex.div.core.view2.errors.ErrorCollector
-import java.util.Timer
-import java.util.TimerTask
-import kotlin.concurrent.timerTask
 
-internal open class Ticker(
+internal class Ticker(
     private val name: String,
     private val onInterrupt: (Long) -> Unit,
     private val onStart: (Long) -> Unit,
@@ -23,34 +21,27 @@ internal open class Ticker(
 
     private var workTimeFromPrevious: Long = 0
 
-    internal var startedAt: Long = DEFAULT_VALUE
+    private var startedAt: Long = DEFAULT_VALUE
 
     private var interruptedAt: Long = DEFAULT_VALUE
 
-    protected var timer: Timer? = null
+    private val currentTime: Long
+        get() = SystemClock.elapsedRealtime()
 
-    private var currentTimerTask: TimerTask? = null
+    private val timer = FixedRateScheduler()
 
-    internal open val currentTime: Long
-        get() = System.currentTimeMillis()
-
-    protected open fun setupTimer(
+    private fun setupTimer(
         period: Long,
         initialDelay: Long = period,
         onTick: () -> Unit
     ) {
-        currentTimerTask?.cancel()
-
-        currentTimerTask = timerTask { onTick() }
-
         startedAt = currentTime
 
-        timer?.scheduleAtFixedRate(currentTimerTask, initialDelay, period)
+        timer.scheduleAtFixedRate(initialDelay, period, onTick)
     }
 
-    protected open fun cleanTicker() {
-        currentTimerTask?.cancel()
-        currentTimerTask = null
+    private fun cleanTicker() {
+        timer.cancel()
     }
 
     private fun resetTickerState() {
@@ -59,15 +50,7 @@ internal open class Ticker(
         workTimeFromPrevious = 0
     }
 
-    open fun attachToTimer(parentTimer: Timer) {
-        timer = parentTimer
-    }
-
-    open fun detachFromTimer() {
-        timer = null
-    }
-
-    open fun update(
+    fun update(
         duration: Long,
         interval: Long?
     ) {
@@ -142,7 +125,9 @@ internal open class Ticker(
         var ticksLeft = (duration / interval) - (totalWorkTime / interval)
 
         val processTick = {
-            if (ticksLeft > 0) onTick(duration)
+            if (ticksLeft > 0) {
+                onTick(duration)
+            }
 
             onEnd(duration)
 
@@ -203,7 +188,7 @@ internal open class Ticker(
         runTimer()
     }
 
-    open fun start() {
+    fun start() {
         when (state) {
             State.STOPPED -> {
                 cleanTicker()
@@ -222,7 +207,7 @@ internal open class Ticker(
         }
     }
 
-    open fun stop() {
+    fun stop() {
         when (state) {
             State.STOPPED -> onError("The timer '$name' already stopped!")
             State.WORKING, State.PAUSED -> {
@@ -237,7 +222,7 @@ internal open class Ticker(
         }
     }
 
-    open fun pause() {
+    fun pause() {
         when (state) {
             State.STOPPED -> onError("The timer '$name' already stopped!")
             State.WORKING -> {
@@ -253,7 +238,7 @@ internal open class Ticker(
         }
     }
 
-    open fun resume() {
+    fun resume() {
         when (state) {
             State.STOPPED -> onError("The timer '$name' is stopped!")
             State.WORKING -> onError("The timer '$name' already working!")
@@ -265,7 +250,7 @@ internal open class Ticker(
         }
     }
 
-    open fun cancel() {
+    fun cancel() {
         when (state) {
             State.STOPPED -> Unit
             State.WORKING, State.PAUSED -> {
@@ -280,7 +265,7 @@ internal open class Ticker(
         }
     }
 
-    open fun reset() {
+    fun reset() {
         cancel()
         start()
     }
