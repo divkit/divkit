@@ -13,7 +13,7 @@ public final class DivActionHandler {
     _ action: DivTimerAction
   ) -> Void
 
-  typealias UpdateCardAction = (DivActionURLHandler.UpdateReason) -> Void
+  typealias UpdateCardAction = (DivCardUpdateReason) -> Void
 
   private let urlHandler: DivUrlHandler
   private let trackVisibility: TrackVisibility
@@ -52,7 +52,7 @@ public final class DivActionHandler {
     submitter: DivSubmitter,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     functionsStorage: DivFunctionsStorage? = nil,
-    updateCard: @escaping (DivActionURLHandler.UpdateReason) -> Void,
+    updateCard: @escaping (DivCardUpdateReason) -> Void,
     showTooltip: ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
     trackVisibility: @escaping TrackVisibility = { _, _ in },

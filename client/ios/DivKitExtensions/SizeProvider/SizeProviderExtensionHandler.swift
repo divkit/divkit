@@ -36,7 +36,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     )
   }
 
-  public func onCardUpdated(reasons: [DivActionURLHandler.UpdateReason]) {
+  public func onCardUpdated(reasons: [DivCardUpdateReason]) {
     let hasNotVariableReason = reasons.isEmpty || reasons.contains {
       switch $0 {
       case .variable:

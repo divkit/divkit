@@ -27,7 +27,7 @@ final class DivActionHandlerTests: XCTestCase {
   }()
 
   private var handledUrl: URL?
-  private var lastUpdateReason: DivActionURLHandler.UpdateReason?
+  private var lastUpdateReason: DivCardUpdateReason?
 
   func test_UrlPassedToUrlHandler() {
     handle(

@@ -178,7 +178,7 @@ final class DivBlockProvider {
     self.divData = divData
   }
 
-  private func update(reasons: [DivActionURLHandler.UpdateReason]) {
+  private func update(reasons: [DivCardUpdateReason]) {
     guard var divData else {
       guard debugParams.isDebugInfoEnabled else { return }
       block = makeErrorsBlock(dataErrors)
@@ -237,7 +237,7 @@ final class DivBlockProvider {
     }
   }
 
-  private func needUpdateBlock(reasons: [DivActionURLHandler.UpdateReason]) -> Bool {
+  private func needUpdateBlock(reasons: [DivCardUpdateReason]) -> Bool {
     guard !reasons.isEmpty else { return true }
     for reason in reasons {
       let cardId: DivCardID
@@ -373,7 +373,7 @@ final class DivBlockProvider {
 
 private let noDataBlock = EmptyBlock.zeroSized
 
-extension DivActionURLHandler.UpdateReason {
+extension DivCardUpdateReason {
   fileprivate func patch(for divCardId: DivCardID) -> DivPatch? {
     switch self {
     case let .patch(cardId, patch):
