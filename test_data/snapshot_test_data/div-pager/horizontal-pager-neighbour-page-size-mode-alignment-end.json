@@ -1,0 +1,168 @@
+{
+  "description": "Horizontal pager with custom neighbour page width with scroll_axis_alignment end",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 90
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "layout_mode": {
+        "type": "fixed",
+        "neighbour_page_width": {
+          "value": 50
+        }
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "left": 20,
+        "right": 20
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "scroll_axis_alignment": "end",
+      "items": [
+        {
+          "type": "text_page_fixed_height",
+          "text": "First page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nLeft padding = 20\nNeighbour page visible part = 40"
+        },
+        {
+          "type": "text_page_fixed_height",
+          "text": "Middle page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nLeft neighbour = 40\nRight neighbour = 10"
+        },
+        {
+          "type": "text_page_fixed_height",
+          "text": "Last page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nRight padding = 20\nNeighbour page visible part = 40"
+        }
+      ]
+    },
+    "scale": {
+      "type": "slider",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "height": {
+        "type": "fixed",
+        "value": 20
+      },
+      "variables": [
+        {
+          "name": "scale",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "thumb_value_variable": "scale",
+      "thumb_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_width": {
+            "value": 0
+          }
+        },
+        "color": "#00000000"
+      },
+      "track_inactive_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "value": 2
+          }
+        },
+        "color": "#AAAAAA"
+      },
+      "track_active_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle"
+        },
+        "color": "#0000ff"
+      },
+      "max_value": 32,
+      "tick_mark_inactive_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "value": 6
+          },
+          "item_width": {
+            "value": 1
+          }
+        },
+        "color": "#000000"
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "test_pager"
+            },
+            {
+              "type": "test_pager",
+              "default_item": 1
+            },
+            {
+              "type": "test_pager",
+              "default_item": 2
+            },
+            {
+              "type": "scale"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
