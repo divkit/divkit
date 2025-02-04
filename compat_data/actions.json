@@ -148,6 +148,9 @@
             },
             "web": {
                 "version_added": "30.33.0"
+            },
+            "ios": {
+                "version_added": "31.1.0"
             }
         }
     }, {

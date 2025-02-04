@@ -85,5 +85,21 @@
                 "version_added": "31.0.0"
             }
         }
+    }, {
+        "id": "pager_cross_axis_alignment",
+        "name": "Pager property <code>cross_axis_alignment</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.1.0"
+            }
+        }
+    }, {
+        "id": "pager_scroll_axis_alignment",
+        "name": "Pager property <code>scroll_axis_alignment</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.1.0"
+            }
+        }
     }]
 }
