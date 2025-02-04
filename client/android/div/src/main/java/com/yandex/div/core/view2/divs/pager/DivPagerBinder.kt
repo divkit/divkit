@@ -102,6 +102,7 @@ internal class DivPagerBinder @Inject constructor(
         view.addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
         view.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
         view.addSubscription(div.scrollAxisAlignment.observe(resolver, reusableObserver))
+        view.addSubscription(div.crossAxisAlignment.observe(resolver, reusableObserver))
         view.addSubscription(div.orientation.observeAndGet(resolver, reusableObserver))
         view.addSubscription(view.viewPager.observeSizeChange(reusableObserver))
 
@@ -144,11 +145,6 @@ internal class DivPagerBinder @Inject constructor(
             } else {
                 null
             }
-        })
-
-        view.addSubscription(div.crossAxisAlignment.observeAndGet(resolver) {
-            adapter.crossAxisAlignment = it
-            view.requestLayout()
         })
 
         view.bindItemBuilder(context, div)
@@ -196,6 +192,7 @@ internal class DivPagerBinder @Inject constructor(
 
         val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
         orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
+        adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
 
         changePageCallbackForOffScreenPages = null
 

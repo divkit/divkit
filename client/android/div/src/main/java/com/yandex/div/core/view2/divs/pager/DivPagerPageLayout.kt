@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs.pager
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.isUnspecified
@@ -13,7 +12,7 @@ import com.yandex.div.internal.widget.DivLayoutParams
 @SuppressLint("ViewConstructor")
 internal class DivPagerPageLayout(
     context: Context,
-    private val orientationProvider: () -> Int
+    private val isHorizontal: () -> Boolean
 ) : DivViewWrapper(context) {
 
     init {
@@ -26,7 +25,7 @@ internal class DivPagerPageLayout(
         // otherwise the page size should be enough for its own content regardless of the current pager height
         if (childCount == 0) return super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val lp = getChildAt(0).layoutParams
-        val isHorizontal = orientationProvider() == ViewPager2.ORIENTATION_HORIZONTAL
+        val isHorizontal = isHorizontal()
         if (isHorizontal && (!isUnspecified(widthMeasureSpec) || MeasureSpec.getSize(widthMeasureSpec) != 0) &&
             (!isUnspecified(heightMeasureSpec) || MeasureSpec.getSize(heightMeasureSpec) != 0)) {
             minimumHeight = getMinimumSize(heightMeasureSpec)

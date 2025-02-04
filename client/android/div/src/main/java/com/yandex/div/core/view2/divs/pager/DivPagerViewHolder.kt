@@ -16,7 +16,6 @@ import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivPager.ItemAlignment
-import javax.inject.Provider
 
 internal class DivPagerViewHolder(
     private val parentContext: BindingContext,
@@ -25,8 +24,8 @@ internal class DivPagerViewHolder(
     viewCreator: DivViewCreator,
     path: DivStatePath,
     private val accessibilityEnabled: Boolean,
-    private val isHorizontal: Boolean,
-    private val crossAxisAlignment: Provider<ItemAlignment>,
+    private val isHorizontal: () -> Boolean,
+    private val crossAxisAlignment: () -> ItemAlignment,
 ) : DivCollectionViewHolder(pageLayout, parentContext, divBinder, viewCreator, path) {
 
     init {
@@ -49,10 +48,10 @@ internal class DivPagerViewHolder(
     }
 
     private fun DivLayoutParams.setCrossAxisAlignment(div: DivBase, resolver: ExpressionResolver) {
-        val childAlignment = if (isHorizontal) div.alignmentVertical else div.alignmentHorizontal
-        val alignment = childAlignment?.evaluate(resolver) ?: crossAxisAlignment.get()
+        val childAlignment = if (isHorizontal()) div.alignmentVertical else div.alignmentHorizontal
+        val alignment = childAlignment?.evaluate(resolver) ?: crossAxisAlignment()
 
-        gravity = if (isHorizontal) {
+        gravity = if (isHorizontal()) {
             when (alignment) {
                 ItemAlignment.CENTER, DivAlignmentVertical.CENTER -> Gravity.CENTER
                 ItemAlignment.END, DivAlignmentVertical.BOTTOM -> Gravity.BOTTOM
