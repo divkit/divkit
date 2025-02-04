@@ -50,6 +50,7 @@
 
     let dialog: HTMLDialogElement;
     let content: HTMLElement;
+    let isOutsidePointerDown = false;
     let isHiding = false;
     let isFullyShowed = false;
     let left = 0;
@@ -60,7 +61,7 @@
     let customPosition = false;
 
     function onDialogClick(event: MouseEvent): void {
-        if (event.target === dialog) {
+        if (event.target === dialog && isOutsidePointerDown) {
             isHiding = true;
         }
     }
@@ -121,6 +122,10 @@
                 isFullyShowed = true;
             }
         }
+    }
+
+    function onOutsidePointerDown(event: PointerEvent): void {
+        isOutsidePointerDown = event.target === dialog;
     }
 
     function onOutsideClick(event: MouseEvent): void {
@@ -188,6 +193,7 @@
 </script>
 
 <svelte:window
+    on:pointerdown={onOutsidePointerDown}
     on:click={onOutsideClick}
     on:resize={update}
 />
