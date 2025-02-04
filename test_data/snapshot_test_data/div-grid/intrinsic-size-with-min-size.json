@@ -1,0 +1,136 @@
+{
+    "description": "Grid block with min_size properties",
+    "platforms": [
+        "android",
+        "ios",
+        "web"
+    ],
+    "card": {
+        "log_id": "div_grid_card",
+        "variables": [
+            {
+                "name": "fixed_width",
+                "type": "integer",
+                "value": 100
+            },
+            {
+                "name": "fixed_height",
+                "type": "integer",
+                "value": 50
+            }
+        ],
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "height": {
+                        "type": "wrap_content"
+                    },
+                    "items": [
+                        {
+                            "type": "text",
+                            "text": "Grid with min_size",
+                            "font_size": 20,
+                            "margins": {
+                                "bottom": 12
+                            }
+                        },
+                        {
+                            "type": "container",
+                            "orientation": "overlap",
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "width": {
+                                "type": "wrap_content"
+                            },
+                            "items": [
+                                {
+                                    "type": "grid",
+                                    "column_count": 1,
+                                    "content_alignment_vertical": "bottom",
+                                    "border": {
+                                        "stroke": {
+                                            "color": "#FA4",
+                                            "width": 3
+                                        }
+                                    },
+                                    "background": [
+                                        {
+                                            "type": "solid",
+                                            "color": "#fae695"
+                                        }
+                                    ],
+                                    "height": {
+                                        "type": "wrap_content",
+                                        "min_size": {
+                                            "value": "@{fixed_height * 2}"
+                                        }
+                                    },
+                                    "width": {
+                                        "type": "wrap_content",
+                                        "min_size": {
+                                            "value": "@{fixed_width * 2}"
+                                        }
+                                    },
+                                    "items": [
+                                        {
+                                            "type": "text",
+                                            "text": "Grid size with min_size",
+                                            "font_size": 11,
+                                            "text_alignment_vertical": "bottom",
+                                            "height": {
+                                                "type": "fixed",
+                                                "value": "@{fixed_height}"
+                                            },
+                                            "width": {
+                                                "type": "fixed",
+                                                "value": "@{fixed_width}"
+                                            },
+                                            "paddings": {
+                                                "bottom": 3,
+                                                "left": 4
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Grid size without min_size",
+                                    "text_alignment_vertical": "bottom",
+                                    "font_size": 11,
+                                    "paddings": {
+                                        "bottom": 3,
+                                        "left": 4
+                                    },
+                                    "height": {
+                                        "type": "fixed",
+                                        "value": "@{fixed_height}"
+                                    },
+                                    "width": {
+                                        "type": "fixed",
+                                        "value": "@{fixed_width}"
+                                    },
+                                    "border": {
+                                        "stroke": {
+                                            "color": "#aaf",
+                                            "width": 3
+                                        }
+                                    },
+                                    "background": [
+                                        {
+                                            "type": "solid",
+                                            "color": "#eef"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

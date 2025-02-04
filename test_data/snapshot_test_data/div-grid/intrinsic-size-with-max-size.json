@@ -1,0 +1,129 @@
+{
+    "description": "Grid block with max_size property",
+    "platforms": [
+        "android",
+        "ios",
+        "web"
+    ],
+    "card": {
+        "log_id": "div_grid_card",
+        "variables": [
+            {
+                "name": "fixed_width",
+                "type": "integer",
+                "value": 200
+            },
+            {
+                "name": "fixed_height",
+                "type": "integer",
+                "value": 100
+            }
+        ],
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "height": {
+                        "type": "wrap_content"
+                    },
+                    "items": [
+                        {
+                            "type": "text",
+                            "text": "Grid with max_size",
+                            "font_size": 20,
+                            "margins": {
+                                "bottom": 12
+                            }
+                        },
+                        {
+                            "type": "container",
+                            "orientation": "overlap",
+                            "items": [
+                                {
+                                    "type": "text",
+                                    "text": "Grid size without max_size",
+                                    "font_size": 11,
+                                    "text_alignment_vertical": "bottom",
+                                    "paddings": {
+                                        "bottom": 3,
+                                        "left": 4
+                                    },
+                                    "height": {
+                                        "type": "fixed",
+                                        "value": "@{fixed_height}"
+                                    },
+                                    "width": {
+                                        "type": "fixed",
+                                        "value": "@{fixed_width}"
+                                    },
+                                    "background": [
+                                        {
+                                            "type": "solid",
+                                            "color": "#eef"
+                                        }
+                                    ],
+                                    "border": {
+                                        "stroke": {
+                                            "color": "#aaf",
+                                            "width": 3
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "grid",
+                                    "column_count": 1,
+                                    "background": [
+                                        {
+                                            "type": "solid",
+                                            "color": "#fae695"
+                                        }
+                                    ],
+                                    "height": {
+                                        "type": "wrap_content",
+                                        "max_size": {
+                                            "value": "@{fixed_height / 2}"
+                                        }
+                                    },
+                                    "width": {
+                                        "type": "wrap_content",
+                                        "max_size": {
+                                            "value": "@{fixed_width / 2}"
+                                        }
+                                    },
+                                    "items": [
+                                        {
+                                            "type": "text",
+                                            "text": "Grid size with\n max_size",
+                                            "font_size": 11,
+                                            "text_alignment_vertical": "top",
+                                            "paddings": {
+                                                "top": 4,
+                                                "left": 4
+                                            },
+                                            "height": {
+                                                "type": "fixed",
+                                                "value": "@{fixed_height}"
+                                            },
+                                            "width": {
+                                                "type": "fixed",
+                                                "value": "@{fixed_width}"
+                                            },
+                                            "border": {
+                                                "stroke": {
+                                                    "color": "#FA4",
+                                                    "width": 3
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
