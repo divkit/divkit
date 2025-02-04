@@ -1,14 +1,13 @@
+import Foundation
 import LayoutKit
 import VGSL
-
-import Foundation
 
 extension DivShadow {
   func resolve(
     _ expressionResolver: ExpressionResolver,
     cornerRadii: CornerRadii = .zero
   ) -> BlockShadow {
-    return BlockShadow(
+    BlockShadow(
       cornerRadii: cornerRadii,
       blurRadius: CGFloat(resolveBlur(expressionResolver)),
       offset: offset.resolve(expressionResolver),

@@ -1,5 +1,4 @@
 import Foundation
-
 import VGSLUI
 
 enum InfiniteScroll {

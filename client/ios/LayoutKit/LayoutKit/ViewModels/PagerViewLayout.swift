@@ -349,7 +349,7 @@ extension Alignment {
       maximum - dimension
     }
   }
-  
+
   fileprivate func offset(
     availableSpace: CGFloat,
     contentSize: CGFloat,

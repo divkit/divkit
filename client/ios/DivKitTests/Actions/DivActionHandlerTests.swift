@@ -334,7 +334,7 @@ final class DivActionHandlerTests: XCTestCase {
   func test_DownloadAction_updateCardIsCalled() {
     let expectedPatch = DivPatch(
       changes: [
-        DivPatch.Change(id: "id", items: [ divText() ])
+        DivPatch.Change(id: "id", items: [divText()]),
       ]
     )
     patchProvider = MockPatchProvider {

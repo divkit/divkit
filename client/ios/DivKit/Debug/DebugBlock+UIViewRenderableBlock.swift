@@ -30,18 +30,19 @@ extension DebugBlock: UIViewRenderable {
 
 private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
   private var childView: BlockView?
-  
+
   var effectiveBackgroundColor: UIColor? {
     childView?.backgroundColor
   }
+
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     childView.map { [$0] } ?? []
   }
-  
+
   private var showDebugInfo: ((ViewType) -> Void)?
   private var errorCollector: DebugErrorCollector?
   private let disposePool = AutodisposePool()
-  
+
   private let errorsButton: UIButton = {
     let button = UIButton(type: .custom)
     button.isHidden = true

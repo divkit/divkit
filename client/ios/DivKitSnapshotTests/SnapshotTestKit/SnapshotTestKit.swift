@@ -57,7 +57,9 @@ enum SnapshotTestKit {
       try! saveFile(path: resultFolderUrl, fileName: "diff.png", image: diff)
 
       Issue.record(
-        Comment("Actual snapshot is not equal to the reference. Diff is saved in Tests/results folder.")
+        Comment(
+          "Actual snapshot is not equal to the reference. Diff is saved in Tests/results folder."
+        )
       )
     }
   }

@@ -84,7 +84,8 @@ final class DivTriggerTests: XCTestCase {
     XCTAssertEqual(triggersCount, 1)
   }
 
-  func test_set_Triggers_WhenConditionIsTrue_OnConditionMode_WithModifiedVariableAndSeparateTriggerSetAndInit() {
+  func test_set_Triggers_WhenConditionIsTrue_OnConditionMode_WithModifiedVariableAndSeparateTriggerSetAndInit(
+  ) {
     flags = DivFlagsInfo(initializeTriggerOnSet: false)
 
     setVariable("should_trigger", true)

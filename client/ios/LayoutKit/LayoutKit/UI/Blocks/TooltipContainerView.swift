@@ -28,12 +28,12 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     onVisibleBoundsChanged = { [weak tooltipView] in
       tooltipView?.onVisibleBoundsChanged(from: .zero, to: tooltipBounds)
     }
-    
+
     super.init(frame: .zero)
-    
+
     let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
     addGestureRecognizer(tapRecognizer)
-    
+
     addSubview(tooltipView)
   }
 
@@ -41,13 +41,16 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   required init?(coder _: NSCoder) {
     fatalError()
   }
-  
+
   @objc private func handleTap(_ sender: UITapGestureRecognizer) {
     let point = sender.location(in: self)
-    let isPointInsideTooltip = tooltipView.point(inside: tooltipView.convert(point, from: self), with: nil)
+    let isPointInsideTooltip = tooltipView.point(
+      inside: tooltipView.convert(point, from: self),
+      with: nil
+    )
     if !isPointInsideTooltip {
       performTapOutsideActions()
-      
+
       if closeByTapOutside {
         close()
       }
@@ -80,7 +83,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       self.onCloseAction()
     })
   }
-  
+
   private func performTapOutsideActions() {
     let uiActionEvents = tapOutsideActions.map {
       UIActionEvent(uiAction: $0, originalSender: self)

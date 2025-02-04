@@ -1,5 +1,5 @@
-import Foundation
 import DivKit
+import Foundation
 @_spi(Legacy) import DivKitExtensions
 import DivKitMarkdownExtension
 import LayoutKit

@@ -404,9 +404,9 @@ extension DivBorder {
     guard resolveHasShadow(expressionResolver) else {
       return nil
     }
-    
+
     let cornerRadii = resolveCornerRadii(expressionResolver)
-    
+
     guard let shadow else {
       return BlockShadow(
         cornerRadii: cornerRadii,
@@ -416,7 +416,7 @@ extension DivBorder {
         color: BlockShadow.Defaults.color
       )
     }
-    
+
     return shadow.resolve(expressionResolver, cornerRadii: cornerRadii)
   }
 

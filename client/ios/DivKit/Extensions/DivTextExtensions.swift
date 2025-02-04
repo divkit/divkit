@@ -381,7 +381,7 @@ extension DivLineStyle {
 extension BlockShadow {
   fileprivate var typoShadow: Shadow {
     Shadow(
-      offset: CGSize(width: offset.x, height: -offset.y), 
+      offset: CGSize(width: offset.x, height: -offset.y),
       blurRadius: blurRadius,
       color: color.withAlphaComponent(CGFloat(opacity))
     )
