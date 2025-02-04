@@ -252,6 +252,7 @@ internal class DivPagerBinder @Inject constructor(
         viewPager.setItemDecoration(decoration)
 
         val offsetProvider = DivPagerPageOffsetProvider(
+            parentSize,
             itemSpacing,
             sizeProvider,
             paddings,
