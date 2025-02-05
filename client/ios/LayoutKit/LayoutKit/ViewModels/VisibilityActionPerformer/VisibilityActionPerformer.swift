@@ -57,13 +57,20 @@ final class VisibilityActionPerformer {
     }
 
     guard visibilityTimer == nil, limiter.canSend() else { return }
-    visibilityTimer = timerScheduler.makeTimer(
-      delay: requiredDuration,
-      handler: { [weak self] in
-        self?.limiter.markSent()
-        self?.action()
-      }
-    )
+
+    let handler = { [weak self] in
+      self?.limiter.markSent()
+      self?.action()
+    }
+
+    if requiredDuration > 0 {
+      visibilityTimer = timerScheduler.makeTimer(
+        delay: requiredDuration,
+        handler: handler
+      )
+    } else {
+      handler()
+    }
   }
 
   private func invalidateTimer() {
