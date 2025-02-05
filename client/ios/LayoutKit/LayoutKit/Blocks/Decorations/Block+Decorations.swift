@@ -28,7 +28,8 @@ extension Block {
     forceWrapping: Bool,
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String?,
-    path: UIElementPath?
+    path: UIElementPath?,
+    isEmpty: Bool?
   ) -> Block {
     let hasAlpha = alpha != nil && alpha?.isApproximatelyEqualTo(1) != true
     let anythingToApplyExceptBoundary =
@@ -45,6 +46,7 @@ extension Block {
         || forceWrapping
         || accessibilityElement != nil
         || reuseId != nil
+        || isEmpty != nil
 
     let decoratingSelf = self as? DecoratingBlock
     let selfBackgroundColor = decoratingSelf?.backgroundColor
@@ -73,7 +75,8 @@ extension Block {
         tooltips: [tooltips, block.tooltips].compactMap { $0 }.flatMap { $0 },
         accessibilityElement: accessibilityElement,
         reuseId: reuseId,
-        path: path
+        path: path,
+        isEmpty: isEmpty
       )
     }
 
@@ -99,7 +102,8 @@ extension Block {
       tooltips: tooltips ?? [],
       accessibilityElement: accessibilityElement,
       reuseId: reuseId,
-      path: path
+      path: path,
+      isEmpty: isEmpty ?? false
     )
   }
 
@@ -129,7 +133,8 @@ extension Block {
     forceWrapping: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    isEmpty: Bool? = nil
   ) -> Block {
     let decoratedBlock = applyDecoratingBlockProperties(
       boundary: boundary,
@@ -148,7 +153,8 @@ extension Block {
       forceWrapping: forceWrapping,
       accessibilityElement: accessibilityElement,
       reuseId: reuseId,
-      path: path
+      path: path,
+      isEmpty: isEmpty
     )
     return decoratedBlock.shaded(with: shadow)
   }

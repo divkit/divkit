@@ -486,20 +486,30 @@ private func makeChildrenWithSeparators(
   guard layoutMode == .noWrap, let separator else {
     return children
   }
-  return Array<ContainerBlock.Child>.build {
-    if separator.showAtStart {
-      separator.style
-    }
-    for (index, child) in children.enumerated() {
-      if separator.showBetween, index > 0 {
-        separator.style
-      }
-      child
-    }
-    if separator.showAtEnd {
-      separator.style
-    }
+
+  var childrenWithSeparators: [ContainerBlock.Child] = []
+  if separator.showAtStart {
+    childrenWithSeparators.append(separator.style)
   }
+
+  var isPrevEmpty = children.first?.content.isEmpty ?? true
+  for (index, child) in children.enumerated() {
+    if separator.showBetween, index > 0 {
+      if isPrevEmpty || child.content.isEmpty {
+        childrenWithSeparators.append(ContainerBlock.Child(content: EmptyBlock.zeroSized))
+      } else {
+        childrenWithSeparators.append(separator.style)
+      }
+    }
+    isPrevEmpty = child.content.isEmpty
+    childrenWithSeparators.append(child)
+  }
+
+  if separator.showAtEnd {
+    childrenWithSeparators.append(separator.style)
+  }
+
+  return childrenWithSeparators
 }
 
 extension ContainerBlock: Equatable {

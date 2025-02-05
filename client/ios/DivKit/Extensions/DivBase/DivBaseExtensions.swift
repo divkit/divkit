@@ -58,7 +58,8 @@ extension DivBase {
         isVisible: false
       ) {
         return EmptyBlock.zeroSized.addingDecorations(
-          visibilityParams: visibilityParams
+          visibilityParams: visibilityParams,
+          isEmpty: true
         )
       }
       context.lastVisibleBoundsCache.onBecomeInvisible(path)

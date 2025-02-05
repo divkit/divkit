@@ -46,6 +46,8 @@ public protocol Block: AnyObject,
   var blockLayoutDirection: UserInterfaceLayoutDirection { get }
 
   var reuseId: String { get }
+
+  var isEmpty: Bool { get }
 }
 
 extension Block {
@@ -154,6 +156,8 @@ extension Block {
   public static var defaultReuseId: String {
     "DefaultReuseId"
   }
+
+  public var isEmpty: Bool { false }
 }
 
 public func ==(lhs: Block, rhs: Block) -> Bool {
