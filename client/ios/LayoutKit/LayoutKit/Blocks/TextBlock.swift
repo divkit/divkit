@@ -32,6 +32,7 @@ public final class TextBlock: BlockWithTraits {
   public let additionalTextInsets: EdgeInsets
   public let truncationToken: NSAttributedString?
   public let truncationImages: [InlineImage]
+  public let autoEllipsize: Bool
 
   let attachments: [TextAttachment]
   let truncationAttachments: [TextAttachment]
@@ -53,7 +54,8 @@ public final class TextBlock: BlockWithTraits {
     truncationImages: [TextBlock.InlineImage] = [],
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
-    tightenWidth: Bool = false
+    tightenWidth: Bool = false,
+    autoEllipsize: Bool = false
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -76,6 +78,7 @@ public final class TextBlock: BlockWithTraits {
       self.truncationAttachments = []
     }
     self.additionalTextInsets = additionalTextInsets ?? .zero
+    self.autoEllipsize = autoEllipsize
   }
 
   public convenience init(
@@ -91,7 +94,8 @@ public final class TextBlock: BlockWithTraits {
     truncationImages: [TextBlock.InlineImage] = [],
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
-    tightenWidth: Bool = false
+    tightenWidth: Bool = false,
+    autoEllipsize: Bool = false
   ) {
     self.init(
       widthTrait: widthTrait,
@@ -107,7 +111,8 @@ public final class TextBlock: BlockWithTraits {
       truncationImages: truncationImages,
       additionalTextInsets: additionalTextInsets,
       canSelect: canSelect,
-      tightenWidth: tightenWidth
+      tightenWidth: tightenWidth,
+      autoEllipsize: autoEllipsize
     )
   }
 
@@ -133,28 +138,17 @@ public final class TextBlock: BlockWithTraits {
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
-    switch heightTrait {
+    return switch heightTrait {
     case let .intrinsic(_, minSize, maxSize):
-      if let cached = cachedIntrinsicHeight,
-         cached.width.isApproximatelyEqualTo(width) {
-        return cached.height
-      }
-
-      let height = ceil(
-        text.heightForWidth(
-          width,
-          maxNumberOfLines: maxIntrinsicNumberOfLines,
-          minNumberOfHiddenLines: minNumberOfHiddenLines,
-          truncationToken: truncationToken
-        ) + additionalTextInsets.vertical.sum
+      clamp(
+        calculateTextIntrinsicContentHeight(for: width),
+        min: minSize,
+        max: maxSize
       )
-      let result = clamp(height, min: minSize, max: maxSize)
-      cachedIntrinsicHeight = (width: width, height: result)
-      return result
     case let .fixed(value):
-      return value
+      value
     case .weighted:
-      return 0
+      0
     }
   }
 
@@ -184,6 +178,27 @@ public final class TextBlock: BlockWithTraits {
       && lhs.images == rhs.images
       && lhs.accessibilityElement == rhs.accessibilityElement
       && lhs.tightenWidth == rhs.tightenWidth
+      && lhs.autoEllipsize == rhs.autoEllipsize
+  }
+  
+  public func calculateTextIntrinsicContentHeight(
+    for width: CGFloat
+  ) -> CGFloat {
+    if let cached = cachedIntrinsicHeight,
+       cached.width.isApproximatelyEqualTo(width) {
+      return cached.height
+    }
+
+    let height = ceil(
+      text.heightForWidth(
+        width,
+        maxNumberOfLines: maxIntrinsicNumberOfLines,
+        minNumberOfHiddenLines: minNumberOfHiddenLines,
+        truncationToken: truncationToken
+      ) + additionalTextInsets.vertical.sum
+    )
+    cachedIntrinsicHeight = (width: width, height: height)
+    return height 
   }
 }
 

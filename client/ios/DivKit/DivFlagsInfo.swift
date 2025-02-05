@@ -28,6 +28,10 @@ public struct DivFlagsInfo {
   /// `false` - tooltips with `match_parent` width (default value for `DivBase.width`) will be
   /// streched to the full width of the window.
   public let useTooltipLegacyWidth: Bool
+  
+  /// Defines the default value for `DivText.autoEllipsize` property.
+  /// Default value is `true`. It differs from other platforms where it is `false`.
+  public let defaultTextAutoEllipsize: Bool
 
   /// Allows the usage of delayed trigger initialization in case the target div requires
   /// existence of nested objects (timers, tooltips, etc)
@@ -45,13 +49,15 @@ public struct DivFlagsInfo {
     imageBlurPreferMetal: Bool = true,
     imageTintPreferMetal: Bool = true,
     useTooltipLegacyWidth: Bool = false,
-    initializeTriggerOnSet: Bool = true
+    initializeTriggerOnSet: Bool = true,
+    defaultTextAutoEllipsize: Bool = true
   ) {
     self.useUrlHandlerForVisibilityActions = useUrlHandlerForVisibilityActions
     self.imageBlurPreferMetal = imageBlurPreferMetal
     self.imageTintPreferMetal = imageTintPreferMetal
     self.useTooltipLegacyWidth = useTooltipLegacyWidth
     self.initializeTriggerOnSet = initializeTriggerOnSet
+    self.defaultTextAutoEllipsize = defaultTextAutoEllipsize
   }
 
   /// The default instance of `DivFlagsInfo`.

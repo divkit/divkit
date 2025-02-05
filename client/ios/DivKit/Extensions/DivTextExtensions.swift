@@ -119,7 +119,8 @@ extension DivText: DivBlockModeling {
       truncationImages: truncationImages,
       additionalTextInsets: additionalTextInsets,
       canSelect: resolveSelectable(expressionResolver),
-      tightenWidth: resolveTightenWidth(expressionResolver)
+      tightenWidth: resolveTightenWidth(expressionResolver),
+      autoEllipsize: resolveAutoEllipsize(expressionResolver) ?? context.flagsInfo.defaultTextAutoEllipsize
     )
   }
 
