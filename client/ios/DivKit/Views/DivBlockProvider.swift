@@ -167,7 +167,6 @@ final class DivBlockProvider {
 
   private func update(divData: DivData?) {
     guard divData !== self.divData else { return }
-    block = noDataBlock
     guard let divData else {
       self.divData = nil
       return
@@ -180,8 +179,7 @@ final class DivBlockProvider {
 
   private func update(reasons: [DivCardUpdateReason]) {
     guard var divData else {
-      guard debugParams.isDebugInfoEnabled else { return }
-      block = makeErrorsBlock(dataErrors)
+      block = debugParams.isDebugInfoEnabled ? makeErrorsBlock(dataErrors) : noDataBlock
       return
     }
 
