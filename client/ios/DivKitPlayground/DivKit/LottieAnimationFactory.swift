@@ -12,7 +12,7 @@ final class LottieAnimationFactory: AsyncSourceAnimatableViewFactory {
     case .restart:
       animationView.loopMode = count == -1 ? .loop : .repeat(count)
     case .reverse:
-      animationView.loopMode = count == -1 ? .autoReverse : .repeatBackwards(count)
+      animationView.loopMode = count == -1 ? .autoReverse : .repeatBackwards(count / 2)
     }
     return animationView
   }
@@ -38,11 +38,11 @@ extension LottieAnimationView: DivKitExtensions.AsyncSourceAnimatableView {
       Task.detached(priority: .userInitiated) {
         let animation =
           switch source {
-          case let .data(data):
-            try? JSONDecoder().decode(LottieAnimation.self, from: data)
-          case let .json(json):
-            try? LottieAnimation(dictionary: json)
-          }
+        case let .data(data):
+          try? JSONDecoder().decode(LottieAnimation.self, from: data)
+        case let .json(json):
+          try? LottieAnimation(dictionary: json)
+        }
         continuation.resume(returning: animation)
       }
     }
