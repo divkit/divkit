@@ -1,3 +1,16 @@
+## 31.2.0
+
+# Android Client:
+* Use Handler in timers instead of java.util.Timer.
+
+# iOS Client:
+* Added `DivCardUpdateReason` typealias for `DivActionURLHandler.UpdateReason`.
+* Added `close_by_tap_outside`/`tap_outside_actions` support for tooltips.
+* Fixed shadow clipping during animation.
+* Fixed timers lifecycle.
+* Separated trigger set and init behind `DivFlagsInfo.initializeTriggerOnSet`.
+
+
 ## 31.1.0
 
 # Android Client:
