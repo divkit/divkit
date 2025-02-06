@@ -55,7 +55,7 @@ public final class TextBlock: BlockWithTraits {
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
     tightenWidth: Bool = false,
-    autoEllipsize: Bool = false
+    autoEllipsize: Bool = true
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -95,7 +95,7 @@ public final class TextBlock: BlockWithTraits {
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
     tightenWidth: Bool = false,
-    autoEllipsize: Bool = false
+    autoEllipsize: Bool = true
   ) {
     self.init(
       widthTrait: widthTrait,
@@ -138,7 +138,7 @@ public final class TextBlock: BlockWithTraits {
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
-    return switch heightTrait {
+    switch heightTrait {
     case let .intrinsic(_, minSize, maxSize):
       clamp(
         calculateTextIntrinsicContentHeight(for: width),
@@ -180,7 +180,7 @@ public final class TextBlock: BlockWithTraits {
       && lhs.tightenWidth == rhs.tightenWidth
       && lhs.autoEllipsize == rhs.autoEllipsize
   }
-  
+
   public func calculateTextIntrinsicContentHeight(
     for width: CGFloat
   ) -> CGFloat {
@@ -198,7 +198,7 @@ public final class TextBlock: BlockWithTraits {
       ) + additionalTextInsets.vertical.sum
     )
     cachedIntrinsicHeight = (width: width, height: height)
-    return height 
+    return height
   }
 }
 
