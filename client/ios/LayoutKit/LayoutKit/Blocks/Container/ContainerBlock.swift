@@ -492,17 +492,18 @@ private func makeChildrenWithSeparators(
     childrenWithSeparators.append(separator.style)
   }
 
-  var isPrevEmpty = children.first?.content.isEmpty ?? true
+  var hasVisilbeItems = false
   for (index, child) in children.enumerated() {
+    let isCurrentItemVisible = !child.content.isEmpty
     if separator.showBetween, index > 0 {
-      if isPrevEmpty || child.content.isEmpty {
-        childrenWithSeparators.append(ContainerBlock.Child(content: EmptyBlock.zeroSized))
-      } else {
+      if isCurrentItemVisible, hasVisilbeItems {
         childrenWithSeparators.append(separator.style)
+      } else {
+        childrenWithSeparators.append(ContainerBlock.Child(content: EmptyBlock.zeroSized))
       }
     }
-    isPrevEmpty = child.content.isEmpty
     childrenWithSeparators.append(child)
+    hasVisilbeItems = hasVisilbeItems || isCurrentItemVisible
   }
 
   if separator.showAtEnd {
