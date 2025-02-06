@@ -1,6 +1,7 @@
 ## 31.2.0
 
 # Android Client:
+* Fixed StackOverflowError at video playback during state change.
 * Use Handler in timers instead of java.util.Timer.
 
 # iOS Client:
