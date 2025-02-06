@@ -1,5 +1,5 @@
 {
-  "description": "Vertical container with separator. Separators between gone items should not be visible.",
+  "description": "Horizontal container with separator. Separators between gone items should not be visible.",
   "platforms": [
     "android",
     "ios",
