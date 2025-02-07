@@ -26,6 +26,7 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.dpToPxF
+import com.yandex.div.core.view2.divs.getTypefaceValue
 import com.yandex.div.core.view2.divs.toPorterDuffMode
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.toTextVerticalAlignment
@@ -390,13 +391,17 @@ internal class SpannedTextBuilder @Inject constructor(
             }
         }
 
-        if (span.fontWeight != null || span.fontWeightValue != null) {
+        if (span.fontFamily != null || span.fontWeight != null || span.fontWeightValue != null) {
+            val fontWeightValue = if (span.fontWeight != null || span.fontWeightValue != null) {
+                getTypefaceValue(span.fontWeight, span.fontWeightValue)
+            } else {
+                getTypefaceValue(textData.fontWeight, textData.fontWeightValue)
+            }
             spannedText.setSpan(
                 TypefaceSpan(
                     typeface = typefaceResolver.getTypeface(
-                        span.fontFamily,
-                        span.fontWeight,
-                        span.fontWeightValue
+                        span.fontFamily ?: textData.fontFamily,
+                        fontWeightValue
                     )
                 ),
                 start,
@@ -539,6 +544,8 @@ internal class SpannedTextBuilder @Inject constructor(
             fontSize = fontSizeValue.unitToPx(displayMetrics, fontSizeUnit),
             fontSizeValue = fontSizeValue,
             fontSizeUnit = fontSizeUnit,
+            fontWeight = divText.fontWeight.evaluate(resolver),
+            fontWeightValue = divText.fontWeightValue?.evaluate(resolver)?.toIntSafely(),
             fontFamily = divText.fontFamily?.evaluate(resolver),
             lineHeight = divText.lineHeight?.evaluate(resolver)?.toIntSafely()?.unitToPx(displayMetrics, fontSizeUnit),
             textColor = divText.textColor.evaluate(resolver)

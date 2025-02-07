@@ -46,6 +46,7 @@ import com.yandex.divkit.demo.div.editor.DivEditorUi
 import com.yandex.divkit.demo.div.editor.DivEditorWebController
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
+import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.lifecycleOwner
@@ -117,7 +118,12 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .divDataChangeListener(transitionScheduler)
             .actionHandler(TransitionActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
+            .additionalTypefaceProviders(
+                mapOf(
+                    "display" to YandexSansDisplayDivTypefaceProvider(this),
+                    "condensed" to YandexSansCondensedTypefaceProvider(this),
+                )
+            )
             .build()
 
         divContext = divContext(
