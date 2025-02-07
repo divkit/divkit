@@ -35,25 +35,6 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
   }
 }
 
-extension DivBlendMode {
-  fileprivate var tintMode: TintMode {
-    switch self {
-    case .sourceIn:
-      .sourceIn
-    case .sourceAtop:
-      .sourceAtop
-    case .darken:
-      .darken
-    case .lighten:
-      .lighten
-    case .multiply:
-      .multiply
-    case .screen:
-      .screen
-    }
-  }
-}
-
 extension DivImage {
   fileprivate func resolveEffects(_ expressionResolver: ExpressionResolver) -> [ImageEffect] {
     filters?.compactMap { $0.resolveEffect(expressionResolver) } ?? []

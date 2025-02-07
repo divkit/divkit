@@ -9,12 +9,20 @@ public final class TextBlock: BlockWithTraits {
     public let holder: ImageHolder
     public let location: Int
     public let tintColor: Color?
+    public let tintMode: TintMode
 
-    public init(size: CGSize, holder: ImageHolder, location: Int, tintColor: Color? = nil) {
+    public init(
+      size: CGSize,
+      holder: ImageHolder,
+      location: Int,
+      tintColor: Color? = nil,
+      tintMode: TintMode = .sourceIn
+    ) {
       self.size = size
       self.holder = holder
       self.location = location
       self.tintColor = tintColor
+      self.tintMode = tintMode
     }
   }
 
@@ -309,6 +317,6 @@ extension TextBlock.InlineImage {
   fileprivate var tintColorImage: Image? {
     let holderImage = holder.image
     guard let tintColor else { return holderImage }
-    return holderImage?.redrawn(withTintColor: tintColor)
+    return holderImage?.redrawn(withTintColor: tintColor, tintMode: tintMode)
   }
 }

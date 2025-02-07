@@ -152,12 +152,12 @@ extension DivText: DivBlockModeling {
     guard let text else {
       return []
     }
-    return (images ?? [])
-      .filter {
-        let start = $0.resolveStart(context.expressionResolver) ?? 0
-        return start <= CFAttributedStringGetLength(text)
-      }
-      .map { $0.makeImage(context: context) }
+    return (images ?? []).compactMap { 
+      $0.makeImage(
+        context: context, 
+        textLength: CFAttributedStringGetLength(text)
+      ) 
+    }
   }
 
   private func apply(
@@ -312,17 +312,33 @@ extension URLQueryItem {
 
 extension DivText.Image {
   fileprivate func makeImage(
-    context: DivBlockModelingContext
-  ) -> TextBlock.InlineImage {
+    context: DivBlockModelingContext,
+    textLength: Int
+  ) -> TextBlock.InlineImage? {
     let expressionResolver = context.expressionResolver
+    let start = resolveStart(expressionResolver) ?? 0
+    
+    guard start <= textLength else {
+      return nil
+    }
+    
+    let indexingDirection = resolveIndexingDirection(expressionResolver)
+    let location = switch indexingDirection {
+    case .normal: 
+      start
+    case .reversed:
+      textLength - start
+    }
+    
     return TextBlock.InlineImage(
       size: CGSize(
         width: CGFloat(width.resolveValue(expressionResolver) ?? 0),
         height: CGFloat(height.resolveValue(expressionResolver) ?? 0)
       ),
       holder: context.imageHolderFactory.make(resolveUrl(expressionResolver)),
-      location: resolveStart(expressionResolver) ?? 0,
-      tintColor: resolveTintColor(expressionResolver)
+      location: location,
+      tintColor: resolveTintColor(expressionResolver),
+      tintMode: resolveTintMode(expressionResolver).tintMode
     )
   }
 }
