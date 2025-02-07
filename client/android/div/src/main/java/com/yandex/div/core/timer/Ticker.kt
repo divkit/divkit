@@ -28,7 +28,9 @@ internal class Ticker(
     private val currentTime: Long
         get() = SystemClock.elapsedRealtime()
 
-    private val timer = FixedRateScheduler()
+    private val timer by lazy(LazyThreadSafetyMode.NONE) {
+        FixedRateScheduler()
+    }
 
     private fun setupTimer(
         period: Long,
