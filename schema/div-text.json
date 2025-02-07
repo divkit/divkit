@@ -133,8 +133,7 @@
         "mask": {
           "$ref": "div-text-range-mask.json",
           "$description": "translations.json#/div_text_range_mask",
-          "platforms": [
-          ]
+          "platforms": []
         }
       },
       "$description": "translations.json#/div_text_range"
@@ -241,7 +240,7 @@
       ],
       "$description": "translations.json#/div_text_image"
     },
-    "ellipsis":  {
+    "ellipsis": {
       "type": "object",
       "properties": {
         "text": {
@@ -471,7 +470,10 @@
         "truncate": {
           "type": "string",
           "enum": [
-            "none", "start", "end", "middle"
+            "none",
+            "start",
+            "end",
+            "middle"
           ],
           "default_value": "end",
           "$description": "translations.json#/div_text_truncate",

@@ -2,12 +2,12 @@
   "type": "pager",
   "orientation": "vertical",
   "layout_mode": {
-                                        "type": "fixed",
-                                        "neighbour_page_width": {
-                                            "type": "fixed",
-                                            "value": 20
-                                        }
-                                    },
+    "type": "fixed",
+    "neighbour_page_width": {
+      "type": "fixed",
+      "value": 20
+    }
+  },
   "items": [
     {
       "type": "text",
@@ -23,15 +23,15 @@
       "type": "gif",
       "gif_url": "https://yastatic.net/s3/home/divkit/chess.png",
       "width": {
-          "type": "fixed",
-          "value": 15
+        "type": "fixed",
+        "value": 15
       },
       "height": {
-          "type": "fixed",
-          "value": 15
+        "type": "fixed",
+        "value": 15
       },
       "margins": {
-          "left": 4
+        "left": 4
       },
       "reuse_id": "test_reuse_id1"
     },

@@ -15,12 +15,10 @@
               "width": {
                 "type": "fixed",
                 "value": 300
-
               },
               "height": {
                 "type": "fixed",
                 "value": 300
-
               },
               "extensions": [
                 {

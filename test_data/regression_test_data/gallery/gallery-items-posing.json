@@ -41,11 +41,13 @@
   },
   "card": {
     "log_id": "gallery-paging",
-    "variables": [{
+    "variables": [
+      {
         "name": "text_position",
         "type": "string",
         "value": "start"
-    }],
+      }
+    ],
     "states": [
       {
         "state_id": 0,
@@ -96,7 +98,6 @@
                     "log_limit": 0,
                     "url": "div-action://set_variable?name=text_position&value=start"
                   }
-            
                 },
                 {
                   "id": "block_2",

@@ -33,7 +33,8 @@
     "mode": {
       "type": "string",
       "enum": [
-        "transactional", "partial"
+        "transactional",
+        "partial"
       ],
       "default_value": "partial",
       "$description": "translations.json#/div_patch_mode",

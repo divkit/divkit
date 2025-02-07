@@ -94,7 +94,9 @@
                     "type": "match_parent",
                     "weight": 1
                   },
-                  "margins": {"left": 2}
+                  "margins": {
+                    "left": 2
+                  }
                 },
                 {
                   "type": "text_block",
@@ -103,12 +105,16 @@
                     "type": "match_parent",
                     "weight": 2
                   },
-                  "margins": {"left": 2}
+                  "margins": {
+                    "left": 2
+                  }
                 },
                 {
                   "type": "text_block",
                   "text": "wrap_content",
-                  "margins": {"left": 2}
+                  "margins": {
+                    "left": 2
+                  }
                 }
               ]
             }

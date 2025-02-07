@@ -38,8 +38,8 @@
           "$description": "translations.json#/div_data_div_state_state_id"
         },
         "div": {
-           "$ref": "div.json",
-           "$description": "translations.json#/div_data_div_state_div"
+          "$ref": "div.json",
+          "$description": "translations.json#/div_data_div_state_div"
         }
       },
       "required": [

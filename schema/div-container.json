@@ -31,12 +31,16 @@
     },
     "typescript": {
       "union_interfaces": [
-         {
-           "required_params": [ "items" ]
-         },
-         {
-           "required_params": [ "item_builder" ]
-         }
+        {
+          "required_params": [
+            "items"
+          ]
+        },
+        {
+          "required_params": [
+            "item_builder"
+          ]
+        }
       ]
     }
   },

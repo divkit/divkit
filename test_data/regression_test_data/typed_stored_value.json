@@ -122,7 +122,11 @@
                     "lifetime": 10,
                     "value": {
                       "type": "array",
-                      "value": [1, 2, 3]
+                      "value": [
+                        1,
+                        2,
+                        3
+                      ]
                     }
                   }
                 }

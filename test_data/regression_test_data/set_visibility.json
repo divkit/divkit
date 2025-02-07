@@ -86,10 +86,12 @@
                     "visibility_duration": 0,
                     "log_limit": 100
                   },
-                  "background": [{
-                    "type": "solid",
-                    "color": "#f1f1f1"
-                  }],
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#f1f1f1"
+                    }
+                  ],
                   "text": "Visible item",
                   "width": {
                     "type": "match_parent"

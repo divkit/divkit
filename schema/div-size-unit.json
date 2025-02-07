@@ -1,13 +1,13 @@
 {
-    "type": "string",
-    "enum": [
-      "dp",
-      "sp",
-      "px"
-    ],
-    "$description": "translations.json#/div_size_unit",
-    "platforms": [
-        "android",
-        "ios"
-    ]
+  "type": "string",
+  "enum": [
+    "dp",
+    "sp",
+    "px"
+  ],
+  "$description": "translations.json#/div_size_unit",
+  "platforms": [
+    "android",
+    "ios"
+  ]
 }

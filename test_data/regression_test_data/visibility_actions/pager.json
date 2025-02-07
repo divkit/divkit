@@ -57,7 +57,7 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "text":"Item ",
+          "text": "Item ",
           "background": [
             {
               "type": "solid",

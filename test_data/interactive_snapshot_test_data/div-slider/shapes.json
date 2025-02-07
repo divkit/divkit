@@ -163,67 +163,67 @@
               {
                 "state_id": "circle",
                 "div": {
-                "type": "div_base",
-                "thumb_style": {
-                  "type": "shape_drawable",
-                  "color": "#ff0000",
-                  "stroke": {
-                    "color": "#ffffff",
-                    "width": 3
+                  "type": "div_base",
+                  "thumb_style": {
+                    "type": "shape_drawable",
+                    "color": "#ff0000",
+                    "stroke": {
+                      "color": "#ffffff",
+                      "width": 3
+                    },
+                    "shape": {
+                      "type": "circle",
+                      "radius": {
+                        "type": "fixed",
+                        "value": "@{slider_circle_radius}"
+                      }
+                    }
                   },
-                  "shape": {
-                    "type": "circle",
-                    "radius": {
-                      "type": "fixed",
-                      "value": "@{slider_circle_radius}"
+                  "track_active_style": {
+                    "type": "shape_drawable",
+                    "color": "#ff0000",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 6
+                      }
                     }
-                  }
-                },
-                "track_active_style": {
-                  "type": "shape_drawable",
-                  "color": "#ff0000",
-                  "shape": {
-                    "type": "rounded_rectangle",
-                    "item_height": {
-                      "type": "fixed",
-                      "value": 6
+                  },
+                  "track_inactive_style": {
+                    "type": "shape_drawable",
+                    "color": "#20000000",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 6
+                      }
                     }
-                  }
-                },
-                "track_inactive_style": {
-                  "type": "shape_drawable",
-                  "color": "#20000000",
-                  "shape": {
-                    "type": "rounded_rectangle",
-                    "item_height": {
-                      "type": "fixed",
-                      "value": 6
+                  },
+                  "tick_mark_active_style": {
+                    "type": "shape_drawable",
+                    "color": "#ff0000",
+                    "shape": {
+                      "type": "circle",
+                      "radius": {
+                        "type": "fixed",
+                        "value": 8
+                      }
                     }
-                  }
-                },
-                "tick_mark_active_style": {
-                  "type": "shape_drawable",
-                  "color": "#ff0000",
-                  "shape": {
-                    "type": "circle",
-                    "radius": {
-                      "type": "fixed",
-                      "value": 8
+                  },
+                  "tick_mark_inactive_style": {
+                    "type": "shape_drawable",
+                    "color": "#20000000",
+                    "shape": {
+                      "type": "circle",
+                      "radius": {
+                        "type": "fixed",
+                        "value": 8
+                      }
                     }
-                  }
-                },
-                "tick_mark_inactive_style": {
-                  "type": "shape_drawable",
-                  "color": "#20000000",
-                  "shape": {
-                    "type": "circle",
-                    "radius": {
-                      "type": "fixed",
-                      "value": 8
-                    }
-                  }
-                },
-                "thumb_value_variable": "slider_value"
+                  },
+                  "thumb_value_variable": "slider_value"
                 }
               }
             ]

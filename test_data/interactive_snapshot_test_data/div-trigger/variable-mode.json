@@ -44,7 +44,7 @@
     },
     "card": {
       "log_id": "sample_card",
-      "variables":[
+      "variables": [
         {
           "name": "total_likes",
           "type": "integer",

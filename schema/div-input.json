@@ -144,7 +144,11 @@
         "autocapitalization": {
           "type": "string",
           "enum": [
-            "auto", "none", "words", "sentences", "all_characters"
+            "auto",
+            "none",
+            "words",
+            "sentences",
+            "all_characters"
           ],
           "default_value": "auto",
           "$description": "translations.json#/div_input_autocapitalization",
@@ -186,7 +190,13 @@
         "keyboard_type": {
           "type": "string",
           "enum": [
-            "single_line_text", "multi_line_text", "phone", "number", "email", "uri", "password"
+            "single_line_text",
+            "multi_line_text",
+            "phone",
+            "number",
+            "email",
+            "uri",
+            "password"
           ],
           "default_value": "multi_line_text",
           "$description": "translations.json#/div_input_keyboard_type"

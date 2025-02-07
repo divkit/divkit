@@ -60,18 +60,18 @@
               "hint_color": "#888888",
               "line_height": 22,
               "options": [
-                  {
-                    "value": "ru",
-                    "text": "Russia"
-                  },
-                  {
-                    "value": "uk",
-                    "text": "United Kingdom"
-                  },
-                  {
-                    "value": "kz"
-                  }
-                ]
+                {
+                  "value": "ru",
+                  "text": "Russia"
+                },
+                {
+                  "value": "uk",
+                  "text": "United Kingdom"
+                },
+                {
+                  "value": "kz"
+                }
+              ]
             },
             {
               "type": "text",

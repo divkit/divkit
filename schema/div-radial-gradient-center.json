@@ -1,12 +1,12 @@
 {
-    "anyOf": [
-        {
-            "$ref": "div-radial-gradient-fixed-center.json",
-            "$description": "translations.json#/div_radial_gradient_fixed_center"
-        },
-        {
-            "$ref": "div-radial-gradient-relative-center.json",
-            "$description": "translations.json#/div_radial_gradient_relative_center"
-        }
-    ]
+  "anyOf": [
+    {
+      "$ref": "div-radial-gradient-fixed-center.json",
+      "$description": "translations.json#/div_radial_gradient_fixed_center"
+    },
+    {
+      "$ref": "div-radial-gradient-relative-center.json",
+      "$description": "translations.json#/div_radial_gradient_relative_center"
+    }
+  ]
 }

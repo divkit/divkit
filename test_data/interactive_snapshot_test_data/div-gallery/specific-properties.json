@@ -61,7 +61,6 @@
         "type": "text",
         "text": "     ",
         "font_size": 14,
-
         "text_color": "#1ABC9C",
         "paddings": {
           "top": 4,

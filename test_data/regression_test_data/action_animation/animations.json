@@ -73,7 +73,7 @@
                 "duration": 500,
                 "end_value": 0.6,
                 "interpolator": "ease"
-              },        
+              },
               "actions": [
                 {
                   "log_id": "animation_ease_scale",

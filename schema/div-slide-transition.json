@@ -23,7 +23,7 @@
           "default_value": "bottom",
           "$description": "translations.json#/div_slide_transition_edge"
         },
-        "distance":{
+        "distance": {
           "$ref": "div-dimension.json",
           "$description": "translations.json#/div_slide_transition_distance"
         }

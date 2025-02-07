@@ -32,8 +32,7 @@
           "$description": "translations.json#/div_text_range_mask_particles_density"
         }
       },
-      "platforms": [
-      ],
+      "platforms": [],
       "required": [
         "type",
         "color"

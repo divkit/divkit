@@ -84,7 +84,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/current",
-          "typed":  {
+          "typed": {
             "type": "scroll_to",
             "id": "gallery1",
             "destination": {
@@ -100,7 +100,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/next",
-          "typed":  {
+          "typed": {
             "type": "scroll_by",
             "id": "gallery1",
             "item_count": 1
@@ -113,7 +113,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/prev",
-          "typed":  {
+          "typed": {
             "type": "scroll_by",
             "id": "gallery1",
             "item_count": -1
@@ -126,7 +126,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/end",
-          "typed":  {
+          "typed": {
             "type": "scroll_to",
             "destination": {
               "type": "end"
@@ -142,7 +142,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/start",
-          "typed":  {
+          "typed": {
             "type": "scroll_to",
             "destination": {
               "type": "start"
@@ -158,7 +158,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/current 2",
-          "typed":  {
+          "typed": {
             "type": "scroll_to",
             "id": "gallery1",
             "destination": {
@@ -174,7 +174,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/forward",
-          "typed":  {
+          "typed": {
             "type": "scroll_by",
             "id": "gallery1",
             "offset": 50
@@ -187,7 +187,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/backward",
-          "typed":  {
+          "typed": {
             "type": "scroll_by",
             "id": "gallery1",
             "offset": -50
@@ -200,7 +200,7 @@
       "div_actions": [
         {
           "log_id": "gallery1/to_position",
-          "typed":  {
+          "typed": {
             "type": "scroll_to",
             "id": "gallery1",
             "destination": {
@@ -214,4 +214,3 @@
     }
   ]
 }
-

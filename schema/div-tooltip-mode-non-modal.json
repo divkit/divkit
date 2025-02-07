@@ -1,17 +1,16 @@
 {
-    "type": "object",
-    "$description": "translations.json#/div_tooltip_mode_non_modal",
-    "platforms": [
-    ],
-    "properties": {
-        "type": {
-            "type": "string",
-            "enum": [
-                "non_modal"
-            ]
-        }
-    },
-    "required": [
-        "type"
-    ]
+  "type": "object",
+  "$description": "translations.json#/div_tooltip_mode_non_modal",
+  "platforms": [],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "non_modal"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
 }

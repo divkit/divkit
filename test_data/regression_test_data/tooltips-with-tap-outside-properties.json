@@ -69,7 +69,7 @@
                     "x": {
                       "value": 0
                     },
-                    "y":  {
+                    "y": {
                       "value": 4
                     }
                   },
@@ -145,7 +145,6 @@
                 }
               ]
             },
-            
             {
               "type": "button",
               "text": "tooltip with tap_outside_actions",
@@ -171,7 +170,7 @@
                     "x": {
                       "value": 0
                     },
-                    "y":  {
+                    "y": {
                       "value": 4
                     }
                   },
@@ -247,7 +246,6 @@
                 }
               ]
             },
-            
             {
               "type": "text",
               "text": "Outside actions called: @{outside_actions_called}",

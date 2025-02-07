@@ -227,7 +227,7 @@
                     "$url": "text_collapse_action"
                   }
                 ],
-                "$id" : "expand_id"
+                "$id": "expand_id"
               }
             },
             {
