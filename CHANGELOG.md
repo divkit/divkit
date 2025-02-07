@@ -11,6 +11,9 @@
 * Fixed timers lifecycle.
 * Separated trigger set and init behind `DivFlagsInfo.initializeTriggerOnSet`.
 
+# Web Client:
+* Fixed `client-hydratable` build.
+
 
 ## 31.1.0
 

@@ -1,3 +1,8 @@
+## 31.2.0 (February 10, 2025)
+
+* Fixed `client-hydratable` build.
+
+
 ## 31.1.0 (February 3, 2025)
 
 * Added support for switching states in the `tooltip`.
