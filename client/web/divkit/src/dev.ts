@@ -32,6 +32,7 @@ window.root = new Root({
     target: document.body,
     props: {
         id: 'abcde',
+        mix: 'divkit-root',
         json,
         onStat(arg) {
             console.log(arg);
