@@ -14,7 +14,7 @@
         "div": {
           "type": "pager",
           "orientation": "vertical",
-          "layout_mode":{
+          "layout_mode": {
             "type": "percentage",
             "page_width": {
               "type": "percentage",
@@ -31,10 +31,10 @@
               "margins": {
                 "bottom": 10
               },
-              "height":{
+              "height": {
                 "type": "match_parent"
               },
-              "width":{
+              "width": {
                 "type": "match_parent"
               },
               "alignment_vertical": "top",
@@ -55,7 +55,8 @@
             {
               "type": "text",
               "text": "Means 73"
-            },{
+            },
+            {
               "type": "text",
               "text": "73 is the best number"
             }

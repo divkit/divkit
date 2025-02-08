@@ -27,7 +27,7 @@ final class DivActionHandlerTests: XCTestCase {
   }()
 
   private var handledUrl: URL?
-  private var lastUpdateReason: DivActionURLHandler.UpdateReason?
+  private var lastUpdateReason: DivCardUpdateReason?
 
   func test_UrlPassedToUrlHandler() {
     handle(
@@ -334,7 +334,7 @@ final class DivActionHandlerTests: XCTestCase {
   func test_DownloadAction_updateCardIsCalled() {
     let expectedPatch = DivPatch(
       changes: [
-        DivPatch.Change(id: "id", items: [ divText() ])
+        DivPatch.Change(id: "id", items: [divText()]),
       ]
     )
     patchProvider = MockPatchProvider {

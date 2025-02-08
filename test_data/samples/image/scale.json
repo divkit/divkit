@@ -139,7 +139,7 @@
                     "end": 40
                   },
                   "width": {
-                    "type":"fixed",
+                    "type": "fixed",
                     "value": 100
                   }
                 },

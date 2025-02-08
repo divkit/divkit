@@ -24,10 +24,12 @@
           "border": {
             "corner_radius": 8
           },
-          "background": [{
-            "type": "solid",
-            "color": "#e0bae3"
-          }],
+          "background": [
+            {
+              "type": "solid",
+              "color": "#e0bae3"
+            }
+          ],
           "$image_url": "album_cover_url",
           "action_animation": {
             "name": "no_animation"

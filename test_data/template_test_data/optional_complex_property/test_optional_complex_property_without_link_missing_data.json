@@ -2,8 +2,7 @@
   "templates": {
     "t_0": {
       "type": "entity_with_optional_complex_property",
-      "property": {
-      }
+      "property": {}
     }
   },
   "entity": {

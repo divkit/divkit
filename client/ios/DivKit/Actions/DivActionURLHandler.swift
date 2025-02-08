@@ -1,8 +1,8 @@
 import Foundation
-import LayoutKit
 import VGSL
 
 public enum DivActionURLHandler {
+  //  Deprecated. Use DivCardUpdateReason
   @frozen
   public enum UpdateReason {
     case patch(DivCardID, DivPatch)

@@ -1,5 +1,5 @@
-import Foundation
 import DivKit
+import Foundation
 import LayoutKit
 import VGSL
 
@@ -125,7 +125,7 @@ extension Dictionary where Key == String {
     _ key: Key,
     expressionResolver: ExpressionResolver
   ) throws -> CornerRadii? {
-    return try? getOptionalField(key) { (obj: Any) in
+    try? getOptionalField(key) { (obj: Any) in
       if let corners = obj as? [String: Any] {
         let topLeft: Int? = try? getOptionalIntFromDict(
           dict: corners, "top-left",

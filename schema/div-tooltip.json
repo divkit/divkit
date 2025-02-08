@@ -39,7 +39,7 @@
       "$ref": "div-point.json",
       "$description": "translations.json#/div_tooltip_offset"
     },
-    "animation_in" : {
+    "animation_in": {
       "$ref": "div-animation.json",
       "$description": "translations.json#/div_tooltip_animation_in",
       "platforms": [
@@ -47,7 +47,7 @@
         "web"
       ]
     },
-    "animation_out" : {
+    "animation_out": {
       "$ref": "div-animation.json",
       "$description": "translations.json#/div_tooltip_animation_out",
       "platforms": [
@@ -59,8 +59,7 @@
       "$ref": "div-tooltip-mode.json",
       "default_value": "{ \"type\": \"modal\" }",
       "$description": "translations.json#/div_tooltip_mode",
-      "platforms": [
-      ]
+      "platforms": []
     },
     "tap_outside_actions": {
       "type": "array",

@@ -1,44 +1,49 @@
 {
-    "templates": {},
-    "card": {
-        "log_id": "snapshot_test_card",
-        "variables": [{
-            "name": "checked",
-            "type": "string",
-            "value": "unchecked"
-        }],
-        "states": [
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "checked",
+        "type": "string",
+        "value": "unchecked"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "state",
+          "id": "check",
+          "state_id_variable": "checked",
+          "states": [
             {
-                "state_id": 0,
-                "div": {
-                    "type": "state",
-                    "id": "check",
-                    "state_id_variable": "checked",
-                    "states": [{
-                        "state_id": "unchecked",
-                        "div": {
-                            "type": "text",
-                            "font_size": 20,
-                            "text": "☐ Approved"
-                        }
-                    }, {
-                        "state_id": "checked",
-                        "div": {
-                            "type": "text",
-                            "font_size": 20,
-                            "text": "☑ Approved"
-                        }
-                    }],
-                    "accessibility": {
-                        "type": "checkbox",
-                        "is_checked": "@{checked == 'checked'}"
-                    },
-                    "action": {
-                        "log_id": "check",
-                        "url": "div-action://set_variable?name=checked&value=@{checked == 'checked' ? 'unchecked' : 'checked'}"
-                    }
-                }
+              "state_id": "unchecked",
+              "div": {
+                "type": "text",
+                "font_size": 20,
+                "text": "☐ Approved"
+              }
+            },
+            {
+              "state_id": "checked",
+              "div": {
+                "type": "text",
+                "font_size": 20,
+                "text": "☑ Approved"
+              }
             }
-        ]
-    }
+          ],
+          "accessibility": {
+            "type": "checkbox",
+            "is_checked": "@{checked == 'checked'}"
+          },
+          "action": {
+            "log_id": "check",
+            "url": "div-action://set_variable?name=checked&value=@{checked == 'checked' ? 'unchecked' : 'checked'}"
+          }
+        }
+      }
+    ]
+  }
 }

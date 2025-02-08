@@ -133,8 +133,7 @@
         "mask": {
           "$ref": "div-text-range-mask.json",
           "$description": "translations.json#/div_text_range_mask",
-          "platforms": [
-          ]
+          "platforms": []
         }
       },
       "$description": "translations.json#/div_text_range"
@@ -175,6 +174,7 @@
           "$description": "translations.json#/div_text_image_tint_mode",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },
@@ -231,6 +231,7 @@
           "$description": "translations.json#/div_text_image_indexing_direction",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         }
@@ -241,7 +242,7 @@
       ],
       "$description": "translations.json#/div_text_image"
     },
-    "ellipsis":  {
+    "ellipsis": {
       "type": "object",
       "properties": {
         "text": {
@@ -347,6 +348,7 @@
           "$description": "translations.json#/div_text_auto_ellipsize",
           "platforms": [
             "android",
+            "ios",
             "web",
             "flutter"
           ]
@@ -470,7 +472,10 @@
         "truncate": {
           "type": "string",
           "enum": [
-            "none", "start", "end", "middle"
+            "none",
+            "start",
+            "end",
+            "middle"
           ],
           "default_value": "end",
           "$description": "translations.json#/div_text_truncate",

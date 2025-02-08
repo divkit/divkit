@@ -13,7 +13,7 @@ final class PlaygroundReporter: DivReporter {
     AppLogger.error(error.message)
     reportError(error)
   }
-  
+
   func reportAction(cardId _: DivCardID, info: DivActionInfo) {
     AppLogger.info("Action (\(info.source)): logId = \(info.logId)")
   }

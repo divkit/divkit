@@ -16,6 +16,16 @@ internal class DivTypefaceResolver @Inject constructor(
     private val typefaceProviders: Map<String, DivTypefaceProvider>,
     private val defaultTypeface: DivTypefaceProvider,
 ) {
+
+    internal fun getTypeface(fontFamily: String?, fontWeightValue: Int): Typeface {
+        val typefaceProvider = if (fontFamily == null) {
+            defaultTypeface
+        } else {
+            typefaceProviders[fontFamily] ?: defaultTypeface
+        }
+        return getTypeface(fontWeightValue, typefaceProvider)
+    }
+
     internal fun getTypeface(fontFamily: String?, fontWeight: DivFontWeight?, fontWeightValue: Int?): Typeface {
         val typefaceProvider = if (fontFamily == null) {
             defaultTypeface

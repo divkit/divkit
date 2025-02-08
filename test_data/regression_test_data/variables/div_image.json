@@ -31,7 +31,6 @@
         "type": "string",
         "value": "https://yastatic.net/s3/home/divkit/shape.png"
       }
-
     ],
     "log_id": "simple_tap",
     "states": [

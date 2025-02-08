@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.spannable
 
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
+import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSizeUnit
 
 internal data class TextData(
@@ -10,6 +11,8 @@ internal data class TextData(
     val fontSizeValue: Int,
     val fontSizeUnit: DivSizeUnit,
     val fontFamily: String?,
+    val fontWeight: DivFontWeight?,
+    val fontWeightValue: Int?,
     @Px val lineHeight: Int?,
     @ColorInt val textColor: Int
 ) {

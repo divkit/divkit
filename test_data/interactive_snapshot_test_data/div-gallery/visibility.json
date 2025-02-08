@@ -9,13 +9,10 @@
     "templates": {
       "div_base": {
         "type": "gallery",
-
         "orientation": "vertical",
         "visibility": "@{visibility}",
-
         "scroll_mode": "paging",
         "restrict_parent_scroll": 1,
-
         "alpha": "@{alpha}",
         "alignment_horizontal": "@{alignment_horizontal}",
         "alignment_vertical": "@{alignment_vertical}",

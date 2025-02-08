@@ -31,7 +31,7 @@ public final class DivKitComponents {
   @_spi(Internal)
   public let visibilityCounter = DivVisibilityCounter()
 
-  public var updateCardSignal: Signal<[DivActionURLHandler.UpdateReason]> {
+  public var updateCardSignal: Signal<[DivCardUpdateReason]> {
     updateCardPipe.signal
   }
 
@@ -45,7 +45,7 @@ public final class DivKitComponents {
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let updateCard: DivActionHandler.UpdateCardAction
-  private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
+  private let updateCardPipe: SignalPipe<[DivCardUpdateReason]>
   private let variableTracker = DivVariableTracker()
   private var debugErrorCollectors = [DivCardID: DebugErrorCollector]()
 
@@ -121,7 +121,7 @@ public final class DivKitComponents {
     self.urlHandler = urlHandler
     self.variablesStorage = variablesStorage
 
-    let updateCardPipe = SignalPipe<[DivActionURLHandler.UpdateReason]>()
+    let updateCardPipe = SignalPipe<[DivCardUpdateReason]>()
     self.updateCardPipe = updateCardPipe
 
     layoutProviderHandler = DivLayoutProviderHandler(variablesStorage: variablesStorage)

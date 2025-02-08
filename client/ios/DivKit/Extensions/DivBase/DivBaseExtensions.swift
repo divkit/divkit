@@ -58,7 +58,8 @@ extension DivBase {
         isVisible: false
       ) {
         return EmptyBlock.zeroSized.addingDecorations(
-          visibilityParams: visibilityParams
+          visibilityParams: visibilityParams,
+          isEmpty: true
         )
       }
       context.lastVisibleBoundsCache.onBecomeInvisible(path)
@@ -404,9 +405,9 @@ extension DivBorder {
     guard resolveHasShadow(expressionResolver) else {
       return nil
     }
-    
+
     let cornerRadii = resolveCornerRadii(expressionResolver)
-    
+
     guard let shadow else {
       return BlockShadow(
         cornerRadii: cornerRadii,
@@ -416,7 +417,7 @@ extension DivBorder {
         color: BlockShadow.Defaults.color
       )
     }
-    
+
     return shadow.resolve(expressionResolver, cornerRadii: cornerRadii)
   }
 

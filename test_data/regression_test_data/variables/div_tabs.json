@@ -9,10 +9,12 @@
         "type": "fixed",
         "value": 28
       },
-      "background": [{
-        "type": "solid",
-        "color": "#f5f5f5"
-      }],
+      "background": [
+        {
+          "type": "solid",
+          "color": "#f5f5f5"
+        }
+      ],
       "paddings": {
         "top": 3,
         "bottom": 3

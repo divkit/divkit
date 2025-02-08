@@ -26,6 +26,7 @@ final class DecoratingBlock: WrapperBlock {
   let accessibilityElement: AccessibilityElement?
   let reuseId: String
   let path: UIElementPath?
+  let isEmpty: Bool
 
   init(
     child: Block,
@@ -45,7 +46,8 @@ final class DecoratingBlock: WrapperBlock {
     tooltips: [BlockTooltip] = [],
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    isEmpty: Bool = false
   ) {
     self.child = child
     self.backgroundColor = backgroundColor
@@ -65,6 +67,7 @@ final class DecoratingBlock: WrapperBlock {
     self.accessibilityElement = accessibilityElement
     self.reuseId = reuseId ?? DecoratingBlock.defaultReuseId
     self.path = path
+    self.isEmpty = isEmpty
   }
 
   var intrinsicContentWidth: CGFloat {
@@ -120,6 +123,7 @@ final class DecoratingBlock: WrapperBlock {
       && tooltips == other.tooltips
       && accessibilityElement == other.accessibilityElement
       && reuseId == other.reuseId
+      && isEmpty == other.isEmpty
   }
 
   func makeCopy(wrapping child: Block) -> DecoratingBlock {
@@ -151,7 +155,8 @@ extension DecoratingBlock {
     tooltips: [BlockTooltip]? = nil,
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    isEmpty: Bool? = nil
   ) -> DecoratingBlock {
     DecoratingBlock(
       child: child ?? self.child,
@@ -171,7 +176,8 @@ extension DecoratingBlock {
       tooltips: tooltips ?? self.tooltips,
       accessibilityElement: accessibilityElement ?? self.accessibilityElement,
       reuseId: reuseId ?? self.reuseId,
-      path: path ?? self.path
+      path: path ?? self.path,
+      isEmpty: isEmpty ?? self.isEmpty
     )
   }
 }

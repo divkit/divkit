@@ -54,7 +54,7 @@
     "states": [
       {
         "state_id": 0,
-        "div":{
+        "div": {
           "type": "container",
           "orientation": "vertical",
           "margins": {

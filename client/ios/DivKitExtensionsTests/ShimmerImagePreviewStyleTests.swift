@@ -44,8 +44,8 @@ private let exactValuesShimmerImagePreviewStyle: [String: Any] = [
     "top-left": 0,
     "top-right": 8,
     "bottom-left": 16,
-    "bottom-right": 32
-  ]
+    "bottom-right": 32,
+  ],
 ]
 private let expressionValuesShimmerImagePreviewStyle: [String: Any] = [
   "angle": "@{15}",
@@ -60,6 +60,6 @@ private let expressionValuesShimmerImagePreviewStyle: [String: Any] = [
     "top-left": "@{0}",
     "top-right": "@{8}",
     "bottom-left": "@{16}",
-    "bottom-right": "@{32}"
-  ]
+    "bottom-right": "@{32}",
+  ],
 ]

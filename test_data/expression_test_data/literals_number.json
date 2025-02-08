@@ -82,7 +82,7 @@
       "expression": "@{.0000324}",
       "expected": {
         "type": "number",
-        "value": 3.24e-05
+        "value": 0.0000324
       },
       "platforms": [
         "android",
@@ -95,7 +95,7 @@
       "expression": "@{+.0000324}",
       "expected": {
         "type": "number",
-        "value": 3.24e-05
+        "value": 0.0000324
       },
       "platforms": [
         "android",
@@ -108,7 +108,7 @@
       "expression": "@{-.0000324}",
       "expected": {
         "type": "number",
-        "value": -3.24e-05
+        "value": -0.0000324
       },
       "platforms": [
         "android",

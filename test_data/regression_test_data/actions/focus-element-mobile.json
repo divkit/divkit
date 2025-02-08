@@ -132,7 +132,7 @@
       {
         "state_id": 0,
         "div": {
-          "div_id": "container", 
+          "div_id": "container",
           "type": "container",
           "width": {
             "type": "match_parent"

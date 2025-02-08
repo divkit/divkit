@@ -46,11 +46,13 @@
   },
   "card": {
     "log_id": "alerts_gallery",
-    "variables": [{
-      "type": "string",
-      "name": "patch_status",
-      "value": "loading"
-    }],
+    "variables": [
+      {
+        "type": "string",
+        "name": "patch_status",
+        "value": "loading"
+      }
+    ],
     "states": [
       {
         "state_id": 0,

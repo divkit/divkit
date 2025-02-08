@@ -186,6 +186,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
             }
         }
     }, {
@@ -194,6 +197,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
             }
         }
     }, {
@@ -202,6 +208,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
             }
         }
     }]

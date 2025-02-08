@@ -490,7 +490,7 @@ extension UnicodeScalarView {
         }
       }
     }
-    
+
     func collapseStackToSingleExpression() throws -> Subexpression {
       try collapseStack(from: 0)
       if let first = stack.first {

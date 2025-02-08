@@ -72,7 +72,9 @@
       "$ref": "common.json#/boolean_int",
       "default_value": "false",
       "$description": "translations.json#/div_accessibility_mute_after_action",
-      "platforms": [ "ios" ]
+      "platforms": [
+        "ios"
+      ]
     }
   },
   "platforms": [

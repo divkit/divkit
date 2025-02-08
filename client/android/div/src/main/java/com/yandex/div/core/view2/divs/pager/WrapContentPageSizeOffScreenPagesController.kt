@@ -32,26 +32,37 @@ internal class WrapContentPageSizeOffScreenPagesController(
     private fun calcSidePagesCount(): Int {
         var prevSpace = pageSizeProvider.getPrevNeighbourSize(parent.currentItem) ?: return 1
         var countLeft = 0
-        var page = parent.currentItem - 1
-        while (prevSpace > 0 && page > 0) {
+        var prevPage = parent.currentItem - 1
+        while (prevSpace > 0 && prevPage > 0) {
             countLeft++
-            prevSpace -= pageSize(page) ?: break
-            page--
+            prevSpace -= pageSize(prevPage) ?: break
+            prevPage--
         }
-        if (prevSpace > paddings.left && page == 0) {
+        if (prevSpace > paddings.start && prevPage == 0) {
             countLeft++
+            prevSpace -= pageSize(prevPage) ?: 0f
         }
 
         var nextSpace = pageSizeProvider.getNextNeighbourSize(parent.currentItem) ?: return countLeft.coerceAtLeast(1)
-        var countRight = 0
-        page = parent.currentItem + 1
-        while (nextSpace > 0 && page < adapter.itemCount - 1) {
-            countRight++
-            nextSpace -= pageSize(page) ?: break
-            page++
+        if (prevSpace > paddings.start) {
+            nextSpace += prevSpace
         }
-        if (nextSpace > paddings.right && page == adapter.itemCount - 1) {
+        var countRight = 0
+        var nextPage = parent.currentItem + 1
+        while (nextSpace > 0 && nextPage < adapter.itemCount - 1) {
             countRight++
+            nextSpace -= pageSize(nextPage) ?: break
+            nextPage++
+        }
+        if (nextSpace > paddings.end && nextPage == adapter.itemCount - 1) {
+            countRight++
+            nextSpace -= pageSize(nextPage) ?: 0f
+        }
+
+        while (nextSpace > 0 && prevPage >= 0) {
+            countLeft++
+            nextSpace -= pageSize(prevPage) ?: break
+            prevPage--
         }
 
         return max(countLeft, countRight).coerceAtLeast(1)

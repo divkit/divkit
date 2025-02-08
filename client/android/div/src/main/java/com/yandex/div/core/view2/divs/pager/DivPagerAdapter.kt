@@ -59,7 +59,7 @@ internal class DivPagerAdapter(
     fun getRealPosition(rawPosition: Int) = rawPosition - offsetToRealItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
-        val view = DivPagerPageLayout(bindingContext.divView.context) { orientation }
+        val view = DivPagerPageLayout(bindingContext.divView.context) { isHorizontal }
         return DivPagerViewHolder(
             bindingContext,
             view,
@@ -67,8 +67,9 @@ internal class DivPagerAdapter(
             viewCreator,
             path,
             accessibilityEnabled,
-            isHorizontal,
-        ) { crossAxisAlignment }
+            { isHorizontal },
+            { crossAxisAlignment },
+        )
     }
 
     private val isHorizontal get() = orientation == ViewPager2.ORIENTATION_HORIZONTAL

@@ -52,7 +52,12 @@ export default defineConfig(({ isSsrBuild, mode }) => {
     const isProd = mode === 'production';
     const outputSubDir = FORMAT === 'iife' ? 'browser/' : (FORMAT === 'es' ? 'esm/' : '');
 
-    const plugins: PluginOption[] = [svelte()];
+    const plugins: PluginOption[] = [svelte({
+        compilerOptions: {
+            immutable: true,
+            hydratable: HYDRATABLE
+        }
+    })];
     if (FORMAT === 'iife') {
         plugins.push(
             moveEsbuildHelpersPlugin()

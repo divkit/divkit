@@ -1,73 +1,76 @@
 {
-    "templates": {
-        "video_item": {
-            "type": "container",
-            "width": {
-                "type": "match_parent",
-                "weight": 1
-            },
-            "items": [{
-                "type": "text",
-                "$text": "text",
-                "font_size": 20
-            }, {
-                "type": "video",
-                "video_sources": [
-                    {
-                        "type": "video_source",
-                        "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
-                        "mime_type": "video/mp4"
-                    }
-                ],
-                "preload_required": true,
-                "repeatable": true,
-                "autostart": true,
-                "muted": true,
-                "height": {
-                    "type": "fixed",
-                    "value": 200
-                },
-                "background": [
-                    {
-                        "type": "solid",
-                        "color": "#000000"
-                    }
-                ],
-                "$scale": "scale"
-            }]
-        }
-    },
-    "card": {
-        "log_id": "video",
-        "states": [
+  "templates": {
+    "video_item": {
+      "type": "container",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "items": [
+        {
+          "type": "text",
+          "$text": "text",
+          "font_size": 20
+        },
+        {
+          "type": "video",
+          "video_sources": [
             {
-                "state_id": 0,
-                "div": {
-                    "type": "grid",
-                    "column_count": 2,
-                    "items": [
-                        {
-                            "type": "video_item",
-                            "text": "Default"
-                        },
-                        {
-                            "type": "video_item",
-                            "text": "fill",
-                            "scale": "fill"
-                        },
-                        {
-                            "type": "video_item",
-                            "text": "no_scale",
-                            "scale": "no_scale"
-                        },
-                        {
-                            "type": "video_item",
-                            "text": "fit",
-                            "scale": "fit"
-                        }
-                    ]
-                }
+              "type": "video_source",
+              "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+              "mime_type": "video/mp4"
             }
-        ]
+          ],
+          "preload_required": true,
+          "repeatable": true,
+          "autostart": true,
+          "muted": true,
+          "height": {
+            "type": "fixed",
+            "value": 200
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#000000"
+            }
+          ],
+          "$scale": "scale"
+        }
+      ]
     }
+  },
+  "card": {
+    "log_id": "video",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 2,
+          "items": [
+            {
+              "type": "video_item",
+              "text": "Default"
+            },
+            {
+              "type": "video_item",
+              "text": "fill",
+              "scale": "fill"
+            },
+            {
+              "type": "video_item",
+              "text": "no_scale",
+              "scale": "no_scale"
+            },
+            {
+              "type": "video_item",
+              "text": "fit",
+              "scale": "fit"
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

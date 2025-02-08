@@ -1,10 +1,12 @@
 package com.yandex.div.core.timer
 
+import android.os.SystemClock
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import java.util.Timer
+import org.robolectric.shadows.ShadowLooper
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 /**
@@ -12,18 +14,14 @@ import kotlin.math.abs
  */
 @RunWith(RobolectricTestRunner::class)
 class TickerTest {
-    private val parentTimer = Timer()
-
     private val defaultTimerName = "test_timer"
     private val defaultDuration = 3000L
     private val defaultInterval = 1000L
+    private val defaultTickCount = (defaultDuration / defaultInterval).toInt()
     private val defaultDeviation = 15L
-    private val retryCount = 3
-
-    private val defaultValue = -1L
 
     @Test
-    fun `run multiple timers`() = retryOnFail {
+    fun `run multiple timers`() {
         val firstTimerDuration = 300L
         val firstTimerInterval = 100L
 
@@ -52,8 +50,9 @@ class TickerTest {
         firstTimer.start()
         secondTimer.start()
 
-        Thread.sleep(400L)
+        advanceUntilIdle()
 
+        Assert.assertEquals(expectedTimerValues.size, actualTimerValues.size)
         val deviated = expectedTimerValues
             .zip(actualTimerValues) { left, right -> abs(right - left) }
             .all { it in 0 until defaultDeviation }
@@ -63,65 +62,59 @@ class TickerTest {
 
     @Test
     fun `correct tick count without extra time`() {
-        val expectedTicks = 3
         var actualTicks = 0
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             onTick = { _, _, _ ->
                 actualTicks++
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
-        Assert.assertEquals(expectedTicks, actualTicks)
+        Assert.assertEquals(defaultTickCount, actualTicks)
     }
 
     @Test
     fun `correct tick count with extra time`() {
         val duration = 3500L
 
-        val expectedTicks = 3
         var actualTicks = 0
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             duration = duration,
             onTick = { _, _, _ ->
                 actualTicks++
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
-        Assert.assertEquals(expectedTicks, actualTicks)
+        Assert.assertEquals(defaultTickCount, actualTicks)
     }
 
     @Test
-    fun `correct duration`() = retryOnDeviation {
+    fun `correct duration`() {
         val duration = 500L
         val interval = 100L
 
-        var startTime: Long = defaultValue
-        var delta: Long = defaultValue
+        var startTime: Long = -1
+        var delta: Long = -1
 
         val ticker = getTicker(
             duration = duration,
             interval = interval,
             onStart = { _, _, _ ->
-                startTime = currentTime
+                startTime = SystemClock.elapsedRealtime()
             },
             onEnd = { _, _, _ ->
-                delta = currentTime - startTime
+                delta = SystemClock.elapsedRealtime() - startTime
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
-        Thread.sleep(duration - interval / 2)
-        Assert.assertEquals(defaultValue, delta)
-        Thread.sleep(interval)
-
-        delta - duration
+        Assert.assertEquals(duration, delta)
     }
 
     @Test
@@ -132,7 +125,7 @@ class TickerTest {
         val expectedTicks = 30
         var actualTicks = 0
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             duration = duration,
             interval = interval,
             onTick = { _, _, _ ->
@@ -144,7 +137,7 @@ class TickerTest {
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
         Assert.assertEquals(expectedTicks, actualTicks)
     }
@@ -153,13 +146,13 @@ class TickerTest {
     fun `end calls onEnd`() {
         var wasCalled = false
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             onEnd = { _, _, _ ->
                 wasCalled = true
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
         Assert.assertTrue(wasCalled)
     }
@@ -168,13 +161,13 @@ class TickerTest {
     fun `tick calls onTick`() {
         var wasCalled = false
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             onTick = { _, _, _ ->
                 wasCalled = true
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
         Assert.assertTrue(wasCalled)
     }
@@ -186,7 +179,7 @@ class TickerTest {
 
         var wasCalled = false
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             duration = duration,
             interval = interval,
             onTick = { _, _, _ ->
@@ -194,7 +187,7 @@ class TickerTest {
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
         Assert.assertFalse(wasCalled)
     }
@@ -202,9 +195,9 @@ class TickerTest {
     @Test
     fun `onEnd and last onTick calls in the same time`() {
         var lastOnEndTime: Long = 0
-        var lastOnTickTime: Long = 1
+        var lastOnTickTime: Long = 0
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             onEnd = { time, _, _ ->
                 lastOnEndTime = time
             },
@@ -213,9 +206,78 @@ class TickerTest {
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
 
         Assert.assertEquals(lastOnEndTime, lastOnTickTime)
+    }
+
+    @Test
+    fun `restore after saving state`() {
+        var tickCounter = 0
+        val ticker = createTicker(
+            onTick = { _, _, _ ->
+                tickCounter++
+            }
+        )
+
+        ticker.start()
+
+        ShadowLooper.idleMainLooper(defaultInterval, TimeUnit.MILLISECONDS)
+        ticker.saveState()
+        Assert.assertEquals(1, tickCounter)
+
+        ShadowLooper.idleMainLooper(defaultInterval / 2, TimeUnit.MILLISECONDS)
+        Assert.assertEquals(1, tickCounter)
+
+        ticker.restoreState(true)
+        advanceUntilIdle()
+        Assert.assertEquals(3, tickCounter)
+    }
+
+    @Test
+    fun `restore after saving state with missed interval`() {
+        var tickCounter = 0
+        val ticker = createTicker(
+            onTick = { _, _, _ ->
+                tickCounter++
+            }
+        )
+
+        ticker.start()
+
+        ShadowLooper.idleMainLooper(defaultInterval, TimeUnit.MILLISECONDS)
+        ticker.saveState()
+        Assert.assertEquals(1, tickCounter)
+
+        ShadowLooper.idleMainLooper(defaultInterval + 100, TimeUnit.MILLISECONDS)
+        Assert.assertEquals(1, tickCounter)
+
+        ticker.restoreState(true)
+        Assert.assertEquals(2, tickCounter)
+
+        advanceUntilIdle()
+        Assert.assertEquals(4, tickCounter)
+    }
+
+    @Test
+    fun `restore countdown`() {
+        var ended = false
+
+        val ticker = createTicker(
+            interval = null,
+            onEnd = { _, _, _ ->
+                ended = true
+            }
+        )
+        ticker.start()
+        ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
+        ticker.saveState()
+        Assert.assertFalse(ended)
+
+        ShadowLooper.idleMainLooper(10, TimeUnit.SECONDS)
+        ticker.restoreState(true)
+        advanceUntilIdle()
+        Assert.assertTrue(ended)
     }
 
     @Test
@@ -231,7 +293,7 @@ class TickerTest {
         var expectedTicksTimeIndex = 0
         val expectedTicksTime = listOf(150L, 300L)
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             duration = duration,
             interval = interval,
             onEnd = { time, currentDuration, _ ->
@@ -248,7 +310,8 @@ class TickerTest {
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
+        Assert.assertEquals(expectedTicksTime.size, expectedTicksTimeIndex)
     }
 
     @Test
@@ -264,7 +327,7 @@ class TickerTest {
         var expectedTicksTimeIndex = 0
         val expectedTicksTime = listOf(150L, 300L)
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             duration = duration,
             interval = interval,
             onEnd = { time, currentDuration, _ ->
@@ -283,7 +346,8 @@ class TickerTest {
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
+        Assert.assertEquals(expectedTicksTime.size, expectedTicksTimeIndex)
     }
 
     @Test
@@ -299,7 +363,7 @@ class TickerTest {
         var expectedTicksTimeIndex = 0
         val expectedTicksTime = listOf(150L, 100L, 200L, 300L, 400L, 500L)
 
-        val ticker = getInstantTicker(
+        val ticker = createTicker(
             duration = duration,
             interval = interval,
             onEnd = { time, _, _ ->
@@ -317,7 +381,9 @@ class TickerTest {
             }
         )
 
-        ticker.start()
+        ticker.startAndAdvance()
+
+        Assert.assertEquals(expectedTicksTime.size, expectedTicksTimeIndex)
     }
 
     @Test
@@ -330,11 +396,13 @@ class TickerTest {
 
         var endTime = -1L
         var firstTickTime: Long = -1L
+        var tickCounter = 0
 
         val ticker = getTicker(
             duration = duration,
             interval = interval,
             onTick = { _, _, _ ->
+                tickCounter++
                 if (firstTickTime == -1L) firstTickTime = System.currentTimeMillis()
             },
             onEnd = { _, _, _ ->
@@ -344,33 +412,38 @@ class TickerTest {
 
         ticker.start()
 
-        Thread.sleep(150)
+        ShadowLooper.idleMainLooper(150, TimeUnit.MILLISECONDS)
+        Assert.assertEquals(1, tickCounter)
         ticker.pause()
-        Thread.sleep(sleepDuration)
+
+        ShadowLooper.idleMainLooper(sleepDuration, TimeUnit.MILLISECONDS)
+        Assert.assertEquals(1, tickCounter)
         ticker.resume()
 
-        Thread.sleep(200L)
+        ShadowLooper.idleMainLooper(200, TimeUnit.MILLISECONDS)
 
         Assert.assertTrue(endTime - firstTickTime - expectedFirstTickAndEndDiff <= defaultDeviation)
+        Assert.assertEquals(3, tickCounter)
     }
 
-    private fun getInstantTicker(
+    private fun createTicker(
         duration: Long = defaultDuration,
         interval: Long? = defaultInterval,
         name: String = defaultTimerName,
-        onStart: InstantTestTicker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
-        onPause: InstantTestTicker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
-        onEnd: InstantTestTicker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
-        onTick: InstantTestTicker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> }
-    ): InstantTestTicker {
-        var ticker: InstantTestTicker? = null
+        onStart: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onInterrupt: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onEnd: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> },
+        onTick: Ticker.(time: Long, duration: Long, interval: Long?) -> Unit = { _, _, _ -> }
+    ): Ticker {
+        var ticker: Ticker? = null
 
-        ticker = InstantTestTicker(
+        ticker = Ticker(
             name = name,
             onStart = { time -> ticker?.onStart(time, duration, interval) },
-            onPause = { time -> ticker?.onPause(time, duration, interval) },
+            onInterrupt = { time -> ticker?.onInterrupt(time, duration, interval) },
             onEnd = { time -> ticker?.onEnd(time, duration, interval) },
-            onTick = { time -> ticker?.onTick(time, duration, interval) }
+            onTick = { time -> ticker?.onTick(time, duration, interval) },
+            errorCollector = null,
         )
 
         ticker.update(duration, interval)
@@ -400,52 +473,15 @@ class TickerTest {
 
         ticker.update(duration, interval)
 
-        ticker.attachToTimer(parentTimer)
-
         return ticker
     }
 
-    /**
-     * Since we work with time, it is worth considering delays.
-     * To avoid fails of tests, we add a small error in time and restart the tests several times
-     */
-    private fun retryOnDeviation(
-        block: () -> Long
-    ) {
-        var retries = 0
-        var wasSuccessful = false
-
-        val deviations = MutableList(retryCount) { 0L }
-
-        while (retries < retryCount && !wasSuccessful) {
-            val deviation = block()
-            wasSuccessful = deviation <= defaultDeviation
-
-            deviations[retries] = deviation
-
-            retries++
-        }
-
-        if (!wasSuccessful) {
-            Assert.fail("Deviations are too big. All values $deviations are greater than $defaultDeviation")
-        }
+    private fun Ticker.startAndAdvance() {
+        start()
+        advanceUntilIdle()
     }
 
-    private fun retryOnFail(
-        block: () -> Unit
-    ) {
-        val retries: MutableList<Throwable> = mutableListOf()
-
-        while (retries.size < retryCount) {
-            try {
-                block()
-
-                break
-            } catch (e: Throwable) { retries += e }
-        }
-
-        if (retries.size >= retryCount) {
-            Assert.fail("All ${retries.size} retries failed!\n\t${retries.map { it.message }.joinToString("\n\t")}")
-        }
+    private fun advanceUntilIdle() {
+        ShadowLooper.shadowMainLooper().idleFor(10, TimeUnit.SECONDS)
     }
 }

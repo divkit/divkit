@@ -70,7 +70,8 @@
                   "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
                 }
               ]
-            },{
+            },
+            {
               "type": "subtitle",
               "text": "The transparency of the first image is 1 and the second is 0.5."
             }

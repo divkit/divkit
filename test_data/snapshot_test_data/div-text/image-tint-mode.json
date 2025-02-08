@@ -1,0 +1,102 @@
+{
+  "description": "Image inside div-text with tint color and different tint modes (for reference: https://developer.apple.com/documentation/coregraphics/cgblendmode)",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "column_count": 3,
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "darken",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/gradient.png",
+                  "tint_color": "#4500FFFF",
+                  "tint_mode": "darken"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "screen",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/gradient.png",
+                  "tint_color": "#4500FFFF",
+                  "tint_mode": "screen"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "lighten",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/gradient.png",
+                  "tint_color": "#4500FFFF",
+                  "tint_mode": "lighten"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "multiply",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/gradient.png",
+                  "tint_color": "#4500FFFF",
+                  "tint_mode": "multiply"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "source_atop",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/gradient.png",
+                  "tint_color": "#4500FFFF",
+                  "tint_mode": "source_atop"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "source_in",
+              "images": [
+                {
+                  "start": 0,
+                  "url": "https://yastatic.net/s3/home/divkit/gradient.png",
+                  "tint_color": "#4500FFFF",
+                  "tint_mode": "source_in"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

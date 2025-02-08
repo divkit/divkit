@@ -150,6 +150,7 @@ public interface Div2Component {
     HistogramReporter getHistogramReporter();
 
     @NonNull
+    @Deprecated
     DivPlayerFactory getDivVideoFactory();
 
     @NonNull
@@ -159,6 +160,7 @@ public interface Div2Component {
     DivCreationTracker getDivCreationTracker();
 
     @NonNull
+    @Deprecated
     RenderScript getRenderScript();
 
     @NonNull

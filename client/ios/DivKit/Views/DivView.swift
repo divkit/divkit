@@ -128,6 +128,11 @@ public final class DivView: VisibleBoundsTrackingView {
     blockView.layoutIfNeeded()
   }
 
+  public override func removeFromSuperview() {
+    super.removeFromSuperview()
+    blockView?.onVisibleBoundsChanged(from: oldBounds, to: .zero)
+  }
+
   /// Returns ``DivCardSize`` of the ``DivView``.
   ///
   /// - Returns: The calculated ``DivCardSize``.

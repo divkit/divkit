@@ -3,12 +3,12 @@ import VGSL
 
 final class RunLoopCardUpdateAggregator {
   private var enabled: Bool = true
-  private var batch: [DivActionURLHandler.UpdateReason] = []
-  private let updateCardAction: ([DivActionURLHandler.UpdateReason]) -> Void
+  private var batch: [DivCardUpdateReason] = []
+  private let updateCardAction: ([DivCardUpdateReason]) -> Void
   private let mainThreadAsyncRunner: MainThreadAsyncRunner
 
   init(
-    updateCardAction: @escaping ([DivActionURLHandler.UpdateReason]) -> Void,
+    updateCardAction: @escaping ([DivCardUpdateReason]) -> Void,
     mainThreadAsyncRunner: @escaping MainThreadAsyncRunner = onMainThreadAsync
   ) {
     self.updateCardAction = updateCardAction
@@ -22,7 +22,7 @@ final class RunLoopCardUpdateAggregator {
     enabled = true
   }
 
-  func aggregate(_ reason: DivActionURLHandler.UpdateReason) {
+  func aggregate(_ reason: DivCardUpdateReason) {
     Thread.assertIsMain()
     guard enabled else { return }
     let notScheduled = batch.isEmpty
@@ -46,11 +46,11 @@ final class RunLoopCardUpdateAggregator {
   }
 }
 
-extension [DivActionURLHandler.UpdateReason] {
-  fileprivate func merge() -> [DivActionURLHandler.UpdateReason] {
+extension [DivCardUpdateReason] {
+  fileprivate func merge() -> [DivCardUpdateReason] {
     var cards: [DivCardID: Set<DivVariableName>] = [:]
 
-    let reasons: [DivActionURLHandler.UpdateReason] = compactMap {
+    let reasons: [DivCardUpdateReason] = compactMap {
       switch $0 {
       case let .variable(affectedCards):
         for (key, value) in affectedCards {

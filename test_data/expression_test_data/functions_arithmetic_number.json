@@ -355,7 +355,7 @@
       "expression": "@{maxNumber()}",
       "expected": {
         "type": "number",
-        "value": 1.7976931348623157E308
+        "value": 1.7976931348623157E+308
       },
       "platforms": [
         "android",
