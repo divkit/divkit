@@ -187,6 +187,7 @@ public class DivStateManager {
       _items = [:]
       _blockIds = [:]
       _blockVisibility = [:]
+      _stateBindings = [:]
     }
   }
 }
