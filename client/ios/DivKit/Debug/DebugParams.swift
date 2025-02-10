@@ -27,18 +27,21 @@ public struct DebugParams {
   public let processMeasurements: ResultAction<(cardId: DivCardID, measurements: Measurements)>
   public let showDebugInfo: (ViewType) -> Void
   public let errorCounterInsets: EdgeInsets
+  public let widcardExtensionHandlers: [DivExtensionHandler]
 
   public init(
     isDebugInfoEnabled: Bool = false,
     processMeasurements: @escaping ResultAction<(cardId: DivCardID, measurements: Measurements)> =
       { _ in },
     showDebugInfo: @escaping (ViewType) -> Void = DebugParams.showDebugInfo(_:),
-    errorCounterInsets: EdgeInsets = .zero
+    errorCounterInsets: EdgeInsets = .zero,
+    widcardExtensionHandlers: [DivExtensionHandler] = []
   ) {
     self.isDebugInfoEnabled = isDebugInfoEnabled
     self.showDebugInfo = showDebugInfo
     self.errorCounterInsets = errorCounterInsets
     self.processMeasurements = processMeasurements
+    self.widcardExtensionHandlers = widcardExtensionHandlers
   }
 }
 

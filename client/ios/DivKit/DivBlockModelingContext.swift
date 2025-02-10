@@ -168,16 +168,13 @@ public struct DivBlockModelingContext {
   }
 
   public func getExtensionHandlers(for div: DivBase) -> [DivExtensionHandler] {
-    guard let extensions = div.extensions else {
-      return []
-    }
-    return extensions.compactMap {
+    (div.extensions ?? []).compactMap {
       let id = $0.id
       if !extensionHandlers.keys.contains(id) {
         addError(message: "No DivExtensionHandler for: \(id)")
       }
       return extensionHandlers[id]
-    }
+    } + debugParams.widcardExtensionHandlers
   }
 
   public func addError(message: String) {
