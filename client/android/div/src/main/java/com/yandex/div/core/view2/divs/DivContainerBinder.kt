@@ -124,18 +124,23 @@ internal class DivContainerBinder @Inject constructor(
         val resolver = context.expressionResolver
         val items = div.buildItems(resolver)
 
-        val oldItems = (this as DivCollectionHolder).items?.let {
-            when {
-                div === oldDiv -> it
-                divView.complexRebindInProgress -> null
-                oldDiv != null &&
-                    DivComparator.areValuesReplaceable(oldDiv, div, oldResolver, context.expressionResolver) &&
-                    DivComparator.areChildrenReplaceable(it, items) -> it
-
-                else -> {
-                    replaceWithReuse(divView, it, items)
-                    null
+        var oldItems = (this as DivCollectionHolder).items
+        when {
+            oldItems == null -> {
+                items.forEach {
+                    val child = divViewCreator.get().create(it.div, it.expressionResolver)
+                    addView(child)
                 }
+            }
+            div === oldDiv -> Unit
+            divView.complexRebindInProgress -> oldItems = null
+            oldDiv != null &&
+                DivComparator.areValuesReplaceable(oldDiv, div, oldResolver, context.expressionResolver) &&
+                DivComparator.areChildrenReplaceable(oldItems, items) -> Unit
+
+            else -> {
+                replaceWithReuse(divView, oldItems, items)
+                oldItems = null
             }
         }
         bindItemBuilder(context, div, path, errorCollector)
