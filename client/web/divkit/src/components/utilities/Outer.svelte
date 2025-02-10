@@ -254,14 +254,30 @@
     $: jsonAlpha = componentContext.getDerivedFromVars(componentContext.json.alpha);
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonBackground = componentContext.getDerivedFromVars(componentContext.json.background);
-    $: jsonAction = componentContext.getDerivedFromVars(componentContext.json.action);
-    $: jsonActions = componentContext.getDerivedFromVars(componentContext.json.actions);
-    $: jsonDoubleTapActions = componentContext.getDerivedFromVars(componentContext.json.doubletap_actions);
-    $: jsonLongTapActions = componentContext.getDerivedFromVars(componentContext.json.longtap_actions);
-    $: jsonPressStartActions = componentContext.getDerivedFromVars(componentContext.json.press_start_actions);
-    $: jsonPressEndActions = componentContext.getDerivedFromVars(componentContext.json.press_end_actions);
-    $: jsonHoverStartActions = componentContext.getDerivedFromVars(componentContext.json.hover_start_actions);
-    $: jsonHoverEndActions = componentContext.getDerivedFromVars(componentContext.json.hover_end_actions);
+    $: jsonAction = componentContext.getDerivedFromVars(
+        componentContext.json.action, undefined, true
+    );
+    $: jsonActions = componentContext.getDerivedFromVars(
+        componentContext.json.actions, undefined, true
+    );
+    $: jsonDoubleTapActions = componentContext.getDerivedFromVars(
+        componentContext.json.doubletap_actions, undefined, true
+    );
+    $: jsonLongTapActions = componentContext.getDerivedFromVars(
+        componentContext.json.longtap_actions, undefined, true
+    );
+    $: jsonPressStartActions = componentContext.getDerivedFromVars(
+        componentContext.json.press_start_actions, undefined, true
+    );
+    $: jsonPressEndActions = componentContext.getDerivedFromVars(
+        componentContext.json.press_end_actions, undefined, true
+    );
+    $: jsonHoverStartActions = componentContext.getDerivedFromVars(
+        componentContext.json.hover_start_actions, undefined, true
+    );
+    $: jsonHoverEndActions = componentContext.getDerivedFromVars(
+        componentContext.json.hover_end_actions, undefined, true
+    );
     $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
     $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
     $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
