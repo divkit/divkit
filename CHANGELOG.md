@@ -4,6 +4,7 @@
 * Fixed StackOverflowError at video playback during state change.
 * Fixed issue when text range `font_family` property was ignored.
 * Use Handler in timers instead of java.util.Timer.
+* Fixed empty text height measurement.
 
 # iOS Client:
 * Added `DivCardUpdateReason` typealias for `DivActionURLHandler.UpdateReason`.
