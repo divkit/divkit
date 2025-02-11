@@ -26,10 +26,10 @@ import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.markdown.DivMarkdownExtensionHandler
-import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.shine.DivShineExtensionHandler
 import com.yandex.div.shine.DivShineLogger
+import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.video.ExoDivPlayerFactory
 import com.yandex.div.video.ExoPlayerVideoPreloader
 import com.yandex.div2.DivAction
@@ -37,6 +37,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
+import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
 import com.yandex.divkit.demo.utils.lifecycleOwner
@@ -44,7 +45,6 @@ import com.yandex.divkit.regression.ScenarioLogDelegate
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import org.json.JSONObject
-import java.lang.Exception
 
 fun divConfiguration(
     activity: Activity,
@@ -78,7 +78,12 @@ fun divConfiguration(
         .tooltipRestrictor { _, _, _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
-        .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(activity)))
+        .additionalTypefaceProviders(
+            mapOf(
+                "display" to YandexSansDisplayDivTypefaceProvider(activity),
+                "condensed" to YandexSansCondensedTypefaceProvider(activity)
+            )
+        )
         .viewPoolReporter(object : ViewPoolProfiler.Reporter {
             override fun reportEvent(message: String, result: Map<String, Any>) {
                 reporter.reportEvent(message, result)
