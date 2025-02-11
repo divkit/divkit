@@ -250,6 +250,98 @@
               "type": "text",
               "text": "Outside actions called: @{outside_actions_called}",
               "text_color": "@{(outside_actions_called == 'true') ? '#00FF00' : '#000000'}"
+            },
+            {
+              "type": "button",
+              "text": "tooltip mode = non_modal",
+              "tooltips": [
+                {
+                  "id": "tooltip_3",
+                  "position": "bottom",
+                  "duration": 0,
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 50
+                    }
+                  },
+                  "mode": {
+                    "type": "non_modal"
+                  },
+                  "close_by_tap_outside": true,
+                  "div": {
+                    "type": "container",
+                    "orientation": "overlap",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "left": 16,
+                          "top": 16,
+                          "right": 16,
+                          "bottom": 16
+                        },
+                        "items": [
+                          {
+                            "type": "text",
+                            "width": {
+                              "type": "wrap_content"
+                            },
+                            "paddings": {
+                              "left": 16,
+                              "top": 16,
+                              "right": 16,
+                              "bottom": 16
+                            },
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#799eb7"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "text_color": "#2C3E50",
+                            "text": "Non modal tooltip"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "image",
+                        "width": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "margins": {
+                          "left": 8,
+                          "top": 8
+                        },
+                        "action": {
+                          "log_id": "hide_tooltip",
+                          "url": "div-action://hide_tooltip?id=tooltip_3"
+                        },
+                        "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
+                        "tint_color": "#000000",
+                        "alignment_horizontal": "left",
+                        "alignment_vertical": "top"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=tooltip_3&multiple=true"
+                }
+              ]
             }
           ]
         }

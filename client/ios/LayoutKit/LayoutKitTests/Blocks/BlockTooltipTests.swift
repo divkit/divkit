@@ -43,6 +43,7 @@ final class BlockTooltipTests: XCTestCase {
       tooltipView: TestView(),
       closeByTapOutside: true,
       tapOutsideActions: [],
+      isModal: true,
       handleAction: { _ in },
       onCloseAction: {}
     )

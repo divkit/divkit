@@ -68,6 +68,7 @@ public class DefaultTooltipManager: TooltipManager {
     public let duration: TimeInterval
     public let closeByTapOutside: Bool
     public let tapOutsideActions: [UserInterfaceAction]
+    public let isModal: Bool
     public let view: VisibleBoundsTrackingView
   }
 
@@ -76,8 +77,13 @@ public class DefaultTooltipManager: TooltipManager {
   private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
-  private(set) var tooltipWindow: UIWindow?
+  private(set) var modalTooltipWindow: UIWindow?
   private var previousOrientation = UIDevice.current.orientation
+
+  private var foregroundWindowScene: UIWindowScene? {
+    let scenes = UIApplication.shared.connectedScenes
+    return scenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+  }
 
   public init(
     shownTooltips: Property<Set<String>> = Property(),
@@ -95,13 +101,14 @@ public class DefaultTooltipManager: TooltipManager {
   }
 
   public func showTooltip(info: TooltipInfo) {
-    setupTooltipWindow()
-
-    guard let tooltipWindow,
+    setupModalTooltipWindow()
+    guard let modalTooltipWindow,
+          let foregroundWindowScene,
+          let currentKeyWindow = foregroundWindowScene.windows.first(where: { $0.isKeyWindow }),
           !showingTooltips.keys.contains(info.id)
     else { return }
 
-    let windowBounds = tooltipWindow.bounds.inset(by: tooltipWindow.safeAreaInsets)
+    let windowBounds = modalTooltipWindow.bounds.inset(by: modalTooltipWindow.safeAreaInsets)
 
     Task { @MainActor in
       guard let tooltip = await existingAnchorViews.compactMap(
@@ -112,23 +119,34 @@ public class DefaultTooltipManager: TooltipManager {
         tooltipView: tooltip.view,
         closeByTapOutside: tooltip.closeByTapOutside,
         tapOutsideActions: tooltip.tapOutsideActions,
+        isModal: tooltip.isModal,
         handleAction: handleAction,
         onCloseAction: { [weak self] in
-          self?.showingTooltips.removeValue(forKey: tooltip.id)
-          self?.tooltipWindow?.isHidden = true
+          guard let self else { return }
+          showingTooltips.removeValue(forKey: tooltip.id)
+          if !showingTooltips.contains(where: { $1.isModal }) {
+            modalTooltipWindow.isHidden = true
+          }
         }
       )
-      // Passing the statusBarStyle control to `rootViewController` of the main window
-      let vc = ProxyViewController(
-        viewController: UIApplication.shared.delegate?.window??
-          .rootViewController ?? UIViewController()
-      )
-      vc.view = view
-      // Window won't rotate if `rootViewController` is not set
-      tooltipWindow.rootViewController = vc
-      tooltipWindow.isHidden = false
-      tooltipWindow.makeKeyAndVisible()
-      view.frame = tooltipWindow.bounds
+
+      if tooltip.isModal {
+        // Passing the statusBarStyle control to `rootViewController` of the main window
+        let vc = ProxyViewController(
+          viewController: UIApplication.shared.delegate?.window??
+            .rootViewController ?? UIViewController()
+        )
+        vc.view = view
+        // Window won't rotate if `rootViewController` is not set
+        modalTooltipWindow.rootViewController = vc
+        modalTooltipWindow.isHidden = false
+        modalTooltipWindow.makeKeyAndVisible()
+        view.frame = modalTooltipWindow.bounds
+      } else {
+        currentKeyWindow.addSubview(view)
+        view.frame = currentKeyWindow.bounds
+      }
+
       showingTooltips[info.id] = view
       if !tooltip.duration.isZero {
         try await Task.sleep(nanoseconds: UInt64(tooltip.duration.nanoseconds))
@@ -152,7 +170,7 @@ public class DefaultTooltipManager: TooltipManager {
 
   public func reset() {
     showingTooltips = [:]
-    tooltipWindow = nil
+    modalTooltipWindow = nil
   }
 
   public func setHandler(_ handler: @escaping (UIActionEvent) -> Void) {
@@ -176,15 +194,13 @@ public class DefaultTooltipManager: TooltipManager {
     previousOrientation = orientation
   }
 
-  private func setupTooltipWindow() {
-    if tooltipWindow == nil {
-      guard let windowScene = UIApplication.shared.connectedScenes
-        .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
-      else { return }
-      tooltipWindow = UIWindow(windowScene: windowScene)
-      tooltipWindow?.windowLevel = UIWindow.Level.alert + 1
-      tooltipWindow?.isHidden = true
-    }
+  private func setupModalTooltipWindow() {
+    guard modalTooltipWindow == nil,
+          let windowScene = foregroundWindowScene else { return }
+
+    modalTooltipWindow = UIWindow(windowScene: windowScene)
+    modalTooltipWindow?.windowLevel = UIWindow.Level.alert + 1
+    modalTooltipWindow?.isHidden = true
   }
 }
 
@@ -215,6 +231,7 @@ extension TooltipAnchorView {
       duration: tooltip.duration,
       closeByTapOutside: tooltip.closeByTapOutside,
       tapOutsideActions: tooltip.tapOutsideActions,
+      isModal: tooltip.mode == .modal,
       view: tooltipView
     )
   }

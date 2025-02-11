@@ -21,6 +21,11 @@ public struct BlockTooltip: Equatable {
     case center
   }
 
+  public enum Mode: Equatable {
+    case modal
+    case nonModal
+  }
+
   public let id: String
   public let block: Block
   public let duration: TimeInterval
@@ -30,6 +35,7 @@ public struct BlockTooltip: Equatable {
   public let tooltipViewFactory: TooltipViewFactory?
   public let closeByTapOutside: Bool
   public let tapOutsideActions: [UserInterfaceAction]
+  public let mode: Mode
 
   public init(
     id: String,
@@ -40,7 +46,8 @@ public struct BlockTooltip: Equatable {
     useLegacyWidth: Bool = true,
     tooltipViewFactory: TooltipViewFactory? = nil,
     closeByTapOutside: Bool = true,
-    tapOutsideActions: [UserInterfaceAction] = []
+    tapOutsideActions: [UserInterfaceAction] = [],
+    mode: Mode = .modal
   ) {
     self.id = id
     self.block = block
@@ -51,6 +58,7 @@ public struct BlockTooltip: Equatable {
     self.tooltipViewFactory = tooltipViewFactory
     self.closeByTapOutside = closeByTapOutside
     self.tapOutsideActions = tapOutsideActions
+    self.mode = mode
   }
 
   public static func ==(lhs: BlockTooltip, rhs: BlockTooltip) -> Bool {
@@ -61,6 +69,7 @@ public struct BlockTooltip: Equatable {
       lhs.useLegacyWidth == rhs.useLegacyWidth &&
       lhs.block.equals(rhs.block) &&
       lhs.closeByTapOutside == rhs.closeByTapOutside &&
-      lhs.tapOutsideActions == rhs.tapOutsideActions
+      lhs.tapOutsideActions == rhs.tapOutsideActions &&
+      lhs.mode == rhs.mode
   }
 }

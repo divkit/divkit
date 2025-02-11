@@ -18,6 +18,13 @@ extension DivTooltip {
       return await tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
     }
 
+    let mode: BlockTooltip.Mode = switch mode {
+    case .divTooltipModeModal:
+      .modal
+    case .divTooltipModeNonModal:
+      .nonModal
+    }
+
     return try BlockTooltip(
       id: id,
       // Legacy behavior. Views should be created with tooltipViewFactory.
@@ -28,7 +35,8 @@ extension DivTooltip {
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
       tooltipViewFactory: tooltipViewFactory,
       closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
-      tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? []
+      tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? [],
+      mode: mode
     )
   }
 }
