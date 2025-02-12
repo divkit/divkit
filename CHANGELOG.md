@@ -1,3 +1,25 @@
+## 31.3.0
+
+# Android Client:
+* Fixed items creation by `item_builder` in `container` with local variables.
+* Removed redundant check for API 26.
+* Throw errors when switching to ambiguous state.
+
+# iOS Client:
+* Add flag `defaultTextAutoEllipsize`. It allows to change default value of `auto_ellipsize` property to `false`.
+* Added `mode` support for `div-tooltip`.
+* Changed the definition of the number of lottie animation repetitions in the "repeat_mode": "reverse" mode.
+* Fixed memory leak in `DivStateManager`.
+* Fixed separators in `container` with gone items.
+* Now one animation playback in any direction is considered one unit.
+* Supported `div-text` `auto_ellipsize` property. Default value is `true`.
+* Supported `indexing_direction` and `tint_mode` properties for `image` in `div-text`.
+
+# Web Client:
+* Fixed an issue with `container` separators rendereed between invisible elements.
+* Fixed, which allows you to return dicts values and arrays in expressions inside actions.
+
+
 ## 31.2.0
 
 # Android Client:
