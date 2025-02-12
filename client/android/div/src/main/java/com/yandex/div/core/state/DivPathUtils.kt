@@ -19,6 +19,7 @@ internal object DivPathUtils {
      * [DivStatePath.pathToLastState], so [DivStatePath] equal to 0/first_state/second_div can return
      * [DivStateLayout] with path 0/first_state/first_div, as it very same layout but with different active states.
      */
+    @Throws(StateConflictException::class)
     internal fun View.findStateLayout(path: DivStatePath): DivStateLayout? {
         if (this !is ViewGroup) {
             return null
@@ -26,13 +27,20 @@ internal object DivPathUtils {
         if (this is DivStateLayout && this.path?.pathToLastState == path.pathToLastState) {
             return this
         }
+
+        var candidate: DivStateLayout? = null
+
         for (child in children) {
             val childView: DivStateLayout? = child.findStateLayout(path)
             if (childView != null) {
-                return childView
+                if (candidate?.path == childView.path) {
+                    throw StateConflictException("Error resolving state for '$path'. " +
+                            "Got at least 2 children with same path '${childView.path}'!")
+                }
+                candidate = childView
             }
         }
-        return null
+        return candidate
     }
 
     /**
@@ -64,6 +72,7 @@ internal object DivPathUtils {
      * - null and [Div.State] - if cannot find [DivStateLayout] and full
      * [root view][com.yandex.div.core.view2.Div2View] rebind needed
      */
+    @Throws(StateConflictException::class)
     internal fun View.tryFindStateDivAndLayout(
         state: DivData.State,
         path: DivStatePath,
@@ -139,3 +148,5 @@ internal object DivPathUtils {
         ""
     }
 }
+
+internal class StateConflictException constructor(message: String, cause: Throwable? = null) : Exception(message, cause)
