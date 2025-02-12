@@ -1,3 +1,9 @@
+## 31.3.0 (February 17, 2025)
+
+* Fixed an issue with `container` separators rendereed between invisible elements.
+* Fixed, which allows you to return dicts values and arrays in expressions inside actions.
+
+
 ## 31.1.0 (February 3, 2025)
 
 * Added support for switching states in the `tooltip`.
