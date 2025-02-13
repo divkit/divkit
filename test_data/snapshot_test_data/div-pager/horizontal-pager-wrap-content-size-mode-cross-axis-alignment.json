@@ -1,0 +1,168 @@
+{
+  "description": "Horizontal pager with wrap_content page width with different cross_axis_alignment",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      }
+    },
+    "text_page": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "paddings": {
+        "left": 8,
+        "top": 4,
+        "right": 8,
+        "bottom": 4
+      },
+      "font_size": 10
+    },
+    "test_pager": {
+      "type": "pager",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "default_item": 1,
+      "items": [
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "$alignment_vertical": "item_0_alignment",
+          "$text": "item_0_text"
+        },
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 105
+          },
+          "height": {
+            "type": "fixed",
+            "value": 90
+          },
+          "$alignment_vertical": "item_1_alignment",
+          "$text": "item_1_text"
+        },
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 70
+          },
+          "$alignment_vertical": "item_2_alignment",
+          "$text": "item_2_text"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 570
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Pager with layout_mode = wrap_content\n\npager height = wrap_content\ncross_axis_alignment = null (default = start)"
+            },
+            {
+              "type": "test_pager",
+              "item_0_alignment": "center",
+              "item_0_text": "alignment_vertical = center",
+              "item_1_text": "alignment_vertical = null (default = top)\nItem is top aligned",
+              "item_2_alignment": "bottom",
+              "item_2_text": "alignment_vertical = bottom"
+            },
+            {
+              "type": "title",
+              "text": "pager height = 130\ncross_axis_alignment = center"
+            },
+            {
+              "type": "test_pager",
+              "height": {
+                "type": "fixed",
+                "value": 130
+              },
+              "cross_axis_alignment": "center",
+              "item_0_text": "alignment_vertical = null (default = top), item is center aligned",
+              "item_1_alignment": "top",
+              "item_1_text": "alignment_vertical = top",
+              "item_2_alignment": "bottom",
+              "item_2_text": "alignment_vertical = bottom"
+            },
+            {
+              "type": "title",
+              "text": "pager height = match_parent\ncross_axis_alignment = end"
+            },
+            {
+              "type": "test_pager",
+              "height": {
+                "type": "match_parent"
+              },
+              "cross_axis_alignment": "end",
+              "item_0_alignment": "center",
+              "item_0_text": "alignment_vertical = center",
+              "item_1_alignment": "top",
+              "item_1_text": "alignment_vertical = top",
+              "item_2_text": "alignment_vertical = null (default = top)\nItem is bottom aligned"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

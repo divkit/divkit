@@ -32,6 +32,7 @@
           "default_value": "center",
           "$description": "translations.json#/div_pager_scroll_axis_alignment",
           "platforms": [
+            "android",
             "ios"
           ]
         },
@@ -39,7 +40,10 @@
           "$ref": "#/definitions/item_alignment",
           "default_value": "start",
           "$description": "translations.json#/div_pager_cross_axis_alignment",
-          "platforms": []
+          "platforms": [
+            "android",
+            "ios"
+          ]
         },
         "layout_mode": {
           "$ref": "div-pager-layout-mode.json",

@@ -1,0 +1,136 @@
+{
+  "description": "Horizontal pager with different scroll_axis_alignment in rtl configuration",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "title": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      },
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "center"
+    },
+    "text_page": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 90
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "left": 20,
+        "right": 20
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "default_item": 1,
+      "items": [
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 250
+          },
+          "text": "Item 0"
+        },
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "text": "Item 1"
+        },
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 220
+          },
+          "text": "Item 2"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Pager in rtl configuration\n\nscroll_axis_alignment = start\nPage is right aligned"
+            },
+            {
+              "type": "test_pager",
+              "scroll_axis_alignment": "start"
+            },
+            {
+              "type": "title",
+              "text": "scroll_axis_alignment = end\nPage is left aligned"
+            },
+            {
+              "type": "test_pager",
+              "scroll_axis_alignment": "end"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

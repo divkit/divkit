@@ -1,0 +1,123 @@
+{
+  "description": "Vertical pager with layout mode 'percentage', scroll_axis_alignment 'end' and few small pages",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "text_page_match_parent_height": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 90
+      },
+      "height": {
+        "type": "fixed",
+        "value": 300
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "layout_mode": {
+        "type": "percentage",
+        "page_width": {
+          "value": 20
+        }
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "scroll_axis_alignment": "end",
+      "items": [
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 0"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 1"
+        },
+        {
+          "type": "text_page_match_parent_height",
+          "text": "Item 2"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text_alignment_horizontal": "center",
+              "margins": {
+                "bottom": 20
+              },
+              "text": "Pager height = 300\npage_width = 20 %\nitem_spacing = 10\npaddings = 10\nscroll_axis_alignment = end\n\nPager is always scrolled to start"
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "test_pager",
+                  "default_item": 0,
+                  "margins": {
+                    "right": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 1,
+                  "margins": {
+                    "right": 20
+                  }
+                },
+                {
+                  "type": "test_pager",
+                  "default_item": 2
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
