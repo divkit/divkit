@@ -33,9 +33,12 @@ internal object DivPathUtils {
         for (child in children) {
             val childView: DivStateLayout? = child.findStateLayout(path)
             if (childView != null) {
-                if (candidate?.path == childView.path) {
+                if (candidate?.path.toString() == childView.path.toString()) {
+                    // At this point we have resolved at least 2 DivStateLayouts which
+                    // may contain target state. We'll stop here to prevent unexpected
+                    // behavior of switching to ambiguous state.
                     throw StateConflictException("Error resolving state for '$path'. " +
-                            "Got at least 2 children with same path '${childView.path}'!")
+                            "Found multiple elements that respond to path '${childView.path}'!")
                 }
                 candidate = childView
             }
