@@ -1,6 +1,7 @@
 package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.triggers.TriggersController
@@ -33,7 +34,7 @@ internal class RuntimeStore(
 ) {
     private var warningShown = false
     private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime?>()
-    private val allRuntimes = mutableSetOf<ExpressionsRuntime>()
+    private val allRuntimes = ObserverList<ExpressionsRuntime>()
     internal val tree = RuntimeTree()
 
     internal var rootRuntime: ExpressionsRuntime? = null
@@ -83,7 +84,7 @@ internal class RuntimeStore(
 
     internal fun putRuntime(runtime: ExpressionsRuntime) {
         resolverToRuntime[runtime.expressionResolver] = runtime
-        allRuntimes.add(runtime)
+        allRuntimes.addObserver(runtime)
     }
 
     internal fun putRuntime(
