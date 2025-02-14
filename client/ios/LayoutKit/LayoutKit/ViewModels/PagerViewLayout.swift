@@ -344,9 +344,9 @@ extension Alignment {
     case .leading:
       minimum
     case .center:
-      floor((minimum + maximum - dimension) / 2)
+      max(minimum, floor((minimum + maximum - dimension) / 2))
     case .trailing:
-      maximum - dimension
+      max(maximum - dimension, minimum)
     }
   }
 
