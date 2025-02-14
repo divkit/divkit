@@ -33,6 +33,9 @@
       "height": {
         "type": "fixed",
         "value": 240
+      },
+      "accessibility": {
+          "description": "image"
       }
     }
   },
