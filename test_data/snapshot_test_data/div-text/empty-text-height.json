@@ -1,0 +1,167 @@
+{
+  "description": "Height measurement of an empty text. Empty text block should obtain the same height as gauge block.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "base_text": {
+      "type": "text",
+      "text_color": "#073642"
+    },
+    "label": {
+      "type": "base_text",
+      "width": {
+        "type": "fixed",
+        "value": 120
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "font_size": 14,
+      "font_weight": "medium"
+    },
+    "test_text": {
+      "type": "base_text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#EEE8D5"
+        }
+      ],
+      "border": {
+        "corner_radius": 4,
+        "stroke": {
+          "color": "#073642",
+          "width": 1
+        }
+      }
+    },
+    "case_container": {
+      "type": "container",
+      "orientation": "horizontal",
+      "height": {
+        "type": "wrap_content"
+      },
+      "content_alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FDF6E3"
+            }
+          ],
+          "items": [
+            {
+              "type": "case_container",
+              "margins": {
+                "bottom": 16
+              },
+              "items": [
+                {
+                  "type": "label",
+                  "margins": {
+                    "right": 8
+                  },
+                  "text": "Font size 16 sp"
+                },
+                {
+                  "type": "test_text",
+                  "margins": {
+                    "right": 8
+                  },
+                  "font_size": 16,
+                  "text": ""
+                },
+                {
+                  "type": "test_text",
+                  "font_size": 16,
+                  "text": "GAUGE"
+                }
+              ]
+            },
+            {
+              "type": "case_container",
+              "margins": {
+                "bottom": 16
+              },
+              "items": [
+                {
+                  "type": "label",
+                  "margins": {
+                    "right": 8
+                  },
+                  "text": "Line height 24 sp"
+                },
+                {
+                  "type": "test_text",
+                  "margins": {
+                    "right": 8
+                  },
+                  "font_size": 16,
+                  "line_height": 24,
+                  "text": ""
+                },
+                {
+                  "type": "test_text",
+                  "font_size": 16,
+                  "line_height": 24,
+                  "text": "GAUGE"
+                }
+              ]
+            },
+            {
+              "type": "case_container",
+              "items": [
+                {
+                  "type": "label",
+                  "margins": {
+                    "right": 8
+                  },
+                  "text": "Font size 32 sp\nLine height 24 sp"
+                },
+                {
+                  "type": "test_text",
+                  "margins": {
+                    "right": 8
+                  },
+                  "font_size": 32,
+                  "line_height": 24,
+                  "text": ""
+                },
+                {
+                  "type": "test_text",
+                  "font_size": 32,
+                  "line_height": 24,
+                  "text": "GAUGE"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
