@@ -1,10 +1,13 @@
 ## 31.3.0
 
 # Android Client:
+* Fixed corner clipping of elements inside transient hierarchy.
 * Fixed items creation by `item_builder` in `container` with local variables.
+* Improved complex rebind.
 * Removed redundant check for API 26.
-* Throw errors when switching to ambiguous state.
 * Supported non-modal tooltip mode and `close_by_tap_outside` flag.
+* Throw errors when switching to ambiguous state.
+* Use a CME-safe collection to resolve crashes occurring during patch application with item_builder.
 
 # iOS Client:
 * Add flag `defaultTextAutoEllipsize`. It allows to change default value of `auto_ellipsize` property to `false`.
