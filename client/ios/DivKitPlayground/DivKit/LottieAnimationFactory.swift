@@ -28,23 +28,13 @@ extension LottieAnimationView: DivKitExtensions.AsyncSourceAnimatableView {
     guard let source = source as? LottieAnimationSourceType else {
       return
     }
-    animation = await withCheckedContinuation { continuation in
-      // We need to make sure we parse the source on a background thread
-      // but LottieAnimation isn't sendable. So to transfer it from the bg
-      // thread back to the main thread we use `withCheckedContinuation`
-      // because it has its return type marked as `sending` which allows
-      // us to transfer a non-sendable type.
-      // We can't achieve the same with a bare `Task{...}.value`.
-      Task.detached(priority: .userInitiated) {
-        let animation =
-          switch source {
-        case let .data(data):
-          try? JSONDecoder().decode(LottieAnimation.self, from: data)
-        case let .json(json):
-          try? LottieAnimation(dictionary: json)
-        }
-        continuation.resume(returning: animation)
+    animation = await Task.detached(priority: .userInitiated) {
+      switch source {
+      case let .data(data):
+        try? JSONDecoder().decode(LottieAnimation.self, from: data)
+      case let .json(json):
+        try? LottieAnimation(dictionary: json)
       }
-    }
+    }.value
   }
 }
