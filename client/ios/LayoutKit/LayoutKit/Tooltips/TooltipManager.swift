@@ -64,11 +64,7 @@ extension TooltipManager {
 
 public class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
-    public let id: String
-    public let duration: TimeInterval
-    public let closeByTapOutside: Bool
-    public let tapOutsideActions: [UserInterfaceAction]
-    public let isModal: Bool
+    public let params: BlockTooltipParams
     public let view: VisibleBoundsTrackingView
   }
 
@@ -116,21 +112,18 @@ public class DefaultTooltipManager: TooltipManager {
         transform: { await $0?.makeTooltip(id: info.id, in: windowBounds) }
       ).first else { return }
       let view = TooltipContainerView(
-        tooltipView: tooltip.view,
-        closeByTapOutside: tooltip.closeByTapOutside,
-        tapOutsideActions: tooltip.tapOutsideActions,
-        isModal: tooltip.isModal,
+        tooltip: tooltip,
         handleAction: handleAction,
         onCloseAction: { [weak self] in
           guard let self else { return }
-          showingTooltips.removeValue(forKey: tooltip.id)
+          showingTooltips.removeValue(forKey: tooltip.params.id)
           if !showingTooltips.contains(where: { $1.isModal }) {
             modalTooltipWindow.isHidden = true
           }
         }
       )
 
-      if tooltip.isModal {
+      if tooltip.params.mode == .modal {
         // Passing the statusBarStyle control to `rootViewController` of the main window
         let vc = ProxyViewController(
           viewController: UIApplication.shared.delegate?.window??
@@ -148,9 +141,10 @@ public class DefaultTooltipManager: TooltipManager {
       }
 
       showingTooltips[info.id] = view
-      if !tooltip.duration.isZero {
-        try await Task.sleep(nanoseconds: UInt64(tooltip.duration.nanoseconds))
-        hideTooltip(id: tooltip.id)
+      let duration = tooltip.params.duration
+      if !duration.isZero {
+        try await Task.sleep(nanoseconds: UInt64(duration.nanoseconds))
+        hideTooltip(id: tooltip.params.id)
       }
     }
   }
@@ -227,11 +221,7 @@ extension TooltipAnchorView {
     )
 
     return DefaultTooltipManager.Tooltip(
-      id: tooltip.id,
-      duration: tooltip.duration,
-      closeByTapOutside: tooltip.closeByTapOutside,
-      tapOutsideActions: tooltip.tapOutsideActions,
-      isModal: tooltip.mode == .modal,
+      params: tooltip.params,
       view: tooltipView
     )
   }

@@ -515,8 +515,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     )
     return TooltipEvent(
       info: info,
+      params: tooltipModel.params,
       tooltipView: tooltipView,
-      duration: tooltipModel.duration
+      tooltipAnchorView: self
     )
   }
 

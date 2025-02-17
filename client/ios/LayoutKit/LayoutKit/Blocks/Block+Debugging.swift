@@ -473,7 +473,7 @@ extension BlockTooltip: CustomDebugStringConvertible {
     """
     BlockTooltip {
       id: \(id)
-      duration: \(duration)
+      duration: \(params.duration)
       offset: \(offset.x) x \(offset.y)
       position: \(position.rawValue)
       block: \(block.debugDescription.indented())

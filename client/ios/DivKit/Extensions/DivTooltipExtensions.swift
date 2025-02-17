@@ -26,17 +26,19 @@ extension DivTooltip {
     }
 
     return try BlockTooltip(
-      id: id,
       // Legacy behavior. Views should be created with tooltipViewFactory.
       block: div.value.makeBlock(context: context),
-      duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
+      params: BlockTooltipParams(
+        id: id,
+        mode: mode,
+        duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
+        closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
+        tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? []
+      ),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
-      tooltipViewFactory: tooltipViewFactory,
-      closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
-      tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? [],
-      mode: mode
+      tooltipViewFactory: tooltipViewFactory
     )
   }
 }

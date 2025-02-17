@@ -3,10 +3,7 @@ import UIKit
 import VGSL
 
 public final class TooltipContainerView: UIView, UIActionEventPerforming {
-  let isModal: Bool
-  private let tooltipView: VisibleBoundsTrackingView
-  private let closeByTapOutside: Bool
-  private let tapOutsideActions: [UserInterfaceAction]
+  private let tooltip: DefaultTooltipManager.Tooltip
   private let handleAction: (LayoutKit.UIActionEvent) -> Void
   private let onCloseAction: Action
 
@@ -15,19 +12,14 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private var onVisibleBoundsChanged: Action?
 
   public init(
-    tooltipView: VisibleBoundsTrackingView,
-    closeByTapOutside: Bool,
-    tapOutsideActions: [UserInterfaceAction],
-    isModal: Bool,
+    tooltip: DefaultTooltipManager.Tooltip,
     handleAction: @escaping (LayoutKit.UIActionEvent) -> Void,
     onCloseAction: @escaping Action
   ) {
-    self.tooltipView = tooltipView
-    self.closeByTapOutside = closeByTapOutside
-    self.tapOutsideActions = tapOutsideActions
-    self.isModal = isModal
+    self.tooltip = tooltip
     self.handleAction = handleAction
     self.onCloseAction = onCloseAction
+    let tooltipView = tooltip.view
     let tooltipBounds = tooltipView.bounds
     onVisibleBoundsChanged = { [weak tooltipView] in
       tooltipView?.onVisibleBoundsChanged(from: .zero, to: tooltipBounds)
@@ -40,12 +32,16 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       addGestureRecognizer(tapRecognizer)
     }
 
-    addSubview(tooltipView)
+    addSubview(tooltip.view)
   }
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError()
+  }
+
+  var isModal: Bool {
+    tooltip.params.mode == .modal
   }
 
   @objc private func handleTap(_ sender: UITapGestureRecognizer) {
@@ -57,7 +53,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
   public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
     if !isPointInsideTooltip(point, event: event), !isModal {
-      if closeByTapOutside {
+      if tooltip.params.closeByTapOutside {
         DispatchQueue.main.async {
           self.close()
         }
@@ -91,24 +87,24 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   public func close() {
     guard !isClosing else { return }
     isClosing = true
-    self.tooltipView.onVisibleBoundsChanged(from: tooltipView.bounds, to: .zero)
+    tooltip.view.onVisibleBoundsChanged(from: tooltip.view.bounds, to: .zero)
     removeFromParentAnimated(completion: {
       self.onCloseAction()
     })
   }
 
   private func performTapOutsideActions() {
-    let uiActionEvents = tapOutsideActions.map {
+    let uiActionEvents = tooltip.params.tapOutsideActions.map {
       UIActionEvent(uiAction: $0, originalSender: self)
     }
     perform(uiActionEvents: uiActionEvents, from: self)
 
-    if closeByTapOutside {
+    if tooltip.params.closeByTapOutside {
       close()
     }
   }
 
   private func isPointInsideTooltip(_ point: CGPoint, event: UIEvent? = nil) -> Bool {
-    tooltipView.point(inside: tooltipView.convert(point, from: self), with: event)
+    tooltip.view.point(inside: tooltip.view.convert(point, from: self), with: event)
   }
 }

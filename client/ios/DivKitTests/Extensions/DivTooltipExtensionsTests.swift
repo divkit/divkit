@@ -26,7 +26,6 @@ final class DivTooltipExtensionsTests: XCTestCase {
         ),
         tooltips: [
           BlockTooltip(
-            id: "tooltip1",
             block: DecoratingBlock(
               child: ContainerBlock(
                 layoutDirection: .vertical,
@@ -34,7 +33,13 @@ final class DivTooltipExtensionsTests: XCTestCase {
               ),
               accessibilityElement: .default
             ),
-            duration: TimeInterval(milliseconds: 1000),
+            params: BlockTooltipParams(
+              id: "tooltip1",
+              mode: .modal,
+              duration: TimeInterval(milliseconds: 1000),
+              closeByTapOutside: true,
+              tapOutsideActions: []
+            ),
             offset: CGPoint(x: 10, y: 20),
             position: .center,
             useLegacyWidth: false
@@ -80,14 +85,18 @@ final class DivTooltipExtensionsTests: XCTestCase {
         ),
         tooltips: [
           BlockTooltip(
-            id: "tooltip1",
             block: DecoratingBlock(
               child: SeparatorBlock(
                 color: color("#14000000")
               ),
               accessibilityElement: .default
             ),
-            duration: TimeInterval(milliseconds: 5000),
+            params: BlockTooltipParams(
+              id: "tooltip1",
+              mode: .modal,
+              duration: TimeInterval(milliseconds: 5000),
+              closeByTapOutside: true
+            ),
             offset: CGPoint(x: 0, y: 0),
             position: .center,
             useLegacyWidth: false
