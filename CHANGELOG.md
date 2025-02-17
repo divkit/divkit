@@ -4,6 +4,7 @@
 * Fixed items creation by `item_builder` in `container` with local variables.
 * Removed redundant check for API 26.
 * Throw errors when switching to ambiguous state.
+* Supported non-modal tooltip mode and `close_by_tap_outside` flag.
 
 # iOS Client:
 * Add flag `defaultTextAutoEllipsize`. It allows to change default value of `auto_ellipsize` property to `false`.
