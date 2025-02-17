@@ -150,15 +150,35 @@ export function getInnerText(target: Node, includeImages: boolean): string {
     for (let i = 0, len = childs.length; i < len; ++i) {
         const child = childs[i];
         const prevChild = childs[i - 1];
-        if (
-            child instanceof HTMLElement &&
+
+        const isChildOnNewline = child instanceof HTMLElement &&
             child.tagName === 'DIV' &&
             i > 0 &&
-            (prevChild.nodeType === STRING_NODE_TYPE || prevChild instanceof HTMLElement && (prevChild.tagName === 'A' || prevChild.tagName === 'SPAN'))
-        ) {
+            (prevChild.nodeType === STRING_NODE_TYPE || prevChild instanceof HTMLElement && (prevChild.tagName === 'A' || prevChild.tagName === 'DIV'));
+
+        if (isChildOnNewline) {
             res += '\n';
         }
-        res += getInnerText(child, includeImages);
+        if (
+            child instanceof HTMLElement &&
+            child.tagName === 'BR' &&
+            i === childs.length - 1
+        ) {
+            // Last <br> in container - do nothing (for example, <div><div>abcde</div><br></div>)
+        } else if (
+            isChildOnNewline &&
+            child instanceof HTMLElement &&
+            child.tagName === 'DIV' &&
+            child.childNodes.length === 1 &&
+            child.childNodes[0] instanceof HTMLElement &&
+            child.childNodes[0].tagName === 'BR'
+        ) {
+            // <div><br></div> - do nothing, already counted in isChildOnNewline
+        } else if (child.nodeType === STRING_NODE_TYPE) {
+            res += child.textContent;
+        } else if (child instanceof HTMLElement) {
+            res += getInnerText(child, includeImages);
+        }
     }
 
     return res;
