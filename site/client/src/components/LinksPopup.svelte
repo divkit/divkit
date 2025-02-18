@@ -136,6 +136,7 @@
         background: var(--alt-bg);
         color: var(--alt-text);
         border-radius: 20px;
+        white-space: normal;
     }
 
     .links-popup__content {
