@@ -53,7 +53,7 @@
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
     import type { Patch } from '../types/patch';
-    import type { ComponentContext } from '../types/componentContext';
+    import type { ComponentContext, StateSetter } from '../types/componentContext';
     import type { Store, StoreAllTypes, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
@@ -63,7 +63,7 @@
     import { checkCustomFunction, customFunctionWrap, mergeCustomFunctions, type CustomFunctions } from '../expressions/funcs/customFuncs';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
     import { ACTION_CTX, type ActionCtxValue } from '../context/action';
-    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../context/state';
+    import { STATE_CTX, type StateCtxValue } from '../context/state';
     import { constStore } from '../utils/constStore';
     import {
         type MaybeMissing,
@@ -517,10 +517,20 @@
         let parts = stateId.split('/');
         const tooltipCtx = parts.length % 2 === 0 && getTooltipContext(componentContext);
         let ctx: ComponentContext | undefined = tooltipCtx || rootComponentContext;
+        const log = (componentContext?.logError || logError);
 
         if (!tooltipCtx) {
             if (ctx.states?.root) {
-                ctx = await ctx.states.root(parts[0]);
+                const setters = ctx.states.root;
+                if (setters.length > 1) {
+                    log(wrapError(new Error('Error resolving state. Found multiple elements that respond to path'), {
+                        additional: {
+                            stateId
+                        }
+                    }));
+                    return;
+                }
+                ctx = await setters[0](parts[0]);
                 if (!ctx) {
                     return;
                 }
@@ -535,7 +545,16 @@
             const selectedStateId = parts[i + 1];
 
             if (ctx.states?.[divId]) {
-                ctx = await ctx.states?.[divId](selectedStateId);
+                const setters: StateSetter[] = ctx.states[divId];
+                if (setters.length > 1) {
+                    log(wrapError(new Error('Error resolving state. Found multiple elements that respond to path'), {
+                        additional: {
+                            stateId
+                        }
+                    }));
+                    return;
+                }
+                ctx = await setters[0](selectedStateId);
                 if (!ctx) {
                     return;
                 }
@@ -1737,15 +1756,18 @@
 
                 if (stateCtx) {
                     stateCtx.states = stateCtx.states || {};
-                    stateCtx.states[stateId] = setState;
+                    stateCtx.states[stateId] = stateCtx.states[stateId] || [];
+                    stateCtx.states[stateId].push(setState);
                 }
-            },
-            unregisterState(stateId) {
-                const stateCtx = getStateContext(ctx.parent);
 
-                if (stateCtx?.states) {
-                    delete stateCtx.states[stateId];
-                }
+                return () => {
+                    if (stateCtx?.states?.[stateId]) {
+                        stateCtx.states[stateId] = stateCtx.states[stateId].filter(it => it !== setState);
+                        if (!stateCtx.states[stateId].length) {
+                            delete stateCtx.states[stateId];
+                        }
+                    }
+                };
             },
             destroy() {
                 const set = componentContextMap.get(ctx.id);

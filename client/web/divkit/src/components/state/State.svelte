@@ -36,7 +36,7 @@
     let childrenWithTransitionOut: ChildWithTransition[] = [];
     let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
-    let prevStateId: string | undefined;
+    let stateUnregister: (() => void) | undefined;
     $: stateId = componentContext.json.div_id || componentContext.id;
     let selectedId: string | undefined;
     let selectedComponentContext: ComponentContext | undefined;
@@ -347,19 +347,13 @@
     }
 
     $: if (componentContext.json) {
-        if (prevStateId) {
-            componentContext.unregisterState(stateId);
-            // stateCtx.unregisterInstance(prevStateId);
-            prevStateId = undefined;
+        if (stateUnregister) {
+            stateUnregister();
+            stateUnregister = undefined;
         }
 
         if (stateId && !componentContext?.fakeElement) {
-            prevStateId = stateId;
-            componentContext.registerState(stateId, setState);
-            /* stateCtx.registerInstance(stateId, {
-                setState,
-                getChild
-            }); */
+            stateUnregister = componentContext.registerState(stateId, setState);
         }
     }
 
@@ -532,8 +526,9 @@
             selectedComponentContext.destroy();
         }
 
-        if (prevStateId) {
-            componentContext.unregisterState(prevStateId);
+        if (stateUnregister) {
+            stateUnregister();
+            stateUnregister = undefined;
         }
     });
 </script>
