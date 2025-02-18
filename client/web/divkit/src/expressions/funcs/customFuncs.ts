@@ -108,7 +108,7 @@ export function mergeCustomFunctions(
         return map1 || undefined;
     }
     if (!map1) {
-        return;
+        return map0 || undefined;
     }
 
     const merged = new Map();
