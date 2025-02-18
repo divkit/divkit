@@ -1,0 +1,91 @@
+{
+  "description": "Pager with wrap content and page with height bigger than pager height.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "block": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#aaaaaa"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "$value": "block_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "block_height"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "pager_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000",
+              "width": 1
+            }
+          },
+          "item_spacing": {
+            "type": "fixed",
+            "value": 4
+          },
+          "layout_mode": {
+            "type": "wrap_content"
+          },
+          "default_item": 1,
+          "items": [
+            {
+              "type": "block",
+              "block_height": 40,
+              "block_width": 80,
+              "text": "Height = 40"
+            },
+            {
+              "type": "block",
+              "block_height": 60,
+              "block_width": 140,
+              "text": "Height = 60. Page height is bigger than pager height"
+            },
+            {
+              "type": "block",
+              "block_height": 40,
+              "block_width": 80,
+              "text": "Height = 40"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

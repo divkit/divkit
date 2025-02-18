@@ -1,0 +1,92 @@
+{
+  "description": "Pager with wrap content and page with width bigger than pager width.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "block": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#aaaaaa"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "$value": "block_height"
+      },
+      "width": {
+        "type": "fixed",
+        "$value": "block_width"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "pager_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 110
+          },
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "item_spacing": {
+            "type": "fixed",
+            "value": 4
+          },
+          "layout_mode": {
+            "type": "wrap_content"
+          },
+          "default_item": 1,
+          "border": {
+            "stroke": {
+              "color": "#FF0000",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "block",
+              "block_width": 80,
+              "block_height": 80,
+              "text": "Width = 80"
+            },
+            {
+              "type": "block",
+              "block_width": 120,
+              "block_height": 140,
+              "text": "Width = 120. Page width is bigger than pager width"
+            },
+            {
+              "type": "block",
+              "block_width": 80,
+              "block_height": 80,
+              "text": "Width = 80"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
