@@ -1,6 +1,20 @@
 import type { Variable } from './expressions/variable';
 import type { Node } from './expressions/ast';
-import type { ComponentCallback, CustomActionCallback, Customization, DivExtensionClass, DivJson, ErrorCallback, FetchInit, Platform, StatCallback, Theme, TypefaceProvider, WrappedError } from '../typings/common';
+import type {
+    ComponentCallback,
+    CustomActionCallback,
+    Customization,
+    DivExtensionClass,
+    DivJson,
+    ErrorCallback,
+    FetchInit,
+    Platform,
+    StatCallback,
+    Theme,
+    TypefaceProvider,
+    WrappedError,
+    Patch
+} from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { Store } from '../typings/store';
 import type { CustomComponentDescription } from '../typings/custom';
@@ -53,6 +67,9 @@ export function render(opts: {
         },
         setData(newJson) {
             instance.setData(newJson);
+        },
+        applyPatch(patch: Patch) {
+            return instance.applyPatch(patch);
         },
         getDebugVariables() {
             return instance.getDebugVariables();

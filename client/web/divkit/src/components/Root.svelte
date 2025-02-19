@@ -44,6 +44,7 @@
         DivVariable,
         Direction,
         ActionMenuItem,
+        Patch,
         VariableTrigger,
         DownloadCallbacks
     } from '../../typings/common';
@@ -52,7 +53,6 @@
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
-    import type { Patch } from '../types/patch';
     import type { ComponentContext, StateSetter } from '../types/componentContext';
     import type { Store, StoreAllTypes, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
@@ -179,6 +179,10 @@
 
     export function setData(newJson: Partial<DivJson>) {
         json = newJson;
+    }
+
+    export function applyPatch(json: Patch): boolean {
+        return applyPatchInternal(json, logError);
     }
 
     const builtinSet = new Set(builtinProtocols);
@@ -676,6 +680,51 @@
         }
     }
 
+    function applyPatchInternal(json: Patch, log: LogError, url?: string): boolean {
+        if (json.templates) {
+            for (const name in json.templates) {
+                if (!templates.hasOwnProperty(name)) {
+                    templates[name] = json.templates[name];
+                }
+            }
+        }
+        if (Array.isArray(json.patch?.changes)) {
+            if (json.patch.mode === 'transactional') {
+                const failed = json.patch.changes.find(change => {
+                    const methods = parentOfMap.get(change.id);
+                    if (!methods) {
+                        return true;
+                    }
+                    const newItemsLen = Array.isArray(change.items) ? change.items.length : 0;
+                    if (methods.isSingleMode && newItemsLen !== 1) {
+                        return true;
+                    }
+                    return false;
+                });
+                if (failed) {
+                    log(wrapError(new Error('Skipping transactional, child is not found or broken'), {
+                        additional: {
+                            url,
+                            id: failed.id
+                        }
+                    }));
+                    execAnyActions(json.patch?.on_failed_actions);
+                    return false;
+                }
+            }
+            json.patch.changes.forEach(change => {
+                const methods = parentOfMap.get(change.id);
+                if (methods) {
+                    methods.replaceWith(change.id, change.items);
+                }
+            });
+            execAnyActions(json.patch?.on_applied_actions);
+            return true;
+        }
+
+        return false;
+    }
+
     function callDownloadAction(
         url: string | null | undefined,
         callbacks: MaybeMissing<DownloadCallbacks | undefined>,
@@ -702,48 +751,13 @@
                             url
                         }
                     }));
+                    execAnyActions(callbacks?.on_fail_actions);
                     return;
                 }
-                if (json.templates) {
-                    for (const name in json.templates) {
-                        if (!templates.hasOwnProperty(name)) {
-                            templates[name] = json.templates[name];
-                        }
-                    }
-                }
-                if (Array.isArray(json.patch?.changes)) {
-                    if (json.patch.mode === 'transactional') {
-                        const failed = json.patch.changes.find(change => {
-                            const methods = parentOfMap.get(change.id);
-                            if (!methods) {
-                                return true;
-                            }
-                            const newItemsLen = Array.isArray(change.items) ? change.items.length : 0;
-                            if (methods.isSingleMode && newItemsLen !== 1) {
-                                return true;
-                            }
-                            return false;
-                        });
-                        if (failed) {
-                            log(wrapError(new Error('Skipping transactional, child is not found or broken'), {
-                                additional: {
-                                    url,
-                                    id: failed.id
-                                }
-                            }));
-                            execAnyActions(json.patch?.on_failed_actions);
-                            execAnyActions(callbacks?.on_fail_actions);
-                            return;
-                        }
-                    }
-                    json.patch.changes.forEach(change => {
-                        const methods = parentOfMap.get(change.id);
-                        if (methods) {
-                            methods.replaceWith(change.id, change.items);
-                        }
-                    });
-                    execAnyActions(json.patch?.on_applied_actions);
+                if (applyPatchInternal(json, log, url)) {
                     execAnyActions(callbacks?.on_success_actions);
+                } else {
+                    execAnyActions(callbacks?.on_fail_actions);
                 }
             }).catch(err => {
                 log(wrapError(new Error('Failed to download the patch'), {

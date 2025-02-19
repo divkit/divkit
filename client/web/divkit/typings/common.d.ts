@@ -363,6 +363,7 @@ export interface DivkitInstance {
     setTheme(theme: Theme): void;
     /** Experimental */
     setData(json: DivJson): void;
+    applyPatch(patch: Patch): boolean;
 }
 
 export type Platform = 'desktop' | 'touch' | 'auto';
@@ -400,4 +401,19 @@ export interface DivExtension {
     updateView?(node: HTMLElement, context: DivExtensionContext): void;
 
     unmountView?(node: HTMLElement, context: DivExtensionContext): void;
+}
+
+export interface PatchChange {
+    id: string;
+    items?: DivBase[];
+}
+
+export interface Patch {
+    templates?: Record<string, DivBase>;
+    patch: {
+        mode?: 'transactional' | 'partial';
+        changes: PatchChange[];
+        on_applied_actions?: Action[];
+        on_failed_actions?: Action[];
+    };
 }
