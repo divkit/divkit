@@ -2480,6 +2480,7 @@
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = DivKitPlayground/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -2502,6 +2503,7 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = DivKitPlayground/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
