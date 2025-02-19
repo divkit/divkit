@@ -539,7 +539,10 @@ class Div2View private constructor(
         trackChildrenVisibility()
     }
 
-    private fun discardVisibilityTracking() {
+    /**
+     * Canceling visibility tracking.
+     * */
+    fun discardVisibilityTracking() {
         val state = divData?.states?.firstOrNull { it.stateId == stateId }
         state?.let { discardStateVisibility(it) }
         discardChildrenVisibility()
