@@ -39,6 +39,7 @@
         DivExtensionContext,
         DivExtensionClass,
         TypefaceProvider,
+        DerivedExpression,
         DisappearAction,
         FetchInit,
         DivVariable,
@@ -1582,6 +1583,9 @@
     function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
             variables: mergeMaps(variables, componentContext.variables),
+            derviedExpression: function<T>(t: T) {
+                return getDerivedFromVars(logError, t) as DerivedExpression<T>;
+            },
             processExpressions: function<T>(t: T) {
                 return getJsonWithVars(
                     logError,

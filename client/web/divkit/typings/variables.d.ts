@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-type Subscriber<T> = (value: T) => void;
-type Unsubscriber = () => void;
+import type { Subscriber, Unsubscriber } from './common';
 
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 export type VariableValue = string | number | bigint | boolean | null | undefined | object | unknown[];

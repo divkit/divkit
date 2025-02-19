@@ -1,4 +1,4 @@
-import type { DivExtension, DivExtensionContext } from '../../typings/common';
+import type { BooleanInt, DivExtension, DivExtensionContext, Unsubscriber } from '../../typings/common';
 import type { WrappedError } from '../utils/wrapError';
 import { filterHTMLElements } from '../utils/filterHTMLElements';
 
@@ -7,6 +7,7 @@ interface Params {
     lottie_json?: object;
     repeat_count?: number;
     repeat_mode?: 'restart' | 'reverse';
+    is_playing?: BooleanInt;
 }
 
 interface AnimationItem {
@@ -53,6 +54,8 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
         private params: Params;
         private animItem: AnimationItem | undefined;
         private wrapper: HTMLElement | undefined;
+        private isPlayingUnsubscriber: Unsubscriber | undefined;
+        private isPlaying = true;
 
         constructor(params: Params) {
             this.params = params;
@@ -279,6 +282,13 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                     });
                 }
             }).catch(onError);
+
+            this.isPlayingUnsubscriber = context.derviedExpression(this.params.is_playing).subscribe(val => {
+                this.isPlaying = val !== false;
+                if (this.animItem) {
+                    this.animItem[this.isPlaying ? 'play' : 'pause']();
+                }
+            });
         }
 
         updateView(_node: HTMLElement, context: DivExtensionContext): void {
@@ -306,6 +316,8 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                 this.wrapper = undefined;
             }
             node.removeAttribute('data-lottie');
+
+            this.isPlayingUnsubscriber?.();
         }
     };
 }

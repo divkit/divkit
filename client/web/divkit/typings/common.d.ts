@@ -1,5 +1,8 @@
 import type { Variable } from './variables';
 
+export type Subscriber<T> = (value: T) => void;
+export type Unsubscriber = () => void;
+
 export type Interpolation = 'linear' | 'ease' | 'ease_in' | 'ease_out' | 'ease_in_out' | 'spring';
 
 export type AnimatorRepeatCount = {
@@ -381,10 +384,15 @@ export interface Customization {
     menuItemClass?: string;
 }
 
+export interface DerivedExpression<T> {
+    subscribe(cb: Subscriber<T>): Unsubscriber;
+}
+
 export interface DivExtensionContext {
     variables: Map<string, Variable>;
     direction: Direction;
     processExpressions<T>(t: T): T;
+    derviedExpression<T>(t: T): DerivedExpression<T>;
     execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;
     getComponentProperty<T>(property: string): T;
