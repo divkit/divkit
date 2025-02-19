@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs.pager
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.widget.makeUnspecifiedSpec
+import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div2.DivPager.ItemAlignment
 import kotlin.math.roundToInt
 
@@ -14,7 +14,9 @@ internal class WrapContentPageSizeItemDecoration(
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        view.measure(makeUnspecifiedSpec(), makeUnspecifiedSpec())
+        val parentWidth = parent.width - paddings.run { left + right }.roundToInt()
+        val parentHeight = parent.height - paddings.run { top + bottom }.roundToInt()
+        view.measure(makeExactSpec(parentWidth), makeExactSpec(parentHeight))
         val child = (view as? DivPagerPageLayout)?.child ?: return
         outRect.set(
             paddings.alignedLeft ?: child.horizontalOffset,

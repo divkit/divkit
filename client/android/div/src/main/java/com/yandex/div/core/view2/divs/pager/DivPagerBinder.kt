@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs.pager
 import android.util.SparseArray
 import android.view.View
 import androidx.core.view.doOnNextLayout
-import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -71,6 +70,12 @@ internal class DivPagerBinder @Inject constructor(
             return
         }
 
+        oldDiv?.let {
+            view.changePageCallbackForOffScreenPages = null
+            view.viewPager.removeItemDecorations()
+            view.pageTransformer = null
+        }
+
         val recyclerView = view.getRecyclerView() ?: return
 
         baseBinder.bindView(context, view, div, oldDiv)
@@ -93,6 +98,10 @@ internal class DivPagerBinder @Inject constructor(
         view.pagerOnItemsCountChange?.onItemsUpdated()
         view.clipToPage = divView.div2Component.isPagerPageClipEnabled
 
+        view.orientation =
+            if (div.isHorizontal(resolver)) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
+        adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
+
         val reusableObserver = { _: Any -> view.applyDecorations(div, resolver, pageTranslations, adapter) }
 
         view.addSubscription(div.paddings?.left?.observe(resolver, reusableObserver))
@@ -103,8 +112,8 @@ internal class DivPagerBinder @Inject constructor(
         view.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
         view.addSubscription(div.scrollAxisAlignment.observe(resolver, reusableObserver))
         view.addSubscription(div.crossAxisAlignment.observe(resolver, reusableObserver))
-        view.addSubscription(div.orientation.observeAndGet(resolver, reusableObserver))
-        view.addSubscription(view.viewPager.observeSizeChange(reusableObserver))
+        view.addSubscription(div.orientation.observe(resolver, reusableObserver))
+        view.addSubscription(view.viewPager.observeSizeChange(div, reusableObserver))
 
         when (val mode = div.layoutMode) {
             is DivPagerLayoutMode.NeighbourPageSize -> {
@@ -190,11 +199,9 @@ internal class DivPagerBinder @Inject constructor(
     ) {
         val recyclerView = getRecyclerView() ?: return
 
-        val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
+        val isHorizontal = div.isHorizontal(resolver)
         orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
         adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
-
-        changePageCallbackForOffScreenPages = null
 
         if (!isActuallyLaidOut) return
 
@@ -268,17 +275,15 @@ internal class DivPagerBinder @Inject constructor(
         )
     }
 
-    private fun ViewPager2.observeSizeChange(observer: (_: Any) -> Unit): Disposable {
+    private fun DivPager.isHorizontal(resolver: ExpressionResolver) =
+        orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
+
+    private fun ViewPager2.observeSizeChange(div: DivPager, observer: (_: Any) -> Unit): Disposable {
         return object : Disposable, View.OnLayoutChangeListener {
             private var oldSize = 0
 
-            private fun getSize() = if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) width else height
-
             init {
                 addOnLayoutChangeListener(this)
-                // First onLayoutChange triggered too late.
-                // Used for set layout paddings before user actions
-                doOnPreDraw { updateSize() }
             }
 
             override fun close() {
@@ -288,11 +293,14 @@ internal class DivPagerBinder @Inject constructor(
             override fun onLayoutChange(
                 v: View, left: Int, top: Int, right: Int, bottom: Int,
                 oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
-            ) = updateSize()
-
-            private fun updateSize() {
-                val newSize = getSize()
-                if (oldSize == newSize) return
+            ) {
+                val newSize = if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) width else height
+                if (oldSize == newSize) {
+                    if (div.layoutMode is DivPagerLayoutMode.PageContentSize) {
+                        requestTransform()
+                    }
+                    return
+                }
 
                 oldSize = newSize
                 observer.invoke(newSize)
@@ -301,10 +309,14 @@ internal class DivPagerBinder @Inject constructor(
     }
 
     private fun ViewPager2.setItemDecoration(decoration: RecyclerView.ItemDecoration) {
+        removeItemDecorations()
+        addItemDecoration(decoration)
+    }
+
+    private fun ViewPager2.removeItemDecorations() {
         for (i in 0 until itemDecorationCount) {
             removeItemDecorationAt(i)
         }
-        addItemDecoration(decoration)
     }
 
     private fun DivPagerView.bindItemBuilder(context: BindingContext, div: DivPager) {
