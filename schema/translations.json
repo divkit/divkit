@@ -2111,6 +2111,18 @@
     "en": "Stroke color.",
     "ru": "Цвет рамки."
   },
+    "div_stroke_style": {
+    "en": "Stroke style.",
+    "ru": "Стиль линии."
+  },
+  "div_stroke_style_dashed": {
+    "en": "Dashed stroke style.",
+    "ru": "Пунктирная линия."
+  },
+  "div_stroke_style_solid": {
+    "en": "Solid stroke style.",
+    "ru": "Сплошная линия."
+  },
   "div_stroke_width": {
     "en": "Stroke width.",
     "ru": "Толщина рамки."

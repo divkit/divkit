@@ -2,6 +2,11 @@
   "type": "object",
   "$description": "translations.json#/div_stroke",
   "properties": {
+    "style": {
+      "$ref": "div-stroke-style.json",
+      "$description": "translations.json#/div_stroke_style",
+      "default_value": "{\"type\": \"solid\"}"
+    },
     "width": {
       "$ref": "common.json#/non_negative_number",
       "default_value": "1",

@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_stroke_style_dashed",
+  "platforms": [],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "dashed"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

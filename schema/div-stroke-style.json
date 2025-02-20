@@ -1,0 +1,11 @@
+{
+  "$description": "translations.json#/div_stroke_style",
+  "anyOf": [
+    {
+      "$ref": "div-stroke-style-solid.json"
+    },
+    {
+      "$ref": "div-stroke-style-dashed.json"
+    }
+  ]
+}
