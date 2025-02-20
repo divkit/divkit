@@ -8,11 +8,17 @@ export interface PageSize {
     type: 'percentage';
     page_width: PercentageSize;
 }
+
 export interface NeighbourPageSize {
     type: 'fixed';
     neighbour_page_width: FixedSize;
 }
-export type PagerLayoutMode = PageSize | NeighbourPageSize;
+
+export interface PageContentSize {
+    type: 'wrap_content';
+}
+
+export type PagerLayoutMode = PageSize | NeighbourPageSize | PageContentSize;
 
 export interface DivPagerData extends DivBaseData {
     type: 'pager';

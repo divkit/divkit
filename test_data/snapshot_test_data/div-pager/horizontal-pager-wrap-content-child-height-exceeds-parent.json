@@ -2,7 +2,8 @@
   "description": "Pager with wrap content and page with height bigger than pager height.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "block": {

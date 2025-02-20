@@ -56,7 +56,7 @@
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
-    import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
+    import { pxToEmWithUnits } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
     import { correctGeneralOrientation } from '../../utils/correctGeneralOrientation';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
@@ -188,7 +188,7 @@
         if (!$jsonLayoutMode) {
             hasLayoutModeError = true;
             componentContext.logError(wrapError(new Error('Empty "layout_mode" prop for div "pager"')));
-        } else if ($jsonLayoutMode.type !== 'percentage' && $jsonLayoutMode.type !== 'fixed') {
+        } else if ($jsonLayoutMode.type !== 'percentage' && $jsonLayoutMode.type !== 'fixed' && $jsonLayoutMode.type !== 'wrap_content') {
             hasLayoutModeError = true;
             componentContext.logError(wrapError(new Error('Incorrect value of "layout_mode.type" for div "pager"')));
         } else {
@@ -237,6 +237,8 @@
         } else if ($jsonLayoutMode?.type === 'percentage') {
             const pageWidth = $jsonLayoutMode.page_width?.value;
             sizeVal = `${Number(pageWidth)}%`;
+        } else if ($jsonLayoutMode?.type === 'wrap_content') {
+            sizeVal = 'minmax(max-content, auto)';
         }
     }
 
@@ -322,6 +324,10 @@
     $: runSelectedActions(currentItem);
 
     function scrollToPagerItem(index: number, behavior: ScrollBehavior = 'smooth'): void {
+        if (!pagerItemsWrapper) {
+            return;
+        }
+
         const isHorizontal = orientation === 'horizontal';
         const nextPagerItem = pagerItemsWrapper.children[index] as HTMLElement;
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
@@ -393,20 +399,22 @@
     onMount(() => {
         mounted = true;
 
-        const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
+        if (pagerItemsWrapper) {
+            const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
 
-        if (isIndicatorExist) {
-            const pagerItems = [...pagerItemsWrapper.children] as HTMLElement[];
+            if (isIndicatorExist) {
+                const pagerItems = [...pagerItemsWrapper.children] as HTMLElement[];
 
-            for (const [index, item] of pagerItems.entries()) {
-                item.setAttribute('role', 'tabpanel');
-                item.setAttribute('id', `${instId}-panel-${index}`);
-                item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
+                for (const [index, item] of pagerItems.entries()) {
+                    item.setAttribute('role', 'tabpanel');
+                    item.setAttribute('id', `${instId}-panel-${index}`);
+                    item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
+                }
             }
-        }
 
-        if (currentItem > 0) {
-            scrollToPagerItem(currentItem, 'instant');
+            if (currentItem > 0) {
+                scrollToPagerItem(currentItem, 'instant');
+            }
         }
     });
 

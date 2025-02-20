@@ -10,7 +10,9 @@
     }
   },
   "platforms": [
-    "ios"
+    "ios",
+    "android",
+    "web"
   ],
   "required": [
     "type"

@@ -1,7 +1,8 @@
 {
   "description": "Horizontal pager with layout mode 'wrap_content' and few small pages",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "title": {

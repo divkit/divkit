@@ -2,7 +2,8 @@
   "description": "Horizontal pager with wrap_content layout mode and children with different widths and item_spacing.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "text_page_wrap_content": {
