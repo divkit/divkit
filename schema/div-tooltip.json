@@ -59,7 +59,9 @@
       "$ref": "div-tooltip-mode.json",
       "default_value": "{ \"type\": \"modal\" }",
       "$description": "translations.json#/div_tooltip_mode",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     },
     "tap_outside_actions": {
       "type": "array",
@@ -76,6 +78,7 @@
       "$description": "translations.json#/div_tooltip_close_by_tap_outside",
       "default_value": "true",
       "platforms": [
+        "android",
         "ios"
       ]
     },
