@@ -21,6 +21,9 @@
         bottom: 'end',
         baseline: 'baseline'
     };
+
+    const stateChangeErrorMessage = (prop: string) =>
+        `The component id with the "${prop}" property for state change is missing. Either specify the id, or specify the "transition_trigger" property without "state_change" value.`;
 </script>
 
 <script lang="ts">
@@ -211,7 +214,7 @@
         jsonTransitionTriggers = componentContext.fakeElement ?
             [] :
             (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
-        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.id);
+        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1);
         hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1);
 
         if (currentNode) {
@@ -659,7 +662,7 @@
 
     $: {
         stateChangingInProgress = undefined;
-        if (hasStateChangeTrigger && componentContext.json.transition_in && rootCtx.isRunning('stateChange')) {
+        if (hasStateChangeTrigger && componentContext.id && componentContext.json.transition_in && rootCtx.isRunning('stateChange')) {
             stateChangingInProgress = true;
         }
     }
@@ -667,6 +670,7 @@
         transitionChangeInProgress = undefined;
         if (
             hasStateChangeTrigger &&
+            componentContext.id &&
             rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.id)
         ) {
             transitionChangeInProgress = true;
@@ -983,27 +987,44 @@
 
         currentNode = node;
         if (hasStateChangeTrigger && componentContext.json.transition_in) {
-            stateCtx.registerChildWithTransitionIn(
-                componentContext.json as DivBaseData,
-                componentContext,
-                componentContext.json.transition_in,
-                node
-            ).then(() => {
-                stateChangingInProgress = false;
-            }).catch(e => {
-                stateChangingInProgress = false;
-                throw e;
-            });
+            if (componentContext.id) {
+                stateCtx.registerChildWithTransitionIn(
+                    componentContext.json as DivBaseData,
+                    componentContext,
+                    componentContext.json.transition_in,
+                    node
+                ).then(() => {
+                    stateChangingInProgress = false;
+                }).catch(e => {
+                    stateChangingInProgress = false;
+                    throw e;
+                });
+            } else {
+                componentContext.logError(wrapError(new Error(stateChangeErrorMessage('transition_in')), {
+                    level: 'warn'
+                }));
+            }
         }
         if (hasStateChangeTrigger && componentContext.json.transition_out) {
-            stateCtx.registerChildWithTransitionOut(
-                componentContext.json as DivBaseData,
-                componentContext,
-                componentContext.json.transition_out,
-                node
-            );
+            if (componentContext.id) {
+                stateCtx.registerChildWithTransitionOut(
+                    componentContext.json as DivBaseData,
+                    componentContext,
+                    componentContext.json.transition_out,
+                    node
+                );
+            } else {
+                componentContext.logError(wrapError(new Error(stateChangeErrorMessage('transition_out')), {
+                    level: 'warn'
+                }));
+            }
         }
         if (!componentContext.fakeElement) {
+            if (componentContext.json.transition_change && !componentContext.id) {
+                componentContext.logError(wrapError(new Error(stateChangeErrorMessage('transition_change')), {
+                    level: 'warn'
+                }));
+            }
             stateCtx.registerChildWithTransitionChange(
                 componentContext.json as DivBaseData,
                 componentContext,
