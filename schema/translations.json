@@ -272,8 +272,8 @@
     "ru": "Параметры HTTP-запроса, которые используются для конфигурации отправки данных."
   },
   "div_action_submit_request_headers": {
-    "en": "HTTP request headers.",
-    "ru": "Заголовки HTTP-запроса."
+    "en": "HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.",
+    "ru": "Заголовки HTTP-запроса. Обратите внимание, что DivKit не очищает дублирующиеся заголовки, наличие которых может приводить к ошибкам в обработке запроса. Учитывайте это при сборке action'ов сложными json-builder'ами."
   },
   "div_action_submit_request_method": {
     "en": "HTTP request method.",

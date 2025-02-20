@@ -22,6 +22,7 @@ class DivKitConfiguration private constructor(
     private val executorService: ExecutorService,
     private val histogramConfiguration: Provider<HistogramConfiguration>,
     private val divStorageComponent: Provider<DivStorageComponent>?,
+    private val divRequestExecutor: Provider<DivRequestExecutor>,
 ) {
 
     @Provides
@@ -61,12 +62,17 @@ class DivKitConfiguration private constructor(
         return ExternalOptional.ofNullable(divStorageComponent?.get())
     }
 
+    @Singleton
+    @Provides
+    fun divRequestExecutor(): DivRequestExecutor = divRequestExecutor.get()
+
     class Builder {
 
         private var sendBeaconConfiguration: Provider<SendBeaconConfiguration>? = null
         private var executorService: ExecutorService? = null
         private var histogramConfiguration = Provider { HistogramConfiguration.DEFAULT }
         private var divStorageComponent: Provider<DivStorageComponent>? = null
+        private var divRequestExecutor = Provider { DivRequestExecutor.STUB }
 
         fun sendBeaconConfiguration(configuration: SendBeaconConfiguration): Builder {
             sendBeaconConfiguration = Provider { configuration }
@@ -93,12 +99,18 @@ class DivKitConfiguration private constructor(
             return this
         }
 
+        fun divRequestExecutor(requestExecutor: Provider<DivRequestExecutor>): Builder {
+            divRequestExecutor = requestExecutor
+            return this
+        }
+
         fun build(): DivKitConfiguration {
             return DivKitConfiguration(
                 sendBeaconConfiguration,
                 executorService ?: Executors.newSingleThreadExecutor(),
                 histogramConfiguration,
                 divStorageComponent,
+                divRequestExecutor
             )
         }
     }

@@ -5,11 +5,9 @@ import android.view.ViewGroup
 import androidx.annotation.MainThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.local.needLocalRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.divs.DivContainerBinder
 import com.yandex.div.core.view2.divs.DivCustomBinder
 import com.yandex.div.core.view2.divs.DivGifImageBinder
@@ -46,6 +44,7 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
+import com.yandex.div.internal.core.getChildContext
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -94,7 +93,7 @@ internal class DivBinder @Inject constructor(
 ) {
     @MainThread
     fun bind(parentContext: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
-        val context = getBindingContext(parentContext, div, path)
+        val context = parentContext.getChildContext(div, path)
         val divView = context.divView
         val resolver = context.expressionResolver
         divView.currentRebindReusableList?.pop(div)?.let {
@@ -246,23 +245,5 @@ internal class DivBinder @Inject constructor(
 
     private fun setGridData(context: BindingContext, view: View, data: DivGrid) {
         gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data)
-    }
-
-    private fun getBindingContext(
-        parentContext: BindingContext, div: Div, path: DivStatePath
-    ): BindingContext {
-        return if (div.needLocalRuntime) {
-                parentContext.getFor(
-                parentContext.runtimeStore?.getOrCreateRuntime(
-                    path = path.fullPath,
-                    parentResolver = parentContext.expressionResolver,
-                    variables = div.value().variables?.toVariables(),
-                    triggers = div.value().variableTriggers,
-                    functions = div.value().functions,
-                )?.expressionResolver ?: parentContext.expressionResolver
-            )
-        } else {
-            parentContext
-        }
     }
 }
