@@ -1,3 +1,24 @@
+## 31.4.0
+
+# Android Client:
+* Div2View.discardVisibilityTracking() now public for cancelling visibility tracking.
+* Fixed corner clipping of elements inside transient hierarchy.
+* Improved complex rebind.
+* Use a CME-safe collection to resolve crashes occurring during patch application with item_builder.
+
+# iOS Client:
+* Updated `TooltipEvent` struct with `div-tooltip` properties.
+
+# Web Client:
+* Added `applyPatch` api for an DivKit instance.
+* Added support for the `is_playing` parameter in the `lottie` extension.
+* Fixed `functions` inheriting.
+* Fixed empty text height measurement.
+* The `derviedExpression` api for extensions has been added. It allows you to subscribe to any expression changes. Do not forget to unsubscribe!.
+* The `download` callbacks have been fixed, which will now be more reliable in several erroneous situations..
+* Throw errors when switching to ambiguous state.
+
+
 ## 31.3.0
 
 # Android Client:
