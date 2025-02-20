@@ -1,3 +1,14 @@
+## 31.4.0 (February 24, 2025)
+
+* Added `applyPatch` api for an DivKit instance.
+* Added support for the `is_playing` parameter in the `lottie` extension.
+* Fixed `functions` inheriting.
+* Fixed empty text height measurement.
+* The `derviedExpression` api for extensions has been added. It allows you to subscribe to any expression changes. Do not forget to unsubscribe!.
+* The `download` callbacks have been fixed, which will now be more reliable in several erroneous situations..
+* Throw errors when switching to ambiguous state.
+
+
 ## 31.3.0 (February 17, 2025)
 
 * Fixed an issue with `container` separators rendereed between invisible elements.
