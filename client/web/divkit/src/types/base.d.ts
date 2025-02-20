@@ -91,6 +91,16 @@ export interface Extension {
     params?: object;
 }
 
+export interface TooltipModeModal {
+    type: 'modal';
+}
+
+export interface TooltipModeNonModal {
+    type: 'non_modal';
+}
+
+export type TooltipMode = TooltipModeModal | TooltipModeNonModal;
+
 export interface Tooltip {
     id: string;
     div: DivBaseData;
@@ -109,6 +119,8 @@ export interface Tooltip {
     };
     animation_in?: Animation;
     animation_out?: Animation;
+
+    mode?: TooltipMode;
 }
 
 export interface DivLayoutProvider {

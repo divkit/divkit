@@ -75,10 +75,16 @@
                   },
                   "div": {
                     "type": "container",
+                    "width": {
+                      "type": "wrap_content"
+                    },
                     "orientation": "overlap",
                     "items": [
                       {
                         "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
                         "paddings": {
                           "left": 16,
                           "top": 16,
@@ -176,10 +182,16 @@
                   },
                   "div": {
                     "type": "container",
+                    "width": {
+                      "type": "wrap_content"
+                    },
                     "orientation": "overlap",
                     "items": [
                       {
                         "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
                         "paddings": {
                           "left": 16,
                           "top": 16,
@@ -273,10 +285,16 @@
                   "close_by_tap_outside": true,
                   "div": {
                     "type": "container",
+                    "width": {
+                      "type": "wrap_content"
+                    },
                     "orientation": "overlap",
                     "items": [
                       {
                         "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
                         "paddings": {
                           "left": 16,
                           "top": 16,

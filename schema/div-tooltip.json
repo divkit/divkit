@@ -60,7 +60,9 @@
       "default_value": "{ \"type\": \"modal\" }",
       "$description": "translations.json#/div_tooltip_mode",
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     "tap_outside_actions": {

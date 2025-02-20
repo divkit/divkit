@@ -2589,7 +2589,8 @@
     {
       "title": "Tooltips with tap outside properties",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Tooltips"

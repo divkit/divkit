@@ -43,6 +43,7 @@
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
     let componentContext: ComponentContext;
+    let modal = true;
 
     $: {
         if (componentContext) {
@@ -59,6 +60,12 @@
 
     $: animationIn = parentComponentContext.getDerivedFromVars(data.animation_in);
     $: animationOut = parentComponentContext.getDerivedFromVars(data.animation_out);
+
+    $: if (data.mode?.type === 'non_modal') {
+        modal = false;
+    } else {
+        modal = true;
+    }
 
     $: mods = {
         visible
@@ -202,7 +209,7 @@
     on:resize={onWindowResize}
 />
 
-{#if visible}
+{#if visible && modal}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class={css.tooltip__overlay} on:click={onOutClick}></div>
