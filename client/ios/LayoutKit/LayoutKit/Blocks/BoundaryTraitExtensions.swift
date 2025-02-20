@@ -47,9 +47,11 @@ extension BoundaryTrait {
     guard let path = makeMaskPath(for: size, inset: border.width / 2) else {
       return nil
     }
+    let rawPattern = border.style.rawPattern
 
     let layer = CAShapeLayer()
     layer.path = path
+    layer.lineDashPattern = rawPattern?.calculateDashPattern(for: getLength(for: size))
     layer.strokeColor = border.color.cgColor
     layer.fillColor = Color.clear.cgColor
     layer.lineWidth = border.width
@@ -69,5 +71,39 @@ extension BoundaryTrait {
     case .noClip:
       nil
     }
+  }
+
+  private func getLength(for size: CGSize) -> CGFloat {
+    switch self {
+    case .noClip, .clipPath: (size.width + size.height) * 2
+    case let .clipCorner(cornerRadius):
+      (size.width + size.height) * 2 + (.pi / 2 - 2) * cornerRadius.sum
+    }
+  }
+}
+
+extension BlockBorder.Style {
+  fileprivate var rawPattern: [CGFloat]? {
+    switch self {
+    case .dashed: [6, 2]
+    case .solid: nil
+    }
+  }
+}
+
+extension [CGFloat] {
+  fileprivate func calculateDashPattern(for length: CGFloat) -> [NSNumber] {
+    guard !isEmpty else { return [] }
+    let sum = reduce(0, +)
+
+    let n = Swift.max(1, Int(round(length / sum)))
+    let factor = length / (CGFloat(n) * sum)
+    return map { NSNumber(value: $0 * factor) }
+  }
+}
+
+extension CornerRadii {
+  fileprivate var sum: CGFloat {
+    topLeft + topRight + bottomLeft + bottomRight
   }
 }

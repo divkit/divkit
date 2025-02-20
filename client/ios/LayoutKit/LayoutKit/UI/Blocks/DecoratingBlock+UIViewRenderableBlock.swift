@@ -317,7 +317,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
     let shouldMakeBorderLayer: Bool
     let boundary = model.boundary.makeInfo(for: bounds.size)
-    shouldMakeBorderLayer = boundary.layer != nil
+    shouldMakeBorderLayer = boundary.layer != nil || model.border?.style
+      .shouldMakeBorderLayer == true
     layer.cornerRadius = boundary.radius
     layer.maskedCorners = boundary.corners
     layer.mask = boundary.layer
@@ -588,6 +589,15 @@ extension BlurEffect {
     switch self {
     case .light: .light
     case .dark: .dark
+    }
+  }
+}
+
+extension BlockBorder.Style {
+  fileprivate var shouldMakeBorderLayer: Bool {
+    switch self {
+    case .dashed: true
+    case .solid: false
     }
   }
 }
