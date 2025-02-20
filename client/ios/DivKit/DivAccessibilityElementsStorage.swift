@@ -37,7 +37,7 @@ final class DivAccessibilityElementsStorage {
     let orderedIds = getOrderedIds()
 
     guard !orderedIds.isEmpty else {
-      return view.superview?.accessibilityElements
+      return []
     }
 
     var systemElements = [Any]()

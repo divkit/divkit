@@ -2607,6 +2607,10 @@
     "en": "Specifies actions triggered by tapping outside the tooltip.",
     "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
   },
+  "div_tooltip_background_accessibility_description": {
+    "en": "Description for accessibility of the background tap action for tooltip.",
+    "ru": "Описание для доступности действия нажатия по фону тултипа."
+  },
   "div_transform": {
     "en": "Transformation of the element.",
     "ru": "Преобразование элемента."

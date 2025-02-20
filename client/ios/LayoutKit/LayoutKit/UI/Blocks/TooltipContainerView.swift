@@ -11,6 +11,18 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private var lastNonZeroBounds: CGRect?
   private var onVisibleBoundsChanged: Action?
 
+  private lazy var backgroundElement: UIAccessibilityElement? = {
+    guard tooltip.params.closeByTapOutside else { return nil }
+
+    let backgroundElement = ActivatableAccessibilityElement(
+      activateAction: weakify(self, in: type(of: self).performTapOutsideActions),
+      accessibilityContainer: self
+    )
+    backgroundElement.accessibilityLabel = tooltip.params.backgroundAccessibilityDescription
+    backgroundElement.accessibilityTraits = .button
+    return backgroundElement
+  }()
+
   public init(
     tooltip: DefaultTooltipManager.Tooltip,
     handleAction: @escaping (LayoutKit.UIActionEvent) -> Void,
@@ -32,7 +44,11 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       addGestureRecognizer(tapRecognizer)
     }
 
-    addSubview(tooltip.view)
+    addSubview(tooltipView)
+
+    if let backgroundElement {
+      accessibilityElements = [tooltipView, backgroundElement]
+    }
   }
 
   @available(*, unavailable)
@@ -76,6 +92,8 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       lastNonZeroBounds = bounds
     }
 
+    backgroundElement?.accessibilityFrameInContainerSpace = bounds
+
     onVisibleBoundsChanged?()
     onVisibleBoundsChanged = nil
   }
@@ -106,5 +124,27 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
   private func isPointInsideTooltip(_ point: CGPoint, event: UIEvent? = nil) -> Bool {
     tooltip.view.point(inside: tooltip.view.convert(point, from: self), with: event)
+  }
+}
+
+private final class ActivatableAccessibilityElement: UIAccessibilityElement {
+  private let activateAction: Action
+
+  init(
+    activateAction: @escaping Action,
+    accessibilityContainer container: Any
+  ) {
+    self.activateAction = activateAction
+    super.init(accessibilityContainer: container)
+  }
+
+  override func accessibilityActivate() -> Bool {
+    activateAction()
+    return true
+  }
+
+  override func accessibilityPerformEscape() -> Bool {
+    activateAction()
+    return true
   }
 }

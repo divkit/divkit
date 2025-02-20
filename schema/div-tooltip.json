@@ -78,6 +78,13 @@
       "platforms": [
         "ios"
       ]
+    },
+    "background_accessibility_description": {
+      "type": "string",
+      "$description": "translations.json#/div_tooltip_background_accessibility_description",
+      "platforms": [
+        "ios"
+      ]
     }
   },
   "required": [

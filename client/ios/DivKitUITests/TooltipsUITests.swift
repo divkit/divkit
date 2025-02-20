@@ -16,6 +16,8 @@ final class TooltipsUITests: XCTestCase {
   private lazy var toggleTooltipButton: XCUIElement = elementsQuery
     .staticTexts["tooltip with close button"]
 
+  private lazy var closeTooltipButton: XCUIElement = app.buttons["close tooltip"]
+
   override func setUpWithError() throws {
     try super.setUpWithError()
 
@@ -57,7 +59,7 @@ final class TooltipsUITests: XCTestCase {
     toggleTooltipButton.tap() // Open tooltip
     XCTAssertTrue(tooltip.exists)
 
-    toggleTooltipButton.tap() // Close tooltip
+    closeTooltipButton.tap() // Close tooltip
     XCTAssertTrue(!tooltip.exists)
   }
 

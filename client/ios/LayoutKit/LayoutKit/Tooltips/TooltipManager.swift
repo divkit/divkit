@@ -111,6 +111,12 @@ public class DefaultTooltipManager: TooltipManager {
         concurrencyLimit: 1,
         transform: { await $0?.makeTooltip(id: info.id, in: windowBounds) }
       ).first else { return }
+
+      let modalWindowManager = ModalTooltipWindowManager(
+        mainWindow: currentKeyWindow,
+        modalWindow: modalTooltipWindow
+      )
+
       let view = TooltipContainerView(
         tooltip: tooltip,
         handleAction: handleAction,
@@ -118,7 +124,7 @@ public class DefaultTooltipManager: TooltipManager {
           guard let self else { return }
           showingTooltips.removeValue(forKey: tooltip.params.id)
           if !showingTooltips.contains(where: { $1.isModal }) {
-            modalTooltipWindow.isHidden = true
+            modalWindowManager.hideModalWindow()
           }
         }
       )
@@ -126,14 +132,13 @@ public class DefaultTooltipManager: TooltipManager {
       if tooltip.params.mode == .modal {
         // Passing the statusBarStyle control to `rootViewController` of the main window
         let vc = ProxyViewController(
-          viewController: UIApplication.shared.delegate?.window??
-            .rootViewController ?? UIViewController()
+          viewController: currentKeyWindow.rootViewController ?? UIViewController(),
+          viewDidAppear: { UIAccessibility.post(notification: .screenChanged, argument: view) }
         )
         vc.view = view
         // Window won't rotate if `rootViewController` is not set
         modalTooltipWindow.rootViewController = vc
-        modalTooltipWindow.isHidden = false
-        modalTooltipWindow.makeKeyAndVisible()
+        modalWindowManager.showModalWindow()
         view.frame = modalTooltipWindow.bounds
       } else {
         currentKeyWindow.addSubview(view)
@@ -229,9 +234,14 @@ extension TooltipAnchorView {
 
 private final class ProxyViewController: UIViewController {
   private let viewController: UIViewController
+  private let viewDidAppear: Action
 
-  init(viewController: UIViewController) {
+  init(
+    viewController: UIViewController,
+    viewDidAppear: @escaping Action
+  ) {
     self.viewController = viewController
+    self.viewDidAppear = viewDidAppear
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -242,6 +252,27 @@ private final class ProxyViewController: UIViewController {
 
   override var preferredStatusBarStyle: UIStatusBarStyle {
     viewController.preferredStatusBarStyle
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    viewDidAppear()
+  }
+}
+
+private struct ModalTooltipWindowManager {
+  let mainWindow: UIWindow
+  let modalWindow: UIWindow
+
+  func showModalWindow() {
+    mainWindow.accessibilityElementsHidden = true
+    modalWindow.isHidden = false
+    modalWindow.makeKeyAndVisible()
+  }
+
+  func hideModalWindow() {
+    mainWindow.accessibilityElementsHidden = false
+    modalWindow.isHidden = true
   }
 }
 #else

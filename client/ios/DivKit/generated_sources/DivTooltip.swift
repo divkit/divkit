@@ -20,6 +20,7 @@ public final class DivTooltip: Sendable {
 
   public let animationIn: DivAnimation?
   public let animationOut: DivAnimation?
+  public let backgroundAccessibilityDescription: Expression<String>?
   public let closeByTapOutside: Expression<Bool> // default value: true
   public let div: Div
   public let duration: Expression<Int> // constraint: number >= 0; default value: 5000
@@ -28,6 +29,10 @@ public final class DivTooltip: Sendable {
   public let offset: DivPoint?
   public let position: Expression<Position>
   public let tapOutsideActions: [DivAction]?
+
+  public func resolveBackgroundAccessibilityDescription(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(backgroundAccessibilityDescription)
+  }
 
   public func resolveCloseByTapOutside(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(closeByTapOutside) ?? true
@@ -47,6 +52,7 @@ public final class DivTooltip: Sendable {
   init(
     animationIn: DivAnimation? = nil,
     animationOut: DivAnimation? = nil,
+    backgroundAccessibilityDescription: Expression<String>? = nil,
     closeByTapOutside: Expression<Bool>? = nil,
     div: Div,
     duration: Expression<Int>? = nil,
@@ -58,6 +64,7 @@ public final class DivTooltip: Sendable {
   ) {
     self.animationIn = animationIn
     self.animationOut = animationOut
+    self.backgroundAccessibilityDescription = backgroundAccessibilityDescription
     self.closeByTapOutside = closeByTapOutside ?? .value(true)
     self.div = div
     self.duration = duration ?? .value(5000)
@@ -75,25 +82,26 @@ extension DivTooltip: Equatable {
     guard
       lhs.animationIn == rhs.animationIn,
       lhs.animationOut == rhs.animationOut,
-      lhs.closeByTapOutside == rhs.closeByTapOutside
+      lhs.backgroundAccessibilityDescription == rhs.backgroundAccessibilityDescription
     else {
       return false
     }
     guard
+      lhs.closeByTapOutside == rhs.closeByTapOutside,
       lhs.div == rhs.div,
-      lhs.duration == rhs.duration,
-      lhs.id == rhs.id
+      lhs.duration == rhs.duration
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.mode == rhs.mode,
-      lhs.offset == rhs.offset,
-      lhs.position == rhs.position
+      lhs.offset == rhs.offset
     else {
       return false
     }
     guard
+      lhs.position == rhs.position,
       lhs.tapOutsideActions == rhs.tapOutsideActions
     else {
       return false
@@ -108,6 +116,7 @@ extension DivTooltip: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["animation_in"] = animationIn?.toDictionary()
     result["animation_out"] = animationOut?.toDictionary()
+    result["background_accessibility_description"] = backgroundAccessibilityDescription?.toValidSerializationValue()
     result["close_by_tap_outside"] = closeByTapOutside.toValidSerializationValue()
     result["div"] = div.toDictionary()
     result["duration"] = duration.toValidSerializationValue()
