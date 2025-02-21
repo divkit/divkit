@@ -492,7 +492,6 @@ public class JsonExpressionParser {
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
         if (array == null) {
-            context.getLogger().logError(missingValue(jsonObject, key));
             return null;
         }
 
