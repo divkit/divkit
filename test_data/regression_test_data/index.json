@@ -1013,6 +1013,13 @@
     {
       "title": "Synchronizing multiple change bounds animations. Blink",
       "case_id": 40,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "animation_in/animation_out is deprecated"
+      },
       "tags": [
         "Animations"
       ],
