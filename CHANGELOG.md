@@ -7,6 +7,7 @@
 * Use a CME-safe collection to resolve crashes occurring during patch application with item_builder.
 
 # iOS Client:
+* Supported `color_map` parameter in linear gradient.
 * Supported `dashed` stroke style in `div-border`.
 * Updated `TooltipEvent` struct with `div-tooltip` properties.
 
