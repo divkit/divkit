@@ -272,7 +272,7 @@ function typefaceProvider(fontFamily: string, opts?: {
 
 Function or object, optional.
 
-Used as a second parameter for `fetch` requests in the `div-action://download` actions.
+It is used as the second parameter for the `fetch` requests in the `download` and `submit` actions.
 
 ```ts
 function fetchInit(url: string) {
@@ -287,6 +287,22 @@ Or
 ```ts
 fetchInit: {
     credentials: 'include'
+}
+```
+
+#### onSubmit
+
+`/client` and `/client-hydratable`
+
+Function, optional.
+
+It is used to process the `submit` actions. If it is not specified, `fetch()` is used by default.
+
+```ts
+function onSubmit(action: ActionSubmit, values: Record<string, unknown>): Promise<void> {
+    return fetch(action.reqeust.url, {
+        body: JSON.stringify(values)
+    });
 }
 ```
 

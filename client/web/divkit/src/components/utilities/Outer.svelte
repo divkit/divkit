@@ -197,6 +197,7 @@
         destroy(): void;
     } | undefined;
     let dev: DevtoolResult | null = null;
+    let idUnregister: (() => void) | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -1064,7 +1065,11 @@
 
         const id = componentContext.id;
         if (id) {
-            rootCtx.registerId(id, () => currentNode);
+            idUnregister?.();
+            idUnregister = rootCtx.registerId(id, {
+                context: () => componentContext,
+                node: () => currentNode
+            });
             stateCtx.registerChild(id);
         }
 
@@ -1089,8 +1094,11 @@
 
         registred = {
             destroy() {
+                if (idUnregister) {
+                    idUnregister();
+                    idUnregister = undefined;
+                }
                 if (id) {
-                    rootCtx.unregisterId(id);
                     stateCtx.unregisterChild(id);
                 }
                 if (visAction) {

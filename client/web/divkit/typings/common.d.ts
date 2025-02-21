@@ -287,10 +287,31 @@ export interface ActionSetState {
     // temporary
 }
 
+export interface ActionSubmitHeader {
+    name: string;
+    value: string;
+}
+
+export type ActionSubmitMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options';
+
+export interface ActionSubmitRequest {
+    url: string;
+    headers?: ActionSubmitHeader[];
+    method?: ActionSubmitMethod;
+}
+
+export interface ActionSubmit {
+    type: 'submit';
+    container_id: string;
+    request: ActionSubmitRequest;
+    on_success_actions?: Action[];
+    on_fail_actions?: Action[];
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
-    ActionVideo | ActionStore | ActionSetState;
+    ActionVideo | ActionStore | ActionSetState | ActionSubmit;
 
 export interface ActionBase {
     log_id: string;
@@ -358,6 +379,8 @@ export type TypefaceProvider = (fontFamily: string, opts?: {
 }) => string;
 
 export type FetchInit = RequestInit | ((url: string) => RequestInit);
+
+export type SubmitCallback = (action: ActionSubmit, values: Record<string, unknown>) => Promise<void>;
 
 export interface DivkitInstance {
     $destroy(): void;

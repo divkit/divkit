@@ -47,7 +47,9 @@
         ActionMenuItem,
         Patch,
         VariableTrigger,
-        DownloadCallbacks
+        DownloadCallbacks,
+        ActionSubmit,
+        SubmitCallback
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
@@ -91,6 +93,7 @@
     import { ENABLED_CTX, type EnabledCtxValue } from '../context/enabled';
     import { createAnimator, type AnimatorInstance } from '../utils/animators';
     import { getStateContext, getTooltipContext } from '../utils/componentUtils';
+    import { checkSubmitAction } from '../utils/checkSubmitAction';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -105,6 +108,7 @@
     export let extensions: Map<string, DivExtensionClass> = new Map();
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
+    export let onSubmit: SubmitCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
     export let onComponent: ComponentCallback | undefined = undefined;
     export let typefaceProvider: TypefaceProvider = _fontFamily => '';
@@ -471,29 +475,36 @@
     }
 
     const idPrefix = genId('byid') + '-id-';
-    const nodeGettersById = new Map<string, NodeGetter>();
+    const nodeGettersById = new Map<string, NodeGetter[]>();
     const nodeById = new Map<string, HTMLElement>();
 
     function fullId(id: string): string {
         return idPrefix + id;
     }
 
-    function registerId(id: string, getter: NodeGetter): void {
-        nodeGettersById.set(id, getter);
-    }
-
-    function unregisterId(id: string): void {
-        nodeGettersById.delete(id);
-
-        const full = fullId(id);
-
-        if (nodeById.has(full)) {
-            nodeById.delete(full);
+    function registerId(id: string, getter: NodeGetter): () => void {
+        let arr = nodeGettersById.get(id) || [];
+        if (!nodeGettersById.has(id)) {
+            nodeGettersById.set(id, arr);
         }
+        arr.push(getter);
+
+        return () => {
+            arr = arr.filter(it => it !== getter);
+            if (!arr.length) {
+                nodeGettersById.delete(id);
+            }
+
+            const full = fullId(id);
+
+            if (nodeById.has(full)) {
+                nodeById.delete(full);
+            }
+        };
     }
 
     function getComponentId(id: string): string {
-        const node = nodeGettersById.get(id)?.();
+        const node = nodeGettersById.get(id)?.[0]?.node();
 
         if (node) {
             const full = fullId(id);
@@ -567,6 +578,92 @@
                 return;
             }
         }
+    }
+
+    async function callSubmit(componentContext: ComponentContext | undefined, action: MaybeMissing<ActionSubmit>) {
+        const log = (componentContext?.logError || logError);
+
+        if (!checkSubmitAction(action)) {
+            log(wrapError(new Error('Incorrect submit action'), {
+                additional: {
+                    containerId: action.container_id
+                }
+            }));
+            return;
+        }
+
+        const getters = nodeGettersById.get(action.container_id);
+
+        if (getters?.length !== 1) {
+            log(wrapError(new Error('Error resolving container. Found multiple elements that respond to id'), {
+                additional: {
+                    containerId: action.container_id
+                }
+            }));
+            return;
+        }
+
+        const ctx = getters[0].context();
+        const vals: Record<string, unknown> = {};
+
+        if (ctx.variables) {
+            for (const [key, variable] of ctx.variables) {
+                vals[key] = variable.getValue();
+            }
+        }
+
+        if (onSubmit) {
+            Promise.resolve()
+                .then(() => onSubmit(action, vals))
+                .then(() => {
+                    execAnyActions(action.on_success_actions);
+                })
+                .catch(() => {
+                    execAnyActions(action.on_fail_actions);
+                });
+
+            return;
+        }
+
+        let hasContentType = false;
+        const headers: [string, string][] = [];
+        action.request.headers?.forEach(header => {
+            headers.push([header.name, header.value]);
+            if (header.name.toLowerCase() === 'content-type') {
+                hasContentType = true;
+            }
+        });
+        if (!hasContentType) {
+            headers.push(['Content-Type', 'application/json']);
+        }
+
+        let init;
+        if (typeof fetchInit === 'function') {
+            init = fetchInit(action.request.url);
+        } else {
+            init = fetchInit;
+        }
+
+        // no await!
+        fetch(action.request.url, {
+            ...init,
+            method: action.request.method || 'post',
+            headers,
+            body: JSON.stringify(vals)
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error('Response is not ok');
+            }
+            execAnyActions(action.on_success_actions);
+        }).catch(err => {
+            log(wrapError(new Error('Failed to submit'), {
+                additional: {
+                    url: action.request.url,
+                    originalError: err
+                }
+            }));
+            execAnyActions(action.on_fail_actions);
+        });
     }
 
     function switchElementAction(
@@ -1221,6 +1318,10 @@
                     await setState(actionTyped.state_id, componentContext);
                     break;
                 }
+                case 'submit': {
+                    await callSubmit(componentContext, actionTyped);
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {
@@ -1845,7 +1946,6 @@
         addSvgFilter,
         removeSvgFilter,
         registerId,
-        unregisterId,
         getComponentId,
         preparePrototypeVariables,
         getStore,
