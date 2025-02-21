@@ -493,21 +493,21 @@ internal class DivTextBinder @Inject constructor(
 
         applyLinearTextGradientColor(
             newTextGradient.angle.evaluate(resolver),
-            newTextGradient.colors.evaluate(resolver)
+            newTextGradient.colors?.evaluate(resolver) ?: emptyList()
         )
 
-        if (newTextGradient.angle.isConstant() && newTextGradient.colors.isConstant()) {
+        if (newTextGradient.angle.isConstant() && newTextGradient.colors.isConstantOrNull()) {
             return
         }
 
         val callback = { _: Any ->
             applyLinearTextGradientColor(
                 newTextGradient.angle.evaluate(resolver),
-                newTextGradient.colors.evaluate(resolver)
+                newTextGradient.colors?.evaluate(resolver) ?: emptyList()
             )
         }
         addSubscription(newTextGradient.angle.observe(resolver, callback))
-        addSubscription(newTextGradient.colors.observe(resolver, callback))
+        addSubscription(newTextGradient.colors?.observe(resolver, callback))
     }
 
     private fun TextView.applyLinearTextGradientColor(

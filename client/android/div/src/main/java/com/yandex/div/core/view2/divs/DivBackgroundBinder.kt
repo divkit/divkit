@@ -291,7 +291,7 @@ internal class DivBackgroundBinder @Inject constructor(
     ): DivBackgroundState = when (this) {
         is DivBackground.LinearGradient -> DivBackgroundState.LinearGradient(
             angle = value.angle.evaluate(resolver).toIntSafely(),
-            colors = value.colors.evaluate(resolver),
+            colors = value.colors?.evaluate(resolver) ?: emptyList(),
         )
         is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
             centerX = value.centerX.toBackgroundState(metrics, resolver),

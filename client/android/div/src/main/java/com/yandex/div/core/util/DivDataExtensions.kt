@@ -454,7 +454,7 @@ internal fun DivBackground?.isConstant(): Boolean {
 
         is DivBackground.LinearGradient -> {
             value.angle.isConstant()
-                && value.colors.isConstant()
+                && value.colors.isConstantOrNull()
         }
 
         is DivBackground.RadialGradient -> {
