@@ -120,7 +120,7 @@
     $: jsonDefaultItem = componentContext.getDerivedFromVars(componentContext.json.default_item);
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
-        componentContext = {
+        componentContext = prevContext = {
             ...componentContext,
             json: {
                 ...componentContext.json,
@@ -131,6 +131,7 @@
 
     const isDesktop = rootCtx.isDesktop;
     let items: ComponentContext[] = [];
+    let prevContext: ComponentContext<DivGalleryData> | undefined;
 
     $: {
         let newItems: {
@@ -153,17 +154,33 @@
             });
         }
 
-        items.forEach(context => {
-            context.destroy();
-        });
+        const unusedContexts = new Set(items);
+        const jsonToContextMap = new Map<unknown, ComponentContext>();
+
+        if (prevContext === componentContext) {
+            items.forEach(context => {
+                jsonToContextMap.set(context.json, context);
+            });
+        }
 
         items = newItems.map((item, index) => {
+            const found = jsonToContextMap.get(item.div);
+            if (found) {
+                unusedContexts.delete(found);
+                return found;
+            }
+
             return componentContext.produceChildContext(item.div, {
                 path: index,
                 variables: item.vars,
                 id: item.id
             });
         });
+
+        for (const ctx of unusedContexts) {
+            ctx.destroy();
+        }
+        prevContext = componentContext;
     }
 
     $: shouldCheckArrows = $isDesktop && mounted;

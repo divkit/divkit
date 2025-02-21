@@ -36,6 +36,7 @@
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { Truthy } from '../../utils/truthy';
     import Outer from '../utilities/Outer.svelte';
     import Actionable from '../utilities/Actionable.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
@@ -97,6 +98,7 @@
     let startTransform: number;
     let currentTransform: number;
     let delimitierStyle: TabsDelimiter | undefined;
+    let prevContext: ComponentContext<DivTabsData> | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -177,7 +179,7 @@
             return;
         }
 
-        componentContext = {
+        componentContext = prevContext = {
             ...componentContext,
             json: {
                 ...componentContext.json,
@@ -373,18 +375,36 @@
             return;
         }
 
-        showedPanels.forEach(componentContext => {
-            componentContext?.destroy();
-        });
+        const unusedContexts = new Set(showedPanels.filter(Truthy));
+        const jsonToContextMap = new Map<unknown, ComponentContext>();
+
+        if (prevContext === componentContext) {
+            showedPanels.forEach(context => {
+                if (context) {
+                    jsonToContextMap.set(context.json, context);
+                }
+            });
+        }
 
         showedPanels = items.map((item, i) => {
-            if (i === selected && item?.div) {
+            if ((i === selected || showedPanels[i]) && item?.div) {
+                const found = jsonToContextMap.get(item.div);
+                if (found) {
+                    unusedContexts.delete(found);
+                    return found;
+                }
+
                 return componentContext.produceChildContext(item.div, {
                     path: i
                 });
             }
         });
         visiblePanels = items.map((_, i) => i === selected);
+
+        for (const ctx of unusedContexts) {
+            ctx.destroy();
+        }
+        prevContext = componentContext;
     }
     $: updateItems(items);
 

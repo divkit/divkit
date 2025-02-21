@@ -42,6 +42,7 @@
     let contentVAlign: AlignmentVerticalMapped = 'start';
     let contentHAlign: AlignmentHorizontal = 'start';
     let items: ComponentContext[] = [];
+    let prevContext: ComponentContext<DivGridData> | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -66,19 +67,35 @@
     }
 
     $: {
-        items.forEach(context => {
-            context.destroy();
-        });
+        const unusedContexts = new Set(items);
+        const jsonToContextMap = new Map<unknown, ComponentContext>();
+
+        if (prevContext === componentContext) {
+            items.forEach(context => {
+                jsonToContextMap.set(context.json, context);
+            });
+        }
 
         items = jsonItems.map((item, index) => {
+            const found = jsonToContextMap.get(item);
+            if (found) {
+                unusedContexts.delete(found);
+                return found;
+            }
+
             return componentContext.produceChildContext(item, {
                 path: index
             });
         });
+
+        for (const ctx of unusedContexts) {
+            ctx.destroy();
+        }
+        prevContext = componentContext;
     }
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
-        componentContext = {
+        componentContext = prevContext = {
             ...componentContext,
             json: {
                 ...componentContext.json,

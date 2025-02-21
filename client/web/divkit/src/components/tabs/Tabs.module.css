@@ -1,4 +1,4 @@
-@value outer from "../Cls.module.css";
+@value outer, root__any-actions from "../Cls.module.css";
 
 .tabs {
     display: flex;
@@ -90,6 +90,10 @@
 
 .tabs__panel .outer {
     pointer-events: none;
+}
+
+.tabs__panel .root__any-actions {
+    pointer-events: auto;
 }
 
 .tabs__panel_visible {

@@ -104,7 +104,13 @@
             return;
         }
 
+        const changed = new Set<string>();
+
         items = states.map((it, index) => {
+            if (items[index].div !== newItems[index] && it.state_id) {
+                changed.add(it.state_id);
+            }
+
             return {
                 ...it,
                 div: newItems[index]
@@ -115,7 +121,7 @@
             ...componentContext.json,
             states: items
         };
-        if (selectedId) {
+        if (selectedId && changed.has(selectedId)) {
             selectState(items.find(it => it.state_id === selectedId) || null);
         }
     }
