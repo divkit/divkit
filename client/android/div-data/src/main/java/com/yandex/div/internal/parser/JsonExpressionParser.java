@@ -455,6 +455,18 @@ public class JsonExpressionParser {
                 context, jsonObject, key, typeHelper, doNotConvert(), listValidator, alwaysValid());
     }
 
+    @NonNull
+    public static <R, V> ExpressionList<V> readOptionalExpressionList(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
+    ) {
+        return readExpressionList(context, jsonObject, key, typeHelper, converter, listValidator, alwaysValid());
+    }
+
     @Nullable
     public static <V> ExpressionList<V> readOptionalExpressionList(
             @NonNull final ParsingContext context,

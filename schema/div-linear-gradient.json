@@ -1,7 +1,40 @@
 {
-  "type": "object",
   "$description": "translations.json#/div_gradient_linear",
+  "definitions": {
+    "color_point": {
+      "type": "object",
+      "suppress_inline": true,
+      "$description": "translations.json#/div_gradient_linear_color_point",
+      "properties": {
+        "color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_gradient_linear_color_point_color"
+        },
+        "position": {
+          "type": "number",
+          "constraint": "number >= 0.0 && number <= 1.0",
+          "$description": "translations.json#/div_gradient_linear_color_point_position"
+        }
+      },
+      "required": [
+        "color",
+        "position"
+      ]
+    }
+  },
+  "type": "object",
   "properties": {
+    "color_map": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/color_point"
+      },
+      "minItems": 2,
+      "platforms": [
+        "ios"
+      ],
+      "$description": "translations.json#/div_gradient_linear_color_map"
+    },
     "colors": {
       "type": "array",
       "items": {
@@ -24,7 +57,6 @@
     }
   },
   "required": [
-    "colors",
     "type"
   ]
 }

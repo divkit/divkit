@@ -3,6 +3,21 @@ import Foundation
 import VGSL
 
 extension Gradient.Linear {
+  init?(points: [Gradient.Point], angle: Int) {
+    guard points.count >= 2 else { return nil }
+    let sortedPoints = points.stableSort(isLessOrEqual: { $0.location <= $1.location })
+
+    guard let start = sortedPoints.first, let end = sortedPoints.last
+    else { return nil }
+
+    self.init(
+      startColor: start.color,
+      intermediatePoints: sortedPoints,
+      endColor: end.color,
+      direction: .init(angle: angle)
+    )
+  }
+
   init?(colors: [Color], angle: Int) {
     guard colors.count >= 2 else {
       return nil
@@ -62,6 +77,39 @@ extension Gradient.Radial {
       intermediatePoints: points,
       outerColor: outerColor
     )
+  }
+}
+
+extension DivLinearGradient {
+  func makeBlockLinearGradient(
+    _ context: DivBlockModelingContext
+  ) -> Gradient.Linear? {
+    let expressionResolver = context.expressionResolver
+
+    if let colorMap {
+      let points: [Gradient.Point] = colorMap.compactMap { positionedColor -> Gradient.Point? in
+        if let color = positionedColor.resolveColor(expressionResolver),
+           let position = positionedColor.resolvePosition(expressionResolver) {
+          return (color: color, location: CGFloat(position))
+        }
+        return nil
+      }
+
+      return Gradient.Linear(
+        points: points,
+        angle: resolveAngle(expressionResolver)
+      )
+    } else if let colors = resolveColors(expressionResolver) {
+      return Gradient.Linear(
+        colors: colors,
+        angle: resolveAngle(expressionResolver)
+      )
+    } else {
+      context.addError(
+        message: "No colors specified in the linear gradient in the `colors` or `color_map` fields"
+      )
+      return nil
+    }
   }
 }
 
