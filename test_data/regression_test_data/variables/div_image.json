@@ -59,6 +59,9 @@
                   "width": 1
                 }
               },
+              "aspect": {
+                "ratio": "@{ratio}"
+              },
               "width": {
                 "type": "match_parent"
               },
