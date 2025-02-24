@@ -4,6 +4,7 @@
 * Div2View.discardVisibilityTracking() now public for cancelling visibility tracking.
 * Fixed corner clipping of elements inside transient hierarchy.
 * Improved complex rebind.
+* Supported dashed stroke style.
 * Use a CME-safe collection to resolve crashes occurring during patch application with item_builder.
 
 # iOS Client:
