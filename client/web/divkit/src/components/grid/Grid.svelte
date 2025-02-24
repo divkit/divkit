@@ -18,8 +18,10 @@
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { wrapError } from '../../utils/wrapError';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivGridData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -28,7 +30,8 @@
 
     const direction = rootCtx.direction;
 
-    let columnCount = 1;
+    let hasError = false;
+    let columnCount = 0;
     let childStore: Readable<ChildInfo[]>;
     let resultItems: {
         componentContext: ComponentContext;
@@ -47,7 +50,8 @@
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
-        columnCount = 1;
+        hasError = false;
+        columnCount = 0;
         contentVAlign = 'start';
         contentHAlign = 'start';
     }
@@ -64,6 +68,13 @@
 
     $: {
         columnCount = correctPositiveNumber($jsonColumnCount, columnCount);
+
+        if (columnCount < 1) {
+            hasError = true;
+            componentContext.logError(wrapError(new Error('Incorrect column_count for grid')));
+        } else {
+            hasError = false;
+        }
     }
 
     $: {
@@ -248,18 +259,24 @@
     });
 </script>
 
-<Outer
-    cls={genClassName('grid', css, mods)}
-    {componentContext}
-    {style}
-    {layoutParams}
-    parentOf={items}
-    {replaceItems}
->
-    {#each resultItems as item}
-        <Unknown
-            componentContext={item.componentContext}
-            layoutParams={item.layoutParams}
-        />
-    {/each}
-</Outer>
+{#if !hasError}
+    <Outer
+        cls={genClassName('grid', css, mods)}
+        {componentContext}
+        {style}
+        {layoutParams}
+        parentOf={items}
+        {replaceItems}
+    >
+        {#each resultItems as item}
+            <Unknown
+                componentContext={item.componentContext}
+                layoutParams={item.layoutParams}
+            />
+        {/each}
+    </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
+{/if}
