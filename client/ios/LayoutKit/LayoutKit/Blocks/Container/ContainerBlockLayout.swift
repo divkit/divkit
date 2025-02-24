@@ -38,6 +38,15 @@ struct ContainerBlockLayout {
   let needCompressConstrainedBlocks: Bool
   let axialAlignmentManager: AxialAlignmentManager
 
+  private var sizeInDirection: CGFloat {
+    switch layoutDirection {
+    case .horizontal:
+      size.width
+    case .vertical:
+      size.height
+    }
+  }
+
   public init(
     children: [ContainerBlock.Child],
     separator: ContainerBlock.Separator? = nil,
@@ -92,142 +101,80 @@ struct ContainerBlockLayout {
   private func calculateNoWrapLayoutFrames(
     children: [ContainerBlock.Child]
   ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
-    var children = children
-    var frames = [CGRect]()
-    var containerAscent: CGFloat?
-    var contentSize: CGFloat = 0
+    typealias ResizableBlocksData = (
+      blocksCount: Int,
+      totalWeight: CGFloat,
+      marginsSize: CGFloat
+    )
+
+    let children =
+      (layoutDirection == .horizontal && blockLayoutDirection == .rightToLeft) ?
+      children.reversed() : children
+
     let gapsSize = gaps.reduce(0, +)
+    let blocks = children.map(\.content)
+
+    let resizableBlocksData = blocks
+      .filter { $0.isResizable(in: layoutDirection) }
+      .reduce(into: ResizableBlocksData(0, 0.0, 0.0)) {
+        $0.blocksCount += 1
+        $0.totalWeight += $1.weightOfResizableBlock(in: layoutDirection)
+        $0.marginsSize += ($1 as? PaddingProviding)?.margins(direction: layoutDirection) ?? 0
+      }
+
+    let sizeOfNonResizableBlocks: CGFloat = switch layoutDirection {
+    case .horizontal:
+      widthsOfHorizontallyNonResizableBlocksIn(blocks).reduce(0, +)
+    case .vertical:
+      heightsOfVerticallyNonResizableBlocksIn(
+        blocks, forSize: size
+      ).reduce(0, +)
+    }
+
+    let spaceAvailableForResizableBlocks = (
+      sizeInDirection
+        - sizeOfNonResizableBlocks
+        - gapsSize
+        - resizableBlocksData.marginsSize
+    )
+
+    let spaceAvailablePerWeightUnit = max(0, spaceAvailableForResizableBlocks) / resizableBlocksData
+      .totalWeight
+
+    let blockMeasure = ResizableBlockMeasure(
+      resizableBlockCount: resizableBlocksData.blocksCount,
+      lengthAvailablePerWeightUnit: spaceAvailablePerWeightUnit,
+      lengthAvailableForResizableBlocks: spaceAvailableForResizableBlocks
+    )
+
+    let constrainedBlocks = blocks
+      .filter { $0.isConstrained(in: layoutDirection) }
+    let constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
+      blockSizes: constrainedBlocks
+        .map { .init(
+          size: $0.sizeOfNonResizableBlock(
+            in: layoutDirection,
+            layoutSize: size
+          ),
+          minSize: $0.minSize(in: layoutDirection)
+        ) },
+      lengthToDecrease: spaceAvailableForResizableBlocks < 0 ? -spaceAvailableForResizableBlocks : 0
+    )
 
     switch layoutDirection {
     case .horizontal:
-      if blockLayoutDirection == .rightToLeft {
-        children.reverse()
-      }
-
-      let horizontallyResizableBlocks = children.map(\.content)
-        .filter(\.isHorizontallyResizable)
-      let widthOfHorizontallyNonResizableBlocks =
-        widthsOfHorizontallyNonResizableBlocksIn(children.map(\.content)).reduce(0, +)
-      let widthAvailableForResizableBlocks = (
-        size.width - widthOfHorizontallyNonResizableBlocks - gapsSize
+      return calculateHorizontalNoWrapLayoutFrames(
+        children: children,
+        blockMeasure: blockMeasure,
+        constrainedBlockSizesIterator: constrainedBlockSizesIterator
       )
-      let resizableBlockWeights = horizontallyResizableBlocks
-        .map(\.weightOfHorizontallyResizableBlock.rawValue)
-      let widthAvailablePerWeightUnit = max(0, widthAvailableForResizableBlocks) /
-        resizableBlockWeights.reduce(0, +)
-
-      var blockMeasure = ResizableBlockMeasure(
-        resizableBlockCount: horizontallyResizableBlocks.count,
-        lengthAvailablePerWeightUnit: widthAvailablePerWeightUnit,
-        lengthAvailableForResizableBlocks: widthAvailableForResizableBlocks
-      )
-
-      let horizontallyConstrainedBlocks = children.map(\.content)
-        .filter(\.isHorizontallyConstrained)
-      var constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
-        blockSizes: horizontallyConstrainedBlocks
-          .map { .init(size: $0.widthOfHorizontallyNonResizableBlock, minSize: $0.minWidth) },
-        lengthToDecrease: widthAvailableForResizableBlocks < 0 ? -widthAvailableForResizableBlocks :
-          0
-      )
-
-      var x = gaps[0]
-      for (child, gapAfterBlock) in zip(children, gaps.dropFirst()) {
-        let block = child.content
-        let widthIfResizable = blockMeasure.measureNext(block.horizontalMeasure)
-        let widthIfConstrained = block
-          .isHorizontallyConstrained ? (constrainedBlockSizesIterator.next() ?? 0) : 0
-        let blockSize = block.sizeFor(
-          widthOfHorizontallyResizableBlock: widthIfResizable,
-          heightOfVerticallyResizableBlock: size.height,
-          constrainedWidth: widthIfConstrained,
-          constrainedHeight: needCompressConstrainedBlocks ? size.height : .infinity
-        )
-        containerAscent = getMaxAscent(
-          current: containerAscent, child: child, childSize: blockSize
-        )
-        let alignmentSpace = size.height - blockSize.height
-        let y = child.crossAlignment.offset(forAvailableSpace: alignmentSpace)
-        frames.append(CGRect(origin: CGPoint(x: x, y: y), size: blockSize))
-        x += blockSize.width + gapAfterBlock
-      }
-      contentSize = x
-      frames.addBaselineOffset(children: children, ascent: containerAscent)
     case .vertical:
-      let blocks = children.map(\.content)
-
-      let blockSizes = blocks.map {
-        (
-          $0,
-          $0
-            .sizeFor(
-              widthOfHorizontallyResizableBlock: size.width,
-              heightOfVerticallyResizableBlock: size.height,
-              constrainedWidth: size.width,
-              constrainedHeight: .infinity
-            ).height
-        )
-      }
-
-      let heightOfVerticallyNonResizableBlocks = blockSizes.filter { !$0.0.isVerticallyResizable }
-        .map(\.1).reduce(0, +)
-
-      let heightAvailableForResizableBlocks = size
-        .height - heightOfVerticallyNonResizableBlocks - gapsSize
-
-      let verticallyResizableBlocks = blocks.filter(\.isVerticallyResizable)
-      let verticallyResizableBlocksWeight = verticallyResizableBlocks
-        .map(\.weightOfVerticallyResizableBlock.rawValue)
-        .reduce(0, +)
-      var blockMeasure = ResizableBlockMeasure(
-        resizableBlockCount: verticallyResizableBlocks.count,
-        lengthAvailablePerWeightUnit: max(0, heightAvailableForResizableBlocks) /
-          verticallyResizableBlocksWeight,
-        lengthAvailableForResizableBlocks: heightAvailableForResizableBlocks
+      return calculateVerticalNoWrapLayoutFrames(
+        children: children,
+        blockMeasure: blockMeasure,
+        constrainedBlockSizesIterator: constrainedBlockSizesIterator
       )
-
-      var constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
-        blockSizes: blockSizes.filter(\.0.isVerticallyConstrained).map {
-          ConstrainedBlockSize(size: $0.1, minSize: $0.0.minHeight)
-        },
-        lengthToDecrease: heightAvailableForResizableBlocks < 0 ?
-          -heightAvailableForResizableBlocks : 0
-      )
-
-      var y = gaps[0]
-      for (child, gapAfterBlock) in zip(children, gaps.dropFirst()) {
-        let block = child.content
-        let width: CGFloat
-        if block.isHorizontallyResizable {
-          width = size.width
-        } else {
-          let intrinsicWidth = block.widthOfHorizontallyNonResizableBlock
-          width = block.isHorizontallyConstrained ? min(intrinsicWidth, size.width) : intrinsicWidth
-        }
-        let height: CGFloat = if block.isVerticallyResizable {
-          blockMeasure.measureNext(block.verticalMeasure)
-        } else if block.isVerticallyConstrained {
-          constrainedBlockSizesIterator.next() ?? 0
-        } else {
-          block.heightOfVerticallyNonResizableBlock(forWidth: width)
-        }
-        let alignmentSpace = size.width - width
-        let x = child.crossAlignment.offset(forAvailableSpace: alignmentSpace)
-        frames.append(CGRect(x: x, y: y, width: width, height: height))
-        y += height + gapAfterBlock
-      }
-      contentSize = y
     }
-
-    return (
-      children,
-      axialAlignmentManager.applyOffset(
-        to: frames,
-        forAvailableSpace: layoutDirection == .horizontal ? size.width : size.height,
-        contentSize: contentSize
-      ),
-      containerAscent
-    )
   }
 
   private func calculateWrapLayoutFrames(
@@ -307,6 +254,101 @@ struct ContainerBlockLayout {
     return (wrapLayoutGroups.childrenWithSeparators, frames, containerAscent)
   }
 
+  private func calculateHorizontalNoWrapLayoutFrames(
+    children: [ContainerBlock.Child],
+    blockMeasure: ResizableBlockMeasure,
+    constrainedBlockSizesIterator: IndexingIterator<[CGFloat]>
+  ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
+    var x = gaps[0]
+    var contentSize: CGFloat = 0
+    var frames = [CGRect]()
+    var containerAscent: CGFloat?
+    var blockMeasure = blockMeasure
+    var constrainedBlockSizesIterator = constrainedBlockSizesIterator
+
+    for (child, gapAfterBlock) in zip(children, gaps.dropFirst()) {
+      let block = child.content
+      let widthIfResizable = blockMeasure.measureNext(block.horizontalMeasure)
+
+      let widthIfConstrained = block
+        .isHorizontallyConstrained ? (constrainedBlockSizesIterator.next() ?? 0) : 0
+
+      let blockSize = block.sizeFor(
+        widthOfHorizontallyResizableBlock: widthIfResizable,
+        heightOfVerticallyResizableBlock: size.height,
+        constrainedWidth: widthIfConstrained,
+        constrainedHeight: needCompressConstrainedBlocks ? size.height : .infinity
+      )
+
+      containerAscent = getMaxAscent(
+        current: containerAscent, child: child, childSize: blockSize
+      )
+      let alignmentSpace = size.height - blockSize.height
+      let y = child.crossAlignment.offset(forAvailableSpace: alignmentSpace)
+      frames.append(CGRect(origin: CGPoint(x: x, y: y), size: blockSize))
+      x += blockSize.width + gapAfterBlock
+    }
+    contentSize = x
+    frames.addBaselineOffset(children: children, ascent: containerAscent)
+
+    return (
+      children,
+      axialAlignmentManager.applyOffset(
+        to: frames,
+        forAvailableSpace: sizeInDirection,
+        contentSize: contentSize
+      ),
+      containerAscent
+    )
+  }
+
+  private func calculateVerticalNoWrapLayoutFrames(
+    children: [ContainerBlock.Child],
+    blockMeasure: ResizableBlockMeasure,
+    constrainedBlockSizesIterator: IndexingIterator<[CGFloat]>
+  ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
+    var y = gaps[0]
+    var contentSize: CGFloat = 0
+    var frames = [CGRect]()
+    var blockMeasure = blockMeasure
+    var constrainedBlockSizesIterator = constrainedBlockSizesIterator
+
+    for (child, gapAfterBlock) in zip(children, gaps.dropFirst()) {
+      let block = child.content
+      let width: CGFloat
+      if block.isHorizontallyResizable {
+        width = size.width
+      } else {
+        let intrinsicWidth = block.widthOfHorizontallyNonResizableBlock
+        width = block.isHorizontallyConstrained ? min(intrinsicWidth, size.width) : intrinsicWidth
+      }
+
+      let height: CGFloat = if block.isVerticallyResizable {
+        blockMeasure.measureNext(block.verticalMeasure)
+      } else if block.isVerticallyConstrained {
+        constrainedBlockSizesIterator.next() ?? 0
+      } else {
+        block.heightOfVerticallyNonResizableBlock(forWidth: width)
+      }
+
+      let alignmentSpace = size.width - width
+      let x = child.crossAlignment.offset(forAvailableSpace: alignmentSpace)
+      frames.append(CGRect(x: x, y: y, width: width, height: height))
+      y += height + gapAfterBlock
+    }
+    contentSize = y
+
+    return (
+      children,
+      axialAlignmentManager.applyOffset(
+        to: frames,
+        forAvailableSpace: sizeInDirection,
+        contentSize: contentSize
+      ),
+      nil
+    )
+  }
+
   private func getLineAscent(group: [WrapLayoutGroups.ChildParametes]) -> CGFloat? {
     guard layoutDirection == .horizontal else {
       return nil
@@ -381,10 +423,17 @@ struct ContainerBlockLayout {
 
 private func heightsOfVerticallyNonResizableBlocksIn(
   _ blocks: [Block],
-  forWidth width: CGFloat
+  forSize size: CGSize
 ) -> [CGFloat] {
   blocks.filter { !$0.isVerticallyResizable }
-    .map { $0.heightOfVerticallyNonResizableBlock(forWidth: width) }
+    .map {
+      $0.sizeFor(
+        widthOfHorizontallyResizableBlock: size.width,
+        heightOfVerticallyResizableBlock: size.height,
+        constrainedWidth: size.width,
+        constrainedHeight: .infinity
+      ).height
+    }
 }
 
 func widthsOfHorizontallyNonResizableBlocksIn(_ blocks: [Block]) -> [CGFloat] {
@@ -393,11 +442,54 @@ func widthsOfHorizontallyNonResizableBlocksIn(_ blocks: [Block]) -> [CGFloat] {
 
 extension Block {
   fileprivate var horizontalMeasure: ResizableBlockMeasure.Measure {
-    isHorizontallyResizable ? .resizable(weightOfHorizontallyResizableBlock) : .nonResizable
+    isHorizontallyResizable ? .resizable(
+      weightOfHorizontallyResizableBlock,
+      reservedSpace: (self as? PaddingProviding)?.margins(direction: .horizontal) ?? 0.0
+    ) : .nonResizable
   }
 
   fileprivate var verticalMeasure: ResizableBlockMeasure.Measure {
-    isVerticallyResizable ? .resizable(weightOfVerticallyResizableBlock) : .nonResizable
+    isVerticallyResizable ? .resizable(
+      weightOfVerticallyResizableBlock,
+      reservedSpace: (self as? PaddingProviding)?.margins(direction: .vertical) ?? 0.0
+    ) : .nonResizable
+  }
+}
+
+extension Block {
+  fileprivate typealias Direction = ContainerBlock.LayoutDirection
+  fileprivate func isResizable(in direction: Direction) -> Bool {
+    direction == .horizontal ? isHorizontallyResizable : isVerticallyResizable
+  }
+
+  fileprivate func isConstrained(in direction: Direction) -> Bool {
+    direction == .horizontal ? isHorizontallyConstrained : isVerticallyConstrained
+  }
+
+  fileprivate func weightOfResizableBlock(in direction: Direction) -> CGFloat {
+    direction == .horizontal ?
+      weightOfHorizontallyResizableBlock.rawValue :
+      weightOfVerticallyResizableBlock.rawValue
+  }
+
+  fileprivate func sizeOfNonResizableBlock(
+    in direction: Direction,
+    layoutSize: CGSize
+  ) -> CGFloat {
+    direction == .horizontal ?
+      widthOfHorizontallyNonResizableBlock :
+      sizeFor(
+        widthOfHorizontallyResizableBlock: layoutSize.width,
+        heightOfVerticallyResizableBlock: layoutSize.height,
+        constrainedWidth: layoutSize.width,
+        constrainedHeight: .infinity
+      ).height
+  }
+
+  fileprivate func minSize(in direction: Direction) -> CGFloat {
+    direction == .horizontal ?
+      minWidth :
+      minHeight
   }
 }
 
@@ -435,3 +527,23 @@ extension ContainerBlock.Child {
     return ascent - childAscent
   }
 }
+
+fileprivate protocol PaddingProviding {
+  var paddings: EdgeInsets { get }
+  var child: Block { get }
+}
+
+extension PaddingProviding {
+  func margins(direction: ContainerBlock.LayoutDirection) -> CGFloat {
+    guard child is PaddingProviding else { return 0 }
+
+    switch direction {
+    case .horizontal:
+      return paddings.horizontal.sum
+    case .vertical:
+      return paddings.vertical.sum
+    }
+  }
+}
+
+extension DecoratingBlock: PaddingProviding {}
