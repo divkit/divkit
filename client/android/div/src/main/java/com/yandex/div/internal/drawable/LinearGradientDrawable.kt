@@ -10,6 +10,7 @@ import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import com.yandex.div.internal.graphics.Colormap
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -60,15 +61,21 @@ internal class LinearGradientDrawable(
             width: Int,
             height: Int
         ): LinearGradient {
-            val halfWidth = width / 2
-            val halfHeight = height / 2
-            val correctedWidth = halfWidth * cos(angle.toRadian())
-            val correctedHeight = halfHeight * sin(angle.toRadian())
-            return LinearGradient(halfWidth - correctedWidth, halfHeight + correctedHeight,
-                halfWidth + correctedWidth, halfHeight - correctedHeight,
+            val halfWidth = width / 2.0f
+            val halfHeight = height / 2.0f
+            val angleRad = angle.toRadian()
+            val gradientWidth = abs(width * cos(angleRad)) + abs(height * sin(angleRad))
+            val widthDelta = (cos(angleRad) * gradientWidth / 2.0f).snap(to = 0.0f)
+            val heightDelta = (sin(angleRad) * gradientWidth / 2.0f).snap(to = 0.0f)
+            return LinearGradient(halfWidth - widthDelta, halfHeight + heightDelta,
+                halfWidth + widthDelta, halfHeight - heightDelta,
                 colors, positions, Shader.TileMode.CLAMP)
         }
 
         private fun Float.toRadian() = (this * PI / 180f).toFloat()
     }
+}
+
+private fun Float.snap(to: Float, sensitivity: Float = 0.0001f): Float {
+    return if (abs(to - this) <= sensitivity) to else this
 }
