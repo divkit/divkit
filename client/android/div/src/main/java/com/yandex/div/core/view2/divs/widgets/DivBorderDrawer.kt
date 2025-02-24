@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.NinePatch
 import android.graphics.Outline
 import android.graphics.Paint
@@ -33,8 +34,10 @@ import com.yandex.div2.DivBorder
 import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
+import com.yandex.div2.DivStrokeStyle
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sqrt
 
 private const val STROKE_OFFSET_PERCENTAGE = 0.1f
 
@@ -122,6 +125,7 @@ internal class DivBorderDrawer(
             val borderColor = border?.stroke?.color?.evaluate(resolver)
                 ?: Color.TRANSPARENT
             borderParams.setPaintParams(strokeWidth, borderColor)
+            borderParams.isDashed = border?.stroke?.style is DivStrokeStyle.Dashed
         }
 
         cornerRadii = border?.getCornerRadii(view.width.dpToPx(metrics).toFloat(),
@@ -177,7 +181,7 @@ internal class DivBorderDrawer(
         }
 
         if (hasBorder) {
-            borderParams.invalidatePath(radii)
+            borderParams.invalidate(radii)
         }
 
         if (hasCustomShadow) {
@@ -255,9 +259,14 @@ internal class DivBorderDrawer(
     private inner class BorderParams {
         val paint = Paint()
         val path = Path()
+        var isDashed: Boolean = false
         private val halfDp = 0.5.dpToPxF(displayMetrics)
+        private val defaultDashWidth = 6.dpToPxF(displayMetrics)
+        private val defaultGapWidth = 2.dpToPxF(displayMetrics)
+
         private val strokeOffset // magic formula to avoid border artifacts
             get() = min(halfDp, max(1f, strokeWidth * STROKE_OFFSET_PERCENTAGE))
+
         private val rect = RectF()
 
         init {
@@ -270,13 +279,62 @@ internal class DivBorderDrawer(
             paint.color = borderColor
         }
 
-        fun invalidatePath(radii: FloatArray) {
-            val halfWidth = (strokeWidth - strokeOffset) / 2f
-            rect.set(halfWidth, halfWidth, view.width.toFloat() - halfWidth, view.height.toFloat() - halfWidth)
+        fun invalidate(radii: FloatArray) {
+            val halfStrokeWidth = (strokeWidth - strokeOffset) / 2f
+            val viewWidth = view.width.toFloat()
+            val viewHeight = view.height.toFloat()
+            rect.set(halfStrokeWidth, halfStrokeWidth, viewWidth - halfStrokeWidth, viewHeight - halfStrokeWidth)
 
             path.reset()
             path.addRoundRect(rect, radii, Path.Direction.CW)
             path.close()
+
+            paint.pathEffect = if (isDashed) {
+                val perimeter = calculatePerimeter(rect.width(), rect.height(), radii)
+                createDashPathEffect(perimeter)
+            } else {
+                null
+            }
+        }
+
+        private fun calculatePerimeter(
+            width: Float,
+            height: Float,
+            radii: FloatArray
+        ): Float {
+            var perimeter = 2 * width + 2 * height
+
+            if (radii.size != 8) {
+                KLog.e("DivBorderDrawer") { "Wrong corner radii count ${radii.size}. Expected 8" }
+                return perimeter
+            }
+
+            for (i in radii.indices step 2) {
+                val rx = radii[i]
+                val ry = radii[i + 1]
+                perimeter -= rx
+                perimeter -= ry
+                perimeter += (Math.PI * sqrt((rx * rx +  ry * ry) / 8.0)).toFloat()
+            }
+            return perimeter.coerceAtLeast(0.0f)
+        }
+
+        private fun createDashPathEffect(perimeter: Float): DashPathEffect {
+            val dashWidth: Float
+            val gapWidth: Float
+            if (perimeter > 0.0f) {
+                val defaultInterval = defaultDashWidth + defaultGapWidth
+                val intervalCount = (perimeter / defaultInterval).toInt()
+                val extraSpace = perimeter - defaultInterval * intervalCount
+                val extraDashSpace = extraSpace * defaultDashWidth / defaultInterval
+                val extraGapSpace = extraSpace * defaultGapWidth / defaultInterval
+                dashWidth = defaultDashWidth + extraDashSpace / intervalCount
+                gapWidth = defaultGapWidth + extraGapSpace / intervalCount
+            } else {
+                dashWidth = defaultDashWidth
+                gapWidth = defaultGapWidth
+            }
+            return DashPathEffect(floatArrayOf(dashWidth, gapWidth), 0.0f)
         }
     }
 

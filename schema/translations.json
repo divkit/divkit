@@ -2128,8 +2128,8 @@
     "ru": "Цвет рамки."
   },
     "div_stroke_style": {
-    "en": "Stroke style.",
-    "ru": "Стиль линии."
+    "en": "Stroke style. Supported for border stroke only.",
+    "ru": "Стиль линии. Поддерживается только для линии обводки."
   },
   "div_stroke_style_dashed": {
     "en": "Dashed stroke style.",
