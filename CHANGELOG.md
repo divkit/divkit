@@ -3,8 +3,10 @@
 # Android Client:
 * Div2View.discardVisibilityTracking() now public for cancelling visibility tracking.
 * Fixed corner clipping of elements inside transient hierarchy.
+* Fixed error handling at optional expression list parsing.
 * Improved complex rebind.
 * Supported dashed stroke style.
+* Supported position points in linear gradient.
 * Use a CME-safe collection to resolve crashes occurring during patch application with item_builder.
 
 # iOS Client:
