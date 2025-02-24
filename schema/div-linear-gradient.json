@@ -31,6 +31,7 @@
       },
       "minItems": 2,
       "platforms": [
+        "android",
         "ios"
       ],
       "$description": "translations.json#/div_gradient_linear_color_map"

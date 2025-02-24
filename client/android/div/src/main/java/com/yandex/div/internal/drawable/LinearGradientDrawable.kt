@@ -8,6 +8,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
+import com.yandex.div.internal.graphics.Colormap
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -17,7 +18,7 @@ import kotlin.math.sin
  */
 internal class LinearGradientDrawable(
     private val angle: Float,
-    private val colors: IntArray
+    private val colormap: Colormap
 ) : Drawable() {
 
     private val paint = Paint()
@@ -26,7 +27,13 @@ internal class LinearGradientDrawable(
     override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
         bounds.let {
-            paint.shader = createLinearGradient(angle, colors, bounds.width(), bounds.height())
+            paint.shader = createLinearGradient(
+                angle,
+                colormap.colors,
+                colormap.positions,
+                bounds.width(),
+                bounds.height()
+            )
             rect.set(bounds)
         }
     }
@@ -46,17 +53,20 @@ internal class LinearGradientDrawable(
 
     companion object {
 
-        fun createLinearGradient(angle: Float,
-                                 colors: IntArray,
-                                 width: Int,
-                                 height: Int): LinearGradient {
+        fun createLinearGradient(
+            angle: Float,
+            colors: IntArray,
+            positions: FloatArray?,
+            width: Int,
+            height: Int
+        ): LinearGradient {
             val halfWidth = width / 2
             val halfHeight = height / 2
             val correctedWidth = halfWidth * cos(angle.toRadian())
             val correctedHeight = halfHeight * sin(angle.toRadian())
             return LinearGradient(halfWidth - correctedWidth, halfHeight + correctedHeight,
                 halfWidth + correctedWidth, halfHeight - correctedHeight,
-                colors, null, Shader.TileMode.CLAMP)
+                colors, positions, Shader.TileMode.CLAMP)
         }
 
         private fun Float.toRadian() = (this * PI / 180f).toFloat()

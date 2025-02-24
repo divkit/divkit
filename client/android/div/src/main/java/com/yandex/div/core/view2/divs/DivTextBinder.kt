@@ -12,8 +12,13 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.observeColorPoint
+import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
@@ -24,6 +29,9 @@ import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
+import com.yandex.div.internal.graphics.Colormap
+import com.yandex.div.internal.graphics.checkIsNotEmpty
+import com.yandex.div.internal.util.compareNullableWith
 import com.yandex.div.internal.widget.EllipsizedTextView
 import com.yandex.div.internal.widget.checkHyphenationSupported
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -92,7 +100,7 @@ internal class DivTextBinder @Inject constructor(
         view.bindText(context, div, oldDiv)
         view.bindEllipsis(context, div, oldDiv)
         view.bindAutoEllipsize(div, oldDiv, expressionResolver)
-        view.bindTextGradient(div, oldDiv, expressionResolver)
+        view.bindTextGradient(context.divView, div, oldDiv, expressionResolver)
         view.bindTextShadow(div, oldDiv, expressionResolver)
         view.bindSelectable(div, oldDiv, expressionResolver)
         view.bindTightenWidth(div, oldDiv, expressionResolver)
@@ -469,55 +477,62 @@ internal class DivTextBinder @Inject constructor(
     //region Text Gradient
 
     private fun DivLineHeightTextView.bindTextGradient(
+        divView: Div2View,
         newDiv: DivText,
         oldDiv: DivText?,
         resolver: ExpressionResolver,
     ) {
         when (val textGradient = newDiv.textGradient) {
             null -> Unit
-            is DivTextGradient.Linear -> bindLinearTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
+            is DivTextGradient.Linear -> bindLinearTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
             is DivTextGradient.Radial -> bindRadialTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
         }
     }
 
     private fun DivLineHeightTextView.bindLinearTextGradient(
+        divView: Div2View,
         newTextGradient: DivLinearGradient,
         oldTextGradient: DivTextGradient?,
         resolver: ExpressionResolver,
     ) {
         if (oldTextGradient is DivTextGradient.Linear
             && newTextGradient.angle.equalsToConstant(oldTextGradient.value.angle)
-            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)) {
+            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)
+            && newTextGradient.colorMap.compareNullableWith(oldTextGradient.value.colorMap) { left, right -> left.equalsToConstant(right)}) {
             return
         }
 
         applyLinearTextGradientColor(
             newTextGradient.angle.evaluate(resolver),
-            newTextGradient.colors?.evaluate(resolver) ?: emptyList()
+            newTextGradient.toColormap(resolver).checkIsNotEmpty(divView)
         )
 
-        if (newTextGradient.angle.isConstant() && newTextGradient.colors.isConstantOrNull()) {
+        if (newTextGradient.angle.isConstant()
+            && newTextGradient.colors.isConstantOrNull()
+            && newTextGradient.colorMap?.all { it.isConstant() } != false) {
             return
         }
 
         val callback = { _: Any ->
             applyLinearTextGradientColor(
                 newTextGradient.angle.evaluate(resolver),
-                newTextGradient.colors?.evaluate(resolver) ?: emptyList()
+                newTextGradient.toColormap(resolver).checkIsNotEmpty(divView)
             )
         }
         addSubscription(newTextGradient.angle.observe(resolver, callback))
         addSubscription(newTextGradient.colors?.observe(resolver, callback))
+        newTextGradient.colorMap?.forEach { observeColorPoint(it, resolver, callback) }
     }
 
     private fun TextView.applyLinearTextGradientColor(
         angle: Long,
-        colors: List<Int>
+        colormap: Colormap
     ) {
         doOnActualLayout {
             this.paint.shader = LinearGradientDrawable.createLinearGradient(
                 angle = angle.toFloat(),
-                colors = colors.toIntArray(),
+                colors = colormap.colors,
+                positions = colormap.positions,
                 width = realTextWidth,
                 height = height - paddingBottom - paddingTop
             )
