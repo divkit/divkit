@@ -2,6 +2,7 @@ package com.yandex.div.core.util
 
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchMap
+import com.yandex.div.internal.graphics.Colormap
 import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -18,6 +19,7 @@ import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPoint
@@ -413,9 +415,11 @@ internal fun DivBackground?.equalsToConstant(other: DivBackground?): Boolean {
         }
 
         is DivBackground.LinearGradient -> {
+            val colormap = value.colorMap ?: emptyList()
             other is DivBackground.LinearGradient
                 && value.angle.equalsToConstant(other.value.angle)
                 && value.colors.equalsToConstant(other.value.colors)
+                && colormap.compareWith(other.value.colorMap ?: emptyList()) { left, right -> left.equalsToConstant(right) }
         }
 
         is DivBackground.RadialGradient -> {
@@ -468,6 +472,44 @@ internal fun DivBackground?.isConstant(): Boolean {
             value.imageUrl.isConstant()
                 && value.insets.isConstant()
         }
+    }
+}
+
+internal fun DivLinearGradient.ColorPoint?.equalsToConstant(other: DivLinearGradient.ColorPoint?): Boolean {
+    if (this == null && other == null) {
+        return true
+    }
+
+    return this?.color.equalsToConstant(other?.color)
+        && this?.position.equalsToConstant(other?.position)
+}
+
+internal fun DivLinearGradient.ColorPoint?.isConstant(): Boolean {
+    if (this == null) {
+        return true
+    }
+
+    return color.isConstant()
+        && position.isConstant()
+}
+
+
+internal fun DivLinearGradient.toColormap(resolver: ExpressionResolver): Colormap {
+    val mappedColors = this.colorMap?.sortedBy { colorPoint -> colorPoint.position.evaluate(resolver) }
+    val uniformColors = this.colors
+
+    if (mappedColors != null) {
+        val colors = IntArray(mappedColors.size)
+        val positions = FloatArray(mappedColors.size)
+        for (i in mappedColors.indices) {
+            colors[i] = mappedColors[i].color.evaluate(resolver)
+            positions[i] = mappedColors[i].position.evaluate(resolver).toFloat()
+        }
+        return Colormap(colors, positions)
+    } else if (uniformColors != null) {
+        return Colormap(uniformColors.evaluate(resolver).toIntArray())
+    } else {
+        return Colormap.EMPTY
     }
 }
 

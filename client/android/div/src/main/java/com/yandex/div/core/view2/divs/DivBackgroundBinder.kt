@@ -22,6 +22,7 @@ import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeBackground
 import com.yandex.div.core.util.toCachedBitmap
+import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
@@ -30,6 +31,8 @@ import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
+import com.yandex.div.internal.graphics.Colormap
+import com.yandex.div.internal.graphics.checkIsNotEmpty
 import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
@@ -128,7 +131,7 @@ internal class DivBackgroundBinder @Inject constructor(
         val resolver = context.expressionResolver
 
         val newDefaultDivBackground =
-            defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) }
+            defaultBackgroundList?.map { it.toBackgroundState(context.divView, metrics, resolver) }
                 ?: emptyList()
 
         val oldDefaultDivBackground = this.defaultBackgroundList
@@ -199,11 +202,12 @@ internal class DivBackgroundBinder @Inject constructor(
         focusedBackgroundList: List<DivBackground>
     ) {
         val metrics = resources.displayMetrics
+        val divView = context.divView
         val resolver = context.expressionResolver
 
         val newDefaultDivBackground =
-            defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) } ?: emptyList()
-        val newFocusedDivBackground = focusedBackgroundList.map { it.toBackgroundState(metrics, resolver) }
+            defaultBackgroundList?.map { it.toBackgroundState(divView, metrics, resolver) } ?: emptyList()
+        val newFocusedDivBackground = focusedBackgroundList.map { it.toBackgroundState(divView, metrics, resolver) }
 
         val oldDefaultDivBackground = this.defaultBackgroundList
         val oldFocusedDivBackground = this.focusedBackgroundList
@@ -286,12 +290,13 @@ internal class DivBackgroundBinder @Inject constructor(
     }
 
     private fun DivBackground.toBackgroundState(
+        divView: Div2View,
         metrics: DisplayMetrics,
         resolver: ExpressionResolver
     ): DivBackgroundState = when (this) {
         is DivBackground.LinearGradient -> DivBackgroundState.LinearGradient(
             angle = value.angle.evaluate(resolver).toIntSafely(),
-            colors = value.colors?.evaluate(resolver) ?: emptyList(),
+            colormap = value.toColormap(resolver).checkIsNotEmpty(divView)
         )
         is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
             centerX = value.centerX.toBackgroundState(metrics, resolver),
@@ -381,9 +386,10 @@ internal class DivBackgroundBinder @Inject constructor(
         }
 
     private sealed class DivBackgroundState {
+
         data class LinearGradient(
             val angle: Int,
-            val colors: List<Int>
+            val colormap: Colormap
         ): DivBackgroundState()
 
         data class RadialGradient(
@@ -528,7 +534,7 @@ internal class DivBackgroundBinder @Inject constructor(
             is Solid -> ColorDrawable(color)
             is LinearGradient -> LinearGradientDrawable(
                 angle = angle.toFloat(),
-                colors = colors.toIntArray()
+                colormap = colormap
             )
             is RadialGradient -> RadialGradientDrawable(
                 radius = radius.toRadialGradientDrawableRadius(),
