@@ -42,6 +42,7 @@ export function render(opts: {
     direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
 }): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
 

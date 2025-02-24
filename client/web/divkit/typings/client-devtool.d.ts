@@ -47,6 +47,7 @@ export function render(opts: {
     direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
 }): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';

@@ -69,6 +69,7 @@ export interface RootCtxValue {
     isDesktop: Readable<boolean>;
     direction: Readable<Direction>;
     customComponents: Map<string, CustomComponentDescription> | undefined;
+    pagerChildrenClipEnabled: boolean;
 
     // Devtool
     componentDevtool?({

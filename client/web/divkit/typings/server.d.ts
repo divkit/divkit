@@ -22,4 +22,5 @@ export function render(opts: {
     direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
 }): string;

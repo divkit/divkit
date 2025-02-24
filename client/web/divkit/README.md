@@ -397,6 +397,12 @@ Number, optional. 0 by default.
 
 Affects the formatting of dates.
 
+#### pagerChildrenClipEnabled
+
+Boolean, optional. `true` by default.
+
+Whether cropping is enabled in the `pager` elements. It can be useful in cases with shadow elements.
+
 #### theme (DEPRECATED)
 
 `system` | `light` | `dark`

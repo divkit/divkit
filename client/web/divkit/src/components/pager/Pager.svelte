@@ -266,7 +266,8 @@
     };
 
     $: mods = {
-        orientation
+        clip: rootCtx.pagerChildrenClipEnabled,
+        orientation,
     };
 
     $: hasError = hasLayoutModeError;

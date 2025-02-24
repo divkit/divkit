@@ -46,6 +46,7 @@ export function render(opts: {
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
 }): DivkitDebugInstance {
     const { target, hydrate, ...rest } = opts;
 

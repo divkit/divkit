@@ -117,6 +117,7 @@
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
     export let direction: Direction = 'ltr';
     export let store: Store | undefined = undefined;
+    export let pagerChildrenClipEnabled = true;
     export let weekStartDay = 0;
 
     let isMounted = true;
@@ -1933,6 +1934,7 @@
         processVariableTriggers,
         isRunning,
         setRunning,
+        pagerChildrenClipEnabled,
         registerInstance,
         unregisterInstance,
         registerParentOf,
