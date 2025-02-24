@@ -1,57 +1,58 @@
 <script lang="ts">
-    import { getContext, type ComponentType } from 'svelte';
-    import type { LayoutItem } from '../../lib';
-    import Canvas from './Canvas.svelte';
-    import Components from './Components.svelte';
-    import NewComponent from './NewComponent.svelte';
-    import Palette from './Palette.svelte';
-    import Props from './Props.svelte';
-    import SplitView from './SplitView.svelte';
-    import TextEditor from './TextEditor.svelte';
-    import PropsAndCode from './PropsAndCode.svelte';
-    import TankerOverview from './TankerOverview.svelte';
-    import SourcesOverview from './SourcesOverview.svelte';
-    import CustomVariables from './CustomVariables.svelte';
-    import Timers from './Timers.svelte';
-    import { Truthy } from '../utils/truthy';
-    import { APP_CTX, type AppContext } from '../ctx/appContext';
+  import { getContext, type ComponentType } from "svelte";
+  import type { LayoutItem } from "../../lib";
+  import Canvas from "./Canvas.svelte";
+  import Components from "./Components.svelte";
+  import NewComponent from "./NewComponent.svelte";
+  import Palette from "./Palette.svelte";
+  import Props from "./Props.svelte";
+  import SplitView from "./SplitView.svelte";
+  import TextEditor from "./TextEditor.svelte";
+  import PropsAndCode from "./PropsAndCode.svelte";
+  import TankerOverview from "./TankerOverview.svelte";
+  import SourcesOverview from "./SourcesOverview.svelte";
+  import CustomVariables from "./CustomVariables.svelte";
+  import Timers from "./Timers.svelte";
+  import { Truthy } from "../utils/truthy";
+  import { APP_CTX, type AppContext } from "../ctx/appContext";
+  import ExamplePages from "./ExamplePages.svelte";
 
-    export let items: LayoutItem[];
+  export let items: LayoutItem[];
 
-    const { state } = getContext<AppContext>(APP_CTX);
-    const { paletteEnabled, readOnly } = state;
+  const { state } = getContext<AppContext>(APP_CTX);
+  const { paletteEnabled, readOnly } = state;
 
-    $: componentMap = {
-        'new-component': $readOnly ? null : NewComponent,
-        'component-tree': Components,
-        'component-props': Props,
-        preview: Canvas,
-        palette: $paletteEnabled ? Palette : null,
-        code: TextEditor,
-        'component-props:code': PropsAndCode,
-        'tanker-overview': TankerOverview,
-        'sources-overview': SourcesOverview,
-        'custom-variables': CustomVariables,
-        timers: Timers
-    };
+  $: componentMap = {
+    "new-component": $readOnly ? null : NewComponent,
+    "component-tree": Components,
+    "component-props": Props,
+    preview: Canvas,
+    // palette: $paletteEnabled ? Palette : null,
+    palette: ExamplePages,
+    code: TextEditor,
+    "component-props:code": PropsAndCode,
+    "tanker-overview": TankerOverview,
+    "sources-overview": SourcesOverview,
+    "custom-variables": CustomVariables,
+    timers: Timers,
+  };
 
-    $: components = items.map(item => {
-        if (!componentMap[item]) {
-            return;
-        }
-        return {
-            component: componentMap[item] as ComponentType,
-            weight: 1,
-            minSize: 200
-        };
-    }).filter(Truthy);
+  $: components = items
+    .map((item) => {
+      if (!componentMap[item]) {
+        return;
+      }
+      return {
+        component: componentMap[item] as ComponentType,
+        weight: 1,
+        minSize: 300,
+      };
+    })
+    .filter(Truthy);
 </script>
 
 {#if components.length}
-    <SplitView
-        orientation="vertical"
-        {components}
-    />
+  <SplitView orientation="vertical" {components} />
 {:else}
-    <svelte:component this={components[0].component} />
+  <svelte:component this={components[0].component} />
 {/if}

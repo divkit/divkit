@@ -7,16 +7,17 @@
     buttonValue,
     deletingScreen,
     isYesNoModalOpen,
+    selectedPatchJson,
     selectedScreen,
     showAddScreenModal,
     type AppContext,
   } from "../ctx/appContext";
   import { SetJsonCommand } from "../data/commands/setJson";
-  import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
-  import type { ScreenModel } from "./models/ScreenModel";
-  import { saveScreen } from "./services/services";
-  import toast from "svelte-french-toast";
-  import { faEdit, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
+  // import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
+  // import type { ScreenModel } from "./models/ScreenModel";
+  // import { saveScreen } from "./services/services";
+  // import toast from "svelte-french-toast";
+  // import { faEdit, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
 
   let node: HTMLElement;
   let editor: ReturnType<typeof createEditor> | undefined;
@@ -39,136 +40,58 @@
 
   let isLoading = false;
 
-  const BASE_VIEW_JSON = JSON.stringify({
-    card: {
-      log_id: "div2_sample_card",
-      states: [
-        {
-          state_id: 0,
-          div: {
-            items: [
-              {
-                items: [
-                  {
-                    accessibility: {
-                      description: "Hello Naji",
-                    },
-                    font_size: 32,
-                    line_height: 40,
-                    text: "Hello Naji",
-                    font_weight: "medium",
-                    text_color: "#000",
-                    type: "text",
-                  },
-                ],
-                height: {
-                  type: "match_parent",
-                },
-                margins: {
-                  bottom: 0,
-                  top: 50,
-                  left: 40,
-                  right: 40,
-                },
-                type: "container",
-              },
-            ],
-            visibility_action: {
-              log_id: "visible",
-            },
-            background: [
-              {
-                color:
-                  "@{getDictOptColor('#00ffffff', local_palette, 'bg_primary', theme)}",
-                type: "solid",
-              },
-            ],
-            height: {
-              type: "match_parent",
-            },
-            orientation: "overlap",
-            type: "container",
-          },
-        },
-      ],
-      variables: [
-        {
-          type: "dict",
-          name: "local_palette",
-          value: {
-            bg_primary: {
-              name: "Primary background",
-              light: "#fff",
-              dark: "#000",
-            },
-            color0: {
-              name: "Secondary background",
-              light: "#eeeeee",
-              dark: "#000",
-            },
-          },
-        },
-        {
-          type: "dict",
-          name: "test",
-          value: {
-            logged: 1,
-            login: "Vasya",
-            mailCount: 123,
-          },
-        },
-      ],
-    },
-  });
-
   // Function to handle update button click
-  async function handleUpdate() {
-    if ($buttonValue === "Save") {
-      showAddScreenModal.set(true); // Open modal
-    } else {
-      if (!editor) return;
-      try {
-        isLoading = true; // Start loading
-        const updatedScreen: ScreenModel = {
-          id: $selectedScreen!.id ?? "",
-          path: $selectedScreen!.path ?? "",
-          version: $selectedScreen!.version ?? "",
-          screenName: $selectedScreen!.screenName ?? "",
-          idSystem: $selectedScreen!.idSystem ?? 0,
-          appScreenPatches: $selectedScreen!.appScreenPatches ?? [],
-          jsonObject: $divjsonStore.fullString, // Explicitly assign the updated jsonObject
-        };
+  // async function handleUpdate() {
+  // if ($buttonValue === "Save") {
+  //   showAddScreenModal.set(true); // Open modal
+  // } else {
+  //   if (!editor) return;
+  //   try {
+  //     isLoading = true; // Start loading
+  //     const updatedScreen: ScreenModel = {
+  //       id: $selectedScreen!.id ?? "",
+  //       path: $selectedScreen!.path ?? "",
+  //       version: $selectedScreen!.version ?? "",
+  //       screenName: $selectedScreen!.screenName ?? "",
+  //       idSystem: $selectedScreen!.idSystem ?? 0,
+  //       appScreenPatches: $selectedScreen!.appScreenPatches ?? [],
+  //       jsonObject: $divjsonStore.fullString, // Explicitly assign the updated jsonObject
+  //     };
 
-        console.log("Updated ScreenModel:", updatedScreen);
+  //     console.log("Updated ScreenModel:", updatedScreen);
 
-        const saveResult = await saveScreen(updatedScreen);
+  //     const saveResult = await saveScreen(updatedScreen);
 
-        state.pushCommand(new SetJsonCommand(state, BASE_VIEW_JSON));
-        buttonValue.set("Save");
+  //     state.pushCommand(new SetJsonCommand(state, BASE_VIEW_JSON));
+  //     buttonValue.set("Save");
 
-        console.log("Screen saved successfully:", saveResult);
+  //     console.log("Screen saved successfully:", saveResult);
 
-        isLoading = false;
-        toast.success("Screen created successfully!");
+  //     isLoading = false;
+  //     toast.success("Screen created successfully!");
 
-        showAddScreenModal.set(false);
-        console.log("Modal closed after success");
-      } catch (err) {
-        isLoading = false;
+  //     showAddScreenModal.set(false);
+  //     console.log("Modal closed after success");
+  //   } catch (err) {
+  //     isLoading = false;
 
-        if (err instanceof Error) {
-          console.error("Save screen failed:", err);
-          toast.error(err.message);
-        } else {
-          console.error("Save screen failed with unknown error:", err);
-          toast.error("An unknown error occurred while saving.");
-        }
-      }
-    }
-  }
+  //     if (err instanceof Error) {
+  //       console.error("Save screen failed:", err);
+  //       toast.error(err.message);
+  //     } else {
+  //       console.error("Save screen failed with unknown error:", err);
+  //       toast.error("An unknown error occurred while saving.");
+  //     }
+  //   }
+  // }
+  // }
 
-  $: if (prevVal !== $divjsonStore.fullString && !editor?.isFocused()) {
-    editor?.setValue($divjsonStore.fullString);
+  // $: if ($selectedPatchJson) {
+  //   editor?.setValue($selectedPatchJson); // Update editor with selected patch JSON
+  // }
+
+  $: if (prevVal !== $selectedPatchJson && !editor?.isFocused()) {
+    editor?.setValue($selectedPatchJson);
   }
 
   $: editor?.setTheme($themeStore);
@@ -188,13 +111,13 @@
   onMount(() => {
     editor = editorFabric({
       node,
-      value: $divjsonStore.fullString,
+      value: $selectedPatchJson,
       theme: $themeStore,
       readOnly: $readOnly,
       shadowRoot,
       onChange(value) {
         console.log("onChange", value);
-        if (value !== $divjsonStore.fullString) {
+        if (value !== $selectedPatchJson) {
           console.log("first if", value);
           let json;
           try {
@@ -251,9 +174,9 @@
   <div class="text-editor" bind:this={node} class:blurred={isLoading}></div>
 
   <!-- Buttons Section -->
-  <div class="button-container">
-    <!-- Delete Button -->
-    <button
+  <!-- <div class="button-container"> -->
+  <!-- Delete Button -->
+  <!-- <button
       class="styled-button delete-button"
       on:click={(event) => {
         event.stopPropagation(); // Prevent triggering any other events
@@ -269,10 +192,10 @@
     >
       <FontAwesomeIcon icon={faTrash} />
       Delete
-    </button>
+    </button> -->
 
-    <!-- Update/Save Button -->
-    <button
+  <!-- Update/Save Button -->
+  <!-- <button
       class="styled-button update-button"
       on:click={handleUpdate}
       class:blurred={isLoading}
@@ -284,8 +207,8 @@
         <FontAwesomeIcon icon={faEdit} />
         Update
       {/if}
-    </button>
-  </div>
+    </button> -->
+  <!-- </div> -->
 </div>
 
 <style>

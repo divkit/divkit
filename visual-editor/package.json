@@ -57,5 +57,13 @@
     "typescript": "5.4.5",
     "vite": "5.2.12",
     "vitest": "2.0.2"
+  },
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "6.7.1",
+    "@fortawesome/svelte-fontawesome": "0.2.3",
+    "axios": "1.7.7",
+    "install": "0.13.0",
+    "svelte-french-toast": "1.2.0",
+    "svelte-material-icons": "3.0.5"
   }
 }
