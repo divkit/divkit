@@ -24,12 +24,15 @@
 }
 
 .menu__item.menu__item {
+    box-sizing: border-box;
     display: block;
+    width: 100%;
     padding: 12px 16px;
     font-size: 20px;
     text-decoration: none;
     color: inherit;
     transition: .15s ease-in-out;
+    text-align: start;
 }
 
 .root_platform_desktop .menu__item.menu__item:hover {
