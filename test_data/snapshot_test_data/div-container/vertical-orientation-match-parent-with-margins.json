@@ -1,0 +1,102 @@
+{
+  "description": "The size of resizable elements with a given weight should calculate without taking margins into account. This means that if you make two or more elements in a container with the same weight, their size will be the same even if one or more of them have margins set.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "items": [
+            {
+              "type": "text",
+              "text": "text1",
+              "font_size": 20,
+              "height": {
+                "type": "match_parent",
+                "weight": 1.0
+              },
+              "alignment_horizontal": "left",
+              "alignment_vertical": "top",
+              "margins": {
+                "bottom": 100
+              },
+              "background": [
+                {
+                  "color": "#FAF",
+                  "type": "solid"
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 93
+              }
+            },
+            {
+              "type": "text",
+              "text": "text2",
+              "font_size": 20,
+              "height": {
+                "type": "match_parent",
+                "weight": 1.0
+              },
+              "background": [
+                {
+                  "color": "#FAF",
+                  "type": "solid"
+                }
+              ],
+              "margins": {
+                "bottom": 100
+              },
+              "alignment_horizontal": "left",
+              "alignment_vertical": "top",
+              "width": {
+                "type": "fixed",
+                "value": 93
+              }
+            },
+            {
+              "type": "text",
+              "text": "text3",
+              "font_size": 20,
+              "height": {
+                "type": "match_parent",
+                "weight": 1.0
+              },
+              "background": [
+                {
+                  "color": "#FAF",
+                  "type": "solid"
+                }
+              ],
+              "alignment_horizontal": "left",
+              "alignment_vertical": "top",
+              "margins": {},
+              "width": {
+                "type": "fixed",
+                "value": 93
+              }
+            }
+          ],
+          "background": [
+            {
+              "color": "#F1EBDC",
+              "type": "solid"
+            }
+          ],
+          "height": {
+            "type": "match_parent"
+          },
+          "orientation": "vertical",
+          "type": "container"
+        }
+      }
+    ]
+  },
+  "templates": {}
+}
