@@ -42,21 +42,24 @@ open class SuperLineHeightTextView @JvmOverloads constructor(
             super.setMeasuredDimension(measuredWidthAndState, it)
         }
 
-        if (isTightenWidth && maxWidth > 0) {
-            val linesCount = layout.lineCount
-            var maxWidth = 0f
-            repeat(linesCount) { n ->
-                maxWidth = max(maxWidth, layout.getLineWidth(n));
-            }
-            maxWidth += compoundPaddingLeft + compoundPaddingRight
-            val newWidth = ceil(maxWidth).toInt()
-            if (newWidth < measuredWidth) {
-                val newMeasuredWidthAndState = MeasureSpec.makeMeasureSpec(
-                    newWidth,
-                    MeasureSpec.getMode(measuredWidthAndState)
-                )
-                super.setMeasuredDimension(newMeasuredWidthAndState, measuredHeightAndState)
-            }
+        val lp = layoutParams as? DivLayoutParams ?: return
+        if (!isTightenWidth || lp.width != DivLayoutParams.WRAP_CONTENT_CONSTRAINED || lp.maxWidth == Int.MAX_VALUE) {
+            return
+        }
+
+        val linesCount = layout.lineCount
+        var maxWidth = 0f
+        repeat(linesCount) { n ->
+            maxWidth = max(maxWidth, layout.getLineWidth(n))
+        }
+        maxWidth += compoundPaddingLeft + compoundPaddingRight
+        val newWidth = ceil(maxWidth).toInt()
+        if (newWidth < measuredWidth) {
+            val newMeasuredWidthAndState = MeasureSpec.makeMeasureSpec(
+                newWidth,
+                MeasureSpec.getMode(measuredWidthAndState)
+            )
+            super.setMeasuredDimension(newMeasuredWidthAndState, measuredHeightAndState)
         }
     }
 
