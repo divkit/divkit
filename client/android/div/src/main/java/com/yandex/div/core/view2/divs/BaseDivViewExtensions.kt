@@ -954,7 +954,9 @@ internal fun DivContentAlignmentHorizontal.toAlignmentHorizontal(): DivAlignment
     DivContentAlignmentHorizontal.LEFT -> DivAlignmentHorizontal.LEFT
     DivContentAlignmentHorizontal.CENTER -> DivAlignmentHorizontal.CENTER
     DivContentAlignmentHorizontal.RIGHT -> DivAlignmentHorizontal.RIGHT
-    else -> DivAlignmentHorizontal.LEFT
+    DivContentAlignmentHorizontal.START -> DivAlignmentHorizontal.START
+    DivContentAlignmentHorizontal.END -> DivAlignmentHorizontal.END
+    else -> DivAlignmentHorizontal.START
 }
 
 internal fun DivContentAlignmentVertical.toAlignmentVertical(): DivAlignmentVertical = when (this) {
