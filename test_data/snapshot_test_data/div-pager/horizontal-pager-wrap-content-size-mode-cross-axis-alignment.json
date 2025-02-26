@@ -2,7 +2,8 @@
   "description": "Horizontal pager with wrap_content page width with different cross_axis_alignment",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "title": {

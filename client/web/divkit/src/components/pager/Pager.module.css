@@ -58,9 +58,26 @@
 }
 
 
+.pager_cross-align_center.pager_orientation_horizontal > .pager__items > .pager__item {
+    align-items: center;
+}
+
+.pager_cross-align_end.pager_orientation_horizontal > .pager__items > .pager__item {
+    align-items: end;
+}
+
+.pager_cross-align_center.pager_orientation_vertical > .pager__items > .pager__item {
+    justify-items: center;
+}
+
+.pager_cross-align_end.pager_orientation_vertical > .pager__items > .pager__item {
+    justify-items: end;
+}
+
+
 .pager_orientation_horizontal > .pager__items > .pager__item_height_content,
 .pager_orientation_horizontal > .pager__items > .pager__item_height_fixed {
-    height: max-content;
+    height: 100%;
 }
 
 .pager_orientation_horizontal > .pager__items > .pager__item_height_content:not(.pager__item_height-constrained),
@@ -70,7 +87,7 @@
 
 .pager_orientation_vertical > .pager__items > .pager__item_width_content,
 .pager_orientation_vertical > .pager__items > .pager__item_width_fixed {
-    width: max-content;
+    width: 100%;
 }
 
 .pager_orientation_vertical > .pager__items > .pager__item_width_content:not(.pager__item_width-constrained),

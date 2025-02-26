@@ -101,6 +101,9 @@
     let padding = '';
     let sizeVal = '';
 
+    let childLayoutParams: LayoutParams = {};
+    let crossAxisAlignment: 'start' | 'center' | 'end' = 'start';
+
     let items: ComponentContext[] = [];
     let prevContext: ComponentContext<DivPagerData> | undefined;
 
@@ -108,6 +111,8 @@
 
     function rebind(): void {
         padding = '';
+        childLayoutParams = {};
+        crossAxisAlignment = 'start';
     }
 
     $: if (origJson) {
@@ -124,6 +129,7 @@
     $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
     $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
+    $: jsonCrossAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_axis_alignment);
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
         componentContext = prevContext = {
@@ -259,6 +265,14 @@
         }
     }
 
+    $: if ($jsonCrossAxisAlignment === 'start' || $jsonCrossAxisAlignment === 'center' || $jsonCrossAxisAlignment === 'end') {
+        crossAxisAlignment = $jsonCrossAxisAlignment;
+
+        childLayoutParams = {
+            [orientation === 'horizontal' ? 'parentVAlign' : 'parentHAlign']: crossAxisAlignment
+        };
+    }
+
     $: style = {
         'grid-gap': itemSpacing,
         padding,
@@ -268,6 +282,7 @@
     $: mods = {
         clip: rootCtx.pagerChildrenClipEnabled,
         orientation,
+        'cross-align': crossAxisAlignment
     };
 
     $: hasError = hasLayoutModeError;
@@ -469,6 +484,7 @@
                 <div class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}>
                     <Unknown
                         componentContext={item}
+                        layoutParams={childLayoutParams}
                     />
                 </div>
             {/each}

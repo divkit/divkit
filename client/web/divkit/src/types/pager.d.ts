@@ -20,6 +20,8 @@ export interface PageContentSize {
 
 export type PagerLayoutMode = PageSize | NeighbourPageSize | PageContentSize;
 
+export type PagerItemAlignment = 'start' | 'center' | 'end';
+
 export interface DivPagerData extends DivBaseData {
     type: 'pager';
     layout_mode: PagerLayoutMode;
@@ -29,4 +31,5 @@ export interface DivPagerData extends DivBaseData {
     orientation?: Orientation;
     restrict_parent_scroll?: BooleanInt;
     default_item?: number;
+    cross_axis_alignment?: PagerItemAlignment;
 }
