@@ -80,7 +80,7 @@ internal class ErrorView(
                 viewModel?.let {
                     val fullReport = errorModel.generateReport()
                     pasteToClipBoard(fullReport).onFailure {
-                        if (it is TransactionTooLargeException) {
+                        if (it.causedByTransactionTooLargeException()) {
                             pasteToClipBoard(errorModel.generateReport(dumpCardContent = false))
                         }
                     }
@@ -112,7 +112,7 @@ internal class ErrorView(
                     ClipData.Item(s)
                 )
             )
-        } catch (e: TransactionTooLargeException) {
+        } catch (e: Exception) {
             return Result.failure(RuntimeException("Failed paste report to clipboard!", e))
         }
 
@@ -258,4 +258,9 @@ private class DetailsViewGroup(
         )
     }
 
+}
+
+private fun Throwable.causedByTransactionTooLargeException(): Boolean {
+    return this is TransactionTooLargeException ||
+            this.cause?.causedByTransactionTooLargeException() == true
 }
