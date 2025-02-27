@@ -1,0 +1,102 @@
+{
+  "card": {
+    "log_id": "test_card",
+    "variables": [
+      {
+        "name": "bool_var",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "int_var",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "number_var",
+        "type": "number",
+        "value": 0.1
+      },
+      {
+        "name": "string_var",
+        "type": "string",
+        "value": "initial value"
+      },
+      {
+        "name": "color_var",
+        "type": "color",
+        "value": "#000000"
+      },
+      {
+        "name": "url_var",
+        "type": "url",
+        "value": "https://initial/url"
+      },
+      {
+        "name": "dict_var",
+        "type": "dict",
+        "value": {
+          "value": "initial value"
+        }
+      },
+      {
+        "name": "array_var",
+        "type": "array",
+        "value": [
+          "initial value"
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "id": "bool_var_text",
+              "text": "@{bool_var}"
+            },
+            {
+              "type": "text",
+              "id": "int_var_text",
+              "text": "@{int_var}"
+            },
+            {
+              "type": "text",
+              "id": "number_var_text",
+              "text": "@{number_var}"
+            },
+            {
+              "type": "text",
+              "id": "string_var_text",
+              "text": "@{string_var}"
+            },
+            {
+              "type": "text",
+              "id": "color_var_text",
+              "text": "@{color_var}"
+            },
+            {
+              "type": "text",
+              "id": "url_var_text",
+              "text": "@{url_var}"
+            },
+            {
+              "type": "text",
+              "id": "dict_var_text",
+              "text": "@{dict_var}"
+            },
+            {
+              "type": "text",
+              "id": "array_var_text",
+              "text": "@{array_var}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
