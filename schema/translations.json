@@ -2127,7 +2127,7 @@
     "en": "Stroke color.",
     "ru": "Цвет рамки."
   },
-    "div_stroke_style": {
+  "div_stroke_style": {
     "en": "Stroke style. Supported for border stroke only.",
     "ru": "Стиль линии. Поддерживается только для линии обводки."
   },
@@ -2583,6 +2583,10 @@
     "en": "Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.",
     "ru": "Анимация исчезания подсказки. По умолчанию подсказка будет исчезать постепенно со смещением от якорной точки на 10 dp."
   },
+  "div_tooltip_background_accessibility_description": {
+    "en": "Description for accessibility of the background tap action for tooltip.",
+    "ru": "Описание для доступности действия нажатия по фону тултипа."
+  },
   "div_tooltip_close_by_tap_outside": {
     "en": "Allows dismissing tooltip by tapping outside of it.",
     "ru": "Позволяет закрывать подсказку при нажатии за её пределами."
@@ -2622,10 +2626,6 @@
   "div_tooltip_tap_outside_actions": {
     "en": "Specifies actions triggered by tapping outside the tooltip.",
     "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
-  },
-  "div_tooltip_background_accessibility_description": {
-    "en": "Description for accessibility of the background tap action for tooltip.",
-    "ru": "Описание для доступности действия нажатия по фону тултипа."
   },
   "div_transform": {
     "en": "Transformation of the element.",
