@@ -106,26 +106,58 @@ function gradient(opts: {
     pos: string | undefined;
     image: string;
 } | undefined {
-    if (!Array.isArray(opts.bg?.colors)) {
+    if (!Array.isArray(opts.bg?.colors) && !Array.isArray(opts.bg?.color_map)) {
         return;
     }
 
-    const colors = opts.bg.colors.filter(Truthy) as string[];
-    if (!colors.length) {
+    const colors = opts.bg.colors?.filter(Truthy);
+    if (!colors?.length && !opts.bg?.color_map) {
         return;
     }
 
-    return {
-        size: undefined,
-        pos: undefined,
-        image:
-            'linear-gradient(' +
+    let image: string;
+    if (opts.bg.color_map) {
+        if (!opts.bg.color_map.every(it => it.color && typeof it.position === 'number' && it.position >= 0 && it.position <= 1)) {
+            return;
+        }
+
+        const colors = opts.bg.color_map as {
+            color: string;
+            position: number;
+        }[];
+
+        const sortedColors = colors.sort((a, b) => {
+            if (Math.abs(a.position - b.position) < 1e-6) {
+                return 0;
+            }
+            return a.position - b.position;
+        });
+
+        image = 'linear-gradient(' +
+            (90 - Number(opts.bg.angle || 0) + 'deg') +
+            ',' +
+            sortedColors
+                .map(color => `${correctColor(color.color)} ${(color.position * 100).toFixed(2)}%`)
+                .join(',') +
+            ')';
+    } else {
+        if (!colors) {
+            return;
+        }
+
+        image = 'linear-gradient(' +
             (90 - Number(opts.bg.angle || 0) + 'deg') +
             ',' +
             colors
                 .map(color => correctColor(color))
                 .join(',') +
-            ')'
+            ')';
+    }
+
+    return {
+        size: undefined,
+        pos: undefined,
+        image
     };
 }
 
