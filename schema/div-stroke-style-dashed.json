@@ -1,7 +1,10 @@
 {
   "type": "object",
   "$description": "translations.json#/div_stroke_style_dashed",
-  "platforms": [],
+  "platforms": [
+    "ios",
+    "web"
+  ],
   "properties": {
     "type": {
       "type": "string",
