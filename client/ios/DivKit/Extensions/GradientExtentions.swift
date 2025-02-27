@@ -38,7 +38,7 @@ extension Gradient.Linear.Direction {
   init(angle: Int) {
     let alpha = Double(angle) / 180.0 * .pi
     let toRaw = CGPoint(x: cos(alpha), y: sin(alpha))
-    let scale = 0.5 / max(abs(toRaw.x), abs(toRaw.y))
+    let scale = (abs(toRaw.x) + abs(toRaw.y)) / 2
     let toNormalized = toRaw * scale
     let to = RelativePoint(
       x: toNormalized.x + 0.5,
