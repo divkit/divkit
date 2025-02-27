@@ -58,12 +58,8 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         })
     }
 
-    private fun applyPatchForListOfDivs(divs: List<Div>?, resolver: ExpressionResolver): List<Div> {
-        val divItems = mutableListOf<Div>()
-        divs?.forEach {
-            divItems.addAll(it.applyPatch(resolver))
-        }
-        return divItems
+    private fun applyPatchForListOfDivs(divs: List<Div>?, resolver: ExpressionResolver): List<Div>? {
+        return divs?.flatMap { it.applyPatch(resolver) }
     }
 
     private fun Div.applyPatchForSingleDiv(): List<Div> {
