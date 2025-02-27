@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs.gallery
 
 import android.view.View
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -23,20 +22,40 @@ internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
 
     override fun findTargetSnapPosition(manager: RecyclerView.LayoutManager, velocityX: Int, velocityY: Int): Int {
         (manager as DivGalleryItemHelper).run {
-            val firstCompletelyVisibleItemPosition = firstCompletelyVisibleItemPosition()
+            val velocity = if (getLayoutManagerOrientation() == LinearLayoutManager.HORIZONTAL) {
+                if (manager.layoutDirection == View.LAYOUT_DIRECTION_LTR) velocityX else -velocityX
+            } else {
+                velocityY
+            }
+
+            val firstCompletelyVisibleItemPosition = if (velocity < 0) {
+                firstCompletelyVisibleItemPosition()
+            } else {
+                lastCompletelyVisibleItemPosition()
+            }
             if (firstCompletelyVisibleItemPosition != RecyclerView.NO_POSITION) {
                 return firstCompletelyVisibleItemPosition
             }
-            val lastVisibleItemPosition = lastVisibleItemPosition()
+
+            val firstVisibleItemPosition = if (velocity < 0) {
+                firstVisibleItemPosition()
+            } else {
+                lastVisibleItemPosition()
+            }
+
+            val lastVisibleItemPosition = if (velocity < 0) {
+                lastVisibleItemPosition()
+            } else {
+                firstVisibleItemPosition()
+            }
+
             // workaround for first/last position
-            if (lastVisibleItemPosition == firstVisibleItemPosition()) {
+            if (lastVisibleItemPosition == firstVisibleItemPosition) {
                 return if (lastVisibleItemPosition != RecyclerView.NO_POSITION) lastVisibleItemPosition else 0
             }
-            val velocity =
-                if (getLayoutManagerOrientation() == LinearLayoutManager.HORIZONTAL) velocityX else velocityY
-            val isRtl = manager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_RTL
+
             // have 2 items on screen and choose by direction
-            return if ((velocity >= 0 && !isRtl) || (isRtl && velocity < 0)) {
+            return if (velocity >= 0) {
                 lastVisibleItemPosition
             } else {
                 lastVisibleItemPosition - 1

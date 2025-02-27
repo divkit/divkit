@@ -129,6 +129,12 @@ internal class DivGridLayoutManager(
         return indexes.first()
     }
 
+    override fun lastCompletelyVisibleItemPosition(): Int {
+        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
+        findLastCompletelyVisibleItemPositions(indexes)
+        return indexes.last()
+    }
+
     override fun firstVisibleItemPosition(): Int {
         val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
         findFirstVisibleItemPositions(indexes)
