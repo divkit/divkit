@@ -1,3 +1,37 @@
+## 31.5.0
+
+# Android Client:
+* Added PreloadFilter interface for the DivPreloader, designed to allows you to control which content needs to be preloaded, regardless of the preloadRequired value for the element.
+* Added support for the `submit` action.
+* Fixed `container` width calculating for text content with enabled `tighten_width`.
+* Fixed content alignment in `container` in rtl-configuration.
+* Fixed error handling at optional expression list parsing.
+* Fixed gallery snapping perfomed after fling gesture.
+* Fixed linear gradient size calculation.
+* Prevent patch from modifying items in containers so item_builder could continue working after patch.
+* Supported `Div2View.setVariable(name, value)` for array variables.
+
+# iOS Client:
+* Fixed transition animation when view size changes.
+* The size of resizable elements with a given weight is now calculated without taking margins into account. This means that if you make two or more elements in a container with the same weight, their size will be the same even if one or more of them have margins set.
+* Updated `div-tooltip` accessibility.
+
+# Web Client:
+* Added a warning for the `transition_id` / `transition_out` / `transition_change` properties without the required `id` property when changing state.
+* Added configuration flag `pagerChildrenClipEnabled`. It can be useful in cases with shadow elements of a `pager`.
+* Added support for the `color_map` property in the linear gradient.
+* Added support for the `cross_axis_alignment` in `pager`.
+* Added support for the `dashed` stroke style.
+* Added support for the `non_modal` mode in `tooltip`.
+* Added support for the `submit` action.
+* Added support for the `wrap_content` `layout_mode` in `pager`.
+* Fixed an issue with the tapable content inside `tabs`.
+* Fixed the default value of `column_count` for the `grid` component. Now it's required, as written in the schema.
+* Fixed the recreation of neighboring components when using the patch.
+* Fixed the styles of `menu_items`.
+* Fixed virtual keyboard in `input` with `keyboard_type` = `number`.
+
+
 ## 31.4.0
 
 # Android Client:
