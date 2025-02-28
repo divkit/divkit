@@ -1,3 +1,4 @@
+import type { ComponentContext } from '../src/types/componentContext';
 import type { Variable } from './variables';
 
 export type Subscriber<T> = (value: T) => void;
@@ -363,6 +364,7 @@ export type ComponentCallback = (details: {
     json: DivBase;
     origJson: DivBase | undefined;
     templateContext: TemplateContext;
+    componentContext: ComponentContext;
 }) => void;
 
 export interface WrappedError extends Error {

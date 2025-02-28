@@ -403,13 +403,15 @@
         node,
         json,
         origJson,
-        templateContext
+        templateContext,
+        componentContext
     }: {
         type: 'mount' | 'update' | 'destroy';
         node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
+        componentContext: ComponentContext;
     }): void {
         if (onComponent) {
             onComponent({
@@ -417,7 +419,8 @@
                 node,
                 json: json as DivBase,
                 origJson: origJson as DivBase | undefined,
-                templateContext
+                templateContext,
+                componentContext
             });
         }
     }
@@ -1806,6 +1809,9 @@
                     ctx.variables,
                     mergeMaps(localVars, opts.variables)
                 );
+                if (process.env.DEVTOOL && localVars) {
+                    componentContext.selfVariables = new Set([...localVars.keys()]);
+                }
 
                 let localCustomFunctions: CustomFunctions | undefined;
                 if (Array.isArray(childProcessedJson.functions)) {

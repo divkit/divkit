@@ -19,6 +19,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     origJson?: MaybeMissing<DivBaseData> | undefined;
     templateContext: TemplateContext;
     variables?: Map<string, Variable>;
+    selfVariables?: Set<string>;
     customFunctions?: CustomFunctions;
     isRootState?: boolean;
     isTooltipRoot?: boolean;

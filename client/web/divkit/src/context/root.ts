@@ -77,12 +77,14 @@ export interface RootCtxValue {
         node,
         json,
         origJson,
-        templateContext
+        templateContext,
+        componentContext
     }: {
         type: 'mount' | 'update' | 'destroy';
         node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
+        componentContext: ComponentContext;
     }): void;
 }
