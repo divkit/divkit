@@ -179,7 +179,7 @@ export function visibilityAction(node: HTMLElement, {
                                 ++status.count;
 
                                 const limit = calcedParams.log_limit === 0 ? Infinity : (calcedParams.log_limit || 1);
-                                if (++status.count >= limit) {
+                                if (status.count >= limit) {
                                     status.finished = true;
                                 }
 
