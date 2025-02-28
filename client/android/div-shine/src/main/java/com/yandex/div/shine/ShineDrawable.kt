@@ -81,6 +81,15 @@ class ShineDrawable(
         valueAnimator.cancel()
     }
 
+    fun resume() {
+        if (!valueAnimator.isPaused) return
+        valueAnimator.resume()
+    }
+
+    fun pause() {
+        valueAnimator.pause()
+    }
+
     override fun isRunning() = valueAnimator.isRunning
 
     public override fun onBoundsChange(bounds: Rect) {

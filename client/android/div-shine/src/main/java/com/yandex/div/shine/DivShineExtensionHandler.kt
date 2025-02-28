@@ -8,6 +8,7 @@ import android.view.View
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.widget.DivViewDelegate
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -19,7 +20,7 @@ import org.json.JSONObject
 private const val EXTENSION_ID = "shine"
 
 class DivShineExtensionHandler(
-    private val logger: DivShineLogger = DivShineLogger.STUB
+    private val logger: DivShineLogger = DivShineLogger.STUB,
 ) : DivExtensionHandler {
 
     override fun matches(div: DivBase): Boolean {
@@ -71,11 +72,38 @@ class DivShineExtensionHandler(
             data,
             actionPerformer,
             expressionResolver,
-            logger
+            logger,
         )
+
+        val delegate = object : DivViewDelegate {
+            var isPaused = false
+
+            private fun invalidateAnimationPause() {
+                if (isPaused && view.isShown && view.isAttachedToWindow) {
+                    transformer.resumeAnimation()
+                    isPaused = false
+                } else if (!isPaused && (!view.isShown || !view.isAttachedToWindow)) {
+                    transformer.pauseAnimation()
+                    isPaused = true
+                }
+            }
+
+            override fun invalidateDrawable(dr: Drawable): Drawable = dr
+
+            override fun onVisibilityChanged(changedView: View, visibility: Int): Boolean {
+                invalidateAnimationPause()
+                return true
+            }
+
+            override fun onAttachedToWindow() = invalidateAnimationPause()
+            override fun onDetachedFromWindow() = invalidateAnimationPause()
+            override fun buildDrawingCache(autoScale: Boolean) = Unit
+            override fun unscheduleDrawable(who: Drawable?) = Unit
+        }
 
         view.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         imageView.imageTransformer = transformer
+        imageView.delegate = delegate
         view.setTag(R.id.div_shine_image_transformer, transformer)
     }
 
@@ -87,6 +115,7 @@ class DivShineExtensionHandler(
     ) {
         val imageView = view as? LoadableImageView
         imageView?.imageTransformer = null
+        imageView?.delegate = null
         val transformer = (view.getTag(R.id.div_shine_image_transformer) as? ShineImageTransformer)
         transformer?.clear()
     }
@@ -136,6 +165,14 @@ private class ShineImageTransformer(
                 start()
             }
         } ?: drawable
+    }
+
+    fun resumeAnimation() {
+        shineDrawable.resume()
+    }
+
+    fun pauseAnimation() {
+        shineDrawable.pause()
     }
 
     fun clear() {
