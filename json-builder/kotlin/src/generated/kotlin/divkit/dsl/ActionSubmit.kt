@@ -97,7 +97,7 @@ data class ActionSubmit internal constructor(
 
         data class Properties internal constructor(
             /**
-             * HTTP request headers.
+             * HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.
              */
             val headers: Property<List<Header>>?,
             /**
@@ -292,7 +292,7 @@ fun ActionSubmit.evaluate(
 fun ActionSubmit.asList() = listOf(this)
 
 /**
- * @param headers HTTP request headers.
+ * @param headers HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.
  * @param method HTTP request method.
  * @param url Link for sending data from the container.
  */
@@ -311,7 +311,7 @@ fun DivScope.actionSubmitRequest(
 )
 
 /**
- * @param headers HTTP request headers.
+ * @param headers HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.
  * @param method HTTP request method.
  * @param url Link for sending data from the container.
  */
@@ -328,7 +328,7 @@ fun DivScope.actionSubmitRequestProps(
 )
 
 /**
- * @param headers HTTP request headers.
+ * @param headers HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.
  * @param method HTTP request method.
  * @param url Link for sending data from the container.
  */
@@ -345,7 +345,7 @@ fun TemplateScope.actionSubmitRequestRefs(
 )
 
 /**
- * @param headers HTTP request headers.
+ * @param headers HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.
  * @param method HTTP request method.
  * @param url Link for sending data from the container.
  */
@@ -364,7 +364,7 @@ fun ActionSubmit.Request.override(
 )
 
 /**
- * @param headers HTTP request headers.
+ * @param headers HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.
  * @param method HTTP request method.
  * @param url Link for sending data from the container.
  */

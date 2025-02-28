@@ -36,6 +36,7 @@ data class Tooltip internal constructor(
         Properties(
             animationIn = additive.animationIn ?: properties.animationIn,
             animationOut = additive.animationOut ?: properties.animationOut,
+            backgroundAccessibilityDescription = additive.backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
             closeByTapOutside = additive.closeByTapOutside ?: properties.closeByTapOutside,
             div = additive.div ?: properties.div,
             duration = additive.duration ?: properties.duration,
@@ -56,6 +57,10 @@ data class Tooltip internal constructor(
          * Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
          */
         val animationOut: Property<Animation>?,
+        /**
+         * Description for accessibility of the background tap action for tooltip.
+         */
+        val backgroundAccessibilityDescription: Property<String>?,
         /**
          * Allows dismissing tooltip by tapping outside of it.
          * Default value: `true`.
@@ -97,6 +102,7 @@ data class Tooltip internal constructor(
             result.putAll(properties)
             result.tryPutProperty("animation_in", animationIn)
             result.tryPutProperty("animation_out", animationOut)
+            result.tryPutProperty("background_accessibility_description", backgroundAccessibilityDescription)
             result.tryPutProperty("close_by_tap_outside", closeByTapOutside)
             result.tryPutProperty("div", div)
             result.tryPutProperty("duration", duration)
@@ -121,6 +127,7 @@ data class Tooltip internal constructor(
 /**
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
+ * @param backgroundAccessibilityDescription Description for accessibility of the background tap action for tooltip.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -135,6 +142,7 @@ fun DivScope.tooltip(
     `use named arguments`: Guard = Guard.instance,
     animationIn: Animation? = null,
     animationOut: Animation? = null,
+    backgroundAccessibilityDescription: String? = null,
     closeByTapOutside: Boolean? = null,
     div: Div? = null,
     duration: Int? = null,
@@ -147,6 +155,7 @@ fun DivScope.tooltip(
     Tooltip.Properties(
         animationIn = valueOrNull(animationIn),
         animationOut = valueOrNull(animationOut),
+        backgroundAccessibilityDescription = valueOrNull(backgroundAccessibilityDescription),
         closeByTapOutside = valueOrNull(closeByTapOutside),
         div = valueOrNull(div),
         duration = valueOrNull(duration),
@@ -161,6 +170,7 @@ fun DivScope.tooltip(
 /**
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
+ * @param backgroundAccessibilityDescription Description for accessibility of the background tap action for tooltip.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -175,6 +185,7 @@ fun DivScope.tooltipProps(
     `use named arguments`: Guard = Guard.instance,
     animationIn: Animation? = null,
     animationOut: Animation? = null,
+    backgroundAccessibilityDescription: String? = null,
     closeByTapOutside: Boolean? = null,
     div: Div? = null,
     duration: Int? = null,
@@ -186,6 +197,7 @@ fun DivScope.tooltipProps(
 ) = Tooltip.Properties(
     animationIn = valueOrNull(animationIn),
     animationOut = valueOrNull(animationOut),
+    backgroundAccessibilityDescription = valueOrNull(backgroundAccessibilityDescription),
     closeByTapOutside = valueOrNull(closeByTapOutside),
     div = valueOrNull(div),
     duration = valueOrNull(duration),
@@ -199,6 +211,7 @@ fun DivScope.tooltipProps(
 /**
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
+ * @param backgroundAccessibilityDescription Description for accessibility of the background tap action for tooltip.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -213,6 +226,7 @@ fun TemplateScope.tooltipRefs(
     `use named arguments`: Guard = Guard.instance,
     animationIn: ReferenceProperty<Animation>? = null,
     animationOut: ReferenceProperty<Animation>? = null,
+    backgroundAccessibilityDescription: ReferenceProperty<String>? = null,
     closeByTapOutside: ReferenceProperty<Boolean>? = null,
     div: ReferenceProperty<Div>? = null,
     duration: ReferenceProperty<Int>? = null,
@@ -224,6 +238,7 @@ fun TemplateScope.tooltipRefs(
 ) = Tooltip.Properties(
     animationIn = animationIn,
     animationOut = animationOut,
+    backgroundAccessibilityDescription = backgroundAccessibilityDescription,
     closeByTapOutside = closeByTapOutside,
     div = div,
     duration = duration,
@@ -237,6 +252,7 @@ fun TemplateScope.tooltipRefs(
 /**
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
+ * @param backgroundAccessibilityDescription Description for accessibility of the background tap action for tooltip.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -251,6 +267,7 @@ fun Tooltip.override(
     `use named arguments`: Guard = Guard.instance,
     animationIn: Animation? = null,
     animationOut: Animation? = null,
+    backgroundAccessibilityDescription: String? = null,
     closeByTapOutside: Boolean? = null,
     div: Div? = null,
     duration: Int? = null,
@@ -263,6 +280,7 @@ fun Tooltip.override(
     Tooltip.Properties(
         animationIn = valueOrNull(animationIn) ?: properties.animationIn,
         animationOut = valueOrNull(animationOut) ?: properties.animationOut,
+        backgroundAccessibilityDescription = valueOrNull(backgroundAccessibilityDescription) ?: properties.backgroundAccessibilityDescription,
         closeByTapOutside = valueOrNull(closeByTapOutside) ?: properties.closeByTapOutside,
         div = valueOrNull(div) ?: properties.div,
         duration = valueOrNull(duration) ?: properties.duration,
@@ -277,6 +295,7 @@ fun Tooltip.override(
 /**
  * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
  * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
+ * @param backgroundAccessibilityDescription Description for accessibility of the background tap action for tooltip.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
@@ -291,6 +310,7 @@ fun Tooltip.defer(
     `use named arguments`: Guard = Guard.instance,
     animationIn: ReferenceProperty<Animation>? = null,
     animationOut: ReferenceProperty<Animation>? = null,
+    backgroundAccessibilityDescription: ReferenceProperty<String>? = null,
     closeByTapOutside: ReferenceProperty<Boolean>? = null,
     div: ReferenceProperty<Div>? = null,
     duration: ReferenceProperty<Int>? = null,
@@ -303,6 +323,7 @@ fun Tooltip.defer(
     Tooltip.Properties(
         animationIn = animationIn ?: properties.animationIn,
         animationOut = animationOut ?: properties.animationOut,
+        backgroundAccessibilityDescription = backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
         closeByTapOutside = closeByTapOutside ?: properties.closeByTapOutside,
         div = div ?: properties.div,
         duration = duration ?: properties.duration,
@@ -315,6 +336,7 @@ fun Tooltip.defer(
 )
 
 /**
+ * @param backgroundAccessibilityDescription Description for accessibility of the background tap action for tooltip.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
  * @param position The position of a tooltip relative to an element it belongs to.
@@ -322,6 +344,7 @@ fun Tooltip.defer(
 @Generated
 fun Tooltip.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    backgroundAccessibilityDescription: ExpressionProperty<String>? = null,
     closeByTapOutside: ExpressionProperty<Boolean>? = null,
     duration: ExpressionProperty<Int>? = null,
     position: ExpressionProperty<Tooltip.Position>? = null,
@@ -329,6 +352,7 @@ fun Tooltip.evaluate(
     Tooltip.Properties(
         animationIn = properties.animationIn,
         animationOut = properties.animationOut,
+        backgroundAccessibilityDescription = backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
         closeByTapOutside = closeByTapOutside ?: properties.closeByTapOutside,
         div = properties.div,
         duration = duration ?: properties.duration,
