@@ -27,9 +27,10 @@ class DivImagePreloader @Inject constructor(
     fun preloadImage(
         div: Div,
         resolver: ExpressionResolver,
-        callback: DivPreloader.DownloadCallback
+        preloadFilter: DivPreloader.PreloadFilter = DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER,
+        callback: DivPreloader.DownloadCallback,
     ): List<LoadReference> {
-        return PreloadVisitor(callback, resolver, visitContainers = false).preload(div)
+        return PreloadVisitor(callback, resolver, preloadFilter, visitContainers = false).preload(div)
     }
 
     private fun preloadImage(url: String, callback: DivPreloader.DownloadCallback, references: ArrayList<LoadReference>) {
@@ -45,6 +46,7 @@ class DivImagePreloader @Inject constructor(
     private inner class PreloadVisitor(
         private val callback: DivPreloader.DownloadCallback,
         private val resolver: ExpressionResolver,
+        private val preloadFilter: DivPreloader.PreloadFilter,
         private val visitContainers: Boolean = true,
     ) : DivVisitor<Unit>() {
         private val references = ArrayList<LoadReference>()
@@ -65,14 +67,14 @@ class DivImagePreloader @Inject constructor(
 
         override fun visit(data: Div.Image, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
-            if (data.value.preloadRequired.evaluate(resolver)) {
+            if (preloadFilter.shouldPreloadContent(data, resolver)) {
                 preloadImage(data.value.imageUrl.evaluate(resolver).toString(), callback, references)
             }
         }
 
         override fun visit(data: Div.GifImage, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
-            if (data.value.preloadRequired.evaluate(resolver)) {
+            if (preloadFilter.shouldPreloadContent(data, resolver)) {
                 preloadImageBytes(data.value.gifUrl.evaluate(resolver).toString(), callback, references)
             }
         }
@@ -121,7 +123,7 @@ class DivImagePreloader @Inject constructor(
 
         private fun visitBackground(data: Div, resolver: ExpressionResolver) {
             data.value().background?.forEach { background ->
-                if (background is DivBackground.Image && background.value.preloadRequired.evaluate(resolver)) {
+                if (background is DivBackground.Image && preloadFilter.shouldPreloadBackground(background, resolver)) {
                     preloadImage(background.value.imageUrl.evaluate(resolver).toString(), callback, references)
                 }
             }
