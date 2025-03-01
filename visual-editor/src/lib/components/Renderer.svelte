@@ -1194,7 +1194,6 @@
                     ['size_provider', SizeProvider],
                     ['lottie', Lottie],
                 ]),
-                //@ts-expect-error Wrong types
                 direction,
                 typefaceProvider(fontFamily) {
                     return customFontFaces.find(it => it.value === fontFamily)?.value || '';

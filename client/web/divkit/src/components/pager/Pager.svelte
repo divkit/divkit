@@ -56,7 +56,7 @@
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
-    import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
+    import { pxToEmWithUnits } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
     import { correctGeneralOrientation } from '../../utils/correctGeneralOrientation';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
@@ -101,12 +101,18 @@
     let padding = '';
     let sizeVal = '';
 
+    let childLayoutParams: LayoutParams = {};
+    let crossAxisAlignment: 'start' | 'center' | 'end' = 'start';
+
     let items: ComponentContext[] = [];
+    let prevContext: ComponentContext<DivPagerData> | undefined;
 
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
         padding = '';
+        childLayoutParams = {};
+        crossAxisAlignment = 'start';
     }
 
     $: if (origJson) {
@@ -123,9 +129,10 @@
     $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
     $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
+    $: jsonCrossAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_axis_alignment);
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
-        componentContext = {
+        componentContext = prevContext = {
             ...componentContext,
             json: {
                 ...componentContext.json,
@@ -155,17 +162,33 @@
             });
         }
 
-        items.forEach(context => {
-            context.destroy();
-        });
+        const unusedContexts = new Set(items);
+        const jsonToContextMap = new Map<unknown, ComponentContext>();
+
+        if (prevContext === componentContext) {
+            items.forEach(context => {
+                jsonToContextMap.set(context.json, context);
+            });
+        }
 
         items = newItems.map((item, index) => {
+            const found = jsonToContextMap.get(item.div);
+            if (found) {
+                unusedContexts.delete(found);
+                return found;
+            }
+
             return componentContext.produceChildContext(item.div, {
                 path: index,
                 variables: item.vars,
                 id: item.id
             });
         });
+
+        for (const ctx of unusedContexts) {
+            ctx.destroy();
+        }
+        prevContext = componentContext;
     }
 
     $: {
@@ -188,7 +211,7 @@
         if (!$jsonLayoutMode) {
             hasLayoutModeError = true;
             componentContext.logError(wrapError(new Error('Empty "layout_mode" prop for div "pager"')));
-        } else if ($jsonLayoutMode.type !== 'percentage' && $jsonLayoutMode.type !== 'fixed') {
+        } else if ($jsonLayoutMode.type !== 'percentage' && $jsonLayoutMode.type !== 'fixed' && $jsonLayoutMode.type !== 'wrap_content') {
             hasLayoutModeError = true;
             componentContext.logError(wrapError(new Error('Incorrect value of "layout_mode.type" for div "pager"')));
         } else {
@@ -237,7 +260,17 @@
         } else if ($jsonLayoutMode?.type === 'percentage') {
             const pageWidth = $jsonLayoutMode.page_width?.value;
             sizeVal = `${Number(pageWidth)}%`;
+        } else if ($jsonLayoutMode?.type === 'wrap_content') {
+            sizeVal = 'minmax(max-content, auto)';
         }
+    }
+
+    $: if ($jsonCrossAxisAlignment === 'start' || $jsonCrossAxisAlignment === 'center' || $jsonCrossAxisAlignment === 'end') {
+        crossAxisAlignment = $jsonCrossAxisAlignment;
+
+        childLayoutParams = {
+            [orientation === 'horizontal' ? 'parentVAlign' : 'parentHAlign']: crossAxisAlignment
+        };
     }
 
     $: style = {
@@ -247,7 +280,9 @@
     };
 
     $: mods = {
-        orientation
+        clip: rootCtx.pagerChildrenClipEnabled,
+        orientation,
+        'cross-align': crossAxisAlignment
     };
 
     $: hasError = hasLayoutModeError;
@@ -322,6 +357,10 @@
     $: runSelectedActions(currentItem);
 
     function scrollToPagerItem(index: number, behavior: ScrollBehavior = 'smooth'): void {
+        if (!pagerItemsWrapper) {
+            return;
+        }
+
         const isHorizontal = orientation === 'horizontal';
         const nextPagerItem = pagerItemsWrapper.children[index] as HTMLElement;
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
@@ -393,20 +432,22 @@
     onMount(() => {
         mounted = true;
 
-        const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
+        if (pagerItemsWrapper) {
+            const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
 
-        if (isIndicatorExist) {
-            const pagerItems = [...pagerItemsWrapper.children] as HTMLElement[];
+            if (isIndicatorExist) {
+                const pagerItems = [...pagerItemsWrapper.children] as HTMLElement[];
 
-            for (const [index, item] of pagerItems.entries()) {
-                item.setAttribute('role', 'tabpanel');
-                item.setAttribute('id', `${instId}-panel-${index}`);
-                item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
+                for (const [index, item] of pagerItems.entries()) {
+                    item.setAttribute('role', 'tabpanel');
+                    item.setAttribute('id', `${instId}-panel-${index}`);
+                    item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
+                }
             }
-        }
 
-        if (currentItem > 0) {
-            scrollToPagerItem(currentItem, 'instant');
+            if (currentItem > 0) {
+                scrollToPagerItem(currentItem, 'instant');
+            }
         }
     });
 
@@ -443,6 +484,7 @@
                 <div class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}>
                     <Unknown
                         componentContext={item}
+                        layoutParams={childLayoutParams}
                     />
                 </div>
             {/each}

@@ -29,7 +29,6 @@ import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.drawable.NoOpDrawable
 import com.yandex.div.internal.core.DivVisitor
-import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
@@ -120,14 +119,6 @@ internal class DivViewCreator @Inject constructor(
 
     override fun visit(data: Div.Separator, resolver: ExpressionResolver): View {
         return DivSeparatorView(context)
-    }
-
-    override fun visit(data: Div.Container, resolver: ExpressionResolver): View {
-        val view = defaultVisit(data, resolver) as ViewGroup
-        data.value.buildItems(resolver).forEach { item ->
-            view.addView(create(item.div, item.expressionResolver))
-        }
-        return view
     }
 
     override fun visit(data: Div.Grid, resolver: ExpressionResolver): View {

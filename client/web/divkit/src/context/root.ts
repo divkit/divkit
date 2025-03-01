@@ -26,7 +26,10 @@ export type ExecAnyActionsFunc = (actions: MaybeMissing<Action[]> | undefined, o
     processUrls?: boolean;
 }) => Promise<void>;
 
-export type NodeGetter = () => HTMLElement | null;
+export type NodeGetter = {
+    context: () => ComponentContext;
+    node: () => HTMLElement | null;
+};
 
 export interface RootCtxValue {
     logStat(type: string, action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
@@ -52,8 +55,7 @@ export interface RootCtxValue {
     unregisterFocusable(id: string): void;
     addSvgFilter(color: string, mode: TintMode): string;
     removeSvgFilter(color: string | undefined, mode: TintMode): void;
-    registerId(id: string, getter: NodeGetter): void;
-    unregisterId(id: string): void;
+    registerId(id: string, getter: NodeGetter): () => void;
     getComponentId(id: string): string;
     preparePrototypeVariables(name: string, data: Record<string, unknown>, index: number): Map<string, Variable>;
     getStore<T>(id: string): Writable<T>;
@@ -67,6 +69,7 @@ export interface RootCtxValue {
     isDesktop: Readable<boolean>;
     direction: Readable<Direction>;
     customComponents: Map<string, CustomComponentDescription> | undefined;
+    pagerChildrenClipEnabled: boolean;
 
     // Devtool
     componentDevtool?({
@@ -74,12 +77,14 @@ export interface RootCtxValue {
         node,
         json,
         origJson,
-        templateContext
+        templateContext,
+        componentContext
     }: {
         type: 'mount' | 'update' | 'destroy';
         node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
+        componentContext: ComponentContext;
     }): void;
 }

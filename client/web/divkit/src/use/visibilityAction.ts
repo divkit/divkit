@@ -94,7 +94,7 @@ export function visibilityAction(node: HTMLElement, {
                 (it.action as DisappearAction).disappear_duration,
             log_limit: it.action.log_limit,
             is_enabled: it.action.is_enabled,
-        }) as Readable<CalcedAction>;
+        }, undefined, true) as Readable<CalcedAction>;
     });
 
     let observer: IntersectionObserver | undefined;
@@ -179,7 +179,7 @@ export function visibilityAction(node: HTMLElement, {
                                 ++status.count;
 
                                 const limit = calcedParams.log_limit === 0 ? Infinity : (calcedParams.log_limit || 1);
-                                if (++status.count >= limit) {
+                                if (status.count >= limit) {
                                     status.finished = true;
                                 }
 

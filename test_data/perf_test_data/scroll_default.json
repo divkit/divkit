@@ -1,0 +1,114 @@
+{
+  "templates": {
+    "pager_element": {
+      "type": "image",
+      "image_url": "https://empty.com/stub_image",
+      "height": {
+        "type": "fixed",
+        "unit": "dp",
+        "value": 400
+      },
+      "width": {
+        "type": "fixed",
+        "unit": "dp",
+        "value": 400
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "clip_to_bounds": 0,
+              "height": {
+                "type": "wrap_content"
+              },
+              "border": {
+                "corner_radius": 16
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#F8F7F5"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 16
+                  },
+                  "items": [
+                    {
+                      "type": "container",
+                      "border": {
+                        "corner_radius": 16
+                      },
+                      "items": [
+                        {
+                          "type": "container",
+                          "items": [
+                            {
+                              "type": "container",
+                              "items": [
+                                {
+                                  "type": "container",
+                                  "items": [
+                                    {
+                                      "type": "pager",
+                                      "background": [
+                                        {
+                                          "type": "solid",
+                                          "color": "#F5F3F1"
+                                        }
+                                      ],
+                                      "items": [
+                                        {
+                                          "type": "pager_element"
+                                        },
+                                        {
+                                          "type": "pager_element"
+                                        },
+                                        {
+                                          "type": "pager_element"
+                                        },
+                                        {
+                                          "type": "pager_element"
+                                        },
+                                        {
+                                          "type": "pager_element"
+                                        }
+                                      ],
+                                      "layout_mode": {
+                                        "type": "wrap_content"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

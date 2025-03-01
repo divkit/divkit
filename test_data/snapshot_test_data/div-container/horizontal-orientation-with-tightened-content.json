@@ -1,0 +1,47 @@
+{
+  "description": "Horizontal container with element with tightened width.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "wrap_content"
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "text",
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "max_size": {
+                  "value": 140
+                }
+              },
+              "text": "Container width = wrap_content.\nText width = wrap_content,\nconstrained = true,\nmax_size = 140,\ntighten_width = true.\nContainer wraps text.",
+              "border": {
+                "stroke": {
+                  "color": "#0000FF",
+                  "width": 2
+                }
+              },
+              "tighten_width": true
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

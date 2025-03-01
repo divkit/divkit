@@ -78,6 +78,7 @@
     },
     {
       "title": "Simple tap",
+      "case_id": 15,
       "tags": [
         "DivAction"
       ],
@@ -560,29 +561,31 @@
     },
     {
       "title": "Accessibility descriptions",
+      "case_id": 196,
       "tags": [
         "Accessibility"
       ],
       "steps": [
         "Set russian language on device",
-        "Turn on Screen reader and set order of elements description to '\u0421\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435,\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435,\u0442\u0438\u043f'",
-        "Set focus on '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 1'",
+        "Turn on Screen reader and set order of elements description to 'Состояние,название,тип'",
+        "Set focus on 'Элемент 1'",
         "Listen to Screen reader",
         "Double tap on screen",
-        "Set focus on '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 2'",
+        "Set focus on 'Элемент 2'",
         "Listen to Screen reader",
-        "Set focus on '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3'"
+        "Set focus on 'Элемент 3'"
       ],
       "expected_results": [
-        "On '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 1' Screen reader should say 'C\u0435\u0439\u0447\u0430\u0441 \u0432 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0438 0; \u042d\u043b\u0435\u043c\u0435\u043d\u0442 1; \u041a\u043d\u043e\u043f\u043a\u0430; \u041a\u043e\u0441\u043d\u0438\u0442\u0435\u0441\u044c \u0434\u0432\u0430\u0436\u0434\u044b, \u0447\u0442\u043e\u0431\u044b \u0430\u043a\u0442\u0438\u0432\u0438\u0440\u043e\u0432\u0430\u0442\u044c'",
-        "After double tap Screen reader should say '\u0421\u0435\u0439\u0447\u0430\u0441 \u0432 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0438 1'",
-        "On '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 2' Screen reader should say '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 2; \u041a\u043d\u043e\u043f\u043a\u0430; \u041d\u0430\u0436\u043c\u0438\u0442\u0435 \u043d\u0430 \u043a\u043d\u043e\u043f\u043a\u0443, \u0447\u0442\u043e\u0431\u044b \u0447\u0442\u043e-\u0442\u043e \u043f\u0440\u043e\u0438\u0437\u043e\u0448\u043b\u043e'",
-        "On '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3' Screen reader should say '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3; \u041a\u043d\u043e\u043f\u043a\u0430'"
+        "On 'Элемент 1' Screen reader should say 'Cейчас в состоянии 0; Элемент 1; Кнопка; Коснитесь дважды, чтобы активировать'",
+        "After double tap Screen reader should say 'Сейчас в состоянии 1'",
+        "On 'Элемент 2' Screen reader should say 'Элемент 2; Кнопка; Нажмите на кнопку, чтобы что-то произошло'",
+        "On 'Элемент 3' Screen reader should say 'Элемент 3; Кнопка'"
       ],
       "file": "accessibility/descriptions.json"
     },
     {
       "title": "Accessibility image range",
+      "case_id": 197,
       "tags": [
         "Accessibility"
       ],
@@ -625,6 +628,7 @@
     },
     {
       "title": "Accessibility auto types",
+      "case_id": 198,
       "tags": [
         "Accessibility"
       ],
@@ -651,8 +655,8 @@
         "Focus on items from top to bottom"
       ],
       "expected_results": [
-        "When focusing on 1 item you'll hear '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 1'",
-        "When focusing on group of 2 and 3 items you will hear '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 2, \u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 3'",
+        "When focusing on 1 item you'll hear 'Это Элемент 1'",
+        "When focusing on group of 2 and 3 items you will hear 'Это Элемент 2, Это Элемент 3'",
         "Can't focus 4 element"
       ],
       "file": "accessibility/mode/default.json"
@@ -672,9 +676,9 @@
       ],
       "expected_results": [
         "Focusing on all card",
-        "You will hear '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 1, \u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 2, \u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 3'",
-        "On activation menu with text '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 1, \u042d\u043b\u0435\u043c\u0435\u043d\u0442 2, \u042d\u043b\u0435\u043c\u0435\u043d\u0442 3' appears",
-        "On focus Screen reader should not say '\u041a\u043e\u0441\u043d\u0438\u0442\u0435\u0441\u044c \u0434\u0432\u0430\u0436\u0434\u044b \u0438 \u0443\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0439\u0442\u0435'"
+        "You will hear 'Это Элемент 1, Это Элемент 2, Это Элемент 3'",
+        "On activation menu with text 'Элемент 1, Элемент 2, Элемент 3' appears",
+        "On focus Screen reader should not say 'Коснитесь дважды и удерживайте'"
       ],
       "file": "accessibility/mode/merge.json"
     },
@@ -693,8 +697,8 @@
       ],
       "expected_results": [
         "Focus on 5-th item",
-        "\u0423\u0441\u043b\u044b\u0448\u0438\u043c '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 5'",
-        "\u041f\u0440\u0438 \u0432\u044b\u043a\u043b\u044e\u0447\u0435\u043d\u043d\u043e\u043c Screen reader \u043d\u0430 \u043a\u0430\u0436\u0434\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0435 \u043f\u0440\u0438 \u0442\u0430\u043f\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u043f\u043e\u044f\u0432\u043b\u044f\u0442\u044c\u0441\u044f \u043c\u0435\u043d\u044e \u0441 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u044d\u0442\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0438"
+        "Услышим 'Это Элемент 5'",
+        "При выключенном Screen reader на каждой кнопке при тапе должно появляться меню с названием этой кнопки"
       ],
       "file": "accessibility/mode/exclude.json"
     },
@@ -720,6 +724,7 @@
     },
     {
       "title": "Checkbox with accessibility",
+      "case_id": 194,
       "platforms": [
         "web"
       ],
@@ -738,6 +743,7 @@
     },
     {
       "title": "Actions on tap",
+      "case_id": 36,
       "automated": [
         "web"
       ],
@@ -974,6 +980,7 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Article",
+      "case_id": 38,
       "tags": [
         "Animations"
       ],
@@ -989,6 +996,7 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Article with transitions",
+      "case_id": 39,
       "tags": [
         "Animations"
       ],
@@ -1004,6 +1012,14 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Blink",
+      "case_id": 40,
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "animation_in/animation_out is deprecated"
+      },
       "tags": [
         "Animations"
       ],
@@ -1017,6 +1033,7 @@
     },
     {
       "title": "Scale transition ignore pivot_x/pivot_y",
+      "case_id": 151,
       "platforms": [
         "android",
         "ios"
@@ -1034,6 +1051,7 @@
     },
     {
       "title": "Change bounds transitions ignore start_delay",
+      "case_id": 41,
       "tags": [
         "Animations"
       ],
@@ -1108,6 +1126,7 @@
     },
     {
       "title": "Lottie animation (repeat_mode=restart, repeat_count=5)",
+      "case_id": 48,
       "platforms": [
         "android",
         "ios",
@@ -1164,6 +1183,7 @@
     },
     {
       "title": "Lottie params",
+      "case_id": 190,
       "platforms": [
         "web"
       ],
@@ -1379,6 +1399,7 @@
     },
     {
       "title": "Visibility actions is_enabled",
+      "case_id": 58,
       "automated": [
         "android",
         "web"
@@ -2082,7 +2103,7 @@
     },
     {
       "title": "Custom card",
-      "case_id": 93, 
+      "case_id": 93,
       "platforms": [
         "android",
         "web"
@@ -2112,6 +2133,7 @@
     },
     {
       "title": "Rive animation (loop=pingPong)",
+      "case_id": 149,
       "platforms": [
         "ios"
       ],
@@ -2122,6 +2144,7 @@
     },
     {
       "title": "Rive animation (loop=oneShot)",
+      "case_id": 148,
       "platforms": [
         "ios"
       ],
@@ -2136,6 +2159,7 @@
     },
     {
       "title": "Visibility transition trigger",
+      "case_id": 94,
       "platforms": [
         "android",
         "web"
@@ -2174,6 +2198,7 @@
     },
     {
       "title": "Gallery items posing",
+      "case_id": 95,
       "automated": [
         "web"
       ],
@@ -2191,6 +2216,7 @@
     },
     {
       "title": "Common timer",
+      "case_id": 96,
       "tags": [
         "Timers"
       ],
@@ -2202,6 +2228,7 @@
     },
     {
       "title": "Common timer with typed action",
+      "case_id": 166,
       "tags": [
         "Timers",
         "TypedActions"
@@ -2219,6 +2246,7 @@
     },
     {
       "title": "Endless timer",
+      "case_id": 97,
       "tags": [
         "Timers"
       ],
@@ -2230,6 +2258,7 @@
     },
     {
       "title": "Countdown timer",
+      "case_id": 98,
       "tags": [
         "Timers"
       ],
@@ -2240,6 +2269,7 @@
     },
     {
       "title": "Change bounds transition allows input focus",
+      "case_id": 162,
       "platforms": [
         "ios"
       ],
@@ -2258,6 +2288,7 @@
     },
     {
       "title": "Blur in DivImage",
+      "case_id": 99,
       "tags": [
         "DivImage"
       ],
@@ -2273,6 +2304,7 @@
     },
     {
       "title": "LayoutProvider",
+      "case_id": 188,
       "platforms": [
         "android",
         "ios",
@@ -2288,6 +2320,7 @@
     },
     {
       "title": "LayoutProvider recursive",
+      "case_id": 189,
       "platforms": [
         "android",
         "ios",
@@ -2304,6 +2337,7 @@
     },
     {
       "title": "SizeProvider extension",
+      "case_id": 102,
       "platforms": [
         "ios",
         "web"
@@ -2322,6 +2356,7 @@
     },
     {
       "title": "SizeProvider extension (recursive)",
+      "case_id": 103,
       "platforms": [
         "ios",
         "web"
@@ -2340,6 +2375,7 @@
     },
     {
       "title": "Fixed length input mask",
+      "case_id": 104,
       "platforms": [
         "android",
         "web",
@@ -2362,6 +2398,7 @@
     },
     {
       "title": "Fixed length phone input mask",
+      "case_id": 105,
       "platforms": [
         "android",
         "web",
@@ -2374,6 +2411,7 @@
     },
     {
       "title": "Phone input mask",
+      "case_id": 146,
       "platforms": [
         "android",
         "ios"
@@ -2395,6 +2433,7 @@
     },
     {
       "title": "Regex input filter",
+      "case_id": 158,
       "platforms": [
         "ios",
         "web"
@@ -2409,6 +2448,7 @@
     },
     {
       "title": "Regex input validator",
+      "case_id": 147,
       "platforms": [
         "android",
         "ios",
@@ -2421,6 +2461,7 @@
     },
     {
       "title": "Expression input filter",
+      "case_id": 159,
       "platforms": [
         "ios",
         "web"
@@ -2435,6 +2476,7 @@
     },
     {
       "title": "Expression input validator",
+      "case_id": 142,
       "platforms": [
         "android",
         "ios",
@@ -2447,6 +2489,7 @@
     },
     {
       "title": "Currency input mask",
+      "case_id": 106,
       "platforms": [
         "android",
         "web"
@@ -2458,6 +2501,7 @@
     },
     {
       "title": "Video with controls",
+      "case_id": 107,
       "tags": [
         "DivVideo"
       ],
@@ -2465,6 +2509,7 @@
     },
     {
       "title": "Video with controls and typed actions",
+      "case_id": 180,
       "tags": [
         "DivVideo",
         "TypedActions"
@@ -2478,6 +2523,7 @@
     },
     {
       "title": "Video volume control",
+      "case_id": 108,
       "tags": [
         "DivVideo"
       ],
@@ -2485,6 +2531,7 @@
     },
     {
       "title": "Disappearing actions with DivVideo",
+      "case_id": 109,
       "tags": [
         "DivVideo",
         "Disappear action",
@@ -2495,6 +2542,7 @@
     },
     {
       "title": "Video stream",
+      "case_id": 152,
       "platforms": [
         "android",
         "ios"
@@ -2506,6 +2554,7 @@
     },
     {
       "title": "Video fullscreen",
+      "case_id": 110,
       "tags": [
         "DivVideo",
         "Disappear action",
@@ -2516,6 +2565,7 @@
     },
     {
       "title": "Video in pager",
+      "case_id": 111,
       "tags": [
         "DivVideo",
         "DivPager"
@@ -2524,6 +2574,7 @@
     },
     {
       "title": "Video callbacks",
+      "case_id": 112,
       "tags": [
         "DivVideo"
       ],
@@ -2531,6 +2582,7 @@
     },
     {
       "title": "Video scale",
+      "case_id": 113,
       "tags": [
         "DivVideo"
       ],
@@ -2543,6 +2595,7 @@
     },
     {
       "title": "Video aspect",
+      "case_id": 114,
       "tags": [
         "DivVideo"
       ],
@@ -2550,6 +2603,7 @@
     },
     {
       "title": "Tooltips with typed actions",
+      "case_id": 179,
       "platforms": [
         "android",
         "ios",
@@ -2572,6 +2626,7 @@
     },
     {
       "title": "Tooltips",
+      "case_id": 117,
       "tags": [
         "Tooltips",
         "visibility_actions"
@@ -2588,8 +2643,10 @@
     },
     {
       "title": "Tooltips with tap outside properties",
+      "case_id": 305,
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Tooltips"
@@ -2599,14 +2656,18 @@
         "Try to tap outside of tooltip",
         "Close tooltip by cross button",
         "Tap on second button",
-        "Tap outside of tooltip"
+        "Tap outside of tooltip",
+        "Tap on third button",
+        "Tap on other buttons"
       ],
       "expected_results": [
         "First tooltip is shown",
         "First tooltip isn't closed by tapping outside of the tooltip",
         "First tooltip is closed",
         "Second tooltip is shown",
-        "Label text changed to `Outside actions called: true`, label text color is green"
+        "Label text changed to `Outside actions called: true`, label text color is green",
+        "Third tooltip is shown",
+        "First and second buttons are clickable during showing of third non modal tooltip"
       ],
       "file": "tooltips-with-tap-outside-properties.json"
     },
@@ -2764,7 +2825,7 @@
     {
       "title": "Patch gallery with typed action",
       "case_id": 192,
-      "platforms":  [
+      "platforms": [
         "android",
         "web"
       ],

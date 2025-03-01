@@ -100,7 +100,8 @@ abstract public class Div2Module {
             @NonNull DivExtensionController extensionController
       ) {
         return new DivPreloader(imagePreloader,
-          customContainerViewAdapter, extensionController, videoPreloader
+          customContainerViewAdapter, extensionController, videoPreloader,
+                DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
         );
     }
 }

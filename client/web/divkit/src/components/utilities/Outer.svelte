@@ -21,6 +21,9 @@
         bottom: 'end',
         baseline: 'baseline'
     };
+
+    const stateChangeErrorMessage = (prop: string) =>
+        `The component id with the "${prop}" property for state change is missing. Either specify the id, or specify the "transition_trigger" property without "state_change" value.`;
 </script>
 
 <script lang="ts">
@@ -194,6 +197,7 @@
         destroy(): void;
     } | undefined;
     let dev: DevtoolResult | null = null;
+    let idUnregister: (() => void) | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -211,7 +215,7 @@
         jsonTransitionTriggers = componentContext.fakeElement ?
             [] :
             (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
-        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.id);
+        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1);
         hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1);
 
         if (currentNode) {
@@ -254,14 +258,30 @@
     $: jsonAlpha = componentContext.getDerivedFromVars(componentContext.json.alpha);
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonBackground = componentContext.getDerivedFromVars(componentContext.json.background);
-    $: jsonAction = componentContext.getDerivedFromVars(componentContext.json.action);
-    $: jsonActions = componentContext.getDerivedFromVars(componentContext.json.actions);
-    $: jsonDoubleTapActions = componentContext.getDerivedFromVars(componentContext.json.doubletap_actions);
-    $: jsonLongTapActions = componentContext.getDerivedFromVars(componentContext.json.longtap_actions);
-    $: jsonPressStartActions = componentContext.getDerivedFromVars(componentContext.json.press_start_actions);
-    $: jsonPressEndActions = componentContext.getDerivedFromVars(componentContext.json.press_end_actions);
-    $: jsonHoverStartActions = componentContext.getDerivedFromVars(componentContext.json.hover_start_actions);
-    $: jsonHoverEndActions = componentContext.getDerivedFromVars(componentContext.json.hover_end_actions);
+    $: jsonAction = componentContext.getDerivedFromVars(
+        componentContext.json.action, undefined, true
+    );
+    $: jsonActions = componentContext.getDerivedFromVars(
+        componentContext.json.actions, undefined, true
+    );
+    $: jsonDoubleTapActions = componentContext.getDerivedFromVars(
+        componentContext.json.doubletap_actions, undefined, true
+    );
+    $: jsonLongTapActions = componentContext.getDerivedFromVars(
+        componentContext.json.longtap_actions, undefined, true
+    );
+    $: jsonPressStartActions = componentContext.getDerivedFromVars(
+        componentContext.json.press_start_actions, undefined, true
+    );
+    $: jsonPressEndActions = componentContext.getDerivedFromVars(
+        componentContext.json.press_end_actions, undefined, true
+    );
+    $: jsonHoverStartActions = componentContext.getDerivedFromVars(
+        componentContext.json.hover_start_actions, undefined, true
+    );
+    $: jsonHoverEndActions = componentContext.getDerivedFromVars(
+        componentContext.json.hover_end_actions, undefined, true
+    );
     $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
     $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
     $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
@@ -328,7 +348,8 @@
                 newHasBorder = true;
                 strokeWidth = correctNonNegativeNumber(border.stroke.width, strokeWidth);
                 strokeColor = correctColor(border.stroke.color, 1, strokeColor);
-                newBorderElemStyle['--divkit-border'] = `${pxToEm(strokeWidth + 1)} solid ${strokeColor}`;
+                const strokeStyle = border.stroke.style?.type === 'dashed' ? 'dashed' : 'solid';
+                newBorderElemStyle['--divkit-border'] = `${pxToEm(strokeWidth + 1)} ${strokeStyle} ${strokeColor}`;
             }
             if (border.corners_radius && typeof border.corners_radius === 'object') {
                 cornersRadius = correctBorderRadiusObject(border.corners_radius, cornersRadius);
@@ -643,7 +664,7 @@
 
     $: {
         stateChangingInProgress = undefined;
-        if (hasStateChangeTrigger && componentContext.json.transition_in && rootCtx.isRunning('stateChange')) {
+        if (hasStateChangeTrigger && componentContext.id && componentContext.json.transition_in && rootCtx.isRunning('stateChange')) {
             stateChangingInProgress = true;
         }
     }
@@ -651,6 +672,7 @@
         transitionChangeInProgress = undefined;
         if (
             hasStateChangeTrigger &&
+            componentContext.id &&
             rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.id)
         ) {
             transitionChangeInProgress = true;
@@ -967,27 +989,44 @@
 
         currentNode = node;
         if (hasStateChangeTrigger && componentContext.json.transition_in) {
-            stateCtx.registerChildWithTransitionIn(
-                componentContext.json as DivBaseData,
-                componentContext,
-                componentContext.json.transition_in,
-                node
-            ).then(() => {
-                stateChangingInProgress = false;
-            }).catch(e => {
-                stateChangingInProgress = false;
-                throw e;
-            });
+            if (componentContext.id) {
+                stateCtx.registerChildWithTransitionIn(
+                    componentContext.json as DivBaseData,
+                    componentContext,
+                    componentContext.json.transition_in,
+                    node
+                ).then(() => {
+                    stateChangingInProgress = false;
+                }).catch(e => {
+                    stateChangingInProgress = false;
+                    throw e;
+                });
+            } else {
+                componentContext.logError(wrapError(new Error(stateChangeErrorMessage('transition_in')), {
+                    level: 'warn'
+                }));
+            }
         }
         if (hasStateChangeTrigger && componentContext.json.transition_out) {
-            stateCtx.registerChildWithTransitionOut(
-                componentContext.json as DivBaseData,
-                componentContext,
-                componentContext.json.transition_out,
-                node
-            );
+            if (componentContext.id) {
+                stateCtx.registerChildWithTransitionOut(
+                    componentContext.json as DivBaseData,
+                    componentContext,
+                    componentContext.json.transition_out,
+                    node
+                );
+            } else {
+                componentContext.logError(wrapError(new Error(stateChangeErrorMessage('transition_out')), {
+                    level: 'warn'
+                }));
+            }
         }
         if (!componentContext.fakeElement) {
+            if (componentContext.json.transition_change && !componentContext.id) {
+                componentContext.logError(wrapError(new Error(stateChangeErrorMessage('transition_change')), {
+                    level: 'warn'
+                }));
+            }
             stateCtx.registerChildWithTransitionChange(
                 componentContext.json as DivBaseData,
                 componentContext,
@@ -1027,7 +1066,11 @@
 
         const id = componentContext.id;
         if (id) {
-            rootCtx.registerId(id, () => currentNode);
+            idUnregister?.();
+            idUnregister = rootCtx.registerId(id, {
+                context: () => componentContext,
+                node: () => currentNode
+            });
             stateCtx.registerChild(id);
         }
 
@@ -1052,8 +1095,11 @@
 
         registred = {
             destroy() {
+                if (idUnregister) {
+                    idUnregister();
+                    idUnregister = undefined;
+                }
                 if (id) {
-                    rootCtx.unregisterId(id);
                     stateCtx.unregisterChild(id);
                 }
                 if (visAction) {

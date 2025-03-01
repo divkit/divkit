@@ -56,7 +56,7 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
     var orientation: Int
         set(value) {
             val adapter = viewPager.adapter as DivPagerAdapter?
-            if (adapter?.orientation == value) {
+            if (viewPager.orientation == value && adapter?.orientation == value) {
                 return
             }
 

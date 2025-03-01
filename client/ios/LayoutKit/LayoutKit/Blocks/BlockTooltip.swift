@@ -21,46 +21,44 @@ public struct BlockTooltip: Equatable {
     case center
   }
 
-  public let id: String
+  public enum Mode: Equatable {
+    case modal
+    case nonModal
+  }
+
+  public let params: BlockTooltipParams
+
   public let block: Block
-  public let duration: TimeInterval
   public let offset: CGPoint
   public let position: Position
   public let useLegacyWidth: Bool
   public let tooltipViewFactory: TooltipViewFactory?
-  public let closeByTapOutside: Bool
-  public let tapOutsideActions: [UserInterfaceAction]
 
   public init(
-    id: String,
     block: Block,
-    duration: TimeInterval,
+    params: BlockTooltipParams,
     offset: CGPoint,
     position: BlockTooltip.Position,
     useLegacyWidth: Bool = true,
-    tooltipViewFactory: TooltipViewFactory? = nil,
-    closeByTapOutside: Bool = true,
-    tapOutsideActions: [UserInterfaceAction] = []
+    tooltipViewFactory: TooltipViewFactory? = nil
   ) {
-    self.id = id
     self.block = block
-    self.duration = duration
     self.offset = offset
     self.position = position
     self.useLegacyWidth = useLegacyWidth
     self.tooltipViewFactory = tooltipViewFactory
-    self.closeByTapOutside = closeByTapOutside
-    self.tapOutsideActions = tapOutsideActions
+    self.params = params
+  }
+
+  public var id: String {
+    params.id
   }
 
   public static func ==(lhs: BlockTooltip, rhs: BlockTooltip) -> Bool {
-    lhs.id == rhs.id &&
-      lhs.duration == rhs.duration &&
+    lhs.params == rhs.params &&
       lhs.offset == rhs.offset &&
       lhs.position == rhs.position &&
       lhs.useLegacyWidth == rhs.useLegacyWidth &&
-      lhs.block.equals(rhs.block) &&
-      lhs.closeByTapOutside == rhs.closeByTapOutside &&
-      lhs.tapOutsideActions == rhs.tapOutsideActions
+      lhs.block.equals(rhs.block)
   }
 }

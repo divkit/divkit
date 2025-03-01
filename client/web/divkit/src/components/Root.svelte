@@ -39,21 +39,24 @@
         DivExtensionContext,
         DivExtensionClass,
         TypefaceProvider,
+        DerivedExpression,
         DisappearAction,
         FetchInit,
         DivVariable,
         Direction,
         ActionMenuItem,
+        Patch,
         VariableTrigger,
-        DownloadCallbacks
+        DownloadCallbacks,
+        ActionSubmit,
+        SubmitCallback
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
-    import type { Patch } from '../types/patch';
-    import type { ComponentContext } from '../types/componentContext';
+    import type { ComponentContext, StateSetter } from '../types/componentContext';
     import type { Store, StoreAllTypes, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
@@ -63,7 +66,7 @@
     import { checkCustomFunction, customFunctionWrap, mergeCustomFunctions, type CustomFunctions } from '../expressions/funcs/customFuncs';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
     import { ACTION_CTX, type ActionCtxValue } from '../context/action';
-    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../context/state';
+    import { STATE_CTX, type StateCtxValue } from '../context/state';
     import { constStore } from '../utils/constStore';
     import {
         type MaybeMissing,
@@ -90,6 +93,7 @@
     import { ENABLED_CTX, type EnabledCtxValue } from '../context/enabled';
     import { createAnimator, type AnimatorInstance } from '../utils/animators';
     import { getStateContext, getTooltipContext } from '../utils/componentUtils';
+    import { checkSubmitAction } from '../utils/checkSubmitAction';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -104,6 +108,7 @@
     export let extensions: Map<string, DivExtensionClass> = new Map();
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
+    export let onSubmit: SubmitCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
     export let onComponent: ComponentCallback | undefined = undefined;
     export let typefaceProvider: TypefaceProvider = _fontFamily => '';
@@ -112,6 +117,7 @@
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
     export let direction: Direction = 'ltr';
     export let store: Store | undefined = undefined;
+    export let pagerChildrenClipEnabled = true;
     export let weekStartDay = 0;
 
     let isMounted = true;
@@ -179,6 +185,10 @@
 
     export function setData(newJson: Partial<DivJson>) {
         json = newJson;
+    }
+
+    export function applyPatch(json: Patch): boolean {
+        return applyPatchInternal(json, logError);
     }
 
     const builtinSet = new Set(builtinProtocols);
@@ -393,13 +403,15 @@
         node,
         json,
         origJson,
-        templateContext
+        templateContext,
+        componentContext
     }: {
         type: 'mount' | 'update' | 'destroy';
         node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
+        componentContext: ComponentContext;
     }): void {
         if (onComponent) {
             onComponent({
@@ -407,7 +419,8 @@
                 node,
                 json: json as DivBase,
                 origJson: origJson as DivBase | undefined,
-                templateContext
+                templateContext,
+                componentContext
             });
         }
     }
@@ -466,29 +479,36 @@
     }
 
     const idPrefix = genId('byid') + '-id-';
-    const nodeGettersById = new Map<string, NodeGetter>();
+    const nodeGettersById = new Map<string, NodeGetter[]>();
     const nodeById = new Map<string, HTMLElement>();
 
     function fullId(id: string): string {
         return idPrefix + id;
     }
 
-    function registerId(id: string, getter: NodeGetter): void {
-        nodeGettersById.set(id, getter);
-    }
-
-    function unregisterId(id: string): void {
-        nodeGettersById.delete(id);
-
-        const full = fullId(id);
-
-        if (nodeById.has(full)) {
-            nodeById.delete(full);
+    function registerId(id: string, getter: NodeGetter): () => void {
+        let arr = nodeGettersById.get(id) || [];
+        if (!nodeGettersById.has(id)) {
+            nodeGettersById.set(id, arr);
         }
+        arr.push(getter);
+
+        return () => {
+            arr = arr.filter(it => it !== getter);
+            if (!arr.length) {
+                nodeGettersById.delete(id);
+            }
+
+            const full = fullId(id);
+
+            if (nodeById.has(full)) {
+                nodeById.delete(full);
+            }
+        };
     }
 
     function getComponentId(id: string): string {
-        const node = nodeGettersById.get(id)?.();
+        const node = nodeGettersById.get(id)?.[0]?.node();
 
         if (node) {
             const full = fullId(id);
@@ -517,10 +537,20 @@
         let parts = stateId.split('/');
         const tooltipCtx = parts.length % 2 === 0 && getTooltipContext(componentContext);
         let ctx: ComponentContext | undefined = tooltipCtx || rootComponentContext;
+        const log = (componentContext?.logError || logError);
 
         if (!tooltipCtx) {
             if (ctx.states?.root) {
-                ctx = await ctx.states.root(parts[0]);
+                const setters = ctx.states.root;
+                if (setters.length > 1) {
+                    log(wrapError(new Error('Error resolving state. Found multiple elements that respond to path'), {
+                        additional: {
+                            stateId
+                        }
+                    }));
+                    return;
+                }
+                ctx = await setters[0](parts[0]);
                 if (!ctx) {
                     return;
                 }
@@ -535,7 +565,16 @@
             const selectedStateId = parts[i + 1];
 
             if (ctx.states?.[divId]) {
-                ctx = await ctx.states?.[divId](selectedStateId);
+                const setters: StateSetter[] = ctx.states[divId];
+                if (setters.length > 1) {
+                    log(wrapError(new Error('Error resolving state. Found multiple elements that respond to path'), {
+                        additional: {
+                            stateId
+                        }
+                    }));
+                    return;
+                }
+                ctx = await setters[0](selectedStateId);
                 if (!ctx) {
                     return;
                 }
@@ -543,6 +582,92 @@
                 return;
             }
         }
+    }
+
+    async function callSubmit(componentContext: ComponentContext | undefined, action: MaybeMissing<ActionSubmit>) {
+        const log = (componentContext?.logError || logError);
+
+        if (!checkSubmitAction(action)) {
+            log(wrapError(new Error('Incorrect submit action'), {
+                additional: {
+                    containerId: action.container_id
+                }
+            }));
+            return;
+        }
+
+        const getters = nodeGettersById.get(action.container_id);
+
+        if (getters?.length !== 1) {
+            log(wrapError(new Error('Error resolving container. Found multiple elements that respond to id'), {
+                additional: {
+                    containerId: action.container_id
+                }
+            }));
+            return;
+        }
+
+        const ctx = getters[0].context();
+        const vals: Record<string, unknown> = {};
+
+        if (ctx.variables) {
+            for (const [key, variable] of ctx.variables) {
+                vals[key] = variable.getValue();
+            }
+        }
+
+        if (onSubmit) {
+            Promise.resolve()
+                .then(() => onSubmit(action, vals))
+                .then(() => {
+                    execAnyActions(action.on_success_actions);
+                })
+                .catch(() => {
+                    execAnyActions(action.on_fail_actions);
+                });
+
+            return;
+        }
+
+        let hasContentType = false;
+        const headers: [string, string][] = [];
+        action.request.headers?.forEach(header => {
+            headers.push([header.name, header.value]);
+            if (header.name.toLowerCase() === 'content-type') {
+                hasContentType = true;
+            }
+        });
+        if (!hasContentType) {
+            headers.push(['Content-Type', 'application/json']);
+        }
+
+        let init;
+        if (typeof fetchInit === 'function') {
+            init = fetchInit(action.request.url);
+        } else {
+            init = fetchInit;
+        }
+
+        // no await!
+        fetch(action.request.url, {
+            ...init,
+            method: action.request.method || 'post',
+            headers,
+            body: JSON.stringify(vals)
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error('Response is not ok');
+            }
+            execAnyActions(action.on_success_actions);
+        }).catch(err => {
+            log(wrapError(new Error('Failed to submit'), {
+                additional: {
+                    url: action.request.url,
+                    originalError: err
+                }
+            }));
+            execAnyActions(action.on_fail_actions);
+        });
     }
 
     function switchElementAction(
@@ -657,6 +782,51 @@
         }
     }
 
+    function applyPatchInternal(json: Patch, log: LogError, url?: string): boolean {
+        if (json.templates) {
+            for (const name in json.templates) {
+                if (!templates.hasOwnProperty(name)) {
+                    templates[name] = json.templates[name];
+                }
+            }
+        }
+        if (Array.isArray(json.patch?.changes)) {
+            if (json.patch.mode === 'transactional') {
+                const failed = json.patch.changes.find(change => {
+                    const methods = parentOfMap.get(change.id);
+                    if (!methods) {
+                        return true;
+                    }
+                    const newItemsLen = Array.isArray(change.items) ? change.items.length : 0;
+                    if (methods.isSingleMode && newItemsLen !== 1) {
+                        return true;
+                    }
+                    return false;
+                });
+                if (failed) {
+                    log(wrapError(new Error('Skipping transactional, child is not found or broken'), {
+                        additional: {
+                            url,
+                            id: failed.id
+                        }
+                    }));
+                    execAnyActions(json.patch?.on_failed_actions);
+                    return false;
+                }
+            }
+            json.patch.changes.forEach(change => {
+                const methods = parentOfMap.get(change.id);
+                if (methods) {
+                    methods.replaceWith(change.id, change.items);
+                }
+            });
+            execAnyActions(json.patch?.on_applied_actions);
+            return true;
+        }
+
+        return false;
+    }
+
     function callDownloadAction(
         url: string | null | undefined,
         callbacks: MaybeMissing<DownloadCallbacks | undefined>,
@@ -683,48 +853,13 @@
                             url
                         }
                     }));
+                    execAnyActions(callbacks?.on_fail_actions);
                     return;
                 }
-                if (json.templates) {
-                    for (const name in json.templates) {
-                        if (!templates.hasOwnProperty(name)) {
-                            templates[name] = json.templates[name];
-                        }
-                    }
-                }
-                if (Array.isArray(json.patch?.changes)) {
-                    if (json.patch.mode === 'transactional') {
-                        const failed = json.patch.changes.find(change => {
-                            const methods = parentOfMap.get(change.id);
-                            if (!methods) {
-                                return true;
-                            }
-                            const newItemsLen = Array.isArray(change.items) ? change.items.length : 0;
-                            if (methods.isSingleMode && newItemsLen !== 1) {
-                                return true;
-                            }
-                            return false;
-                        });
-                        if (failed) {
-                            log(wrapError(new Error('Skipping transactional, child is not found or broken'), {
-                                additional: {
-                                    url,
-                                    id: failed.id
-                                }
-                            }));
-                            execAnyActions(json.patch?.on_failed_actions);
-                            execAnyActions(callbacks?.on_fail_actions);
-                            return;
-                        }
-                    }
-                    json.patch.changes.forEach(change => {
-                        const methods = parentOfMap.get(change.id);
-                        if (methods) {
-                            methods.replaceWith(change.id, change.items);
-                        }
-                    });
-                    execAnyActions(json.patch?.on_applied_actions);
+                if (applyPatchInternal(json, log, url)) {
                     execAnyActions(callbacks?.on_success_actions);
+                } else {
+                    execAnyActions(callbacks?.on_fail_actions);
                 }
             }).catch(err => {
                 log(wrapError(new Error('Failed to download the patch'), {
@@ -1187,6 +1322,10 @@
                     await setState(actionTyped.state_id, componentContext);
                     break;
                 }
+                case 'submit': {
+                    await callSubmit(componentContext, actionTyped);
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {
@@ -1549,6 +1688,9 @@
     function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
             variables: mergeMaps(variables, componentContext.variables),
+            derviedExpression: function<T>(t: T) {
+                return getDerivedFromVars(logError, t) as DerivedExpression<T>;
+            },
             processExpressions: function<T>(t: T) {
                 return getJsonWithVars(
                     logError,
@@ -1667,6 +1809,9 @@
                     ctx.variables,
                     mergeMaps(localVars, opts.variables)
                 );
+                if (process.env.DEVTOOL && localVars) {
+                    componentContext.selfVariables = new Set([...localVars.keys()]);
+                }
 
                 let localCustomFunctions: CustomFunctions | undefined;
                 if (Array.isArray(childProcessedJson.functions)) {
@@ -1737,15 +1882,18 @@
 
                 if (stateCtx) {
                     stateCtx.states = stateCtx.states || {};
-                    stateCtx.states[stateId] = setState;
+                    stateCtx.states[stateId] = stateCtx.states[stateId] || [];
+                    stateCtx.states[stateId].push(setState);
                 }
-            },
-            unregisterState(stateId) {
-                const stateCtx = getStateContext(ctx.parent);
 
-                if (stateCtx?.states) {
-                    delete stateCtx.states[stateId];
-                }
+                return () => {
+                    if (stateCtx?.states?.[stateId]) {
+                        stateCtx.states[stateId] = stateCtx.states[stateId].filter(it => it !== setState);
+                        if (!stateCtx.states[stateId].length) {
+                            delete stateCtx.states[stateId];
+                        }
+                    }
+                };
             },
             destroy() {
                 const set = componentContextMap.get(ctx.id);
@@ -1792,6 +1940,7 @@
         processVariableTriggers,
         isRunning,
         setRunning,
+        pagerChildrenClipEnabled,
         registerInstance,
         unregisterInstance,
         registerParentOf,
@@ -1805,7 +1954,6 @@
         addSvgFilter,
         removeSvgFilter,
         registerId,
-        unregisterId,
         getComponentId,
         preparePrototypeVariables,
         getStore,

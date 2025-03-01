@@ -168,16 +168,13 @@ public struct DivBlockModelingContext {
   }
 
   public func getExtensionHandlers(for div: DivBase) -> [DivExtensionHandler] {
-    guard let extensions = div.extensions else {
-      return []
-    }
-    return extensions.compactMap {
+    (div.extensions ?? []).compactMap {
       let id = $0.id
       if !extensionHandlers.keys.contains(id) {
         addError(message: "No DivExtensionHandler for: \(id)")
       }
       return extensionHandlers[id]
-    }
+    } + debugParams.widcardExtensionHandlers
   }
 
   public func addError(message: String) {
@@ -207,9 +204,9 @@ public struct DivBlockModelingContext {
       .getVariableValue(path: parentPath, name: divVariableName) ?? defaultValue
     let valueProp = Property<T>(
       getter: { value },
-      setter: {
-        guard let newValue = DivVariableValue($0) else { return }
-        self.variablesStorage.update(
+      setter: { [weak variablesStorage] in
+        guard let variablesStorage, let newValue = DivVariableValue($0) else { return }
+        variablesStorage.update(
           path: parentPath,
           name: divVariableName,
           value: newValue

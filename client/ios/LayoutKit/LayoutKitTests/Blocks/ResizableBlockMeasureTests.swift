@@ -43,4 +43,18 @@ final class ResizableBlockMeasureTests: XCTestCase {
         .isApproximatelyEqualTo(250)
     )
   }
+
+  func test_ResizableWithMargins() {
+    let margin = 50.0
+    var blockMeasure = ResizableBlockMeasure(
+      resizableBlockCount: 3,
+      lengthAvailablePerWeightUnit: 10,
+      lengthAvailableForResizableBlocks: 1000
+    )
+
+    XCTAssertTrue(
+      blockMeasure.measureNext(.resizable(LayoutTrait.Weight(rawValue: 10)!, reservedSpace: margin))
+        .isApproximatelyEqualTo(100 + margin)
+    )
+  }
 }

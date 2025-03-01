@@ -19,6 +19,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     origJson?: MaybeMissing<DivBaseData> | undefined;
     templateContext: TemplateContext;
     variables?: Map<string, Variable>;
+    selfVariables?: Set<string>;
     customFunctions?: CustomFunctions;
     isRootState?: boolean;
     isTooltipRoot?: boolean;
@@ -26,7 +27,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     parentContext?: ComponentContext;
     id: string;
     animators?: Record<string, MaybeMissing<Animator>>;
-    states?: Record<string, StateSetter>;
+    states?: Record<string, StateSetter[]>;
 
     logError(error: WrappedError): void;
     execAnyActions(
@@ -60,7 +61,6 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     }): ComponentContext;
     getVariable(varName: string, type?: VariableType): Variable | undefined;
     getAnimator(name: string): MaybeMissing<Animator> | undefined;
-    registerState(stateId: string, setState: StateSetter): void;
-    unregisterState(stateId: string): void;
+    registerState(stateId: string, setState: StateSetter): () => void;
     destroy(): void;
 }

@@ -120,7 +120,6 @@ internal class SpannedTextBuilder @Inject constructor(
         ellipsis: DivText.Ellipsis,
         textConsumer: TextConsumer? = null
     ): Spanned {
-
         return buildText(bindingContext,
             textView,
             divText,
@@ -145,7 +144,8 @@ internal class SpannedTextBuilder @Inject constructor(
         val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
 
-        val spannedText = SpannableStringBuilder(text)
+        // We use zero-width space for empty text to make sure line height span will be applied properly.
+        val spannedText = SpannableStringBuilder(text.ifEmpty { ZWSP })
         val textData = createTextData(context, bindingContext, divText, text)
         val textLength = textData.textLength
         val spans = preprocessSpans(context, bindingContext, textData, ranges)
@@ -262,6 +262,15 @@ internal class SpannedTextBuilder @Inject constructor(
         val sequentialSpans = mutableListOf<SpanData>()
         val activeSpans = mutableListOf<SpanData>()
         var leftBound = bounds.first()
+
+        if (bounds.size == 1) {
+            val rightBound = leftBound
+            sequentialSpans += overlappingSpans.fold(SpanData.empty(leftBound, rightBound)) { result, span ->
+                result.mergeWith(span, start = leftBound, end = rightBound)
+            }
+            return sequentialSpans
+        }
+
         for (i in 1 until bounds.size) {
             val rightBound = bounds[i]
             for (j in overlappingSpans.indices) {
@@ -411,6 +420,12 @@ internal class SpannedTextBuilder @Inject constructor(
         }
 
         if (span.lineHeight != null || span.topOffset != null) {
+            val type = if (span.lineHeight == textData.lineHeight) {
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            } else {
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            }
+
             spannedText.setSpan(
                 LineHeightWithTopOffsetSpan(
                     topOffset = span.topOffset ?: 0,
@@ -420,7 +435,7 @@ internal class SpannedTextBuilder @Inject constructor(
                 ),
                 start,
                 end,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                type
             )
         }
 
@@ -639,5 +654,6 @@ internal class SpannedTextBuilder @Inject constructor(
     private companion object {
         private const val IMAGE_PLACEHOLDER = "#"
         private const val WORD_JOINER = "\u2060"
+        private const val ZWSP = "\u200B"
     }
 }

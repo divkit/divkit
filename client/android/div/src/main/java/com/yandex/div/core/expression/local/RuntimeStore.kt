@@ -1,11 +1,13 @@
 package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.util.toLocalFunctions
+import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
@@ -13,6 +15,7 @@ import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivTrigger
@@ -33,7 +36,7 @@ internal class RuntimeStore(
 ) {
     private var warningShown = false
     private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime?>()
-    private val allRuntimes = mutableSetOf<ExpressionsRuntime>()
+    private val allRuntimes = ObserverList<ExpressionsRuntime>()
     internal val tree = RuntimeTree()
 
     internal var rootRuntime: ExpressionsRuntime? = null
@@ -70,20 +73,24 @@ internal class RuntimeStore(
      */
     internal fun getOrCreateRuntime(
         path: String,
-        variables: List<Variable>? = null,
-        triggers: List<DivTrigger>? = null,
-        functions: List<DivFunction>? = null,
+        div: Div,
         parentResolver: ExpressionResolver? = null,
         parentRuntime: ExpressionsRuntime? = null,
     ) = tree.getNode(path)?.runtime ?: getRuntimeOrCreateChild(
-        path, variables, triggers, functions, null, parentResolver, parentRuntime
+        path,
+        div.value().variables?.toVariables(),
+        div.value().variableTriggers,
+        div.value().functions,
+        null,
+        parentResolver,
+        parentRuntime,
     )
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
     internal fun putRuntime(runtime: ExpressionsRuntime) {
         resolverToRuntime[runtime.expressionResolver] = runtime
-        allRuntimes.add(runtime)
+        allRuntimes.addObserver(runtime)
     }
 
     internal fun putRuntime(
@@ -142,10 +149,14 @@ internal class RuntimeStore(
         functions: List<DivFunction>?,
     ): ExpressionsRuntime {
         val localVariableController = VariableControllerImpl(baseRuntime.variableController)
-        variables?.forEach { localVariableController.declare(it) }
+        if (!variables.isNullOrEmpty()) {
+            variables.forEach { localVariableController.declare(it) }
+        }
 
         var functionProvider = baseRuntime.functionProvider
-        functions?.let { functionProvider += it.toLocalFunctions() }
+        if (!functions.isNullOrEmpty()) {
+            functionProvider += functions.toLocalFunctions()
+        }
 
         val evaluationContext = EvaluationContext(
             variableProvider = localVariableController,
@@ -162,15 +173,19 @@ internal class RuntimeStore(
             onCreateCallback = onCreateCallback,
         )
 
-        val triggerController = if (variablesTriggers == null) null else TriggersController(
-            localVariableController,
-            resolver,
-            evaluator,
-            errorCollector,
-            div2Logger,
-            divActionBinder
-        ).apply {
-            ensureTriggersSynced(variablesTriggers)
+        val triggerController = if (variablesTriggers.isNullOrEmpty()) {
+            null
+        } else {
+            TriggersController(
+                localVariableController,
+                resolver,
+                evaluator,
+                errorCollector,
+                div2Logger,
+                divActionBinder
+            ).apply {
+                ensureTriggersSynced(variablesTriggers)
+            }
         }
 
         return ExpressionsRuntime(resolver, localVariableController, triggerController, functionProvider, this).also {

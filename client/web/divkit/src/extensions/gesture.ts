@@ -1,6 +1,4 @@
-import { tick } from 'svelte';
 import type { Action, DivExtension, DivExtensionContext } from '../../typings/common';
-import type { WrappedError } from '../utils/wrapError';
 
 interface Params {
     swipe_up?: Action[];

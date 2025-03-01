@@ -456,6 +456,18 @@ public class JsonExpressionParser {
     }
 
     @Nullable
+    public static <R, V> ExpressionList<V> readOptionalExpressionList(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
+    ) {
+        return readOptionalExpressionList(context, jsonObject, key, typeHelper, converter, listValidator, alwaysValid());
+    }
+
+    @Nullable
     public static <V> ExpressionList<V> readOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final JSONObject jsonObject,
@@ -480,7 +492,6 @@ public class JsonExpressionParser {
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
         if (array == null) {
-            context.getLogger().logError(missingValue(jsonObject, key));
             return null;
         }
 

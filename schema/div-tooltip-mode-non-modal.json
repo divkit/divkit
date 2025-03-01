@@ -1,7 +1,11 @@
 {
   "type": "object",
   "$description": "translations.json#/div_tooltip_mode_non_modal",
-  "platforms": [],
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
   "properties": {
     "type": {
       "type": "string",

@@ -1,4 +1,8 @@
+import type { ComponentContext } from '../src/types/componentContext';
 import type { Variable } from './variables';
+
+export type Subscriber<T> = (value: T) => void;
+export type Unsubscriber = () => void;
 
 export type Interpolation = 'linear' | 'ease' | 'ease_in' | 'ease_out' | 'ease_in_out' | 'spring';
 
@@ -284,10 +288,31 @@ export interface ActionSetState {
     // temporary
 }
 
+export interface ActionSubmitHeader {
+    name: string;
+    value: string;
+}
+
+export type ActionSubmitMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options';
+
+export interface ActionSubmitRequest {
+    url: string;
+    headers?: ActionSubmitHeader[];
+    method?: ActionSubmitMethod;
+}
+
+export interface ActionSubmit {
+    type: 'submit';
+    container_id: string;
+    request: ActionSubmitRequest;
+    on_success_actions?: Action[];
+    on_fail_actions?: Action[];
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
-    ActionVideo | ActionStore | ActionSetState;
+    ActionVideo | ActionStore | ActionSetState | ActionSubmit;
 
 export interface ActionBase {
     log_id: string;
@@ -339,6 +364,7 @@ export type ComponentCallback = (details: {
     json: DivBase;
     origJson: DivBase | undefined;
     templateContext: TemplateContext;
+    componentContext: ComponentContext;
 }) => void;
 
 export interface WrappedError extends Error {
@@ -356,6 +382,8 @@ export type TypefaceProvider = (fontFamily: string, opts?: {
 
 export type FetchInit = RequestInit | ((url: string) => RequestInit);
 
+export type SubmitCallback = (action: ActionSubmit, values: Record<string, unknown>) => Promise<void>;
+
 export interface DivkitInstance {
     $destroy(): void;
     execAction(action: Action | VisibilityAction | DisappearAction): void;
@@ -363,6 +391,7 @@ export interface DivkitInstance {
     setTheme(theme: Theme): void;
     /** Experimental */
     setData(json: DivJson): void;
+    applyPatch(patch: Patch): boolean;
 }
 
 export type Platform = 'desktop' | 'touch' | 'auto';
@@ -380,10 +409,15 @@ export interface Customization {
     menuItemClass?: string;
 }
 
+export interface DerivedExpression<T> {
+    subscribe(cb: Subscriber<T>): Unsubscriber;
+}
+
 export interface DivExtensionContext {
     variables: Map<string, Variable>;
     direction: Direction;
     processExpressions<T>(t: T): T;
+    derviedExpression<T>(t: T): DerivedExpression<T>;
     execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;
     getComponentProperty<T>(property: string): T;
@@ -400,4 +434,19 @@ export interface DivExtension {
     updateView?(node: HTMLElement, context: DivExtensionContext): void;
 
     unmountView?(node: HTMLElement, context: DivExtensionContext): void;
+}
+
+export interface PatchChange {
+    id: string;
+    items?: DivBase[];
+}
+
+export interface Patch {
+    templates?: Record<string, DivBase>;
+    patch: {
+        mode?: 'transactional' | 'partial';
+        changes: PatchChange[];
+        on_applied_actions?: Action[];
+        on_failed_actions?: Action[];
+    };
 }

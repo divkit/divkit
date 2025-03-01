@@ -91,7 +91,8 @@ describe('crossplatform', () => {
         const skipTests = [
             'patches',
             // animated images
-            'div-gif-image'
+            'div-gif-image',
+            'new_state_incompatible'
         ];
         read(`${crossplatformPath}/unit_test_data/`, createSimpleTestCase, skipTests);
     });

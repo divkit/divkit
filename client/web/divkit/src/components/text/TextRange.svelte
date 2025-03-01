@@ -196,5 +196,6 @@
     {actions}
     style={makeStyle(style)}
 >
-    {text}
+    <!-- zero-width-space -->
+    {text || '​'}
 </Actionable>

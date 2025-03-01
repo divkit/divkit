@@ -3,27 +3,35 @@ import UIKit
 import VGSL
 
 public final class TooltipContainerView: UIView, UIActionEventPerforming {
-  private let tooltipView: VisibleBoundsTrackingView
-  private let closeByTapOutside: Bool
-  private let tapOutsideActions: [UserInterfaceAction]
+  private let tooltip: DefaultTooltipManager.Tooltip
   private let handleAction: (LayoutKit.UIActionEvent) -> Void
   private let onCloseAction: Action
 
+  private var isClosing = false
   private var lastNonZeroBounds: CGRect?
   private var onVisibleBoundsChanged: Action?
 
+  private lazy var backgroundElement: UIAccessibilityElement? = {
+    guard tooltip.params.closeByTapOutside else { return nil }
+
+    let backgroundElement = ActivatableAccessibilityElement(
+      activateAction: weakify(self, in: type(of: self).performTapOutsideActions),
+      accessibilityContainer: self
+    )
+    backgroundElement.accessibilityLabel = tooltip.params.backgroundAccessibilityDescription
+    backgroundElement.accessibilityTraits = .button
+    return backgroundElement
+  }()
+
   public init(
-    tooltipView: VisibleBoundsTrackingView,
-    closeByTapOutside: Bool,
-    tapOutsideActions: [UserInterfaceAction],
+    tooltip: DefaultTooltipManager.Tooltip,
     handleAction: @escaping (LayoutKit.UIActionEvent) -> Void,
     onCloseAction: @escaping Action
   ) {
-    self.tooltipView = tooltipView
-    self.closeByTapOutside = closeByTapOutside
-    self.tapOutsideActions = tapOutsideActions
+    self.tooltip = tooltip
     self.handleAction = handleAction
     self.onCloseAction = onCloseAction
+    let tooltipView = tooltip.view
     let tooltipBounds = tooltipView.bounds
     onVisibleBoundsChanged = { [weak tooltipView] in
       tooltipView?.onVisibleBoundsChanged(from: .zero, to: tooltipBounds)
@@ -31,10 +39,16 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
     super.init(frame: .zero)
 
-    let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-    addGestureRecognizer(tapRecognizer)
+    if isModal {
+      let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+      addGestureRecognizer(tapRecognizer)
+    }
 
     addSubview(tooltipView)
+
+    if let backgroundElement {
+      accessibilityElements = [tooltipView, backgroundElement]
+    }
   }
 
   @available(*, unavailable)
@@ -42,18 +56,27 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     fatalError()
   }
 
+  var isModal: Bool {
+    tooltip.params.mode == .modal
+  }
+
   @objc private func handleTap(_ sender: UITapGestureRecognizer) {
     let point = sender.location(in: self)
-    let isPointInsideTooltip = tooltipView.point(
-      inside: tooltipView.convert(point, from: self),
-      with: nil
-    )
-    if !isPointInsideTooltip {
+    if !isPointInsideTooltip(point) {
       performTapOutsideActions()
+    }
+  }
 
-      if closeByTapOutside {
-        close()
+  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    if !isPointInsideTooltip(point, event: event), !isModal {
+      if tooltip.params.closeByTapOutside {
+        DispatchQueue.main.async {
+          self.close()
+        }
       }
+      return nil
+    } else {
+      return super.hitTest(point, with: event)
     }
   }
 
@@ -69,6 +92,8 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
       lastNonZeroBounds = bounds
     }
 
+    backgroundElement?.accessibilityFrameInContainerSpace = bounds
+
     onVisibleBoundsChanged?()
     onVisibleBoundsChanged = nil
   }
@@ -78,16 +103,48 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   }
 
   public func close() {
-    self.tooltipView.onVisibleBoundsChanged(from: tooltipView.bounds, to: .zero)
+    guard !isClosing else { return }
+    isClosing = true
+    tooltip.view.onVisibleBoundsChanged(from: tooltip.view.bounds, to: .zero)
     removeFromParentAnimated(completion: {
       self.onCloseAction()
     })
   }
 
   private func performTapOutsideActions() {
-    let uiActionEvents = tapOutsideActions.map {
+    let uiActionEvents = tooltip.params.tapOutsideActions.map {
       UIActionEvent(uiAction: $0, originalSender: self)
     }
     perform(uiActionEvents: uiActionEvents, from: self)
+
+    if tooltip.params.closeByTapOutside {
+      close()
+    }
+  }
+
+  private func isPointInsideTooltip(_ point: CGPoint, event: UIEvent? = nil) -> Bool {
+    tooltip.view.point(inside: tooltip.view.convert(point, from: self), with: event)
+  }
+}
+
+private final class ActivatableAccessibilityElement: UIAccessibilityElement {
+  private let activateAction: Action
+
+  init(
+    activateAction: @escaping Action,
+    accessibilityContainer container: Any
+  ) {
+    self.activateAction = activateAction
+    super.init(accessibilityContainer: container)
+  }
+
+  override func accessibilityActivate() -> Bool {
+    activateAction()
+    return true
+  }
+
+  override func accessibilityPerformEscape() -> Bool {
+    activateAction()
+    return true
   }
 }

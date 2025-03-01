@@ -1,7 +1,8 @@
 {
   "description": "Vertical pager with layout mode 'wrap_content' and few small pages",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "text_page_match_parent_height": {

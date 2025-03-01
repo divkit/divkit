@@ -109,7 +109,7 @@ extension DivText: DivBlockModeling {
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
       text: attributedString,
-      textGradient: resolveGradient(expressionResolver),
+      textGradient: resolveGradient(context),
       verticalAlignment: resolveTextAlignmentVertical(expressionResolver).alignment,
       maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
       minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,
@@ -120,7 +120,8 @@ extension DivText: DivBlockModeling {
       additionalTextInsets: additionalTextInsets,
       canSelect: resolveSelectable(expressionResolver),
       tightenWidth: resolveTightenWidth(expressionResolver),
-      autoEllipsize: resolveAutoEllipsize(expressionResolver) ?? context.flagsInfo.defaultTextAutoEllipsize
+      autoEllipsize: resolveAutoEllipsize(expressionResolver) ?? context.flagsInfo
+        .defaultTextAutoEllipsize
     )
   }
 
@@ -152,11 +153,11 @@ extension DivText: DivBlockModeling {
     guard let text else {
       return []
     }
-    return (images ?? []).compactMap { 
+    return (images ?? []).compactMap {
       $0.makeImage(
-        context: context, 
+        context: context,
         textLength: CFAttributedStringGetLength(text)
-      ) 
+      )
     }
   }
 
@@ -231,16 +232,14 @@ extension DivText: DivBlockModeling {
     }
   }
 
-  private func resolveGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
+  private func resolveGradient(_ context: DivBlockModelingContext) -> Gradient? {
+    let expressionResolver = context.expressionResolver
     guard let textGradient else {
       return nil
     }
     switch textGradient {
     case let .divLinearGradient(gradient):
-      return Gradient.Linear(
-        colors: gradient.resolveColors(expressionResolver) ?? [],
-        angle: gradient.resolveAngle(expressionResolver)
-      ).map { .linear($0) }
+      return gradient.makeBlockLinearGradient(context).map { .linear($0) }
     case let .divRadialGradient(gradient):
       return Gradient.Radial(
         colors: gradient.resolveColors(expressionResolver) ?? [],
@@ -317,19 +316,19 @@ extension DivText.Image {
   ) -> TextBlock.InlineImage? {
     let expressionResolver = context.expressionResolver
     let start = resolveStart(expressionResolver) ?? 0
-    
+
     guard start <= textLength else {
       return nil
     }
-    
+
     let indexingDirection = resolveIndexingDirection(expressionResolver)
     let location = switch indexingDirection {
-    case .normal: 
+    case .normal:
       start
     case .reversed:
       textLength - start
     }
-    
+
     return TextBlock.InlineImage(
       size: CGSize(
         width: CGFloat(width.resolveValue(expressionResolver) ?? 0),

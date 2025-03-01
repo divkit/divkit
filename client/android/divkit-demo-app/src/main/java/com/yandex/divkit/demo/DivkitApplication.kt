@@ -10,6 +10,7 @@ import com.yandex.div.core.DivKitConfiguration
 import com.yandex.div.internal.Assert
 import com.yandex.divkit.demo.beacon.SendBeaconRequestExecutorImpl
 import com.yandex.divkit.demo.beacon.SendBeaconWorkerSchedulerImpl
+import com.yandex.divkit.demo.div.DemoDivRequestExecutor
 import com.yandex.divkit.demo.utils.VisualAssertionErrorHandler
 import com.yandex.divkit.regression.di.HasRegressionTesting
 import com.yandex.divkit.regression.di.RegressionComponent
@@ -61,20 +62,22 @@ class DivkitApplication : Application(), HasRegressionTesting {
             enableLogging(true)
             enableAssertions(BuildConfig.THROW_ASSERTS)
         }
+        val okHttpClient = OkHttpClient()
         DivKit.configure(
             DivKitConfiguration.Builder()
-                .sendBeaconConfiguration(::configureSendBeacon)
+                .sendBeaconConfiguration(configureSendBeacon(okHttpClient))
                 .histogramConfiguration(Container::histogramConfiguration)
+                .divRequestExecutor { DemoDivRequestExecutor(okHttpClient) }
                 .build()
         )
 
         AppCompatDelegate.setDefaultNightMode(Container.preferences.nightMode)
     }
 
-    private fun configureSendBeacon(): SendBeaconConfiguration {
+    private fun configureSendBeacon(okHttpClient: OkHttpClient): SendBeaconConfiguration {
         return SendBeaconConfiguration(
             executor = Executors.newSingleThreadExecutor(),
-            requestExecutor = SendBeaconRequestExecutorImpl(OkHttpClient.Builder().build()),
+            requestExecutor = SendBeaconRequestExecutorImpl(okHttpClient),
             workerScheduler = SendBeaconWorkerSchedulerImpl(this),
             perWorkerLogger = SendBeaconPerWorkerLogger.Logcat,
             databaseName = "mordaSendBeacon.db"

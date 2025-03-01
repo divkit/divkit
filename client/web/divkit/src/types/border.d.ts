@@ -1,10 +1,21 @@
 import type { BooleanInt } from '../../typings/common';
 import type { Dimension } from './sizes';
 
+export interface StrokeStyleSolid {
+    type: 'solid';
+}
+
+export interface StrokeStyleDashed {
+    type: 'dashed';
+}
+
+export type StrokeStyle = StrokeStyleSolid | StrokeStyleDashed;
+
 export interface Stroke {
     width?: number;
     color: string;
     // unit
+    style?: StrokeStyle;
 }
 
 export interface CornersRadius {

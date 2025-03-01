@@ -85,7 +85,7 @@ internal class RebindTask(
             lastExistingParent = null,
         )
 
-        if (existingToken.divHash == newToken.divHash) {
+        if (existingToken.isCombinable(newToken)) {
             doNodeInSameMode(existingToken, newToken)
         } else {
             doNodeInExistingMode(existingToken)
@@ -116,7 +116,7 @@ internal class RebindTask(
         val aloneExistingChild = mutableListOf<ExistingToken>()
 
         existingToken.getChildrenTokens(combinedToken).forEach { existingChild ->
-            val newChildWithSameHash = aloneNewChild.find { it.divHash == existingChild.divHash }
+            val newChildWithSameHash = aloneNewChild.find { it.isCombinable(existingChild) }
 
             if (newChildWithSameHash != null) {
                 doNodeInSameMode(existingChild, newChildWithSameHash)
@@ -155,7 +155,7 @@ internal class RebindTask(
     }
 
     private fun doNodeInNewMode(newToken: NewToken) {
-        val existingWithSameHash = aloneExisting.find { it.divHash == newToken.divHash }
+        val existingWithSameHash = aloneExisting.find { it.isCombinable(newToken) }
 
         if (existingWithSameHash != null) {
             aloneExisting.remove(existingWithSameHash)

@@ -277,10 +277,14 @@
         if ($jsonMask?.type === 'currency') {
             inputType = isSupportInputMode ? 'text' : 'tel';
             inputMode = 'decimal';
+        } else if (keyboardType === 'number') {
+            inputMode = 'decimal';
+        } else {
+            inputMode = undefined;
         }
     }
 
-    $: isMultiline = keyboardType === 'multi_line_text'/* && isPositiveNumber($jsonVisibleMaxLines) && $jsonVisibleMaxLines > 1*/;
+    $: isMultiline = keyboardType === 'multi_line_text';
 
     $: {
         if (isPositiveNumber($jsonVisibleMaxLines)) {

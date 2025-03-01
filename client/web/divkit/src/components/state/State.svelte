@@ -36,7 +36,7 @@
     let childrenWithTransitionOut: ChildWithTransition[] = [];
     let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
-    let prevStateId: string | undefined;
+    let stateUnregister: (() => void) | undefined;
     $: stateId = componentContext.json.div_id || componentContext.id;
     let selectedId: string | undefined;
     let selectedComponentContext: ComponentContext | undefined;
@@ -104,7 +104,13 @@
             return;
         }
 
+        const changed = new Set<string>();
+
         items = states.map((it, index) => {
+            if (items[index].div !== newItems[index] && it.state_id) {
+                changed.add(it.state_id);
+            }
+
             return {
                 ...it,
                 div: newItems[index]
@@ -115,7 +121,7 @@
             ...componentContext.json,
             states: items
         };
-        if (selectedId) {
+        if (selectedId && changed.has(selectedId)) {
             selectState(items.find(it => it.state_id === selectedId) || null);
         }
     }
@@ -347,19 +353,13 @@
     }
 
     $: if (componentContext.json) {
-        if (prevStateId) {
-            componentContext.unregisterState(stateId);
-            // stateCtx.unregisterInstance(prevStateId);
-            prevStateId = undefined;
+        if (stateUnregister) {
+            stateUnregister();
+            stateUnregister = undefined;
         }
 
         if (stateId && !componentContext?.fakeElement) {
-            prevStateId = stateId;
-            componentContext.registerState(stateId, setState);
-            /* stateCtx.registerInstance(stateId, {
-                setState,
-                getChild
-            }); */
+            stateUnregister = componentContext.registerState(stateId, setState);
         }
     }
 
@@ -532,8 +532,9 @@
             selectedComponentContext.destroy();
         }
 
-        if (prevStateId) {
-            componentContext.unregisterState(prevStateId);
+        if (stateUnregister) {
+            stateUnregister();
+            stateUnregister = undefined;
         }
     });
 </script>

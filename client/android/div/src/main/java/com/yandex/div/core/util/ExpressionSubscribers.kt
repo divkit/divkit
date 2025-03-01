@@ -9,6 +9,7 @@ import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFixedSize
+import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
@@ -242,7 +243,8 @@ internal fun ExpressionSubscriber.observeBackground (
         is DivBackground.LinearGradient -> {
             val linearGradientBackground = background.value
             addSubscription(linearGradientBackground.angle.observe(resolver, callback))
-            addSubscription(linearGradientBackground.colors.observe(resolver, callback))
+            addSubscription(linearGradientBackground.colors?.observe(resolver, callback))
+            linearGradientBackground.colorMap?.forEach { colorPoint -> observeColorPoint(colorPoint, resolver, callback) }
         }
 
         is DivBackground.RadialGradient -> {
@@ -259,6 +261,19 @@ internal fun ExpressionSubscriber.observeBackground (
             observeAbsoluteEdgeInsets(ninePatchBackground.insets, resolver, callback)
         }
     }
+}
+
+internal fun ExpressionSubscriber.observeColorPoint(
+    colorPoint: DivLinearGradient.ColorPoint?,
+    resolver: ExpressionResolver,
+    callback: (Any) -> Unit
+) {
+    if (colorPoint == null) {
+        return
+    }
+
+    addSubscription(colorPoint.color.observe(resolver, callback))
+    addSubscription(colorPoint.position.observe(resolver, callback))
 }
 
 internal fun ExpressionSubscriber.observeRadialGradientCenter (

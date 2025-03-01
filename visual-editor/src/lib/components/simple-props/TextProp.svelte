@@ -5,8 +5,9 @@
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { tankerKeyToVariableName } from '../../utils/tanker';
-    import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
+    import { calcSelectionOffset, getInnerText, setSelectionOffset } from '../../utils/contenteditable';
     import { parseConstraint } from '../../utils/parseConstraint';
+    import { supportsPlainTextOnly } from '../../utils/supportsPlainTextOnly';
 
     export let id: string = '';
     export let value: string;
@@ -52,7 +53,7 @@
 
     function onChange() {
         if (elem.hasAttribute('contenteditable')) {
-            value = elem.innerText;
+            value = getInnerText(elem, false);
         }
 
         if (item.default === '\0') {
@@ -116,7 +117,7 @@
     }
 
     afterUpdate(() => {
-        if (elem?.hasAttribute('contenteditable') && elem.innerText !== value) {
+        if (elem?.hasAttribute('contenteditable') && getInnerText(elem, false) !== value) {
             let selection;
             let prevStart;
             let prevEnd;
@@ -172,7 +173,7 @@
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false"
-            contenteditable="true"
+            contenteditable={supportsPlainTextOnly ? 'plaintext-only' : 'true'}
             {id}
             bind:this={elem}
             on:input={onChange}

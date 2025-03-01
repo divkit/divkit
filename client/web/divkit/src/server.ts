@@ -18,6 +18,7 @@ export function render(opts: {
     direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
 }) {
     // Root has client-side typings, not a server one
     return (Root as any).render(opts).html;

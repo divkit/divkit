@@ -272,8 +272,8 @@
     "ru": "Параметры HTTP-запроса, которые используются для конфигурации отправки данных."
   },
   "div_action_submit_request_headers": {
-    "en": "HTTP request headers.",
-    "ru": "Заголовки HTTP-запроса."
+    "en": "HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.",
+    "ru": "Заголовки HTTP-запроса. Обратите внимание, что DivKit не очищает дублирующиеся заголовки, наличие которых может приводить к ошибкам в обработке запроса. Учитывайте это при сборке action'ов сложными json-builder'ами."
   },
   "div_action_submit_request_method": {
     "en": "HTTP request method.",
@@ -1142,6 +1142,22 @@
   "div_gradient_linear_angle": {
     "en": "Angle of gradient direction.",
     "ru": "Угол направления градиента."
+  },
+  "div_gradient_linear_color_map": {
+    "en": "Colors and positions of gradient points. When using this parameter, the `colors` parameter is ignored.",
+    "ru": "Цвета и расположение точек градиента. При использовании данного параметра игнорируется параметр `colors`."
+  },
+  "div_gradient_linear_color_point": {
+    "en": "Describes color at particular gradient position.",
+    "ru": "Определяет цвет градиента на заданной позиции."
+  },
+  "div_gradient_linear_color_point_color": {
+    "en": "Gradient color corresponding to gradient point.",
+    "ru": "Цвет градиента, соответствующий точке градиента."
+  },
+  "div_gradient_linear_color_point_position": {
+    "en": "The position of the gradient point.",
+    "ru": "Расположение точки градиента."
   },
   "div_gradient_radial": {
     "en": "Radial gradient.",
@@ -2111,6 +2127,18 @@
     "en": "Stroke color.",
     "ru": "Цвет рамки."
   },
+  "div_stroke_style": {
+    "en": "Stroke style. Supported for border stroke only.",
+    "ru": "Стиль линии. Поддерживается только для линии обводки."
+  },
+  "div_stroke_style_dashed": {
+    "en": "Dashed stroke style.",
+    "ru": "Пунктирная линия."
+  },
+  "div_stroke_style_solid": {
+    "en": "Solid stroke style.",
+    "ru": "Сплошная линия."
+  },
   "div_stroke_width": {
     "en": "Stroke width.",
     "ru": "Толщина рамки."
@@ -2554,6 +2582,10 @@
   "div_tooltip_animation_out": {
     "en": "Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.",
     "ru": "Анимация исчезания подсказки. По умолчанию подсказка будет исчезать постепенно со смещением от якорной точки на 10 dp."
+  },
+  "div_tooltip_background_accessibility_description": {
+    "en": "Description for accessibility of the background tap action for tooltip.",
+    "ru": "Описание для доступности действия нажатия по фону тултипа."
   },
   "div_tooltip_close_by_tap_outside": {
     "en": "Allows dismissing tooltip by tapping outside of it.",

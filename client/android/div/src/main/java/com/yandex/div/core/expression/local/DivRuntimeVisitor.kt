@@ -7,7 +7,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.getChildPathUnit
 import com.yandex.div.internal.Assert
@@ -114,6 +113,7 @@ internal class DivRuntimeVisitor @Inject constructor(
             is Div.Slider -> defaultVisit(div, divView, path, parentRuntime)
             is Div.Text -> defaultVisit(div, divView, path, parentRuntime)
             is Div.Video -> defaultVisit(div, divView, path, parentRuntime)
+            is Div.Switch -> defaultVisit(div, divView, path, parentRuntime)
         }
     }
 
@@ -123,21 +123,20 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: MutableList<String>,
         parentRuntime: ExpressionsRuntime?
     ): ExpressionsRuntime? {
-        return if (div.needLocalRuntime) {
-            val stringPath = path.joinToString("/")
-            divView.runtimeStore?.getOrCreateRuntime(
-                path = stringPath,
-                variables = div.value().variables?.toVariables(),
-                triggers = div.value().variableTriggers,
-                functions = div.value().functions,
-                parentRuntime = parentRuntime,
-            )?.also { runtime -> runtime.onAttachedToWindow(divView) } ?: run {
-                Assert.fail("ExpressionRuntimeVisitor cannot create runtime for path = $stringPath")
-                null
-            }
-        } else {
-            parentRuntime
+        if (!div.needLocalRuntime) return parentRuntime
+
+        val stringPath = path.joinToString("/")
+        divView.runtimeStore?.getOrCreateRuntime(
+            path = stringPath,
+            div = div,
+            parentRuntime = parentRuntime,
+        )?.let {
+            it.onAttachedToWindow(divView)
+            return it
         }
+
+        Assert.fail("ExpressionRuntimeVisitor cannot create runtime for path = $stringPath")
+        return null
     }
 
     private fun visitContainer(

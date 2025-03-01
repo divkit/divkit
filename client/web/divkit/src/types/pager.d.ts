@@ -8,11 +8,19 @@ export interface PageSize {
     type: 'percentage';
     page_width: PercentageSize;
 }
+
 export interface NeighbourPageSize {
     type: 'fixed';
     neighbour_page_width: FixedSize;
 }
-export type PagerLayoutMode = PageSize | NeighbourPageSize;
+
+export interface PageContentSize {
+    type: 'wrap_content';
+}
+
+export type PagerLayoutMode = PageSize | NeighbourPageSize | PageContentSize;
+
+export type PagerItemAlignment = 'start' | 'center' | 'end';
 
 export interface DivPagerData extends DivBaseData {
     type: 'pager';
@@ -23,4 +31,5 @@ export interface DivPagerData extends DivBaseData {
     orientation?: Orientation;
     restrict_parent_scroll?: BooleanInt;
     default_item?: number;
+    cross_axis_alignment?: PagerItemAlignment;
 }

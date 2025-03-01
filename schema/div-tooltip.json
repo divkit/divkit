@@ -59,7 +59,11 @@
       "$ref": "div-tooltip-mode.json",
       "default_value": "{ \"type\": \"modal\" }",
       "$description": "translations.json#/div_tooltip_mode",
-      "platforms": []
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "tap_outside_actions": {
       "type": "array",
@@ -75,6 +79,14 @@
       "type": "boolean",
       "$description": "translations.json#/div_tooltip_close_by_tap_outside",
       "default_value": "true",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "background_accessibility_description": {
+      "type": "string",
+      "$description": "translations.json#/div_tooltip_background_accessibility_description",
       "platforms": [
         "ios"
       ]

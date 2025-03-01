@@ -41,6 +41,7 @@ import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivVideoActionHandler
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
+ import com.yandex.div.core.state.StateConflictException
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
@@ -538,7 +539,10 @@ class Div2View private constructor(
         trackChildrenVisibility()
     }
 
-    private fun discardVisibilityTracking() {
+    /**
+     * Canceling visibility tracking.
+     * */
+    fun discardVisibilityTracking() {
         val state = divData?.states?.firstOrNull { it.stateId == stateId }
         state?.let { discardStateVisibility(it) }
         discardChildrenVisibility()
@@ -1289,7 +1293,12 @@ class Div2View private constructor(
             if (newState.stateId != stateId) {
                 switchToState(newState.stateId, isPendingStateTemporary)
             } else if (childCount > 0) {
-                viewComponent.stateSwitcher.switchStates(newState, pendingPaths.immutableCopy(), expressionResolver)
+                try {
+                    viewComponent.stateSwitcher.switchStates(newState, pendingPaths.immutableCopy(), expressionResolver)
+                } catch (e: StateConflictException) {
+                    logError(e)
+                    resetToInitialState()
+                }
             }
             reset()
         }

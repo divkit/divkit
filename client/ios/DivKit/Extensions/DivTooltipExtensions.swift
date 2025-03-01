@@ -18,17 +18,28 @@ extension DivTooltip {
       return await tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
     }
 
+    let mode: BlockTooltip.Mode = switch mode {
+    case .divTooltipModeModal:
+      .modal
+    case .divTooltipModeNonModal:
+      .nonModal
+    }
+
     return try BlockTooltip(
-      id: id,
       // Legacy behavior. Views should be created with tooltipViewFactory.
       block: div.value.makeBlock(context: context),
-      duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
+      params: BlockTooltipParams(
+        id: id,
+        mode: mode,
+        duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
+        closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
+        tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? [],
+        backgroundAccessibilityDescription: resolveBackgroundAccessibilityDescription(expressionResolver)
+      ),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
-      tooltipViewFactory: tooltipViewFactory,
-      closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
-      tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? []
+      tooltipViewFactory: tooltipViewFactory
     )
   }
 }

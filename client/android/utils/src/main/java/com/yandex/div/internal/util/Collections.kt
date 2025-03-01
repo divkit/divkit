@@ -50,3 +50,16 @@ public inline fun <T> List<T>.compareWith(other: List<T>, comparator: (T, T) -> 
     }
     return true
 }
+
+@InternalApi
+public inline fun <T> List<T>?.compareNullableWith(other: List<T>?, comparator: (T, T) -> Boolean): Boolean {
+    if (this == null && other == null) {
+        return true
+    }
+
+    if (this == null || other == null) {
+        return false
+    }
+
+    return compareWith(other, comparator)
+}

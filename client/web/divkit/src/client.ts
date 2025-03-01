@@ -12,7 +12,8 @@ import type {
     Platform,
     StatCallback,
     Theme,
-    TypefaceProvider
+    TypefaceProvider,
+    Patch
 } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { CustomComponentDescription } from '../typings/custom';
@@ -41,6 +42,7 @@ export function render(opts: {
     direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
 }): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
 
@@ -62,6 +64,9 @@ export function render(opts: {
         },
         setData(newJson) {
             instance.setData(newJson);
+        },
+        applyPatch(patch: Patch) {
+            return instance.applyPatch(patch);
         }
     };
 }

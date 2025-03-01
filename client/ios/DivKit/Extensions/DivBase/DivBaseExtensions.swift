@@ -395,6 +395,7 @@ extension DivBorder {
       return nil
     }
     return BlockBorder(
+      style: stroke.resolveStyle(expressionResolver),
       color: stroke.resolveColor(expressionResolver) ?? .black,
       width: stroke.resolveUnit(expressionResolver)
         .makeScaledValue(stroke.resolveWidth(expressionResolver))
@@ -437,6 +438,15 @@ extension DivBorder {
       bottomLeft: CGFloat(bottomLeft),
       bottomRight: CGFloat(bottomRight)
     )
+  }
+}
+
+extension DivStroke {
+  fileprivate func resolveStyle(_: ExpressionResolver) -> BlockBorder.Style {
+    switch style {
+    case .divStrokeStyleDashed: BlockBorder.Style.dashed
+    case .divStrokeStyleSolid: BlockBorder.Style.solid
+    }
   }
 }
 

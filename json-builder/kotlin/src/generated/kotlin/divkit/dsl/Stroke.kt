@@ -35,6 +35,7 @@ data class Stroke internal constructor(
     operator fun plus(additive: Properties): Stroke = Stroke(
         Properties(
             color = additive.color ?: properties.color,
+            style = additive.style ?: properties.style,
             unit = additive.unit ?: properties.unit,
             width = additive.width ?: properties.width,
         )
@@ -45,6 +46,11 @@ data class Stroke internal constructor(
          * Stroke color.
          */
         val color: Property<Color>?,
+        /**
+         * Stroke style. Supported for border stroke only.
+         * Default value: `{"type": "solid"}`.
+         */
+        val style: Property<StrokeStyle>?,
         /**
          * Default value: `dp`.
          */
@@ -59,6 +65,7 @@ data class Stroke internal constructor(
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("color", color)
+            result.tryPutProperty("style", style)
             result.tryPutProperty("unit", unit)
             result.tryPutProperty("width", width)
             return result
@@ -68,17 +75,20 @@ data class Stroke internal constructor(
 
 /**
  * @param color Stroke color.
+ * @param style Stroke style. Supported for border stroke only.
  * @param width Stroke width.
  */
 @Generated
 fun DivScope.stroke(
     `use named arguments`: Guard = Guard.instance,
     color: Color? = null,
+    style: StrokeStyle? = null,
     unit: SizeUnit? = null,
     width: Double? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = valueOrNull(color),
+        style = valueOrNull(style),
         unit = valueOrNull(unit),
         width = valueOrNull(width),
     )
@@ -86,49 +96,58 @@ fun DivScope.stroke(
 
 /**
  * @param color Stroke color.
+ * @param style Stroke style. Supported for border stroke only.
  * @param width Stroke width.
  */
 @Generated
 fun DivScope.strokeProps(
     `use named arguments`: Guard = Guard.instance,
     color: Color? = null,
+    style: StrokeStyle? = null,
     unit: SizeUnit? = null,
     width: Double? = null,
 ) = Stroke.Properties(
     color = valueOrNull(color),
+    style = valueOrNull(style),
     unit = valueOrNull(unit),
     width = valueOrNull(width),
 )
 
 /**
  * @param color Stroke color.
+ * @param style Stroke style. Supported for border stroke only.
  * @param width Stroke width.
  */
 @Generated
 fun TemplateScope.strokeRefs(
     `use named arguments`: Guard = Guard.instance,
     color: ReferenceProperty<Color>? = null,
+    style: ReferenceProperty<StrokeStyle>? = null,
     unit: ReferenceProperty<SizeUnit>? = null,
     width: ReferenceProperty<Double>? = null,
 ) = Stroke.Properties(
     color = color,
+    style = style,
     unit = unit,
     width = width,
 )
 
 /**
  * @param color Stroke color.
+ * @param style Stroke style. Supported for border stroke only.
  * @param width Stroke width.
  */
 @Generated
 fun Stroke.override(
     `use named arguments`: Guard = Guard.instance,
     color: Color? = null,
+    style: StrokeStyle? = null,
     unit: SizeUnit? = null,
     width: Double? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = valueOrNull(color) ?: properties.color,
+        style = valueOrNull(style) ?: properties.style,
         unit = valueOrNull(unit) ?: properties.unit,
         width = valueOrNull(width) ?: properties.width,
     )
@@ -136,17 +155,20 @@ fun Stroke.override(
 
 /**
  * @param color Stroke color.
+ * @param style Stroke style. Supported for border stroke only.
  * @param width Stroke width.
  */
 @Generated
 fun Stroke.defer(
     `use named arguments`: Guard = Guard.instance,
     color: ReferenceProperty<Color>? = null,
+    style: ReferenceProperty<StrokeStyle>? = null,
     unit: ReferenceProperty<SizeUnit>? = null,
     width: ReferenceProperty<Double>? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = color ?: properties.color,
+        style = style ?: properties.style,
         unit = unit ?: properties.unit,
         width = width ?: properties.width,
     )
@@ -165,6 +187,7 @@ fun Stroke.evaluate(
 ): Stroke = Stroke(
     Stroke.Properties(
         color = color ?: properties.color,
+        style = properties.style,
         unit = unit ?: properties.unit,
         width = width ?: properties.width,
     )
