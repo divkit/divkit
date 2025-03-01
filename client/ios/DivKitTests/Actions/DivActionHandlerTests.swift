@@ -224,6 +224,40 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertEqual(["one", "new value"], getVariableValue("array_var"))
   }
 
+  func test_ArraySetValueAction_SetsArrayValue() {
+    setVariableValue("array_var", .array(["one", "two"]))
+
+    handle(.divActionArraySetValue(
+      DivActionArraySetValue(
+        index: .value(1),
+        value: arrayValue(["new value", ["key1": "value", "key2": 123.45]]),
+        variableName: .value("array_var")
+      )
+    ))
+
+    XCTAssertEqual(
+      DivArray.fromAny(["one", ["new value", ["key1": "value", "key2": 123.45]]])!,
+      getVariableValue("array_var")
+    )
+  }
+
+  func test_ArraySetValueAction_SetsDictValue() {
+    setVariableValue("array_var", .array(["one", "two"]))
+
+    handle(.divActionArraySetValue(
+      DivActionArraySetValue(
+        index: .value(1),
+        value: .dictValue(DictValue(value: ["key1": "value", "key2": 123.45])),
+        variableName: .value("array_var")
+      )
+    ))
+
+    XCTAssertEqual(
+      DivArray.fromAny(["one", ["key1": "value", "key2": 123.45]])!,
+      getVariableValue("array_var")
+    )
+  }
+
   func test_ArraySetValueAction_DoesNothingForInvalidIndex() {
     setVariableValue("array_var", .array(["one", "two"]))
 
@@ -456,32 +490,29 @@ final class DivActionHandlerTests: XCTestCase {
   func test_SetVariableAction_SetsArrayVariable() {
     setVariableValue("array_var", .array([]))
 
+    let value: [Any] = [["key1": "value", "key2": 123.45], ["key1": "value", "key2": true]]
     handle(.divActionSetVariable(
       DivActionSetVariable(
-        value: .arrayValue(ArrayValue(value: .value(["value 1", "value 2"]))),
+        value: arrayValue(value),
         variableName: .value("array_var")
       )
     ))
 
-    XCTAssertEqual(["value 1", "value 2"], getVariableValue("array_var"))
+    XCTAssertEqual(DivArray.fromAny(value)!, getVariableValue("array_var"))
   }
 
   func test_SetVariableAction_SetsDictVariable() {
     setVariableValue("dict_var", .dict([:]))
 
+    let value: [String: Any] = ["key1": "value", "key2": 123.45, "nested": ["key": "value"]]
     handle(.divActionSetVariable(
       DivActionSetVariable(
-        value: .dictValue(DictValue(
-          value: ["key_1": "value_1", "nested": ["key_2": "value_2"]]
-        )),
+        value: .dictValue(DictValue(value: value)),
         variableName: .value("dict_var")
       )
     ))
 
-    XCTAssertEqual(
-      ["key_1": "value_1", "nested": ["key_2": "value_2"]] as DivDictionary,
-      getVariableValue("dict_var")
-    )
+    XCTAssertEqual(DivDictionary.fromAny(value)!, getVariableValue("dict_var"))
   }
 
   func test_SetVariableAction_SetsLocalVariable() {
@@ -580,6 +611,10 @@ final class DivActionHandlerTests: XCTestCase {
   private func setVariableValue(_ name: DivVariableName, _ value: DivVariableValue) {
     variablesStorage.set(cardId: cardId, variables: [name: value])
   }
+}
+
+private func arrayValue(_ value: [Any]) -> DivTypedValue {
+  .arrayValue(ArrayValue(value: .value(value)))
 }
 
 private func stringValue(_ value: String) -> DivTypedValue {
