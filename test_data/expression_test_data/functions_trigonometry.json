@@ -348,6 +348,73 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "expression": "@{ctan(0.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [ctan(0.0)]. Cotangent is undefined for the given value."
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{ctan(pi())}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [ctan(3.141592653589793)]. Cotangent is undefined for the given value."
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{ctan(pi() / 2)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{ctan(pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{ctan(-pi() / 4)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{ctan(var)}",
+      "expected": {
+        "type": "number",
+        "value": 0.57735026919
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "number",
+          "value": 1.0471975512
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
