@@ -2,6 +2,7 @@
 
 # Android Client:
 * Added PreloadFilter interface for the DivPreloader, designed to allows you to control which content needs to be preloaded, regardless of the preloadRequired value for the element.
+* Added resume/pause for shine extension while gone.
 * Added support for the `submit` action.
 * Fixed `container` width calculating for text content with enabled `tighten_width`.
 * Fixed content alignment in `container` in rtl-configuration.
