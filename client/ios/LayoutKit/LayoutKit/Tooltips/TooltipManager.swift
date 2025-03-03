@@ -129,20 +129,25 @@ public class DefaultTooltipManager: TooltipManager {
         }
       )
 
+      // Passing the statusBarStyle control to `rootViewController` of the main window
+      let vc = ProxyViewController(
+        viewController: currentKeyWindow.rootViewController ?? UIViewController(),
+        viewDidAppear: { UIAccessibility.post(notification: .screenChanged, argument: view) }
+      )
+      vc.view = view
+
       if tooltip.params.mode == .modal {
-        // Passing the statusBarStyle control to `rootViewController` of the main window
-        let vc = ProxyViewController(
-          viewController: currentKeyWindow.rootViewController ?? UIViewController(),
-          viewDidAppear: { UIAccessibility.post(notification: .screenChanged, argument: view) }
-        )
-        vc.view = view
         // Window won't rotate if `rootViewController` is not set
         modalTooltipWindow.rootViewController = vc
         modalWindowManager.showModalWindow()
         view.frame = modalTooltipWindow.bounds
       } else {
-        currentKeyWindow.addSubview(view)
-        view.frame = currentKeyWindow.bounds
+        guard let rootViewController = currentKeyWindow.rootViewController else {
+          return assertionFailure("Failed to read root view controller of key window")
+        }
+        rootViewController.addChild(vc)
+        rootViewController.view.addSubview(view)
+        view.frame = rootViewController.view.bounds
       }
 
       showingTooltips[info.id] = view
