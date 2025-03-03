@@ -1056,16 +1056,7 @@
                         if (name && value !== null) {
                             const variableInstance = componentContext?.getVariable(name) || variables.get(name);
                             if (variableInstance) {
-                                const type = variableInstance.getType();
-                                if (type === 'dict' || type === 'array') {
-                                    log(wrapError(new Error(`Setting ${type} variables is not supported`), {
-                                        additional: {
-                                            name
-                                        }
-                                    }));
-                                } else {
-                                    variableInstance.set(value);
-                                }
+                                variableInstance.set(value);
                             } else {
                                 log(wrapError(new Error('Cannot find variable'), {
                                     additional: {
