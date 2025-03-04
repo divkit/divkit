@@ -10,7 +10,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
@@ -159,9 +158,12 @@ internal class DivGalleryBinder @Inject constructor(
         context.divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
             val galleryState = state.getBlockState(id) as? GalleryState
-            val position = galleryState?.visibleItemIndex
-                ?: div.defaultItem.evaluate(resolver).toIntSafely()
-            val offset = galleryState?.scrollOffset ?: if (view.isLayoutRtl()) view.paddingRight else view.paddingLeft
+            val position = galleryState?.visibleItemIndex ?: div.defaultItem.evaluate(resolver).toIntSafely()
+            val offset = galleryState?.scrollOffset ?: when {
+                position != 0 -> 0
+                orientation == RecyclerView.HORIZONTAL -> view.paddingStart
+                else -> view.paddingTop
+            }
             view.scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
             view.addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
         }
@@ -184,20 +186,15 @@ internal class DivGalleryBinder @Inject constructor(
 
     private fun DivRecyclerView.scrollToPositionInternal(
         position: Int,
-        offset: Int? = null,
+        offset: Int,
         scrollPosition: ScrollPosition
     ) {
-        val layoutManager = layoutManager as? DivGalleryItemHelper
-        when {
-            offset == null && position == 0 -> {
-                // Show left or top padding on first position without any snapping
-                layoutManager?.instantScrollToPosition(position, scrollPosition)
-            }
-            offset != null -> layoutManager?.instantScrollToPositionWithOffset(position, offset, scrollPosition)
-            else -> {
-                // Call on RecyclerView itself for proper snapping.
-                layoutManager?.instantScrollToPosition(position, scrollPosition)
-            }
+        val layoutManager = layoutManager as? DivGalleryItemHelper ?: return
+        if (offset == 0 && position == 0) {
+            // Show left or top padding on first position without any snapping
+            layoutManager.instantScrollToPosition(position, scrollPosition)
+        } else {
+            layoutManager.instantScrollToPositionWithOffset(position, offset, scrollPosition)
         }
     }
 

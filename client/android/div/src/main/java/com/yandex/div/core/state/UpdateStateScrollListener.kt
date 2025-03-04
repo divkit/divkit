@@ -15,15 +15,9 @@ internal class UpdateStateScrollListener(
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
         val visibleItemIndex = layoutManager.firstVisibleItemPosition()
-        val visibleItemHolder = recyclerView.findViewHolderForLayoutPosition(visibleItemIndex)
-        var scrollOffset = 0
-        if (visibleItemHolder != null) {
-            scrollOffset = if (layoutManager.getLayoutManagerOrientation() == RecyclerView.VERTICAL) {
-                visibleItemHolder.itemView.top - layoutManager.view.paddingTop
-            } else {
-                visibleItemHolder.itemView.left - layoutManager.view.paddingLeft
-            }
-        }
+        val scrollOffset = recyclerView.findViewHolderForLayoutPosition(visibleItemIndex)?.itemView?.let {
+            layoutManager.calcScrollOffset(it)
+        } ?: 0
         divViewState.putBlockState(blockId, GalleryState(visibleItemIndex, scrollOffset))
     }
 }
