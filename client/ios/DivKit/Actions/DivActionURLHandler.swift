@@ -10,5 +10,14 @@ public enum DivActionURLHandler {
     case state(DivCardID)
     case variable([DivCardID: Set<DivVariableName>])
     case external
+
+    var isVariable: Bool {
+      switch self {
+      case .variable:
+        return true
+      default:
+        return false
+      }
+    }
   }
 }

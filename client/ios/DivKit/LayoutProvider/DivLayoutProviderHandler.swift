@@ -7,7 +7,8 @@ public final class DivLayoutProviderHandler {
   private let autodisposePool = AutodisposePool()
 
   // Stores variables that has been updated during the layout cycle to prevent relayout.
-  // onCardUpdated() must be called when the card is updated and new layout cycle begins.
+  // resetUpdatedVariables() must be called when the card is updated and new layout cycle begins.
+  private var updateVariablesCounter = 0
   private var updatedVariables: Set<DivVariableName> = []
 
   public init(variablesStorage: DivVariablesStorage) {
@@ -41,6 +42,7 @@ public final class DivLayoutProviderHandler {
   }
 
   public func resetUpdatedVariables() {
+    updateVariablesCounter = 0
     updatedVariables = []
   }
 
@@ -55,10 +57,14 @@ public final class DivLayoutProviderHandler {
     }
 
     if updatedVariables.contains(variableName) {
-      DivKitLogger.warning(
-        "[DivLayoutProviderHandler] Variable '\(variableName)' was already updated during the layout cycle."
-      )
-      return
+      if updateVariablesCounter > 3 {
+        DivKitLogger.warning(
+          "[DivLayoutProviderHandler] Variable '\(variableName)' was already updated more then 3 times during the layout cycle. It looks like there is a circular dependency in the layout."
+        )
+        return
+      } else {
+        updateVariablesCounter += 1
+      }
     }
 
     updatedVariables.insert(variableName)

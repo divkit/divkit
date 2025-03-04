@@ -211,6 +211,10 @@ final class DivBlockProvider {
       debugParams: debugParams,
       parentScrollView: parentScrollView
     )
+
+    if reasons.filter(\.isVariable).isEmpty {
+      context.layoutProviderHandler?.resetUpdatedVariables()
+    }
     dataErrors.forEach { context.errorsStorage.add($0) }
     do {
       block = try measurements.renderTime.updateMeasure {
