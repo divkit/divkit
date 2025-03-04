@@ -7,7 +7,9 @@
       "$description": "translations.json#/div_stroke_style",
       "default_value": "{\"type\": \"solid\"}",
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     "width": {
