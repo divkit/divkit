@@ -90,14 +90,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.isEditable = true
     multiLineInput.isSelectable = true
     multiLineInput.showsVerticalScrollIndicator = false
-    multiLineInput.autocorrectionType = .no
     multiLineInput.backgroundColor = .clear
     multiLineInput.delegate = self
     multiLineInput.textContainer.lineFragmentPadding = 0
     multiLineInput.returnKeyType = .default
 
     singleLineInput.isHidden = true
-    singleLineInput.autocorrectionType = .no
     singleLineInput.backgroundColor = .clear
     singleLineInput.delegate = self
     singleLineInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -185,13 +183,21 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       multiLineInput.inputView = nil
       multiLineInput.tintColor = nil
       selectionItems = nil
-      multiLineInput.keyboardType = type.uiType
-      singleLineInput.keyboardType = type.uiType
+      setKeyboardType(type)
     case let .selection(items):
       selectionItems = items
       multiLineInput.tintColor = multiLineInput.backgroundColor
       multiLineInput.inputView = selectionView
+      setKeyboardType(.default)
     }
+  }
+
+  private func setKeyboardType(_ type: TextInputBlock.InputType.KeyboardType) {
+    multiLineInput.keyboardType = type.uiType
+    singleLineInput.keyboardType = type.uiType
+
+    singleLineInput.autocorrectionType = type.autoCorrectionType
+    multiLineInput.autocorrectionType = type.autoCorrectionType
   }
 
   func setInputAccessoryView(_ accessoryView: ViewType?) {
@@ -791,6 +797,18 @@ extension TextInputBlock.InputType.KeyboardType {
       .webSearch
     case .asciiCapableNumberPad:
       .asciiCapableNumberPad
+    }
+  }
+
+  fileprivate var autoCorrectionType: UITextAutocorrectionType {
+    switch self {
+    case .URL, .webSearch, .twitter, .emailAddress:
+      return .no
+    case .default:
+      return .default
+    case .asciiCapable, .numbersAndPunctuation, .numberPad, .phonePad,
+         .namePhonePad, .decimalPad, .asciiCapableNumberPad:
+      return .yes
     }
   }
 }

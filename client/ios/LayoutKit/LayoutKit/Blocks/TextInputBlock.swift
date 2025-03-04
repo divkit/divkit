@@ -220,7 +220,10 @@ public final class TextInputBlock: BlockWithTraits {
 
 extension TextInputBlock {
   public static func ==(lhs: TextInputBlock, rhs: TextInputBlock) -> Bool {
-    lhs.heightTrait == rhs.heightTrait
+    lhs.autocapitalizationType == rhs.autocapitalizationType
+      && lhs.enterKeyType == rhs.enterKeyType
+      && lhs.enterKeyActions == rhs.enterKeyActions
+      && lhs.heightTrait == rhs.heightTrait
       && lhs.highlightColor == rhs.highlightColor
       && lhs.hint == rhs.hint
       && lhs.inputType == rhs.inputType
