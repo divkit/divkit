@@ -234,7 +234,7 @@ private class ShineImageTransformer(
             enabled = enabled,
             colors = colors.toIntArray(),
             locations = locations.map { it.toFloat() }.toFloatArray(),
-            angle = angle,
+            angle = 90 - angle,
             duration = duration,
             startDelay = startDelay,
             repeatDelay = repeatDelay,
