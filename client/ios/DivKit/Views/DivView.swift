@@ -120,12 +120,20 @@ public final class DivView: VisibleBoundsTrackingView {
   public override func layoutSubviews() {
     super.layoutSubviews()
     guard let blockView else { return }
+    blockView.frame = bounds
+
+    if !bounds.isEmpty {
+      blockView.layoutIfNeeded()
+    }
+
     blockView.onVisibleBoundsChanged(
       from: oldBounds,
       to: blockProvider?.lastVisibleBounds ?? .zero
     )
-    blockView.frame = bounds
-    blockView.layoutIfNeeded()
+
+    if bounds.isEmpty {
+      blockView.layoutIfNeeded()
+    }
   }
 
   public override func removeFromSuperview() {
