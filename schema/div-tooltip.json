@@ -72,7 +72,8 @@
       },
       "$description": "translations.json#/div_tooltip_tap_outside_actions",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "close_by_tap_outside": {
@@ -81,7 +82,8 @@
       "default_value": "true",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "background_accessibility_description": {

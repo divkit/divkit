@@ -172,7 +172,15 @@
         event.stopPropagation();
         event.preventDefault();
 
-        rootCtx.onTooltipClose(internalId);
+        if (componentContext.getJsonWithVars(data.close_by_tap_outside) !== false) {
+            rootCtx.onTooltipClose(internalId);
+        }
+
+        if (data.tap_outside_actions) {
+            componentContext.execAnyActions(data.tap_outside_actions, {
+                processUrls: true
+            });
+        }
     }
 
     function onWindowResize(): void {
@@ -205,8 +213,11 @@
 </script>
 
 <svelte:window
-    on:click={onOutClick}
     on:resize={onWindowResize}
+/>
+
+<svelte:body
+    on:click={onOutClick}
 />
 
 {#if visible && modal}
