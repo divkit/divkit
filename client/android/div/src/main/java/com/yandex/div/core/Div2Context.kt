@@ -147,6 +147,13 @@ class Div2Context @MainThread private constructor(
         }
     }
 
+    /**
+     * @return `true` if at least one tooltip was cancelled, `false` otherwise.
+     */
+    fun cancelTooltips(): Boolean {
+        return div2Component.tooltipController.cancelAllTooltips()
+    }
+
     fun childContext(baseContext: ContextThemeWrapper): Div2Context {
         return Div2Context(baseContext, div2Component, lifecycleOwner)
     }

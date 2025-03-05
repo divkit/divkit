@@ -78,14 +78,19 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
     fun showTooltip(tooltipId: String, context: BindingContext, multiple: Boolean = false) {
         findChildWithTooltip(tooltipId, context.divView)?.let { (divTooltip, anchor) ->
-            showTooltip(divTooltip, anchor, context, multiple)
+            showTooltip(context, divTooltip, anchor, multiple)
         } ?: run {
             context.divView.logError(IllegalStateException(
                 "Unable to find view for tooltip '$tooltipId'"))
         }
     }
 
-    private fun showTooltip(divTooltip: DivTooltip, anchor: View, context: BindingContext, multiple: Boolean) {
+    private fun showTooltip(
+        context: BindingContext,
+        divTooltip: DivTooltip,
+        anchor: View,
+        multiple: Boolean
+    ) {
         if (tooltips.contains(divTooltip.id)) {
             return
         }
@@ -101,30 +106,49 @@ internal class DivTooltipController @VisibleForTesting constructor(
         tooltips[id]?.popupWindow?.dismiss()
     }
 
-    fun cancelTooltips(context: BindingContext) = cancelTooltips(context, context.divView, context.divView)
+    fun cancelTooltips(divView: Div2View) = cancelTooltips(divView as View)
 
-    private fun cancelTooltips(context: BindingContext, view: View, div2View: Div2View) {
+    private fun cancelTooltips(view: View) {
         @Suppress("UNCHECKED_CAST")
         (view.getTag(R.id.div_tooltips_tag) as? List<DivTooltip>)?.let { tooltipList ->
-            tooltipList.forEach { tooltip ->
-                val forRemove = mutableListOf<String>()
-                tooltips[tooltip.id]?.apply {
-                    dismissed = true
-                    if (popupWindow.isShowing) {
-                        popupWindow.clearAnimation()
-                        popupWindow.dismiss()
-                    } else {
-                        forRemove.add(tooltip.id)
-                        stopVisibilityTracking(context, tooltip.div)
-                    }
-                    ticket?.cancel()
-                }
-                forRemove.forEach { tooltips.remove(it) }
+            val forRemove = tooltipList.mapNotNull { tooltip ->
+                dismissTooltip(tooltip)
             }
+            forRemove.forEach { tooltips.remove(it) }
         }
         if (view is ViewGroup) {
             view.children.forEach { child ->
-                cancelTooltips(context, child, div2View)
+                cancelTooltips(child)
+            }
+        }
+    }
+
+    fun cancelAllTooltips(): Boolean {
+        if (tooltips.isEmpty()) {
+            return false
+        }
+
+        tooltips.forEach { (_, tooltip) -> dismissTooltip(tooltip) }
+        tooltips.clear()
+        return true
+    }
+
+    private fun dismissTooltip(tooltip: DivTooltip): String? {
+        val tooltipData = tooltips[tooltip.id] ?: return null
+        return dismissTooltip(tooltipData)
+    }
+
+    private fun dismissTooltip(tooltip: TooltipData): String? {
+        tooltip.apply {
+            dismissed = true
+            ticket?.cancel()
+            return if (popupWindow.isShowing) {
+                popupWindow.clearAnimation()
+                popupWindow.dismiss()
+                null
+            } else {
+                stopVisibilityTracking(tooltip.bindingContext, tooltip.div)
+                tooltip.id
             }
         }
     }
@@ -193,7 +217,14 @@ internal class DivTooltipController @VisibleForTesting constructor(
             setupAnimation(divTooltip, resolver)
         }
         val onBackPressedCallback = createOnBackPressCallback(divTooltip, div2View)
-        val tooltipData = TooltipData(popup, div, null, onBackPressedCallback)
+        val tooltipData = TooltipData(
+            id = divTooltip.id,
+            bindingContext = context,
+            div = div,
+            popupWindow = popup,
+            ticket = null,
+            onBackPressedCallback = onBackPressedCallback
+        )
 
         popup.setOnDismissListener {
             tooltips.remove(divTooltip.id)
@@ -275,8 +306,10 @@ internal class DivTooltipController @VisibleForTesting constructor(
 }
 
 private class TooltipData(
-    val popupWindow: SafePopupWindow,
+    val id: String,
+    val bindingContext: BindingContext,
     val div: Div,
+    val popupWindow: SafePopupWindow,
     var ticket: DivPreloader.Ticket? = null,
     val onBackPressedCallback: OnBackPressedCallback?,
     var dismissed: Boolean = false,

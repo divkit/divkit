@@ -1102,7 +1102,7 @@ class Div2View private constructor(
     }
 
     override fun cancelTooltips() {
-        tooltipController.cancelTooltips(bindingContext)
+        tooltipController.cancelTooltips(this)
     }
 
     override fun dispatchDraw(canvas: Canvas) {
