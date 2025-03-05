@@ -240,11 +240,17 @@ extension ScrollPageIndicatorLayer {
       }
 
       let fromIndex = Int(fromValue)
-      if fromIndex == numberOfPages, currentIndex == 0 {
-        addAnimation(-1)
-      } else {
-        addAnimation(fromValue)
+      let indexDifference = currentIndex - fromIndex
+      let numberOfPages = Double(numberOfPages)
+      let correctedFromValue: Double = switch indexDifference {
+      case ...(-2): // From last to first element
+        -1
+      case 2...: // From first to last element
+        numberOfPages
+      default:
+        fromValue
       }
+      addAnimation(correctedFromValue)
     }
   }
 }
