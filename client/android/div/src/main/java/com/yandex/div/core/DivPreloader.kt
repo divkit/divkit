@@ -30,6 +30,7 @@ class DivPreloader internal constructor(
     private val preloadFilter: PreloadFilter
 ) {
 
+    @JvmOverloads
     constructor(
         configuration: DivConfiguration,
         preloadFilter: PreloadFilter = PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
@@ -41,6 +42,7 @@ class DivPreloader internal constructor(
         preloadFilter = preloadFilter
     )
 
+    @JvmOverloads
     constructor(
         context: Div2Context,
         preloadFilter: PreloadFilter = PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
