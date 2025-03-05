@@ -284,6 +284,7 @@
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
 		9D09984F2CA30D010098098C /* AccessoryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */; };
 		9D5BFB092CA1DA20005F8EB1 /* CustomFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */; };
+		9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */; };
 		9F89F0D92CEF4C9A00460B76 /* ShineExtensionParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */; };
 		9F89F0DB2CEF5AAC00460B76 /* ShimmerStyleTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */; };
 		9FE7D2FE2CF751E300BAF071 /* VGSL in Frameworks */ = {isa = PBXBuildFile; productRef = 9FE7D2FD2CF751E300BAF071 /* VGSL */; };
@@ -647,6 +648,7 @@
 		98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTooltipTests.swift; sourceTree = "<group>"; };
 		9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProvider.swift; sourceTree = "<group>"; };
 		9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunctionTests.swift; sourceTree = "<group>"; };
+		9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActionHandlerTests.swift; sourceTree = "<group>"; };
 		9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShineExtensionParamsTests.swift; sourceTree = "<group>"; };
 		9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerStyleTester.swift; sourceTree = "<group>"; };
 		9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivBlockModelingContext.swift; sourceTree = "<group>"; };
@@ -947,6 +949,7 @@
 		8C40BA002ABB3B45008405AD /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */,
 				8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */,
 				8C7B1B312865C01C0036EF4C /* DivActionIntentTests.swift */,
 				431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */,
@@ -2014,6 +2017,7 @@
 				8C23F43E29DDB3810069F3F7 /* DefaultValueTests.swift in Sources */,
 				8C23F41E29DDB3810069F3F7 /* EntityWithComplexPropertyTemplate.swift in Sources */,
 				8C23F41629DDB3810069F3F7 /* EntityWithArrayOfExpressions.swift in Sources */,
+				9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */,
 				8C23F42629DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift in Sources */,
 				8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */,
 				8C23F44429DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift in Sources */,
