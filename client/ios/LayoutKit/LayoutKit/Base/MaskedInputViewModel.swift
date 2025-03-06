@@ -14,25 +14,30 @@ public class MaskedInputViewModel {
   @ObservableVariable var cursorPosition: NSRange?
   @ObservableProperty var rawText: String
   @ObservableProperty var maskValidator: MaskValidator
+  @ObservableProperty var typo: Typo?
   private let disposePool = AutodisposePool()
 
   init(
     rawText: String,
     maskValidator: MaskValidator,
+    typo: Typo? = nil,
     signal: Signal<Action>
   ) {
     let rawText = ObservableProperty(initialValue: rawText)
     let maskValidator = ObservableProperty(initialValue: maskValidator)
+    let typo = ObservableProperty(initialValue: typo)
     let rawCursorData: ObservableProperty<CursorData?> =
       ObservableProperty(initialValue: nil)
     self._rawText = rawText
     self._maskValidator = maskValidator
+    self._typo = typo
     self._rawCursorPosition = rawCursorData
     let resultSignal = Signal.combineLatest(
       rawText.currentAndNewValues.skipRepeats(),
       maskValidator.currentAndNewValues.skipRepeats(),
-      rawCursorData.currentAndNewValues.skipRepeats()
-    ).map { binding, maskValidator, cursor in
+      rawCursorData.currentAndNewValues.skipRepeats(),
+      typo.currentAndNewValues.skipRepeats()
+    ).map { binding, maskValidator, cursor, _ in
       let res = maskValidator.formatted(rawText: binding, rawCursorPosition: cursor)
       return (
         res.text,

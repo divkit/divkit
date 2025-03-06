@@ -377,11 +377,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     guard self.maskedViewModel == nil else {
       maskedViewModel?.rawText = rawTextValue.value
       maskedViewModel?.maskValidator = mask
+      maskedViewModel?.typo = typo
       return
     }
     self.maskedViewModel = MaskedInputViewModel(
       rawText: self.rawTextValue.value,
       maskValidator: mask,
+      typo: typo,
       signal: userInputPipe.signal
     )
     maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] range in
