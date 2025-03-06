@@ -39,6 +39,10 @@
     transform: translateX(3em);
 }
 
+.switch_direction_rtl .switch__tumbler_checked .switch__thumb {
+    transform: translateX(-3em);
+}
+
 .switch_disabled .switch__thumb,
 .switch_disabled .switch__tumbler_checked .switch__thumb {
     background-color: #f3f3f3;

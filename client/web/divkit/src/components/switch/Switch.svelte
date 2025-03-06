@@ -20,6 +20,7 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+    const direction = rootCtx.direction;
 
     let prevId: string | undefined;
     let input: HTMLInputElement;
@@ -86,7 +87,8 @@
     }
 
     $: mods = {
-        disabled: !isEnabled
+        disabled: !isEnabled,
+        direction: $direction
     };
     $: stl = {
         '--divkit-switch-on-color': onColor,
