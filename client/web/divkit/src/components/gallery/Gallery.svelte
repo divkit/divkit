@@ -398,17 +398,17 @@
         return res;
     }
 
-    function scrollTo(offset: number, behavior: ScrollBehavior = 'smooth'): void {
+    function scrollTo(offset: number, animated = true): void {
         const isHorizontal = orientation === 'horizontal';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
 
         scroller.scroll({
             [scrollDirection]: offset,
-            behavior
+            behavior: animated ? 'smooth' : 'instant'
         });
     }
 
-    function scrollToGalleryItem(galleryElements: HTMLElement[], index: number, behavior: ScrollBehavior = 'smooth'): void {
+    function scrollToGalleryItem(galleryElements: HTMLElement[], index: number, animated = true): void {
         const isHorizontal = orientation === 'horizontal';
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
 
@@ -426,7 +426,7 @@
                 const scrollWrapperSize = scroller.offsetWidth;
                 offset = (elem[elementOffset] + elem.offsetWidth + .01 - itemSpacing / 2) - scrollWrapperSize;
             }
-            scrollTo(offset, behavior);
+            scrollTo(offset, animated);
         }
     }
 
@@ -485,15 +485,15 @@
         if (componentContext.id && !componentContext.fakeElement) {
             prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
-                setCurrentItem(item: number) {
+                setCurrentItem(item: number, animated: boolean) {
                     const galleryElements = getItems();
                     if (item < 0 || item > galleryElements.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    scrollToGalleryItem(galleryElements, item);
+                    scrollToGalleryItem(galleryElements, item, animated);
                 },
-                setPreviousItem(step: number, overflow: Overflow) {
+                setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
                     const currentElementIndex = calculateCurrentElementIndex('prev');
                     const galleryElements = getItems();
                     let previousItem = currentElementIndex - step;
@@ -502,9 +502,9 @@
                         previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, galleryElements.length) : 0;
                     }
 
-                    scrollToGalleryItem(galleryElements, previousItem);
+                    scrollToGalleryItem(galleryElements, previousItem, animated);
                 },
-                setNextItem(step: number, overflow: Overflow) {
+                setNextItem(step: number, overflow: Overflow, animated: boolean) {
                     const isHorizontal = orientation === 'horizontal';
                     const directionMultiplier = ($direction === 'ltr' || !isHorizontal) ? 1 : -1;
                     // Go to scroller start, if we reached right/bottom edge of scroller
@@ -515,7 +515,7 @@
                     );
                     const galleryElements = getItems();
                     if (isEdgeScroll && overflow === 'ring') {
-                        scrollToGalleryItem(galleryElements, 0);
+                        scrollToGalleryItem(galleryElements, 0, animated);
                         return;
                     }
 
@@ -526,15 +526,15 @@
                         nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, galleryElements.length) : galleryElements.length - 1;
                     }
 
-                    scrollToGalleryItem(galleryElements, nextItem);
+                    scrollToGalleryItem(galleryElements, nextItem, animated);
                 },
-                scrollToStart() {
-                    scrollTo(0);
+                scrollToStart(animated: boolean) {
+                    scrollTo(0, animated);
                 },
-                scrollToEnd() {
-                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? 1e6 : -1e6);
+                scrollToEnd(animated: boolean) {
+                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? 1e6 : -1e6, animated);
                 },
-                scrollBackward(step: number, overflow: Overflow) {
+                scrollBackward(step: number, overflow: Overflow, animated: boolean) {
                     const isHorizontal = orientation === 'horizontal';
                     const directionMultiplier = ($direction === 'ltr' || !isHorizontal) ? 1 : -1;
                     const currentOffset = isHorizontal ?
@@ -551,9 +551,9 @@
                             newOffset = nonNegativeModulo(newOffset, maxOffset);
                         }
                     }
-                    scrollTo(newOffset * directionMultiplier);
+                    scrollTo(newOffset * directionMultiplier, animated);
                 },
-                scrollForward(step: number, overflow: Overflow) {
+                scrollForward(step: number, overflow: Overflow, animated: boolean) {
                     const isHorizontal = orientation === 'horizontal';
                     const directionMultiplier = ($direction === 'ltr' || !isHorizontal) ? 1 : -1;
                     const currentOffset = isHorizontal ?
@@ -570,10 +570,10 @@
                             newOffset = nonNegativeModulo(newOffset, maxOffset);
                         }
                     }
-                    scrollTo(newOffset * directionMultiplier);
+                    scrollTo(newOffset * directionMultiplier, animated);
                 },
-                scrollToPosition(step) {
-                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? step : -step);
+                scrollToPosition(step, animated: boolean) {
+                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? step : -step, animated);
                 },
             });
         }
@@ -586,7 +586,7 @@
 
         if (defaultItem) {
             const galleryElements = getItems();
-            scrollToGalleryItem(galleryElements, defaultItem, 'auto');
+            scrollToGalleryItem(galleryElements, defaultItem, false);
         }
     });
 

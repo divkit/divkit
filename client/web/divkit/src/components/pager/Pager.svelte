@@ -376,24 +376,24 @@
         currentItem = index;
     }
 
-    function setPreviousItem(step: number, overflow: Overflow) {
+    function setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
         let previousItem = currentItem - step;
 
         if (previousItem < 0) {
             previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, items.length) : 0;
         }
 
-        scrollToPagerItem(previousItem);
+        scrollToPagerItem(previousItem, animated ? 'smooth' : 'instant');
     }
 
-    function setNextItem(step: number, overflow: Overflow) {
+    function setNextItem(step: number, overflow: Overflow, animated: boolean) {
         let nextItem = currentItem + step;
 
         if (nextItem > items.length - 1) {
             nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, items.length) : items.length - 1;
         }
 
-        scrollToPagerItem(nextItem);
+        scrollToPagerItem(nextItem, animated ? 'smooth' : 'instant');
     }
 
     $: if (componentContext.json) {
@@ -410,20 +410,20 @@
         if (componentContext.id && !componentContext.fakeElement) {
             prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
-                setCurrentItem(item: number) {
+                setCurrentItem(item: number, animated: boolean) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    scrollToPagerItem(item);
+                    scrollToPagerItem(item, animated ? 'smooth' : 'instant');
                 },
                 setPreviousItem,
                 setNextItem,
-                scrollToStart() {
-                    scrollToPagerItem(0);
+                scrollToStart(animated) {
+                    scrollToPagerItem(0, animated ? 'smooth' : 'instant');
                 },
-                scrollToEnd() {
-                    scrollToPagerItem(items.length - 1);
+                scrollToEnd(animated) {
+                    scrollToPagerItem(items.length - 1, animated ? 'smooth' : 'instant');
                 }
             });
         }
@@ -493,7 +493,7 @@
         {#if hasScrollLeft && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => ($direction === 'ltr' ? setPreviousItem : setNextItem)(1, 'clamp')}>
+            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => ($direction === 'ltr' ? setPreviousItem : setNextItem)(1, 'clamp', true)}>
                 {#if !leftClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
@@ -504,7 +504,7 @@
         {#if hasScrollRight && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => ($direction === 'ltr' ? setNextItem : setPreviousItem)(1, 'clamp')}>
+            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => ($direction === 'ltr' ? setNextItem : setPreviousItem)(1, 'clamp', true)}>
                 {#if !rightClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>

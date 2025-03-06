@@ -677,11 +677,13 @@
         {
             item,
             step,
-            overflow
+            overflow,
+            animated
         }: {
             item?: string | null;
             step?: string | null;
             overflow?: string | null;
+            animated?: string | null;
         }
     ): void {
         if (!id) {
@@ -709,6 +711,8 @@
         }
         overflow = overflow || 'clamp';
 
+        const isAnimated = animated === null || animated !== '0' && animated !== 'false';
+
         const instance = getInstance<SwitchElements>(id);
         if (!instance) {
             return;
@@ -716,28 +720,28 @@
 
         switch (type) {
             case 'set_current_item':
-                instance.setCurrentItem(itemVal);
+                instance.setCurrentItem(itemVal, isAnimated);
                 return;
             case 'set_previous_item':
-                instance.setPreviousItem(stepVal, overflow as Overflow);
+                instance.setPreviousItem(stepVal, overflow as Overflow, isAnimated);
                 return;
             case 'set_next_item':
-                instance.setNextItem(stepVal, overflow as Overflow);
+                instance.setNextItem(stepVal, overflow as Overflow, isAnimated);
                 return;
             case 'scroll_to_start':
-                instance.scrollToStart?.();
+                instance.scrollToStart?.(isAnimated);
                 return;
             case 'scroll_to_end':
-                instance.scrollToEnd?.();
+                instance.scrollToEnd?.(isAnimated);
                 return;
             case 'scroll_backward':
-                instance.scrollBackward?.(stepVal, overflow as Overflow);
+                instance.scrollBackward?.(stepVal, overflow as Overflow, isAnimated);
                 return;
             case 'scroll_forward':
-                instance.scrollForward?.(stepVal, overflow as Overflow);
+                instance.scrollForward?.(stepVal, overflow as Overflow, isAnimated);
                 return;
             case 'scroll_to_position':
-                instance.scrollToPosition?.(stepVal);
+                instance.scrollToPosition?.(stepVal, isAnimated);
                 return;
         }
     }
@@ -1046,7 +1050,8 @@
                         switchElementAction(parts[1], params.get('id'), {
                             item: params.get('item'),
                             step: params.get('step'),
-                            overflow: params.get('overflow')
+                            overflow: params.get('overflow'),
+                            animated: params.get('animated')
                         });
                         break;
                     case 'set_variable':

@@ -408,11 +408,11 @@
     }
     $: updateItems(items);
 
-    async function setSelected(val: number, focus = false): Promise<void> {
+    async function setSelected(val: number, focus: boolean, animated: boolean): Promise<void> {
         previousSelected = selected;
         selected = val;
         initTabsSwipe();
-        changeTab();
+        changeTab(animated);
 
         if (focus) {
             await tick();
@@ -441,12 +441,12 @@
         }
         const newSelected = indices[newSelectedIndex];
 
-        setSelected(newSelected, focus);
+        setSelected(newSelected, focus, true);
     }
 
     function selectItem(_event: Event, index: number): boolean {
         if (selected !== index) {
-            setSelected(index);
+            setSelected(index, false, true);
 
             return false;
         }
@@ -454,8 +454,8 @@
         return true;
     }
 
-    function changeTab(): void {
-        isAnimated = true;
+    function changeTab(animated = true): void {
+        isAnimated = animated;
         updateTransform(-selected * 100);
         updateShowedPanels();
         updateWrapperHeight();
@@ -530,9 +530,9 @@
         } else if (event.which === ARROW_RIGHT) {
             moveSelected(1, true);
         } else if (event.which === HOME) {
-            setSelected(0, true);
+            setSelected(0, true, true);
         } else if (event.which === END) {
-            setSelected(items.length - 1, true);
+            setSelected(items.length - 1, true, true);
         } else {
             return;
         }
@@ -648,7 +648,7 @@
             updateTransform(-newSelected * 100);
             hideNonVisiblePanels();
         } else {
-            setSelected(newSelected);
+            setSelected(newSelected, false, true);
         }
     }
 
@@ -661,36 +661,36 @@
         if (componentContext.id && !hasError && !componentContext.fakeElement) {
             prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
-                setCurrentItem(item: number) {
+                setCurrentItem(item: number, animated: boolean) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    setSelected(item);
+                    setSelected(item, false, animated);
                 },
-                setPreviousItem(step: number, overflow: Overflow) {
+                setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
                     let previousItem = selected - step;
 
                     if (previousItem < 0) {
                         previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, items.length) : 0;
                     }
 
-                    setSelected(previousItem);
+                    setSelected(previousItem, false, animated);
                 },
-                setNextItem(step: number, overflow: Overflow) {
+                setNextItem(step: number, overflow: Overflow, animated: boolean) {
                     let nextItem = selected + step;
 
                     if (nextItem > items.length - 1) {
                         nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, items.length) : items.length - 1;
                     }
 
-                    setSelected(nextItem);
+                    setSelected(nextItem, false, animated);
                 },
-                scrollToStart() {
-                    setSelected(0);
+                scrollToStart(animated: boolean) {
+                    setSelected(0, false, animated);
                 },
-                scrollToEnd() {
-                    setSelected(items.length - 1);
+                scrollToEnd(animated: boolean) {
+                    setSelected(items.length - 1, false, animated);
                 },
             });
         }
