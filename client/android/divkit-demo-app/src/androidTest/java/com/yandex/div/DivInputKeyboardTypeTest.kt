@@ -7,10 +7,8 @@ import com.yandex.divkit.demo.DummyActivity
 import org.junit.Rule
 import org.junit.Test
 
-internal const val TEXT_WITH_DIFFERENT_SYMBOLS =
-        "https://Text_with different+symbols(123)@site.ru\nsecond_line"
-
 private const val TEXT_BEFORE_BREAK = "https://Text_with different+symbols(123)@site.ru"
+internal const val TEXT_WITH_DIFFERENT_SYMBOLS = "$TEXT_BEFORE_BREAK\nsecond_line"
 
 class DivInputKeyboardTypeTest {
 
@@ -32,6 +30,14 @@ class DivInputKeyboardTypeTest {
         checkType(
             type = "single_line_text",
             expectedText = TEXT_BEFORE_BREAK
+        )
+    }
+
+    @Test
+    fun checkNumber() {
+        checkType(
+            type = "number",
+            expectedText = "-912302."
         )
     }
 

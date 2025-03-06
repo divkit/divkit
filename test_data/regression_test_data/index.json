@@ -2435,6 +2435,7 @@
       "title": "Regex input filter",
       "case_id": 158,
       "platforms": [
+        "android",
         "ios",
         "web"
       ],
@@ -2463,6 +2464,7 @@
       "title": "Expression input filter",
       "case_id": 159,
       "platforms": [
+        "android",
         "ios",
         "web"
       ],

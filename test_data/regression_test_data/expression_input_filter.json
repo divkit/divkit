@@ -190,6 +190,10 @@
                   "condition": "@{input_enabled}"
                 }
               ]
+            },
+            {
+              "type": "pretty_text",
+              "text": "Variable value: @{text}"
             }
           ]
         }

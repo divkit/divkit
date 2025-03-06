@@ -120,6 +120,10 @@
               "type": "pretty_input",
               "variable": "regex",
               "hint": "regex"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Variable value: @{input}"
             }
           ]
         }

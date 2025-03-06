@@ -63,6 +63,7 @@
           "type": "array",
           "$description": "translations.json#/div_input_filters",
           "platforms": [
+            "android",
             "ios",
             "web"
           ],

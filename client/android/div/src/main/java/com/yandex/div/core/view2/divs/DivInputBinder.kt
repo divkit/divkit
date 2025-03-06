@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.Color
+import android.text.Editable
 import android.text.InputFilter
 import android.text.InputType
 import android.text.method.DigitsKeyListener
@@ -16,6 +17,9 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.inputfilter.ExpressionInputFilter
+import com.yandex.div.core.util.inputfilter.InputFiltersHolder
+import com.yandex.div.core.util.inputfilter.RegexInputFilter
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.mask.BaseInputMask
 import com.yandex.div.core.util.mask.CurrencyInputMask
@@ -43,6 +47,7 @@ import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivCurrencyInputMask
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivInputFilter
 import com.yandex.div2.DivInputValidator
 import com.yandex.div2.DivPhoneInputMask
 import java.util.Locale
@@ -335,13 +340,20 @@ internal class DivInputBinder @Inject constructor(
         removeAfterTextChangeListener()
 
         var inputMask: BaseInputMask? = null
-
         observeMask(div, bindingContext.expressionResolver, divView) {
             inputMask = it
-
             inputMask?.let { mask ->
                 setText(mask.value)
                 setSelection(mask.cursorPosition)
+            }
+        }
+
+        var inputFilters: InputFiltersHolder? = null
+        observeFilters(div, bindingContext) { filters ->
+            inputFilters = filters
+            inputFilters?.let {
+                it.currentValue = editableText?.toString() ?: ""
+                it.cursorPosition = selectionStart
             }
         }
 
@@ -357,48 +369,74 @@ internal class DivInputBinder @Inject constructor(
             primaryVariable = div.textVariable
         }
 
-        val setSecondVariable = { value: String ->
-            if (secondaryVariable != null) divView.setVariable(secondaryVariable, value)
-        }
-
-        val callbacks = object : TwoWayStringVariableBinder.Callbacks {
-            override fun onVariableChanged(value: String?) {
-                val valueToSet = inputMask?.let {
-                    it.overrideRawValue(value ?: "")
-
-                    setSecondVariable(it.value)
-
-                    it.value
-                } ?: value
-
-                setText(valueToSet)
-            }
-
-            override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                addAfterTextChangeAction { editable ->
-                    val fieldValue = editable?.toString() ?: ""
-
-                    inputMask?.apply {
-                        if (value != fieldValue) {
-                            applyChangeFrom(text?.toString() ?: "", selectionStart)
-
-                            setText(value)
-                            setSelection(cursorPosition)
-
-                            setSecondVariable(value)
-                        }
-                    }
-
-                    val valueToUpdate = inputMask?.rawValue?.replace(',', '.') ?: fieldValue
-
-                    valueUpdater(valueToUpdate)
-                }
-            }
-        }
-
+        val callbacks = createCallbacks(inputMask, inputFilters, divView, secondaryVariable)
         addSubscription(variableBinder.bindVariable(bindingContext, primaryVariable, callbacks, path))
 
         observeValidators(div, bindingContext.expressionResolver, divView)
+    }
+
+    private fun DivInputView.createCallbacks(
+        inputMask: BaseInputMask?,
+        filters: InputFiltersHolder?,
+        divView: Div2View,
+        secondaryVariable: String?,
+    ) = object : TwoWayStringVariableBinder.Callbacks {
+
+        override fun onVariableChanged(value: String?) {
+            val newValue = value ?: ""
+
+            inputMask?.let {
+                it.overrideRawValue(newValue)
+                setSecondVariable(it.value)
+                setText(it.value)
+                return
+            }
+
+            filters?.run {
+                if (!checkValue(newValue)) return
+
+                currentValue = newValue
+                cursorPosition = newValue.length
+            }
+
+            setText(newValue)
+        }
+
+        override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) =
+            addAfterTextChangeAction { applyMaskOrFilters(it, valueUpdater) }
+
+        private fun applyMaskOrFilters(editable: Editable?, valueUpdater: (String) -> Unit) {
+            val fieldValue = editable?.toString() ?: ""
+
+            inputMask?.run {
+                if (value != fieldValue) {
+                    applyChangeFrom(text?.toString() ?: "", selectionStart)
+                    setText(value)
+                    setSelection(cursorPosition)
+                    setSecondVariable(value)
+                }
+                valueUpdater(rawValue.replace(',', '.'))
+                return
+            }
+
+            filters?.run {
+                if (currentValue == fieldValue) return
+
+                if (!checkValue(fieldValue)) {
+                    setText(currentValue)
+                    setSelection(cursorPosition)
+                    return
+                }
+
+                currentValue = fieldValue
+                cursorPosition = selectionStart
+            }
+
+            valueUpdater(fieldValue)
+        }
+
+        private fun setSecondVariable(value: String) =
+            secondaryVariable?.let { divView.setVariable(secondaryVariable, value) }
     }
 
     private fun DivInputView.observeValidators(
@@ -648,6 +686,47 @@ internal class DivInputBinder @Inject constructor(
         }
 
         updateMaskData(Unit)
+    }
+
+    private fun DivInputView.observeFilters(
+        div: DivInput,
+        bindingContext: BindingContext,
+        onFiltersUpdate: (InputFiltersHolder?) -> Unit
+    ) {
+        div.mask?.let { return }
+
+        val divFilters = div.filters
+        if (divFilters.isNullOrEmpty()) return
+
+        val resolver = bindingContext.expressionResolver
+        val updateFiltersData = { _: Any ->
+            val filters = divFilters.mapNotNull {
+                when (it) {
+                    is DivInputFilter.Regex -> {
+                        try {
+                            RegexInputFilter(it.value.pattern.evaluate(resolver))
+                        } catch (e: PatternSyntaxException) {
+                            errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
+                                .logError(IllegalArgumentException("Invalid regex pattern '${e.pattern}'.", e))
+                            null
+                        }
+                    }
+                    is DivInputFilter.Expression -> ExpressionInputFilter(it.value.condition, resolver)
+                }
+            }
+
+            onFiltersUpdate(InputFiltersHolder(filters))
+        }
+
+        divFilters.forEach {
+            when (it) {
+                is DivInputFilter.Regex ->
+                    addSubscription(it.value.pattern.observe(resolver, updateFiltersData))
+                is DivInputFilter.Expression -> Unit
+            }
+        }
+
+        updateFiltersData(Unit)
     }
 
     private fun getCapitalization(
