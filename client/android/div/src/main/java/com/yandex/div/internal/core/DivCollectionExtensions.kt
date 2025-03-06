@@ -30,8 +30,13 @@ fun DivGallery.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResu
 fun DivPager.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
     buildItems(items, itemBuilder, resolver)
 
-private fun buildItems(items: List<Div>?, itemBuilder: DivCollectionItemBuilder?, resolver: ExpressionResolver) =
-    items?.toDivItemBuilderResult(resolver) ?: itemBuilder?.build(resolver) ?: emptyList()
+private fun buildItems(items: List<Div>?,
+                       itemBuilder: DivCollectionItemBuilder?,
+                       resolver: ExpressionResolver): List<DivItemBuilderResult> {
+    return itemBuilder?.build(resolver)
+        ?: items?.toDivItemBuilderResult(resolver)
+        ?: emptyList()
+}
 
 internal fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> =
     data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(obj, i, resolver) }
