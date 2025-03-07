@@ -1008,11 +1008,11 @@ internal fun sendAccessibilityEventUnchecked(
     }
 }
 
-internal fun <T> T.bindClipChildren(
+internal fun ViewGroup.bindClipChildren(
     newClipToBounds: Expression<Boolean>,
     oldClipToBounds: Expression<Boolean>?,
     resolver: ExpressionResolver
-) where T : ViewGroup, T : DivHolderView<*> {
+) {
     if (newClipToBounds.equalsToConstant(oldClipToBounds)) {
         return
     }
@@ -1023,11 +1023,13 @@ internal fun <T> T.bindClipChildren(
         return
     }
 
-    addSubscription(newClipToBounds.observe(resolver) { clip -> applyClipChildren(clip) })
+    (this as? DivHolderView<*>)?.addSubscription(
+        newClipToBounds.observe(resolver) { clip -> applyClipChildren(clip) }
+    )
 }
 
-internal fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
-    needClipping = clip
+internal fun ViewGroup.applyClipChildren(clip: Boolean) {
+    (this as? DivHolderView<*>)?.needClipping = clip
     val parent = parent
     if (!clip && parent is ViewGroup) {
         parent.clipChildren = false

@@ -12,7 +12,6 @@ import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivData
@@ -181,9 +180,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         iterator.next()
 
         // Notify internal recycler about changes if needed.
-        pathToChild.findLast {
-            it.value() is DivGallery || it.value() is DivPager
-        }?.value()?.let {
+        pathToChild.findLast { it is Div.Gallery || it is Div.Pager }?.let {
             findPatchedRecyclerViewAndNotifyChange(parentView, it, idToPatch)
         }
 
@@ -381,14 +378,14 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
 
     private fun findPatchedRecyclerViewAndNotifyChange(
         currentView: View,
-        divWithPatchedChild: DivBase,
+        divWithPatchedChild: Div,
         patchedChildId: String
     ): View? {
         when(currentView) {
             is DivRecyclerView -> {
                 if (currentView.div === divWithPatchedChild) {
                     val adapter = (currentView.adapter as? DivGalleryAdapter) ?: return currentView
-                    currentView.div?.items?.forEachIndexed { i, child ->
+                    currentView.div?.value?.items?.forEachIndexed { i, child ->
                         if (child.value().id == patchedChildId) {
                             adapter.notifyItemChanged(i)
                             return currentView
@@ -400,7 +397,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
             is DivPagerView -> {
                 if (currentView.div === divWithPatchedChild) {
                     val adapter = (currentView.viewPager.getChildAt(0) as? RecyclerView)?.adapter ?: return currentView
-                    currentView.div?.items?.forEachIndexed { i, child ->
+                    currentView.div?.value?.items?.forEachIndexed { i, child ->
                         if (child.value().id == patchedChildId) {
                             adapter.notifyItemChanged(i)
                             return currentView

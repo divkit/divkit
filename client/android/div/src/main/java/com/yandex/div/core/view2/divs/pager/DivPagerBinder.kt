@@ -31,6 +31,7 @@ import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
 import javax.inject.Inject
@@ -45,28 +46,21 @@ internal class DivPagerBinder @Inject constructor(
     private val divActionBinder: DivActionBinder,
     private val pagerIndicatorConnector: PagerIndicatorConnector,
     private val accessibilityStateProvider: AccessibilityStateProvider,
-) : DivViewBinder<DivPager, DivPagerView> {
+) : DivViewBinder<Div.Pager, DivPager, DivPagerView>(baseBinder) {
 
-    override fun bindView(
-        context: BindingContext,
-        view: DivPagerView,
-        div: DivPager,
-        path: DivStatePath
-    ) {
-        div.id?.let {
-            pagerIndicatorConnector.submitPager(it, view)
-        }
-        val divView = context.divView
-        val resolver = context.expressionResolver
+    override fun bindView(context: BindingContext, view: DivPagerView, div: Div.Pager, path: DivStatePath) {
+        div.value.id?.let { pagerIndicatorConnector.submitPager(it, view) }
         val oldDiv = view.div
         if (div === oldDiv) {
             val pager = view.viewPager
             val adapter = pager.adapter as? DivPagerAdapter ?: return
-            if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, context)) {
+            if (adapter.applyPatch(view.getRecyclerView(), divPatchCache, context)) {
                 view.pagerOnItemsCountChange?.onItemsUpdated()
-                pager.doOnNextLayout { pager.requestTransform() }
+                return
             }
-            view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
+
+            view.bindStates(context.divView.rootDiv(), context, context.expressionResolver, divBinder.get())
+            pager.doOnNextLayout { pager.requestTransform() }
             return
         }
 
@@ -76,89 +70,90 @@ internal class DivPagerBinder @Inject constructor(
             view.pageTransformer = null
         }
 
-        val recyclerView = view.getRecyclerView() ?: return
-
         baseBinder.bindView(context, view, div, oldDiv)
+        view.bind(context, div.value, path)
+    }
 
+    private fun DivPagerView.bind(bindingContext: BindingContext, div: DivPager, path: DivStatePath) {
+        val recyclerView = getRecyclerView() ?: return
+        
+        val divView = bindingContext.divView
+        val resolver = bindingContext.expressionResolver
         val pageTranslations = SparseArray<Float>()
-        val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
-        view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
+        val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
+        setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
         val adapter = DivPagerAdapter(
             div.buildItems(resolver),
-            context,
+            bindingContext,
             divBinder.get(),
             pageTranslations,
             viewCreator,
             path,
             a11yEnabled,
-            view
+            this
         )
-        view.viewPager.adapter = adapter
-        view.bindInfiniteScroll(div, resolver)
-        view.pagerOnItemsCountChange?.onItemsUpdated()
-        view.clipToPage = divView.div2Component.isPagerPageClipEnabled
+        viewPager.adapter = adapter
+        bindInfiniteScroll(div, resolver)
+        pagerOnItemsCountChange?.onItemsUpdated()
+        clipToPage = divView.div2Component.isPagerPageClipEnabled
 
-        view.orientation =
+        orientation =
             if (div.isHorizontal(resolver)) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
         adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
 
-        val reusableObserver = { _: Any -> view.applyDecorations(div, resolver, pageTranslations, adapter) }
+        val reusableObserver = { _: Any -> applyDecorations(div, resolver, pageTranslations, adapter) }
 
-        view.addSubscription(div.paddings?.left?.observe(resolver, reusableObserver))
-        view.addSubscription(div.paddings?.right?.observe(resolver, reusableObserver))
-        view.addSubscription(div.paddings?.top?.observe(resolver, reusableObserver))
-        view.addSubscription(div.paddings?.bottom?.observe(resolver, reusableObserver))
-        view.addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
-        view.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
-        view.addSubscription(div.scrollAxisAlignment.observe(resolver, reusableObserver))
-        view.addSubscription(div.crossAxisAlignment.observe(resolver, reusableObserver))
-        view.addSubscription(div.orientation.observe(resolver, reusableObserver))
-        view.addSubscription(view.viewPager.observeSizeChange(div, reusableObserver))
+        addSubscription(div.paddings?.left?.observe(resolver, reusableObserver))
+        addSubscription(div.paddings?.right?.observe(resolver, reusableObserver))
+        addSubscription(div.paddings?.top?.observe(resolver, reusableObserver))
+        addSubscription(div.paddings?.bottom?.observe(resolver, reusableObserver))
+        addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
+        addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
+        addSubscription(div.scrollAxisAlignment.observe(resolver, reusableObserver))
+        addSubscription(div.crossAxisAlignment.observe(resolver, reusableObserver))
+        addSubscription(div.orientation.observe(resolver, reusableObserver))
+        addSubscription(viewPager.observeSizeChange(div, reusableObserver))
 
         when (val mode = div.layoutMode) {
             is DivPagerLayoutMode.NeighbourPageSize -> {
-                view.addSubscription(mode.value.neighbourPageWidth.value.observe(resolver, reusableObserver))
-                view.addSubscription(mode.value.neighbourPageWidth.unit.observe(resolver, reusableObserver))
+                addSubscription(mode.value.neighbourPageWidth.value.observe(resolver, reusableObserver))
+                addSubscription(mode.value.neighbourPageWidth.unit.observe(resolver, reusableObserver))
             }
             is DivPagerLayoutMode.PageSize ->
-                view.addSubscription(mode.value.pageWidth.value.observe(resolver, reusableObserver))
+                addSubscription(mode.value.pageWidth.value.observe(resolver, reusableObserver))
             is DivPagerLayoutMode.PageContentSize -> Unit
         }
 
-        view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
+        pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
             divView = divView,
             items = adapter.itemsToShow,
             divActionBinder = divActionBinder,
         )
 
-        view.changePageCallbackForLogger = DivPagerPageChangeCallback(
-            bindingContext = context,
+        changePageCallbackForLogger = DivPagerPageChangeCallback(
+            bindingContext = bindingContext,
             divPager = div,
             recyclerView = recyclerView,
             items = adapter.itemsToShow,
-            pagerView = view,
+            pagerView = this,
         )
 
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
             val pagerState = state.getBlockState(id) as? PagerState
-            view.changePageCallbackForState = UpdateStateChangePageCallback(id, state)
-            view.currentItem = pagerState?.currentPageIndex?.takeIf {
+            changePageCallbackForState = UpdateStateChangePageCallback(id, state)
+            currentItem = pagerState?.currentPageIndex?.takeIf {
                 it < adapter.getRealPosition(adapter.itemsToShow.size)
             } ?: adapter.getPosition(div.defaultItem.evaluate(resolver).toIntSafely())
         }
 
-        view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->
-            view.onInterceptTouchEventListener = if (restrictParentScroll) {
-                ParentScrollRestrictor
-            } else {
-                null
-            }
+        addSubscription(div.restrictParentScroll.observeAndGet(resolver) {
+            onInterceptTouchEventListener = if (it) ParentScrollRestrictor else null
         })
 
-        view.bindItemBuilder(context, div)
+        bindItemBuilder(bindingContext, div)
         if (a11yEnabled) {
-            view.enableAccessibility()
+            enableAccessibility()
         }
     }
 

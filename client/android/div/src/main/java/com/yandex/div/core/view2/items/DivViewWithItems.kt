@@ -185,10 +185,14 @@ internal sealed class DivViewWithItems {
         @set:VisibleForTesting(otherwise = VisibleForTesting.NONE)
         internal var viewForTests: DivViewWithItems? = null
 
-        internal inline fun create(view: View, resolver: ExpressionResolver, direction: () -> Direction): DivViewWithItems? {
+        internal inline fun create(
+            view: View,
+            resolver: ExpressionResolver,
+            direction: () -> Direction,
+        ): DivViewWithItems? {
             return viewForTests ?: when (view) {
                 is DivRecyclerView -> {
-                    when (view.div!!.scrollMode.evaluate(resolver)) {
+                    when (view.div!!.value.scrollMode.evaluate(resolver)) {
                         DivGallery.ScrollMode.DEFAULT -> Gallery(view, direction())
                         DivGallery.ScrollMode.PAGING -> PagingGallery(view, direction())
                     }

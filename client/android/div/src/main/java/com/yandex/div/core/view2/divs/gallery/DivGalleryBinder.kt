@@ -36,65 +36,56 @@ internal class DivGalleryBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
     private val divPatchCache: DivPatchCache,
-    private val scrollInterceptionAngle: Float,
-) : DivViewBinder<DivGallery, DivRecyclerView> {
+    private val recyclerScrollInterceptionAngle: Float,
+) : DivViewBinder<Div.Gallery, DivGallery, DivRecyclerView>(baseBinder) {
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun bindView(context: BindingContext, view: DivRecyclerView, div: DivGallery, path: DivStatePath) {
-        val divView = context.divView
-        val resolver = context.expressionResolver
-
+    override fun bindView(context: BindingContext, view: DivRecyclerView, div: Div.Gallery, path: DivStatePath) {
         val oldDiv = (view as? DivRecyclerView)?.div
         if (div === oldDiv) {
             val adapter = view.adapter as? DivGalleryAdapter ?: return
             adapter.applyPatch(view, divPatchCache, context)
-            view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
+            view.bindStates(context.divView.rootDiv(), context, context.expressionResolver, divBinder.get())
             return
         }
 
         baseBinder.bindView(context, view, div, oldDiv)
+        view.bind(context, div.value, path)
+    }
 
-        val reusableObserver = { _: Any ->
-            updateDecorations(view, div, context)
-        }
-        view.addSubscription(div.orientation.observe(resolver, reusableObserver))
-        view.addSubscription(div.scrollbar.observe(resolver, reusableObserver))
-        view.addSubscription(div.scrollMode.observe(resolver, reusableObserver))
-        view.addSubscription(div.itemSpacing.observe(resolver, reusableObserver))
-        view.addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
-        div.columnCount?.let {
-            view.addSubscription(it.observe(resolver, reusableObserver))
-        }
+    private fun DivRecyclerView.bind(bindingContext: BindingContext, div: DivGallery, path: DivStatePath) {
+        val resolver = bindingContext.expressionResolver
+        val reusableObserver = { _: Any -> updateDecorations(bindingContext, div) }
+        addSubscription(div.orientation.observe(resolver, reusableObserver))
+        addSubscription(div.scrollbar.observe(resolver, reusableObserver))
+        addSubscription(div.scrollMode.observe(resolver, reusableObserver))
+        addSubscription(div.itemSpacing.observe(resolver, reusableObserver))
+        addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
+        div.columnCount?.let { addSubscription(it.observe(resolver, reusableObserver)) }
 
-        view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
-        view.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
-        view.clipToPadding = false
-
-        view.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        setRecycledViewPool(ReleasingViewPool(bindingContext.divView.releaseViewVisitor))
+        setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
+        clipToPadding = false
+        overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         val itemStateBinder = { itemView: View, _: Div ->
-            itemView.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
+            itemView.bindStates(bindingContext.divView.rootDiv(), bindingContext, resolver, divBinder.get())
         }
-        view.adapter = DivGalleryAdapter(
+        adapter = DivGalleryAdapter(
             div.buildItems(resolver),
-            context,
+            bindingContext,
             divBinder.get(),
             viewCreator,
             itemStateBinder,
             path
         )
-        view.bindItemBuilder(context, div)
-        view.resetAnimatorAndRestoreOnLayout()
-
-        updateDecorations(view, div, context)
+        bindItemBuilder(bindingContext, div)
+        resetAnimatorAndRestoreOnLayout()
+        updateDecorations(bindingContext, div)
     }
 
-    private fun updateDecorations(
-        view: DivRecyclerView,
-        div: DivGallery,
-        context: BindingContext,
-    ) {
-        val metrics = view.resources.displayMetrics
+    private fun DivRecyclerView.updateDecorations(context: BindingContext, div: DivGallery) {
+        val metrics = resources.displayMetrics
         val resolver = context.expressionResolver
         val divOrientation = div.orientation.evaluate(resolver)
         val orientation = if (divOrientation == DivGallery.Orientation.HORIZONTAL) {
@@ -104,42 +95,37 @@ internal class DivGalleryBinder @Inject constructor(
         }
 
         val scrollbarEnabled = div.scrollbar.evaluate(resolver) == DivGallery.Scrollbar.AUTO
-        view.isVerticalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.VERTICAL
-        view.isHorizontalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.HORIZONTAL
-        view.isScrollbarFadingEnabled = false
+        isVerticalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.VERTICAL
+        isHorizontalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.HORIZONTAL
+        isScrollbarFadingEnabled = false
 
         val columnCount = div.columnCount?.evaluate(resolver) ?: 1
 
-        view.clipChildren = false
-        view.setItemDecoration(
+        clipChildren = false
+        setItemDecoration(
             if (columnCount == 1L)
                 PaddingItemDecoration(
-                    midItemPadding = div.itemSpacing.evaluate(resolver)
-                        .dpToPx(metrics),
+                    midItemPadding = div.itemSpacing.evaluate(resolver).dpToPx(metrics),
                     orientation = orientation
                 )
             else
                 PaddingItemDecoration(
-                    midItemPadding = div.itemSpacing.evaluate(resolver)
-                        .dpToPx(metrics),
-                    crossItemPadding = (div.crossSpacing ?: div.itemSpacing).evaluate(resolver)
-                        .dpToPx(metrics),
+                    midItemPadding = div.itemSpacing.evaluate(resolver).dpToPx(metrics),
+                    crossItemPadding = (div.crossSpacing ?: div.itemSpacing).evaluate(resolver).dpToPx(metrics),
                     orientation = orientation
                 )
         )
 
-        val scrollMode = div.scrollMode.evaluate(resolver).also { view.scrollMode = it }
+        val scrollMode = div.scrollMode.evaluate(resolver).also { scrollMode = it }
         when (scrollMode) {
-            DivGallery.ScrollMode.DEFAULT -> {
-                view.pagerSnapStartHelper?.attachToRecyclerView(null)
-            }
+            DivGallery.ScrollMode.DEFAULT -> pagerSnapStartHelper?.attachToRecyclerView(null)
             DivGallery.ScrollMode.PAGING -> {
-                val itemSpacing = div.itemSpacing.evaluate(resolver).dpToPx(view.resources.displayMetrics)
+                val itemSpacing = div.itemSpacing.evaluate(resolver).dpToPx(resources.displayMetrics)
 
-                val helper = view.pagerSnapStartHelper?.also { it.itemSpacing = itemSpacing } ?:
-                    PagerSnapStartHelper(itemSpacing).also { view.pagerSnapStartHelper = it }
+                val helper = pagerSnapStartHelper?.also { it.itemSpacing = itemSpacing } ?:
+                    PagerSnapStartHelper(itemSpacing).also { pagerSnapStartHelper = it }
 
-                helper.attachToRecyclerView(view)
+                helper.attachToRecyclerView(this)
             }
         }
 
@@ -147,32 +133,29 @@ internal class DivGalleryBinder @Inject constructor(
         // DivGalleryItemHelper type with DivGridLayoutManager, resulting in
         // casting DivLinearLayoutManager to DivGridLayoutManager exception.
         val itemHelper: DivGalleryItemHelper = if (columnCount == 1L) {
-            DivLinearLayoutManager(context, view, div, orientation)
+            DivLinearLayoutManager(context, this, div, orientation)
         } else {
-            DivGridLayoutManager(context, view, div, orientation)
+            DivGridLayoutManager(context, this, div, orientation)
         }
-        view.layoutManager = itemHelper.toLayoutManager()
+        layoutManager = itemHelper.toLayoutManager()
 
-        view.scrollInterceptionAngle = scrollInterceptionAngle
-        view.clearOnScrollListeners()
+        scrollInterceptionAngle = recyclerScrollInterceptionAngle
+        clearOnScrollListeners()
         context.divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
             val galleryState = state.getBlockState(id) as? GalleryState
             val position = galleryState?.visibleItemIndex ?: div.defaultItem.evaluate(resolver).toIntSafely()
             val offset = galleryState?.scrollOffset ?: when {
                 position != 0 -> 0
-                orientation == RecyclerView.HORIZONTAL -> view.paddingStart
-                else -> view.paddingTop
+                orientation == RecyclerView.HORIZONTAL -> paddingStart
+                else -> paddingTop
             }
-            view.scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
-            view.addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
+            scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
+            addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
         }
-        view.addOnScrollListener(DivGalleryScrollListener(context, view, itemHelper, div))
-        view.onInterceptTouchEventListener = if (div.restrictParentScroll.evaluate(resolver)) {
-            ParentScrollRestrictor
-        } else {
-            null
-        }
+        addOnScrollListener(DivGalleryScrollListener(context, this, itemHelper, div))
+        onInterceptTouchEventListener =
+            if (div.restrictParentScroll.evaluate(resolver)) ParentScrollRestrictor else null
     }
 
     private fun DivRecyclerView.resetAnimatorAndRestoreOnLayout() {

@@ -17,7 +17,7 @@ import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
-import com.yandex.div2.DivPager
+import com.yandex.div2.Div
 
 @Mockable
 internal class DivPagerView @JvmOverloads constructor(
@@ -25,7 +25,7 @@ internal class DivPagerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ViewPager2Wrapper(context, attrs, defStyleAttr),
-    DivHolderView<DivPager> by DivHolderViewMixin(),
+    DivHolderView<Div.Pager> by DivHolderViewMixin(),
     OnInterceptTouchEventListenerHost {
 
     internal var changePageCallbackForState: ViewPager2.OnPageChangeCallback? = null

@@ -5,9 +5,9 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.internal.widget.TransientViewMixin
-import com.yandex.div2.DivBase
+import com.yandex.div2.Div
 
-internal interface DivHolderView<T: DivBase> : DivBorderSupports,
+internal interface DivHolderView<T: Div> : DivBorderSupports,
     TransientView,
     ExpressionSubscriber {
 
@@ -15,7 +15,7 @@ internal interface DivHolderView<T: DivBase> : DivBorderSupports,
     var bindingContext: BindingContext?
 }
 
-internal class DivHolderViewMixin<T: DivBase> : DivHolderView<T>,
+internal class DivHolderViewMixin<T: Div> : DivHolderView<T>,
     DivBorderSupports by DivBorderSupportsMixin(),
     TransientView by TransientViewMixin() {
 

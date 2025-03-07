@@ -23,6 +23,7 @@ import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.DivActionBinder
@@ -51,17 +52,20 @@ import com.yandex.div.internal.widget.tabs.TabTitlesLayoutView
 import com.yandex.div.internal.widget.tabs.TabView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivTabs
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Provider
 
 @DivScope
 internal class DivTabsBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val viewCreator: DivViewCreator,
+    private val divBinder: Provider<DivBinder>,
     private val viewPool: ViewPool,
     private val textStyleProvider: TabTextStyleProvider,
     private val actionBinder: DivActionBinder,
@@ -72,7 +76,8 @@ internal class DivTabsBinder @Inject constructor(
     @Named(Names.THEMED_CONTEXT) private val context: Context,
     private val runtimeVisitor: DivRuntimeVisitor,
     private val tabsStateCache: TabsStateCache,
-) {
+) : DivViewBinder<Div.Tabs, DivTabs, DivTabsLayout>(baseBinder) {
+
     private var oldDivSelectedTab: Long? = null
 
     init {
@@ -80,54 +85,49 @@ internal class DivTabsBinder @Inject constructor(
         viewPool.register(TAG_TAB_ITEM, { TabItemLayout(context) }, 2)
     }
 
-    fun bindView(context: BindingContext, view: DivTabsLayout, div: DivTabs, divBinder: DivBinder, path: DivStatePath) {
+    override fun bindView(context: BindingContext, view: DivTabsLayout, div: Div.Tabs, path: DivStatePath) {
         val oldDiv = view.div
-        val resolver = context.expressionResolver
         if (oldDiv === div) {
-            view.divTabsAdapter?.applyPatch(resolver, div)?.let {
+            view.divTabsAdapter?.applyPatch(context.expressionResolver, div)?.let {
                 view.div = it
                 return@bindView
             }
+        } else {
+            baseBinder.bindView(context, view, div, oldDiv)
+            view.bind(context, div.value, oldDiv?.value)
         }
 
-        val divView = context.divView
-        baseBinder.bindView(context, view, div, oldDiv)
+        bindAdapter(path, context, view, oldDiv?.value, div.value, divBinder.get(), view)
+    }
 
-        view.clipToPadding = false
+    override fun DivTabsLayout.bind(bindingContext: BindingContext, div: DivTabs, oldDiv: DivTabs?) {
+        val resolver = bindingContext.expressionResolver
+
+        clipToPadding = false
 
         val applyPaddings = { _: Any? ->
-            view.titleLayout.applyPaddings(div.titlePaddings, resolver)
+            titleLayout.applyPaddings(div.titlePaddings, resolver)
         }
         applyPaddings(null)
-        div.titlePaddings.left.observe(resolver, applyPaddings)
-        div.titlePaddings.right.observe(resolver, applyPaddings)
-        div.titlePaddings.top.observe(resolver, applyPaddings)
-        div.titlePaddings.bottom.observe(resolver, applyPaddings)
+        addSubscription(div.titlePaddings.left.observe(resolver, applyPaddings))
+        addSubscription(div.titlePaddings.right.observe(resolver, applyPaddings))
+        addSubscription(div.titlePaddings.top.observe(resolver, applyPaddings))
+        addSubscription(div.titlePaddings.bottom.observe(resolver, applyPaddings))
 
-        view.titleLayout.observeHeight(div, resolver)
-        view.observeStyle(resolver, div.tabTitleStyle)
-        view.observeDividerStyle(resolver, div.tabTitleDelimiter, context)
-        view.pagerLayout.clipToPadding = false
-        div.separatorPaddings.observe(resolver, view) {
-            view.divider.applyMargins(div.separatorPaddings, resolver)
-        }
-        view.addSubscription(div.separatorColor.observeAndGet(resolver) {
-            view.divider.setBackgroundColor(it)
+        titleLayout.observeHeight(div, resolver)
+        observeStyle(resolver, div.tabTitleStyle)
+        observeDividerStyle(resolver, div.tabTitleDelimiter, bindingContext)
+        pagerLayout.clipToPadding = false
+        div.separatorPaddings.observe(resolver, this) { divider.applyMargins(div.separatorPaddings, resolver) }
+        addSubscription(div.separatorColor.observeAndGet(resolver) { divider.setBackgroundColor(it) })
+        addSubscription(div.hasSeparator.observeAndGet(resolver) {
+            divider.visibility = if (it) View.VISIBLE else View.GONE
         })
-        view.addSubscription(div.hasSeparator.observeAndGet(resolver) { hasSeparator ->
-            view.divider.visibility = if (hasSeparator) View.VISIBLE else View.GONE
-        })
-        view.titleLayout.setOnScrollChangedListener { div2Logger.logTabTitlesScroll(divView) }
-        view.titleLayout.setFocusTracker(context.divView.inputFocusTracker)
+        titleLayout.setOnScrollChangedListener { div2Logger.logTabTitlesScroll(bindingContext.divView) }
+        titleLayout.setFocusTracker(bindingContext.divView.inputFocusTracker)
 
-        bindAdapter(path, context, view, oldDiv, div, divBinder, view)
-
-        view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictScroll ->
-            view.viewPager.onInterceptTouchEventListener = if (restrictScroll) {
-                ParentScrollRestrictor
-            } else {
-                null
-            }
+        addSubscription(div.restrictParentScroll.observeAndGet(resolver) {
+            viewPager.onInterceptTouchEventListener = if (it) ParentScrollRestrictor else null
         })
     }
 
@@ -188,7 +188,7 @@ internal class DivTabsBinder @Inject constructor(
 
             setupNewAdapter(
                 view.divTabsAdapter?.pager?.currentItemIndex
-                ?: div.selectedTab.evaluate(resolver).toIntSafely()
+                    ?: div.selectedTab.evaluate(resolver).toIntSafely()
             )
         })
 
@@ -196,7 +196,7 @@ internal class DivTabsBinder @Inject constructor(
 
         val divView = bindingContext.divView
         val isDataTagTheSame = divView.prevDataTag == DivDataTag.INVALID
-                || divView.dataTag == divView.prevDataTag
+            || divView.dataTag == divView.prevDataTag
 
         val selectedTab = div.selectedTab.evaluate(resolver)
         val keepSelectedTab = isDataTagTheSame && oldDivSelectedTab == selectedTab
@@ -464,17 +464,17 @@ internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: Expres
     val applyTabPaddings = { _: Any? ->
         if (paddings.start != null || paddings.end != null) {
             setTabPadding(
-                    paddings.start?.evaluate(resolver).dpToPx(metrics),
-                    paddings.top.evaluate(resolver).dpToPx(metrics),
-                    paddings.end?.evaluate(resolver).dpToPx(metrics),
-                    paddings.bottom.evaluate(resolver).dpToPx(metrics)
+                paddings.start?.evaluate(resolver).dpToPx(metrics),
+                paddings.top.evaluate(resolver).dpToPx(metrics),
+                paddings.end?.evaluate(resolver).dpToPx(metrics),
+                paddings.bottom.evaluate(resolver).dpToPx(metrics)
             )
         } else {
             setTabPadding(
-                    paddings.left.evaluate(resolver).dpToPx(metrics),
-                    paddings.top.evaluate(resolver).dpToPx(metrics),
-                    paddings.right.evaluate(resolver).dpToPx(metrics),
-                    paddings.bottom.evaluate(resolver).dpToPx(metrics)
+                paddings.left.evaluate(resolver).dpToPx(metrics),
+                paddings.top.evaluate(resolver).dpToPx(metrics),
+                paddings.right.evaluate(resolver).dpToPx(metrics),
+                paddings.bottom.evaluate(resolver).dpToPx(metrics)
             )
         }
     }
@@ -482,10 +482,8 @@ internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: Expres
     subscriber.addSubscription(paddings.top.observe(resolver, applyTabPaddings))
     subscriber.addSubscription(paddings.bottom.observe(resolver, applyTabPaddings))
     if (paddings.start != null || paddings.end != null) {
-       subscriber.addSubscription(paddings.start?.observe(resolver, applyTabPaddings)
-               )
-        subscriber.addSubscription(paddings.end?.observe(resolver, applyTabPaddings)
-               )
+        subscriber.addSubscription(paddings.start?.observe(resolver, applyTabPaddings))
+        subscriber.addSubscription(paddings.end?.observe(resolver, applyTabPaddings))
     } else {
         subscriber.addSubscription(paddings.left.observe(resolver, applyTabPaddings))
         subscriber.addSubscription(paddings.right.observe(resolver, applyTabPaddings))

@@ -4,14 +4,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import com.yandex.div.internal.widget.SeparatorView
-import com.yandex.div2.DivSeparator
+import com.yandex.div2.Div
 
 internal class DivSeparatorView  @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : SeparatorView(context, attrs, defStyleAttr),
-    DivHolderView<DivSeparator> by DivHolderViewMixin() {
+    DivHolderView<Div.Separator> by DivHolderViewMixin() {
 
     init {
         dividerColor = DEFAULT_DIVIDER_COLOR

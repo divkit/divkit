@@ -9,21 +9,18 @@ import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivSeparator
 import javax.inject.Inject
 
 @DivScope
 internal class DivSeparatorBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder
-) : DivViewBinder<DivSeparator, DivSeparatorView> {
+    baseBinder: DivBaseBinder
+) : DivViewBinder<Div.Separator, DivSeparator, DivSeparatorView>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivSeparatorView, div: DivSeparator) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
-
-        baseBinder.bindView(context, view, div, oldDiv)
-        view.applyDivActions(
-            context,
+    override fun DivSeparatorView.bind(bindingContext: BindingContext, div: DivSeparator, oldDiv: DivSeparator?) {
+        applyDivActions(
+            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -36,10 +33,10 @@ internal class DivSeparatorBinder @Inject constructor(
             div.accessibility,
         )
 
-        view.bindStyle(div.delimiterStyle, oldDiv?.delimiterStyle, context.expressionResolver)
+        bindStyle(div.delimiterStyle, oldDiv?.delimiterStyle, bindingContext.expressionResolver)
 
-        view.setDividerHeightResource(R.dimen.div_separator_delimiter_height)
-        view.dividerGravity = Gravity.CENTER
+        setDividerHeightResource(R.dimen.div_separator_delimiter_height)
+        dividerGravity = Gravity.CENTER
     }
 
     private fun DivSeparatorView.bindStyle(

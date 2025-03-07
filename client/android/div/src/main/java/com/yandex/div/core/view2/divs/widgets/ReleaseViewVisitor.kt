@@ -22,7 +22,7 @@ internal class ReleaseViewVisitor @Inject constructor(
 ) : DivViewVisitor() {
 
     override fun defaultVisit(view: DivHolderView<*>) =
-        releaseInternal(view as View, view.div, view.bindingContext?.expressionResolver)
+        releaseInternal(view as View, view.div?.value(), view.bindingContext?.expressionResolver)
 
     override fun visit(view: DivPagerView) {
         super.visit(view)
@@ -39,8 +39,8 @@ internal class ReleaseViewVisitor @Inject constructor(
         val resolver = view.bindingContext?.expressionResolver ?: return
         release(view)
         view.customView?.let {
-            divExtensionController.unbindView(divView, resolver, it, divCustom)
-            divCustomContainerViewAdapter.release(it, divCustom)
+            divExtensionController.unbindView(divView, resolver, it, divCustom.value)
+            divCustomContainerViewAdapter.release(it, divCustom.value)
         }
     }
 

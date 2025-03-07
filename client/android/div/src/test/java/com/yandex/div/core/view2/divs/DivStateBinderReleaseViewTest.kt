@@ -16,7 +16,7 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.state.InMemoryDivStateCache
-import com.yandex.div2.DivState
+import com.yandex.div2.Div
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -112,5 +112,4 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     }
 }
 
-private val UnitTestData.asDivState: DivState
-    get() = this.div.value() as DivState
+private val UnitTestData.asDivState get() = div as Div.State

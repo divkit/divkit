@@ -6,6 +6,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTransitionTrigger
@@ -43,8 +44,8 @@ class DivBaseBinderTest {
 
     @Test
     fun `do not apply paddings when same`() {
-        val div = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
-        val oldDiv = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
+        val div = createDiv(paddings = paddingsBottom1)
+        val oldDiv = createDiv(paddings = paddingsBottom1)
 
         baseBinder.bindView(context, view, oldDiv, null)
         clearInvocations(view)
@@ -57,8 +58,8 @@ class DivBaseBinderTest {
 
     @Test
     fun `do not apply paddings when equals`() {
-        val div = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
-        val oldDiv = DivText(text = "text".asExpression(), paddings = paddingsBottom2)
+        val div = createDiv(paddings = paddingsBottom1)
+        val oldDiv = createDiv(paddings = paddingsBottom2)
 
         baseBinder.bindView(context, view, oldDiv, null)
         clearInvocations(view)
@@ -71,8 +72,8 @@ class DivBaseBinderTest {
 
     @Test
     fun `apply paddings when value changed`() {
-        val div = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
-        val oldDiv = DivText(text = "text".asExpression(), paddings = paddingsTop)
+        val div = createDiv(paddings = paddingsBottom1)
+        val oldDiv = createDiv(paddings = paddingsTop)
 
         baseBinder.bindView(context, view, div, oldDiv)
 
@@ -82,11 +83,7 @@ class DivBaseBinderTest {
 
     @Test
     fun `not clear animation when view is visible`() {
-        val div = DivText(
-                text = "text".asExpression(),
-                visibility = DivVisibility.VISIBLE.asExpression(),
-                transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
-        )
+        val div = createDiv(transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE))
 
         baseBinder.bindView(context, view, div, null)
 
@@ -95,10 +92,9 @@ class DivBaseBinderTest {
 
     @Test
     fun `clear animation when view is invisible`() {
-        val div = DivText(
-                text = "text".asExpression(),
-                visibility = DivVisibility.INVISIBLE.asExpression(),
-                transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
+        val div = createDiv(
+            visibility = DivVisibility.INVISIBLE,
+            transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
         )
 
         baseBinder.bindView(context, view, div, null)
@@ -108,14 +104,24 @@ class DivBaseBinderTest {
 
     @Test
     fun `clear animation when view is gone`() {
-        val div = DivText(
-                text = "text".asExpression(),
-                visibility = DivVisibility.GONE.asExpression(),
-                transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
+        val div = createDiv(
+            visibility = DivVisibility.GONE,
+            transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
         )
 
         baseBinder.bindView(context, view, div, null)
 
         verify(view).clearAnimation()
     }
+
+    private fun createDiv(
+        paddings: DivEdgeInsets? = null,
+        visibility: DivVisibility = DivVisibility.VISIBLE,
+        transitionTriggers: List<DivTransitionTrigger>? = null
+    ) = Div.Text(DivText(
+        text = "text".asExpression(),
+        paddings = paddings,
+        visibility = visibility.asExpression(),
+        transitionTriggers = transitionTriggers,
+    ))
 }

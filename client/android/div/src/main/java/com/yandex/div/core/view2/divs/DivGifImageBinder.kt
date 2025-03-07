@@ -23,6 +23,7 @@ import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGifImage
@@ -36,25 +37,19 @@ private const val GIF_SUFFIX = ".gif"
 
 @DivScope
 internal class DivGifImageBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
     private val errorCollectors: ErrorCollectors,
-) : DivViewBinder<DivGifImage, DivGifImageView> {
+) : DivViewBinder<Div.GifImage, DivGifImage, DivGifImageView>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivGifImageView, div: DivGifImage) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
-
-        val divView = context.divView
+    override fun DivGifImageView.bind(bindingContext: BindingContext, div: DivGifImage, oldDiv: DivGifImage?) {
+        val divView = bindingContext.divView
+        val expressionResolver = bindingContext.expressionResolver
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
-        val expressionResolver = context.expressionResolver
-
-        baseBinder.bindView(context, view, div, oldDiv)
-
-        view.applyDivActions(
-            context,
+        applyDivActions(
+            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -67,15 +62,19 @@ internal class DivGifImageBinder @Inject constructor(
             div.accessibility,
         )
 
-        view.bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
+        bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
 
-        view.addSubscription(
-            div.scale.observeAndGet(expressionResolver) { scale -> view.imageScale = scale.toImageScale() }
+        addSubscription(
+            div.scale.observeAndGet(expressionResolver) { scale -> imageScale = scale.toImageScale() }
         )
-        view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
-        view.addSubscription(
+        observeContentAlignment(
+            expressionResolver,
+            div.contentAlignmentHorizontal,
+            div.contentAlignmentVertical
+        )
+        addSubscription(
             div.gifUrl.observeAndGet(expressionResolver) {
-                view.applyGifImage(divView, expressionResolver, div, errorCollector)
+                applyGifImage(divView, expressionResolver, div, errorCollector)
             }
         )
     }

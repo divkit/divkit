@@ -6,14 +6,14 @@ import android.util.AttributeSet
 import android.view.View
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.GridContainer
-import com.yandex.div2.DivGrid
+import com.yandex.div2.Div
 
 internal class DivGridLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : GridContainer(context, attrs, defStyleAttr),
-    DivHolderView<DivGrid> by DivHolderViewMixin(),
+    DivHolderView<Div.Grid> by DivHolderViewMixin(),
     DivAnimator {
 
     internal var releaseViewVisitor: ReleaseViewVisitor? = null

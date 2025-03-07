@@ -14,12 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.math.MathUtils
 import androidx.core.view.GestureDetectorCompat
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div2.Div
-import com.yandex.div2.DivState
 import kotlin.math.abs
 import kotlin.math.sign
 
@@ -30,7 +28,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<DivState> by DivHolderViewMixin() {
+    DivHolderView<Div.State> by DivHolderViewMixin() {
 
     var path: DivStatePath? = null
     val stateId: String?

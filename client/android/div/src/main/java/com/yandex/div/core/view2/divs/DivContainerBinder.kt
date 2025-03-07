@@ -62,25 +62,37 @@ private const val AXIS_CROSS = "cross"
 
 @DivScope
 internal class DivContainerBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val divViewCreator: Provider<DivViewCreator>,
     private val divPatchManager: DivPatchManager,
     private val divBinder: Provider<DivBinder>,
     private val errorCollectors: ErrorCollectors,
-) : DivViewBinder<DivContainer, ViewGroup> {
+) : DivViewBinder<Div.Container, DivContainer, ViewGroup>(baseBinder) {
 
     private val tempRect = Rect()
 
-    override fun bindView(context: BindingContext, view: ViewGroup, div: DivContainer, path: DivStatePath) {
+    override fun bindView(context: BindingContext, view: ViewGroup, div: Div.Container, path: DivStatePath) {
         @Suppress("UNCHECKED_CAST")
-        val divHolderView = view as DivHolderView<DivContainer>
-        val oldDiv = divHolderView.div
-        val divView = context.divView
-        val oldResolver = divHolderView.bindingContext?.expressionResolver ?: divView.oldExpressionResolver
+        val divHolderView = view as DivHolderView<Div.Container>
+        val oldDiv = divHolderView.div?.value
+        val oldResolver = divHolderView.bindingContext?.expressionResolver ?: context.divView.oldExpressionResolver
 
-        baseBinder.bindView(context, view, div, oldDiv)
-        view.applyDivActions(
-            context,
+        super.bindView(context, view, div)
+
+        for (childView in view.children) {
+            context.divView.unbindViewFromDiv(childView)
+        }
+
+        view.bindItems(context, div.value, oldDiv, oldResolver, path)
+    }
+
+    override fun ViewGroup.bind(
+        bindingContext: BindingContext,
+        div: DivContainer,
+        oldDiv: DivContainer?,
+    ) {
+        applyDivActions(
+            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -93,23 +105,14 @@ internal class DivContainerBinder @Inject constructor(
             div.accessibility,
         )
 
-        val resolver = context.expressionResolver
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        val resolver = bindingContext.expressionResolver
+        bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
+        bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
 
-        view.bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
-
-        when (view) {
-            is DivLinearLayout -> view.bindProperties(div, oldDiv, resolver)
-            is DivWrapLayout -> view.bindProperties(div, oldDiv, resolver)
+        when (this) {
+            is DivLinearLayout -> bindProperties(div, oldDiv, resolver)
+            is DivWrapLayout -> bindProperties(div, oldDiv, resolver)
         }
-
-        view.bindClipChildren(div, oldDiv, resolver)
-
-        for (childView in view.children) {
-            divView.unbindViewFromDiv(childView)
-        }
-
-        view.bindItems(context, div, oldDiv, oldResolver, path, errorCollector)
     }
 
     private fun ViewGroup.bindItems(
@@ -118,7 +121,6 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         oldResolver: ExpressionResolver,
         path: DivStatePath,
-        errorCollector: ErrorCollector,
     ) {
         val divView = context.divView
         val resolver = context.expressionResolver
@@ -143,6 +145,7 @@ internal class DivContainerBinder @Inject constructor(
                 oldItems = null
             }
         }
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
         bindItemBuilder(context, div, path, errorCollector)
         applyItems(context, div, oldDiv, items, oldItems, path, errorCollector)
     }
@@ -243,7 +246,7 @@ internal class DivContainerBinder @Inject constructor(
                 newDiv,
                 oldDiv,
                 childDiv,
-                oldChildDiv,
+                oldChildDiv?.value(),
                 bindingContext.expressionResolver,
                 item.expressionResolver,
                 subscriber,
@@ -332,14 +335,6 @@ internal class DivContainerBinder @Inject constructor(
         }
     }
 
-    private fun <T> T.bindClipChildren(
-        newDiv: DivContainer,
-        oldDiv: DivContainer?,
-        resolver: ExpressionResolver
-    ) where T : ViewGroup, T : DivHolderView<*> {
-        bindClipChildren(newDiv.clipToBounds, oldDiv?.clipToBounds, resolver)
-    }
-
     private fun DivLinearLayout.bindProperties(
         newDiv: DivContainer,
         oldDiv: DivContainer?,
@@ -391,7 +386,7 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         resolver: ExpressionResolver,
         crossinline applyOrientation: (orientation: DivContainer.Orientation) -> Unit
-    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+    ) where T : ViewGroup, T : DivHolderView<Div.Container> {
         if (newDiv.orientation.equalsToConstant(oldDiv?.orientation)) {
             return
         }
@@ -412,7 +407,7 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         resolver: ExpressionResolver,
         crossinline applyContentAlignment: (DivContentAlignmentHorizontal, DivContentAlignmentVertical) -> Unit
-    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+    ) where T : ViewGroup, T : DivHolderView<Div.Container> {
         if (newDiv.contentAlignmentHorizontal.equalsToConstant(oldDiv?.contentAlignmentHorizontal)
             && newDiv.contentAlignmentVertical.equalsToConstant(oldDiv?.contentAlignmentVertical)) {
             return
@@ -476,7 +471,7 @@ internal class DivContainerBinder @Inject constructor(
         oldSeparator: DivContainer.Separator?,
         resolver: ExpressionResolver,
         crossinline applySeparatorShowMode: (DivContainer.Separator?, ExpressionResolver) -> Unit
-    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+    ) where T : ViewGroup, T : DivHolderView<Div.Container> {
         if (newSeparator?.showAtStart.equalsToConstant(oldSeparator?.showAtStart)
             && newSeparator?.showBetween.equalsToConstant(oldSeparator?.showBetween)
             && newSeparator?.showAtEnd.equalsToConstant(oldSeparator?.showAtEnd)) {
@@ -502,7 +497,7 @@ internal class DivContainerBinder @Inject constructor(
         oldSeparator: DivContainer.Separator?,
         resolver: ExpressionResolver,
         crossinline applySeparatorStyle: (DivDrawable?, ExpressionResolver) -> Unit
-    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+    ) where T : ViewGroup, T : DivHolderView<Div.Container> {
         if (newSeparator?.style.equalsToConstant(oldSeparator?.style)) {
             return
         }
@@ -522,7 +517,7 @@ internal class DivContainerBinder @Inject constructor(
         oldSeparator: DivContainer.Separator?,
         resolver: ExpressionResolver,
         crossinline applySeparatorMargins: (DivEdgeInsets?, ExpressionResolver) -> Unit
-    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+    ) where T : ViewGroup, T : DivHolderView<Div.Container> {
         if (newSeparator?.margins.equalsToConstant(oldSeparator?.margins)) {
             return
         }
@@ -645,11 +640,11 @@ internal class DivContainerBinder @Inject constructor(
         }
     }
 
-    fun setDataWithoutBinding(bindingContext: BindingContext, view: ViewGroup, div: DivContainer) {
+    fun setDataWithoutBinding(bindingContext: BindingContext, view: ViewGroup, div: Div.Container) {
         @Suppress("UNCHECKED_CAST")
-        (view as DivHolderView<DivContainer>).div = div
+        (view as DivHolderView<Div.Container>).div = div
         val binder = divBinder.get()
-        div.buildItems(bindingContext.expressionResolver).forEachIndexed { index, item ->
+        div.value.buildItems(bindingContext.expressionResolver).forEachIndexed { index, item ->
             val childView = view.getChildAt(index)
             val context = childView.bindingContext ?: bindingContext
             binder.setDataWithoutBinding(context, childView, item.div)

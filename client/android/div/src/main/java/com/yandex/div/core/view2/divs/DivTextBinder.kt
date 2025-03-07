@@ -38,6 +38,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivFontWeight
@@ -63,19 +64,15 @@ private const val LONGEST_WORD_BREAK = 10
  */
 @DivScope
 internal class DivTextBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val spannedTextBuilder: SpannedTextBuilder,
     @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationEnabled: Boolean
-) : DivViewBinder<DivText, DivLineHeightTextView> {
-
-    override fun bindView(context: BindingContext, view: DivLineHeightTextView, div: DivText) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
-
-        baseBinder.bindView(context, view, div, oldDiv)
-        view.applyDivActions(
-            context,
+) : DivViewBinder<Div.Text, DivText, DivLineHeightTextView>(baseBinder) {
+    
+    override fun DivLineHeightTextView.bind(bindingContext: BindingContext, div: DivText, oldDiv: DivText?) {
+        applyDivActions(
+            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -88,23 +85,23 @@ internal class DivTextBinder @Inject constructor(
             div.accessibility,
         )
 
-        val expressionResolver = context.expressionResolver
-        view.bindTypeface(div, oldDiv, expressionResolver)
-        view.bindTextAlignment(div, oldDiv, expressionResolver)
-        view.bindFontSize(div, oldDiv, expressionResolver)
-        view.bindFontFeatureSettings(div, oldDiv, expressionResolver)
-        view.bindTextColor(div, oldDiv, expressionResolver)
-        view.bindUnderline(div, oldDiv, expressionResolver)
-        view.bindStrikethrough(div, oldDiv, expressionResolver)
-        view.bindMaxLines(div, oldDiv, expressionResolver)
-        view.bindText(context, div, oldDiv)
-        view.bindEllipsis(context, div, oldDiv)
-        view.bindAutoEllipsize(div, oldDiv, expressionResolver)
-        view.bindTextGradient(context.divView, div, oldDiv, expressionResolver)
-        view.bindTextShadow(div, oldDiv, expressionResolver)
-        view.bindSelectable(div, oldDiv, expressionResolver)
-        view.bindTightenWidth(div, oldDiv, expressionResolver)
-        view.updateFocusableState(div)
+        val expressionResolver = bindingContext.expressionResolver
+        bindTypeface(div, oldDiv, expressionResolver)
+        bindTextAlignment(div, oldDiv, expressionResolver)
+        bindFontSize(div, oldDiv, expressionResolver)
+        bindFontFeatureSettings(div, oldDiv, expressionResolver)
+        bindTextColor(div, oldDiv, expressionResolver)
+        bindUnderline(div, oldDiv, expressionResolver)
+        bindStrikethrough(div, oldDiv, expressionResolver)
+        bindMaxLines(div, oldDiv, expressionResolver)
+        bindText(bindingContext, div, oldDiv)
+        bindEllipsis(bindingContext, div, oldDiv)
+        bindAutoEllipsize(div, oldDiv, expressionResolver)
+        bindTextGradient(bindingContext.divView, div, oldDiv, expressionResolver)
+        bindTextShadow(div, oldDiv, expressionResolver)
+        bindSelectable(div, oldDiv, expressionResolver)
+        bindTightenWidth(div, oldDiv, expressionResolver)
+        updateFocusableState(div)
     }
 
     //region Text Alignment

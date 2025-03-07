@@ -19,6 +19,7 @@ import com.yandex.div.internal.widget.slider.SliderTextStyle
 import com.yandex.div.internal.widget.slider.SliderView
 import com.yandex.div.internal.widget.slider.shapes.TextDrawable
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivSizeUnit
@@ -30,59 +31,53 @@ import kotlin.math.roundToLong
 private const val SLIDER_TICKS_OVERLAP_WARNING = "Slider ticks overlap each other."
 
 internal class DivSliderBinder @Inject constructor(
-        private val baseBinder: DivBaseBinder,
+        baseBinder: DivBaseBinder,
         private val logger: Div2Logger,
         private val typefaceProvider: DivTypefaceProvider,
         private val variableBinder: TwoWayIntegerVariableBinder,
         private val errorCollectors: ErrorCollectors,
         private val horizontalInterceptionAngle: Float,
         @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
-) : DivViewBinder<DivSlider, DivSliderView> {
+) : DivViewBinder<Div.Slider, DivSlider, DivSliderView>(baseBinder) {
 
     private var errorCollector: ErrorCollector? = null
 
-    override fun bindView(
-        context: BindingContext,
-        view: DivSliderView,
+    override fun DivSliderView.bind(
+        bindingContext: BindingContext,
         div: DivSlider,
+        oldDiv: DivSlider?,
         path: DivStatePath
     ) {
-        val oldDiv = view.div
-        val divView = context.divView
-        errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        if (div === oldDiv) return
+        val expressionResolver = bindingContext.expressionResolver
+        errorCollector = errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
 
-        val expressionResolver = context.expressionResolver
+        interceptionAngle = horizontalInterceptionAngle
 
-        baseBinder.bindView(context, view, div, oldDiv)
-
-        view.interceptionAngle = horizontalInterceptionAngle
-
-        view.addSubscription(
-            div.minValue.observeAndGet(expressionResolver) { minValue ->
-                view.minValue = minValue.toFloat()
-                view.checkSliderTicks()
+        addSubscription(
+            div.minValue.observeAndGet(expressionResolver) {
+                minValue = it.toFloat()
+                checkSliderTicks()
             }
         )
-        view.addSubscription(
-            div.maxValue.observeAndGet(expressionResolver) { maxValue ->
-                view.maxValue = maxValue.toFloat()
-                view.checkSliderTicks()
+        addSubscription(
+            div.maxValue.observeAndGet(expressionResolver) {
+                maxValue = it.toFloat()
+                checkSliderTicks()
             }
         )
 
-        view.addSubscription(
-            div.isEnabled.observeAndGet(expressionResolver) { view.interactive = it }
+        addSubscription(
+            div.isEnabled.observeAndGet(expressionResolver) { interactive = it }
         )
 
-        view.clearOnThumbChangedListener()
-        view.setupThumb(div, context, path)
-        view.setupSecondaryThumb(div, context, path)
+        clearOnThumbChangedListener()
+        setupThumb(div, bindingContext, path)
+        setupSecondaryThumb(div, bindingContext, path)
 
-        view.setupTrack(div, expressionResolver)
-        view.setupTickMarks(div, expressionResolver)
+        setupTrack(div, expressionResolver)
+        setupTickMarks(div, expressionResolver)
 
-        view.setupRanges(div, expressionResolver)
+        setupRanges(div, expressionResolver)
     }
 
     private fun DivSliderView.setupThumb(

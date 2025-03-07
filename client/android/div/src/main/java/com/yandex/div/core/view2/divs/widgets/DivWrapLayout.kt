@@ -4,11 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.wraplayout.WrapContainerLayout
-import com.yandex.div2.DivContainer
+import com.yandex.div2.Div
 
-internal class DivWrapLayout(context: Context) :
-    WrapContainerLayout(context),
-    DivHolderView<DivContainer> by DivHolderViewMixin(),
+internal class DivWrapLayout(context: Context) : WrapContainerLayout(context),
+    DivHolderView<Div.Container> by DivHolderViewMixin(),
     DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 

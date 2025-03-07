@@ -42,6 +42,7 @@ import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivCurrencyInputMask
@@ -65,46 +66,43 @@ internal class DivInputBinder @Inject constructor(
     private val actionBinder: DivActionBinder,
     private val accessibilityStateProvider: AccessibilityStateProvider,
     private val errorCollectors: ErrorCollectors
-) : DivViewBinder<DivInput, DivInputView> {
+) : DivViewBinder<Div.Input, DivInput, DivInputView>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivInputView, div: DivInput, path: DivStatePath) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
+    override fun DivInputView.bind(
+        bindingContext: BindingContext,
+        div: DivInput,
+        oldDiv: DivInput?,
+        path: DivStatePath
+    ) {
+        val expressionResolver = bindingContext.expressionResolver
+        isFocusable = true
+        isFocusableInTouchMode = true
+        textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
+        accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
 
-        val expressionResolver = context.expressionResolver
+        observeBackground(bindingContext, div, oldDiv, expressionResolver)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        observeFontSize(div, expressionResolver)
+        observeTypeface(div, expressionResolver)
+        observeTextColor(div, expressionResolver)
+        observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
+        observeLineHeight(div, expressionResolver)
+        observeMaxVisibleLines(div, expressionResolver)
+        observeMaxLength(div, expressionResolver)
 
-        view.apply {
-            isFocusable = true
-            isFocusableInTouchMode = true
-            textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
-            accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
+        observeHintText(div, expressionResolver)
+        observeHintColor(div, expressionResolver)
+        observeHighlightColor(div, expressionResolver)
 
-            observeBackground(context, div, oldDiv, expressionResolver)
+        observeKeyboardTypeAndCapitalization(div, expressionResolver)
+        observeEnterTypeAndActions(div, bindingContext, expressionResolver)
+        observeSelectAllOnFocus(div, expressionResolver)
+        observeIsEnabled(div, expressionResolver)
 
-            observeFontSize(div, expressionResolver)
-            observeTypeface(div, expressionResolver)
-            observeTextColor(div, expressionResolver)
-            observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
-            observeLineHeight(div, expressionResolver)
-            observeMaxVisibleLines(div, expressionResolver)
-            observeMaxLength(div, expressionResolver)
+        observeText(div, bindingContext, path)
 
-            observeHintText(div, expressionResolver)
-            observeHintColor(div, expressionResolver)
-            observeHighlightColor(div, expressionResolver)
-
-            observeKeyboardTypeAndCapitalization(div, expressionResolver)
-            observeEnterTypeAndActions(div, context, expressionResolver)
-            observeSelectAllOnFocus(div, expressionResolver)
-            observeIsEnabled(div, expressionResolver)
-
-            observeText(div, context, path)
-
-            focusTracker = context.divView.inputFocusTracker
-            focusTracker?.requestFocusIfNeeded(view)
-        }
+        focusTracker = bindingContext.divView.inputFocusTracker
+        focusTracker?.requestFocusIfNeeded(this)
     }
 
     private fun DivInputView.observeTextAlignment(

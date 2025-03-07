@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivGrid
+import com.yandex.div2.Div
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -37,12 +37,11 @@ class DivGridBinderTest : DivBinderTest() {
         assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
     }
 
-    private fun createTestData(filename: String): Pair<DivGrid, DivGridLayout> {
-        val div = UnitTestData(GRID_DIR, filename).div
-        val divGrid = div.value() as DivGrid
+    private fun createTestData(filename: String): Pair<Div.Grid, DivGridLayout> {
+        val div = UnitTestData(GRID_DIR, filename).div as Div.Grid
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivGridLayout
         view.layoutParams = defaultLayoutParams()
-        return divGrid to view
+        return div to view
     }
 
     companion object {

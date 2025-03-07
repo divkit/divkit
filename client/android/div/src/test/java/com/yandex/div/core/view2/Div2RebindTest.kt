@@ -14,9 +14,9 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.viewEquals
 import com.yandex.div.internal.Assert
 import com.yandex.div2.DivData
-import junit.framework.Assert.assertNotNull
-import junit.framework.Assert.assertNull
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -70,7 +70,7 @@ class Div2RebindTest {
         val divStateLayout: DivStateLayout? = divView.findStateLayout(path)
 
         assertNotNull(divStateLayout)
-        assertEquals("state_container", divStateLayout?.div?.id)
+        assertEquals("state_container", divStateLayout?.div?.value?.id)
     }
 
     @Test
@@ -86,7 +86,7 @@ class Div2RebindTest {
             val divStateLayout: DivStateLayout? = divView.findStateLayout(path)
 
             assertNotNull(divStateLayout)
-            assertEquals(containerStateId, divStateLayout?.div?.id)
+            assertEquals(containerStateId, divStateLayout?.div?.value?.id)
         }
     }
 
@@ -101,7 +101,7 @@ class Div2RebindTest {
 
         // default state is 0/state_container/first/{futher_path} but state_container is created, so we still get it.
         assertNotNull(divStateLayout)
-        assertEquals("state_container", divStateLayout?.div?.id)
+        assertEquals("state_container", divStateLayout?.div?.value?.id)
     }
 
     @Test

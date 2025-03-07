@@ -36,6 +36,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
@@ -50,45 +51,45 @@ internal class DivBaseBinder @Inject constructor(
     private val divFocusBinder: DivFocusBinder,
     private val divAccessibilityBinder: DivAccessibilityBinder,
 ) {
-    fun bindView(context: BindingContext, view: View, div: DivBase, oldDiv: DivBase?) {
-        val resolver = context.expressionResolver
-
+    fun bindView(context: BindingContext, view: View, div: Div, oldDiv: Div?) {
         @Suppress("UNCHECKED_CAST")
-        (view as DivHolderView<DivBase>).let {
+        (view as DivHolderView<Div>).let {
             it.closeAllSubscription()
             it.div = div
             it.bindingContext = context
         }
+        view.bind(context, div.value(), oldDiv?.value())
+    }
 
-        val divView = context.divView
-        val subscriber = view.expressionSubscriber
+    private fun View.bind(bindingContext: BindingContext, div: DivBase, oldDiv: DivBase?) {
+        val resolver = bindingContext.expressionResolver
+        val divView = bindingContext.divView
+        val subscriber = expressionSubscriber
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            view.defaultFocusHighlightEnabled = false
+            defaultFocusHighlightEnabled = false
         }
 
-        view.bindId(divView, div, oldDiv)
-        view.bindLayoutParams(div, oldDiv, resolver, subscriber)
-        view.bindLayoutProvider(divView, div, oldDiv, resolver)
-        view.bindAccessibility(divView, div, oldDiv, resolver, subscriber)
-        view.bindAlpha(div, oldDiv, resolver, subscriber)
+        bindId(divView, div, oldDiv)
+        bindLayoutParams(div, oldDiv, resolver, subscriber)
+        bindLayoutProvider(divView, div, oldDiv, resolver)
+        bindAccessibility(divView, div, oldDiv, resolver, subscriber)
+        bindAlpha(div, oldDiv, resolver, subscriber)
 
-        view.bindBackground(context, div, oldDiv, subscriber)
-        view.bindBorder(context, div)
-        view.bindPaddings(div, oldDiv, resolver, subscriber)
+        bindBackground(bindingContext, div, oldDiv, subscriber)
+        bindBorder(bindingContext, div)
+        bindPaddings(div, oldDiv, resolver, subscriber)
 
-        view.bindNextFocus(divView, div, oldDiv, resolver, subscriber)
-        view.bindFocusActions(context, div.focus?.onFocus, div.focus?.onBlur)
-        view.bindVisibility(divView, div, oldDiv, resolver, subscriber)
-        view.bindTransform(div, oldDiv, resolver, subscriber)
+        bindNextFocus(divView, div, oldDiv, resolver, subscriber)
+        bindFocusActions(bindingContext, div.focus?.onFocus, div.focus?.onBlur)
+        bindVisibility(divView, div, oldDiv, resolver, subscriber)
+        bindTransform(div, oldDiv, resolver, subscriber)
 
-        div.tooltips?.let {
-            tooltipController.mapTooltip(view, it)
-        }
+        div.tooltips?.let { tooltipController.mapTooltip(this, it) }
 
         // DivAccessibilityBinder is responsible for focus setup, so changing isFocusable only if binder is disabled
         if (!divAccessibilityBinder.enabled) {
-            view.applyFocusableState(div)
+            applyFocusableState(div)
         }
     }
 
@@ -591,7 +592,7 @@ internal class DivBaseBinder @Inject constructor(
         }
     }
 
-    private inline fun View.bindNextFocusId(
+    private inline fun bindNextFocusId(
         newFocusId: Expression<String>?,
         oldFocusId: Expression<String>?,
         resolver: ExpressionResolver,

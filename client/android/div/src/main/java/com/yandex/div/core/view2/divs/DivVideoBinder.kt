@@ -27,6 +27,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoScale
 import java.util.concurrent.ExecutorService
@@ -34,20 +35,21 @@ import javax.inject.Inject
 
 @DivScope
 internal class DivVideoBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
     private val divActionBinder: DivActionBinder,
     private val videoViewMapper: DivVideoViewMapper,
     private val executorService: ExecutorService,
     private val playerFactory: DivPlayerFactory,
-) : DivViewBinder<DivVideo, DivVideoView> {
-    override fun bindView(context: BindingContext, view: DivVideoView, div: DivVideo, path: DivStatePath) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
+) : DivViewBinder<Div.Video, DivVideo, DivVideoView>(baseBinder) {
 
-        baseBinder.bindView(context, view, div, oldDiv)
-
-        val resolver = context.expressionResolver
+    override fun DivVideoView.bind(
+        bindingContext: BindingContext,
+        div: DivVideo,
+        oldDiv: DivVideo?,
+        path: DivStatePath
+    ) {
+        val resolver = bindingContext.expressionResolver
         val source = div.createSource(resolver)
         val config = DivPlayerPlaybackConfig(
             autoplay = div.autostart.evaluate(resolver),
@@ -56,23 +58,23 @@ internal class DivVideoBinder @Inject constructor(
             payload = div.playerSettingsPayload
         )
 
-        val currentPlayerView = view.getPlayerView()
+        val currentPlayerView = getPlayerView()
         var currentPreviewView: PreviewImageView? = null
 
-        for (i in 0 until view.childCount) {
-            val childView = view.getChildAt(i)
+        for (i in 0 until childCount) {
+            val childView = getChildAt(i)
             if (childView is PreviewImageView) {
                 currentPreviewView = childView
                 break
             }
         }
 
-        val playerView = currentPlayerView ?: playerFactory.makePlayerView(view.context).apply {
+        val playerView = currentPlayerView ?: playerFactory.makePlayerView(context).apply {
             // We won't to show black video square before preview is rendered
             visibility = View.INVISIBLE
         }
 
-        val previewImageView: PreviewImageView = currentPreviewView ?: PreviewImageView(view.context)
+        val previewImageView: PreviewImageView = currentPreviewView ?: PreviewImageView(context)
 
         div.applyPreview(resolver) { preview ->
             preview?.let {
@@ -88,23 +90,23 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         val player = playerFactory.makePlayer(source, config).apply {
-            addObserver(createObserver(context, div, previewImageView))
+            addObserver(createObserver(bindingContext, div, previewImageView))
             playerView.attach(this)
         }
 
-        view.observeElapsedTime(div, context, player, path)
-        view.observeMuted(div, resolver, player)
-        view.observeScale(div, resolver, playerView, previewImageView)
+        observeElapsedTime(div, bindingContext, player, path)
+        observeMuted(div, resolver, player)
+        observeScale(div, resolver, playerView, previewImageView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
-            view.removeAllViews()
+            removeAllViews()
 
-            view.addView(playerView)
-            view.addView(previewImageView)
+            addView(playerView)
+            addView(previewImageView)
         }
 
-        videoViewMapper.addView(view, div)
-        view.bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
+        videoViewMapper.addView(this, div)
+        bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
     }
 
     private fun createObserver(

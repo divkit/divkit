@@ -51,7 +51,7 @@ class DivSelectBinderTest : DivBinderTest() {
 
     @Test
     fun `bind value_variable`() {
-        underTest.bindView(bindingContext, view, divSelect, path)
+        underTest.bindView(bindingContext, view, div, path)
 
         verify(variableBinder).bindVariable(any(), eq(divSelect.valueVariable), any(), any())
         verifyNoMoreInteractions(variableBinder)
@@ -59,7 +59,7 @@ class DivSelectBinderTest : DivBinderTest() {
 
     @Test
     fun `update text after variable changed`() {
-        underTest.bindView(bindingContext, view, divSelect, path)
+        underTest.bindView(bindingContext, view, div, path)
         verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
@@ -76,7 +76,7 @@ class DivSelectBinderTest : DivBinderTest() {
     fun `update text and variable after option selected`() {
         val viewStateChangeListener = mock<(String) -> Unit>()
 
-        underTest.bindView(bindingContext, view, divSelect, path)
+        underTest.bindView(bindingContext, view, div, path)
         verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()

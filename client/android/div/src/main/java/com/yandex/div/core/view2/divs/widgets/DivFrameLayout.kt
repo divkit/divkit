@@ -6,14 +6,14 @@ import android.util.AttributeSet
 import android.view.View
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.internal.widget.FrameContainerLayout
-import com.yandex.div2.DivContainer
+import com.yandex.div2.Div
 
 internal class DivFrameLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<DivContainer> by DivHolderViewMixin(),
+    DivHolderView<Div.Container> by DivHolderViewMixin(),
     DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 
