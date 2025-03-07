@@ -1,3 +1,12 @@
+## 31.6.0 (March 10, 2025)
+
+* Added `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
+* Added support for parsing `array` and `dict` from a string (including both the `div-action://set_variable` and the `variable.set('value')` programming api). The format is json.
+* Added support for the `tap_outside_actions` and `close_by_tap_outside` in `tooltip`.
+* Fixed `switch` in rtl layout.
+* Fixed an error with an incorrect number of actions and `log_limit` (`visibility_actions` / `disappear_actions`).
+
+
 ## 31.5.0 (March 3, 2025)
 
 * Added a warning for the `transition_id` / `transition_out` / `transition_change` properties without the required `id` property when changing state.
