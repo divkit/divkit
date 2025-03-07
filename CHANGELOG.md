@@ -1,3 +1,25 @@
+## 31.6.0
+
+# Android Client:
+* Supported `filters` property in `input`.
+* Added `Div2Context.closeTooltips()` method.
+* Made `item_builder` have a higher priority than `items`, just like other platforms.
+* Fixed scroll position restoring in `gallery` when first item is visible or in rtl-configuration.
+* Fixed `shine` gradient angle. Angle goes counterclockwise and rotates the gradient relative to the horizontal line.
+
+# iOS Client:
+* `input` autocorrection value depends on `input_type`.
+* Fixed arrays parsing in typed actions.
+* Fixed calculation of sizes in `layout_provider`.
+
+# Web Client:
+* Added `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
+* Added support for parsing `array` and `dict` from a string (including both the `div-action://set_variable` and the `variable.set('value')` programming api). The format is json.
+* Added support for the `tap_outside_actions` and `close_by_tap_outside` in `tooltip`.
+* Fixed `switch` in rtl layout.
+* Fixed an error with an incorrect number of actions and `log_limit` (`visibility_actions` / `disappear_actions`).
+
+
 ## 31.5.0
 
 # Android Client:
