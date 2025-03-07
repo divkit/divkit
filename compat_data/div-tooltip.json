@@ -41,6 +41,39 @@
         "compat": {
             "ios": {
                 "version_added": "31.3.0"
+            },
+            "android": {
+                "version_added": "31.3.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
+    }, {
+        "id": "tooltip_tap_outside_actions",
+        "name": "<code>tap_outside_actions</code> property for the tooltip",
+        "compat": {
+            "ios": {
+                "version_added": "31.2.0"
+            }
+        }
+    }, {
+        "id": "tooltip_close_by_tap_outside",
+        "name": "<code>close_by_tap_outside</code> property for the tooltip",
+        "compat": {
+            "ios": {
+                "version_added": "31.2.0"
+            },
+            "android": {
+                "version_added": "31.3.0"
+            }
+        }
+    }, {
+        "id": "tooltip_background_accessibility_description",
+        "name": "<code>background_accessibility_description</code> property for the tooltip",
+        "compat": {
+            "ios": {
+                "version_added": "31.5.0"
             }
         }
     }]

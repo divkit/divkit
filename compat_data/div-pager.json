@@ -83,6 +83,9 @@
             },
             "android": {
                 "version_added": "31.0.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
             }
         }
     }, {
@@ -91,6 +94,9 @@
         "compat": {
             "android": {
                 "version_added": "31.1.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
             }
         }
     }, {
