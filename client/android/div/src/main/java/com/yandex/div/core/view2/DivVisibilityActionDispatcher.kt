@@ -27,7 +27,8 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
     private val divActionBeaconSender: DivActionBeaconSender
 ) {
 
-    private val actionLogCounters = arrayMap<CompositeLogId, Int>()
+    private val appearLogCounters = arrayMap<CompositeLogId, Int>()
+    private val disappearLogCounters = arrayMap<CompositeLogId, Int>()
 
     fun dispatchActions(scope: Div2View, resolver: ExpressionResolver, view: View, actions: Array<DivSightAction>) {
         scope.bulkActions {
@@ -39,7 +40,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
 
     fun dispatchAction(scope: Div2View, resolver: ExpressionResolver, view: View, action: DivSightAction) {
         val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(resolver))
-        val counter = actionLogCounters.getOrPut(compositeLogId) { 0 }
+        val counter = countersFor(action).getOrPut(compositeLogId) { 0 }
         KLog.i(TAG) { "visibility action dispatched: id=$compositeLogId, counter=$counter" }
 
         val logLimit = action.logLimit.evaluate(resolver)
@@ -60,8 +61,16 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
                 }
             }
 
-            actionLogCounters[compositeLogId] = counter + 1
+            countersFor(action)[compositeLogId] = counter + 1
             KLog.i(TAG) { "visibility action logged: $compositeLogId" }
+        }
+    }
+
+    private fun countersFor(action: DivSightAction): MutableMap<CompositeLogId, Int> {
+        return if (action is DivVisibilityAction) {
+            appearLogCounters
+        } else {
+            disappearLogCounters
         }
     }
 
@@ -97,15 +106,18 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
 
     fun reset(tags: List<DivDataTag>) {
         if (tags.isEmpty()) {
-            actionLogCounters.clear()
+            appearLogCounters.clear()
+            disappearLogCounters.clear()
         } else {
             tags.forEach { tag ->
-                actionLogCounters.keys.removeAll {
-                    compositeLogId -> compositeLogId.dataTag == tag.id
+                appearLogCounters.keys.removeAll { compositeLogId ->
+                    compositeLogId.dataTag == tag.id
+                }
+                disappearLogCounters.keys.removeAll { compositeLogId ->
+                    compositeLogId.dataTag == tag.id
                 }
             }
         }
-        actionLogCounters.clear()
     }
 
     private companion object {

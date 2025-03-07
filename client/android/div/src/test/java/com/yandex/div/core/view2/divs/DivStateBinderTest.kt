@@ -206,7 +206,14 @@ class DivStateBinderTest: DivBinderTest() {
         stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath())
         stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath())
 
-        verify(divVisibilityActionTracker, never()).trackVisibilityActionsOf(any(), any(), eq(null), any(), any())
+        verify(divVisibilityActionTracker, never()).trackVisibilityActionsOf(
+            scope = any(),
+            resolver = any(),
+            view = eq(null),
+            div = any(),
+            appearActions = any(),
+            disappearActions = any()
+        )
     }
 
     @Test
@@ -215,7 +222,14 @@ class DivStateBinderTest: DivBinderTest() {
         switchToState("second")
         stateBinder.bindView(bindingContext, stateLayout, divState, rootPath())
 
-        verify(divVisibilityActionTracker, times(1)).trackVisibilityActionsOf(any(), any(), eq(null), any(), any())
+        verify(divVisibilityActionTracker, times(1)).trackVisibilityActionsOf(
+            scope = any(),
+            resolver = any(),
+            view = eq(null),
+            div = any(),
+            appearActions = any(),
+            disappearActions = any()
+        )
     }
 
     @Test
@@ -225,7 +239,14 @@ class DivStateBinderTest: DivBinderTest() {
         stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath())
         stateBinder.bindView(bindingContext, stateLayout, newData, rootPath())
 
-        verify(divVisibilityActionTracker, times(1)).trackVisibilityActionsOf(any(), any(), eq(null), any(), any())
+        verify(divVisibilityActionTracker, times(1)).trackVisibilityActionsOf(
+            scope = any(),
+            resolver = any(),
+            view = eq(null),
+            div = any(),
+            appearActions = any(),
+            disappearActions = any()
+        )
     }
 
     @Test

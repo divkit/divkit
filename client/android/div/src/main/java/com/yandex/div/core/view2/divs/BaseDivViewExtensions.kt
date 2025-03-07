@@ -616,14 +616,18 @@ internal fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
 internal val DivBase.hasSightActions: Boolean
     get() = visibilityAction != null || !visibilityActions.isNullOrEmpty() || !disappearActions.isNullOrEmpty()
 
-internal val DivBase.allVisibilityActions: List<DivVisibilityAction>
+internal val DivBase.allAppearActions: List<DivVisibilityAction>
     get() = visibilityActions ?: visibilityAction?.let { listOf(it) }.orEmpty()
 
 internal val DivBase.allDisappearActions: List<DivDisappearAction>
     get() = disappearActions.orEmpty()
 
 internal val DivBase.allSightActions: List<DivSightAction>
-    get() = this.allDisappearActions + this.allVisibilityActions
+    get() = this.allDisappearActions + this.allAppearActions
+
+internal fun <T : DivSightAction> List<T>.filterEnabled(resolver: ExpressionResolver): List<T> {
+    return filter { action -> action.isEnabled.evaluate(resolver) }
+}
 
 internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) = suppressExpressionErrors {
     applyWidth(div, resolver)
@@ -720,13 +724,15 @@ internal fun ViewGroup.trackVisibilityActions(
         val newLogIds = newItems.flatMap { it.div.value().allSightActions }.mapTo(HashSet()) { it.logId }
 
         for (oldItem in oldItems) {
-            val actionsToRemove = oldItem.div.value().allSightActions.filter { it.logId !in newLogIds }
+            val appearActionsToRemove = oldItem.div.value().allAppearActions.filter { it.logId !in newLogIds }
+            val disappearActionsToRemove = oldItem.div.value().allDisappearActions.filter { it.logId !in newLogIds }
             visibilityActionTracker.trackVisibilityActionsOf(
                 divView,
                 oldItem.expressionResolver,
                 null,
                 oldItem.div,
-                actionsToRemove
+                appearActionsToRemove,
+                disappearActionsToRemove
             )
         }
     }

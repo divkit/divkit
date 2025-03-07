@@ -11,8 +11,10 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.SynchronizedWeakHashMap
 import com.yandex.div.core.util.doOnHierarchyLayout
-import com.yandex.div.core.view2.divs.allSightActions
+import com.yandex.div.core.view2.divs.allAppearActions
+import com.yandex.div.core.view2.divs.allDisappearActions
 import com.yandex.div.core.view2.divs.duration
+import com.yandex.div.core.view2.divs.filterEnabled
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
@@ -33,14 +35,22 @@ internal class DivVisibilityActionTracker @Inject constructor(
 ) {
 
     private val handler = Handler(Looper.getMainLooper())
-    private val trackedTokens = DivVisibilityTokenHolder()
+    private val appearTrackedTokens = DivVisibilityTokenHolder()
+    private val disappearTrackedTokens = DivVisibilityTokenHolder()
 
     private val isEnabledObserver = SightActionIsEnabledObserver(
         onEnable = { scope, resolver, view, div, action ->
-            trackVisibilityActions(scope, resolver, view, div, listOf(action))
+            when (action) {
+                is DivVisibilityAction -> trackVisibilityActions(scope, resolver, view, div, listOf(action), emptyList())
+                is DivDisappearAction -> trackVisibilityActions(scope, resolver, view, div, emptyList(), listOf(action))
+            }
+
         },
-        onDisable = { scope, resolver, _, div, action ->
-            shouldTrackVisibilityAction(scope, resolver, null, action, 0)
+        onDisable = { scope, resolver, _, _, action ->
+            when (action) {
+                is DivVisibilityAction -> shouldTrackVisibilityAction(scope, resolver, null, action, 0, appearTrackedTokens)
+                is DivDisappearAction -> shouldTrackVisibilityAction(scope, resolver, null, action, 0, disappearTrackedTokens)
+            }
         }
     )
 
@@ -79,8 +89,10 @@ internal class DivVisibilityActionTracker @Inject constructor(
         resolver: ExpressionResolver,
         view: View?,
         div: Div,
-        visibilityActions: List<DivSightAction> = div.value().allSightActions
+        appearActions: List<DivVisibilityAction> = div.value().allAppearActions,
+        disappearActions: List<DivDisappearAction> = div.value().allDisappearActions
     ) {
+        val visibilityActions = appearActions + disappearActions
         if (visibilityActions.isEmpty()) return
 
         val originalDataTag = scope.dataTag
@@ -92,9 +104,14 @@ internal class DivVisibilityActionTracker @Inject constructor(
                     // Prevent visibility tracking when data has changed
                     if (scope.dataTag == originalDataTag) {
                         isEnabledObserver.observe(view, scope, resolver, div, visibilityActions)
-                        trackVisibilityActions(scope, resolver, view, div, visibilityActions.filter {
-                            it.isEnabled.evaluate(resolver)
-                        })
+                        trackVisibilityActions(
+                            scope,
+                            resolver,
+                            view,
+                            div,
+                            appearActions.filterEnabled(resolver),
+                            disappearActions.filterEnabled(resolver)
+                        )
                     }
 
                     enqueuedVisibilityActions.remove(view)
@@ -106,8 +123,11 @@ internal class DivVisibilityActionTracker @Inject constructor(
         } else {
             // Canceling tracking
             isEnabledObserver.cancelObserving(visibilityActions)
-            visibilityActions.forEach { action ->
-                shouldTrackVisibilityAction(scope, resolver, null, action, 0)
+            appearActions.forEach { action ->
+                shouldTrackVisibilityAction(scope, resolver, null, action, 0, appearTrackedTokens)
+            }
+            disappearActions.forEach { action ->
+                shouldTrackVisibilityAction(scope, resolver, null, action, 0, disappearTrackedTokens)
             }
         }
     }
@@ -118,9 +138,15 @@ internal class DivVisibilityActionTracker @Inject constructor(
         div: Div
     ) {
         val actions = div.value().disappearActions ?: return
-        trackVisibilityActions(context.divView, context.expressionResolver, view, div, actions.filter {
-            it.isEnabled.evaluate(context.expressionResolver)
-        })
+        val resolver = context.expressionResolver
+        trackVisibilityActions(
+            context.divView,
+            resolver,
+            view,
+            div,
+            emptyList(),
+            actions.filterEnabled(resolver)
+        )
     }
 
     fun startTrackingViewsHierarchy(context: BindingContext, root: View, rootDiv: Div?) {
@@ -166,7 +192,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
         resolver: ExpressionResolver,
         view: View,
         div: Div,
-        visibilityActions: List<DivSightAction>
+        appearActions: List<DivVisibilityAction>,
+        disappearActions: List<DivDisappearAction>
     ) {
         Assert.assertMainThread()
 
@@ -176,15 +203,24 @@ internal class DivVisibilityActionTracker @Inject constructor(
             result
         }
 
-        visibilityActions.groupBy { action: DivSightAction ->
+        appearActions.groupBy { action ->
             action.duration.evaluate(resolver)
-        }.forEach { entry: Map.Entry<Long, List<DivSightAction>> ->
-            val (delayMs, actions) = entry
+        }.forEach { (delayMs, actions) ->
+            val actionsToTrack = actions.filterTo(ArrayList(actions.size)) { action ->
+                shouldTrackVisibilityAction(scope, resolver, view, action, visibilityPercentage, appearTrackedTokens)
+            }
+            if (actionsToTrack.isNotEmpty()) {
+                startTracking(scope, resolver, view, actionsToTrack, delayMs, appearTrackedTokens)
+            }
+        }
 
+        disappearActions.groupBy { action ->
+            action.duration.evaluate(resolver)
+        }.forEach { (delayMs, actions) ->
             var haveWaitingDisappearActions = false
-            actions.filterIsInstance<DivDisappearAction>().forEach {
-                val actionPercentage = it.visibilityPercentage.evaluate(resolver)
-                val needWaiting = visibilityPercentage > actionPercentage
+            actions.forEach {
+                val actionVisibilityPercentage = it.visibilityPercentage.evaluate(resolver)
+                val needWaiting = visibilityPercentage > actionVisibilityPercentage
                 haveWaitingDisappearActions = haveWaitingDisappearActions || needWaiting
                 if (needWaiting) {
                     appearedForDisappearActions.getOrPut(view) { mutableSetOf() }.apply { add(it) }
@@ -194,11 +230,11 @@ internal class DivVisibilityActionTracker @Inject constructor(
                 divWithWaitingDisappearActions[view] = div
             }
 
-            val actionsToBeTracked = actions.filterTo(ArrayList(actions.size)) { action ->
-                shouldTrackVisibilityAction(scope, resolver, view, action, visibilityPercentage)
+            val actionsToTrack = actions.filterTo(ArrayList(actions.size)) { action ->
+                shouldTrackVisibilityAction(scope, resolver, view, action, visibilityPercentage, disappearTrackedTokens)
             }
-            if (actionsToBeTracked.isNotEmpty()) {
-                startTracking(scope, resolver, view, actionsToBeTracked, delayMs)
+            if (actionsToTrack.isNotEmpty()) {
+                startTracking(scope, resolver, view, actionsToTrack, delayMs, disappearTrackedTokens)
             }
         }
     }
@@ -211,7 +247,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
         resolver: ExpressionResolver,
         view: View?,
         action: DivSightAction,
-        visibilityPercentage: Int
+        visibilityPercentage: Int,
+        trackedTokens: DivVisibilityTokenHolder
     ): Boolean {
         val trackable = when (action) {
             is DivVisibilityAction -> {
@@ -236,8 +273,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
             view != null && originalLogId == null && trackable -> return true
             view != null && originalLogId == null && !trackable -> Unit
             view != null && originalLogId != null && trackable -> Unit
-            view != null && originalLogId != null && !trackable -> cancelTracking(originalLogId, view, action)
-            view == null && originalLogId != null -> cancelTracking(originalLogId, null, action)
+            view != null && originalLogId != null && !trackable -> cancelTracking(originalLogId, view, action, trackedTokens)
+            view == null && originalLogId != null -> cancelTracking(originalLogId, null, action, trackedTokens)
             view == null && originalLogId == null -> Unit
         }
         return false
@@ -248,7 +285,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
         resolver: ExpressionResolver,
         view: View,
         actions: List<DivSightAction>,
-        delayMs: Long
+        delayMs: Long,
+        trackedTokens: DivVisibilityTokenHolder
     ) {
         val logIds = actions.associateTo(HashMap(actions.size, 1f)) { action ->
             val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(resolver))
@@ -274,7 +312,12 @@ internal class DivVisibilityActionTracker @Inject constructor(
         }
     }
 
-    private fun cancelTracking(compositeLogId: CompositeLogId, view: View?, action: DivSightAction) {
+    private fun cancelTracking(
+        compositeLogId: CompositeLogId,
+        view: View?,
+        action: DivSightAction,
+        trackedTokens: DivVisibilityTokenHolder
+    ) {
         KLog.i(TAG) { "cancelTracking: id=$compositeLogId" }
         trackedTokens.remove(compositeLogId) { emptyToken ->
             handler.removeCallbacksAndMessages(emptyToken)

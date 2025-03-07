@@ -166,7 +166,14 @@ class DivTooltipControllerTest {
     fun `visibility tracking is started on show`() {
         prepareDiv()
         underTest.showTooltip("tooltip_id", bindingContext)
-        verify(visibilityActionTracker).trackVisibilityActionsOf(eq(div2View), eq(expressionResolver), any(), eq(div), any())
+        verify(visibilityActionTracker).trackVisibilityActionsOf(
+            scope = eq(div2View),
+            resolver = eq(expressionResolver),
+            view = any(),
+            div = eq(div),
+            appearActions = any(),
+            disappearActions = any()
+        )
     }
 
     @Test
