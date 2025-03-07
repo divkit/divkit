@@ -2414,7 +2414,8 @@
       "case_id": 146,
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"

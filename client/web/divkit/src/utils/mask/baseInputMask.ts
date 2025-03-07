@@ -139,6 +139,12 @@ export abstract class BaseInputMask {
             diff.start = Math.max(0, position - diff.added);
         }
 
+        const tailStart = this.replaceBodyTail(diff, newValue);
+
+        this.calculateCursorPosition(diff, tailStart);
+    }
+
+    protected replaceBodyTail(diff: TextDiff, newValue: string): number {
         const body = this.buildBodySubstring(diff, newValue);
         const tail = this.buildTailSubstring(diff);
 
@@ -154,7 +160,7 @@ export abstract class BaseInputMask {
 
         this.replaceChars(tail, tailStart);
 
-        this.calculateCursorPosition(diff, tailStart);
+        return tailStart;
     }
 
     protected buildBodySubstring(diff: TextDiff, newValue: string): string {

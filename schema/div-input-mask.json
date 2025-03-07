@@ -23,7 +23,8 @@
       "$description": "translations.json#/div_input_mask_phone",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

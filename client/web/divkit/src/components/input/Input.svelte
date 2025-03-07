@@ -44,6 +44,7 @@
     import type { InputMask } from '../../types/input';
     import type { AlignmentHorizontal } from '../../types/alignment';
     import type { ComponentContext } from '../../types/componentContext';
+    import type { PhoneInputMask } from '../../utils/mask/phoneInputMask';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
@@ -67,6 +68,7 @@
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
+    import { updatePhoneMask } from '../../utils/updatePhoneMask';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
@@ -183,6 +185,8 @@
             inputMask = updateFixedMask(mask, componentContext.logError, inputMask as FixedLengthInputMask);
         } else if (mask?.type === 'currency') {
             inputMask = updateCurrencyMask(mask, componentContext.logError, inputMask as CurrencyInputMask);
+        } else if (mask?.type === 'phone') {
+            inputMask = updatePhoneMask(componentContext.logError, inputMask as PhoneInputMask);
         }
 
         if (inputMask) {

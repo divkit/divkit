@@ -27,7 +27,11 @@ export interface CurrencyInputMask extends MaskBase {
     locale?: string;
 }
 
-export type InputMask = FixedLengthInputMask | CurrencyInputMask;
+export interface PhoneInputMask extends MaskBase {
+    type: 'phone';
+}
+
+export type InputMask = FixedLengthInputMask | CurrencyInputMask | PhoneInputMask;
 
 export type InputAutocapitalization = 'auto' | 'none' | 'words' | 'sentences' | 'all_characters';
 
