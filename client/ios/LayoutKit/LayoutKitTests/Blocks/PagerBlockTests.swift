@@ -15,14 +15,8 @@ final class PagerBlockTests: XCTestCase {
     XCTAssertEqual(block.intrinsicContentWidth, 111)
   }
 
-  func test_WhenIntrinsictHeight_IntrinsicContentHeightReturnsMaxHeightbourPageHeight_1() throws {
+  func test_WhenIntrinsictHeight_IntrinsicContentHeightReturnsMaxPageHeight() throws {
     let block = makePagerBlock(currentPage: 0)
-
-    XCTAssertEqual(block.intrinsicContentHeight(forWidth: .infinity), 100)
-  }
-
-  func test_WhenIntrinsictHeight_IntrinsicContentHeightReturnsMaxHeightbourPageHeight_2() throws {
-    let block = makePagerBlock(currentPage: 3)
 
     XCTAssertEqual(block.intrinsicContentHeight(forWidth: .infinity), 1000)
   }

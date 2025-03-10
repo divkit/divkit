@@ -35,7 +35,6 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
 
   public init(
     model: GalleryViewModel,
-    pageIndex: Int,
     alignment: Alignment,
     layoutMode: PagerBlock.LayoutMode,
     boundsSize: CGSize
@@ -51,8 +50,7 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
 
     let contentSize = model.contentSize(
       for: blockFrames,
-      fitting: boundsSize,
-      pageIndex: pageIndex
+      fitting: boundsSize
     )
 
     self.contentSize = model.direction.isHorizontal
@@ -94,14 +92,12 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
 extension GalleryViewModel {
   public func intrinsicPagerSize(
     forWidth width: CGFloat?,
-    pageIndex: Int,
     layoutMode: PagerBlock.LayoutMode
   ) -> CGSize {
     let size = width.map { CGSize(width: $0, height: 0) }
     return contentSize(
       for: self.frames(fitting: size, layoutMode: layoutMode),
-      fitting: size,
-      pageIndex: pageIndex
+      fitting: size
     )
   }
 }
@@ -128,8 +124,7 @@ extension GalleryViewModel {
     let bound = (size ?? .zero).dimension(in: direction)
     let contentSize = contentSize(
       for: frames,
-      fitting: nil,
-      pageIndex: 0
+      fitting: nil
     ).dimension(in: direction)
 
     let firstFrameOrigin = firstFrame.origin.dimension(in: direction)
@@ -169,12 +164,9 @@ extension GalleryViewModel {
 
   fileprivate func contentSize(
     for frames: [CGRect],
-    fitting size: CGSize?,
-    pageIndex: Int
+    fitting size: CGSize?
   ) -> CGSize {
     guard let lastFrame = frames.last else { return .zero }
-
-    let neigbourFrames = frames[max(0, pageIndex - 1)...min(frames.count - 1, pageIndex + 1)]
 
     switch direction {
     case .horizontal:
@@ -185,7 +177,7 @@ extension GalleryViewModel {
 
       let bottomGap = crossInsets(forSize: size).trailing
       let width = lastFrame.maxX + rightGap
-      let maxHeight = neigbourFrames.map(\.maxY).max()!
+      let maxHeight = frames.map(\.maxY).max()!
 
       return CGSize(width: width, height: maxHeight + bottomGap)
     case .vertical:
@@ -194,7 +186,7 @@ extension GalleryViewModel {
         forSize: size,
         elementMainAxisSize: lastFrame.size.dimension(in: direction)
       )
-      let maxWidth = neigbourFrames.map(\.maxX).max()!
+      let maxWidth = frames.map(\.maxX).max()!
       let height = lastFrame.maxY + bottomGap
       return CGSize(width: maxWidth + rightGap, height: height)
     }

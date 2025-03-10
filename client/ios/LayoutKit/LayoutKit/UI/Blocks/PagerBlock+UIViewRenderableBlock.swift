@@ -59,7 +59,6 @@ private final class PagerView: BlockView {
     let layoutFactory: GalleryView.LayoutFactory = { model, boundsSize in
       PagerViewLayout(
         model: model,
-        pageIndex: Int(round(galleryState.contentPosition.pageIndex ?? 1)),
         alignment: alignment,
         layoutMode: layoutMode,
         boundsSize: boundsSize
