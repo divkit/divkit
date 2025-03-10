@@ -1,7 +1,8 @@
 {
   "description": "Use typed actions for scroll and navigation in gallery",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "templates": {

@@ -49,11 +49,14 @@
         VariableTrigger,
         DownloadCallbacks,
         ActionSubmit,
-        SubmitCallback
+        SubmitCallback,
+        ActionScrollTo,
+        ActionScrollBy,
+        Overflow
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
-    import type { SwitchElements, Overflow } from '../types/switch-elements';
+    import type { SwitchElements } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
     import type { ComponentContext, StateSetter } from '../types/componentContext';
@@ -670,6 +673,97 @@
         });
     }
 
+    function callScrollTo(
+        componentContext: ComponentContext | undefined,
+        actionTyped: MaybeMissing<ActionScrollTo>
+    ): void {
+        const log = (componentContext?.logError || logError);
+
+        const instance = actionTyped.id && getInstance<SwitchElements>(actionTyped.id);
+        if (!instance) {
+            log(wrapError(new Error('Missing component for "scroll_to" action'), {
+                additional: {
+                    id: actionTyped.id
+                }
+            }));
+            return;
+        }
+        if (actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean') {
+            log(wrapError(new Error('Missing properties for "scroll_to" action'), {
+                additional: {
+                    id: actionTyped.id
+                }
+            }));
+            return;
+        }
+        switch (actionTyped.destination?.type) {
+            case 'index': {
+                if (typeof actionTyped.destination.value === 'number') {
+                    instance.setCurrentItem(actionTyped.destination.value, actionTyped.animated ?? true);
+                }
+                break;
+            }
+            case 'offset': {
+                if (typeof actionTyped.destination.value === 'number') {
+                    instance.scrollToPosition?.(actionTyped.destination.value, actionTyped.animated ?? true);
+                }
+                break;
+            }
+            case 'start': {
+                instance.scrollToStart?.(actionTyped.animated ?? true);
+                break;
+            }
+            case 'end': {
+                instance.scrollToEnd?.(actionTyped.animated ?? true);
+                break;
+            }
+            default: {
+                log(wrapError(new Error('Unknown destination for "scroll_to" action'), {
+                    additional: {
+                        id: actionTyped.id,
+                        destination: actionTyped.destination?.type
+                    }
+                }));
+            }
+        }
+    }
+
+    function callScrollBy(
+        componentContext: ComponentContext | undefined,
+        actionTyped: MaybeMissing<ActionScrollBy>
+    ): void {
+        const log = (componentContext?.logError || logError);
+
+        const instance = actionTyped.id && getInstance<SwitchElements>(actionTyped.id);
+        if (!instance) {
+            log(wrapError(new Error('Missing component for "scroll_by" action'), {
+                additional: {
+                    id: actionTyped.id
+                }
+            }));
+            return;
+        }
+        if (
+            typeof actionTyped.item_count !== 'number' && actionTyped.item_count !== undefined ||
+            typeof actionTyped.offset !== 'number' && actionTyped.offset !== undefined ||
+            actionTyped.overflow !== undefined && actionTyped.overflow !== 'clamp' && actionTyped.overflow !== 'ring' ||
+            actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean'
+        ) {
+            log(wrapError(new Error('Missing properties for "scroll_by" action'), {
+                additional: {
+                    id: actionTyped.id
+                }
+            }));
+            return;
+        }
+        instance.scrollCombined?.({
+            step: actionTyped.item_count,
+            offset: actionTyped.offset,
+            overflow: actionTyped.overflow,
+            animated: actionTyped.animated
+        });
+    }
+
     function switchElementAction(
         type: 'set_current_item' | 'set_previous_item' | 'set_next_item' | 'scroll_to_start' |
             'scroll_to_end' | 'scroll_backward' | 'scroll_forward' | 'scroll_to_position',
@@ -735,10 +829,18 @@
                 instance.scrollToEnd?.(isAnimated);
                 return;
             case 'scroll_backward':
-                instance.scrollBackward?.(stepVal, overflow as Overflow, isAnimated);
+                instance.scrollCombined?.({
+                    offset: -stepVal,
+                    overflow: overflow as Overflow,
+                    animated: isAnimated
+                });
                 return;
             case 'scroll_forward':
-                instance.scrollForward?.(stepVal, overflow as Overflow, isAnimated);
+                instance.scrollCombined?.({
+                    offset: stepVal,
+                    overflow: overflow as Overflow,
+                    animated: isAnimated
+                });
                 return;
             case 'scroll_to_position':
                 instance.scrollToPosition?.(stepVal, isAnimated);
@@ -1320,6 +1422,14 @@
                 }
                 case 'submit': {
                     await callSubmit(componentContext, actionTyped);
+                    break;
+                }
+                case 'scroll_to': {
+                    callScrollTo(componentContext, actionTyped);
+                    break;
+                }
+                case 'scroll_by': {
+                    callScrollBy(componentContext, actionTyped);
                     break;
                 }
                 default: {

@@ -45,11 +45,12 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Orientation } from '../../types/orientation';
     import type { PagerData } from '../../stores/pagers';
-    import type { Overflow, SwitchElements } from '../../types/switch-elements';
+    import type { SwitchElements } from '../../types/switch-elements';
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
     import type { Variable } from '../../expressions/variable';
+    import type { Overflow } from '../../../typings/common';
 
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -376,22 +377,25 @@
         currentItem = index;
     }
 
-    function setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
-        let previousItem = currentItem - step;
-
-        if (previousItem < 0) {
-            previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, items.length) : 0;
+    function clampIndex(index: number, overflow: Overflow): number {
+        if (index > items.length - 1) {
+            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : items.length - 1;
         }
+        if (index < 0) {
+            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : 0;
+        }
+
+        return index;
+    }
+
+    function setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
+        let previousItem = clampIndex(currentItem - step, overflow);
 
         scrollToPagerItem(previousItem, animated ? 'smooth' : 'instant');
     }
 
     function setNextItem(step: number, overflow: Overflow, animated: boolean) {
-        let nextItem = currentItem + step;
-
-        if (nextItem > items.length - 1) {
-            nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, items.length) : items.length - 1;
-        }
+        let nextItem = clampIndex(currentItem + step, overflow);
 
         scrollToPagerItem(nextItem, animated ? 'smooth' : 'instant');
     }
@@ -424,7 +428,16 @@
                 },
                 scrollToEnd(animated) {
                     scrollToPagerItem(items.length - 1, animated ? 'smooth' : 'instant');
-                }
+                },
+                scrollCombined({
+                    step,
+                    overflow,
+                    animated
+                }) {
+                    if (step) {
+                        scrollToPagerItem(clampIndex(currentItem + step, overflow || 'clamp'), animated ? 'smooth' : 'instant');
+                    }
+                },
             });
         }
     }

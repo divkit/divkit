@@ -8,9 +8,9 @@
     import type { Mods } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivTabsData } from '../../types/tabs';
-    import type { Action } from '../../../typings/common';
+    import type { Action, Overflow } from '../../../typings/common';
     import type { EdgeInsets } from '../../types/edgeInserts';
-    import type { SwitchElements, Overflow } from '../../types/switch-elements';
+    import type { SwitchElements } from '../../types/switch-elements';
     import type { TabItem } from '../../types/tabs';
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivBaseData } from '../../types/base';
@@ -652,6 +652,17 @@
         }
     }
 
+    function clampIndex(index: number, overflow: Overflow): number {
+        if (index > items.length - 1) {
+            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : items.length - 1;
+        }
+        if (index < 0) {
+            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : 0;
+        }
+
+        return index;
+    }
+
     $: if (componentContext.json) {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
@@ -669,20 +680,12 @@
                     setSelected(item, false, animated);
                 },
                 setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
-                    let previousItem = selected - step;
-
-                    if (previousItem < 0) {
-                        previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, items.length) : 0;
-                    }
+                    let previousItem = clampIndex(selected - step, overflow);
 
                     setSelected(previousItem, false, animated);
                 },
                 setNextItem(step: number, overflow: Overflow, animated: boolean) {
-                    let nextItem = selected + step;
-
-                    if (nextItem > items.length - 1) {
-                        nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, items.length) : items.length - 1;
-                    }
+                    let nextItem = clampIndex(selected + step, overflow);
 
                     setSelected(nextItem, false, animated);
                 },
@@ -691,6 +694,15 @@
                 },
                 scrollToEnd(animated: boolean) {
                     setSelected(items.length - 1, false, animated);
+                },
+                scrollCombined({
+                    step,
+                    overflow,
+                    animated
+                }) {
+                    if (step) {
+                        setSelected(clampIndex(selected + step, overflow || 'clamp'), false, animated || true);
+                    }
                 },
             });
         }

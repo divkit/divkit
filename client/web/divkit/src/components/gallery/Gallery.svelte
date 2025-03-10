@@ -9,13 +9,14 @@
     import type { Align, LayoutParams } from '../../types/layoutParams';
     import type { DivGalleryData } from '../../types/gallery';
     import type { DivBaseData } from '../../types/base';
-    import type { Overflow, SwitchElements } from '../../types/switch-elements';
+    import type { SwitchElements } from '../../types/switch-elements';
     import type { Orientation } from '../../types/orientation';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
     import type { Style } from '../../types/general';
     import type { ComponentContext } from '../../types/componentContext';
     import type { Variable } from '../../expressions/variable';
+    import type { Overflow } from '../../../typings/common';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
@@ -408,13 +409,27 @@
         });
     }
 
-    function scrollToGalleryItem(galleryElements: HTMLElement[], index: number, animated = true): void {
+    function scrollToGalleryItem(galleryElements: HTMLElement[], index: number, {
+        animated = true,
+        extraOffset = 0,
+        overflow = 'clamp'
+    }: {
+        animated?: boolean;
+        extraOffset?: number;
+        overflow?: Overflow;
+    } = {}): void {
         const isHorizontal = orientation === 'horizontal';
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
 
         // 0.01 forces Chromium to use scroll-snap (exact correct scroll position will not trigger it)
         // Chromium will save scroll-snapped value and will not save exact one
         // Saved scroll position is used on resnapping (e.g. content change)
+
+        if (index > galleryElements.length - 1) {
+            index = overflow === 'ring' ? nonNegativeModulo(index, galleryElements.length) : galleryElements.length - 1;
+        } else if (index < 0) {
+            index = overflow === 'ring' ? nonNegativeModulo(index, galleryElements.length) : 0;
+        }
 
         const elem = galleryElements[index];
 
@@ -426,8 +441,63 @@
                 const scrollWrapperSize = scroller.offsetWidth;
                 offset = (elem[elementOffset] + elem.offsetWidth + .01 - itemSpacing / 2) - scrollWrapperSize;
             }
+
+            if (extraOffset) {
+                offset += extraOffset;
+
+                const maxOffset = isHorizontal ?
+                    scroller.scrollWidth - scroller.offsetWidth :
+                    scroller.scrollHeight - scroller.offsetHeight;
+                if (offset > maxOffset) {
+                    if (overflow === 'clamp') {
+                        offset = maxOffset;
+                    } else if (overflow === 'ring') {
+                        offset = nonNegativeModulo(offset, maxOffset);
+                    }
+                }
+                if (offset < 0) {
+                    if (overflow === 'clamp') {
+                        offset = 0;
+                    } else if (overflow === 'ring') {
+                        offset = nonNegativeModulo(offset, maxOffset);
+                    }
+                }
+            }
+
             scrollTo(offset, animated);
         }
+    }
+
+    function scrollOffset(offset: number, {
+        overflow = 'clamp',
+        animated = true
+    }: {
+        overflow?: Overflow;
+        animated?: boolean;
+    } = {}): void {
+        const isHorizontal = orientation === 'horizontal';
+        const directionMultiplier = ($direction === 'ltr' || !isHorizontal) ? 1 : -1;
+        const currentOffset = isHorizontal ?
+            scroller.scrollLeft :
+            scroller.scrollTop;
+        const maxOffset = isHorizontal ?
+            scroller.scrollWidth - scroller.offsetWidth :
+            scroller.scrollHeight - scroller.offsetHeight;
+        let newOffset = currentOffset * directionMultiplier + offset;
+        if (newOffset > maxOffset) {
+            if (overflow === 'clamp') {
+                newOffset = maxOffset;
+            } else if (overflow === 'ring') {
+                newOffset = nonNegativeModulo(newOffset, maxOffset);
+            }
+        } else if (newOffset < 0) {
+            if (overflow === 'clamp') {
+                newOffset = 0;
+            } else if (overflow === 'ring') {
+                newOffset = nonNegativeModulo(newOffset, maxOffset);
+            }
+        }
+        scrollTo(newOffset * directionMultiplier, animated);
     }
 
     function checkIsIntersecting(scroller: DOMRect, item: DOMRect): boolean {
@@ -491,18 +561,14 @@
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    scrollToGalleryItem(galleryElements, item, animated);
+                    scrollToGalleryItem(galleryElements, item, { animated });
                 },
                 setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
                     const currentElementIndex = calculateCurrentElementIndex('prev');
                     const galleryElements = getItems();
                     let previousItem = currentElementIndex - step;
 
-                    if (previousItem < 0) {
-                        previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, galleryElements.length) : 0;
-                    }
-
-                    scrollToGalleryItem(galleryElements, previousItem, animated);
+                    scrollToGalleryItem(galleryElements, previousItem, { animated, overflow });
                 },
                 setNextItem(step: number, overflow: Overflow, animated: boolean) {
                     const isHorizontal = orientation === 'horizontal';
@@ -515,18 +581,14 @@
                     );
                     const galleryElements = getItems();
                     if (isEdgeScroll && overflow === 'ring') {
-                        scrollToGalleryItem(galleryElements, 0, animated);
+                        scrollToGalleryItem(galleryElements, 0, { animated });
                         return;
                     }
 
                     const currentElementIndex = calculateCurrentElementIndex('next');
                     let nextItem = currentElementIndex + step;
 
-                    if (nextItem > galleryElements.length - 1) {
-                        nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, galleryElements.length) : galleryElements.length - 1;
-                    }
-
-                    scrollToGalleryItem(galleryElements, nextItem, animated);
+                    scrollToGalleryItem(galleryElements, nextItem, { animated, overflow });
                 },
                 scrollToStart(animated: boolean) {
                     scrollTo(0, animated);
@@ -534,47 +596,26 @@
                 scrollToEnd(animated: boolean) {
                     scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? 1e6 : -1e6, animated);
                 },
-                scrollBackward(step: number, overflow: Overflow, animated: boolean) {
-                    const isHorizontal = orientation === 'horizontal';
-                    const directionMultiplier = ($direction === 'ltr' || !isHorizontal) ? 1 : -1;
-                    const currentOffset = isHorizontal ?
-                        scroller.scrollLeft :
-                        scroller.scrollTop;
-                    const maxOffset = isHorizontal ?
-                        scroller.scrollWidth - scroller.offsetWidth :
-                        scroller.scrollHeight - scroller.offsetHeight;
-                    let newOffset = currentOffset * directionMultiplier - step;
-                    if (newOffset < 0) {
-                        if (overflow === 'clamp') {
-                            newOffset = 0;
-                        } else if (overflow === 'ring') {
-                            newOffset = nonNegativeModulo(newOffset, maxOffset);
-                        }
-                    }
-                    scrollTo(newOffset * directionMultiplier, animated);
-                },
-                scrollForward(step: number, overflow: Overflow, animated: boolean) {
-                    const isHorizontal = orientation === 'horizontal';
-                    const directionMultiplier = ($direction === 'ltr' || !isHorizontal) ? 1 : -1;
-                    const currentOffset = isHorizontal ?
-                        scroller.scrollLeft :
-                        scroller.scrollTop;
-                    const maxOffset = isHorizontal ?
-                        scroller.scrollWidth - scroller.offsetWidth :
-                        scroller.scrollHeight - scroller.offsetHeight;
-                    let newOffset = currentOffset * directionMultiplier + step;
-                    if (newOffset > maxOffset) {
-                        if (overflow === 'clamp') {
-                            newOffset = maxOffset;
-                        } else if (overflow === 'ring') {
-                            newOffset = nonNegativeModulo(newOffset, maxOffset);
-                        }
-                    }
-                    scrollTo(newOffset * directionMultiplier, animated);
-                },
                 scrollToPosition(step, animated: boolean) {
                     scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? step : -step, animated);
                 },
+                scrollCombined({
+                    step,
+                    offset,
+                    overflow,
+                    animated
+                }) {
+                    if (step) {
+                        const currentElementIndex = calculateCurrentElementIndex(step > 0 ? 'next' : 'prev');
+                        const nextItem = currentElementIndex + step;
+                        scrollToGalleryItem(getItems(), nextItem, { animated, extraOffset: offset, overflow });
+                    } else if (offset) {
+                        scrollOffset(offset, {
+                            overflow,
+                            animated
+                        });
+                    }
+                }
             });
         }
     }
@@ -586,7 +627,7 @@
 
         if (defaultItem) {
             const galleryElements = getItems();
-            scrollToGalleryItem(galleryElements, defaultItem, false);
+            scrollToGalleryItem(galleryElements, defaultItem, { animated: false });
         }
     });
 

@@ -251,7 +251,8 @@
       "case_id": 172,
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivGallery",

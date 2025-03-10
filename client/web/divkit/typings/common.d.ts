@@ -309,10 +309,49 @@ export interface ActionSubmit {
     on_fail_actions?: Action[];
 }
 
+export type Overflow = 'clamp' | 'ring';
+
+export interface ActionScrollBy {
+    type: 'scroll_by';
+    id: string;
+    animated?: boolean;
+    overflow?: Overflow;
+    offset?: number;
+    item_count?: number;
+}
+
+export interface ActionScrollToDestinationOffset {
+    type: 'offset';
+    value: number;
+}
+
+export interface ActionScrollToDestinationIndex {
+    type: 'index';
+    value: number;
+}
+
+export interface ActionScrollToDestinationStart {
+    type: 'start';
+}
+
+export interface ActionScrollToDestinationEnd {
+    type: 'end';
+}
+
+export type ActionScrollToDestination = ActionScrollToDestinationOffset | ActionScrollToDestinationIndex |
+    ActionScrollToDestinationStart | ActionScrollToDestinationEnd;
+
+export interface ActionScrollTo {
+    type: 'scroll_to';
+    id: string;
+    animated?: boolean;
+    destination: ActionScrollToDestination;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
-    ActionVideo | ActionStore | ActionSetState | ActionSubmit;
+    ActionVideo | ActionStore | ActionSetState | ActionSubmit | ActionScrollBy | ActionScrollTo;
 
 export interface ActionBase {
     log_id: string;
