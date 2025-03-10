@@ -9,8 +9,6 @@ import com.yandex.div.evaluable.types.Url
 
 internal interface VariableController : VariableProvider {
 
-    override fun get(name: String) = getMutableVariable(name)?.getValue().wrapVariableValue()
-
     fun subscribeToVariablesChange(
         names: List<String>,
         invokeOnSubscription: Boolean = false,

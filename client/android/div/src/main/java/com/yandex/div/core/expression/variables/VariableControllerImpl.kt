@@ -32,6 +32,8 @@ internal class VariableControllerImpl(
         observers.addObserver(observer)
     }
 
+    override fun get(name: String) = getMutableVariable(name)?.getValue().wrapVariableValue() ?: delegate?.get(name)
+
     override fun subscribeToVariablesChange(
         names: List<String>,
         invokeOnSubscription: Boolean,

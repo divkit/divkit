@@ -9,7 +9,7 @@ internal class VariableAndConstantController(
     private val constants: ConstantsProvider,
 ) : VariableController {
 
-    override fun get(name: String) = constants.get(name) ?: super.get(name)
+    override fun get(name: String) = constants.get(name).wrapVariableValue() ?: delegate.get(name)
 
     override fun subscribeToVariablesChange(
         names: List<String>,
