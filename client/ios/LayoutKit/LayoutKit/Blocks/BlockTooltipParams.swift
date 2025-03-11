@@ -7,6 +7,8 @@ public struct BlockTooltipParams: Equatable {
   public let closeByTapOutside: Bool
   let tapOutsideActions: [UserInterfaceAction]
   public let backgroundAccessibilityDescription: String?
+  public let animationIn: [TransitioningAnimation]?
+  public let animationOut: [TransitioningAnimation]?
 
   public init(
     id: String,
@@ -14,7 +16,9 @@ public struct BlockTooltipParams: Equatable {
     duration: TimeInterval,
     closeByTapOutside: Bool,
     tapOutsideActions: [UserInterfaceAction] = [],
-    backgroundAccessibilityDescription: String? = nil
+    backgroundAccessibilityDescription: String? = nil,
+    animationIn: [TransitioningAnimation]? = nil,
+    animationOut: [TransitioningAnimation]? = nil
   ) {
     self.id = id
     self.mode = mode
@@ -22,5 +26,7 @@ public struct BlockTooltipParams: Equatable {
     self.closeByTapOutside = closeByTapOutside
     self.tapOutsideActions = tapOutsideActions
     self.backgroundAccessibilityDescription = backgroundAccessibilityDescription
+    self.animationIn = animationIn
+    self.animationOut = animationOut
   }
 }

@@ -34,7 +34,17 @@ extension DivTooltip {
         duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
         closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
         tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? [],
-        backgroundAccessibilityDescription: resolveBackgroundAccessibilityDescription(expressionResolver)
+        backgroundAccessibilityDescription: resolveBackgroundAccessibilityDescription(
+          expressionResolver
+        ),
+        animationIn: animationIn?.makeTransitioningAnimations(
+          for: .appearing,
+          with: expressionResolver
+        ),
+        animationOut: animationOut?.makeTransitioningAnimations(
+          for: .disappearing,
+          with: expressionResolver
+        )
       ),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,

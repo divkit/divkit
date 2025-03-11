@@ -150,6 +150,8 @@ public class DefaultTooltipManager: TooltipManager {
         view.frame = rootViewController.view.bounds
       }
 
+      view.animateAppear()
+
       showingTooltips[info.id] = view
       let duration = tooltip.params.duration
       if !duration.isZero {

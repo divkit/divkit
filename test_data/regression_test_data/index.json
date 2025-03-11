@@ -2695,6 +2695,26 @@
       "file": "tooltips/tooltip-positions.json"
     },
     {
+      "title": "Tooltips with animations",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Tooltips",
+        "Animations"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown with custom animations",
+        "Tooltips are hidden with custom animations"
+      ],
+      "file": "tooltips/tooltips-animations.json"
+    },
+    {
       "title": "Switching state in the tooltip",
       "case_id": 207,
       "platforms": [
