@@ -2,6 +2,7 @@
   "type": "object",
   "$description": "translations.json#/div_stroke_style_dashed",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],
