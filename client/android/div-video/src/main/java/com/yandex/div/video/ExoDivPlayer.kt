@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SeekParameters
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_FULL
@@ -22,13 +23,15 @@ import com.yandex.div.internal.KAssert
 internal class ExoDivPlayer(
     private val context: Context,
     private var src: List<DivVideoSource>,
-    config: DivPlayerPlaybackConfig
+    config: DivPlayerPlaybackConfig,
+    cacheDataSourceFactory: CacheDataSource.Factory?
 ) : DivPlayer {
     val player: ExoPlayer by lazy {
         ExoPlayer.Builder(context).build()
     }
+
     private val mediaSourceAbstractFactory by lazy {
-        ExoDivMediaSourceAbstractFactory(context)
+        ExoDivMediaSourceAbstractFactory(context, cacheDataSourceFactory)
     }
 
     private val observers = ObserverList<DivPlayer.Observer>()

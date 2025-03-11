@@ -523,6 +523,7 @@ public class DivConfiguration {
         }
 
         @NonNull
+        @Deprecated // Use DivPlayerFactory to setup preloader
         public Builder divPlayerPreloader(@NonNull DivPlayerPreloader divPlayerPreloader) {
             mDivPlayerPreloader = divPlayerPreloader;
             return this;
@@ -705,6 +706,10 @@ public class DivConfiguration {
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
+            DivPlayerFactory divPlayerFactory =
+                    mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory;
+            DivPlayerPreloader divPlayerPreloader =
+                    mDivPlayerPreloader == null ? divPlayerFactory.makePreloader() : mDivPlayerPreloader;
             return new DivConfiguration(
                     new DivImageLoaderWrapper(mImageLoader),
                     mActionHandler == null ? new DivActionHandler() : mActionHandler,
@@ -716,8 +721,8 @@ public class DivConfiguration {
                     mDivVisibilityChangeListeners,
                     mDivCustomContainerViewAdapter == null ? DivCustomContainerViewAdapter.STUB
                             : mDivCustomContainerViewAdapter,
-                    mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory,
-                    mDivPlayerPreloader == null ? DivPlayerPreloader.STUB : mDivPlayerPreloader,
+                    divPlayerFactory,
+                    divPlayerPreloader,
                     mTooltipRestrictor == null ? DivTooltipRestrictor.STUB : mTooltipRestrictor,
                     mExtensionHandlers,
                     mDivDownloader == null ? DivDownloader.STUB : mDivDownloader,

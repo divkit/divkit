@@ -97,7 +97,6 @@ fun divConfiguration(
         .extension(DivShimmerExtensionHandler())
         .extension(createDivShineExtensionHandler())
         .divPlayerFactory(ExoDivPlayerFactory(activity))
-        .divPlayerPreloader(ExoPlayerVideoPreloader(activity))
 }
 
 fun createDivSwipeGestureExtensionHandler(): DivGestureExtensionHandler {
