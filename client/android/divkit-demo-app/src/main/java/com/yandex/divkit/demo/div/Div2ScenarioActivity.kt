@@ -203,6 +203,10 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 showLoadDivJsonDialog()
                 true
             }
+            R.id.div2_close_all_tooltips -> {
+                divContext.cancelTooltips()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -32,4 +32,5 @@
     <string name="variables">Load variables</string>
     <string name="load_patch">Load patch</string>
     <string name="load_div_json">Load another div json</string>
+    <string name="close_all_tooltips">Close all tooltips</string>
 </resources>
