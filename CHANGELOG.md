@@ -6,6 +6,7 @@
 * Made `item_builder` have a higher priority than `items`, just like other platforms.
 * Fixed scroll position restoring in `gallery` when first item is visible or in rtl-configuration.
 * Fixed `shine` gradient angle. Angle goes counterclockwise and rotates the gradient relative to the horizontal line.
+* Fixed gallery scroll in `paging` mode.
 
 # iOS Client:
 * `input` autocorrection value depends on `input_type`.
