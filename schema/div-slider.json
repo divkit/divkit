@@ -140,7 +140,8 @@
           "$description": "translations.json#/div_slider_ranges",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "secondary_value_accessibility": {

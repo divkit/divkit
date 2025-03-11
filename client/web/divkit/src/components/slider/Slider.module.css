@@ -75,20 +75,25 @@
     position: relative;
 }
 
+.slider__tracks-ranges {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.slider__tracks-ranges_rtl {
+    transform: scale(-1);
+}
+
 .slider__track {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    margin: auto;
-}
-
-.slider__active-track {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto;
+    margin: auto 0;
 }
 
 .slider__thumb-text {
