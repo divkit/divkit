@@ -128,7 +128,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
             return false
         }
 
-        tooltips.forEach { (_, tooltip) -> dismissTooltip(tooltip) }
+        tooltips.values.toList().forEach { tooltip -> dismissTooltip(tooltip) }
         tooltips.clear()
         return true
     }
