@@ -470,6 +470,139 @@ final class DivBaseExtensionsTests: XCTestCase {
     )
   }
 
+  func test_WhenBlockHasVisibilityAndDisappearAction_WithCommonIds_DoNotShareVisibilityCounter(
+  ) throws {
+    let context = DivBlockModelingContext(scheduler: timer)
+    let commonLogId = "common_id"
+
+    let block = makeBlock(
+      divText(
+        disappearActions: [
+          DivDisappearAction(
+            disappearDuration: .value(0),
+            logId: .value(commonLogId),
+            logLimit: .value(4)
+          ),
+        ],
+        text: "arbitary text",
+        visibilityActions: [
+          DivVisibilityAction(
+            logId: .value(commonLogId),
+            logLimit: .value(2),
+            visibilityDuration: .value(0)
+          ),
+        ]
+      ),
+      context: context
+    )
+
+    let visibilityTester = VisibilityTester(block: block, timer: timer)
+    visibilityTester.setViewVisibleAndDissappear(repeatCount: 10)
+
+    XCTAssertEqual(visibilityTester.callsCount, 6)
+    XCTAssertEqual(visibilityTester.callsCount(type: .appear), 2)
+    XCTAssertEqual(visibilityTester.callsCount(type: .disappear), 4)
+  }
+
+  func test_WhenBlockHasVisibilityActions_WithCommonIds_ShareCounterAndAddWarning() throws {
+    let context = DivBlockModelingContext(scheduler: timer)
+    let appearId = "appear_id"
+
+    let block = makeBlock(
+      divText(
+        text: "arbitary text",
+        visibilityActions: [
+          DivVisibilityAction(
+            logId: .value(appearId),
+            logLimit: .value(1),
+            visibilityDuration: .value(0)
+          ),
+          DivVisibilityAction(
+            logId: .value(appearId),
+            logLimit: .value(2),
+            url: .value(testURL),
+            visibilityDuration: .value(0)
+          ),
+          DivVisibilityAction(
+            logId: .value(appearId),
+            logLimit: .value(3),
+            visibilityDuration: .value(0)
+          ),
+        ]
+      ),
+      context: context,
+      ignoreErrors: true
+    )
+
+    let visibilityTester = VisibilityTester(block: block, timer: timer)
+    visibilityTester.setViewVisibleAndDissappear(repeatCount: 20)
+
+    XCTAssertEqual(visibilityTester.callsCount(type: .appear), 3)
+
+    let appearTestURLActionsCount = visibilityTester.callsCount(
+      type: .appear,
+      url: testURL
+    )
+    XCTAssertEqual(appearTestURLActionsCount, 1)
+
+    assertEqual(
+      context.errorsStorage.errors,
+      [
+        DivBlockModelingWarning(
+          "appear actions array contains non-unique log_id values: [Optional(\"appear_id\")]",
+          path: .root + 0
+        ),
+      ]
+    )
+  }
+
+  func test_WhenBlockHasDisappearActions_WithCommonIds_ShareCounterAndAddWarning() throws {
+    let context = DivBlockModelingContext(scheduler: timer)
+    let disappearId = "dissappear_id"
+
+    let block = makeBlock(
+      divText(
+        disappearActions: [
+          DivDisappearAction(
+            disappearDuration: .value(0),
+            logId: .value(disappearId),
+            logLimit: .value(3),
+            url: .value(testURL)
+          ),
+          DivDisappearAction(
+            disappearDuration: .value(0),
+            logId: .value(disappearId),
+            logLimit: .value(1)
+          ),
+        ],
+        text: "arbitary text"
+      ),
+      context: context,
+      ignoreErrors: true
+    )
+
+    let visibilityTester = VisibilityTester(block: block, timer: timer)
+    visibilityTester.setViewVisibleAndDissappear(repeatCount: 20)
+
+    XCTAssertEqual(visibilityTester.callsCount(type: .disappear), 3)
+
+    let disappearTestURLActionsCount = visibilityTester.callsCount(
+      type: .disappear,
+      url: testURL
+    )
+    XCTAssertEqual(disappearTestURLActionsCount, 3)
+
+    assertEqual(
+      context.errorsStorage.errors,
+      [
+        DivBlockModelingWarning(
+          "disappear actions array contains non-unique log_id values: [Optional(\"dissappear_id\")]",
+          path: .root + 0
+        ),
+      ]
+    )
+  }
+
   func test_WithBackroundReuseId() throws {
     let context = DivBlockModelingContext()
     let block = try makeBlock(fromFile: "div-reuse-id-background-wrapper", context: context)
@@ -527,6 +660,13 @@ private func makeBlock(
   try DivTextTemplate.makeBlock(fromFile: filename, context: context)
 }
 
+private func assertEqual(_ actual: [DivError], _ expected: [DivError]) {
+  assertEqual(
+    actual.map(\.prettyMessage),
+    expected.map(\.prettyMessage)
+  )
+}
+
 extension TemplateValue where ResolvedValue: DivBlockModeling {
   fileprivate static func makeBlock(
     fromFile filename: String,
@@ -541,3 +681,4 @@ extension TemplateValue where ResolvedValue: DivBlockModeling {
 }
 
 private let testReuseId = "test_reuse_id"
+private let testURL = URL(string: "https://ya.ru")!

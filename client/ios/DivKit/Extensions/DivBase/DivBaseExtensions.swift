@@ -54,7 +54,11 @@ extension DivBase {
     if visibility == .gone {
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       if let visibilityParams = context.makeVisibilityParams(
-        actions: makeDisappearActions(context: context),
+        actions: makeVisibilityActions(
+          divActions: disappearActions,
+          actionsType: .disappear,
+          context: context
+        ),
         isVisible: false
       ) {
         return EmptyBlock.zeroSized.addingDecorations(
@@ -95,8 +99,16 @@ extension DivBase {
     // Properties should be applied in specific order.
     // For example, shadow should be applied to block with border
     // and alpha should be applied to block with border and shadow.
-    var visibilityActions = makeVisibilityActions(context: context)
-    visibilityActions += makeDisappearActions(context: context)
+    var visibilityActions = makeVisibilityActions(
+      divActions: visibilityActions ?? visibilityAction.asArray(),
+      actionsType: .appear,
+      context: context
+    )
+    visibilityActions += makeVisibilityActions(
+      divActions: disappearActions,
+      actionsType: .disappear,
+      context: context
+    )
     let visibilityParams = context.makeVisibilityParams(
       actions: visibilityActions,
       isVisible: true
@@ -200,17 +212,25 @@ extension DivBase {
   }
 
   private func makeVisibilityActions(
+    divActions: [DivVisibilityActionBase]?,
+    actionsType: VisibilityActionType,
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
-    (visibilityActions ?? visibilityAction.asArray())
-      .compactMap { $0.makeVisibilityAction(context: context) }
-  }
+    let blockActions: [VisibilityAction] = divActions?.compactMap {
+      $0.makeVisibilityAction(
+        context: context
+      )
+    } ?? []
 
-  private func makeDisappearActions(
-    context: DivBlockModelingContext
-  ) -> [VisibilityAction] {
-    disappearActions?
-      .compactMap { $0.makeDisappearAction(context: context) } ?? []
+    let logIds = blockActions.map(\.logId)
+    let nonUniqueLogIds = logIds.nonUniqueElements
+    if !nonUniqueLogIds.isEmpty {
+      context.addWarning(
+        message: "\(actionsType.rawValue) actions array contains non-unique log_id values: \(nonUniqueLogIds)"
+      )
+    }
+
+    return blockActions
   }
 
   private func applyTransitioningAnimations(

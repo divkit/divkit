@@ -30,3 +30,11 @@ extension [Div] {
     makeBlocks(context: context, mappedBy: { _, block, _ in block })
   }
 }
+
+extension Array where Element: Hashable {
+  var nonUniqueElements: [Element] {
+    countElements()
+      .filter { $0.value > 1 }
+      .map(\.key)
+  }
+}

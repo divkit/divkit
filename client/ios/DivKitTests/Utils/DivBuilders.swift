@@ -94,6 +94,7 @@ func divImage(
 func divText(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  disappearActions: [DivDisappearAction]? = nil,
   focus: DivFocus? = nil,
   fontSize: Int? = nil,
   fontWeight: DivFontWeight? = nil,
@@ -116,6 +117,7 @@ func divText(
   return .divText(DivText(
     accessibility: accessibility,
     actions: actions,
+    disappearActions: disappearActions,
     focus: focus,
     fontSize: fontSize.map { .value($0) },
     fontWeight: fontWeight.map { .value($0) },
