@@ -82,7 +82,7 @@ final class SnapshotTestRunner {
     manager: DefaultTooltipManager,
     check: CheckAction
   ) async throws {
-    guard let tooltipWindow = manager.modalTooltipWindow else {
+    guard let tooltipWindow = manager.tooltipWindowManager?.modalWindow else {
       return try check(nil)
     }
 

@@ -77,7 +77,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     if !isPointInsideTooltip(point, event: event), !isModal {
       if tooltip.params.closeByTapOutside {
         DispatchQueue.main.async {
-          self.close()
+          self.close(animated: true)
         }
       }
       return nil
@@ -91,7 +91,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
     if let lastNonZeroBounds,
        lastNonZeroBounds != bounds {
-      close()
+      close(animated: true)
     }
 
     if bounds != .zero {
@@ -108,20 +108,25 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     handleAction(event)
   }
 
-  public func close() {
+  public func close(animated: Bool) {
     guard !isClosing else { return }
     isClosing = true
     tooltip.view.onVisibleBoundsChanged(from: tooltip.view.bounds, to: .zero)
 
-    if let animationOut = tooltip.params.animationOut {
-      setInitialParamsAndAnimate(animations: animationOut) {
-        self.removeFromSuperview()
-        self.onCloseAction()
+    if animated {
+      if let animationOut = tooltip.params.animationOut {
+        setInitialParamsAndAnimate(animations: animationOut) {
+          self.removeFromSuperview()
+          self.onCloseAction()
+        }
+      } else {
+        removeFromParentAnimated {
+          self.onCloseAction()
+        }
       }
     } else {
-      removeFromParentAnimated {
-        self.onCloseAction()
-      }
+      removeFromSuperview()
+      onCloseAction()
     }
   }
 
@@ -132,7 +137,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     perform(uiActionEvents: uiActionEvents, from: self)
 
     if tooltip.params.closeByTapOutside {
-      close()
+      close(animated: true)
     }
   }
 
