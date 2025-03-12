@@ -11,13 +11,18 @@ import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.toDivItemBuilderResult
 import com.yandex.div2.DivVisibility
 
-internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
+internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     items: List<DivItemBuilderResult>,
 ) : VisibilityAwareAdapter<VH>(items) {
 
     override fun getItemViewType(position: Int): Int {
         val item = visibleItems.getOrNull(position) ?: return 0
         return item.div.value().reuseId?.evaluate(item.expressionResolver).hashCode()
+    }
+
+    override fun onViewAttachedToWindow(holder: VH) {
+        super.onViewAttachedToWindow(holder)
+        holder.updateState()
     }
 
     fun applyPatch(

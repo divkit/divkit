@@ -107,9 +107,9 @@ internal class DivStateBinder @Inject constructor(
         id: String,
     ): Pair<DivState.State?, DivState.State?> {
         val cardId = context.divView.divTag.id
-        val statePath = "$path/$id"
+        val statePath = "${path.statesString}/$id"
         val stateId = (temporaryStateCache.getState(cardId, statePath) ?: divStateCache.getState(cardId, statePath))
-            ?.also { view.valueUpdater?.invoke(it) }
+            ?.also { view.variableUpdater?.invoke(it) }
             ?: stateIdVariable?.let { getValueFromVariable(context, it) }
 
         val oldState = states.find { it.stateId == view.stateId }
@@ -128,7 +128,7 @@ internal class DivStateBinder @Inject constructor(
     ) {
         val resolver = context.expressionResolver
         fixAlignment(div, oldDiv, resolver)
-        observeStateIdVariable(div, context, path, stateId)
+        observeStateIdVariable(div, context, path)
         bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
         swipeOutCallback = newState.swipeOutActions?.let {
             { swipeOut(context.divView, resolver, it) }
@@ -281,7 +281,6 @@ internal class DivStateBinder @Inject constructor(
         div: DivState,
         bindingContext: BindingContext,
         divStatePath: DivStatePath,
-        currentStateId: String?
     ) {
         val stateIdVariable = div.stateIdVariable ?: return
 
@@ -290,13 +289,13 @@ internal class DivStateBinder @Inject constructor(
             stateIdVariable,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {
-                    if (value == null || value == currentStateId) return
+                    if (value == null || stateId == null || value == stateId) return
                     val newDivStatePath = divStatePath.append(div.getId(), value)
                     bindingContext.divView.switchToState(newDivStatePath, true)
                 }
 
                 override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                    this@observeStateIdVariable.valueUpdater = valueUpdater
+                    variableUpdater = valueUpdater
                 }
             },
             path = divStatePath

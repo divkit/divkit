@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs.gallery
 
 import android.annotation.SuppressLint
-import android.view.View
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.dagger.DivScope
@@ -45,7 +44,7 @@ internal class DivGalleryBinder @Inject constructor(
         if (div === oldDiv) {
             val adapter = view.adapter as? DivGalleryAdapter ?: return
             adapter.applyPatch(view, divPatchCache, context)
-            view.bindStates(context.divView.rootDiv(), context, context.expressionResolver, divBinder.get())
+            view.bindStates(context, divBinder.get())
             return
         }
 
@@ -67,18 +66,7 @@ internal class DivGalleryBinder @Inject constructor(
         setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-
-        val itemStateBinder = { itemView: View, _: Div ->
-            itemView.bindStates(bindingContext.divView.rootDiv(), bindingContext, resolver, divBinder.get())
-        }
-        adapter = DivGalleryAdapter(
-            div.buildItems(resolver),
-            bindingContext,
-            divBinder.get(),
-            viewCreator,
-            itemStateBinder,
-            path
-        )
+        adapter = DivGalleryAdapter(div.buildItems(resolver), bindingContext, divBinder.get(), viewCreator, path)
         bindItemBuilder(bindingContext, div)
         resetAnimatorAndRestoreOnLayout()
         updateDecorations(bindingContext, div)

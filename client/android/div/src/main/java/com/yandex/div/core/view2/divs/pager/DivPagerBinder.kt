@@ -59,7 +59,7 @@ internal class DivPagerBinder @Inject constructor(
                 return
             }
 
-            view.bindStates(context.divView.rootDiv(), context, context.expressionResolver, divBinder.get())
+            view.bindStates(context, divBinder.get())
             pager.doOnNextLayout { pager.requestTransform() }
             return
         }

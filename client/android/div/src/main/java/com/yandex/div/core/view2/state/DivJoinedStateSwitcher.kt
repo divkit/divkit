@@ -24,7 +24,7 @@ internal class DivJoinedStateSwitcher @Inject constructor(
         val rootDiv = state.div
         var view = rootView
         var div = rootDiv
-        var path = DivStatePath.fromState(state.stateId)
+        var path = DivStatePath.fromState(state)
 
         // trying to bind exact DivState, not whole view.
         val commonPath = findCommonPath(paths, path)
@@ -35,7 +35,7 @@ internal class DivJoinedStateSwitcher @Inject constructor(
             if (viewByPath != null) {
                 view = viewByPath
                 div = divByPath
-                path = commonPath
+                path = viewByPath.path ?: commonPath
             }
         }
 

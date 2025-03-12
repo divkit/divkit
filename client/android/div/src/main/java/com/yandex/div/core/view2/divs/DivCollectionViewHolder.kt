@@ -24,7 +24,7 @@ internal abstract class DivCollectionViewHolder(
     protected var oldDiv: Div? = null
     private val childrenPaths = mutableMapOf<String, DivStatePath>()
 
-    open fun bind(bindingContext: BindingContext, div: Div, position: Int) {
+    protected fun bind(bindingContext: BindingContext, div: Div, index: Int) {
         val resolver = bindingContext.expressionResolver
 
         if (viewWrapper.tryRebindRecycleContainerChildren(bindingContext.divView, div)) {
@@ -42,16 +42,15 @@ internal abstract class DivCollectionViewHolder(
 
         oldDiv = div
 
-        val id = div.value().getChildPathUnit(position)
-        val childPath = childrenPaths.getOrPut(id) { div.value().resolvePath(id, path) }
+        val id = div.value().getChildPathUnit(index)
+        val childPath = childrenPaths.getOrPut(id) { path.appendDiv(id) }
 
         if (parentContext.expressionResolver != bindingContext.expressionResolver) {
-            resolveRuntime(
-                runtimeStore = bindingContext.runtimeStore,
-                div = div.value(),
+            bindingContext.runtimeStore?.resolveRuntimeWith(
                 childPath.fullPath,
-                resolver = resolver,
-                parentResolver = parentContext.expressionResolver,
+                div,
+                resolver,
+                parentContext.expressionResolver,
             )
         }
 
@@ -66,6 +65,11 @@ internal abstract class DivCollectionViewHolder(
         return viewCreator.create(div, bindingContext.expressionResolver).also {
             viewWrapper.addView(it)
         }
+    }
+
+    fun updateState() {
+        val child = viewWrapper.child ?: return
+        child.bindingContext?.let { child.bindStates(it, divBinder) }
     }
 
     protected abstract fun logReuseError()

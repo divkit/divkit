@@ -37,7 +37,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     private val gestureDetector = GestureDetectorCompat(context, swipeListener, Handler(Looper.getMainLooper()))
     var swipeOutCallback: (() -> Unit)? = null
     internal var activeStateDiv: Div? = null
-    var valueUpdater: ((String) -> Unit)? = null
+    var variableUpdater: ((String) -> Unit)? = null
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (swipeOutCallback == null) {

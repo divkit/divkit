@@ -76,15 +76,7 @@ internal class RuntimeStore(
         div: Div,
         parentResolver: ExpressionResolver? = null,
         parentRuntime: ExpressionsRuntime? = null,
-    ) = tree.getNode(path)?.runtime ?: getRuntimeOrCreateChild(
-        path,
-        div.value().variables?.toVariables(),
-        div.value().variableTriggers,
-        div.value().functions,
-        null,
-        parentResolver,
-        parentRuntime,
-    )
+    ) = tree.getNode(path)?.runtime ?: getRuntimeOrCreateChild(path, div, null, parentResolver, parentRuntime)
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
@@ -106,9 +98,7 @@ internal class RuntimeStore(
 
     internal fun resolveRuntimeWith(
         path: String,
-        variables: List<Variable>?,
-        triggers: List<DivTrigger>?,
-        functions: List<DivFunction>?,
+        div: Div,
         resolver: ExpressionResolver,
         parentResolver: ExpressionResolver?,
     ): ExpressionsRuntime? {
@@ -120,8 +110,8 @@ internal class RuntimeStore(
             return null
         }
 
-        if (runtimeForPath != null) tree.removeRuntimeAndCleanup(runtimeForPath, path)
-        return getRuntimeOrCreateChild(path, variables, triggers, functions, existingRuntime, parentResolver)
+        runtimeForPath?.let { tree.removeRuntimeAndCleanup(it, path) }
+        return getRuntimeOrCreateChild(path, div, existingRuntime, parentResolver)
     }
 
     internal fun cleanup() {
@@ -195,9 +185,7 @@ internal class RuntimeStore(
 
     private fun getRuntimeOrCreateChild(
         path: String,
-        variables: List<Variable>?,
-        variablesTriggers: List<DivTrigger>?,
-        functions: List<DivFunction>?,
+        div: Div,
         existingRuntime: ExpressionsRuntime? = null,
         parentResolver: ExpressionResolver? = null,
         parentRuntime: ExpressionsRuntime? = null,
@@ -213,13 +201,16 @@ internal class RuntimeStore(
 
         val parentRuntime = parentRuntime ?: parentResolver?.let { getRuntimeWithOrNull(it) }
 
-        return if (needLocalRuntime(variables, variablesTriggers, functions)) {
-            createChildRuntime(runtime, parentRuntime, path, variables, variablesTriggers, functions)
-        } else {
-            runtime.also {
-                tree.storeRuntime(runtime, parentRuntime, path)
-                runtime.updateSubscriptions()
-            }
+        val variables = div.value().variables?.toVariables()
+        val variableTriggers = div.value().variableTriggers
+        val functions = div.value().functions
+
+        if (needLocalRuntime(variables, variableTriggers, functions)) {
+            return createChildRuntime(runtime, parentRuntime, path, variables, variableTriggers, functions)
         }
+
+        tree.storeRuntime(runtime, parentRuntime, path)
+        runtime.updateSubscriptions()
+        return runtime
     }
 }

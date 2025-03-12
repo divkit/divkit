@@ -14,7 +14,6 @@ import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.isAlternated
 import com.yandex.div.core.util.isReversed
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.getRuntimeFor
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.evaluable.types.Color
@@ -158,7 +157,7 @@ internal object DivVariableAnimatorBuilder {
         name: String,
         resolver: ExpressionResolver,
     ): T? {
-        val runtime = getRuntimeFor(divView.runtimeStore, resolver) ?: divView.expressionsRuntime
+        val runtime = divView.runtimeStore?.getRuntimeWithOrNull(resolver) ?: divView.expressionsRuntime
         return runtime?.variableController?.getMutableVariable(name) as? T
     }
 }

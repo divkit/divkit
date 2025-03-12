@@ -62,7 +62,7 @@ private const val AXIS_CROSS = "cross"
 
 @DivScope
 internal class DivContainerBinder @Inject constructor(
-    baseBinder: DivBaseBinder,
+    private val baseBinder: DivBaseBinder,
     private val divViewCreator: Provider<DivViewCreator>,
     private val divPatchManager: DivPatchManager,
     private val divBinder: Provider<DivBinder>,
@@ -74,16 +74,23 @@ internal class DivContainerBinder @Inject constructor(
     override fun bindView(context: BindingContext, view: ViewGroup, div: Div.Container, path: DivStatePath) {
         @Suppress("UNCHECKED_CAST")
         val divHolderView = view as DivHolderView<Div.Container>
-        val oldDiv = divHolderView.div?.value
+        val oldDiv = divHolderView.div
         val oldResolver = divHolderView.bindingContext?.expressionResolver ?: context.divView.oldExpressionResolver
 
-        super.bindView(context, view, div)
+        if (div === oldDiv) {
+            val oldItems = (view as DivCollectionHolder).items ?: return
+            view.dispatchItems(context, div.value, oldDiv.value, oldItems, oldItems, path)
+            return
+        }
+
+        baseBinder.bindView(context, view, div, oldDiv)
+        view.bind(context, div.value, oldDiv?.value)
 
         for (childView in view.children) {
             context.divView.unbindViewFromDiv(childView)
         }
 
-        view.bindItems(context, div.value, oldDiv, oldResolver, path)
+        view.bindItems(context, div.value, oldDiv?.value, oldResolver, path)
     }
 
     override fun ViewGroup.bind(
@@ -174,19 +181,22 @@ internal class DivContainerBinder @Inject constructor(
         path: DivStatePath,
         errorCollector: ErrorCollector,
     ) {
-        val divView = context.divView
-        tryRebindPlainContainerChildren(divView, items, divViewCreator)
-
+        tryRebindPlainContainerChildren(context.divView, items, divViewCreator)
         validateChildren(div, items, context.expressionResolver, errorCollector)
-        val dispatchedItems = dispatchBinding(context, div, oldDiv, items, path)
+        dispatchItems(context, div, oldDiv, items, oldItems, path)
+    }
 
-        dispatchedItems.forEachIndexed { i, item ->
-            if (item.div.value().hasSightActions) {
-                divView.bindViewToDiv(getChildAt(i), item.div)
-            }
-        }
+    private fun ViewGroup.dispatchItems(
+        bindingContext: BindingContext,
+        div: DivContainer,
+        oldDiv: DivContainer?,
+        items: List<DivItemBuilderResult>,
+        oldItems: List<DivItemBuilderResult>?,
+        path: DivStatePath,
+    ) {
+        val dispatchedItems = dispatchBinding(bindingContext, div, oldDiv, items, path)
         (this as DivCollectionHolder).items = dispatchedItems
-        trackVisibilityActions(divView, dispatchedItems, oldItems)
+        trackVisibilityActions(bindingContext.divView, dispatchedItems, oldItems)
     }
 
     private fun ViewGroup.validateChildren(
@@ -212,51 +222,15 @@ internal class DivContainerBinder @Inject constructor(
         items: List<DivItemBuilderResult>,
         path: DivStatePath,
     ): List<DivItemBuilderResult> {
-        val binder = divBinder.get()
         var shift = 0
-        val subscriber = expressionSubscriber
-
-        val patchedItems = items.flatMapIndexed { index, item ->
-            newDiv.itemBuilder?.let { return@flatMapIndexed listOf(item) } ?: applyPatchToChild(
-                bindingContext,
-                item.div,
-                index + shift
-            ).map { div -> DivItemBuilderResult(div, item.expressionResolver) }.also { shift += it.size - 1 }
+        val patchedItems = newDiv.itemBuilder?.let { items } ?: items.flatMapIndexed { index, item ->
+            applyPatchToChild(bindingContext, item.div, index + shift)
+                .map { div -> DivItemBuilderResult(div, item.expressionResolver) }
+                .also { shift += it.size - 1 }
         }
 
         patchedItems.forEachIndexed { index, item ->
-            val childView = getChildAt(index)
-            val childDiv = item.div.value()
-            val oldChildDiv = (childView as? DivHolderView<*>)?.div
-            val childPath = childDiv.resolvePath(index, path)
-
-            if (bindingContext.expressionResolver != item.expressionResolver) {
-                resolveRuntime(
-                    runtimeStore = bindingContext.runtimeStore,
-                    div = childDiv,
-                    path = childPath.fullPath,
-                    resolver = item.expressionResolver,
-                    parentResolver = bindingContext.expressionResolver,
-                )
-            }
-
-            val childContext = bindingContext.getFor(item.expressionResolver)
-            binder.bind(childContext, childView, item.div, childPath)
-            childView.bindChildAlignment(
-                newDiv,
-                oldDiv,
-                childDiv,
-                oldChildDiv?.value(),
-                bindingContext.expressionResolver,
-                item.expressionResolver,
-                subscriber,
-                bindingContext.divView
-            )
-            if (childDiv.hasSightActions) {
-                bindingContext.divView.bindViewToDiv(childView, item.div)
-            } else {
-                bindingContext.divView.unbindViewFromDiv(childView)
-            }
+            getChildAt(index).bindChild(bindingContext, item.div, item.expressionResolver, newDiv, oldDiv, path, index)
         }
         return patchedItems
     }
@@ -266,22 +240,55 @@ internal class DivContainerBinder @Inject constructor(
         childDiv: Div,
         childIndex: Int
     ): List<Div> {
-        val divView = bindingContext.divView
-        val childId = childDiv.value().id
-        if (childId != null) {
-            val patch = divPatchManager.createViewsForId(bindingContext, childId) ?: return listOf(childDiv)
-            removeViewAt(childIndex)
-            var shift = 0
-            patch.forEach { (patchDiv, patchView) ->
-                addView(patchView, childIndex + shift++)
-                val patchDivBase = patchDiv.value()
-                if (patchDivBase.hasSightActions) {
-                    divView.bindViewToDiv(patchView, patchDiv)
-                }
-            }
-            return patch.keys.toList()
+        val childId = childDiv.value().id ?: return listOf(childDiv)
+        val patch = divPatchManager.createViewsForId(bindingContext, childId) ?: return listOf(childDiv)
+        removeViewAt(childIndex)
+        var shift = 0
+        patch.forEach { (_, patchView) -> addView(patchView, childIndex + shift++) }
+        return patch.keys.toList()
+    }
+
+    private fun View.bindChild(
+        parentContext: BindingContext,
+        div: Div,
+        resolver: ExpressionResolver,
+        parentDiv: DivContainer,
+        oldParentDiv: DivContainer?,
+        parentPath: DivStatePath,
+        index: Int
+    ) {
+        val oldDiv = (this as? DivHolderView<*>)?.div
+        val path = div.value().resolvePath(index, parentPath)
+
+        val parentResolver = parentContext.expressionResolver
+        if (parentResolver != resolver) {
+            parentContext.runtimeStore?.resolveRuntimeWith(
+                path.fullPath,
+                div,
+                resolver,
+                parentResolver
+            )
         }
-        return listOf(childDiv)
+
+        divBinder.get().bind(parentContext.getFor(resolver), this, div, path)
+
+        val divView = parentContext.divView
+        bindChildAlignment(
+            parentDiv,
+            oldParentDiv,
+            div.value(),
+            oldDiv?.value(),
+            parentResolver,
+            resolver,
+            expressionSubscriber,
+            divView
+        )
+
+        if (div.value().hasSightActions) {
+            divView.bindViewToDiv(this, div)
+        } else {
+            divView.unbindViewFromDiv(this)
+        }
     }
 
     private fun ViewGroup.replaceWithReuse(

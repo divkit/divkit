@@ -75,7 +75,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to created runtime`() {
         val newResolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
-        underTest.resolveRuntimeWith(path.fullPath, null, null, null, newResolver, newResolver)
+        underTest.resolveRuntimeWith(path.fullPath, div, newResolver, newResolver)
 
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(newResolver))
         Assert.assertEquals(
@@ -86,8 +86,8 @@ class RuntimeStoreTest {
 
     @Test
     fun `setPathToRuntimeWith creates runtime with new variables if variables provided`() {
-        val variables = listOf(Variable.IntegerVariable(CHILD_VARIABLE, 123))
-        underTest.resolveRuntimeWith(path.fullPath, variables, null, null, resolver, resolver)
+        setVariable()
+        underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)
 
         val runtime = underTest.getOrCreateRuntime(path.fullPath, div)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
@@ -121,13 +121,12 @@ class RuntimeStoreTest {
 
     @Test
     fun `getOrCreateRuntime returns wrapped parent runtime with new variables if new variables provided`() {
-        val variables = listOf(DivVariable.Integer(IntegerVariable(CHILD_VARIABLE, 123)))
         val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
         val parentVariableController = mock<VariableController> {
             on { getMutableVariable(PARENT_VARIABLE) } doReturn Variable.StringVariable(PARENT_VARIABLE, "123")
         }
         val runtime = ExpressionsRuntime(resolver, parentVariableController, null, functionProvider, underTest)
-        whenever(divBase.variables).doReturn(variables)
+        setVariable()
 
         underTest.putRuntime(runtime, PARENT_PATH, rootRuntime)
 
@@ -155,7 +154,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to runtime`() {
         val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
-        underTest.resolveRuntimeWith(path.fullPath, null, null, null, resolver, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)
 
         Assert.assertNotNull(runtimeFromCallback)
         Assert.assertEquals(
@@ -170,7 +169,7 @@ class RuntimeStoreTest {
 
     @Test
     fun `setPathToRuntimeWith creates new runtime if new variables provided`() {
-        val variables = listOf(Variable.IntegerVariable(CHILD_VARIABLE, 123))
+        setVariable()
         val parentVariableController = mock<VariableController> {
             on { getMutableVariable(PARENT_VARIABLE) } doReturn Variable.StringVariable(PARENT_VARIABLE, "123")
         }
@@ -178,7 +177,7 @@ class RuntimeStoreTest {
             parentVariableController, evaluator, errorCollector, callback
         )
 
-        underTest.resolveRuntimeWith(path.fullPath, variables, null, null, resolver, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)
         val newRuntime = underTest.getOrCreateRuntime(path.fullPath, div)
 
         Assert.assertNotNull(newRuntime)
@@ -190,5 +189,10 @@ class RuntimeStoreTest {
             123L,
             newRuntime?.variableController?.getMutableVariable(CHILD_VARIABLE)?.getValue()
         )
+    }
+
+    private fun setVariable() {
+        val variables = listOf(DivVariable.Integer(IntegerVariable(CHILD_VARIABLE, 123)))
+        whenever(divBase.variables).doReturn(variables)
     }
 }

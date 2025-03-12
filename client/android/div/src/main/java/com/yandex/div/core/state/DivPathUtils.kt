@@ -93,7 +93,9 @@ internal object DivPathUtils {
             }
         }
 
-        val divByPath = state.div.findDivState(path, resolver) as? Div.State ?: return null // Ignore if no such state
+        val divByPath = viewByPath?.div
+            ?: state.div.findDivState(path, resolver) as? Div.State
+            ?: return null // Ignore if no such state
 
         return Pair(viewByPath, divByPath)
     }
@@ -152,4 +154,4 @@ internal object DivPathUtils {
     }
 }
 
-internal class StateConflictException constructor(message: String, cause: Throwable? = null) : Exception(message, cause)
+internal class StateConflictException(message: String, cause: Throwable? = null) : Exception(message, cause)

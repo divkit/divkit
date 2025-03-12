@@ -38,7 +38,7 @@ internal class DivTooltipViewBuilder @Inject constructor(
         div: Div,
     ): View {
         val divBase = div.value()
-        val tooltipView = div2Builder.get().buildView(div, context, DivStatePath.fromState(0))
+        val tooltipView = div2Builder.get().buildView(div, context, DivStatePath.fromRootDiv(0, div))
         val resolver = context.expressionResolver
         val displayMetrics = tooltipView.context.resources.displayMetrics
         tooltipView.layoutParams = LayoutParams(

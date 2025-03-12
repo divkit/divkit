@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.divs.gallery
 
-import android.view.View
 import android.view.ViewGroup
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -8,7 +7,6 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.internal.core.DivItemBuilderResult
-import com.yandex.div2.Div
 import java.util.WeakHashMap
 
 internal class DivGalleryAdapter(
@@ -16,7 +14,6 @@ internal class DivGalleryAdapter(
     private val bindingContext: BindingContext,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
-    private val itemStateBinder: (itemView: View, div: Div) -> Unit,
     private val path: DivStatePath,
 ) : DivCollectionAdapter<DivGalleryViewHolder>(items) {
 
@@ -27,14 +24,9 @@ internal class DivGalleryAdapter(
         setHasStableIds(true)
     }
 
-    override fun onViewAttachedToWindow(holder: DivGalleryViewHolder) {
-        super.onViewAttachedToWindow(holder)
-        holder.updateState()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder {
         val view = DivGalleryItemLayout(bindingContext.divView.context)
-        return DivGalleryViewHolder(bindingContext, view, divBinder, viewCreator, itemStateBinder, path)
+        return DivGalleryViewHolder(bindingContext, view, divBinder, viewCreator, path)
     }
 
     override fun getItemId(position: Int): Long {
@@ -44,6 +36,6 @@ internal class DivGalleryAdapter(
 
     override fun onBindViewHolder(holder: DivGalleryViewHolder, position: Int) {
         val item = visibleItems[position]
-        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position)
+        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position, items.indexOf(item))
     }
 }

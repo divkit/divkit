@@ -34,7 +34,7 @@ internal class DivCustomBinder @Inject constructor(
         val resolver = context.expressionResolver
 
         if (oldDiv === div) {
-            view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
+            view.bindStates(context, divBinder.get())
             return
         }
 

@@ -3,7 +3,6 @@ package com.yandex.div.internal.core
 import com.yandex.div.core.actions.logError
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.getRuntimeFor
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -64,7 +63,7 @@ class VariableMutationHandler {
             name: String,
             resolver: ExpressionResolver,
         ): Variable? {
-            val runtime = getRuntimeFor(div2View.runtimeStore, resolver) ?: div2View.expressionsRuntime
+            val runtime = div2View.runtimeStore?.getRuntimeWithOrNull(resolver) ?: div2View.expressionsRuntime
 
             return runtime?.variableController?.getMutableVariable(name)
         }

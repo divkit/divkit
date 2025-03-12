@@ -98,7 +98,7 @@ class DivActionTypedSubmitHandler @Inject constructor(
         fun findContainer(view: Div2View): Triple<Div, BindingContext, DivStatePath>? {
             val data = view.divData ?: return null
             data.states.forEach { state ->
-                visit(state.div, view.bindingContext, DivStatePath.fromState(state.stateId))
+                visit(state.div, view.bindingContext, DivStatePath.fromState(state))
             }
 
             if (containers.isEmpty()) {

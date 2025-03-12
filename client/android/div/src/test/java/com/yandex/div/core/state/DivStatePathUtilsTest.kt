@@ -17,10 +17,10 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DivStatePathUtilsTest {
 
-    private val rootPath = DivStatePath(0, getStates(0))
-    private val firstLvlPath = DivStatePath(0, getStates(1))
-    private val scndLvlPath = DivStatePath(0, getStates(2))
-    private val thrdLvlPath = DivStatePath(0, getStates(3))
+    private val rootPath = DivStatePath(0, getStates(0), getPath(0))
+    private val firstLvlPath = DivStatePath(0, getStates(1), getPath(1))
+    private val scndLvlPath = DivStatePath(0, getStates(2), getPath(2))
+    private val thrdLvlPath = DivStatePath(0, getStates(3), getPath(3))
     private val testData = UnitTestData("div-state", "state_tree.json")
     private val div = testData.div
     private val resolver = mock<ExpressionResolver>()
@@ -98,12 +98,16 @@ class DivStatePathUtilsTest {
         Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, rootPath), rootPath)
         Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, thrdLvlPath), thrdLvlPath)
 
-        val notSharedState = DivStatePath(0, mutableListOf("one" to "another"))
+        val notSharedState = DivStatePath(0, listOf("one" to "another"), listOf("0", "one", "another"))
 
         Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, notSharedState), rootPath)
         Assert.assertEquals(DivStatePath.lowestCommonAncestor(thrdLvlPath, scndLvlPath.append("some", "state")), scndLvlPath)
 
-        val pseudoThrdLvl = DivStatePath(0, mutableListOf("one" to "another").apply { addAll(getStates(2)) })
+        val pseudoThrdLvl = DivStatePath(
+            0,
+            mutableListOf("one" to "another").apply { addAll(getStates(2)) },
+            mutableListOf("0", "one", "another").apply { addAll(getPath(2)) }
+        )
 
         Assert.assertEquals(DivStatePath.lowestCommonAncestor(pseudoThrdLvl, thrdLvlPath), rootPath)
     }
@@ -127,10 +131,19 @@ class DivStatePathUtilsTest {
     }
 }
 
-private fun getStates(deepness: Int): MutableList<Pair<String, String>> {
+private fun getStates(deepness: Int): List<Pair<String, String>> {
     val states = mutableListOf<Pair<String, String>>()
     repeat(deepness) {
         states.add("stateName$it" to "stateValue$it")
     }
     return states
+}
+
+private fun getPath(deepness: Int): List<String> {
+    val path = mutableListOf("0")
+    repeat(deepness) {
+        path.add("stateName$it")
+        path.add("stateValue$it")
+    }
+    return path
 }

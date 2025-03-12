@@ -2,19 +2,11 @@ package com.yandex.div.core.view2.divs.tabs
 
 import androidx.viewpager.widget.ViewPager
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
-import com.yandex.div.core.expression.local.RuntimeTree
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.DivVisibilityActionTracker
-import com.yandex.div.core.view2.divs.DivActionBinder
-import com.yandex.div.core.view2.divs.resolvePath
-import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
-import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
-import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTabs
 

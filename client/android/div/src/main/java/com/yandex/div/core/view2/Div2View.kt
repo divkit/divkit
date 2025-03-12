@@ -36,12 +36,11 @@ import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
-import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivVideoActionHandler
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
- import com.yandex.div.core.state.StateConflictException
+import com.yandex.div.core.state.StateConflictException
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
@@ -139,8 +138,6 @@ class Div2View private constructor(
         get() = viewComponent.mediaReleaseViewVisitor
     internal var expressionsRuntime: ExpressionsRuntime? = null
     private var oldExpressionsRuntime: ExpressionsRuntime? = null
-    private val variableController: VariableController?
-        get() = expressionsRuntime?.variableController
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
     internal var runtimeStore: RuntimeStore? = null
@@ -224,7 +221,7 @@ class Div2View private constructor(
         val state = data.state() ?: return
         val attachTriggers = {
             viewComponent.runtimeVisitor.createAndAttachRuntimes(
-                state.div, DivStatePath.fromState(data.stateId()), this
+                state.div, DivStatePath.fromState(state), this
             )
         }
         if (bindOnAttachEnabled) {
@@ -893,7 +890,7 @@ class Div2View private constructor(
                 bindingContext,
                 newStateView,
                 newState.div,
-                DivStatePath.fromState(newState.stateId)
+                DivStatePath.fromState(newState)
             )
         }
 
@@ -924,7 +921,7 @@ class Div2View private constructor(
         isUpdateTemporary: Boolean = true
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
-        return divBuilder.buildView(newState.div, bindingContext, DivStatePath.fromState(newState.stateId)).also {
+        return divBuilder.buildView(newState.div, bindingContext, DivStatePath.fromState(newState)).also {
             div2Component.divBinder.attachIndicators()
         }
     }
@@ -935,7 +932,7 @@ class Div2View private constructor(
         isUpdateTemporary: Boolean = true
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
-        val path = DivStatePath.fromState(newState.stateId)
+        val path = DivStatePath.fromState(newState)
         val view = divBuilder.createView(newState.div, bindingContext, path)
         if (bindOnAttachEnabled) {
             bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
@@ -1073,6 +1070,13 @@ class Div2View private constructor(
 
     override fun getCurrentStateId() = stateId
 
+    internal val currentRootPath: DivStatePath
+        get() {
+            return divData?.states?.firstOrNull { it.stateId == stateId }?.let {
+                DivStatePath.fromState(it)
+            } ?: DivStatePath.fromState(stateId)
+        }
+
     override fun getCurrentState(): DivViewState? {
         val data = divData ?: return null
         val currentState = div2Component.stateManager.getState(dataTag)
@@ -1179,7 +1183,7 @@ class Div2View private constructor(
             }
             divData = newData
             div2Component.stateManager.updateState(dataTag, state.stateId, true)
-            div2Component.divBinder.bind(bindingContext, rootDivView, state.div, DivStatePath.fromState(stateId))
+            div2Component.divBinder.bind(bindingContext, rootDivView, state.div, DivStatePath.fromState(state))
             requestLayout()
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
@@ -1222,7 +1226,7 @@ class Div2View private constructor(
             oldData,
             newData,
             viewToRebind,
-            DivStatePath.fromState(newData.stateId())
+            DivStatePath.fromState(stateToBind)
         )
         if (!result) {
             return false

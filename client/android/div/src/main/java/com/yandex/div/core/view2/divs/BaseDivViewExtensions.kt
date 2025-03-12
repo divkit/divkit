@@ -23,16 +23,14 @@ import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.expression.local.ChildPathUnitCache
-import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
-import com.yandex.div.core.state.DivPathUtils.findDivState
+import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -62,7 +60,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
-import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
@@ -636,71 +633,30 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
         div.alignmentVertical?.evaluate(resolver))
 }
 
-internal fun getRuntimeFor(runtimeStore: RuntimeStore?, resolver: ExpressionResolver) =
-    runtimeStore?.getRuntimeWithOrNull(resolver)
+internal fun DivBase.getChildPathUnit(index: Int) =
+    if (this is DivState) getId() else id ?: ChildPathUnitCache.getValue(index)
 
-internal fun resolveRuntime(
-    runtimeStore: RuntimeStore?,
-    div: DivBase,
-    path: String,
-    resolver: ExpressionResolver,
-    parentResolver: ExpressionResolver,
-) = runtimeStore?.resolveRuntimeWith(
-    path = path,
-    variables = div.variables?.toVariables(),
-    triggers = div.variableTriggers,
-    functions = div.functions,
-    resolver = resolver,
-    parentResolver = parentResolver,
-)
-
-internal fun DivBase.getChildPathUnit(index: Int) = id ?: ChildPathUnitCache.getValue(index)
-
-internal fun DivBase.resolvePath(index: Int, parentPath: DivStatePath): DivStatePath {
-    return if (this is DivState) parentPath
-    else parentPath.appendDiv(getChildPathUnit(index))
-}
-
-internal fun DivBase.resolvePath(pathUnit: String, parentPath: DivStatePath): DivStatePath {
-    return if (this is DivState) parentPath
-    else parentPath.appendDiv(pathUnit)
-}
+internal fun DivBase.resolvePath(index: Int, parentPath: DivStatePath) = parentPath.appendDiv(getChildPathUnit(index))
 
 /**
  * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]
  */
-internal fun View.bindStates(
-    div: Div?,
-    context: BindingContext,
-    resolver: ExpressionResolver,
-    binder: DivBinder,
-) {
-    if (div == null) return
-    val statesByPath = mutableMapOf<DivStatePath, DivStateLayout>()
-    traverseViewHierarhy(this) { currentView ->
-        if (currentView !is DivStateLayout) {
-            return@traverseViewHierarhy true
-        }
-        currentView.path?.let { path ->
-            statesByPath[path] = currentView
-        }
+internal fun View.bindStates(bindingContext: BindingContext, binder: DivBinder) {
+    traverseViewHierarchy(this) { currentView ->
+        if (currentView !is DivStateLayout) return@traverseViewHierarchy true
+        val div = currentView.div ?: return@traverseViewHierarchy false
+        val path = currentView.path ?: return@traverseViewHierarchy false
+        binder.bind(bindingContext, currentView, div, path.parentState())
         false
-    }
-    statesByPath.entries.forEach { (path, layout) ->
-        val divByPath = div.findDivState(path, resolver)
-        if (divByPath != null) {
-            val parentState = path.parentState()
-            binder.bind(context, layout, divByPath, parentState)
-        }
     }
 }
 
-private fun traverseViewHierarhy(view: View, action: (View) -> Boolean) {
+private fun traverseViewHierarchy(view: View, action: (View) -> Boolean) {
     if (!action(view) || view !is ViewGroup) {
         return
     }
     view.children.forEach {
-        traverseViewHierarhy(it, action)
+        traverseViewHierarchy(it, action)
     }
 }
 
