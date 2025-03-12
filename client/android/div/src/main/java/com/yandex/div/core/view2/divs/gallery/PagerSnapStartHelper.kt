@@ -28,26 +28,17 @@ internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
                 velocityY
             }
 
-            val firstCompletelyVisibleItemPosition = if (velocity < 0) {
+            val nextCompletelyVisibleItemPosition = if (velocity < 0) {
                 firstCompletelyVisibleItemPosition()
             } else {
                 lastCompletelyVisibleItemPosition()
             }
-            if (firstCompletelyVisibleItemPosition != RecyclerView.NO_POSITION) {
-                return firstCompletelyVisibleItemPosition
+            if (nextCompletelyVisibleItemPosition != RecyclerView.NO_POSITION) {
+                return nextCompletelyVisibleItemPosition
             }
 
-            val firstVisibleItemPosition = if (velocity < 0) {
-                firstVisibleItemPosition()
-            } else {
-                lastVisibleItemPosition()
-            }
-
-            val lastVisibleItemPosition = if (velocity < 0) {
-                lastVisibleItemPosition()
-            } else {
-                firstVisibleItemPosition()
-            }
+            val firstVisibleItemPosition = firstVisibleItemPosition()
+            val lastVisibleItemPosition = lastVisibleItemPosition()
 
             // workaround for first/last position
             if (lastVisibleItemPosition == firstVisibleItemPosition) {
@@ -55,10 +46,10 @@ internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
             }
 
             // have 2 items on screen and choose by direction
-            return if (velocity >= 0) {
-                lastVisibleItemPosition
+            return if (velocity < 0) {
+                firstVisibleItemPosition
             } else {
-                lastVisibleItemPosition - 1
+                lastVisibleItemPosition
             }
         }
     }
