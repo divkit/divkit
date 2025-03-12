@@ -175,6 +175,7 @@ public class DefaultTooltipManager: TooltipManager {
   }
 
   public func reset() {
+    showingTooltips.values.forEach { $0.close() }
     showingTooltips = [:]
     modalTooltipWindow = nil
   }
