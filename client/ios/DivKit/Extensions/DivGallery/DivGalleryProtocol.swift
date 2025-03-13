@@ -54,7 +54,7 @@ extension DivGalleryProtocol {
       )
     }
 
-    if infiniteScroll, children.count > 2 {
+    if infiniteScroll {
       let leadingBuffer = children[..<bufferSize]
       let trailingBuffer = children[(children.count - bufferSize)...]
       children = trailingBuffer + children + leadingBuffer
