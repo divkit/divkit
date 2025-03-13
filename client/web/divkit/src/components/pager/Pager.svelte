@@ -400,10 +400,11 @@
         scrollToPagerItem(nextItem, animated ? 'smooth' : 'instant');
     }
 
-    $: if (componentContext.json) {
+    function init(): void {
         const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
         if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
             currentItem = prevSelectedItem = defaultItem;
+            pagerDataUpdate(items.length, currentItem);
         }
 
         if (prevId) {
@@ -440,6 +441,10 @@
                 },
             });
         }
+    }
+
+    $: if (componentContext.json) {
+        init();
     }
 
     onMount(() => {

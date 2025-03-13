@@ -1,4 +1,10 @@
-.indicator {}
+.indicator {
+    visibility: hidden;
+}
+
+.indicator_visible {
+    visibility: visible;
+}
 
 .indicator__scroller {
     width: 100%;
@@ -17,6 +23,7 @@
     display: flex;
     align-items: center;
     height: 100%;
+    min-height: var(--divkit-indicator-active-height);
 }
 
 .indicator__item {

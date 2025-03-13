@@ -211,7 +211,8 @@
 
     $: mods = {
         placement,
-        direction: $direction
+        direction: $direction,
+        visible: pagerData?.size > 1
     };
 </script>
 
