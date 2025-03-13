@@ -89,7 +89,9 @@ extension DivInput: DivBlockModeling {
       paddings: paddings?.resolve(context),
       isEnabled: resolveIsEnabled(expressionResolver),
       maxLength: resolveMaxLength(expressionResolver),
-      shouldClearFocus: shouldClearFocus
+      shouldClearFocus: shouldClearFocus,
+      autocorrection: keyboardType.autocorrection,
+      isSecure: keyboardType.isSecure
     )
   }
 
@@ -208,7 +210,7 @@ extension DivAlignmentVertical {
 extension DivInput.KeyboardType {
   fileprivate var system: TextInputBlock.InputType {
     switch self {
-    case .singleLineText, .multiLineText:
+    case .singleLineText, .multiLineText, .password:
       return .default
     case .phone:
       return .keyboard(.phonePad)
@@ -218,9 +220,34 @@ extension DivInput.KeyboardType {
       return .keyboard(.emailAddress)
     case .uri:
       return .keyboard(.URL)
+    }
+  }
+
+  fileprivate var autocorrection: Bool {
+    switch self {
+    case .singleLineText,
+         .multiLineText:
+      true
+    case .phone,
+         .number,
+         .email,
+         .uri,
+         .password:
+      false
+    }
+  }
+
+  fileprivate var isSecure: Bool {
+    switch self {
     case .password:
-      DivKitLogger.warning("Keyboard type '\(self.rawValue)' is not supported")
-      return .default
+      true
+    case .singleLineText,
+         .multiLineText,
+         .phone,
+         .number,
+         .email,
+         .uri:
+      false
     }
   }
 }
