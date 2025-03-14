@@ -16,7 +16,7 @@ import org.junit.Test
     packageName = PACKAGE_NAME,
     description = "Div storage loading test",
     owners = ["edubinskaya", "i-ts", "bgubanov"],
-    defaultRepeat = 31,
+    defaultRepeat = 50,
     timeoutSeconds = 3000
 )
 class DivStorageCardsLoadTest: Div2BasePerformanceTest() {

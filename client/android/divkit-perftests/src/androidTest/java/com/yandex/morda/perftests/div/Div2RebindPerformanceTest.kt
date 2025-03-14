@@ -16,7 +16,7 @@ import org.junit.Test
     packageName = PACKAGE_NAME,
     description = "Div2 rebinding performance test",
     owners = ["the-leo"],
-    defaultRepeat = 31,
+    defaultRepeat = 50,
     timeoutSeconds = 3000
 )
 class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
