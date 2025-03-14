@@ -35,8 +35,6 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Templates.Cold",
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
         ]
@@ -90,8 +88,6 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.JSON.Warm",
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
         ]

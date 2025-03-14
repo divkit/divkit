@@ -59,8 +59,6 @@ class Div2MultiplatformPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Data.Warm",
             "Div.Binding.Cold",
             "Div.Binding.Warm",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
         ]
@@ -78,8 +76,6 @@ class Div2MultiplatformPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Data.Warm",
             "Div.Binding.Cold",
             "Div.Binding.Warm",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
         ]
