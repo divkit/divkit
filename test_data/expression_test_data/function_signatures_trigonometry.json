@@ -136,6 +136,20 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "function_name": "ctan",
+      "doc": "Calculates the cotangent of the given angle in radians",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Angle in radians."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
