@@ -14,8 +14,6 @@ enum InfiniteScroll {
     boundsSize: CGFloat = 0,
     alignment: Alignment = .center
   ) -> Position? {
-    guard origins.count > 2 else { return nil }
-
     let itemsCount = origins.count
     let cycleStartIndex = bufferSize
     let cycleEndIndex = itemsCount - bufferSize - 1

@@ -38,7 +38,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       defaultCrossAlignment: crossAlignment,
       scrollMode: .autoPaging(inertionEnabled: false),
       infiniteScroll: resolveInfiniteScroll(expressionResolver),
-      bufferSize: layoutMode.bufferSize(itemsCount: items.count),
+      bufferSize: min(layoutMode.bufferSize(itemsCount: items.count), items.count),
       transformation: pageTransformation?.resolve(
         expressionResolver,
         scrollDirection: scrollDirection
