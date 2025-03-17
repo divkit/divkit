@@ -13,4 +13,7 @@ dependencies {
     implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"
     }
+
+    testImplementation libs.kotlin.test
+    testImplementation libs.kotlin.testJunit
 }
