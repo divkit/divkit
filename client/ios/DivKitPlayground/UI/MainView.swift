@@ -1,9 +1,12 @@
 import SwiftUI
 
 struct MainView: View {
-  @Environment(\.colorScheme) var colorScheme
   @AppStorage(UserPreferences.isRTLEnabledKey)
   var isRTLEnabled: Bool = UserPreferences.isRTLEnabledDefault
+
+  var colorScheme: ColorScheme {
+    UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .light
+  }
 
   var body: some View {
     NavigationView {

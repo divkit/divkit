@@ -65,7 +65,9 @@ open class DivViewController: UIViewController {
 
   open func onViewUpdated() {}
 
-  private func setData(_ data: [String: Any]) {
+  private func setData(
+    _ data: [String: Any]
+  ) {
     Task {
       await divView.setSource(
         DivViewSource(

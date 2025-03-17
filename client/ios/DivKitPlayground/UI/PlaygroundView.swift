@@ -4,6 +4,8 @@ struct PlaygroundView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
 
+  @Environment(\.colorScheme) var colorScheme
+
   let url: URL
   let divViewProvider: DivViewProvider
 
@@ -16,6 +18,9 @@ struct PlaygroundView: View {
       divViewProvider.makeDivView(url)
     }
     .overlay(reloadButton, alignment: .topTrailing)
+    .onChange(of: colorScheme) { _ in
+      divViewProvider.jsonProvider.refreshPalette()
+    }
   }
 
   private var reloadButton: some View {
