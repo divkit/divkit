@@ -230,6 +230,7 @@
                 {
                   "type": "input",
                   "hint_text": "Toast your mind",
+                  "font_family": "super_trivia",
                   "hint_color": "#666",
                   "width": {
                     "type": "match_parent"
@@ -281,6 +282,7 @@
                     {
                       "type": "text",
                       "text": "Toast!",
+                      "font_family": "super_trivia",
                       "paddings": {
                         "top": 10,
                         "left": 10,
@@ -303,6 +305,28 @@
                       ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text_alignment_horizontal": "center",
+              "text": "**Info**: no error in code `println(\"Hello World!\")`",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#fff"
+                }
+              ],
+              "paddings": {
+                "top": 5,
+                "bottom": 5,
+                "left": 5,
+                "right": 5
+              },
+              "extensions": [
+                {
+                  "id": "markdown"
                 }
               ]
             },

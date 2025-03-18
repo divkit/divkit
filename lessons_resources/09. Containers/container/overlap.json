@@ -1,0 +1,73 @@
+{
+  "templates": {
+    "block": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "generated_div",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "margins": {
+            "top": 10,
+            "left": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "type": "container",
+          "orientation": "overlap",
+          "width": {
+            "type": "fixed",
+            "value": 150
+          },
+          "height": {
+            "type": "fixed",
+            "value": 150
+          },
+          "items": [
+            {
+              "type": "block",
+              "background_color": "#6000ff00"
+            },
+            {
+              "type": "block",
+              "background_color": "#600000ff",
+              "alignment_horizontal": "end",
+              "alignment_vertical": "bottom"
+            },
+            {
+              "type": "text",
+              "text": "Everything in one container",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "text_alignment_horizontal": "center",
+              "alignment_horizontal": "end",
+              "font_size": 15,
+              "margins": {
+                "top": 12
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

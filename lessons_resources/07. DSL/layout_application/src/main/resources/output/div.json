@@ -1,0 +1,75 @@
+{
+  "card" : {
+    "log_id" : "generated_div",
+    "states" : [ {
+      "state_id" : 0,
+      "div" : {
+        "type" : "container",
+        "items" : [ {
+          "type" : "text",
+          "text" : "Selected post: @{selected_post_description}",
+          "text_alignment_horizontal" : "center"
+        }, {
+          "type" : "gallery",
+          "items" : [ {
+            "type" : "sample_card",
+            "description" : "Аллея со скамейкой",
+            "img" : "https://raw.githubusercontent.com/divkit/divkit/91a4fe592d2ee4ba247f87cd769caf2527dcea80/client/android/divkit-demo-app/src/main/assets/images/district/item_background_1.png"
+          }, {
+            "type" : "sample_card",
+            "description" : "Дорожка около пруда",
+            "img" : "https://raw.githubusercontent.com/divkit/divkit/91a4fe592d2ee4ba247f87cd769caf2527dcea80/client/android/divkit-demo-app/src/main/assets/images/district/item_background_2.png"
+          }, {
+            "type" : "sample_card",
+            "description" : "Пересечение дорожек",
+            "img" : "https://raw.githubusercontent.com/divkit/divkit/91a4fe592d2ee4ba247f87cd769caf2527dcea80/client/android/divkit-demo-app/src/main/assets/images/district/item_background_3.png"
+          }, {
+            "type" : "sample_card",
+            "description" : "Вечерняя аллея с фонарём",
+            "img" : "https://raw.githubusercontent.com/divkit/divkit/91a4fe592d2ee4ba247f87cd769caf2527dcea80/client/android/divkit-demo-app/src/main/assets/images/district/item_background_4.png"
+          } ],
+          "orientation" : "horizontal"
+        } ]
+      }
+    } ],
+    "variables" : [ {
+      "type" : "string",
+      "name" : "selected_post_description",
+      "value" : "none"
+    } ]
+  },
+  "templates" : {
+    "sample_card" : {
+      "type" : "container",
+      "actions" : [ {
+        "log_id" : "post_selected",
+        "typed" : {
+          "type" : "set_variable",
+          "value" : {
+            "type" : "string",
+            "$value" : "description"
+          },
+          "variable_name" : "selected_post_description"
+        }
+      } ],
+      "items" : [ {
+        "type" : "image",
+        "$image_url" : "img"
+      }, {
+        "type" : "text",
+        "$text" : "description",
+        "text_alignment_horizontal" : "center"
+      } ],
+      "margins" : {
+        "bottom" : 10,
+        "left" : 10,
+        "right" : 10,
+        "top" : 10
+      },
+      "width" : {
+        "type" : "fixed",
+        "value" : 150
+      }
+    }
+  }
+}

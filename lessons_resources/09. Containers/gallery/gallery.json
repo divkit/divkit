@@ -1,0 +1,148 @@
+{
+  "templates": {
+    "basic_text": {
+      "type": "text",
+      "font_size": 15,
+      "margins": {
+        "top": 12,
+        "bottom": 12,
+        "start": 12,
+        "end": 12
+      },
+      "border": {
+        "corner_radius": 10
+      },
+      "paddings": {
+        "top": 10,
+        "bottom": 10,
+        "start": 10,
+        "end": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#600000ff"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "alignment_horizontal": "center",
+      "reuse_id": "text"
+    },
+    "image_block": {
+      "type": "container",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#2000ffff"
+        }
+      ],
+      "border": {
+        "corner_radius": 10
+      },
+      "margins": {
+        "top": 12,
+        "bottom": 12,
+        "start": 12,
+        "end": 12
+      },
+      "paddings": {
+        "top": 10,
+        "bottom": 10,
+        "start": 10,
+        "end": 10
+      },
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "url",
+          "height": {
+            "type": "fixed",
+            "value": 250
+          },
+          "scale": "fit"
+        }
+      ],
+      "reuse_id": "image"
+    }
+  },
+  "card": {
+    "log_id": "generated_div",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "margins": {
+            "top": 10,
+            "left": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "type": "container",
+          "orientation": "vertical",
+          "border": {
+            "stroke": {
+              "color": "#000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery",
+              "height": {
+                "type": "fixed",
+                "value": 300
+              },
+              "items": [
+                {
+                  "type": "basic_text",
+                  "text": "Block 1"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 2"
+                },
+                {
+                  "type": "image_block",
+                  "url": "https://yastatic.net/s3/home/divkit/wombat.jpg"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 3"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 4"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 5"
+                },
+                {
+                  "type": "image_block",
+                  "url": "https://yastatic.net/s3/home/divkit/ducks.jpg"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 6"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 7"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 8"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 9"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

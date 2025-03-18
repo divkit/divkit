@@ -1,0 +1,115 @@
+{
+  "templates": {
+    "basic_text": {
+      "type": "text",
+      "font_size": 15,
+      "margins": {
+        "top": 12,
+        "bottom": 12,
+        "start": 12,
+        "end": 12
+      },
+      "border": {
+        "corner_radius": 10
+      },
+      "paddings": {
+        "top": 10,
+        "bottom": 10,
+        "start": 10,
+        "end": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#600000ff"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "alignment_horizontal": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "generated_div",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "margins": {
+            "top": 10,
+            "left": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "type": "container",
+          "orientation": "vertical",
+          "border": {
+            "stroke": {
+              "color": "#000"
+            }
+          },
+          "items": [
+            {
+              "type": "pager",
+              "id": "pager_id",
+              "orientation": "horizontal",
+              "layout_mode":{
+                "type": "fixed",
+                "neighbour_page_width": {
+                  "type": "fixed",
+                  "value": 10
+                }
+              },
+              "infinite_scroll": true,
+              "items": [
+                {
+                  "type": "basic_text",
+                  "text": "Block 1"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 2"
+                },
+                {
+                  "type": "basic_text",
+                  "text": "Block 3"
+                }
+              ]
+            },
+            {
+              "type": "indicator",
+              "pager_id": "pager_id",
+              "inactive_item_color": "#d0d1d9",
+              "active_item_color": "#000000",
+              "alignment_horizontal": "center",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "width": {
+                "type": "wrap_content"
+              },
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 2
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 2
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
