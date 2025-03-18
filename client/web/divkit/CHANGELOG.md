@@ -1,3 +1,10 @@
+## 31.7.0 (March 17, 2025)
+
+* Added support for the `phone` `input` mask.
+* Added support for the `ranges` in `slider`.
+* Added support for the `scroll_to` and `scroll_by` actions.
+
+
 ## 31.6.0 (March 10, 2025)
 
 * Added `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.

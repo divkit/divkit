@@ -1,3 +1,28 @@
+## 31.7.0
+
+# Android Client:
+* Added a way for shine animation to have onPause/onResume lifecycle from client through `pauseShineObservable`.
+* Do not hide keyboard by clicks on divs.
+* Fixed access to local variables in `state`.
+* Fixed access to variables in items built by `item_builder`.
+* Fixed video player cache.
+* Implemented independent tracking of `visibility_actions` and `disappear_actions`.
+* Supported elements comparing by`reuse_id` to optimize `item_builder` data updating.
+* Updated Gradle to 8.13 and Android Gradle Plugin to 8.8.2.
+
+# iOS Client:
+* Fixed `DefaultTooltipManager.reset()` to make it close showing tooltips.
+* Input with mask updates text color when color scheme changes.
+* Separated visibility counter storage for `visibility_actions` and `disappear_actions`. Fixed `log_limit` common `id` in both `visibility_actions` and `disappear_actions`. Added warning for common `id` in `visibility_actions` or `disappear_actions`.
+* Supported `animation_in`, `animation_out` properties for `div-tooltip`.
+* Supported `password` `keyboard_type`.
+
+# Web Client:
+* Added support for the `phone` `input` mask.
+* Added support for the `ranges` in `slider`.
+* Added support for the `scroll_to` and `scroll_by` actions.
+
+
 ## 31.6.0
 
 # Android Client:
