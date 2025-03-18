@@ -15,8 +15,31 @@ import VGSL
 public final class DivView: VisibleBoundsTrackingView {
   private let divKitComponents: DivKitComponents
   private let preloader: DivViewPreloader
-  private var blockProvider: DivBlockProvider?
   private var blockSubscription: Disposable?
+
+  private var shouldInvokeOnVisibleBoundsChanged: Bool {
+    get {
+      blockProvider?.shouldInvokeOnVisibleBoundsChanged ?? false
+    }
+    set {
+      blockProvider?.shouldInvokeOnVisibleBoundsChanged = newValue
+    }
+  }
+
+  private var lastVisibleBounds: CGRect {
+    get {
+      blockProvider?.lastVisibleBounds ?? .zero
+    }
+    set {
+      blockProvider?.lastVisibleBounds = newValue
+    }
+  }
+
+  private var blockProvider: DivBlockProvider? {
+    didSet {
+      lastVisibleBounds = bounds
+    }
+  }
 
   private var blockView: BlockView? {
     didSet {
@@ -24,10 +47,14 @@ public final class DivView: VisibleBoundsTrackingView {
         oldValue?.removeFromSuperview()
         blockView.flatMap(addSubview(_:))
       }
+
+      if blockView !== nil {
+        shouldInvokeOnVisibleBoundsChanged = true
+      }
     }
   }
 
-  private var oldBounds: CGRect = .zero
+  private let boundsTracker = BoundsTracker()
 
   /// Initializes a new `DivView` instance.
   ///
@@ -120,25 +147,36 @@ public final class DivView: VisibleBoundsTrackingView {
   public override func layoutSubviews() {
     super.layoutSubviews()
     guard let blockView else { return }
+
     blockView.frame = bounds
+    blockView.layoutIfNeeded()
 
-    if !bounds.isEmpty {
-      blockView.layoutIfNeeded()
+    if shouldInvokeOnVisibleBoundsChanged {
+      blockView.onVisibleBoundsChanged(
+        from: boundsTracker.previousBounds,
+        to: lastVisibleBounds
+      )
+
+      shouldInvokeOnVisibleBoundsChanged = false
+      boundsTracker.updatePreviousBounds()
     }
+  }
 
-    blockView.onVisibleBoundsChanged(
-      from: oldBounds,
-      to: blockProvider?.lastVisibleBounds ?? .zero
-    )
+  public override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
 
-    if bounds.isEmpty {
-      blockView.layoutIfNeeded()
+    if boundsTracker.append(bounds) {
+      boundsDidChange()
+      onVisibleBoundsChanged(to: bounds)
     }
   }
 
   public override func removeFromSuperview() {
     super.removeFromSuperview()
-    blockView?.onVisibleBoundsChanged(from: oldBounds, to: .zero)
+    blockView?.onVisibleBoundsChanged(
+      from: boundsTracker.currentBounds,
+      to: .zero
+    )
   }
 
   /// Returns ``DivCardSize`` of the ``DivView``.
@@ -215,11 +253,18 @@ public final class DivView: VisibleBoundsTrackingView {
     setNeedsLayout()
   }
 
+  private func boundsDidChange() {
+    if blockProvider?.cardSize?.width == .matchParent ||
+      blockProvider?.cardSize?.height == .matchParent {
+      invalidateIntrinsicContentSize()
+    }
+  }
+
   /// Notifies the DivView about changes in its visible bounds.
   /// - Parameters:
   ///  - to: The new bounds rectangle.
   public func onVisibleBoundsChanged(to: CGRect) {
-    blockProvider?.lastVisibleBounds = to
+    lastVisibleBounds = to
     if window == nil {
       forceLayout()
     } else {
@@ -261,21 +306,6 @@ extension DivView: UIActionEventPerforming {
 }
 
 extension DivView {
-  public override func layoutSublayers(of layer: CALayer) {
-    super.layoutSublayers(of: layer)
-    boundsDidChange(bounds: bounds)
-  }
-
-  private func boundsDidChange(bounds: CGRect) {
-    if oldBounds.width != bounds.width, blockProvider?.cardSize?.width == .matchParent {
-      invalidateIntrinsicContentSize()
-    }
-    if oldBounds.height != bounds.height, blockProvider?.cardSize?.height == .matchParent {
-      invalidateIntrinsicContentSize()
-    }
-    oldBounds = bounds
-  }
-
   public override var accessibilityElements: [Any]? {
     get {
       guard let elements = self.blockProvider?.accessibilityElementsStorage?
@@ -287,6 +317,26 @@ extension DivView {
       return elements
     }
     set {}
+  }
+
+  private class BoundsTracker {
+    private(set) var currentBounds = CGRect.zero
+    private(set) var previousBounds = CGRect.zero
+
+    func append(_ bounds: CGRect) -> Bool {
+      if currentBounds != bounds {
+        previousBounds = currentBounds
+        currentBounds = bounds
+
+        return true
+      }
+
+      return false
+    }
+
+    func updatePreviousBounds() {
+      previousBounds = currentBounds
+    }
   }
 }
 

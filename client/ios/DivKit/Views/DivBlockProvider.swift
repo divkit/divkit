@@ -18,10 +18,6 @@ final class DivBlockProvider {
 
   private(set) var id: DivViewId!
 
-  var cardId: DivCardID {
-    id.cardId
-  }
-
   private(set) var cardSize: DivViewSize? {
     didSet {
       if let cardSize, let id {
@@ -53,7 +49,17 @@ final class DivBlockProvider {
     }
   }
 
-  var lastVisibleBounds: CGRect = .zero
+  var cardId: DivCardID {
+    id.cardId
+  }
+
+  var shouldInvokeOnVisibleBoundsChanged: Bool = true
+
+  var lastVisibleBounds: CGRect = .zero {
+    didSet {
+      shouldInvokeOnVisibleBoundsChanged = true
+    }
+  }
 
   var accessibilityElementsStorage: DivAccessibilityElementsStorage?
 
@@ -214,6 +220,7 @@ final class DivBlockProvider {
 
     if reasons.filter(\.isVariable).isEmpty {
       context.layoutProviderHandler?.resetUpdatedVariables()
+      shouldInvokeOnVisibleBoundsChanged = true
     }
     dataErrors.forEach { context.errorsStorage.add($0) }
     do {

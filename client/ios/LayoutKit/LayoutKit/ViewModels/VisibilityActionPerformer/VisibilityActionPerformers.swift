@@ -33,11 +33,10 @@ final class VisibilityActionPerformers {
 
   func onVisibleBoundsChanged(to: CGRect, bounds: CGRect) {
     let visibleAreaPercentageBefore = visibilityParams.lastVisibleArea.value
-    let visibleAreaPercentageAfter: Int = if bounds.isEmpty {
-      visibilityParams.isVisible ? 100 : 0
-    } else {
-      min(Int(to.area * 100 / bounds.area), 100)
-    }
+
+    let visibleAreaPercentageAfter =
+      (!visibilityParams.isVisible || bounds.isEmpty) ?
+      0 : min(Int(to.area * 100 / bounds.area), 100)
 
     guard visibleAreaPercentageAfter != visibleAreaPercentageBefore else {
       return
