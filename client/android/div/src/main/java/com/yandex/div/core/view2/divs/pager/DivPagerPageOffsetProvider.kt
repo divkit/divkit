@@ -42,7 +42,7 @@ internal class DivPagerPageOffsetProvider(
 
         val prevActivePage = pagePosition - ceil(position).toInt()
         val nextActivePage = pagePosition - floor(position).toInt()
-        if (contentIsSmallerThanPager(position, prevActivePage, nextActivePage )) {
+        if (contentIsSmallerThanPager(prevActivePage, nextActivePage )) {
             return getOffsetForSmallContent( position, prevActivePage, nextActivePage)
         }
 
@@ -97,17 +97,13 @@ internal class DivPagerPageOffsetProvider(
 
     private fun Float.biggerThan(maxOffset: Float) = this >= abs(maxOffset)
 
-    private fun contentIsSmallerThanPager(position: Float, prevActivePage: Int, nextActivePage: Int): Boolean {
+    private fun contentIsSmallerThanPager(prevActivePage: Int, nextActivePage: Int): Boolean {
         val space = parentSize - paddings.start - paddings.end
-        val part = if (position > 0) position.frac else position.fracInverted
-        var itemsSize = part * (pageSizeProvider.getItemSize(prevActivePage) ?: return true)
-        if (itemsSize >= space) return false
-
-        itemsSize += (1 - part) * (pageSizeProvider.getItemSize(nextActivePage) ?: return true)
+        var itemsSize = pageSizeProvider.getItemSize(prevActivePage) ?: return true
         if (itemsSize >= space) return false
 
         if (prevActivePage != nextActivePage) {
-            itemsSize += itemSpacing
+            itemsSize += itemSpacing + (pageSizeProvider.getItemSize(nextActivePage) ?: return true)
             if (itemsSize >= space) return false
         }
 
