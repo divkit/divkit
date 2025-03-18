@@ -13,8 +13,9 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
-import com.yandex.div.core.util.isActuallyLaidOut
+import com.yandex.div.core.util.heightProperty
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.widthProperty
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
@@ -100,6 +101,8 @@ internal class DivPagerBinder @Inject constructor(
         orientation =
             if (div.isHorizontal(resolver)) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
         adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
+
+        applyDecorations(div, resolver, pageTranslations, adapter)
 
         val reusableObserver = { _: Any -> applyDecorations(div, resolver, pageTranslations, adapter) }
 
@@ -198,10 +201,8 @@ internal class DivPagerBinder @Inject constructor(
         orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
         adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
 
-        if (!isActuallyLaidOut) return
-
         val metrics = resources.displayMetrics
-        val parentSize = if (isHorizontal) viewPager.width else viewPager.height
+        val parentSize = if (isHorizontal) viewPager.widthProperty() else viewPager.heightProperty()
         val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
         val infiniteScroll = div.infiniteScroll.evaluate(resolver)
         val scrollAxisAlignment = div.scrollAxisAlignment.evaluate(resolver)

@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs.pager
 
+import com.yandex.div.core.util.ViewProperty
 import com.yandex.div2.DivPager.ItemAlignment
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -7,7 +8,7 @@ import kotlin.math.floor
 import kotlin.math.sign
 
 internal class DivPagerPageOffsetProvider(
-    private val parentSize: Int,
+    private val parentSize: ViewProperty<Int>,
     private val itemSpacing: Float,
     private val pageSizeProvider: DivPagerPageSizeProvider,
     private val paddings: DivPagerPaddingsHolder,
@@ -98,7 +99,7 @@ internal class DivPagerPageOffsetProvider(
     private fun Float.biggerThan(maxOffset: Float) = this >= abs(maxOffset)
 
     private fun contentIsSmallerThanPager(prevActivePage: Int, nextActivePage: Int): Boolean {
-        val space = parentSize - paddings.start - paddings.end
+        val space = parentSize.get() - paddings.start - paddings.end
         var itemsSize = pageSizeProvider.getItemSize(prevActivePage) ?: return true
         if (itemsSize >= space) return false
 

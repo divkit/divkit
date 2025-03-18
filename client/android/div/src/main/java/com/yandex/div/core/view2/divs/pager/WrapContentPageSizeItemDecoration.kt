@@ -3,12 +3,13 @@ package com.yandex.div.core.view2.divs.pager
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.util.ViewProperty
 import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div2.DivPager.ItemAlignment
 import kotlin.math.roundToInt
 
 internal class WrapContentPageSizeItemDecoration(
-    private val parentSize: Int,
+    private val parentSize: ViewProperty<Int>,
     private val paddings: DivPagerPaddingsHolder,
     private val alignment: ItemAlignment,
 ) : RecyclerView.ItemDecoration() {
@@ -28,24 +29,24 @@ internal class WrapContentPageSizeItemDecoration(
 
     private val View.horizontalOffset: Int get() {
         return when (alignment) {
-            ItemAlignment.START -> parentSize - paddings.start - measuredWidth
-            ItemAlignment.CENTER -> (parentSize - measuredWidth) / 2f
-            ItemAlignment.END -> parentSize - paddings.end - measuredWidth
+            ItemAlignment.START -> parentSize.get() - paddings.start - measuredWidth
+            ItemAlignment.CENTER -> (parentSize.get() - measuredWidth) / 2f
+            ItemAlignment.END -> parentSize.get() - paddings.end - measuredWidth
         }.roundToInt()
     }
 
     private val View.topOffset: Int get() {
         return when (alignment) {
             ItemAlignment.START -> paddings.start
-            ItemAlignment.CENTER -> (parentSize - measuredHeight) / 2f
-            ItemAlignment.END -> parentSize - paddings.end - measuredHeight
+            ItemAlignment.CENTER -> (parentSize.get() - measuredHeight) / 2f
+            ItemAlignment.END -> parentSize.get() - paddings.end - measuredHeight
         }.roundToInt()
     }
 
     private val View.bottomOffset: Int get() {
         return when (alignment) {
-            ItemAlignment.START -> parentSize - paddings.start - measuredHeight
-            ItemAlignment.CENTER -> (parentSize - measuredHeight) / 2f
+            ItemAlignment.START -> parentSize.get() - paddings.start - measuredHeight
+            ItemAlignment.CENTER -> (parentSize.get() - measuredHeight) / 2f
             ItemAlignment.END -> paddings.end
         }.roundToInt()
     }

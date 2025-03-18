@@ -6,17 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.roundToInt
 
 internal class FixedPageSizeItemDecoration(
-    paddings: DivPagerPaddingsHolder,
+    private val paddings: DivPagerPaddingsHolder,
     private val sizeProvider: FixedPageSizeProvider,
 ) : RecyclerView.ItemDecoration() {
 
-    private val offsetLeft = paddings.alignedLeft.toOffset()
+    private val offsetLeft: Int get() = paddings.alignedLeft.toOffset()
 
-    private val offsetTop = paddings.alignedTop.toOffset()
+    private val offsetTop: Int get() = paddings.alignedTop.toOffset()
 
-    private val offsetRight = paddings.alignedRight.toOffset()
+    private val offsetRight: Int get() = paddings.alignedRight.toOffset()
 
-    private val offsetBottom = paddings.alignedBottom.toOffset()
+    private val offsetBottom: Int get() = paddings.alignedBottom.toOffset()
 
     private fun Int?.toOffset() = this ?: sizeProvider.neighbourSize.roundToInt()
 
