@@ -386,12 +386,49 @@ final class ScrollActionHandlerTests: XCTestCase {
     )
   }
 
-  private func handleScrollTo(_ destination: DivActionScrollDestination) {
+  func test_Gallery_NonAnimated() {
+    setState(galleryState(index: 2, itemCount: 5))
+
+    handleScrollTo(indexDestination(3), animated: false)
+
+    XCTAssertEqual(
+      galleryState(index: 3, itemCount: 5, animated: false),
+      getState()
+    )
+    XCTAssertTrue(isUpdateCardCalled)
+  }
+
+  func test_Pager_NonAnimated() {
+    setState(pagerState(index: 2, itemCount: 5))
+
+    handleScrollTo(indexDestination(3), animated: false)
+
+    XCTAssertEqual(
+      pagerState(index: 3, itemCount: 5, animated: false),
+      getState()
+    )
+    XCTAssertTrue(isUpdateCardCalled)
+  }
+
+  func test_Tab_NonAnimated() {
+    setState(tabState(index: 2, itemCount: 5))
+
+    handleScrollTo(indexDestination(3), animated: false)
+
+    XCTAssertEqual(
+      tabState(index: 3, itemCount: 5),
+      getState()
+    )
+    XCTAssertTrue(isUpdateCardCalled)
+  }
+
+  private func handleScrollTo(_ destination: DivActionScrollDestination, animated: Bool = true) {
     handler.handle(
       divAction(
         logId: "action_id",
         typed: .divActionScrollTo(
           DivActionScrollTo(
+            animated: .value(animated),
             destination: destination,
             id: .value("element_id")
           )
@@ -406,14 +443,15 @@ final class ScrollActionHandlerTests: XCTestCase {
   private func handleScrollBy(
     itemCount: Int = 0,
     offset: Int = 0,
-    overflow: DivActionScrollBy.Overflow = .clamp
+    overflow: DivActionScrollBy.Overflow = .clamp,
+    animated: Bool = true
   ) {
     handler.handle(
       divAction(
         logId: "action_id",
         typed: .divActionScrollBy(
           DivActionScrollBy(
-            animated: .value(false),
+            animated: .value(animated),
             id: .value("element_id"),
             itemCount: .value(itemCount),
             offset: .value(offset),
@@ -453,19 +491,38 @@ private func indexDestination(_ value: Int) -> DivActionScrollDestination {
   DivActionScrollDestination.indexDestination(IndexDestination(value: .value(value)))
 }
 
-private func galleryState(index: Int, itemCount: Int) -> GalleryViewState {
-  GalleryViewState(contentPageIndex: CGFloat(index), itemsCount: itemCount)
+private func galleryState(index: Int, itemCount: Int, animated: Bool = true) -> GalleryViewState {
+  GalleryViewState(
+    contentPageIndex: CGFloat(index),
+    itemsCount: itemCount,
+    animated: animated
+  )
 }
 
-private func galleryState(offset: CGFloat, itemCount: Int, range: CGFloat) -> GalleryViewState {
+private func galleryState(
+  offset: CGFloat,
+  itemCount: Int,
+  range: CGFloat,
+  animated: Bool = true
+) -> GalleryViewState {
   GalleryViewState(
     contentPosition: .offset(offset, firstVisibleItemIndex: 0),
     itemsCount: itemCount,
     isScrolling: false,
-    scrollRange: range
+    scrollRange: range,
+    animated: animated
   )
 }
 
-private func pagerState(index: Int, itemCount: Int) -> PagerViewState {
-  PagerViewState(numberOfPages: itemCount, currentPage: index)
+private func pagerState(index: Int, itemCount: Int, animated: Bool = true) -> PagerViewState {
+  PagerViewState(
+    numberOfPages: itemCount,
+    currentPage: index,
+    animated: animated,
+    isScrolling: false
+  )
+}
+
+private func tabState(index: Int, itemCount: Int) -> TabViewState {
+  TabViewState(selectedPageIndex: CGFloat(index), countOfPages: itemCount)
 }

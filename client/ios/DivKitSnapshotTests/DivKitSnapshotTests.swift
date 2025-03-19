@@ -89,7 +89,7 @@ private class LabelImagePreviewProvider: ViewProvider {
 }
 
 private let defaultPagerViewState = [
-  pagerId: PagerViewState(numberOfPages: 11, currentPage: 1),
+  pagerId: PagerViewState(numberOfPages: 11, floatCurrentPage: 1.0),
 ]
 
 private let testPagerViewStates = [

@@ -27,6 +27,8 @@ final class ScrollActionHandler {
 
     let itemCount = action.resolveItemCount(expressionResolver)
     let cardId = context.cardId
+    let animated = action.resolveAnimated(expressionResolver)
+
     if itemCount == 0 {
       let offset = action.resolveOffset(expressionResolver)
       scrollToOffset(
@@ -34,10 +36,17 @@ final class ScrollActionHandler {
         id: id,
         offset: offset,
         isRelative: true,
-        overflow: overflow
+        overflow: overflow,
+        animated: animated
       )
     } else {
-      scrollToNextItem(cardId: cardId, id: id, step: itemCount, overflow: overflow)
+      scrollToNextItem(
+        cardId: cardId,
+        id: id,
+        step: itemCount,
+        overflow: overflow,
+        animated: animated
+      )
     }
   }
 
@@ -48,23 +57,25 @@ final class ScrollActionHandler {
     }
 
     let cardId = context.cardId
+    let animated = action.resolveAnimated(expressionResolver)
+
     switch action.destination {
     case let .indexDestination(destination):
       if let index = destination.resolveValue(expressionResolver) {
-        scrollToItem(cardId: cardId, id: id, index: index)
+        scrollToItem(cardId: cardId, id: id, index: index, animated: animated)
       }
     case let .offsetDestination(destination):
       if let value = destination.resolveValue(expressionResolver) {
-        scrollToOffset(cardId: cardId, id: id, offset: value)
+        scrollToOffset(cardId: cardId, id: id, offset: value, animated: animated)
       }
     case .startDestination:
-      scrollToStart(cardId: cardId, id: id)
+      scrollToStart(cardId: cardId, id: id, animated: animated)
     case .endDestination:
-      scrollToEnd(cardId: cardId, id: id)
+      scrollToEnd(cardId: cardId, id: id, animated: animated)
     }
   }
 
-  func scrollToItem(cardId: DivCardID, id: String, index: Int) {
+  func scrollToItem(cardId: DivCardID, id: String, index: Int, animated: Bool) {
     guard let state = getState(cardId: cardId, id: id) else {
       DivKitLogger.error("Unexpected state type for \(id)")
       return
@@ -78,7 +89,7 @@ final class ScrollActionHandler {
     blockStateStorage.setState(
       id: id,
       cardId: cardId,
-      state: state.makeState(clampedIndex)
+      state: state.makeState(clampedIndex, animated)
     )
 
     updateCard(.state(cardId))
@@ -88,7 +99,8 @@ final class ScrollActionHandler {
     cardId: DivCardID,
     id: String,
     step: Int,
-    overflow: OverflowMode
+    overflow: OverflowMode,
+    animated: Bool
   ) {
     guard let state = getState(cardId: cardId, id: id) else {
       DivKitLogger.error("Unexpected state type for \(id)")
@@ -100,7 +112,7 @@ final class ScrollActionHandler {
       size: state.itemsCount,
       overflow: overflow
     )
-    scrollToItem(cardId: cardId, id: id, index: index)
+    scrollToItem(cardId: cardId, id: id, index: index, animated: animated)
   }
 
   func scrollToOffset(
@@ -108,7 +120,8 @@ final class ScrollActionHandler {
     id: String,
     offset: Int,
     isRelative: Bool = false,
-    overflow: OverflowMode = .clamp
+    overflow: OverflowMode = .clamp,
+    animated: Bool
   ) {
     guard let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
           case let .offset(currentPosition, _) = state.contentPosition else {
@@ -132,17 +145,18 @@ final class ScrollActionHandler {
         contentPosition: .offset(position),
         itemsCount: state.itemsCount,
         isScrolling: state.isScrolling,
-        scrollRange: range
+        scrollRange: range,
+        animated: animated
       )
     )
     updateCard(.state(cardId))
   }
 
-  func scrollToStart(cardId: DivCardID, id: String) {
+  func scrollToStart(cardId: DivCardID, id: String, animated: Bool) {
     // should update offset for gallery
     if let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
        case .offset = state.contentPosition {
-      scrollToOffset(cardId: cardId, id: id, offset: 0)
+      scrollToOffset(cardId: cardId, id: id, offset: 0, animated: animated)
       return
     }
 
@@ -150,15 +164,15 @@ final class ScrollActionHandler {
       DivKitLogger.error("Unexpected state type for \(id)")
       return
     }
-    scrollToItem(cardId: cardId, id: id, index: 0)
+    scrollToItem(cardId: cardId, id: id, index: 0, animated: animated)
   }
 
-  func scrollToEnd(cardId: DivCardID, id: String) {
+  func scrollToEnd(cardId: DivCardID, id: String, animated: Bool) {
     // should update offset for gallery
     if let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
        case .offset = state.contentPosition {
       if let scrollRange = state.scrollRange {
-        scrollToOffset(cardId: cardId, id: id, offset: Int(scrollRange))
+        scrollToOffset(cardId: cardId, id: id, offset: Int(scrollRange), animated: animated)
       }
       return
     }
@@ -167,11 +181,11 @@ final class ScrollActionHandler {
       DivKitLogger.error("Unexpected state type for \(id)")
       return
     }
-    scrollToItem(cardId: cardId, id: id, index: state.itemsCount - 1)
+    scrollToItem(cardId: cardId, id: id, index: state.itemsCount - 1, animated: animated)
   }
 
-  private func getState(cardId: DivCardID, id: String) -> GalleryTypeViewState? {
-    blockStateStorage.getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState
+  private func getState(cardId: DivCardID, id: String) -> CollectionTypeViewState? {
+    blockStateStorage.getStateUntyped(id, cardId: cardId) as? CollectionTypeViewState
   }
 
   private func normalizeOffset(
@@ -215,14 +229,15 @@ final class ScrollActionHandler {
   }
 }
 
-fileprivate protocol GalleryTypeViewState: ElementState {
+protocol CollectionTypeViewState: ElementState {
   var itemsCount: Int { get }
   var currentItemIndex: Int { get }
+  var animated: Bool { get }
 
-  var makeState: (_ clampedIndex: Int) -> Self { get }
+  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> Self { get }
 }
 
-extension GalleryViewState: GalleryTypeViewState {
+extension GalleryViewState: CollectionTypeViewState {
   var currentItemIndex: Int {
     switch contentPosition {
     case let .offset(_, firstVisibleItemsIndex):
@@ -244,19 +259,20 @@ extension GalleryViewState: GalleryTypeViewState {
     }
   }
 
-  var makeState: (_ clampedIndex: Int) -> GalleryViewState {
-    { clampedIndex in
+  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> GalleryViewState {
+    { clampedIndex, animated in
       GalleryViewState(
         contentPosition: .paging(index: CGFloat(clampedIndex)),
         itemsCount: itemsCount,
         isScrolling: isScrolling,
-        scrollRange: scrollRange
+        scrollRange: scrollRange,
+        animated: animated
       )
     }
   }
 }
 
-extension PagerViewState: GalleryTypeViewState {
+extension PagerViewState: CollectionTypeViewState {
   var itemsCount: Int {
     numberOfPages
   }
@@ -265,17 +281,24 @@ extension PagerViewState: GalleryTypeViewState {
     Int(currentPage)
   }
 
-  var makeState: (_ clampedIndex: Int) -> PagerViewState {
-    { clampedIndex in
+  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> PagerViewState {
+    { clampedIndex, animated in
       PagerViewState(
         numberOfPages: itemsCount,
-        currentPage: clampedIndex
+        currentPage: clampedIndex,
+        animated: animated,
+        isScrolling: false
       )
     }
   }
 }
 
-extension TabViewState: GalleryTypeViewState {
+extension TabViewState: CollectionTypeViewState {
+  // Animation for Tabs is not supported
+  var animated: Bool {
+    false
+  }
+
   var itemsCount: Int {
     countOfPages
   }
@@ -284,8 +307,8 @@ extension TabViewState: GalleryTypeViewState {
     Int(selectedPageIndex)
   }
 
-  var makeState: (_ clampedIndex: Int) -> TabViewState {
-    { clampedIndex in
+  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> TabViewState {
+    { clampedIndex, _ in
       TabViewState(
         selectedPageIndex: CGFloat(clampedIndex),
         countOfPages: itemsCount

@@ -136,11 +136,19 @@ extension PagerView: ElementStateObserver {
       return
     }
 
+    // Don't set PagerViewState during action with animation
+    if galleryState.animated, !galleryState.isScrolling {
+      return
+    }
+    let currentPage = Int(pageIndex.rounded()) - model.infiniteCorrection
+
     setState(
       path: model.path,
       state: PagerViewState(
         numberOfPages: model.itemsCountWithoutInfinite,
-        currentPage: Int(pageIndex.rounded()) - model.infiniteCorrection
+        currentPage: currentPage,
+        animated: galleryState.animated,
+        isScrolling: galleryState.isScrolling
       ),
       selectedActions: selectedActions
     )
@@ -173,6 +181,7 @@ private func makeGalleryViewState(
     contentPosition: position,
     itemsCount: model.items.count,
     isScrolling: oldState?.isScrolling ?? false,
-    scrollRange: oldState?.scrollRange
+    scrollRange: oldState?.scrollRange,
+    animated: state.animated
   ).resetToModelIfInconsistent(model)
 }

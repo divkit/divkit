@@ -42,7 +42,10 @@ private final class PageControlBlockView: BlockView, VisibleBoundsTrackingLeaf {
       if isFirstConfiguration {
         addSubview(indicatorView)
       }
-      configureIndicatorView(animated: !isFirstConfiguration)
+
+      // Animate indicator on user interaction and action animations
+      let animated = !isFirstConfiguration && (model.state.animated || model.state.isScrolling)
+      configureIndicatorView(animated: animated)
     }
   }
 
@@ -67,14 +70,10 @@ private final class PageControlBlockView: BlockView, VisibleBoundsTrackingLeaf {
     indicatorView.configuration = model.configuration
     indicatorView.numberOfPages = model.state.numberOfPages
 
-    let currentPage = model.state.currentPage
-    if animated {
-      UIView.animate(withDuration: 0.2) { [weak self] in
-        self?.indicatorView.currentIndexPosition = currentPage
-      }
-    } else {
-      indicatorView.currentIndexPosition = currentPage
-    }
+    CATransaction.begin()
+    CATransaction.setDisableActions(!animated)
+    self.indicatorView.currentIndexPosition = model.state.currentPage
+    CATransaction.commit()
 
     switch model.layoutDirection {
     case .leftToRight:

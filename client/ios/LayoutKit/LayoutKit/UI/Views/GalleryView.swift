@@ -129,7 +129,7 @@ public final class GalleryView: BlockView {
         deferredStateSetting = .pending(self.state)
       case .idle, .pending, .firstLayoutPerformed:
         if oldModel?.path == model.path {
-          updateContentOffset(to: self.state.contentPosition, animated: true)
+          updateContentOffset(to: self.state.contentPosition, animated: self.state.animated)
         } else {
           collectionView.performWithDetachedDelegate {
             updateContentOffset(to: self.state.contentPosition, animated: false)
@@ -238,7 +238,7 @@ public final class GalleryView: BlockView {
     }
     if case let .pending(state) = deferredStateSetting {
       collectionView.performWithDetachedDelegate {
-        updateContentOffset(to: state.contentPosition, animated: false)
+        updateContentOffset(to: state.contentPosition, animated: state.animated)
       }
     }
     deferredStateSetting = .idle
@@ -338,11 +338,13 @@ extension GalleryView: ScrollDelegate {
       contentPosition = .paging(index: pageIndex)
     }
 
+    let isScrolling = scrollView.isTracking || scrollView.isDecelerating || scrollView.isDragging
     let newState = GalleryViewState(
       contentPosition: contentPosition,
       itemsCount: model.items.count,
-      isScrolling: true,
-      scrollRange: state.scrollRange
+      isScrolling: isScrolling,
+      scrollRange: state.scrollRange,
+      animated: state.animated
     )
     setState(newState, notifyingObservers: true)
     updatesDelegate?.onContentOffsetChanged(offset, in: model)
@@ -374,7 +376,8 @@ extension GalleryView: ScrollDelegate {
       contentPosition: state.contentPosition,
       itemsCount: model.items.count,
       isScrolling: false,
-      scrollRange: state.scrollRange
+      scrollRange: state.scrollRange,
+      animated: false
     )
     setState(newState, notifyingObservers: true)
     visibilityDelegate?.onGalleryVisibilityChanged()
@@ -472,7 +475,8 @@ extension GalleryView {
       isScrolling: state.isScrolling,
       scrollRange: model.direction.isHorizontal ?
         layout.contentSize.width - bounds.width :
-        layout.contentSize.height - bounds.height
+        layout.contentSize.height - bounds.height,
+      animated: state.animated
     )
   }
 }

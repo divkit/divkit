@@ -292,34 +292,37 @@ public final class DivActionHandler {
           value: value
         )
       case let .setCurrentItem(id, index):
-        scrollActionHandler.scrollToItem(cardId: cardId, id: id, index: index)
+        scrollActionHandler.scrollToItem(cardId: cardId, id: id, index: index, animated: true)
       case let .setNextItem(id, step, overflow):
         scrollActionHandler.scrollToNextItem(
           cardId: cardId,
           id: id,
           step: step,
-          overflow: overflow
+          overflow: overflow,
+          animated: true
         )
       case let .setPreviousItem(id, step, overflow):
         scrollActionHandler.scrollToNextItem(
           cardId: cardId,
           id: id,
           step: -step,
-          overflow: overflow
+          overflow: overflow,
+          animated: true
         )
       case let .scroll(id, mode):
         switch mode {
         case .start:
-          scrollActionHandler.scrollToStart(cardId: cardId, id: id)
+          scrollActionHandler.scrollToStart(cardId: cardId, id: id, animated: true)
         case .end:
-          scrollActionHandler.scrollToEnd(cardId: cardId, id: id)
+          scrollActionHandler.scrollToEnd(cardId: cardId, id: id, animated: true)
         case let .forward(offset, overflow):
           scrollActionHandler.scrollToOffset(
             cardId: cardId,
             id: id,
             offset: offset,
             isRelative: true,
-            overflow: overflow
+            overflow: overflow,
+            animated: true
           )
         case let .backward(offset, overflow):
           scrollActionHandler.scrollToOffset(
@@ -327,10 +330,16 @@ public final class DivActionHandler {
             id: id,
             offset: -offset,
             isRelative: true,
-            overflow: overflow
+            overflow: overflow,
+            animated: true
           )
         case let .position(position):
-          scrollActionHandler.scrollToOffset(cardId: cardId, id: id, offset: position)
+          scrollActionHandler.scrollToOffset(
+            cardId: cardId,
+            id: id,
+            offset: position,
+            animated: true
+          )
         }
       case let .video(id: id, action: action):
         context.blockStateStorage.setState(
