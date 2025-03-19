@@ -24,5 +24,19 @@
                 "version_added": "30.33.0"
             }
         }
+    }, {
+        "id": "slider_ranges",
+        "name": "Slider <code>ranges</code> property",
+        "compat": {
+            "android": {
+                "version_added": "28.4.0"
+            },
+            "ios": {
+                "version_added": "28.4.0"
+            },
+            "web": {
+                "version_added": "31.7.0"
+            }
+        }
     }]
 }

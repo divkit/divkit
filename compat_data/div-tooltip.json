@@ -82,5 +82,19 @@
                 "version_added": "31.5.0"
             }
         }
+    }, {
+        "id": "tooltip_animation",
+        "name": "<code>animation_in</code> and <code>animation_out</code> properties for the tooltip",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "27.4.0"
+            },
+            "ios": {
+                "version_added": "31.7.0"
+            }
+        }
     }]
 }
