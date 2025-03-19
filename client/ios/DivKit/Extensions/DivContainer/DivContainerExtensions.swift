@@ -4,17 +4,16 @@ import VGSL
 
 extension DivContainer: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let path = context.parentPath + (id ?? DivContainer.type)
-    let containerContext = context.modifying(parentPath: path)
+    let context = modifiedContextParentPath(context)
     return try applyBaseProperties(
-      to: { try makeBaseBlock(context: containerContext) },
-      context: containerContext,
+      to: { try makeBaseBlock(context: context) },
+      context: context,
       actionsHolder: self,
       customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
-        resolveAccessibilityDescription(containerContext)
+        resolveAccessibilityDescription(context)
       },
       applyPaddings: false,
-      clipToBounds: resolveClipToBounds(containerContext.expressionResolver)
+      clipToBounds: resolveClipToBounds(context.expressionResolver)
     )
   }
 

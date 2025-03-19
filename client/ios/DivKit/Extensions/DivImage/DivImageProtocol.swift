@@ -32,7 +32,7 @@ extension DivImageProtocol {
     if case .intrinsic = resolveContentWidthTrait(context) {
       throw DivBlockModelingError(
         "\(typeName) has wrap_content width",
-        path: context.parentPath
+        path: context.path
       )
     }
 
@@ -40,7 +40,7 @@ extension DivImageProtocol {
        case .intrinsic = heightTrait {
       throw DivBlockModelingError(
         "\(typeName) without aspect has wrap_content height",
-        path: context.parentPath
+        path: context.path
       )
     }
   }

@@ -6,6 +6,8 @@ import VGSL
 
 extension DivInput: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    let context = modifiedContextParentPath(context)
+
     let textBinding = context.makeBinding(variableName: textVariable, defaultValue: "")
     return try applyBaseProperties(
       to: { try makeBaseBlock(context: context, textBinding: textBinding) },
@@ -50,10 +52,8 @@ extension DivInput: DivBlockModeling {
     let enterKeyActions = enterKeyActions?.uiActions(context: context) ?? []
     let enterKeyType = resolveEnterKeyType(expressionResolver)
 
-    let inputPath = context.parentPath + (id ?? DivInput.type)
-
     let blockStateStorage = context.blockStateStorage
-    let isFocused = blockStateStorage.isFocused(path: inputPath)
+    let isFocused = blockStateStorage.isFocused(path: context.path)
 
     if isFocused { blockStateStorage.setInputFocused() }
     let shouldClearFocus = Variable<Bool> { [weak blockStateStorage] in
@@ -75,7 +75,7 @@ extension DivInput: DivBlockModeling {
       maxVisibleLines: resolveMaxVisibleLines(expressionResolver),
       selectAllOnFocus: resolveSelectAllOnFocus(expressionResolver),
       maskValidator: mask?.makeMaskValidator(expressionResolver),
-      path: inputPath,
+      path: context.path,
       isFocused: isFocused,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,

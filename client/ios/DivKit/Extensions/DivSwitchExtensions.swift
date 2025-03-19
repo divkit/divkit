@@ -2,6 +2,7 @@ import LayoutKit
 
 extension DivSwitch: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    let context = modifiedContextParentPath(context)
     let resolver = context.expressionResolver
     let switchVariable = context.makeBinding(
       variableName: isOnVariable,

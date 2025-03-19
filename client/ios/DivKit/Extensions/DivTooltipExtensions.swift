@@ -79,7 +79,7 @@ extension [DivTooltip]? {
       context.errorsStorage.add(
         DivBlockModelingError(
           "Tooltip can not host another tooltips",
-          path: context.parentPath
+          path: context.path
         )
       )
       return []

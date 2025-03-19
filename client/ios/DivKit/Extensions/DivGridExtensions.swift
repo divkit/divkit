@@ -3,12 +3,11 @@ import VGSL
 
 extension DivGrid: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let path = context.parentPath + (id ?? DivGrid.type)
-    let gridContext = context.modifying(parentPath: path)
-    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+    let context = modifiedContextParentPath(context)
+    return try modifyError({ DivBlockModelingError($0.message, path: context.path) }) {
       try applyBaseProperties(
-        to: { try makeBaseBlock(context: gridContext) },
-        context: gridContext,
+        to: { try makeBaseBlock(context: context) },
+        context: context,
         actionsHolder: self
       )
     }
@@ -19,10 +18,12 @@ extension DivGrid: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let path = context.parentPath
+    let path = context.path
     let itemsContext = context.modifying(errorsStorage: DivErrorsStorage(errors: []))
     let items = nonNilItems.enumerated().compactMap { tuple in
-      let itemContext = itemsContext.modifying(parentPath: path + tuple.offset)
+      let itemContext = itemsContext.modifying(
+        pathSuffix: String(tuple.offset)
+      )
       do {
         return try tuple.element.value.makeGridItem(context: itemContext)
       } catch {

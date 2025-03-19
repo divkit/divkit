@@ -124,6 +124,7 @@ final class DecoratingBlock: WrapperBlock {
       && accessibilityElement == other.accessibilityElement
       && reuseId == other.reuseId
       && isEmpty == other.isEmpty
+      && path == other.path
   }
 
   func makeCopy(wrapping child: Block) -> DecoratingBlock {

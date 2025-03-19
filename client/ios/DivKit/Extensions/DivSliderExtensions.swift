@@ -5,7 +5,8 @@ import VGSL
 
 extension DivSlider: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
+    let context = modifiedContextParentPath(context)
+    return try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: nil

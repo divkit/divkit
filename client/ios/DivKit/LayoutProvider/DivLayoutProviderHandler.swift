@@ -99,7 +99,7 @@ extension DivLayoutProvider {
     }
     return handler.apply(
       block: block,
-      path: context.parentPath,
+      path: context.path,
       widthVariableName: widthVariableName?.toVariableName(),
       heightVariableName: heightVariableName?.toVariableName()
     )

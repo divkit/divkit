@@ -4,12 +4,11 @@ import VGSL
 
 extension DivPager: DivBlockModeling, DivGalleryProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let path = context.parentPath + (id ?? DivPager.type)
-    let pagerContext = context.modifying(parentPath: path)
-    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+    let context = modifiedContextParentPath(context)
+    return try modifyError({ DivBlockModelingError($0.message, path: context.path) }) {
       try applyBaseProperties(
-        to: { try makeBaseBlock(context: pagerContext) },
-        context: pagerContext,
+        to: { try makeBaseBlock(context: context) },
+        context: context,
         actionsHolder: nil,
         applyPaddings: false
       )
@@ -50,7 +49,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       layoutMode: layoutMode,
       gallery: gallery,
       selectedActions: items.map { $0.value.makeSelectedActions(context: context) },
-      state: getState(context: context, path: context.parentPath, numberOfPages: items.count),
+      state: getState(context: context, path: context.path, numberOfPages: items.count),
       widthTrait: resolveWidthTrait(context),
       heightTrait: resolveHeightTrait(context)
     )

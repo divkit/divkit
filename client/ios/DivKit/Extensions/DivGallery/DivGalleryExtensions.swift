@@ -4,12 +4,11 @@ import VGSL
 
 extension DivGallery: DivBlockModeling, DivGalleryProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let path = context.parentPath + (id ?? DivGallery.type)
-    let galleryContext = context.modifying(parentPath: path)
-    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+    let context = modifiedContextParentPath(context)
+    return try modifyError({ DivBlockModelingError($0.message, path: context.path) }) {
       try applyBaseProperties(
-        to: { try makeBaseBlock(context: galleryContext) },
-        context: galleryContext,
+        to: { try makeBaseBlock(context: context) },
+        context: context,
         actionsHolder: nil,
         applyPaddings: false
       )
@@ -42,7 +41,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     context: DivBlockModelingContext,
     itemsCount: Int
   ) -> GalleryViewState {
-    let path = context.parentPath
+    let path = context.path
     let index: CGFloat
     let scrollRange: CGFloat?
     let animated: Bool

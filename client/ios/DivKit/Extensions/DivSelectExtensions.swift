@@ -6,7 +6,8 @@ import VGSL
 
 extension DivSelect: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
+    let context = modifiedContextParentPath(context)
+    return try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: nil
@@ -41,9 +42,7 @@ extension DivSelect: DivBlockModeling {
     let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
-    let selectPath = context.parentPath + (id ?? DivSelect.type)
-
-    let isFocused = context.blockStateStorage.isFocused(path: selectPath)
+    let isFocused = context.blockStateStorage.isFocused(path: context.path)
 
     return TextInputBlock(
       widthTrait: resolveContentWidthTrait(context),
@@ -53,7 +52,7 @@ extension DivSelect: DivBlockModeling {
       rawTextValue: nil,
       textTypo: textTypo,
       inputType: makeInputType(expressionResolver),
-      path: selectPath,
+      path: context.path,
       isFocused: isFocused,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,

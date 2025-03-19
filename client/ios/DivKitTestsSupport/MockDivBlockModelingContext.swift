@@ -4,7 +4,9 @@ import VGSL
 extension DivBlockModelingContext {
   public static let testCardId = DivCardID(rawValue: "test_card_id")
 
-  public static let `default` = DivBlockModelingContext()
+  public static var `default`: DivBlockModelingContext {
+    DivBlockModelingContext()
+  }
 
   public init(
     cardId: DivCardID = Self.testCardId,

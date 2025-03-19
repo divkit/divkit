@@ -11,7 +11,7 @@ extension DivBase {
     applyPaddings: Bool = true,
     clipToBounds: Bool = true
   ) throws -> Block {
-    let path = context.parentPath
+    let path = context.path
 
     context.functionsStorage?.setIfNeeded(
       path: path,
@@ -26,7 +26,7 @@ extension DivBase {
       triggers: variableTriggers ?? []
     )
 
-    if let id = context.elementId ?? id {
+    if let id = context.currentDivId {
       context.idToPath[path.cardId.path + id] = path
     }
 
@@ -126,10 +126,9 @@ extension DivBase {
     }
 
     let shadow = border?.resolveShadow(expressionResolver)
-
     let accessibilityElement = (accessibility ?? DivAccessibility()).resolve(
       expressionResolver,
-      id: context.elementId ?? id,
+      id: context.currentDivId,
       customParams: customAccessibilityParams
     )
 
@@ -238,7 +237,7 @@ extension DivBase {
     context: DivBlockModelingContext,
     statePath: DivStatePath
   ) -> Block {
-    guard let id = context.elementId ?? id else {
+    guard let id = context.currentDivId else {
       return block
     }
 
@@ -478,7 +477,7 @@ extension DivBlockModelingContext {
     if actions.isEmpty {
       return nil
     }
-    let path = parentPath
+    let path = path
     return VisibilityParams(
       actions: actions,
       isVisible: isVisible,

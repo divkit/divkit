@@ -5,6 +5,7 @@ import VGSL
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    let context = modifiedContextParentPath(context)
     let expressionResolver = context.expressionResolver
     let lazyText = Lazy(getter: { [unowned self] in
       resolveText(expressionResolver) ?? ""
@@ -120,8 +121,9 @@ extension DivText: DivBlockModeling {
       additionalTextInsets: additionalTextInsets,
       canSelect: resolveSelectable(expressionResolver),
       tightenWidth: resolveTightenWidth(expressionResolver),
-      autoEllipsize: resolveAutoEllipsize(expressionResolver) ?? context.flagsInfo
-        .defaultTextAutoEllipsize
+      autoEllipsize: resolveAutoEllipsize(expressionResolver)
+        ?? context.flagsInfo.defaultTextAutoEllipsize,
+      path: context.path
     )
   }
 

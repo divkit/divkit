@@ -56,8 +56,8 @@ private func delay() {
 }
 
 private let testFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
-private let appearPath = UIElementPath("card") + "0" + "appear" + "appear_action"
-private let disappearPath = UIElementPath("card") + "0" + "disappear" + "disappear_action"
+private let appearPath = UIElementPath("card") + "0" + "text" + "appear" + "appear_action"
+private let disappearPath = UIElementPath("card") + "0" + "text" + "disappear" + "disappear_action"
 private let appearTestData = divData(
   divText(
     text: "Sample",

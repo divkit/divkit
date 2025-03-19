@@ -86,7 +86,10 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: .default
             ),
             DecoratingBlock(
-              child: textBlock(text: "Hello!"),
+              child: textBlock(
+                text: "Hello!",
+                path: defaultContainerPath + 1 + "text"
+              ),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Hello!"
@@ -158,14 +161,20 @@ final class DivContainerExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: [
             DecoratingBlock(
-              child: textBlock(text: "Item 1"),
+              child: textBlock(
+                text: "Item 1",
+                path: defaultContainerPath + 0 + "text"
+              ),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Item 1"
               )
             ),
             DecoratingBlock(
-              child: textBlock(text: "Item 2"),
+              child: textBlock(
+                text: "Item 2",
+                path: defaultContainerPath + 1 + "text"
+              ),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Item 2"
@@ -208,7 +217,10 @@ final class DivContainerExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: [
             DecoratingBlock(
-              child: textBlock(text: "Index = 0"),
+              child: textBlock(
+                text: "Index = 0",
+                path: defaultContainerPath + 0 + "item_0"
+              ),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Index = 0",
@@ -216,7 +228,74 @@ final class DivContainerExtensionsTests: XCTestCase {
               )
             ),
             DecoratingBlock(
-              child: textBlock(text: "Index = 1"),
+              child: textBlock(
+                text: "Index = 1",
+                path: defaultContainerPath + 1 + "item_1"
+              ),
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Index = 1",
+                identifier: "item_1"
+              )
+            ),
+          ]
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+  
+  func test_ItemBuilder_PathsWithPrototypeId() throws {
+    let context = DivBlockModelingContext(
+      cardId: "custom_card_id"
+    )
+
+    let block = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([
+            [],
+            [],
+          ]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(
+              div: divText(
+                textExpression: "Index = @{index}"
+              ),
+              id: expression("item_@{index}")
+            ),
+          ]
+        )
+      ),
+      context: context,
+      stateId: 777
+    )
+    let customContainerPath = UIElementPath("custom_card_id") + 777 + "container"
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: textBlock(
+                text: "Index = 0",
+                path: customContainerPath + 0 + "item_0"
+              ),
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Index = 0",
+                identifier: "item_0"
+              )
+            ),
+            DecoratingBlock(
+              child: textBlock(
+                text: "Index = 1",
+                path: customContainerPath + 1 + "item_1"
+              ),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Index = 1",
@@ -256,7 +335,10 @@ final class DivContainerExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: [
             DecoratingBlock(
-              child: textBlock(text: "itemBuilder"),
+              child: textBlock(
+                text: "itemBuilder",
+                path: defaultContainerPath + 0 + "text"
+              ),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "itemBuilder"
@@ -294,20 +376,27 @@ final class DivContainerExtensionsTests: XCTestCase {
       )
     )
 
+    let nestedTextPath = UIElementPath.root + 0 + "container" + 2 + "container" + 0 + "text"
     let expectedBlock = try StateBlock(
       child: DecoratingBlock(
         child: ContainerBlock(
           layoutDirection: .vertical,
           children: [
             DecoratingBlock(
-              child: textBlock(text: "Hello!"),
+              child: textBlock(
+                text: "Hello!",
+                path: defaultContainerPath + 0 + "text"
+              ),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Hello!"
               )
             ),
             DecoratingBlock(
-              child: textBlock(text: "Excluded item"),
+              child: textBlock(
+                text: "Excluded item",
+                path: defaultContainerPath + 1 + "text"
+              ),
               accessibilityElement: accessibility(hideElementWithChildren: true)
             ),
             DecoratingBlock(
@@ -315,7 +404,10 @@ final class DivContainerExtensionsTests: XCTestCase {
                 layoutDirection: .vertical,
                 children: [
                   DecoratingBlock(
-                    child: textBlock(text: "Nested item"),
+                    child: textBlock(
+                      text: "Nested item",
+                      path: nestedTextPath
+                    ),
                     accessibilityElement: accessibility(
                       traits: .staticText,
                       label: "Nested item"
@@ -367,7 +459,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                   minSize: 0,
                   maxSize: .infinity
                 ),
-                text: "Hello!"
+                text: "Hello!",
+                path: defaultContainerPath + 0 + "text"
               ),
               accessibilityElement: accessibility(
                 traits: .staticText,
@@ -399,12 +492,100 @@ final class DivContainerExtensionsTests: XCTestCase {
     let wrappedContainer = container.children[0].content as! WrapperBlock
     let gallery = wrappedContainer.child as! GalleryBlock
 
-    // We are using "container" const instead of DivContainer.type to emphasise its importance for
-    // analytics.
-    // DivContainer.type changes can brake analytic reports.
     XCTAssertEqual(
       gallery.model.path,
       UIElementPath.root + "container" + 0 + "gallery"
+    )
+  }
+
+  func test_PathForMultipleItems_withId() throws {
+    let textWithIdDiv = divText(
+      id: "text_id"
+    )
+    let textWithoutIdDiv = divText(
+      id: nil
+    )
+
+    let block = makeBlock(
+      divContainer(
+        id: "container_id",
+        items: [
+          textWithIdDiv,
+          textWithoutIdDiv,
+          divGallery(
+            items: [textWithIdDiv, textWithoutIdDiv],
+            id: "gallery_id"
+          ),
+        ]
+      ),
+      stateId: 777
+    )
+
+    let container: ContainerBlock = try block.child.unwrap()
+    let items = container.children.map(\.content)
+    let textWithIdBlock: TextBlock = try items[0].unwrap()
+    let textWithoutIdBlock: TextBlock = try items[1].unwrap()
+    let gallery: GalleryBlock = try items[2].unwrap()
+
+    let containerPath = UIElementPath.root + 777 + "container_id"
+    XCTAssertEqual(
+      textWithIdBlock.path,
+      containerPath + 0 + "text_id"
+    )
+
+    XCTAssertEqual(
+      textWithoutIdBlock.path,
+      containerPath + 1 + "text"
+    )
+
+    XCTAssertEqual(
+      gallery.model.path,
+      containerPath + 2 + "gallery_id"
+    )
+  }
+
+  func test_PathForMultipleItems_noId() throws {
+    let textWithIdDiv = divText(
+      id: "text_id"
+    )
+    let textWithoutIdDiv = divText(
+      id: nil
+    )
+
+    let block = makeBlock(
+      divContainer(
+        id: nil,
+        items: [
+          textWithIdDiv,
+          textWithoutIdDiv,
+          divGallery(
+            items: [textWithIdDiv, textWithoutIdDiv]
+          ),
+        ]
+      ),
+      stateId: 777
+    )
+
+    let container: ContainerBlock = try block.child.unwrap()
+    let items = container.children.map(\.content)
+    let textWithIdBlock: TextBlock = try items[0].unwrap()
+    let textWithoutIdBlock: TextBlock = try items[1].unwrap()
+    let gallery: GalleryBlock = try items[2].unwrap()
+
+    let containerPath = UIElementPath.root + 777 + "container"
+    XCTAssertEqual(
+      textWithIdBlock.path,
+      containerPath + 0 + "text_id"
+    )
+
+    XCTAssertEqual(
+      textWithoutIdBlock.path,
+      containerPath + 1 + "text"
+    )
+
+    XCTAssertEqual(
+      gallery.model.path,
+      containerPath + 2 + "gallery"
     )
   }
 
@@ -523,3 +704,5 @@ extension DivBlockModelingError: Swift.Equatable {
       && lhs.causes.map(\.description) == rhs.causes.map(\.description)
   }
 }
+
+private let defaultContainerPath = UIElementPath.root + 0 + "container"

@@ -37,7 +37,10 @@ final class DivBaseExtensionsTests: XCTestCase {
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
         child: DecoratingBlock(
-          child: textBlock(text: "Hello!"),
+          child: textBlock(
+            text: "Hello!",
+            path: .root + 0 + "text"
+          ),
           paddings: EdgeInsets(horizontal: 20),
           accessibilityElement: accessibility(
             traits: .staticText,
@@ -109,6 +112,7 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   func test_WithActions() throws {
+    let context = DivBlockModelingContext.default
     let actions = [
       divAction(
         logId: "action1_log_id",
@@ -133,9 +137,16 @@ final class DivBaseExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: []
         ),
-        actions: NonEmptyArray(actions.compactMap { $0.uiAction(path: .root + "0" + "container") }),
+        actions: NonEmptyArray(actions.compactMap {
+          $0.uiAction(
+            context: context
+              .modifying(pathSuffix: "0")
+              .modifying(pathSuffix: "container")
+          )
+        }),
         actionAnimation: .default,
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: .root + 0 + "container"
       ),
       ids: []
     )
@@ -156,12 +167,14 @@ final class DivBaseExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: DecoratingBlock(
           child: separatorBlock(),
-          actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
+          actions: NonEmptyArray(action.uiAction(pathSuffix: "0/separator")!),
           actionAnimation: .default,
-          accessibilityElement: .default
+          accessibilityElement: .default,
+          path: .root + 0 + "separator"
         ),
         boundary: .noClip,
-        paddings: EdgeInsets(vertical: 10)
+        paddings: EdgeInsets(vertical: 10),
+        path: nil
       ),
       ids: []
     )
@@ -187,14 +200,15 @@ final class DivBaseExtensionsTests: XCTestCase {
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
         child: separatorBlock(),
-        actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
+        actions: NonEmptyArray(action.uiAction(pathSuffix: "0/separator")!),
         actionAnimation: .default,
         boundary: .clipCorner(CornerRadii(20)),
         border: BlockBorder(
           color: color("#112233"),
           width: 2
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: .root + 0 + "separator"
       ),
       ids: []
     )
@@ -231,7 +245,8 @@ final class DivBaseExtensionsTests: XCTestCase {
           child: ShadedBlock(
             block: DecoratingBlock(
               child: separatorBlock(),
-              accessibilityElement: .default
+              accessibilityElement: .default,
+              path: nil
             ),
             shadow: BlockShadow(
               cornerRadii: CornerRadii(0),
@@ -240,12 +255,14 @@ final class DivBaseExtensionsTests: XCTestCase {
               color: color("#112233")
             )
           ),
-          actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
+          actions: NonEmptyArray(action.uiAction(pathSuffix: "0/separator")!),
           actionAnimation: .default,
-          boundary: .noClip
+          boundary: .noClip,
+          path: .root + 0 + "separator"
         ),
         boundary: .noClip,
-        paddings: EdgeInsets(vertical: 10)
+        paddings: EdgeInsets(vertical: 10),
+        path: nil
       ),
       ids: []
     )
@@ -360,9 +377,10 @@ final class DivBaseExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: separatorBlock(),
         backgroundColor: color("#112233"),
-        actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
+        actions: NonEmptyArray(action.uiAction(pathSuffix: "0/separator")!),
         actionAnimation: .default,
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: .root + 0 + "separator"
       ),
       ids: []
     )
@@ -384,7 +402,8 @@ final class DivBaseExtensionsTests: XCTestCase {
           widthTrait: .resizable,
           text: "Hello!".withTypo(),
           verticalAlignment: .leading,
-          accessibilityElement: nil
+          accessibilityElement: nil,
+          path: .root + 0 + "text"
         ),
         accessibilityElement: accessibility(
           traits: .staticText,
@@ -550,7 +569,7 @@ final class DivBaseExtensionsTests: XCTestCase {
       [
         DivBlockModelingWarning(
           "appear actions array contains non-unique log_id values: [Optional(\"appear_id\")]",
-          path: .root + 0
+          path: .root + 0 + "text"
         ),
       ]
     )
@@ -597,7 +616,7 @@ final class DivBaseExtensionsTests: XCTestCase {
       [
         DivBlockModelingWarning(
           "disappear actions array contains non-unique log_id values: [Optional(\"dissappear_id\")]",
-          path: .root + 0
+          path: .root + 0 + "text"
         ),
       ]
     )

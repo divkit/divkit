@@ -30,7 +30,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     }
     return handler.apply(
       block: block,
-      path: context.parentPath,
+      path: context.path,
       widthVariableName: widthVariableName,
       heightVariableName: heightVariableName
     )

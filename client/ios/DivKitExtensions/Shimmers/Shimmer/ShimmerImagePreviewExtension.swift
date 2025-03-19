@@ -28,7 +28,7 @@ public final class ShimmerImagePreviewExtension: DivExtensionHandler {
     let ShimmerImagePreviewViewProvider = ShimmerImagePreviewViewProvider(
       style: style,
       effectBeginTime: effectBeginTime,
-      path: context.parentPath
+      path: context.path
     )
     let imageHolder = context.imageHolderFactory.make(
       div.resolveImageUrl(expressionResolver),

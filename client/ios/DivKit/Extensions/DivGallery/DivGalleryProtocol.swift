@@ -73,7 +73,7 @@ extension DivGalleryProtocol {
       layoutDirection: context.layoutDirection,
       metrics: metrics,
       scrollMode: scrollMode,
-      path: context.parentPath,
+      path: context.path,
       alignment: alignment,
       direction: direction,
       bufferSize: bufferSize,

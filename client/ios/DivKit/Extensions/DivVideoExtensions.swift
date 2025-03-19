@@ -5,7 +5,8 @@ import VGSL
 
 extension DivVideo: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
+    let context = modifiedContextParentPath(context)
+    return try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: nil
@@ -42,11 +43,8 @@ extension DivVideo: DivBlockModeling {
       settingsPayload: playerSettingsPayload ?? [:]
     )
 
-    let videoPath = context.parentPath + (id ?? DivVideo.type)
-    let videoContext = context.modifying(parentPath: videoPath)
-
-    let state: VideoBlockViewState = videoContext.blockStateStorage
-      .getState(videoContext.parentPath) ?? .init(state: autostart == true ? .playing : .paused)
+    let state: VideoBlockViewState = context.blockStateStorage
+      .getState(context.path) ?? .init(state: autostart == true ? .playing : .paused)
 
     let model = VideoBlockViewModel(
       videoData: videoData,
@@ -58,7 +56,7 @@ extension DivVideo: DivBlockModeling {
       bufferingActions: bufferingActions,
       endActions: endActions,
       fatalActions: fatalActions,
-      path: videoContext.parentPath,
+      path: context.path,
       scale: resolveScale(resolver).scale
     )
 
