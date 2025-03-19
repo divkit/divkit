@@ -13,7 +13,8 @@ import type {
     StatCallback,
     Theme,
     TypefaceProvider,
-    Patch
+    Patch,
+    VideoPlayerProviderClient
 } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { CustomComponentDescription } from '../typings/custom';
@@ -43,6 +44,7 @@ export function render(opts: {
     store?: Store;
     weekStartDay?: number;
     pagerChildrenClipEnabled?: boolean;
+    videoPlayerProvider?: VideoPlayerProviderClient;
 }): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
 

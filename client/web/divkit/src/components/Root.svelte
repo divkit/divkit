@@ -52,7 +52,8 @@
         SubmitCallback,
         ActionScrollTo,
         ActionScrollBy,
-        Overflow
+        Overflow,
+        VideoPlayerProvider
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
@@ -122,6 +123,7 @@
     export let store: Store | undefined = undefined;
     export let pagerChildrenClipEnabled = true;
     export let weekStartDay = 0;
+    export let videoPlayerProvider: VideoPlayerProvider | undefined = undefined;
 
     let isMounted = true;
 
@@ -2073,6 +2075,7 @@
         isPointerFocus,
         customComponents,
         direction: directionStore,
+        videoPlayerProvider,
         componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined
     });
 

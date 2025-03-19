@@ -1,5 +1,5 @@
 import Root from './components/Root.svelte';
-import type { Customization, Direction, DivJson, ErrorCallback, Platform, TypefaceProvider } from '../typings/common';
+import type { Customization, Direction, DivJson, ErrorCallback, Platform, TypefaceProvider, VideoPlayerProviderServer } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { CustomComponentDescription } from '../typings/custom';
 import type { Store } from '../typings/store';
@@ -19,6 +19,7 @@ export function render(opts: {
     store?: Store;
     weekStartDay?: number;
     pagerChildrenClipEnabled?: boolean;
+    videoPlayerProvider?: VideoPlayerProviderServer;
 }) {
     // Root has client-side typings, not a server one
     return (Root as any).render(opts).html;

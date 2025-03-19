@@ -4,7 +4,8 @@ import type {
     Platform,
     Customization,
     TypefaceProvider,
-    Direction
+    Direction,
+    VideoPlayerProviderServer
 } from './common';
 import type { CustomComponentDescription } from './custom';
 import type { Store } from './store';
@@ -23,4 +24,5 @@ export function render(opts: {
     store?: Store;
     weekStartDay?: number;
     pagerChildrenClipEnabled?: boolean;
+    videoPlayerProvider?: VideoPlayerProviderServer;
 }): string;

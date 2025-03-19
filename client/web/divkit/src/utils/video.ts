@@ -1,4 +1,4 @@
-import type { VideoScale } from '../types/video';
+import type { VideoScale } from '../../typings/common';
 
 export function videoSize(scale?: VideoScale): string {
     if (scale === 'fill') {

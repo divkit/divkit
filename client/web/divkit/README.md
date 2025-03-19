@@ -403,6 +403,12 @@ Boolean, optional. `true` by default.
 
 Whether cropping is enabled in the `pager` elements. It can be useful in cases with shadow elements.
 
+#### videoPlayerProvider
+
+Object, optional.
+
+A provider for implementing a custom video player. On the server side, the `videoPlayerProvider` must contain the `template` property, which is a string or a markup provider function for the video player. On the client side, the `videoPlayerProvider` must contain an `instance` function that creates an instance of the player.
+
 #### theme (DEPRECATED)
 
 `system` | `light` | `dark`

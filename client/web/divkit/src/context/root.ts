@@ -1,5 +1,5 @@
 import type { Readable, Writable } from 'svelte/store';
-import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VariableTrigger, VisibilityAction } from '../../typings/common';
+import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VariableTrigger, VideoPlayerProvider, VisibilityAction } from '../../typings/common';
 import type { DivBaseData, Tooltip } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable } from '../expressions/variable';
@@ -70,6 +70,7 @@ export interface RootCtxValue {
     direction: Readable<Direction>;
     customComponents: Map<string, CustomComponentDescription> | undefined;
     pagerChildrenClipEnabled: boolean;
+    videoPlayerProvider?: VideoPlayerProvider | undefined;
 
     // Devtool
     componentDevtool?({

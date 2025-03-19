@@ -11,7 +11,8 @@ import type {
     DivExtensionClass,
     TypefaceProvider,
     FetchInit,
-    Direction
+    Direction,
+    VideoPlayerProviderClient
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
 import type { WrappedError } from './common';
@@ -48,6 +49,7 @@ export function render(opts: {
     store?: Store;
     weekStartDay?: number;
     pagerChildrenClipEnabled?: boolean;
+    videoPlayerProvider?: VideoPlayerProviderClient;
 }): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';
