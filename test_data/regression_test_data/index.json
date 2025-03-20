@@ -1839,6 +1839,22 @@
       "file": "selectable_text.json"
     },
     {
+      "title": "Text mask",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "DivText"
+      ],
+      "steps": [
+        "Click on both types of masks"
+      ],
+      "expected_results": [
+        "Text should be revealed on click. Text layout should not change, masked and non-masked text should have the same width and height. Mask should not contain any extra space inside of it"
+      ],
+      "file": "text-mask.json"
+    },
+    {
       "title": "Nested change bounds transitions",
       "case_id": 77,
       "automated": [

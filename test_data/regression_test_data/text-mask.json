@@ -1,0 +1,193 @@
+{
+  "templates": {
+    "text_template": {
+      "type": "text",
+      "font_size": 20
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "mask0",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "mask1",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "mask2",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "mask3",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "mask4",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_template",
+              "text": "Solid mask value. Text end",
+              "ranges": [
+                {
+                  "start": 11,
+                  "end": 16,
+                  "mask": {
+                    "type": "solid",
+                    "is_enabled": "@{mask0}",
+                    "color": "#ccc"
+                  },
+                  "actions": [
+                    {
+                      "log_id": "toggle_mask",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "mask0",
+                        "value": {
+                          "type": "boolean",
+                          "value": "@{!mask0}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 0.2 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "is_enabled": "@{mask1}",
+                    "color": "#000",
+                    "density": 0.2
+                  },
+                  "actions": [
+                    {
+                      "log_id": "toggle_mask",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "mask1",
+                        "value": {
+                          "type": "boolean",
+                          "value": "@{!mask1}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 0.4 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "is_enabled": "@{mask2}",
+                    "color": "#000",
+                    "density": 0.4
+                  },
+                  "actions": [
+                    {
+                      "log_id": "toggle_mask",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "mask2",
+                        "value": {
+                          "type": "boolean",
+                          "value": "@{!mask2}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 0.8 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "is_enabled": "@{mask3}",
+                    "color": "#000",
+                    "density": 0.8
+                  },
+                  "actions": [
+                    {
+                      "log_id": "toggle_mask",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "mask3",
+                        "value": {
+                          "type": "boolean",
+                          "value": "@{!mask3}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Particles mask 1.0 value. Text end",
+              "ranges": [
+                {
+                  "start": 19,
+                  "end": 24,
+                  "mask": {
+                    "type": "particles",
+                    "is_enabled": "@{mask4}",
+                    "color": "#000",
+                    "density": 1
+                  },
+                  "actions": [
+                    {
+                      "log_id": "toggle_mask",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "mask4",
+                        "value": {
+                          "type": "boolean",
+                          "value": "@{!mask4}"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

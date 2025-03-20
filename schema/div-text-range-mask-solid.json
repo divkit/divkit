@@ -17,7 +17,9 @@
           "$description": "translations.json#/div_solid_background_color"
         }
       },
-      "platforms": [],
+      "platforms": [
+        "web"
+      ],
       "required": [
         "color",
         "type"

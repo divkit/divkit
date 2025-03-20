@@ -29,10 +29,13 @@
         "density": {
           "type": "number",
           "default_value": "0.8",
+          "constraint": "number > 0.0 && number <= 1.0",
           "$description": "translations.json#/div_text_range_mask_particles_density"
         }
       },
-      "platforms": [],
+      "platforms": [
+        "web"
+      ],
       "required": [
         "type",
         "color"

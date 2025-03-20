@@ -46,6 +46,23 @@ export interface TextRangeBorder {
 
 export type TextVerticalAlignment = 'top' | 'center' | 'bottom' | 'baseline';
 
+export interface TextMaskParticles {
+    type: 'particles';
+    is_enabled?: boolean;
+    color: string;
+    is_animated?: boolean;
+    particle_size?: FixedSize;
+    density?: number;
+}
+
+export interface TextMaskSolid{
+    type: 'solid';
+    is_enabled?: boolean;
+    color: string;
+}
+
+export type TextMask = TextMaskParticles | TextMaskSolid;
+
 export interface TextRange extends TextStyles {
     start?: number;
     end?: number;
@@ -55,6 +72,7 @@ export interface TextRange extends TextStyles {
     background?: RangeBackground;
     alignment_vertical?: TextVerticalAlignment;
     baseline_offset?: number;
+    mask?: TextMask;
 }
 
 export type TextIndexingDirection = 'normal' | 'reversed';
