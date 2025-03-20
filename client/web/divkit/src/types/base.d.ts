@@ -123,6 +123,7 @@ export interface Tooltip {
     mode?: TooltipMode;
     tap_outside_actions?: Action[];
     close_by_tap_outside?: boolean;
+    background_accessibility_description?: string;
 }
 
 export interface DivLayoutProvider {

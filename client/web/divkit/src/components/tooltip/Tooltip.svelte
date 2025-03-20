@@ -187,6 +187,12 @@
         reposition();
     }
 
+    function onKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'Escape' && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+            rootCtx.onTooltipClose(internalId);
+        }
+    }
+
     onMount(() => {
         if (rootCtx.tooltipRoot) {
             const computed = window.getComputedStyle(tooltipNode);
@@ -221,20 +227,36 @@
 />
 
 {#if visible && modal}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class={css.tooltip__overlay} on:click={onOutClick}></div>
+    {#if data.background_accessibility_description}
+        <button
+            class={css.tooltip__overlay}
+            type="button"
+            aria-label={data.background_accessibility_description}
+            on:click={onOutClick}
+        ></button>
+    {:else}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+            class={css.tooltip__overlay}
+            on:click={onOutClick}
+        ></div>
+    {/if}
 {/if}
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
     bind:this={tooltipNode}
     class="{genClassName('tooltip', css, mods)} {$isDesktop ? rootCss.root_platform_desktop : ''}"
+    role="dialog"
+    aria-modal={modal}
     style:top={tooltipY}
     style:left={tooltipX}
     style:width={tooltipWidth}
     style:height={tooltipHeight}
     in:inOutAnimation={{ animations: $animationIn || DEFAULT_ANIMATION, direction: 'in' }}
     out:inOutAnimation={{ animations: $animationOut || DEFAULT_ANIMATION, direction: 'out' }}
+    on:keydown={onKeyDown}
 >
     <Unknown
         {componentContext}
