@@ -50,7 +50,9 @@
 }
 
 .text-range__cloud-svg {
-    display: none;
+    display: inline;
+    width: 0;
+    height: 0;
 }
 
 .text-range_relative-vertical-align {

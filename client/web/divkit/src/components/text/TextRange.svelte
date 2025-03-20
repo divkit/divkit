@@ -28,12 +28,13 @@
     export let singleline = false;
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
     export let cloudBg = false;
+    export let cloudBgId = '';
     export let customLineHeight: number | null = null;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const direction = rootCtx.direction;
 
-    const cloudFilterId = cloudBg && rootCtx.genId('text-range') || '';
+    const cloudFilterId = cloudBg && cloudBgId || rootCtx.genId('text-range') || '';
 
     let decoration = 'none';
     let fontSize = 12;
@@ -227,10 +228,10 @@
         padding: cloudPadding ?
             edgeInsertsToCss(edgeInsertsMultiply(cloudPadding, 10 / fontSize), $direction) :
             undefined,
-        filter: cloudBg && hasCloudBg ? `url(#${cloudFilterId})` : shadow,
+        filter: cloudBg && hasCloudBg && !cloudBgId ? `url(#${cloudFilterId})` : shadow,
         color: colorOverride || color,
         background,
-        opacity: cloudBg && hasCloudBg ?
+        opacity: cloudBg && hasCloudBg && !cloudBgId ?
             (parseColor((textStyles.background as CloudBackground).color)?.a ?? 255) / 255 :
             undefined,
         /**
