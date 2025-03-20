@@ -272,8 +272,8 @@
     "ru": "Параметры HTTP-запроса, которые используются для конфигурации отправки данных."
   },
   "div_action_submit_request_headers": {
-    "en": "HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex json-builders.",
-    "ru": "Заголовки HTTP-запроса. Обратите внимание, что DivKit не очищает дублирующиеся заголовки, наличие которых может приводить к ошибкам в обработке запроса. Учитывайте это при сборке action'ов сложными json-builder'ами."
+    "en": "HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex JSON-builders.",
+    "ru": "Заголовки HTTP-запроса. Обратите внимание, что DivKit не очищает дублирующиеся заголовки, наличие которых может приводить к ошибкам в обработке запроса. Учитывайте это при сборке action'ов сложными JSON-builder'ами."
   },
   "div_action_submit_request_method": {
     "en": "HTTP request method.",
@@ -2584,12 +2584,12 @@
     "ru": "Анимация исчезания подсказки. По умолчанию подсказка будет исчезать постепенно со смещением от якорной точки на 10 dp."
   },
   "div_tooltip_background_accessibility_description": {
-    "en": "Description for accessibility of the background tap action for tooltip.",
-    "ru": "Описание для доступности действия нажатия по фону тултипа."
+    "en": "Description for accessibility of the tap action on the background of the tooltip.",
+    "ru": "Описание для доступности действия нажатия на фон тултипа."
   },
   "div_tooltip_close_by_tap_outside": {
     "en": "Allows dismissing tooltip by tapping outside of it.",
-    "ru": "Позволяет закрывать подсказку при нажатии за её пределами."
+    "ru": "Позволяет закрывать подсказку при нажатии за ее пределами."
   },
   "div_tooltip_div": {
     "en": "An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.",
@@ -2609,11 +2609,11 @@
   },
   "div_tooltip_mode_modal": {
     "en": "Modal mode. Clicks outside do not pass through to underlying elements. Restricts focus to the tooltip. Back button on Android and back gesture on iOS close the tooltip.",
-    "ru": "Модальный режим. Клик за пределами не проходит сквозь и не доступен элементам под подсказкой. Ограничивает фокус в пределах подсказки. Кнопка назад на android и жест назад на ios закрывают подсказку"
+    "ru": "Модальный режим. Клик за пределами не проходит сквозь и не доступен элементам под подсказкой. Ограничивает фокус в пределах подсказки. Кнопка назад на Android и жест назад на iOS закрывают подсказку."
   },
   "div_tooltip_mode_non_modal": {
     "en": "Non-modal mode. Clicks outside pass through to underlying elements. Does not restrict focus to the tooltip. Back button on Android and back gesture on iOS do not close the tooltip.",
-    "ru": "Немодальный режим. Клик за пределами обрабатывается элементами под подсказкой. Не ограничивает фокус в пределах подсказки. Кнопка назад на android и жест назад на ios не закрывают подсказку."
+    "ru": "Немодальный режим. Клик за пределами обрабатывается элементами под подсказкой. Не ограничивает фокус в пределах подсказки. Кнопка назад на Android и жест назад на iOS не закрывают подсказку."
   },
   "div_tooltip_offset": {
     "en": "Shift relative to an anchor point.",
