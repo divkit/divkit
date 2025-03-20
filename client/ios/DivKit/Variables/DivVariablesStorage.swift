@@ -75,6 +75,15 @@ public final class DivVariablesStorage {
     getVariableValue(path: cardId.path, name: name)
   }
 
+  public func getVariableValue(
+    cardId: DivCardID,
+    name: DivVariableName
+  ) -> DivVariableValue? {
+    lock.withLock {
+      getNearestStorage(cardId.path).getVariableValue(name)
+    }
+  }
+
   public func hasValue(cardId: DivCardID, name: DivVariableName) -> Bool {
     let localStorage = lock.withLock {
       localStorages[cardId.path]
