@@ -40,7 +40,11 @@ class Evaluator(val evaluationContext: EvaluationContext) {
             }
             Token.Operator.Unary.Not -> {
                 if (literal !is Boolean) {
-                    throwExceptionOnEvaluationFailed("!$literal", "A Boolean is expected after a unary not.")
+                    val quote = if (literal is String) "'" else ""
+                    throwExceptionOnEvaluationFailed(
+                        "!$quote$literal$quote",
+                        "A Boolean is expected after a unary not."
+                    )
                 }
                 !literal
             }

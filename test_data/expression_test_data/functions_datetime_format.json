@@ -151,6 +151,9 @@
     },
     {
       "expression": "@{formatDateAsUTC(parseUnixTime(0), '\\'Year \\'y\\', extended year \\'u')}",
+      "unsupported_platforms": {
+        "android": "Platform-specific format"
+      },
       "expected": {
         "type": "string",
         "value": "Year 1970, extended year 1970"

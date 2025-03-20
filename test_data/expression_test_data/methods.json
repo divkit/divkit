@@ -217,6 +217,7 @@
         "value": "Failed to evaluate [!'false']. A Boolean is expected after a unary not."
       },
       "platforms": [
+        "android",
         "ios",
         "web",
         "flutter"
