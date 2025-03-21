@@ -107,6 +107,20 @@ export interface Palette {
     dark: PaletteList;
 }
 
+export type EvalTypes = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'datetime' | 'dict' | 'array';
+
+export interface DivFunctionArgument {
+    name: string;
+    type: EvalTypes;
+}
+
+export interface DivFunction {
+    name: string;
+    body: string;
+    return_type: EvalTypes;
+    arguments: DivFunctionArgument[];
+}
+
 export interface DivJson {
     templates?: Record<string, unknown>;
     card: {
@@ -115,6 +129,7 @@ export interface DivJson {
         variables?: DivVariable[];
         variable_triggers?: VariableTrigger[];
         timers?: DivTimer[];
+        functions?: DivFunction[];
     }
     /** @deprecated */
     palette?: Palette;

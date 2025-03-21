@@ -78,7 +78,8 @@
         "$ref": "div-function.json"
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "$description": "translations.json#/div_data_functions"
     },

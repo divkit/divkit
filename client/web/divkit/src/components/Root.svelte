@@ -53,10 +53,13 @@
         ActionScrollTo,
         ActionScrollBy,
         Overflow,
-        VideoPlayerProvider
+        VideoPlayerProvider,
+
+        DivFunction
+
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
-    import type { Animator, AppearanceTransition, DivBaseData, DivFunction, Tooltip, TransitionChange } from '../types/base';
+    import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
     import type { SwitchElements } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
@@ -100,6 +103,7 @@
     import { checkSubmitAction } from '../utils/checkSubmitAction';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
+  import Actionable from './utilities/Actionable.svelte';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -1814,6 +1818,32 @@
         };
     }
 
+    function prepareCustomFunctions(
+        list: MaybeMissing<DivFunction>[],
+        componentContext?: ComponentContext
+    ): CustomFunctions {
+        const customFunctions: CustomFunctions = new Map();
+        const log = (componentContext?.logError || logError);
+
+        list.forEach(desc => {
+            if (customFunctions) {
+                try {
+                    checkCustomFunction(desc);
+                } catch (err: unknown) {
+                    // Only Error thrown here
+                    log(wrapError(err as Error));
+                    return;
+                }
+                const fn = desc as DivFunction;
+                const list = customFunctions.get(fn.name) || [];
+                list.push(customFunctionWrap(fn));
+                customFunctions.set(fn.name, list);
+            }
+        });
+
+        return customFunctions;
+    }
+
     function produceComponentContext(from?: ComponentContext | undefined): ComponentContext {
         const ctx: ComponentContext = {
             id: '',
@@ -1923,22 +1953,7 @@
 
                 let localCustomFunctions: CustomFunctions | undefined;
                 if (Array.isArray(childProcessedJson.functions)) {
-                    localCustomFunctions = new Map();
-                    childProcessedJson.functions.forEach(desc => {
-                        if (localCustomFunctions) {
-                            try {
-                                checkCustomFunction(desc);
-                            } catch (err: unknown) {
-                                // Only Error thrown here
-                                ctx.logError(wrapError(err as Error));
-                                return;
-                            }
-                            const fn = desc as DivFunction;
-                            const list = localCustomFunctions.get(fn.name) || [];
-                            list.push(customFunctionWrap(fn));
-                            localCustomFunctions.set(fn.name, list);
-                        }
-                    });
+                    localCustomFunctions = prepareCustomFunctions(childProcessedJson.functions, ctx);
                 }
                 componentContext.customFunctions = mergeCustomFunctions(ctx.customFunctions, localCustomFunctions);
 
@@ -2288,6 +2303,10 @@
 
     $: states = json?.card?.states;
     const rootComponentContext = produceComponentContext();
+    if (Array.isArray(json.card?.functions)) {
+        rootComponentContext.customFunctions = prepareCustomFunctions(json.card.functions);
+    }
+
     let rootStateComponentContext: ComponentContext | undefined;
     $: if (states && !hasError && !hsaIdError) {
         const rootStateDiv: DivBaseData = {

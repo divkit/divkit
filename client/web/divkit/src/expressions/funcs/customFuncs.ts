@@ -1,4 +1,4 @@
-import type { DivFunction } from '../../types/base';
+import type { DivFunction } from '../../../typings/common';
 import type { Node } from '../ast';
 import { evalExpression, type EvalTypes, type VariablesMap } from '../eval';
 import { parse } from '../expressions';
