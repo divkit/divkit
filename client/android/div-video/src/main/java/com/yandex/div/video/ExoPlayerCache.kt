@@ -2,7 +2,7 @@ package com.yandex.div.video
 
 import android.content.Context
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
@@ -12,12 +12,9 @@ private const val VIDEO_CACHE_DIR = "divKit_video_cache"
 private const val CACHE_SIZE = 90L * 1024 * 1024
 
 public class ExoPlayerCache(private val context: Context) {
-    private val httpDataSourceFactory = DefaultHttpDataSource.Factory()
-        .setAllowCrossProtocolRedirects(true)
-
     internal val cacheDataSourceFactory: CacheDataSource.Factory = CacheDataSource.Factory()
         .setCache(simpleCache)
-        .setUpstreamDataSourceFactory(httpDataSourceFactory)
+        .setUpstreamDataSourceFactory(DefaultDataSource.Factory(context))
         .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
 
     private val simpleCache: SimpleCache
