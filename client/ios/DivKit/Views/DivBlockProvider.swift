@@ -183,7 +183,7 @@ final class DivBlockProvider {
     self.divData = divData
   }
 
-  private func update(reasons: [DivCardUpdateReason]) {
+  func update(reasons: [DivCardUpdateReason]) {
     guard var divData else {
       block = debugParams.isDebugInfoEnabled ? makeErrorsBlock(dataErrors) : noDataBlock
       return

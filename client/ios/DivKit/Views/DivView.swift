@@ -139,6 +139,14 @@ public final class DivView: VisibleBoundsTrackingView {
     blockProvider?.parentScrollView = parentScrollView
   }
 
+  /// Applies the patch to the card with id.
+  /// - Parameters:
+  /// - patch: `DivPatch` that should be applied to the card.
+  /// - cardId: ID of the card to which the patch should be applied.
+  public func applyPatch(_ patch: DivPatch, cardId: DivCardID) {
+    blockProvider?.update(reasons: [.patch(cardId, patch)])
+  }
+
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
