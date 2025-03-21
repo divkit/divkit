@@ -144,6 +144,41 @@ final class DivBlockModelingContextTests: XCTestCase {
 
     XCTAssertEqual(context.errorsStorage.errors.count, 1)
   }
+
+  func testWhenModifyOtherPropertiesToNil_contextIsNotChanged() throws {
+    let parentContext = DivBlockModelingContext().modifying(
+      cardLogId: "card_log_id",
+      pathSuffix: "path_suffix",
+      parentDivStatePath: .makeDivStatePath(from: "div_id")
+    )
+
+    let childContext = parentContext.modifying(
+      cardLogId: nil,
+      pathSuffix: nil,
+      parentDivStatePath: nil
+    )
+
+    XCTAssertEqual(childContext.cardLogId, parentContext.cardLogId)
+    XCTAssertEqual(childContext.path, parentContext.path)
+    XCTAssertEqual(childContext.parentDivStatePath, parentContext.parentDivStatePath)
+  }
+
+  func test_WhenModifyIdPropertiesToNil_propertiesAreNil() throws {
+    let parentContext = DivBlockModelingContext().modifying(
+      overridenId: "overriden_id",
+      currentDivId: "current_div_id",
+      pathSuffix: "arbitrary_parent_path_suffix"
+    )
+
+    let childContext = parentContext.modifying(
+      overridenId: nil,
+      currentDivId: nil,
+      pathSuffix: "arbitrary_child_path_suffix"
+    )
+
+    XCTAssertNil(childContext.overridenId)
+    XCTAssertNil(childContext.currentDivId)
+  }
 }
 
 private final class MockSizeModifier: DivSizeModifier {
