@@ -1130,103 +1130,7 @@
             return;
         }
 
-        if (actionUrl) {
-            try {
-                const url = actionUrl.replace(/div-action:\/\//, '');
-                const parts = /([^?]+)\?(.+)/.exec(url);
-                if (!parts) {
-                    return;
-                }
-                const params = new URLSearchParams(parts[2]);
-
-                switch (parts[1]) {
-                    case 'set_state':
-                        await setState(params.get('state_id'), componentContext);
-                        break;
-                    case 'set_current_item':
-                    case 'set_previous_item':
-                    case 'set_next_item':
-                    case 'scroll_to_start':
-                    case 'scroll_to_end':
-                    case 'scroll_backward':
-                    case 'scroll_forward':
-                    case 'scroll_to_position':
-                        switchElementAction(parts[1], params.get('id'), {
-                            item: params.get('item'),
-                            step: params.get('step'),
-                            overflow: params.get('overflow'),
-                            animated: params.get('animated')
-                        });
-                        break;
-                    case 'set_variable':
-                        const name = params.get('name');
-                        const value = params.get('value');
-
-                        if (name && value !== null) {
-                            const variableInstance = componentContext?.getVariable(name) || variables.get(name);
-                            if (variableInstance) {
-                                variableInstance.set(value);
-                            } else {
-                                log(wrapError(new Error('Cannot find variable'), {
-                                    additional: {
-                                        name
-                                    }
-                                }));
-                            }
-                        } else {
-                            log(wrapError(new Error('Incorrect set_variable_action'), {
-                                additional: {
-                                    url
-                                }
-                            }));
-                        }
-                        break;
-                    case 'timer':
-                        const timerAction = params.get('action');
-                        const id = params.get('id');
-
-                        if (timersController) {
-                            timersController.execTimerAction(id, timerAction);
-                        } else {
-                            log(wrapError(new Error('Incorrect timer action'), {
-                                additional: {
-                                    id,
-                                    action: timerAction
-                                }
-                            }));
-                        }
-                        break;
-                    case 'video':
-                        callVideoAction(params.get('id'), params.get('action'), componentContext);
-                        break;
-                    case 'download':
-                        callDownloadAction(params.get('url'), action.download_callbacks, componentContext);
-                        break;
-                    case 'show_tooltip':
-                        callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
-                        break;
-                    case 'hide_tooltip':
-                        callHideTooltip(params.get('id'), componentContext);
-                        break;
-                    case 'set_stored_value': {
-                        callSetStoredValue(componentContext, params.get('name'), params.get('value'), params.get('type'), params.get('lifetime'));
-                        break;
-                    }
-                    default:
-                        log(wrapError(new Error('Unknown type of action'), {
-                            additional: {
-                                url: actionUrl
-                            }
-                        }));
-                }
-            } catch (err: any) {
-                log(wrapError(err, {
-                    additional: {
-                        url: actionUrl
-                    }
-                }));
-            }
-        } else if (actionTyped) {
+        if (actionTyped) {
             switch (actionTyped.type) {
                 case 'set_variable': {
                     const { variable_name: name, value } = actionTyped;
@@ -1441,6 +1345,102 @@
                         }
                     }));
                 }
+            }
+        } else if (actionUrl) {
+            try {
+                const url = actionUrl.replace(/div-action:\/\//, '');
+                const parts = /([^?]+)\?(.+)/.exec(url);
+                if (!parts) {
+                    return;
+                }
+                const params = new URLSearchParams(parts[2]);
+
+                switch (parts[1]) {
+                    case 'set_state':
+                        await setState(params.get('state_id'), componentContext);
+                        break;
+                    case 'set_current_item':
+                    case 'set_previous_item':
+                    case 'set_next_item':
+                    case 'scroll_to_start':
+                    case 'scroll_to_end':
+                    case 'scroll_backward':
+                    case 'scroll_forward':
+                    case 'scroll_to_position':
+                        switchElementAction(parts[1], params.get('id'), {
+                            item: params.get('item'),
+                            step: params.get('step'),
+                            overflow: params.get('overflow'),
+                            animated: params.get('animated')
+                        });
+                        break;
+                    case 'set_variable':
+                        const name = params.get('name');
+                        const value = params.get('value');
+
+                        if (name && value !== null) {
+                            const variableInstance = componentContext?.getVariable(name) || variables.get(name);
+                            if (variableInstance) {
+                                variableInstance.set(value);
+                            } else {
+                                log(wrapError(new Error('Cannot find variable'), {
+                                    additional: {
+                                        name
+                                    }
+                                }));
+                            }
+                        } else {
+                            log(wrapError(new Error('Incorrect set_variable_action'), {
+                                additional: {
+                                    url
+                                }
+                            }));
+                        }
+                        break;
+                    case 'timer':
+                        const timerAction = params.get('action');
+                        const id = params.get('id');
+
+                        if (timersController) {
+                            timersController.execTimerAction(id, timerAction);
+                        } else {
+                            log(wrapError(new Error('Incorrect timer action'), {
+                                additional: {
+                                    id,
+                                    action: timerAction
+                                }
+                            }));
+                        }
+                        break;
+                    case 'video':
+                        callVideoAction(params.get('id'), params.get('action'), componentContext);
+                        break;
+                    case 'download':
+                        callDownloadAction(params.get('url'), action.download_callbacks, componentContext);
+                        break;
+                    case 'show_tooltip':
+                        callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
+                        break;
+                    case 'hide_tooltip':
+                        callHideTooltip(params.get('id'), componentContext);
+                        break;
+                    case 'set_stored_value': {
+                        callSetStoredValue(componentContext, params.get('name'), params.get('value'), params.get('type'), params.get('lifetime'));
+                        break;
+                    }
+                    default:
+                        log(wrapError(new Error('Unknown type of action'), {
+                            additional: {
+                                url: actionUrl
+                            }
+                        }));
+                }
+            } catch (err: any) {
+                log(wrapError(err, {
+                    additional: {
+                        url: actionUrl
+                    }
+                }));
             }
         }
     }
