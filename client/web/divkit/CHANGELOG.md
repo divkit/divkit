@@ -1,3 +1,18 @@
+## 31.8.0 (March 24, 2025)
+
+* Added support for `background_accessibility_description` for the `tooltip`. If specified, the backdrop (background) of the `tooltip` is converted to a button with the specified text.
+* Added support for the `mask` in `text`.
+* Added the ability to provide a custom implementation of the video player using the `videoPlayerProvider` property.
+* Fixed a bug that caused the `indicator` elements to be non-clickable on the `desktop` platform.
+* Fixed a bug where the `video` component was not available for mouse/touch events (context menu, etc.).
+* Fixed an error with blinking the height of the `indicator` when changing the elements of the `pager`.
+* Fixed the `cloud` background of the `text` in Firefox (for the background of the entire text only).
+* Fixed the issue with the `pager` hanging if `default_item` was specified.
+* Fixed typings for the package.
+* The `indicator` has been updated, which will be hidden if there is one element or less in the `pager`.
+* The tooltip accessibility has been updated: it now has the appropriate ARIA role and closes when the `Escape` key is pressed.
+
+
 ## 31.7.0 (March 17, 2025)
 
 * Added support for the `phone` `input` mask.
