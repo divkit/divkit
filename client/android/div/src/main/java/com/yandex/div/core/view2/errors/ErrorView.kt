@@ -21,7 +21,6 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.Assert
-import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.FrameContainerLayout
 
 internal class ErrorView(
@@ -76,6 +75,9 @@ internal class ErrorView(
         }
 
         val view = DetailsViewGroup(root.context, errorModel.getErrorHandler(),
+            onExecuteAction = { actionString ->
+                errorModel.executeAction(actionString)
+            },
             onCloseAction = {
                 errorModel.hideDetails()
             },
@@ -167,6 +169,7 @@ internal class ErrorView(
 private class DetailsViewGroup(
     context: Context,
     errorHandler: (Throwable) -> Unit,
+    private val onExecuteAction: (String) -> Unit,
     private val onCloseAction: () -> Unit,
     private val onCopyAction: () -> Unit,
 ) : LinearLayout(context) {
@@ -261,11 +264,7 @@ private class DetailsViewGroup(
         addView(
             Button(context).apply {
                 text = "execute"
-                setOnClickListener {
-                    KLog.i("execution button") {
-                        "execution button clicked, action input is: ${actionInput.text}"
-                    }
-                }
+                setOnClickListener { onExecuteAction(actionInput.text.toString()) }
             },
             LayoutParams(
                 LayoutParams.WRAP_CONTENT,
