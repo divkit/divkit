@@ -10,6 +10,8 @@ import android.os.TransactionTooLargeException
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -19,6 +21,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.FrameContainerLayout
 
 internal class ErrorView(
@@ -171,6 +174,7 @@ private class DetailsViewGroup(
     private val variableMonitor = VariableMonitor(errorHandler)
 
     private val errorsOutput = createErrorsOutput()
+    private val actionInput = createActionInput()
     private val monitorView = VariableMonitorView(context, variableMonitor)
 
     init {
@@ -237,6 +241,39 @@ private class DetailsViewGroup(
         gravity = Gravity.LEFT
     }
 
+    private fun createActionInput() = EditText(context).apply {
+        setTextColor(Color.WHITE)
+        setPadding(24, 12, 24, 12)
+        setBackgroundResource(R.drawable.action_box_background)
+        setHorizontallyScrolling(true)
+    }
+
+    private fun createActionExecutionBox() = LinearLayout(context).apply {
+        orientation = VERTICAL
+
+        addView(
+            actionInput, LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT,
+                1f
+            )
+        )
+        addView(
+            Button(context).apply {
+                text = "execute"
+                setOnClickListener {
+                    KLog.i("execution button") {
+                        "execution button clicked, action input is: ${actionInput.text}"
+                    }
+                }
+            },
+            LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+            )
+        )
+    }
+
     private fun configureView() {
         val padding = 8.dpToPx(resources.displayMetrics)
         setPadding(padding, padding, padding, padding)
@@ -247,6 +284,12 @@ private class DetailsViewGroup(
         addView(
             createTopPanel(), LayoutParams(
                 LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+            )
+        )
+        addView(
+            createActionExecutionBox(), LayoutParams(
+                LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT,
             )
         )
