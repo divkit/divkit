@@ -1,3 +1,14 @@
+<script lang="ts" context="module">
+    const FILE_TYPE_TO_LIMITS = {
+        '': 'image',
+        image: 'image',
+        gif: 'image',
+        lottie: 'lottie',
+        video: 'video',
+        image_preview: 'preview'
+    } as const;
+</script>
+
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
@@ -30,7 +41,14 @@
 
     const dispatch = createEventDispatcher();
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { file2Dialog, warnFileLimit, errorFileLimit, previewWarnFileLimit, previewErrorFileLimit } = getContext<AppContext>(APP_CTX);
+    const {
+        file2Dialog,
+        warnFileLimit,
+        errorFileLimit,
+        previewWarnFileLimit,
+        previewErrorFileLimit,
+        fileLimits
+    } = getContext<AppContext>(APP_CTX);
 
     let internalValue: string | number = 0;
     let elem: HTMLElement;
@@ -81,8 +99,8 @@
         pattern;
 
     $: fileSizeMod = fileType === 'image_preview' ?
-        calcFileSizeMod(currentSize, previewWarnFileLimit, previewErrorFileLimit) :
-        calcFileSizeMod(currentSize, warnFileLimit, errorFileLimit);
+        calcFileSizeMod(currentSize, FILE_TYPE_TO_LIMITS[fileType], previewWarnFileLimit, previewErrorFileLimit, fileLimits) :
+        calcFileSizeMod(currentSize, FILE_TYPE_TO_LIMITS[fileType], warnFileLimit, errorFileLimit, fileLimits);
 
     $: totalInlineButtonsWidth = ((currentSize && currentSize > 0 && sizeLabelWidth > 0) ? sizeLabelWidth : 0) +
         customButtonsWidth;

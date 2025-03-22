@@ -1,3 +1,5 @@
+import type { FileLimits } from '../../lib';
+
 const cache = new Map<string, Promise<number>>();
 
 export function getFileSize(value: string, fileType: string): Promise<number> {
@@ -21,8 +23,29 @@ export function getFileSize(value: string, fileType: string): Promise<number> {
     return res;
 }
 
-export function calcFileSizeMod(currentSize: number | undefined, warnLimit: number, errorLimit: number): string {
+export function calcFileSizeMod(
+    currentSize: number | undefined,
+    type: keyof FileLimits,
+    warnLimit: number,
+    errorLimit: number,
+    fileLimits: FileLimits | undefined
+): string {
     if (!currentSize || currentSize < 1) {
+        return '';
+    }
+
+    if (fileLimits) {
+        const limits = fileLimits[type];
+        if (!limits) {
+            return '';
+        }
+        if (limits.error !== undefined && currentSize > limits.error) {
+            return 'error';
+        }
+        if (limits.warn !== undefined && currentSize > limits.warn) {
+            return 'warn';
+        }
+
         return '';
     }
 

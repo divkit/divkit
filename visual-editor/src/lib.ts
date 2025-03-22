@@ -106,6 +106,19 @@ export interface Source {
     example: object;
 }
 
+export interface FileLimit {
+    warn?: number;
+    error?: number;
+}
+
+export interface FileLimits {
+    preview?: FileLimit;
+    image?: FileLimit;
+    lottie?: FileLimit;
+    video?: FileLimit;
+    upload?: FileLimit;
+}
+
 export interface DivProEditorOptions {
     renderTo: HTMLElement;
     shadowRoot?: ShadowRoot;
@@ -121,10 +134,15 @@ export interface DivProEditorOptions {
     paletteEnabled?: boolean;
     cardLocales?: CardLocale[];
     sources?: Source[];
+    /* @deprecated */
     previewWarnFileLimit?: number;
+    /* @deprecated */
     previewErrorFileLimit?: number;
+    /* @deprecated */
     warnFileLimit?: number;
+    /* @deprecated */
     errorFileLimit?: number;
+    fileLimits?: FileLimits;
     rootConfigurable?: boolean;
     customFontFaces?: FontFaceDesc[];
     directionSelector?: boolean;
@@ -207,6 +225,7 @@ export const DivProEditor = {
                 previewErrorFileLimit: opts.previewErrorFileLimit,
                 warnFileLimit: opts.warnFileLimit,
                 errorFileLimit: opts.errorFileLimit,
+                fileLimits: opts.fileLimits,
                 rootConfigurable: opts.rootConfigurable,
                 customFontFaces: opts.customFontFaces,
                 directionSelector: opts.directionSelector,

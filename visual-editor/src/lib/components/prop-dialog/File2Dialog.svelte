@@ -1,3 +1,14 @@
+<script lang="ts" context="module">
+    const SUBTYPE_TO_LIMIT = {
+        '': 'image',
+        image: 'image',
+        gif: 'image',
+        lottie: 'lottie',
+        video: 'video',
+        image_preview: 'preview'
+    } as const;
+</script>
+
 <script lang="ts">
     import { getContext } from 'svelte';
 
@@ -12,11 +23,18 @@
     import trashIcon from '../../../assets/trash.svg?raw';
     import generateIcon from '../../../assets/generate.svg?raw';
     import { loadFileAsBase64 } from '../../utils/loadFileAsBase64';
-    import { getFileSize } from '../../utils/fileSize';
+    import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
     import { hasRequestVideoFrame } from '../../utils/hasRequestVideoFrame';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { uploadFile, previewWarnFileLimit, previewErrorFileLimit, warnFileLimit, errorFileLimit } = getContext<AppContext>(APP_CTX);
+    const {
+        uploadFile,
+        previewWarnFileLimit,
+        previewErrorFileLimit,
+        warnFileLimit,
+        errorFileLimit,
+        fileLimits
+    } = getContext<AppContext>(APP_CTX);
 
     const FILE_FILTER = {
         image: 'image/png, image/jpeg',
@@ -104,7 +122,7 @@
     };
     let callback: File2DialogCallback;
     let title = '';
-    let subtype = '';
+    let subtype: '' | 'image' | 'gif' | 'lottie' | 'video' | 'image_preview' = '';
     let commonSubtype = '';
     let lottieItem: AnimationItem | null;
     let previewNode: HTMLElement;
@@ -134,7 +152,12 @@
     }
 
     function upload(file: File): Promise<void> {
-        if (file.size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
+        if (fileLimits?.upload) {
+            if (subtype !== 'image_preview' && fileLimits.upload.error !== undefined && file.size > fileLimits.upload.error) {
+                showError = 'big';
+                return Promise.resolve();
+            }
+        } else if (file.size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
             showError = 'big';
             return Promise.resolve();
         }
@@ -148,10 +171,7 @@
             value.url = url;
             loading = false;
 
-            if (file.size > (subtype === 'image_preview' ? previewWarnFileLimit : warnFileLimit) && subtype !== 'video') {
-                showError = 'big-warn';
-                return Promise.resolve();
-            }
+            loadFileSize();
         }).catch(_err => {
             loading = false;
             showError = 'load';
@@ -250,8 +270,16 @@
     function loadFileSize(): void {
         showError = false;
 
-        getFileSize(String(value), subtype).then(size => {
-            if (size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
+        getFileSize(String(value.url), subtype).then(size => {
+            if (fileLimits) {
+                const sizeMod = calcFileSizeMod(size, SUBTYPE_TO_LIMIT[subtype], Infinity, Infinity, fileLimits);
+
+                if (sizeMod === 'error') {
+                    showError = 'big';
+                } else if (sizeMod === 'warn') {
+                    showError = 'big-warn';
+                }
+            } else if (size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
                 showError = 'big';
             } else if (size > (subtype === 'image_preview' ? previewWarnFileLimit : warnFileLimit)) {
                 showError = 'big-warn';
@@ -306,6 +334,7 @@
                         img.onload = () => {
                             ctx.drawImage(img, 0, 0);
                             value.url = canvas.toDataURL();
+                            loadFileSize();
                             resolve(value.url);
                         };
                         img.onerror = () => {
@@ -344,6 +373,7 @@
                 canvas.height = meta.height;
                 ctx.drawImage(video, 0, 0);
                 value.url = canvas.toDataURL();
+                loadFileSize();
             });
             // todo on error
         }
