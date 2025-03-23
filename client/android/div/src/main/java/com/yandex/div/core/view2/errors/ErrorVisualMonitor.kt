@@ -13,12 +13,16 @@ import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.evaluable.types.Url
+import com.yandex.div.internal.KLog
+import com.yandex.div.internal.util.map
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div2.DivAction
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.URL
 import javax.inject.Inject
 
 private const val SHOW_LIMIT = 25
@@ -186,18 +190,24 @@ internal class ErrorModel(
     }
 
     fun executeAction(action: String) {
-        try {
-            val actionJson = JSONObject(action)
-            val divAction = DivAction(
-                DivParsingEnvironment(ParsingErrorLogger.LOG),
-                actionJson
-            )
-            div2View.handleAction(divAction)
-        }
-        catch (e: JSONException) {
-            val uri = Uri.parse(action)
-            div2View.handleUri(uri)
-        }
+        val parsingEnvironment = DivParsingEnvironment(ParsingErrorLogger.LOG)
+        val actions = runCatching { JSONArray(action) }
+            .mapCatching { jsonArray ->
+                jsonArray.map { actionJson ->
+                    DivAction(parsingEnvironment, actionJson as JSONObject)
+                }
+            }
+            .recoverCatching {
+                val jsonObject = JSONObject(action)
+                listOf(DivAction(parsingEnvironment, jsonObject))
+            }
+            .getOrElse {
+                val uri = Uri.parse(action)
+                div2View.handleUri(uri)
+                return
+            }
+
+        actions.forEach(div2View::handleAction)
     }
 
     fun getErrorHandler(): (Throwable) -> Unit {

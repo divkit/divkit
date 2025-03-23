@@ -7,6 +7,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.os.TransactionTooLargeException
+import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
@@ -249,20 +250,33 @@ private class DetailsViewGroup(
         setPadding(24, 12, 24, 12)
         setBackgroundResource(R.drawable.action_box_background)
         setHorizontallyScrolling(true)
+        setHintTextColor(Color.parseColor("#bbbbbb"))
+        hint = "div-action://some_action?arg=value..."
     }
 
+    @SuppressLint("SetTextI18n")
     private fun createActionExecutionBox() = LinearLayout(context).apply {
         orientation = VERTICAL
 
         addView(
-            actionInput, LayoutParams(
-                LayoutParams.MATCH_PARENT,
+            AppCompatTextView(context).apply {
+                text = "Enter array of div-actions, single action or action url:"
+                setTextColor(Color.WHITE)
+                setPadding(0, 0, 0, 12)
+            },
+            LayoutParams(
                 LayoutParams.WRAP_CONTENT,
-                1f
+                LayoutParams.WRAP_CONTENT,
             )
         )
         addView(
-            Button(context).apply {
+            actionInput, LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT,
+            )
+        )
+        addView(
+            Button(ContextThemeWrapper(context, android.R.style.Theme_Material)).apply {
                 text = "execute"
                 setOnClickListener { onExecuteAction(actionInput.text.toString()) }
             },
