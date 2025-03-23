@@ -13,16 +13,12 @@ import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.evaluable.types.Url
-import com.yandex.div.internal.KLog
 import com.yandex.div.internal.util.map
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div2.DivAction
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
-import java.net.URL
 import javax.inject.Inject
 
 private const val SHOW_LIMIT = 25
