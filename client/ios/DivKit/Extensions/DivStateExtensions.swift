@@ -5,15 +5,12 @@ import LayoutKit
 import VGSL
 
 extension DivState: DivBlockModeling {
-  public func pathSuffix(parentContext: DivBlockModelingContext) -> String? {
-    parentContext.overridenId ?? divId ?? id
-  }
-
-  public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let context = modifiedContextParentPath(context)
+  public func makeBlock(context parentContext: DivBlockModelingContext) throws -> Block {
+    let stateId = parentContext.overridenId ?? divId ?? id ?? ""
+    let context = modifiedContextParentPath(parentContext)
     return try addSwipeHandling(
       to: applyBaseProperties(
-        to: { try makeBaseBlock(context: context) },
+        to: { try makeBaseBlock(context: context, id: stateId) },
         context: context,
         actionsHolder: nil
       ),
@@ -21,8 +18,7 @@ extension DivState: DivBlockModeling {
     )
   }
 
-  private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let id = context.currentDivId ?? ""
+  private func makeBaseBlock(context: DivBlockModelingContext, id: String) throws -> Block {
     if id == "" {
       context.addWarning(message: "DivState has no id")
     }

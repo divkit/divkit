@@ -237,6 +237,8 @@ public struct DivBlockModelingContext {
     // It is important to set nil value for elementId if nothing passed.
     // This fiels is used for overriding ids in prototype items
     context.overridenId = overridenId
+    context.currentDivId = currentDivId
+
     if let cardLogId {
       context.cardLogId = cardLogId
     }
@@ -260,9 +262,6 @@ public struct DivBlockModelingContext {
 
     if let pathSuffix {
       context.path = context.path + pathSuffix
-    }
-    if let currentDivId {
-      context.currentDivId = currentDivId
     }
 
     context.errorsStorage = errorsStorage ?? self.errorsStorage
