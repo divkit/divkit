@@ -7,6 +7,7 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.internal.Assert
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingVariable
 
 @Mockable
@@ -18,7 +19,7 @@ internal class VariableControllerImpl(
     private val onChangeObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
     private val onRemoveObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
 
-    private val onAnyVariableChangeObservers = ObserverList<(Variable) -> Unit>()
+    private val onAnyVariableChangeObservers = mutableMapOf<ExpressionResolver, (Variable) -> Unit>()
     private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
     private val declarationObserver = object : DeclarationObserver {
         override fun onDeclared(variable: Variable) = onVariableDeclared(variable)
@@ -124,7 +125,7 @@ internal class VariableControllerImpl(
 
     private fun notifyVariableChanged(v: Variable) {
         Assert.assertMainThread()
-        onAnyVariableChangeObservers.forEach { it.invoke(v) }
+        onAnyVariableChangeObservers.values.toList().forEach { callback -> callback.invoke(v) }
         onChangeObservers[v.name]?.forEach {
             it.invoke(v)
         }
@@ -147,9 +148,9 @@ internal class VariableControllerImpl(
     private fun onVariableRemoved(variable: Variable) {
         variable.removeObserver(notifyVariableChangedCallback)
         onRemoveObservers[variable.name]?.forEach { it.invoke(variable) }
-        onAnyVariableChangeObservers.forEach {
-            it.invoke(variable)
-            variable.removeObserver(it)
+        onAnyVariableChangeObservers.values.toList().forEach { callback ->
+            callback.invoke(variable)
+            variable.removeObserver(callback)
         }
 
         variables.remove(variable.name)
@@ -199,9 +200,9 @@ internal class VariableControllerImpl(
         onVariableDeclared(variable)
     }
 
-    override fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit) {
-        onAnyVariableChangeObservers.addObserver(callback)
-        delegate?.setOnAnyVariableChangeCallback {
+    override fun setOnAnyVariableChangeCallback(owner: ExpressionResolver, callback: (Variable) -> Unit) {
+        onAnyVariableChangeObservers[owner] = callback
+        delegate?.setOnAnyVariableChangeCallback(owner) {
             if (variables[it.name] == null) callback.invoke(it)
         }
     }
