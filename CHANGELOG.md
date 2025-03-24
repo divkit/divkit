@@ -2,9 +2,11 @@
 
 # Android Client:
 * Fixed an issue where `pager` padding was not applied properly.
+* Fixed local video files playback.
 * Open DivVariableController.captureAllVariables.
 
 # iOS Client:
+* Added public `applyPatch` function in `DivView` to allow applying patches from clients.
 * Added public func `getVariableValue` in `DivVariableStorage` to get `DivVariableValue` from the storage.
 * Fixed a bug with visibility actions not working when resizing the DivView.
 * Supported `animated` property for `scroll_by` action.
