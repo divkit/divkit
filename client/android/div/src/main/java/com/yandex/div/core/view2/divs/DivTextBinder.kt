@@ -655,8 +655,6 @@ internal class DivTextBinder @Inject constructor(
         }
     }
 
-    //region Text Color
-
     private fun DivLineHeightTextView.bindRichText(
         bindingContext: BindingContext,
         newDiv: DivText,
