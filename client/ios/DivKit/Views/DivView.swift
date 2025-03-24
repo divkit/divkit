@@ -68,6 +68,8 @@ public final class DivView: VisibleBoundsTrackingView {
     self.divKitComponents = divKitComponents
     preloader = divViewPreloader ?? DivViewPreloader(divKitComponents: divKitComponents)
     super.init(frame: .zero)
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    addGestureRecognizer(tapGestureRecognizer)
   }
 
   /// Sets the source of the ``DivView`` and updates the layout.
@@ -268,6 +270,10 @@ public final class DivView: VisibleBoundsTrackingView {
     }
   }
 
+  @objc private func handleTap() {
+    clearFocus()
+  }
+
   /// Notifies the DivView about changes in its visible bounds.
   /// - Parameters:
   ///  - to: The new bounds rectangle.
@@ -295,6 +301,21 @@ extension DivView: ElementStateObserver {
   public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.focusedElementChanged(isFocused: isFocused, forPath: path)
     blockProvider?.update(path: path, isFocused: isFocused)
+  }
+
+  public func clearFocus() {
+    let blockStateStorage = divKitComponents.blockStateStorage
+    let focusedElement = blockStateStorage.getFocusedElement()
+    guard focusedElement != nil else {
+      return
+    }
+    blockStateStorage.clearFocus()
+    UIApplication.shared.sendAction(
+      #selector(UIResponder.resignFirstResponder),
+      to: nil,
+      from: nil,
+      for: nil
+    )
   }
 }
 

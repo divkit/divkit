@@ -286,6 +286,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
   @objc private func handleTap(recognizer: UITapGestureRecognizer) {
+    observer?.clearFocus()
+
     // Sometimes there are late touches that were performed before layout.
     // This breaks UX due to UIView reusing, so just skip them here.
     guard bounds.contains(recognizer.location(in: self)) else { return }
@@ -304,6 +306,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     guard let actions = model.actions?.asArray() else {
       return false
     }
+    observer?.clearFocus()
     actions.perform(sendingFrom: self)
     return true
   }
