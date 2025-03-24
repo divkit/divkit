@@ -3,6 +3,7 @@
 # Android Client:
 * Fixed an issue where `pager` padding was not applied properly.
 * Fixed local video files playback.
+* Fixed multiple UI update on variable change.
 * Open DivVariableController.captureAllVariables.
 
 # iOS Client:
