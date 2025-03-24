@@ -29,7 +29,8 @@ extension Block {
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String?,
     path: UIElementPath?,
-    isEmpty: Bool?
+    isEmpty: Bool?,
+    isFocused: Bool?
   ) -> Block {
     let hasAlpha = alpha != nil && alpha?.isApproximatelyEqualTo(1) != true
     let anythingToApplyExceptBoundary =
@@ -47,6 +48,7 @@ extension Block {
         || accessibilityElement != nil
         || reuseId != nil
         || isEmpty != nil
+        || isFocused != nil
 
     let decoratingSelf = self as? DecoratingBlock
     let selfBackgroundColor = decoratingSelf?.backgroundColor
@@ -76,7 +78,8 @@ extension Block {
         accessibilityElement: accessibilityElement,
         reuseId: reuseId,
         path: path,
-        isEmpty: isEmpty
+        isEmpty: isEmpty,
+        isFocused: isFocused
       )
     }
 
@@ -103,7 +106,8 @@ extension Block {
       accessibilityElement: accessibilityElement,
       reuseId: reuseId,
       path: path,
-      isEmpty: isEmpty ?? false
+      isEmpty: isEmpty ?? false,
+      isFocused: isFocused ?? false
     )
   }
 
@@ -134,7 +138,8 @@ extension Block {
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
     path: UIElementPath? = nil,
-    isEmpty: Bool? = nil
+    isEmpty: Bool? = nil,
+    isFocused: Bool? = nil
   ) -> Block {
     let decoratedBlock = applyDecoratingBlockProperties(
       boundary: boundary,
@@ -154,7 +159,8 @@ extension Block {
       accessibilityElement: accessibilityElement,
       reuseId: reuseId,
       path: path,
-      isEmpty: isEmpty
+      isEmpty: isEmpty,
+      isFocused: isFocused
     )
     return decoratedBlock.shaded(with: shadow)
   }

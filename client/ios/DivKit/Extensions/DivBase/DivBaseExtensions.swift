@@ -9,7 +9,8 @@ extension DivBase {
     actionsHolder: DivActionsHolder?,
     customAccessibilityParams: CustomAccessibilityParams = .default,
     applyPaddings: Bool = true,
-    clipToBounds: Bool = true
+    clipToBounds: Bool = true,
+    isFocused: Bool = false
   ) throws -> Block {
     let path = context.path
 
@@ -114,7 +115,7 @@ extension DivBase {
       isVisible: true
     )
 
-    let isFocused = context.blockStateStorage.isFocused(path: path)
+    let isFocused = isFocused || context.blockStateStorage.isFocused(path: path)
     let border = getBorder(isFocused)
 
     let boundary: BoundaryTrait? = if !clipToBounds {
@@ -143,7 +144,8 @@ extension DivBase {
       shadow: shadow,
       visibilityParams: visibilityParams,
       tooltips: tooltips.makeTooltips(context: context),
-      accessibilityElement: accessibilityElement
+      accessibilityElement: accessibilityElement,
+      isFocused: isFocused
     )
 
     let rotation = transform?.resolveRotation(expressionResolver)

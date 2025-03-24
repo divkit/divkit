@@ -48,7 +48,8 @@ extension DecoratingBlock {
       tooltips: tooltips,
       accessibility: accessibilityElement,
       reuseId: reuseId,
-      path: path
+      path: path,
+      isFocused: isFocused
     )
     view.configure(
       model: model,
@@ -123,6 +124,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let accessibility: AccessibilityElement?
     let reuseId: String?
     let path: UIElementPath?
+    let isFocused: Bool?
 
     var hasResponsiveUI: Bool {
       actions.hasPayload || longTapActions.hasPayload || doubleTapActions.hasPayload
@@ -154,6 +156,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private var visibilityActionPerformers: VisibilityActionPerformers?
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  private var hasFocused = false
+  private var isViewOnWindow: Bool { window != nil }
 
   private var tapRecognizer: UITapGestureRecognizer? {
     didSet {
@@ -352,6 +357,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     view.transform = currentTransform
   }
 
+  override func didMoveToWindow() {
+    updateVoiceOverFocus()
+  }
+
   func configure(
     model: Model,
     observer: ElementStateObserver?,
@@ -393,6 +402,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     applyAccessibilityFromScratch(model.accessibility)
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
+
+    hasFocused = oldModel?.isFocused == false && model.isFocused == true
+    updateVoiceOverFocus()
 
     if oldModel?.visibilityParams != model.visibilityParams {
       if let visibilityParams = model.visibilityParams {
@@ -519,6 +531,12 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       tooltipView: tooltipView,
       tooltipAnchorView: self
     )
+  }
+
+  private func updateVoiceOverFocus() {
+    guard hasFocused, isViewOnWindow else { return }
+
+    UIAccessibility.post(notification: .layoutChanged, argument: self)
   }
 
   deinit {

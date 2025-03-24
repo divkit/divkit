@@ -7,22 +7,31 @@ import VGSL
 extension DivInput: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     let context = modifiedContextParentPath(context)
+    let isFocused = context.blockStateStorage.isFocused(path: context.path)
 
     let textBinding = context.makeBinding(variableName: textVariable, defaultValue: "")
     return try applyBaseProperties(
-      to: { try makeBaseBlock(context: context, textBinding: textBinding) },
+      to: {
+        try makeBaseBlock(
+          context: context,
+          textBinding: textBinding,
+          isFocused: isFocused
+        )
+      },
       context: context,
       actionsHolder: nil,
       customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
         accessibility?.resolveDescription(context.expressionResolver) ?? textBinding.value
       },
-      applyPaddings: false
+      applyPaddings: false,
+      isFocused: isFocused
     )
   }
 
   private func makeBaseBlock(
     context: DivBlockModelingContext,
-    textBinding: Binding<String>
+    textBinding: Binding<String>,
+    isFocused: Bool
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
 
@@ -53,7 +62,6 @@ extension DivInput: DivBlockModeling {
     let enterKeyType = resolveEnterKeyType(expressionResolver)
 
     let blockStateStorage = context.blockStateStorage
-    let isFocused = blockStateStorage.isFocused(path: context.path)
 
     if isFocused { blockStateStorage.setInputFocused() }
     let shouldClearFocus = Variable<Bool> { [weak blockStateStorage] in
