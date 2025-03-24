@@ -11,6 +11,7 @@ extension DivBlockModelingContext {
   public init(
     cardId: DivCardID = Self.testCardId,
     additionalId: String? = nil,
+    actionHandler: DivActionHandler? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     extensionHandlers: [DivExtensionHandler] = [],
     scheduler: Scheduling? = nil,
@@ -19,6 +20,7 @@ extension DivBlockModelingContext {
     self = DivBlockModelingContext(
       cardId: cardId,
       additionalId: additionalId,
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       imageHolderFactory: FakeImageHolderFactory(),
       extensionHandlers: extensionHandlers,

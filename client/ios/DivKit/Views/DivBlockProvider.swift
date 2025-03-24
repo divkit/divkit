@@ -193,23 +193,6 @@ final class DivBlockProvider {
       return
     }
 
-    reasons.compactMap { $0.patch(for: self.cardId) }.forEach {
-      divData = divData.applyPatch(
-        $0,
-        callbacks: Callbacks(elementChanged: { [weak self] id in
-          self?.divKitComponents.triggersStorage.reset(elementId: id)
-        })
-      )
-      $0.onAppliedActions?.forEach { action in
-        divKitComponents.actionHandler.handle(
-          action,
-          path: UIElementPath(cardId.rawValue),
-          source: .callback,
-          sender: nil
-        )
-      }
-    }
-    self.divData = divData
     let context = divKitComponents.makeContext(
       cardId: cardId,
       additionalId: id.additionalId,
@@ -217,6 +200,15 @@ final class DivBlockProvider {
       debugParams: debugParams,
       parentScrollView: parentScrollView
     )
+
+    reasons.compactMap { $0.patch(for: self.cardId) }.forEach { patch in
+      divData = divData.applyPatchWithActions(
+        patch,
+        context: context
+      )
+    }
+
+    self.divData = divData
 
     if reasons.filter(\.isVariable).isEmpty {
       context.layoutProviderHandler?.resetUpdatedVariables()

@@ -58,6 +58,7 @@ public struct DivBlockModelingContext {
     cardId: DivCardID,
     additionalId: String? = nil,
     stateManager: DivStateManager = DivStateManager(),
+    actionHandler: DivActionHandler? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     imageHolderFactory: DivImageHolderFactory,
     extensionHandlers: [DivExtensionHandler] = [],
@@ -67,7 +68,7 @@ public struct DivBlockModelingContext {
     self.init(
       viewId: DivViewId(cardId: cardId, additionalId: additionalId),
       stateManager: stateManager,
-      actionHandler: nil,
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: nil,
       lastVisibleBoundsCache: nil,

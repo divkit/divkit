@@ -2867,6 +2867,7 @@
       "case_id": 192,
       "platforms": [
         "android",
+        "ios",
         "web"
       ],
       "tags": [
@@ -3160,6 +3161,7 @@
       ],
       "platforms": [
         "web",
+        "ios",
         "android"
       ],
       "steps": [
@@ -3455,6 +3457,7 @@
       "case_id": 139,
       "platforms": [
         "web",
+        "ios",
         "android"
       ],
       "tags": [
