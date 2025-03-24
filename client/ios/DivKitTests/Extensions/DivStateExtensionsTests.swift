@@ -72,7 +72,7 @@ final class DivStateExtensionsTests: XCTestCase {
       )
     )
 
-    let expectedPath = UIElementPath.root + 0 + "test_div_id" + "state_item_1" + "text"
+    let expectedPath = UIElementPath.root + 0 + "test_id" + "state_item_1" + "text"
 
     assertEqual(
       try block.firstStateElementPath(),
@@ -105,7 +105,7 @@ final class DivStateExtensionsTests: XCTestCase {
     let block = makeBlock(
       divState(
         divId: "test_div_id",
-        id: "arbitrary_id",
+        id: "test_id",
         defaultStateId: .value("state_item_2"),
         states: defaultStates()
       ),
@@ -114,7 +114,7 @@ final class DivStateExtensionsTests: XCTestCase {
 
     assertEqual(
       try block.firstStateElementPath(),
-      .root + 0 + "test_div_id" + "state_item_2" + "text"
+      .root + 0 + "test_id" + "state_item_2" + "text"
     )
   }
 
@@ -157,6 +157,85 @@ final class DivStateExtensionsTests: XCTestCase {
       try getPathForText(index: 1),
       .root + 0 + "container" + 1 + "test_prototype_id" + "state_item_1" + "text"
     )
+  }
+
+  func test_accessibilityID_overridenId() throws {
+    let context = DivBlockModelingContext().modifying(
+      overridenId: "overriden_id"
+    )
+    let block = try divState(
+      divId: "div_id",
+      id: "id",
+      states: defaultStates()
+    ).value.makeBlock(context: context)
+
+    XCTAssertEqual("overriden_id", block.accessibilityElement?.strings.identifier)
+  }
+
+  func test_accessibilityID_divId() throws {
+    let context = DivBlockModelingContext().modifying(
+      overridenId: nil
+    )
+
+    let block = try divState(
+      divId: "div_id",
+      id: "id",
+      states: defaultStates()
+    ).value.makeBlock(context: context)
+
+    XCTAssertEqual("id", block.accessibilityElement?.strings.identifier)
+  }
+
+  func test_accessibiltyID_id() throws {
+    let context = DivBlockModelingContext().modifying(
+      overridenId: nil
+    )
+
+    let block = try divState(
+      divId: nil,
+      id: "id",
+      states: defaultStates()
+    ).value.makeBlock(context: context)
+
+    XCTAssertEqual("id", block.accessibilityElement?.strings.identifier)
+  }
+
+  func test_stateManagerItems_divId() throws {
+    let context = DivBlockModelingContext()
+
+    _ = try divState(
+      divId: "div_id",
+      id: "id",
+      states: defaultStates()
+    ).value.makeBlock(context: context)
+
+    let expectedItems = [
+      DivStatePath(rawValue: .init("div_id")): DivStateManager.Item(
+        currentStateID: .init(rawValue: "state_item_1"),
+        previousState: .empty
+      ),
+    ]
+
+    XCTAssertEqual(expectedItems, context.stateManager.items)
+  }
+
+  func test_stateManagerItems_id() throws {
+    let context = DivBlockModelingContext()
+
+    _ = try divState(
+      divId: nil,
+      id: "id",
+      states: defaultStates()
+    ).value.makeBlock(context: context)
+
+    let expectedItems = [
+      DivStatePath(rawValue: .init("id")): DivStateManager.Item(
+        currentStateID: .init(rawValue: "state_item_1"),
+        previousState: .empty
+      ),
+    ]
+
+    XCTAssertEqual(expectedItems, context.stateManager.items)
   }
 }
 
