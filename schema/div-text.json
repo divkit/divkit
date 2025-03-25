@@ -481,12 +481,7 @@
           ],
           "default_value": "end",
           "$description": "translations.json#/div_text_truncate",
-          "deprecated": true,
-          "code_generation_disabled_kotlin": true,
-          "code_generation_disabled_swift": true,
           "platforms": [
-            "android",
-            "ios"
           ]
         },
         "text_shadow": {

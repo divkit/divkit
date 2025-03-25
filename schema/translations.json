@@ -2536,8 +2536,8 @@
     "ru": "Ограничивать ширину текста максимальной шириной строки. Работает только с шириной `wrap_content`, `constrained=true` и выставленным `max_size`."
   },
   "div_text_truncate": {
-    "en": "Text cropping method. Use `ellipsis` instead.",
-    "ru": "Способ обрезания текста. Вместо него используйте `ellipsis`."
+    "en": "Location of text cropping marker.",
+    "ru": "Расположение маркера обрезки текста."
   },
   "div_text_underline": {
     "en": "Underline.",
