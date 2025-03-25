@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onDestroy, tick } from 'svelte';
+    import { getContext, onDestroy, onMount, tick } from 'svelte';
     import { writable } from 'svelte/store';
 
     import css from './Tabs.module.css';
@@ -7,7 +7,7 @@
 
     import type { Mods } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivTabsData } from '../../types/tabs';
+    import type { DivTabsData, TabsTitleAnimationType } from '../../types/tabs';
     import type { Action, Overflow } from '../../../typings/common';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { SwitchElements } from '../../types/switch-elements';
@@ -98,6 +98,9 @@
     let startTransform: number;
     let currentTransform: number;
     let delimitierStyle: TabsDelimiter | undefined;
+    let animationType: TabsTitleAnimationType = 'slide';
+    let animationDuration: number | undefined;
+    let selectedTabStyles: Record<string, string> | undefined;
     let prevContext: ComponentContext<DivTabsData> | undefined;
 
     $: origJson = componentContext.origJson;
@@ -119,6 +122,9 @@
         separatorMargins = '';
         titlePadding = null;
         delimitierStyle = undefined;
+        animationType = 'slide';
+        animationDuration = 300;
+        selectedTabStyles = undefined;
     }
 
     $: if (origJson) {
@@ -370,6 +376,14 @@
         delimitierStyle = correctTabDelimiterStyle($jsonDelimiterStyle, delimitierStyle);
     }
 
+    $: if ($jsonTabStyle?.animation_type === 'fade' || $jsonTabStyle?.animation_type === 'none') {
+        animationType = $jsonTabStyle.animation_type;
+    }
+
+    $: if (isNonNegativeNumber($jsonTabStyle?.animation_duration)) {
+        animationDuration = $jsonTabStyle.animation_duration;
+    }
+
     function updateItems(items: MaybeMissing<TabItem>[]): void {
         if (hasError) {
             return;
@@ -413,6 +427,8 @@
         selected = val;
         initTabsSwipe();
         changeTab(animated);
+
+        updateSlideAnimation();
 
         if (focus) {
             await tick();
@@ -663,6 +679,29 @@
         return index;
     }
 
+    function updateSlideAnimation(): void {
+        if (animationType !== 'slide') {
+            return;
+        }
+
+        tick().then(() => {
+            const elem = tabsElem?.querySelector<HTMLElement>('.' + css.tabs__item_selected);
+            if (!elem) {
+                return;
+            }
+
+            const listBBox = tabsElem.getBoundingClientRect();
+            const elemBBox = elem.getBoundingClientRect();
+
+            selectedTabStyles = {
+                top: `${elemBBox.top - listBBox.top}px`,
+                left: `${elemBBox.left - listBBox.left + tabsElem.scrollLeft}px`,
+                width: `${elemBBox.width}px`,
+                height: `${elemBBox.height}px`
+            };
+        });
+    }
+
     $: if (componentContext.json) {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
@@ -709,8 +748,13 @@
     }
 
     $: mods = {
-        'height-parent': $jsonHeight?.type === 'match_parent' ? 'yes' : ''
+        'height-parent': $jsonHeight?.type === 'match_parent' ? 'yes' : '',
+        animation: animationType
     };
+
+    onMount(() => {
+        updateSlideAnimation();
+    });
 
     onDestroy(() => {
         showedPanels.forEach(componentContext => {
@@ -723,6 +767,10 @@
         }
     });
 </script>
+
+<svelte:window
+    on:resize={animationType === 'slide' ? updateSlideAnimation : undefined}
+></svelte:window>
 
 {#if !hasError}
     <Outer
@@ -754,46 +802,76 @@
             style:--divkit-tabs-inactive-background-color={tabInactiveBackground}
             style:--divkit-tabs-border-radius={tabBorderRadius}
             style:--divkit-tabs-items-spacing={tabItemSpacing ? pxToEmWithUnits(tabItemSpacing * 10 / tabFontSize) : ''}
+            style:--divkit-tabs-animation-duration={animationDuration !== undefined ? `${animationDuration}ms` : ''}
             on:keydown={onTabKeydown}
         >
-            {#each $childStore as item}
-                {@const index = item.index}
-                {@const isSelected = index === selected}
+            <div class={css['tabs__items-bg']} aria-hidden="true">
+                {#each $childStore as item}
+                    {@const index = item.index}
+                    {@const isSelected = index === selected}
 
-                {#if delimitierStyle && index > 0}
-                    <img
-                        class={css.tabs__delimitier}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                        src={delimitierStyle.url}
-                        style:width={delimitierStyle.width ? pxToEm(delimitierStyle.width) : undefined}
-                        style:height={delimitierStyle.height ? pxToEm(delimitierStyle.height) : undefined}
-                    />
-                {/if}
+                    {#if delimitierStyle && index > 0}
+                        <span
+                            class={css.tabs__delimitier}
+                            style:width={delimitierStyle.width ? pxToEm(delimitierStyle.width) : undefined}
+                            style:height={delimitierStyle.height ? pxToEm(delimitierStyle.height) : undefined}
+                        ></span>
+                    {/if}
 
-                <Actionable
-                    {componentContext}
-                    cls={genClassName('tabs__item', css, {
-                        selected: isSelected,
-                        actionable: Boolean(item.title_click_action)
-                    })}
-                    actions={
-                        item.title_click_action && !componentContext.fakeElement ?
-                            [item.title_click_action].filter(filterEnabledActions) :
-                            []
-                    }
-                    attrs={{
-                        id: `${instId}-tab-${index}`,
-                        'aria-controls': `${instId}-panel-${index}`,
-                        role: 'tab',
-                        // eslint-disable-next-line no-nested-ternary
-                        tabindex: isSelected && !componentContext.fakeElement ? (item.title_click_action ? undefined : '0') : '-1',
-                        'aria-selected': isSelected ? 'true' : 'false'
-                    }}
-                    customAction={componentContext.fakeElement ? null : (event => selectItem(event, index))}
-                >{item.title}</Actionable>
-            {/each}
+                    <span
+                        class={genClassName('tabs__item', css, {
+                            selected: isSelected,
+                            actionable: Boolean(item.title_click_action)
+                        })}
+                    >{item.title}</span>
+                {/each}
+            </div>
+            {#if animationType === 'slide' && selectedTabStyles}
+                <div
+                    class={css['tabs__tabs-highlighter']}
+                    style={makeStyle(selectedTabStyles)}
+                ></div>
+            {/if}
+            <div class={css['tabs__items-text']}>
+                {#each $childStore as item}
+                    {@const index = item.index}
+                    {@const isSelected = index === selected}
+
+                    {#if delimitierStyle && index > 0}
+                        <img
+                            class={css.tabs__delimitier}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            src={delimitierStyle.url}
+                            style:width={delimitierStyle.width ? pxToEm(delimitierStyle.width) : undefined}
+                            style:height={delimitierStyle.height ? pxToEm(delimitierStyle.height) : undefined}
+                        />
+                    {/if}
+
+                    <Actionable
+                        {componentContext}
+                        cls={genClassName('tabs__item', css, {
+                            selected: isSelected,
+                            actionable: Boolean(item.title_click_action)
+                        })}
+                        actions={
+                            item.title_click_action && !componentContext.fakeElement ?
+                                [item.title_click_action].filter(filterEnabledActions) :
+                                []
+                        }
+                        attrs={{
+                            id: `${instId}-tab-${index}`,
+                            'aria-controls': `${instId}-panel-${index}`,
+                            role: 'tab',
+                            // eslint-disable-next-line no-nested-ternary
+                            tabindex: isSelected && !componentContext.fakeElement ? (item.title_click_action ? undefined : '0') : '-1',
+                            'aria-selected': isSelected ? 'true' : 'false'
+                        }}
+                        customAction={componentContext.fakeElement ? null : (event => selectItem(event, index))}
+                    >{item.title}</Actionable>
+                {/each}
+            </div>
         </div>
         {#if $jsonSeparator}
             <div

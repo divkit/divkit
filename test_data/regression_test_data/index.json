@@ -1805,7 +1805,8 @@
       "title": "Animations of switching tabs headers",
       "case_id": 164,
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "DivTabs",

@@ -6,6 +6,8 @@ import type { EdgeInsets } from './edgeInserts';
 import type { CornersRadius } from './border';
 import type { FixedSize } from './sizes';
 
+export type TabsTitleAnimationType = 'slide' | 'fade' | 'none';
+
 export interface TabsTitleStyle {
     font_size?: number;
     // font_size_unit
@@ -23,6 +25,8 @@ export interface TabsTitleStyle {
     inactive_background_color?: string;
     corner_radius?: number;
     corners_radius?: CornersRadius;
+    animation_type?: TabsTitleAnimationType;
+    animation_duration?: number;
 }
 
 export interface TabItem {
