@@ -16,28 +16,13 @@ public final class DivView: VisibleBoundsTrackingView {
   private let divKitComponents: DivKitComponents
   private let preloader: DivViewPreloader
   private var blockSubscription: Disposable?
+  private var shouldRecalculateVisibilitySubscription: Disposable?
 
-  private var shouldInvokeOnVisibleBoundsChanged: Bool {
-    get {
-      blockProvider?.shouldInvokeOnVisibleBoundsChanged ?? false
-    }
-    set {
-      blockProvider?.shouldInvokeOnVisibleBoundsChanged = newValue
-    }
-  }
-
-  private var lastVisibleBounds: CGRect {
-    get {
-      blockProvider?.lastVisibleBounds ?? .zero
-    }
-    set {
-      blockProvider?.lastVisibleBounds = newValue
-    }
-  }
+  private var shouldRecalculateVisibility = true
 
   private var blockProvider: DivBlockProvider? {
     didSet {
-      lastVisibleBounds = bounds
+      onVisibleBoundsChanged(to: bounds)
     }
   }
 
@@ -48,8 +33,8 @@ public final class DivView: VisibleBoundsTrackingView {
         blockView.flatMap(addSubview(_:))
       }
 
-      if blockView !== nil {
-        shouldInvokeOnVisibleBoundsChanged = true
+      if blockView != nil {
+        shouldRecalculateVisibility = true
       }
     }
   }
@@ -91,6 +76,10 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    shouldRecalculateVisibilitySubscription = blockProvider?
+      .$shouldRecalculateVisibility.currentAndNewValues.addObserver { [weak self] in
+        self?.shouldRecalculateVisibility = $0
+      }
     preloader.setSourceTask?.cancel()
     await preloader.setSource(source, debugParams: debugParams)
   }
@@ -115,6 +104,10 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    shouldRecalculateVisibilitySubscription = blockProvider?
+      .$shouldRecalculateVisibility.currentAndNewValues.addObserver { [weak self] in
+        self?.shouldRecalculateVisibility = $0
+      }
     preloader.setSource(source, debugParams: debugParams)
   }
 
@@ -132,6 +125,10 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    shouldRecalculateVisibilitySubscription = blockProvider?
+      .$shouldRecalculateVisibility.currentAndNewValues.addObserver { [weak self] in
+        self?.shouldRecalculateVisibility = $0
+      }
   }
 
   /// Sets the parent scroll view for the DivView.
@@ -161,13 +158,13 @@ public final class DivView: VisibleBoundsTrackingView {
     blockView.frame = bounds
     blockView.layoutIfNeeded()
 
-    if shouldInvokeOnVisibleBoundsChanged {
+    if shouldRecalculateVisibility {
       blockView.onVisibleBoundsChanged(
         from: boundsTracker.previousBounds,
-        to: lastVisibleBounds
+        to: boundsTracker.lastVisibleBounds
       )
 
-      shouldInvokeOnVisibleBoundsChanged = false
+      shouldRecalculateVisibility = false
       boundsTracker.updatePreviousBounds()
     }
   }
@@ -175,16 +172,13 @@ public final class DivView: VisibleBoundsTrackingView {
   public override func layoutSublayers(of layer: CALayer) {
     super.layoutSublayers(of: layer)
 
-    if boundsTracker.append(bounds) {
-      boundsDidChange()
-      onVisibleBoundsChanged(to: bounds)
-    }
+    boundsDidChange()
   }
 
   public override func removeFromSuperview() {
     super.removeFromSuperview()
     blockView?.onVisibleBoundsChanged(
-      from: boundsTracker.currentBounds,
+      from: boundsTracker.lastVisibleBounds,
       to: .zero
     )
   }
@@ -278,7 +272,9 @@ public final class DivView: VisibleBoundsTrackingView {
   /// - Parameters:
   ///  - to: The new bounds rectangle.
   public func onVisibleBoundsChanged(to: CGRect) {
-    lastVisibleBounds = to
+    guard boundsTracker.append(to) else { return }
+
+    shouldRecalculateVisibility = true
     if window == nil {
       forceLayout()
     } else {
@@ -349,13 +345,13 @@ extension DivView {
   }
 
   private class BoundsTracker {
-    private(set) var currentBounds = CGRect.zero
+    private(set) var lastVisibleBounds = CGRect.zero
     private(set) var previousBounds = CGRect.zero
 
     func append(_ bounds: CGRect) -> Bool {
-      if currentBounds != bounds {
-        previousBounds = currentBounds
-        currentBounds = bounds
+      if lastVisibleBounds != bounds {
+        previousBounds = lastVisibleBounds
+        lastVisibleBounds = bounds
 
         return true
       }
@@ -364,7 +360,7 @@ extension DivView {
     }
 
     func updatePreviousBounds() {
-      previousBounds = currentBounds
+      previousBounds = lastVisibleBounds
     }
   }
 }

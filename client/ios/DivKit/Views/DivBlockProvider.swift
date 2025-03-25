@@ -53,13 +53,8 @@ final class DivBlockProvider {
     id.cardId
   }
 
-  var shouldInvokeOnVisibleBoundsChanged: Bool = true
-
-  var lastVisibleBounds: CGRect = .zero {
-    didSet {
-      shouldInvokeOnVisibleBoundsChanged = true
-    }
-  }
+  @ObservableProperty
+  private(set) var shouldRecalculateVisibility: Bool = true
 
   var accessibilityElementsStorage: DivAccessibilityElementsStorage?
 
@@ -212,7 +207,7 @@ final class DivBlockProvider {
 
     if reasons.filter(\.isVariable).isEmpty {
       context.layoutProviderHandler?.resetUpdatedVariables()
-      shouldInvokeOnVisibleBoundsChanged = true
+      shouldRecalculateVisibility = true
     }
     dataErrors.forEach { context.errorsStorage.add($0) }
     do {
