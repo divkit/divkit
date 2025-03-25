@@ -23,6 +23,7 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.Assert
@@ -283,7 +284,13 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setPositiveButton("Perform action") { _, _ ->
                 val action = editText.text.toString()
                 preferences.edit().putString(KEY_DIV2_ACTION_URL, action).apply()
-                actionHandler.handleActionUrl(Uri.parse(action), div2View)
+                try {
+                    val env = DivParsingEnvironment(ParsingErrorLogger.LOG)
+                    val jsonObject = JSONObject(action)
+                    actionHandler.handleAction(DivAction(env, jsonObject), div2View, div2View.expressionResolver)
+                } catch (e: JSONException) {
+                    actionHandler.handleActionUrl(Uri.parse(action), div2View)
+                }
             }
         adb.create().show()
     }
