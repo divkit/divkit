@@ -60,7 +60,7 @@
           "type": "container",
           "visibility_action": {
             "log_id": "visibility",
-            "url": "div-action://download?url=https%3A%2F%2Fdivkit.tech%2Fplayground%2Fapi%2Fjson%3Fuuid%3Dd05dd997-ac93-426e-9dc2-ceb0e3c19183"
+            "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftransaction-callbacks-2.json"
           },
           "width": {
             "type": "match_parent"
