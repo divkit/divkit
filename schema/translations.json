@@ -2874,5 +2874,9 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
+  },
+  "div_base_capture_focus_on_action": {
+    "en": "If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>",
+    "ru": "Если значение:<li>`true` — при активации экшена элемента фокус будет перенесён на него. Это означает, что фокус режима доступности будет перенесён, а виртуальная клавиатура скрыта, за исключением случаев, когда целевой элемент предполагает её наличие (например, `input`).</li><li>`false` — при нажатии на элемент фокус останется на текущем сфокусированном элементе.</li>"
   }
 }
