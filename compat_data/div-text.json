@@ -160,5 +160,13 @@
                 "version_added": "31.0.0"
             }
         }
+    }, {
+        "id": "text_mask",
+        "name": "<code>mask</code> property for the range of a <code>text</code>",
+        "compat": {
+            "web": {
+                "version_added": "31.8.0"
+            }
+        }
     }]
 }

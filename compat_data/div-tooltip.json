@@ -80,6 +80,9 @@
         "compat": {
             "ios": {
                 "version_added": "31.5.0"
+            },
+            "web": {
+                "version_added": "31.8.0"
             }
         }
     }, {
