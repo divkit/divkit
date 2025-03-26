@@ -182,6 +182,24 @@ public class DivStateManager {
     }
   }
 
+  func setBlockVisibility(
+    statePath: DivStatePath,
+    resolvedId: String,
+    div: DivBase,
+    isVisible: Bool
+  ) {
+    if case .value = div.visibility {
+      // visibility is constant
+      return
+    }
+
+    lock.withLock {
+      if div.shouldApplyTransition(.visibilityChange) {
+        _blockVisibility[statePath + resolvedId] = isVisible
+      }
+    }
+  }
+
   public func reset() {
     lock.withLock {
       _items = [:]

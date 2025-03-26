@@ -28,7 +28,6 @@
           "items": [
             {
               "type": "separator",
-              "id": "circle",
               "width": {
                 "type": "fixed",
                 "value": 120
