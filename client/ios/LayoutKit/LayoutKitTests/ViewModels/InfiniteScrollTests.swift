@@ -261,6 +261,68 @@ final class InfiniteScrollTests: XCTestCase {
       nil
     )
   }
+
+  func test_newPositionWithInsetsAndStartAlignment_lowerBound() throws {
+    let origins: [CGFloat] = [10, 50, 90, 130, 170]
+    let alignment = Alignment.leading
+    let insetMode = InsetMode.fixed(values: SideInsets(leading: 15, trailing: 10))
+
+    // origins[1] + alignment.correction - leading = 50 + (-1) - 15
+    let thresholdOffset: CGFloat = 34
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset - 1,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
+      ),
+      .init(offset: 153, page: 3)
+    )
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
+      ),
+      nil
+    )
+  }
+
+  func test_newPositionWithInsetsAndStartAlignment_upperBound() throws {
+    let origins: [CGFloat] = [10, 50, 90, 130, 170]
+    let alignment = Alignment.leading
+    let insetMode = InsetMode.fixed(values: SideInsets(leading: 15, trailing: 10))
+
+    // origins[4] + alignment.correction - trailing = 170 + (-1) - 10
+    let thresholdOffset: CGFloat = 159
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset + 1,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
+      ),
+      .init(offset: 40, page: 1)
+    )
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
+      ),
+      nil
+    )
+  }
 }
 
 extension InfiniteScroll {
