@@ -269,12 +269,6 @@
       "unsupported_platforms": {
         "web": "No need for reuse identifier"
       }
-    },
-    "capture_focus_on_action": {
-      "type": "boolean",
-      "default_value": "true",
-      "$description": "translations.json#/div_base_capture_focus_on_action",
-      "platforms": []
     }
   }
 }
