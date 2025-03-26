@@ -533,6 +533,7 @@ internal class DivTextBinder @Inject constructor(
                 width = realTextWidth,
                 height = height - paddingBottom - paddingTop
             )
+            invalidate()
         }
     }
 
@@ -587,6 +588,7 @@ internal class DivTextBinder @Inject constructor(
                 width = realTextWidth,
                 height = height - paddingBottom - paddingTop
             )
+            invalidate()
         }
     }
 
