@@ -74,7 +74,7 @@ final class DecoratingBlock: WrapperBlock {
   }
 
   var intrinsicContentWidth: CGFloat {
-    child.intrinsicContentWidth.roundedToScreenScale + paddings.horizontalInsets.sum
+    child.intrinsicContentWidth.roundedToScreenScale + paddings.horizontal.sum
   }
 
   func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
