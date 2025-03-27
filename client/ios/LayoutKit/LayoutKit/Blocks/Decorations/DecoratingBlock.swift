@@ -78,9 +78,9 @@ final class DecoratingBlock: WrapperBlock {
   }
 
   func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
-    let childWidth = max(0, width - paddings.horizontalInsets.sum)
+    let childWidth = max(0, width - paddings.horizontal.sum)
     return child.intrinsicContentHeight(forWidth: childWidth).roundedToScreenScale
-      + paddings.verticalInsets.sum
+      + paddings.vertical.sum
   }
 
   var widthOfHorizontallyNonResizableBlock: CGFloat {
@@ -95,11 +95,11 @@ final class DecoratingBlock: WrapperBlock {
     guard let childAscent = child.ascent(forWidth: width) else {
       return nil
     }
-    return childAscent + paddings.verticalInsets.leading
+    return childAscent + paddings.vertical.leading
   }
 
   func laidOut(for width: CGFloat) -> Block {
-    let childWidth = width - paddings.horizontalInsets.sum
+    let childWidth = width - paddings.horizontal.sum
     return updatingChild(child.laidOut(for: childWidth))
   }
 

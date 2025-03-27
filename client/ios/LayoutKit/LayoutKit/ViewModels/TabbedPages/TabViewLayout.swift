@@ -17,7 +17,7 @@ public struct TabViewLayout: Equatable {
     let contentsModel = model.contentsModel
 
     let titlesHeight = listModel.tabs.reduce(CGFloat(0)) { max($0, $1.totalSize.height) }
-    let listHeight = titlesHeight + listModel.listPaddings.verticalInsets.sum
+    let listHeight = titlesHeight + listModel.listPaddings.vertical.sum
 
     let separatorHeight: CGFloat
     let separatorInsets: EdgeInsets
@@ -29,7 +29,7 @@ public struct TabViewLayout: Equatable {
       separatorInsets = .zero
     }
 
-    let newWidth = width ?? max(contentsModel.intrinsicWidth, separatorInsets.horizontalInsets.sum)
+    let newWidth = width ?? max(contentsModel.intrinsicWidth, separatorInsets.horizontal.sum)
 
     let height: CGFloat? = switch contentsModel.pagesHeight {
     case .byHighestPage:
@@ -44,12 +44,12 @@ public struct TabViewLayout: Equatable {
       ) +
       listHeight +
       separatorHeight +
-      separatorInsets.verticalInsets.sum
+      separatorInsets.vertical.sum
 
     listFrame = CGRect(origin: .zero, size: CGSize(width: newWidth, height: listHeight))
 
     let separatorY = listFrame.maxY + separatorInsets.top
-    let separatorWidth = newWidth - separatorInsets.horizontalInsets.sum
+    let separatorWidth = newWidth - separatorInsets.horizontal.sum
 
     separatorFrame = CGRect(
       x: separatorInsets.left,
@@ -89,7 +89,7 @@ extension TabContentsViewModel {
     TabContentsViewLayout.intrinsicWidth(
       for: pages.map(\.block),
       footer: footer,
-      pagesInsets: contentInsets.horizontalInsets
+      pagesInsets: contentInsets.horizontal
     )
   }
 

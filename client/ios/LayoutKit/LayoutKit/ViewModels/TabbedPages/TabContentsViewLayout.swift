@@ -45,7 +45,7 @@ struct TabContentsViewLayout: Equatable {
     footer: Block?,
     pagesInsets: EdgeInsets
   ) -> CGFloat {
-    let itemWidth = width - pagesInsets.horizontalInsets.sum
+    let itemWidth = width - pagesInsets.horizontal.sum
     let listHeight: CGFloat = switch pagesHeightMode {
     case .byHighestPage:
       pages.map { $0.intrinsicContentHeight(forWidth: itemWidth) }.max()!
@@ -56,7 +56,7 @@ struct TabContentsViewLayout: Equatable {
       )
     }
     let footerHeight = footer?.heightOfVerticallyNonResizableBlock(forWidth: width) ?? 0
-    return listHeight + footerHeight + pagesInsets.verticalInsets.sum
+    return listHeight + footerHeight + pagesInsets.vertical.sum
   }
 }
 

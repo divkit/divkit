@@ -202,7 +202,7 @@ extension DivBase {
     _ context: DivBlockModelingContext,
     paddings: EdgeInsets
   ) -> LayoutTrait {
-    resolveWidthTrait(context).trim(paddings.horizontalInsets)
+    resolveWidthTrait(context).trim(paddings.horizontal)
   }
 
   func getTransformedHeight(_ context: DivBlockModelingContext) -> DivSize {
@@ -221,7 +221,7 @@ extension DivBase {
     _ context: DivBlockModelingContext,
     paddings: EdgeInsets
   ) -> LayoutTrait {
-    resolveHeightTrait(context).trim(paddings.verticalInsets)
+    resolveHeightTrait(context).trim(paddings.vertical)
   }
 }
 

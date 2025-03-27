@@ -178,8 +178,8 @@ public final class TextInputBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(_, minSize, maxSize):
-      let width = width - (paddings?.horizontalInsets.sum ?? 0)
-      let verticalPaddings = paddings?.verticalInsets.sum ?? 0
+      let width = width - (paddings?.horizontal.sum ?? 0)
+      let verticalPaddings = paddings?.vertical.sum ?? 0
       guard let maxVisibleLines else {
         let textHeight = ceil(textForMeasuring.sizeForWidth(width).height)
         return clamp(textHeight + verticalPaddings, min: minSize, max: maxSize)
