@@ -1,0 +1,76 @@
+{
+  "description": "Local functions with url arguments.",
+  "div_data": {
+    "card": {
+      "log_id": "local_functions",
+      "variables": [
+        {
+          "name": "url_var",
+          "type": "url",
+          "value": "https://some.url"
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "functions": [
+              {
+                "name": "urlFunction",
+                "body": "@{url}",
+                "return_type": "url",
+                "arguments": [
+                  {
+                    "name": "url",
+                    "type": "url"
+                  }
+                ]
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "url": "div-action://set_variable?name=result&value=@{urlFunction(url_var)}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check urlFunction",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "url",
+            "value": "https://some.url"
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    }
+  ]
+}

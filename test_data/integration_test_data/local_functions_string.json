@@ -1,0 +1,137 @@
+{
+  "description": "Local functions with string arguments.",
+  "div_data": {
+    "card": {
+      "log_id": "local_functions",
+      "variables": [
+        {
+          "name": "string_var",
+          "type": "string",
+          "value": "test"
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "functions": [
+              {
+                "name": "stringLen",
+                "body": "@{len(str)}",
+                "return_type": "integer",
+                "arguments": [
+                  {
+                    "name": "str",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "captureFunction",
+                "body": "@{len(string_var)}",
+                "return_type": "string",
+                "arguments": [
+                ]
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "url": "div-action://set_variable?name=result&value=@{stringLen(string_var)}"
+                  }
+                ]
+              },
+              {
+                "condition": "@{step == 1}",
+                "actions": [
+                  {
+                    "log_id": "step 1",
+                    "url": "div-action://set_variable?name=result&value=@{stringLen('hello')}"
+                  }
+                ]
+              },
+              {
+                "condition": "@{step == 2}",
+                "actions": [
+                  {
+                    "log_id": "step 2",
+                    "url": "div-action://set_variable?name=string_var&value=@{captureFunction(string_var)}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check stringLen with string variable",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 4
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "check stringLen with string",
+          "url": "div-action://set_variable?name=step&value=1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 5
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "check wrong type",
+          "url": "div-action://set_variable?name=step&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Function captureFunction() returned integer, but string was expected."
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

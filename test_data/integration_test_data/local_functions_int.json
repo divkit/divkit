@@ -1,0 +1,138 @@
+{
+  "description": "Local functions with integer arguments.",
+  "div_data": {
+    "card": {
+      "log_id": "local_functions",
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            123,
+            123.45
+          ]
+        },
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 123
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "functions": [
+              {
+                "name": "increment",
+                "body": "@{value + 1}",
+                "return_type": "integer",
+                "arguments": [
+                  {
+                    "name": "value",
+                    "type": "integer"
+                  }
+                ]
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "url": "div-action://set_variable?name=result&value=@{increment(integer_var)}"
+                  }
+                ]
+              },
+              {
+                "condition": "@{step == 1}",
+                "actions": [
+                  {
+                    "log_id": "step 1",
+                    "url": "div-action://set_variable?name=result&value=@{increment(123)}"
+                  }
+                ]
+              },
+              {
+                "condition": "@{step == 2}",
+                "actions": [
+                  {
+                    "log_id": "step 2",
+                    "url": "div-action://set_variable?name=integer_var&value=@{array_var.increment(2)}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check increment with integer variable",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 124
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "check increment with integer",
+          "url": "div-action://set_variable?name=step&value=1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 124
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "check method",
+          "url": "div-action://set_variable?name=step&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Failed to evaluate [[123,123.45].increment(2)]. Unknown method name: increment."
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

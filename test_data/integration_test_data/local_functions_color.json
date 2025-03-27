@@ -1,0 +1,74 @@
+{
+  "description": "Local functions with color arguments.",
+  "div_data": {
+    "card": {
+      "log_id": "local_functions",
+      "variables": [
+        {
+          "name": "color_var",
+          "type": "color",
+          "value": "#AABBCC"
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "functions": [
+              {
+                "name": "colorFunction",
+                "body": "@{color}",
+                "return_type": "color",
+                "arguments": [
+                  {
+                    "name": "color",
+                    "type": "color"
+                  }
+                ]
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "url": "div-action://set_variable?name=result&value=@{colorFunction(color_var)}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check colorFunction",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "color",
+            "value": "#AABBCC"
+          }
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

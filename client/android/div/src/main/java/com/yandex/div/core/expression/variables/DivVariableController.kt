@@ -145,7 +145,7 @@ class DivVariableController(
                 val undeclaredVariableType = undeclaredVariables[variable.name]
                 if (undeclaredVariableType != null && undeclaredVariableType != variable::class.java.name) {
                     throw VariableMutationException("Cannot declare new variable with type = " +
-                        "${variable::class.java.name}, because this variable have been declared" +
+                        "${variable::class.java.name}, because this variable have been declared " +
                         "with another type = $undeclaredVariableType")
                 }
 
