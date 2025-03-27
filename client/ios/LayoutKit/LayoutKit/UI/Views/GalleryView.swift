@@ -314,7 +314,8 @@ extension GalleryView: ScrollDelegate {
       origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY },
       bufferSize: model.bufferSize,
       boundsSize: model.direction.isHorizontal ? bounds.width : bounds.height,
-      alignment: model.alignment
+      alignment: model.alignment,
+      insetMode: model.metrics.axialInsetMode
     ) {
       offset = newPosition.offset
       scrollStartOffset = offset

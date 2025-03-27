@@ -427,6 +427,19 @@
       "file": "pager/pager_infinite_scroll.json"
     },
     {
+      "title": "Pager with infinite scroll, start scroll alignment and paddings",
+      "case_id": 161,
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "file": "pager/pager_infinite_scroll_with_start_paddings.json"
+    },
+    {
       "title": "Action animations",
       "case_id": 33,
       "tags": [

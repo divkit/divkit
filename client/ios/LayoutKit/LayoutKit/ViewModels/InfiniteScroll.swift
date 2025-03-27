@@ -12,7 +12,8 @@ enum InfiniteScroll {
     origins: [CGFloat],
     bufferSize: Int,
     boundsSize: CGFloat = 0,
-    alignment: Alignment = .center
+    alignment: Alignment = .center,
+    insetMode: InsetMode = .fixed(values: .zero)
   ) -> Position? {
     let itemsCount = origins.count
     let cycleStartIndex = bufferSize
@@ -21,9 +22,11 @@ enum InfiniteScroll {
     let cycleSize = origins[cycleEndIndex + 1] - origins[cycleStartIndex]
     let correctedOffset = currentOffset + alignment.offset(bounds: boundsSize)
 
-    if correctedOffset < origins[cycleStartIndex] + alignment.correction {
+    let insets = insetMode.insets(forSize: boundsSize)
+    if correctedOffset < origins[cycleStartIndex] + alignment.correction - insets.leading {
       return Position(offset: currentOffset + cycleSize, page: cycleEndIndex)
-    } else if correctedOffset > origins[cycleEndIndex + 1] + alignment.correction {
+    } else if correctedOffset > origins[cycleEndIndex + 1] + alignment.correction - insets
+      .trailing {
       return Position(offset: currentOffset - cycleSize, page: cycleStartIndex)
     }
     return nil
