@@ -82,7 +82,8 @@
             }
         }
 
-        if (Array.isArray(actions) && actions?.length && actionCtx.hasAction()) {
+        hasJSAction = Boolean(customAction);
+        if ((href || Array.isArray(actions) && actions?.length) && actionCtx.hasAction()) {
             href = '';
             componentContext.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element'), {
                 level: 'warn',
@@ -90,10 +91,7 @@
                     actions
                 }
             }));
-        }
-
-        hasJSAction = Boolean(customAction);
-        if (href && !isBuiltinSchema(getUrlSchema(href), rootCtx.getBuiltinProtocols())) {
+        } else if (href && !isBuiltinSchema(getUrlSchema(href), rootCtx.getBuiltinProtocols())) {
             href = '';
             hasJSAction = true;
         } else if (!href && Array.isArray(actions) && actions?.length) {
