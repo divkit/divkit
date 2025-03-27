@@ -125,7 +125,8 @@
     }
 
     function onOutsidePointerDown(event: PointerEvent): void {
-        isOutsidePointerDown = event.target === dialog;
+        const path = event.composedPath();
+        isOutsidePointerDown = path[0] === dialog;
     }
 
     function onOutsideClick(event: MouseEvent): void {
