@@ -485,6 +485,11 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true,
             enablePerTheme: true
         }, {
+            name: 'props.high_priority_preview_show',
+            prop: 'high_priority_preview_show',
+            type: 'boolean',
+            enableSources: true
+        }, {
             name: 'props.image_scale',
             prop: 'scale',
             type: 'select',

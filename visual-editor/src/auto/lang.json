@@ -116,6 +116,7 @@
         "props.select_options": "Список опций",
         "props.is_enabled": "Включён",
         "props.on_color": "Цвет включённого состояния",
+        "props.high_priority_preview_show": "Ускоренный предпросмотр",
         "actions_count": [
             "%s действие",
             "%s действия",
@@ -423,6 +424,7 @@
         "props.select_options": "Select options",
         "props.is_enabled": "Is enabled",
         "props.on_color": "Color of the enabled state",
+        "props.high_priority_preview_show": "Faster preview",
         "actions_count": [
             "%s action",
             "%s actions",
