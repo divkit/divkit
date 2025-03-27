@@ -1,6 +1,7 @@
 {
   "description": "Container with centered dark shadow",
   "platforms": [
+    "android",
     "ios",
     "web",
     "flutter"
