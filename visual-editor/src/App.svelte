@@ -61,6 +61,8 @@
 
     export let directionSelector = false;
 
+    export let perThemeProps = get(state.paletteEnabled);
+
     export let uploadFile: (file: File) => Promise<string> = loadFileAsBase64;
 
     export let editorFabric: (opts: EditorOptions) => EditorInstance = editorFabricInternal;
@@ -182,6 +184,7 @@
         rootConfigurable,
         customFontFaces,
         directionSelector,
+        perThemeProps,
 
         rendererApi() {
             return rendererApi;

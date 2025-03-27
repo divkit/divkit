@@ -3050,15 +3050,20 @@
         } else {
             return;
         }
+        const evalledUrl = evalJson({
+            url
+        }).url;
+        const isExpression = evalledUrl !== url;
 
         file2Dialog().show({
             target: elem,
             title,
             value: {
-                url
+                url: evalledUrl
             },
             subtype,
             hasSize: false,
+            disabled: $readOnly || isExpression,
             callback(value) {
                 let property;
                 if (subtype === 'image') {

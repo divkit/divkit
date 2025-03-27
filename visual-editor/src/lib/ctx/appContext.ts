@@ -239,6 +239,7 @@ export interface AppContext {
     rootConfigurable: boolean;
     customFontFaces: FontFaceDesc[];
     directionSelector: boolean;
+    perThemeProps: boolean;
 
     rendererApi: () => RendererApi;
     setRendererApi(api: RendererApi): void;

@@ -47,6 +47,7 @@ export interface BaseProperty {
     show?: ConditionObject;
     enabled?: ConditionObject | false;
     enableSources?: boolean;
+    enablePerTheme?: boolean;
 }
 
 export interface RadioProperty extends BaseProperty {
@@ -121,7 +122,7 @@ export interface VideoSourcesProperty extends BaseProperty {
 
 export interface FileProperty extends BaseProperty {
     type: 'file';
-    subtype: 'image' | 'gif' | 'lottie' | 'image_preview';
+    subtype: 'image' | 'gif' | 'lottie' | 'image_preview' | 'video';
     generateFromVideoProperty?: string;
     generateFromLottieProperty?: string;
 }
@@ -474,13 +475,15 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             prop: 'image_url',
             type: 'file',
             subtype: 'image',
-            enableSources: true
+            enableSources: true,
+            enablePerTheme: true
         }, {
             name: 'props.preview',
             prop: 'preview',
             type: 'file',
             subtype: 'image_preview',
-            enableSources: true
+            enableSources: true,
+            enablePerTheme: true
         }, {
             name: 'props.image_scale',
             prop: 'scale',
@@ -516,13 +519,15 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             prop: 'gif_url',
             type: 'file',
             subtype: 'image',
-            enableSources: true
+            enableSources: true,
+            enablePerTheme: true
         }, {
             name: 'props.preview',
             prop: 'preview',
             type: 'file',
             subtype: 'image_preview',
-            enableSources: true
+            enableSources: true,
+            enablePerTheme: true
         }, {
             name: 'props.image_scale',
             prop: 'scale',
@@ -563,7 +568,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             type: 'file',
             generateFromVideoProperty: 'video_sources',
             subtype: 'image_preview',
-            enableSources: true
+            enableSources: true,
+            enablePerTheme: true
         }, {
             name: 'props.image_scale',
             prop: 'scale',

@@ -147,6 +147,7 @@ export interface DivProEditorOptions {
     customFontFaces?: FontFaceDesc[];
     directionSelector?: boolean;
     direction?: 'ltr' | 'rtl';
+    perThemeProps?: boolean;
 }
 
 export interface DivProEditorInstance {
@@ -229,6 +230,7 @@ export const DivProEditor = {
                 rootConfigurable: opts.rootConfigurable,
                 customFontFaces: opts.customFontFaces,
                 directionSelector: opts.directionSelector,
+                perThemeProps: opts.perThemeProps,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,

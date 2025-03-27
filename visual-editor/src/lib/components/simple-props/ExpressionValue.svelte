@@ -31,6 +31,8 @@
         border: none;
         border-radius: 8px;
         background: var(--fill-transparent-1);
+        text-overflow: ellipsis;
+        overflow: hidden;
         appearance: none;
         transition: .15s ease-in-out;
         transition-property: background-color;
