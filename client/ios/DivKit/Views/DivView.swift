@@ -54,6 +54,8 @@ public final class DivView: VisibleBoundsTrackingView {
     preloader = divViewPreloader ?? DivViewPreloader(divKitComponents: divKitComponents)
     super.init(frame: .zero)
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    tapGestureRecognizer.delegate = self
+    tapGestureRecognizer.cancelsTouchesInView = false
     addGestureRecognizer(tapGestureRecognizer)
   }
 
@@ -387,5 +389,14 @@ extension UIViewController {
       alert.addAction(action)
     }
     present(alert, animated: true)
+  }
+}
+
+extension DivView: UIGestureRecognizerDelegate {
+  public func gestureRecognizer(
+    _: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
+  ) -> Bool {
+    true
   }
 }
