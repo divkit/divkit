@@ -64,11 +64,13 @@
           "variable_name": "result",
           "value": {
             "type": "color",
-            "value": "#AABBCC"
+            "value": "#FFAABBCC"
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

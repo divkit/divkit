@@ -70,6 +70,79 @@ function createInteractiveTestCase(testCase, testPath) {
     });
 }
 
+function createIntegrationTestCase(testCase, testPath) {
+    const { description, div_data, cases } = JSON.parse(fs.readFileSync(path.join(path.resolve(__dirname, '../../..'), testPath), 'utf8'));
+
+    for (let i = 0; i < cases.length; ++i) {
+        const item = cases[i];
+        const resultType = item.expected.find(it => it.type === 'variable' && it.variable_name === 'result')?.value?.type;
+
+        if (item.platforms && !item.platforms.includes('web')) {
+            continue;
+        }
+
+        describe(description, () => {
+            it(`Case [${i}]`, async function() {
+                await this.browser.yaOpenCrossplatformJson(testPath, {
+                    result_type: resultType
+                });
+
+                for (let j = 0; j < item.div_actions.length; j++) {
+                    const action = item.div_actions[j];
+
+                    await this.browser.execute(action => {
+                        window.divkitRoot.execAction(action);
+                    }, action);
+                }
+
+                for (let j = 0; j < item.expected.length; j++) {
+                    const expected = item.expected[j];
+
+                    if (expected.type === 'variable') {
+                        const result = await this.browser.execute(variableName => {
+                            const inst = window.divkitRoot.getDebugAllVariables().get(variableName);
+                            const type = inst.getType();
+                            let value = inst.getValue();
+
+                            if (typeof value === 'bigint') {
+                                value = Number(value);
+                            } else if (type === 'boolean') {
+                                value = Boolean(value);
+                            }
+
+                            return {
+                                type,
+                                value
+                            };
+                        }, expected.variable_name);
+
+                        result.type.should.equal(expected.value.type);
+                        result.value.should.equal(expected.value.value);
+                    } else if (expected.type === 'error') {
+                        const errors = await this.browser.execute(() => {
+                            if (!window.errors) {
+                                return [];
+                            }
+
+                            return window.errors.map(it => {
+                                return {
+                                    message: it.message,
+                                    additionalMessage: it.additional ? it.additional.message : undefined
+                                };
+                            });
+                        });
+
+                        errors.length.should.equal(1);
+                        errors[0].additionalMessage.should.equal(expected.value);
+                    } else {
+                        throw new Error('Unsupported expected type ' + expected.type);
+                    }
+                }
+            });
+        });
+    }
+}
+
 const crossplatformPath = '../../../../../../test_data';
 describe('crossplatform', () => {
     describe('samples', () => {
@@ -85,6 +158,11 @@ describe('crossplatform', () => {
     describe('interactions', () => {
         const skipTests = [];
         read(`${crossplatformPath}/interactive_snapshot_test_data/`, createInteractiveTestCase, skipTests);
+    });
+
+    describe('integration', () => {
+        const skipTests = [];
+        read(`${crossplatformPath}/integration_test_data/`, createIntegrationTestCase, skipTests);
     });
 
     describe('unit', () => {

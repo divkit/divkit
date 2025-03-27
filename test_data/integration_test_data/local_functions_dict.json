@@ -78,7 +78,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     }
   ]

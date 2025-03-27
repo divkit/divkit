@@ -94,7 +94,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -115,7 +116,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -128,10 +130,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Function captureFunction() returned integer, but string was expected."
+          "value": "Failed to evaluate [captureFunction('test')]. Exactly 0 argument(s) expected."
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

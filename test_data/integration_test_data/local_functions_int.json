@@ -95,7 +95,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -116,7 +117,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -129,10 +131,13 @@
       "expected": [
         {
           "type": "error",
-          "value": "Failed to evaluate [[123,123.45].increment(2)]. Unknown method name: increment."
+          "value": "Failed to evaluate [increment(2)]. Unknown method name: increment."
         }
       ],
-      "platforms": []
+      "platforms": [
+        "android",
+        "web"
+      ]
     }
   ]
 }
