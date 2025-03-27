@@ -113,6 +113,15 @@ final class DivBaseBlockBuilder {
     return div.focus?.background ?? div.background
   }
 
+  private func isAppearing() -> Bool {
+    let stateManager = context.stateManager
+    if stateManager.shouldBlockAppearWithTransition(path: statePath + identity) {
+      return true
+    }
+
+    return stateManager.isBlockAdded(identity, stateBlockPath: statePath.stateBlockPath)
+  }
+
   func applyExtensionHandlers(
     stage: ApplyExtensionHandlersStage
   ) -> Self {
@@ -246,11 +255,7 @@ final class DivBaseBlockBuilder {
   func applyTransitioningAnimations() -> Self {
     let expressionResolver = context.expressionResolver
 
-    let animationIn: [TransitioningAnimation]? = if div.isAppearing(
-      statePath: statePath,
-      id: identity,
-      context: context
-    ) {
+    let animationIn: [TransitioningAnimation]? = if isAppearing() {
       div.transitionIn?.resolveAnimations(expressionResolver, type: .appearing)
     } else {
       nil

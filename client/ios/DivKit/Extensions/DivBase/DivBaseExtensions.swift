@@ -131,19 +131,6 @@ extension DivBase {
     return blockActions
   }
 
-  func isAppearing(
-    statePath: DivStatePath,
-    id: String,
-    context: DivBlockModelingContext
-  ) -> Bool {
-    let stateManager = context.stateManager
-    if stateManager.shouldBlockAppearWithTransition(path: statePath + id) {
-      return true
-    }
-
-    return stateManager.isBlockAdded(id, stateBlockPath: statePath.stateBlockPath)
-  }
-
   private func setupContext(
     context: DivBlockModelingContext,
     identity: String
