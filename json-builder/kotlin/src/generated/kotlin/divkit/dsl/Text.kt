@@ -48,6 +48,7 @@ data class Text internal constructor(
             autoEllipsize = additive.autoEllipsize ?: properties.autoEllipsize,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            captureFocusOnAction = additive.captureFocusOnAction ?: properties.captureFocusOnAction,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
@@ -157,6 +158,11 @@ data class Text internal constructor(
          * Element stroke.
          */
         val border: Property<Border>?,
+        /**
+         * If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+         * Default value: `true`.
+         */
+        val captureFocusOnAction: Property<Boolean>?,
         /**
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
@@ -356,10 +362,9 @@ data class Text internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
-         * Text cropping method. Use `ellipsis` instead.
+         * Location of text cropping marker.
          * Default value: `end`.
          */
-        @Deprecated("Marked as deprecated in the JSON schema ")
         val truncate: Property<Truncate>?,
         /**
          * Underline.
@@ -408,6 +413,7 @@ data class Text internal constructor(
             result.tryPutProperty("auto_ellipsize", autoEllipsize)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("capture_focus_on_action", captureFocusOnAction)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("doubletap_actions", doubletapActions)
@@ -468,7 +474,7 @@ data class Text internal constructor(
     }
 
     /**
-     * Text cropping method. Use `ellipsis` instead.
+     * Location of text cropping marker.
      * 
      * Possible values: [none], [start], [end], [middle].
      */
@@ -856,6 +862,7 @@ data class Text internal constructor(
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
@@ -902,7 +909,7 @@ data class Text internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -926,6 +933,7 @@ fun DivScope.text(
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
@@ -995,6 +1003,7 @@ fun DivScope.text(
         autoEllipsize = valueOrNull(autoEllipsize),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
@@ -1066,6 +1075,7 @@ fun DivScope.text(
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
@@ -1112,7 +1122,7 @@ fun DivScope.text(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1136,6 +1146,7 @@ fun DivScope.textProps(
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
@@ -1204,6 +1215,7 @@ fun DivScope.textProps(
     autoEllipsize = valueOrNull(autoEllipsize),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    captureFocusOnAction = valueOrNull(captureFocusOnAction),
     columnSpan = valueOrNull(columnSpan),
     disappearActions = valueOrNull(disappearActions),
     doubletapActions = valueOrNull(doubletapActions),
@@ -1274,6 +1286,7 @@ fun DivScope.textProps(
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
@@ -1320,7 +1333,7 @@ fun DivScope.textProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1344,6 +1357,7 @@ fun TemplateScope.textRefs(
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
@@ -1412,6 +1426,7 @@ fun TemplateScope.textRefs(
     autoEllipsize = autoEllipsize,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     columnSpan = columnSpan,
     disappearActions = disappearActions,
     doubletapActions = doubletapActions,
@@ -1482,6 +1497,7 @@ fun TemplateScope.textRefs(
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
@@ -1528,7 +1544,7 @@ fun TemplateScope.textRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1552,6 +1568,7 @@ fun Text.override(
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
@@ -1621,6 +1638,7 @@ fun Text.override(
         autoEllipsize = valueOrNull(autoEllipsize) ?: properties.autoEllipsize,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        captureFocusOnAction = valueOrNull(captureFocusOnAction) ?: properties.captureFocusOnAction,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
@@ -1692,6 +1710,7 @@ fun Text.override(
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
@@ -1738,7 +1757,7 @@ fun Text.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1762,6 +1781,7 @@ fun Text.defer(
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
@@ -1831,6 +1851,7 @@ fun Text.defer(
         autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = disappearActions ?: properties.disappearActions,
         doubletapActions = doubletapActions ?: properties.doubletapActions,
@@ -1895,6 +1916,7 @@ fun Text.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -1914,7 +1936,7 @@ fun Text.defer(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param visibility Element visibility.
  */
@@ -1926,6 +1948,7 @@ fun Text.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     autoEllipsize: ExpressionProperty<Boolean>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
     fontFamily: ExpressionProperty<String>? = null,
@@ -1963,6 +1986,7 @@ fun Text.evaluate(
         autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
         background = properties.background,
         border = properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = properties.disappearActions,
         doubletapActions = properties.doubletapActions,
@@ -2034,6 +2058,7 @@ fun Text.evaluate(
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
@@ -2080,7 +2105,7 @@ fun Text.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -2104,6 +2129,7 @@ fun Component<Text>.override(
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
@@ -2174,6 +2200,7 @@ fun Component<Text>.override(
         autoEllipsize = valueOrNull(autoEllipsize),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
@@ -2245,6 +2272,7 @@ fun Component<Text>.override(
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
@@ -2291,7 +2319,7 @@ fun Component<Text>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -2315,6 +2343,7 @@ fun Component<Text>.defer(
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
@@ -2385,6 +2414,7 @@ fun Component<Text>.defer(
         autoEllipsize = autoEllipsize,
         background = background,
         border = border,
+        captureFocusOnAction = captureFocusOnAction,
         columnSpan = columnSpan,
         disappearActions = disappearActions,
         doubletapActions = doubletapActions,
@@ -2449,6 +2479,7 @@ fun Component<Text>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -2468,7 +2499,7 @@ fun Component<Text>.defer(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
- * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param truncate Location of text cropping marker.
  * @param underline Underline.
  * @param visibility Element visibility.
  */
@@ -2480,6 +2511,7 @@ fun Component<Text>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     autoEllipsize: ExpressionProperty<Boolean>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
     fontFamily: ExpressionProperty<String>? = null,
@@ -2518,6 +2550,7 @@ fun Component<Text>.evaluate(
         autoEllipsize = autoEllipsize,
         background = null,
         border = null,
+        captureFocusOnAction = captureFocusOnAction,
         columnSpan = columnSpan,
         disappearActions = null,
         doubletapActions = null,

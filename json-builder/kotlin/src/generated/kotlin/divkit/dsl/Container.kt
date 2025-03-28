@@ -48,6 +48,7 @@ data class Container internal constructor(
             aspect = additive.aspect ?: properties.aspect,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            captureFocusOnAction = additive.captureFocusOnAction ?: properties.captureFocusOnAction,
             clipToBounds = additive.clipToBounds ?: properties.clipToBounds,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             contentAlignmentHorizontal = additive.contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
@@ -143,6 +144,11 @@ data class Container internal constructor(
          * Element stroke.
          */
         val border: Property<Border>?,
+        /**
+         * If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+         * Default value: `true`.
+         */
+        val captureFocusOnAction: Property<Boolean>?,
         /**
          * Enables the bounding of child elements by the parent's borders.
          * Default value: `true`.
@@ -322,6 +328,7 @@ data class Container internal constructor(
             result.tryPutProperty("aspect", aspect)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("capture_focus_on_action", captureFocusOnAction)
             result.tryPutProperty("clip_to_bounds", clipToBounds)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("content_alignment_horizontal", contentAlignmentHorizontal)
@@ -457,6 +464,7 @@ data class Container internal constructor(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -512,6 +520,7 @@ fun DivScope.row(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -563,6 +572,7 @@ fun DivScope.row(
     aspect = aspect,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -617,6 +627,7 @@ fun DivScope.row(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -672,6 +683,7 @@ fun DivScope.row(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -723,6 +735,7 @@ fun DivScope.row(
     aspect = aspect,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -777,6 +790,7 @@ fun DivScope.row(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -832,6 +846,7 @@ fun DivScope.column(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -883,6 +898,7 @@ fun DivScope.column(
     aspect = aspect,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -937,6 +953,7 @@ fun DivScope.column(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -992,6 +1009,7 @@ fun DivScope.column(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -1043,6 +1061,7 @@ fun DivScope.column(
     aspect = aspect,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -1097,6 +1116,7 @@ fun DivScope.column(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -1152,6 +1172,7 @@ fun DivScope.stack(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -1203,6 +1224,7 @@ fun DivScope.stack(
     aspect = aspect,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -1257,6 +1279,7 @@ fun DivScope.stack(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -1312,6 +1335,7 @@ fun DivScope.stack(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -1363,6 +1387,7 @@ fun DivScope.stack(
     aspect = aspect,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -1418,6 +1443,7 @@ fun DivScope.stack(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -1473,6 +1499,7 @@ fun DivScope.container(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -1526,6 +1553,7 @@ fun DivScope.container(
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
@@ -1582,6 +1610,7 @@ fun DivScope.container(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -1637,6 +1666,7 @@ fun DivScope.containerProps(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -1689,6 +1719,7 @@ fun DivScope.containerProps(
     aspect = valueOrNull(aspect),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    captureFocusOnAction = valueOrNull(captureFocusOnAction),
     clipToBounds = valueOrNull(clipToBounds),
     columnSpan = valueOrNull(columnSpan),
     contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
@@ -1744,6 +1775,7 @@ fun DivScope.containerProps(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -1799,6 +1831,7 @@ fun TemplateScope.containerRefs(
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
@@ -1851,6 +1884,7 @@ fun TemplateScope.containerRefs(
     aspect = aspect,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -1906,6 +1940,7 @@ fun TemplateScope.containerRefs(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -1961,6 +1996,7 @@ fun Container.override(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -2014,6 +2050,7 @@ fun Container.override(
         aspect = valueOrNull(aspect) ?: properties.aspect,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        captureFocusOnAction = valueOrNull(captureFocusOnAction) ?: properties.captureFocusOnAction,
         clipToBounds = valueOrNull(clipToBounds) ?: properties.clipToBounds,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal) ?: properties.contentAlignmentHorizontal,
@@ -2070,6 +2107,7 @@ fun Container.override(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -2125,6 +2163,7 @@ fun Container.defer(
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
@@ -2178,6 +2217,7 @@ fun Container.defer(
         aspect = aspect ?: properties.aspect,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
@@ -2225,6 +2265,7 @@ fun Container.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -2241,6 +2282,7 @@ fun Container.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
@@ -2263,6 +2305,7 @@ fun Container.evaluate(
         aspect = properties.aspect,
         background = properties.background,
         border = properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
@@ -2319,6 +2362,7 @@ fun Container.evaluate(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -2374,6 +2418,7 @@ fun Component<Container>.override(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
@@ -2428,6 +2473,7 @@ fun Component<Container>.override(
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
@@ -2484,6 +2530,7 @@ fun Component<Container>.override(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -2539,6 +2586,7 @@ fun Component<Container>.defer(
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
@@ -2593,6 +2641,7 @@ fun Component<Container>.defer(
         aspect = aspect,
         background = background,
         border = border,
+        captureFocusOnAction = captureFocusOnAction,
         clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
@@ -2640,6 +2689,7 @@ fun Component<Container>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -2656,6 +2706,7 @@ fun Component<Container>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
@@ -2679,6 +2730,7 @@ fun Component<Container>.evaluate(
         aspect = null,
         background = null,
         border = null,
+        captureFocusOnAction = captureFocusOnAction,
         clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
