@@ -12,7 +12,8 @@ extension DivState: DivBlockModeling {
       to: applyBaseProperties(
         to: { try makeBaseBlock(context: context, id: stateId) },
         context: context,
-        actionsHolder: nil
+        actionsHolder: nil,
+        clipToBounds: resolveClipToBounds(context.expressionResolver)
       ),
       context: context
     )

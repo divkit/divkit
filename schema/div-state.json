@@ -103,7 +103,8 @@
           "$description": "translations.json#/div_clip_to_bounds",
           "platforms": [
             "android",
-            "web"
+            "web",
+            "ios"
           ]
         }
       },
