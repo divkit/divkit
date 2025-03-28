@@ -1,3 +1,9 @@
+## 31.8.1
+
+# iOS Client:
+* Fix pager infinite scrolling + scroll_axis_alignment start and paddings.
+
+
 ## 31.8.0
 
 # Android Client:
