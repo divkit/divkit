@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.util.DisplayMetrics
+import com.yandex.div.core.util.findNearest
 import com.yandex.div.core.util.observeFixedSize
 import com.yandex.div.core.util.observeRoundedRectangleShape
 import com.yandex.div.core.util.observeShape
@@ -17,6 +18,7 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivIndicatorItemPlacement
+import com.yandex.div2.DivPager
 import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivSizeUnit
@@ -26,9 +28,14 @@ internal class DivIndicatorBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val pagerIndicatorConnector: PagerIndicatorConnector
 ) : DivViewBinder<Div.Indicator, DivIndicator, DivPagerIndicatorView>(baseBinder) {
-
     override fun bindView(context: BindingContext, view: DivPagerIndicatorView, div: Div.Indicator) {
-        div.value.pagerId?.let { pagerIndicatorConnector.submitIndicator(it, view) }
+        context.divView.rootDiv()?.let { rootDiv ->
+            findNearest<DivPager>(rootDiv, context.expressionResolver, div.value()) {
+                div.value.pagerId == null || it.id == div.value.pagerId
+            }?.let { pagerToAttach ->
+                pagerIndicatorConnector.submitIndicator(view, pagerToAttach)
+            }
+        }
         super.bindView(context, view, div)
     }
 

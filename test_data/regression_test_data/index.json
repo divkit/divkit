@@ -3676,6 +3676,40 @@
         "Cursor at the last position"
       ],
       "file": "input_focus.json"
+    },
+    {
+      "title": "Indicator auto-binding (different pager ids)",
+      "case_id": 200,
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivIndicator"
+      ],
+      "steps": [
+        "Scroll pagers"
+      ],
+      "expected_results": [
+        "Each indicator is bound to the nearest pager"
+      ],
+      "file": "indicator_auto_binding_different_ids.json"
+    },
+    {
+      "title": "Indicator auto-binding (same pager ids)",
+      "case_id": 201,
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivIndicator"
+      ],
+      "steps": [
+        "Scroll pagers"
+      ],
+      "expected_results": [
+        "Each indicator is bound to the nearest pager"
+      ],
+      "file": "indicator_auto_binding_same_ids.json"
     }
   ]
 }
