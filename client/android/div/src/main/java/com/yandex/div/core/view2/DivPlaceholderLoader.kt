@@ -30,7 +30,7 @@ internal class DivPlaceholderLoader @Inject constructor(
         currentPlaceholderColor: Int,
         synchronous: Boolean,
         onSetPlaceholder: (Drawable?) -> Unit,
-        onSetPreview: (ImageRepresentation?) -> Unit
+        onSetPreview: (ImageRepresentation) -> Unit
     ) {
         currentPreview?.let {
             enqueueDecoding(it, imageView, synchronous) { decoded ->

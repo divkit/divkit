@@ -63,8 +63,8 @@ allprojects {
                     "-opt-in=com.yandex.div.core.annotations.InternalApi",
                     "-opt-in=com.yandex.div.core.annotations.ExperimentalApi"
             ]
-            languageVersion = KotlinVersion.KOTLIN_1_5
-            apiVersion = KotlinVersion.KOTLIN_1_5
+            languageVersion = KotlinVersion.KOTLIN_1_8
+            apiVersion = KotlinVersion.KOTLIN_1_8
             jvmTarget = JvmTarget.JVM_1_8
         }
     }
@@ -99,7 +99,7 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion "8.10.2"
+    gradleVersion "8.13"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
