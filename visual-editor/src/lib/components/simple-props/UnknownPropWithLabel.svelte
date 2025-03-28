@@ -12,6 +12,7 @@
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { encodeBackground } from '../../utils/encodeBackground';
     import { encodeDivString } from '../../utils/encodeDivString';
+    import { isPaletteColor } from '../../data/palette';
     import sourceIcon from '../../../assets/source.svg?raw';
     import ExpressionValue from './ExpressionValue.svelte';
     import lightThemeIcon from '../../../assets/lightTheme.svg?url';
@@ -36,6 +37,7 @@
     $: tankerToggled = typeof value === 'string' && value.startsWith('@{tanker_');
     $: perThemeToggled = typeof value === 'string' && PER_THEME_RE.test(value);
     $: isExpression = !tankerToggled && value !== evalValue && typeof value !== 'object';
+    $: isPalette = !tankerToggled && item.type === 'color' && isPaletteColor(String(value));
     $: showSources = !tankerToggled && ('enableSources' in item && item.enableSources || isExpression);
 
     $: if (value !== undefined && perThemeToggled) {
@@ -251,7 +253,7 @@
                 on:change={event => onThemeValueChange(event, 'dark')}
             />
         </div>
-    {:else if hasLabel && isExpression}
+    {:else if hasLabel && isExpression && !isPalette}
         <ExpressionValue
             {evalValue}
             on:click={onSourceClick}
