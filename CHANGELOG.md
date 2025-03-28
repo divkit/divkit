@@ -1,3 +1,23 @@
+## 31.9.0
+
+# Android Client:
+* Fix animator on text gradient.
+
+# iOS Client:
+* Added Voice Over focus when focusing on `DivInput`.
+* Added support for `mode` with value "transactional" and `on_failed_actions` properties in `div-patch`.
+* Hide keyboard on tap outside.
+* Replace deprecated `EdgeInsets.horizontalInsets`/`EdgeInsets.verticalInsets` API usages with `EdgeInsets.horizontal`/`EdgeInsets.vertical`.
+* Visual animation no longer requires specifying an element ID.
+
+# Web Client:
+* Added support for `functions` in the `card` (div data). Previously, they were supported only in components.
+* Added support for the `animation_type` and `animation_duration` in `tabs`.
+* Fixed a bug with the importance of properties in action, now `typed` is more important than `url`.
+* Fixed an error message when a local function was found, but the arguments were incorrect.
+* The logic of the "nested actions" warning has been updated, nested `<button>` will no longer be rendered.
+
+
 ## 31.8.1
 
 # iOS Client:
