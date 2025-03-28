@@ -1,6 +1,5 @@
 package com.yandex.div.internal.parser
 
-import android.annotation.SuppressLint
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
@@ -47,7 +46,6 @@ internal object JsonTopologicalSorting {
      * @throws ParsingException if top level object has no parent reference or it is empty.
      * @throws JSONException if json is malformed.
      */
-    @SuppressLint("NewApi")
     @Throws(JSONException::class, ParsingException::class, CyclicDependencyException::class)
     fun sort(context: ParsingContext, json: JSONObject): Map<String, Set<String>> {
         val types = parseTypeDependencies(context, json)

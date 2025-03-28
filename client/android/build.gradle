@@ -88,6 +88,12 @@ subprojects {
             }
         }
 
+        if (project.tasks.names.contains("lint")) {
+            project.tasks.named("lint").get().configure { task ->
+                unitTests.dependsOn(task)
+            }
+        }
+
         project.tasks.withType(PublishToMavenRepository).configureEach { task ->
             task.finalizedBy(reportBuildNumber)
         }
