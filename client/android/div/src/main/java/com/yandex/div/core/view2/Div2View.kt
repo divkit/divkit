@@ -312,7 +312,7 @@ class Div2View private constructor(
         dataTag = tag
 
         data.states.forEach {
-            div2Component.preloader.preload(it.div, expressionResolver)
+            div2Component.divViewDataPreloader.preload(it.div, bindingContext, DivStatePath.fromState(it))
         }
 
         val isDataReplaceable = DivComparator.isDivDataReplaceable(
@@ -382,7 +382,7 @@ class Div2View private constructor(
         dataTag = tag
 
         data.states.forEach {
-            div2Component.preloader.preload(it.div, expressionResolver)
+            div2Component.divViewDataPreloader.preload(it.div, bindingContext, DivStatePath.fromState(it))
         }
         paths.forEach { path ->
             div2Component.stateManager.updateStates(divTag.id, path, temporary)

@@ -66,8 +66,7 @@ class DivPreloader internal constructor(
     }
 
     companion object {
-        private val NO_CALLBACK = Callback { }
-
+        internal val NO_CALLBACK = Callback { }
     }
 
     private inner class PreloadVisitor(
@@ -137,8 +136,10 @@ class DivPreloader internal constructor(
         }
     }
 
-    private class TicketImpl : Ticket {
-        val refs = mutableListOf<PreloadReference>()
+    internal class TicketImpl : Ticket {
+
+        private val refs = mutableListOf<PreloadReference>()
+
         fun addReference(reference: PreloadReference) {
             refs.add(reference)
         }

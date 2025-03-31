@@ -72,7 +72,7 @@ internal class DivBaseBinder @Inject constructor(
 
         bindId(divView, div, oldDiv)
         bindLayoutParams(div, oldDiv, resolver, subscriber)
-        bindLayoutProvider(divView, div, oldDiv, resolver)
+        bindLayoutProvider(bindingContext, div, oldDiv)
         bindAccessibility(divView, div, oldDiv, resolver, subscriber)
         bindAlpha(div, oldDiv, resolver, subscriber)
 
@@ -246,11 +246,11 @@ internal class DivBaseBinder @Inject constructor(
     }
 
     private fun View.bindLayoutProvider(
-        divView: Div2View,
+        bindingContext: BindingContext,
         newDiv: DivBase,
         oldDiv: DivBase?,
-        resolver: ExpressionResolver
     ) {
+        val divView = bindingContext.divView
         val data = divView.divData ?: return
         val layoutProvider = newDiv.layoutProvider ?: return
         if (layoutProvider.widthVariableName.equals(oldDiv?.layoutProvider?.widthVariableName)
@@ -268,14 +268,34 @@ internal class DivBaseBinder @Inject constructor(
         }
 
         val variablesHolder = divView.variablesHolders[data] ?: DivLayoutProviderVariablesHolder()
-            .apply { observeDivData(data, resolver) }
+            .apply { observeDivData(data, bindingContext) }
             .also { divView.variablesHolders[data] = it }
 
         val listener = View.OnLayoutChangeListener { _, left, top, right, bottom,
                                                      oldLeft, oldTop, oldRight, oldBottom ->
             val metrics = resources.displayMetrics
-            updateSizeVariable(divView, metrics, widthVariable, variablesHolder, left, right, oldLeft, oldRight, resolver)
-            updateSizeVariable(divView, metrics, heightVariable, variablesHolder, top, bottom, oldTop, oldBottom, resolver)
+            updateSizeVariable(
+                divView,
+                metrics,
+                widthVariable,
+                variablesHolder,
+                left,
+                right,
+                oldLeft,
+                oldRight,
+                bindingContext.expressionResolver,
+            )
+            updateSizeVariable(
+                divView,
+                metrics,
+                heightVariable,
+                variablesHolder,
+                top,
+                bottom,
+                oldTop,
+                oldBottom,
+                bindingContext.expressionResolver
+            )
         }
         if (width > 0 || height > 0) {
             listener.onLayoutChange(this, left, top, right, bottom, 0, 0, 0, 0)

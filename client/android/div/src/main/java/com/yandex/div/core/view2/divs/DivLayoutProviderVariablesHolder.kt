@@ -1,18 +1,19 @@
 package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.Disposable
-import com.yandex.div.internal.core.DivVisitor
+import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivSize
 
-class DivLayoutProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber {
+internal class DivLayoutProviderVariablesHolder : DivTreeVisitor<Unit>(), ExpressionSubscriber {
 
     private val changedVariables = mutableListOf<String>()
 
@@ -22,45 +23,15 @@ class DivLayoutProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscribe
 
     fun clear() = changedVariables.clear()
 
-    fun observeDivData(data: DivData, resolver: ExpressionResolver) = data.states.forEach { visit(it.div, resolver) }
+    fun observeDivData(data: DivData, context: BindingContext) =
+        data.states.forEach { visit(it.div, context, DivStatePath.fromState(it)) }
 
-    override fun defaultVisit(data: Div, resolver: ExpressionResolver) = data.observeSize(resolver)
+    override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) =
+        data.value().observeSize(context.expressionResolver)
 
-    override fun visit(data: Div.Container, resolver: ExpressionResolver) {
-        defaultVisit(data, resolver)
-        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
-    }
-
-    override fun visit(data: Div.Grid, resolver: ExpressionResolver) {
-        defaultVisit(data, resolver)
-        data.value.nonNullItems.forEach { visit(it, resolver) }
-    }
-
-    override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
-        defaultVisit(data, resolver)
-        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
-    }
-
-    override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
-        defaultVisit(data, resolver)
-        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
-    }
-
-    override fun visit(data: Div.Tabs, resolver: ExpressionResolver) {
-        defaultVisit(data, resolver)
-        data.value.items.forEach { visit(it.div, resolver) }
-    }
-
-    override fun visit(data: Div.State, resolver: ExpressionResolver) {
-        defaultVisit(data, resolver)
-        data.value.states.forEach { state -> state.div?.let { visit(it, resolver) } }
-    }
-
-    private fun Div.observeSize(resolver: ExpressionResolver) {
-        with(value()) {
-            width.observe(resolver)
-            height.observe(resolver)
-        }
+    private fun DivBase.observeSize(resolver: ExpressionResolver) {
+        width.observe(resolver)
+        height.observe(resolver)
     }
 
     private fun DivSize.observe(resolver: ExpressionResolver) {

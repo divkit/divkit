@@ -12,6 +12,7 @@ import com.yandex.div.core.DivCustomContainerChildFactory;
 import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivDataChangeListener;
 import com.yandex.div.core.DivPreloader;
+import com.yandex.div.core.DivViewDataPreloader;
 import com.yandex.div.core.actions.DivActionTypedHandlerCombiner;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
@@ -189,6 +190,9 @@ public interface Div2Component {
 
     @NonNull
     BitmapEffectHelper getBitmapEffectHelper();
+
+    @NonNull
+    DivViewDataPreloader getDivViewDataPreloader();
 
     /**
      * Builder for Div2Component
