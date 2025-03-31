@@ -1151,19 +1151,19 @@
     "en": "Angle of gradient direction.",
     "ru": "Угол направления градиента."
   },
-  "div_gradient_linear_color_map": {
+  "div_gradient_color_map": {
     "en": "Colors and positions of gradient points. When using this parameter, the `colors` parameter is ignored.",
     "ru": "Цвета и расположение точек градиента. При использовании данного параметра игнорируется параметр `colors`."
   },
-  "div_gradient_linear_color_point": {
+  "div_gradient_color_point": {
     "en": "Describes color at particular gradient position.",
     "ru": "Определяет цвет градиента на заданной позиции."
   },
-  "div_gradient_linear_color_point_color": {
+  "div_gradient_color_point_color": {
     "en": "Gradient color corresponding to gradient point.",
     "ru": "Цвет градиента, соответствующий точке градиента."
   },
-  "div_gradient_linear_color_point_position": {
+  "div_gradient_color_point_position": {
     "en": "The position of the gradient point.",
     "ru": "Расположение точки градиента."
   },
