@@ -60,7 +60,8 @@ export type RadialGradientCenter = RadialGradientFixedCenter | RadialGradientRel
 
 export interface RadialBackground {
     type: 'radial_gradient';
-    colors: string[];
+    colors?: string[];
+    color_map?: GradientColorPoint[];
     radius?: RadialBackgroundRadius;
     center_x?: RadialGradientCenter;
     center_y?: RadialGradientCenter;
