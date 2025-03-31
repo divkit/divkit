@@ -1,10 +1,10 @@
 import type { EdgeInsets } from '../types/edgeInserts';
 import { isNonNegativeNumber } from './isNonNegativeNumber';
 
-export function correctEdgeInsertsObject(
+export function correctEdgeInsertsObject<T extends EdgeInsets | null>(
     edgeInsets: EdgeInsets | undefined,
-    defaultVal: EdgeInsets | null
-): EdgeInsets | null {
+    defaultVal: T
+): T {
     if (!edgeInsets || typeof edgeInsets !== 'object') {
         return defaultVal;
     }
@@ -22,5 +22,5 @@ export function correctEdgeInsertsObject(
         }
     }
 
-    return edgeInsets;
+    return edgeInsets as T;
 }

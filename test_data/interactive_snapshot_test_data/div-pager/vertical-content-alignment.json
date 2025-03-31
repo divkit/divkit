@@ -2,7 +2,8 @@
   "description": "Vertical pager with different content_alignment",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

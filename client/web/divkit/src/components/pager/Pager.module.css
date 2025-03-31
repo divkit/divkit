@@ -21,8 +21,19 @@
     grid-template-rows: 100%;
     max-width: 100%;
     max-height: 100%;
-    scroll-snap-align: center;
     pointer-events: none;
+}
+
+.pager_scroll-align_start > .pager__items > .pager__item {
+    scroll-snap-align: start;
+}
+
+.pager_scroll-align_center > .pager__items > .pager__item {
+    scroll-snap-align: center;
+}
+
+.pager_scroll-align_end > .pager__items > .pager__item {
+    scroll-snap-align: end;
 }
 
 .pager_clip .pager__item {

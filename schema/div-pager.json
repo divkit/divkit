@@ -33,7 +33,8 @@
           "$description": "translations.json#/div_pager_scroll_axis_alignment",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "cross_axis_alignment": {

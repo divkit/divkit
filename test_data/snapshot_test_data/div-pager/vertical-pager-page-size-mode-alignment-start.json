@@ -2,7 +2,8 @@
   "description": "Vertical pager with custom page width with scroll_axis_alignment start",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "text_page_match_parent_height": {

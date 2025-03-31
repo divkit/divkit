@@ -1,7 +1,8 @@
 {
   "description": "Vertical pager with layout mode 'percentage', scroll_axis_alignment 'end' and few small pages",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "text_page_match_parent_height": {

@@ -1,7 +1,8 @@
 {
   "description": "Horizontal pager with layout_mode 'percentage', scroll_axis_alignment 'end' and few small pages",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "title": {

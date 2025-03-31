@@ -51,22 +51,24 @@
     import type { Size } from '../../types/sizes';
     import type { Variable } from '../../expressions/variable';
     import type { Overflow } from '../../../typings/common';
+    import type { EdgeInsets } from '../../types/edgeInserts';
 
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
-    import { pxToEmWithUnits } from '../../utils/pxToEm';
+    import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
     import { correctGeneralOrientation } from '../../utils/correctGeneralOrientation';
-    import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
     import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
     import { constStore } from '../../utils/constStore';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivPagerData>;
@@ -99,11 +101,15 @@
 
     let orientation: Orientation = 'horizontal';
     let itemSpacing = '0em';
+    let paddingObj: EdgeInsets = {};
     let padding = '';
     let sizeVal = '';
 
     let childLayoutParams: LayoutParams = {};
     let crossAxisAlignment: 'start' | 'center' | 'end' = 'start';
+    let scrollAxisAlignment: 'start' | 'center' | 'end' = 'center';
+
+    let scrollPaddings: EdgeInsets = {};
 
     let items: ComponentContext[] = [];
     let prevContext: ComponentContext<DivPagerData> | undefined;
@@ -111,9 +117,11 @@
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
-        padding = '';
+        paddingObj = {};
         childLayoutParams = {};
         crossAxisAlignment = 'start';
+        scrollAxisAlignment = 'center';
+        scrollPaddings = {};
     }
 
     $: if (origJson) {
@@ -131,6 +139,7 @@
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
     $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
     $: jsonCrossAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_axis_alignment);
+    $: jsonScrollAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.scroll_axis_alignment);
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
         componentContext = prevContext = {
@@ -232,7 +241,14 @@
     }
 
     $: {
-        padding = correctEdgeInserts($jsonPaddings, $direction, padding);
+        paddingObj = correctEdgeInsertsObject($jsonPaddings, paddingObj);
+        padding = edgeInsertsToCss(paddingObj, $direction);
+        scrollPaddings = {
+            top: paddingObj.top,
+            right: ($direction === 'ltr' ? paddingObj.start : paddingObj.end) ?? paddingObj.left ?? 0,
+            bottom: paddingObj.bottom,
+            left: ($direction === 'ltr' ? paddingObj.end : paddingObj.start) ?? paddingObj.right ?? 0
+        };
     }
 
     $: gridAuto = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
@@ -274,16 +290,25 @@
         };
     }
 
+    $: if ($jsonScrollAxisAlignment === 'start' || $jsonScrollAxisAlignment === 'center' || $jsonScrollAxisAlignment === 'end') {
+        scrollAxisAlignment = $jsonScrollAxisAlignment;
+    }
+
     $: style = {
         'grid-gap': itemSpacing,
         padding,
-        [gridAuto]: sizeVal
+        [gridAuto]: sizeVal,
+        'scroll-padding-top': scrollPaddings.top ? pxToEm(scrollPaddings.top) : undefined,
+        'scroll-padding-right': scrollPaddings.right ? pxToEm(scrollPaddings.right) : undefined,
+        'scroll-padding-bottom': scrollPaddings.bottom ? pxToEm(scrollPaddings.bottom) : undefined,
+        'scroll-padding-left': scrollPaddings.left ? pxToEm(scrollPaddings.left) : undefined,
     };
 
     $: mods = {
         clip: rootCtx.pagerChildrenClipEnabled,
         orientation,
-        'cross-align': crossAxisAlignment
+        'cross-align': crossAxisAlignment,
+        'scroll-align': scrollAxisAlignment
     };
 
     $: hasError = hasLayoutModeError;
@@ -367,8 +392,16 @@
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
         const elementSize: keyof HTMLElement = isHorizontal ? 'offsetWidth' : 'offsetHeight';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
-        const position = nextPagerItem[elementOffset] + nextPagerItem[elementSize] / 2 -
-            pagerItemsWrapper[elementSize] / 2;
+        const scrollSize: keyof HTMLElement = isHorizontal ? 'scrollWidth' : 'scrollHeight';
+        let position;
+        if (index === 0) {
+            position = 0;
+        } else if (index === items.length - 1) {
+            position = pagerItemsWrapper[scrollSize];
+        } else {
+            position = nextPagerItem[elementOffset] + nextPagerItem[elementSize] / 2 -
+                pagerItemsWrapper[elementSize] / 2;
+        }
 
         pagerItemsWrapper.scroll({
             [scrollDirection]: position,
@@ -401,12 +434,6 @@
     }
 
     function init(): void {
-        const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
-        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
-            currentItem = prevSelectedItem = defaultItem;
-            pagerDataUpdate(items.length, currentItem);
-        }
-
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
@@ -444,6 +471,12 @@
     }
 
     $: if (componentContext.json) {
+        const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
+        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
+            currentItem = prevSelectedItem = defaultItem;
+            pagerDataUpdate(items.length, defaultItem);
+        }
+
         init();
     }
 
@@ -463,9 +496,7 @@
                 }
             }
 
-            if (currentItem > 0) {
-                scrollToPagerItem(currentItem, 'instant');
-            }
+            scrollToPagerItem(currentItem, 'instant');
         }
     });
 

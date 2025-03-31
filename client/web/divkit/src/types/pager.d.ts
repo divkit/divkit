@@ -31,5 +31,6 @@ export interface DivPagerData extends DivBaseData {
     orientation?: Orientation;
     restrict_parent_scroll?: BooleanInt;
     default_item?: number;
+    scroll_axis_alignment?: PagerItemAlignment;
     cross_axis_alignment?: PagerItemAlignment;
 }

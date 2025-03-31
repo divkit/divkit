@@ -2,7 +2,8 @@
   "description": "Horizontal pager with wrap_content page width with scroll_axis_alignment start",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "text_page_fixed_height": {
