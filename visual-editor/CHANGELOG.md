@@ -1,3 +1,14 @@
+## 0.4.7
+
+* Added the `high_priority_image_show` flag to the interface
+* Added the ability to set different values for different themes for images and videos
+* Fixed the display of a dialog with an image if the url field contains the expressions
+* Added the ability to customize file limits in more detail, old properties have been deprecated
+* Fixed file size calculation if the field is empty
+* Fixed closing of the dialog by clicking past inside shadow root
+* Fixed showing the size `wrap_content` for the root element
+* Fixed the display of properties with colors from the palette
+
 ## 0.4.6
 
 * Fixed the display of long variable names in the variable panel
