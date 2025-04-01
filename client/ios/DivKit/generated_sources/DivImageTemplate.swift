@@ -19,6 +19,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
   public let aspect: Field<DivAspectTemplate>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
+  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: center
   public let contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: center
@@ -77,6 +78,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       aspect: dictionary.getOptionalField("aspect", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
+      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       contentAlignmentHorizontal: dictionary.getOptionalExpressionField("content_alignment_horizontal"),
       contentAlignmentVertical: dictionary.getOptionalExpressionField("content_alignment_vertical"),
@@ -136,6 +138,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
     aspect: Field<DivAspectTemplate>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
+    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
@@ -192,6 +195,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
     self.aspect = aspect
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal
     self.contentAlignmentVertical = contentAlignmentVertical
@@ -249,6 +253,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
     let aspectValue = { parent?.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let contentAlignmentHorizontalValue = { parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
     let contentAlignmentVerticalValue = { parent?.contentAlignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -304,6 +309,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
@@ -368,6 +374,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       aspect: { aspectValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
       contentAlignmentVertical: { contentAlignmentVerticalValue.value }(),
@@ -430,6 +437,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
     var aspectValue: DeserializationResult<DivAspect> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
+    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = { parent?.contentAlignmentHorizontal?.value() ?? .noValue }()
     var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = { parent?.contentAlignmentVertical?.value() ?? .noValue }()
@@ -535,6 +543,11 @@ public final class DivImageTemplate: TemplateValue, Sendable {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "capture_focus_on_action" {
+           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -808,6 +821,11 @@ public final class DivImageTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.captureFocusOnAction?.link {
+           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.columnSpan?.link {
            columnSpanValue = columnSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator) })
           }
@@ -1069,6 +1087,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
@@ -1133,6 +1152,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       aspect: { aspectValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
       contentAlignmentVertical: { contentAlignmentVerticalValue.value }(),
@@ -1200,6 +1220,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       aspect: aspect ?? mergedParent.aspect,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
+      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       contentAlignmentHorizontal: contentAlignmentHorizontal ?? mergedParent.contentAlignmentHorizontal,
       contentAlignmentVertical: contentAlignmentVertical ?? mergedParent.contentAlignmentVertical,
@@ -1262,6 +1283,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       aspect: merged.aspect?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
+      captureFocusOnAction: merged.captureFocusOnAction,
       columnSpan: merged.columnSpan,
       contentAlignmentHorizontal: merged.contentAlignmentHorizontal,
       contentAlignmentVertical: merged.contentAlignmentVertical,

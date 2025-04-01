@@ -18,6 +18,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
   public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
+  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let crossAxisAlignment: Field<Expression<ItemAlignment>>? // default value: start
   public let defaultItem: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
@@ -65,6 +66,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
+      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       crossAxisAlignment: dictionary.getOptionalExpressionField("cross_axis_alignment"),
       defaultItem: dictionary.getOptionalExpressionField("default_item"),
@@ -113,6 +115,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
+    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     crossAxisAlignment: Field<Expression<ItemAlignment>>? = nil,
     defaultItem: Field<Expression<Int>>? = nil,
@@ -158,6 +161,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction
     self.columnSpan = columnSpan
     self.crossAxisAlignment = crossAxisAlignment
     self.defaultItem = defaultItem
@@ -204,6 +208,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let crossAxisAlignmentValue = { parent?.crossAxisAlignment?.resolveOptionalValue(context: context) ?? .noValue }()
     let defaultItemValue = { parent?.defaultItem?.resolveOptionalValue(context: context, validator: ResolvedValue.defaultItemValidator) ?? .noValue }()
@@ -248,6 +253,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       crossAxisAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_axis_alignment", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
@@ -301,6 +307,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       crossAxisAlignment: { crossAxisAlignmentValue.value }(),
       defaultItem: { defaultItemValue.value }(),
@@ -352,6 +359,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
+    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var crossAxisAlignmentValue: DeserializationResult<Expression<DivPager.ItemAlignment>> = { parent?.crossAxisAlignment?.value() ?? .noValue }()
     var defaultItemValue: DeserializationResult<Expression<Int>> = { parent?.defaultItem?.value() ?? .noValue }()
@@ -426,6 +434,11 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "capture_focus_on_action" {
+           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -641,6 +654,11 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.border?.link {
            borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.captureFocusOnAction?.link {
+           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -863,6 +881,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       crossAxisAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_axis_alignment", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
@@ -916,6 +935,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       crossAxisAlignment: { crossAxisAlignmentValue.value }(),
       defaultItem: { defaultItemValue.value }(),
@@ -972,6 +992,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
+      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       crossAxisAlignment: crossAxisAlignment ?? mergedParent.crossAxisAlignment,
       defaultItem: defaultItem ?? mergedParent.defaultItem,
@@ -1023,6 +1044,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
+      captureFocusOnAction: merged.captureFocusOnAction,
       columnSpan: merged.columnSpan,
       crossAxisAlignment: merged.crossAxisAlignment,
       defaultItem: merged.defaultItem,

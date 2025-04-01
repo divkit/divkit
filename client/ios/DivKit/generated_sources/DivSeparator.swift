@@ -43,6 +43,7 @@ public final class DivSeparator: DivBase, Sendable {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
+  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let delimiterStyle: DelimiterStyle?
   public let disappearActions: [DivDisappearAction]?
@@ -88,6 +89,10 @@ public final class DivSeparator: DivBase, Sendable {
     resolver.resolveNumeric(alpha) ?? 1.0
   }
 
+  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(captureFocusOnAction) ?? true
+  }
+
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(columnSpan)
   }
@@ -127,6 +132,7 @@ public final class DivSeparator: DivBase, Sendable {
     animators: [DivAnimator]? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
+    captureFocusOnAction: Expression<Bool>? = nil,
     columnSpan: Expression<Int>? = nil,
     delimiterStyle: DelimiterStyle? = nil,
     disappearActions: [DivDisappearAction]? = nil,
@@ -170,6 +176,7 @@ public final class DivSeparator: DivBase, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnSpan = columnSpan
     self.delimiterStyle = delimiterStyle
     self.disappearActions = disappearActions
@@ -231,77 +238,82 @@ extension DivSeparator: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.delimiterStyle == rhs.delimiterStyle
+      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.delimiterStyle == rhs.delimiterStyle,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions
+      lhs.doubletapActions == rhs.doubletapActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.functions == rhs.functions,
-      lhs.height == rhs.height
+      lhs.functions == rhs.functions
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.hoverEndActions == rhs.hoverEndActions,
-      lhs.hoverStartActions == rhs.hoverStartActions,
-      lhs.id == rhs.id
+      lhs.hoverStartActions == rhs.hoverStartActions
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.pressEndActions == rhs.pressEndActions,
-      lhs.pressStartActions == rhs.pressStartActions
+      lhs.pressEndActions == rhs.pressEndActions
     else {
       return false
     }
     guard
+      lhs.pressStartActions == rhs.pressStartActions,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -325,6 +337,7 @@ extension DivSeparator: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
+    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["delimiter_style"] = delimiterStyle?.toDictionary()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }

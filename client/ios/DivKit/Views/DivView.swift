@@ -394,9 +394,11 @@ extension UIViewController {
 
 extension DivView: UIGestureRecognizerDelegate {
   public func gestureRecognizer(
-    _: UIGestureRecognizer,
-    shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
   ) -> Bool {
-    true
+    guard let view = gestureRecognizer.view,
+          let otherView = otherGestureRecognizer.view else { return false }
+    return view.isDescendant(of: otherView)
   }
 }

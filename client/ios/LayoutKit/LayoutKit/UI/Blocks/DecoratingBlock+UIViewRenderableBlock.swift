@@ -49,7 +49,8 @@ extension DecoratingBlock {
       accessibility: accessibilityElement,
       reuseId: reuseId,
       path: path,
-      isFocused: isFocused
+      isFocused: isFocused,
+      captureFocusOnAction: captureFocusOnAction
     )
     view.configure(
       model: model,
@@ -125,6 +126,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let reuseId: String?
     let path: UIElementPath?
     let isFocused: Bool?
+    let captureFocusOnAction: Bool
 
     var hasResponsiveUI: Bool {
       actions.hasPayload || longTapActions.hasPayload || doubleTapActions.hasPayload
@@ -286,11 +288,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
   @objc private func handleTap(recognizer: UITapGestureRecognizer) {
-    observer?.clearFocus()
-
     // Sometimes there are late touches that were performed before layout.
     // This breaks UX due to UIView reusing, so just skip them here.
     guard bounds.contains(recognizer.location(in: self)) else { return }
+    captureFocusIfNeeded()
     model.analyticsURL.flatMap(AnalyticsUrlEvent.init(analyticsUrl:))?.sendFrom(self)
     let actions: [UserInterfaceAction]? = if recognizer === doubleTapRecognizer {
       model.doubleTapActions?.asArray()
@@ -306,7 +307,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     guard let actions = model.actions?.asArray() else {
       return false
     }
-    observer?.clearFocus()
+    captureFocusIfNeeded()
     actions.perform(sendingFrom: self)
     return true
   }
@@ -542,6 +543,13 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     UIAccessibility.post(notification: .layoutChanged, argument: self)
   }
 
+  private func captureFocusIfNeeded() {
+    if model.captureFocusOnAction, let path = model?.path {
+      observer?.clearFocus()
+      observer?.focusedElementChanged(isFocused: true, forPath: path)
+    }
+  }
+
   deinit {
     if model?.tooltips.isEmpty == false {
       renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
@@ -554,6 +562,8 @@ extension DecoratingView {
     guard recognizer.state == .began else {
       return
     }
+
+    captureFocusIfNeeded()
 
     if let longTapActions = model.longTapActions {
       cancelTracking(with: nil)

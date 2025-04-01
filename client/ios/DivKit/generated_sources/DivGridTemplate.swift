@@ -17,6 +17,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
   public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
+  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnCount: Field<Expression<Int>>? // constraint: number >= 0
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
@@ -66,6 +67,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
+      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnCount: dictionary.getOptionalExpressionField("column_count"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       contentAlignmentHorizontal: dictionary.getOptionalExpressionField("content_alignment_horizontal"),
@@ -116,6 +118,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
     animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
+    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnCount: Field<Expression<Int>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
@@ -163,6 +166,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction
     self.columnCount = columnCount
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal
@@ -211,6 +215,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnCountValue = { parent?.columnCount?.resolveValue(context: context, validator: ResolvedValue.columnCountValidator) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let contentAlignmentHorizontalValue = { parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -257,6 +262,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnCountValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_count", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
@@ -312,6 +318,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnCount: { columnCountNonNil }(),
       columnSpan: { columnSpanValue.value }(),
       contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
@@ -365,6 +372,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
+    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnCountValue: DeserializationResult<Expression<Int>> = { parent?.columnCount?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = { parent?.contentAlignmentHorizontal?.value() ?? .noValue }()
@@ -453,6 +461,11 @@ public final class DivGridTemplate: TemplateValue, Sendable {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "capture_focus_on_action" {
+           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -681,6 +694,11 @@ public final class DivGridTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.captureFocusOnAction?.link {
+           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.columnCount?.link {
            columnCountValue = columnCountValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnCountValidator) })
           }
@@ -903,6 +921,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnCountValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_count", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
@@ -958,6 +977,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnCount: { columnCountNonNil }(),
       columnSpan: { columnSpanValue.value }(),
       contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
@@ -1016,6 +1036,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
       animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
+      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnCount: columnCount ?? mergedParent.columnCount,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       contentAlignmentHorizontal: contentAlignmentHorizontal ?? mergedParent.contentAlignmentHorizontal,
@@ -1069,6 +1090,7 @@ public final class DivGridTemplate: TemplateValue, Sendable {
       animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
+      captureFocusOnAction: merged.captureFocusOnAction,
       columnCount: merged.columnCount,
       columnSpan: merged.columnSpan,
       contentAlignmentHorizontal: merged.contentAlignmentHorizontal,

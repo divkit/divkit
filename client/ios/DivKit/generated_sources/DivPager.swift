@@ -26,6 +26,7 @@ public final class DivPager: DivBase, Sendable {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
+  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let crossAxisAlignment: Expression<ItemAlignment> // default value: start
   public let defaultItem: Expression<Int> // constraint: number >= 0; default value: 0
@@ -73,6 +74,10 @@ public final class DivPager: DivBase, Sendable {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -138,6 +143,7 @@ public final class DivPager: DivBase, Sendable {
     animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
+    captureFocusOnAction: Expression<Bool>?,
     columnSpan: Expression<Int>?,
     crossAxisAlignment: Expression<ItemAlignment>?,
     defaultItem: Expression<Int>?,
@@ -182,6 +188,7 @@ public final class DivPager: DivBase, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnSpan = columnSpan
     self.crossAxisAlignment = crossAxisAlignment ?? .value(.start)
     self.defaultItem = defaultItem ?? .value(0)
@@ -240,89 +247,90 @@ extension DivPager: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.crossAxisAlignment == rhs.crossAxisAlignment
+      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.crossAxisAlignment == rhs.crossAxisAlignment,
       lhs.defaultItem == rhs.defaultItem,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.functions == rhs.functions,
-      lhs.height == rhs.height
+      lhs.functions == rhs.functions
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.infiniteScroll == rhs.infiniteScroll,
-      lhs.itemBuilder == rhs.itemBuilder
+      lhs.infiniteScroll == rhs.infiniteScroll
     else {
       return false
     }
     guard
+      lhs.itemBuilder == rhs.itemBuilder,
       lhs.itemSpacing == rhs.itemSpacing,
-      lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
+      lhs.layoutMode == rhs.layoutMode,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.pageTransformation == rhs.pageTransformation,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.pageTransformation == rhs.pageTransformation
     else {
       return false
     }
     guard
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollAxisAlignment == rhs.scrollAxisAlignment
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.scrollAxisAlignment == rhs.scrollAxisAlignment,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -343,6 +351,7 @@ extension DivPager: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
+    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["cross_axis_alignment"] = crossAxisAlignment.toValidSerializationValue()
     result["default_item"] = defaultItem.toValidSerializationValue()

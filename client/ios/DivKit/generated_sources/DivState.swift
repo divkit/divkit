@@ -35,6 +35,7 @@ public final class DivState: DivBase, Sendable {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
+  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let clipToBounds: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let defaultStateId: Expression<String>?
@@ -77,6 +78,10 @@ public final class DivState: DivBase, Sendable {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveClipToBounds(_ resolver: ExpressionResolver) -> Bool {
@@ -130,6 +135,7 @@ public final class DivState: DivBase, Sendable {
     animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
+    captureFocusOnAction: Expression<Bool>?,
     clipToBounds: Expression<Bool>?,
     columnSpan: Expression<Int>?,
     defaultStateId: Expression<String>?,
@@ -169,6 +175,7 @@ public final class DivState: DivBase, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.clipToBounds = clipToBounds ?? .value(true)
     self.columnSpan = columnSpan
     self.defaultStateId = defaultStateId
@@ -222,75 +229,76 @@ extension DivState: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.clipToBounds == rhs.clipToBounds,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
+      lhs.clipToBounds == rhs.clipToBounds
     else {
       return false
     }
     guard
+      lhs.columnSpan == rhs.columnSpan,
       lhs.defaultStateId == rhs.defaultStateId,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.divId == rhs.divId
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.divId == rhs.divId,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.functions == rhs.functions
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.functions == rhs.functions,
       lhs.height == rhs.height,
-      lhs.id == rhs.id,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.stateIdVariable == rhs.stateIdVariable
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.stateIdVariable == rhs.stateIdVariable,
       lhs.states == rhs.states,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -312,6 +320,7 @@ extension DivState: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
+    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["clip_to_bounds"] = clipToBounds.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["default_state_id"] = defaultStateId?.toValidSerializationValue()

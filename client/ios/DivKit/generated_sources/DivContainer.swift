@@ -64,6 +64,7 @@ public final class DivContainer: DivBase, Sendable {
   public let aspect: DivAspect?
   public let background: [DivBackground]?
   public let border: DivBorder?
+  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let clipToBounds: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal> // default value: start
@@ -115,6 +116,10 @@ public final class DivContainer: DivBase, Sendable {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveClipToBounds(_ resolver: ExpressionResolver) -> Bool {
@@ -177,6 +182,7 @@ public final class DivContainer: DivBase, Sendable {
     aspect: DivAspect?,
     background: [DivBackground]?,
     border: DivBorder?,
+    captureFocusOnAction: Expression<Bool>?,
     clipToBounds: Expression<Bool>?,
     columnSpan: Expression<Int>?,
     contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal>?,
@@ -229,6 +235,7 @@ public final class DivContainer: DivBase, Sendable {
     self.aspect = aspect
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.clipToBounds = clipToBounds ?? .value(true)
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.start)
@@ -299,97 +306,102 @@ extension DivContainer: Equatable {
     guard
       lhs.background == rhs.background,
       lhs.border == rhs.border,
-      lhs.clipToBounds == rhs.clipToBounds
+      lhs.captureFocusOnAction == rhs.captureFocusOnAction
     else {
       return false
     }
     guard
+      lhs.clipToBounds == rhs.clipToBounds,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
-      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical
+      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions
+      lhs.doubletapActions == rhs.doubletapActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.functions == rhs.functions,
-      lhs.height == rhs.height
+      lhs.functions == rhs.functions
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.hoverEndActions == rhs.hoverEndActions,
-      lhs.hoverStartActions == rhs.hoverStartActions,
-      lhs.id == rhs.id
+      lhs.hoverStartActions == rhs.hoverStartActions
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.itemBuilder == rhs.itemBuilder,
-      lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
+      lhs.layoutMode == rhs.layoutMode,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.lineSeparator == rhs.lineSeparator,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.lineSeparator == rhs.lineSeparator
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.pressEndActions == rhs.pressEndActions,
-      lhs.pressStartActions == rhs.pressStartActions,
-      lhs.reuseId == rhs.reuseId
+      lhs.pressStartActions == rhs.pressStartActions
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.separator == rhs.separator
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.separator == rhs.separator,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -414,6 +426,7 @@ extension DivContainer: Serializable {
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
+    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["clip_to_bounds"] = clipToBounds.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()

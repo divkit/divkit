@@ -18,6 +18,7 @@ public final class DivImage: DivBase, Sendable {
   public let aspect: DivAspect?
   public let background: [DivBackground]?
   public let border: DivBorder?
+  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: center
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
@@ -71,6 +72,10 @@ public final class DivImage: DivBase, Sendable {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -154,6 +159,7 @@ public final class DivImage: DivBase, Sendable {
     aspect: DivAspect? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
+    captureFocusOnAction: Expression<Bool>? = nil,
     columnSpan: Expression<Int>? = nil,
     contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     contentAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
@@ -209,6 +215,7 @@ public final class DivImage: DivBase, Sendable {
     self.aspect = aspect
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.center)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.center)
@@ -286,99 +293,104 @@ extension DivImage: Equatable {
       return false
     }
     guard
+      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
-      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical
+      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions
+      lhs.doubletapActions == rhs.doubletapActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.filters == rhs.filters,
-      lhs.focus == rhs.focus,
-      lhs.functions == rhs.functions
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.functions == rhs.functions,
       lhs.height == rhs.height,
-      lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow,
-      lhs.hoverEndActions == rhs.hoverEndActions
+      lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow
     else {
       return false
     }
     guard
+      lhs.hoverEndActions == rhs.hoverEndActions,
       lhs.hoverStartActions == rhs.hoverStartActions,
-      lhs.id == rhs.id,
-      lhs.imageUrl == rhs.imageUrl
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.imageUrl == rhs.imageUrl,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.placeholderColor == rhs.placeholderColor,
-      lhs.preloadRequired == rhs.preloadRequired
+      lhs.placeholderColor == rhs.placeholderColor
     else {
       return false
     }
     guard
+      lhs.preloadRequired == rhs.preloadRequired,
       lhs.pressEndActions == rhs.pressEndActions,
-      lhs.pressStartActions == rhs.pressStartActions,
-      lhs.preview == rhs.preview
+      lhs.pressStartActions == rhs.pressStartActions
     else {
       return false
     }
     guard
+      lhs.preview == rhs.preview,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.scale == rhs.scale,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tintColor == rhs.tintColor,
-      lhs.tintMode == rhs.tintMode
+      lhs.tintColor == rhs.tintColor
     else {
       return false
     }
     guard
+      lhs.tintMode == rhs.tintMode,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -404,6 +416,7 @@ extension DivImage: Serializable {
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
+    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()

@@ -200,6 +200,7 @@ public final class DivTabs: DivBase, Sendable {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
+  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let dynamicHeight: Expression<Bool> // default value: false
@@ -247,6 +248,10 @@ public final class DivTabs: DivBase, Sendable {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -315,6 +320,7 @@ public final class DivTabs: DivBase, Sendable {
     animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
+    captureFocusOnAction: Expression<Bool>?,
     columnSpan: Expression<Int>?,
     disappearActions: [DivDisappearAction]?,
     dynamicHeight: Expression<Bool>?,
@@ -359,6 +365,7 @@ public final class DivTabs: DivBase, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.dynamicHeight = dynamicHeight ?? .value(false)
@@ -417,89 +424,90 @@ extension DivTabs: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.dynamicHeight == rhs.dynamicHeight,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.functions == rhs.functions,
-      lhs.hasSeparator == rhs.hasSeparator,
-      lhs.height == rhs.height
+      lhs.hasSeparator == rhs.hasSeparator
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.items == rhs.items,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.selectedTab == rhs.selectedTab,
-      lhs.separatorColor == rhs.separatorColor,
-      lhs.separatorPaddings == rhs.separatorPaddings
+      lhs.separatorColor == rhs.separatorColor
     else {
       return false
     }
     guard
+      lhs.separatorPaddings == rhs.separatorPaddings,
       lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled,
-      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter,
-      lhs.tabTitleStyle == rhs.tabTitleStyle
+      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter
     else {
       return false
     }
     guard
+      lhs.tabTitleStyle == rhs.tabTitleStyle,
       lhs.titlePaddings == rhs.titlePaddings,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -520,6 +528,7 @@ extension DivTabs: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
+    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["dynamic_height"] = dynamicHeight.toValidSerializationValue()

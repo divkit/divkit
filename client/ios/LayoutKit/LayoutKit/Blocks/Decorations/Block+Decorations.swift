@@ -30,7 +30,8 @@ extension Block {
     reuseId: String?,
     path: UIElementPath?,
     isEmpty: Bool?,
-    isFocused: Bool?
+    isFocused: Bool?,
+    captureFocusOnAction: Bool?
   ) -> Block {
     let hasAlpha = alpha != nil && alpha?.isApproximatelyEqualTo(1) != true
     let anythingToApplyExceptBoundary =
@@ -49,6 +50,7 @@ extension Block {
         || reuseId != nil
         || isEmpty != nil
         || isFocused != nil
+        || captureFocusOnAction != nil
 
     let decoratingSelf = self as? DecoratingBlock
     let selfBackgroundColor = decoratingSelf?.backgroundColor
@@ -79,7 +81,8 @@ extension Block {
         reuseId: reuseId,
         path: path,
         isEmpty: isEmpty,
-        isFocused: isFocused
+        isFocused: isFocused,
+        captureFocusOnAction: captureFocusOnAction ?? block.captureFocusOnAction
       )
     }
 
@@ -107,7 +110,8 @@ extension Block {
       reuseId: reuseId,
       path: path,
       isEmpty: isEmpty ?? false,
-      isFocused: isFocused ?? false
+      isFocused: isFocused ?? false,
+      captureFocusOnAction: captureFocusOnAction ?? DecoratingBlock.defaultCaptureFocusOnAction
     )
   }
 
@@ -139,7 +143,8 @@ extension Block {
     reuseId: String? = nil,
     path: UIElementPath? = nil,
     isEmpty: Bool? = nil,
-    isFocused: Bool? = nil
+    isFocused: Bool? = nil,
+    captureFocusOnAction: Bool? = nil
   ) -> Block {
     let decoratedBlock = applyDecoratingBlockProperties(
       boundary: boundary,
@@ -160,7 +165,8 @@ extension Block {
       reuseId: reuseId,
       path: path,
       isEmpty: isEmpty,
-      isFocused: isFocused
+      isFocused: isFocused,
+      captureFocusOnAction: captureFocusOnAction
     )
     return decoratedBlock.shaded(with: shadow)
   }

@@ -7,7 +7,7 @@ import VGSL
 public final class DivTextRangeMaskParticles: Sendable {
   public static let type: String = "particles"
   public let color: Expression<Color>
-  public let density: Expression<Double> // default value: 0.8
+  public let density: Expression<Double> // constraint: number > 0.0 && number <= 1.0; default value: 0.8
   public let isAnimated: Expression<Bool> // default value: false
   public let isEnabled: Expression<Bool> // default value: true
   public let particleSize: DivFixedSize // default value: DivFixedSize(value: .value(1))
@@ -27,6 +27,9 @@ public final class DivTextRangeMaskParticles: Sendable {
   public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(isEnabled) ?? true
   }
+
+  static let densityValidator: AnyValueValidator<Double> =
+    makeValueValidator(valueValidator: { $0 > 0.0 && $0 <= 1.0 })
 
   init(
     color: Expression<Color>,

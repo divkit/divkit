@@ -3710,6 +3710,29 @@
         "Each indicator is bound to the nearest pager"
       ],
       "file": "indicator_auto_binding_same_ids.json"
+    },
+    {
+      "title": "Input with capture on focus actions",
+      "case_id": 220,
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput",
+        "DivAction"
+      ],
+      "steps": [
+        "Tap the input",
+        "Tap the first button",
+        "Tap the input",
+        "Tap the second button",
+        "Tap the input",
+        "Tap the third button"
+      ],
+      "expected_results": [
+        "Only last tap doesn't affect input focus"
+      ],
+      "file": "input_capture_focus.json"
     }
   ]
 }

@@ -7,6 +7,8 @@ protocol DivActionsHolder {
   var actionAnimation: DivAnimation { get }
   var doubletapActions: [DivAction]? { get }
   var longtapActions: [DivAction]? { get }
+
+  func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool
 }
 
 extension DivText: DivActionsHolder {}
@@ -73,7 +75,8 @@ extension Block {
         .resolveActionAnimation(context.expressionResolver),
       doubleTapActions: doubletapActions,
       longTapActions: longtapActions,
-      path: context.path
+      path: context.path,
+      captureFocusOnAction: actionsHolder.resolveCaptureFocusOnAction(context.expressionResolver)
     )
   }
 }

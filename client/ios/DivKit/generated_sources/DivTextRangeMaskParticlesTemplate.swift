@@ -8,7 +8,7 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
   public static let type: String = "particles"
   public let parent: String?
   public let color: Field<Expression<Color>>?
-  public let density: Field<Expression<Double>>? // default value: 0.8
+  public let density: Field<Expression<Double>>? // constraint: number > 0.0 && number <= 1.0; default value: 0.8
   public let isAnimated: Field<Expression<Bool>>? // default value: false
   public let isEnabled: Field<Expression<Bool>>? // default value: true
   public let particleSize: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(1))
@@ -42,7 +42,7 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTextRangeMaskParticlesTemplate?) -> DeserializationResult<DivTextRangeMaskParticles> {
     let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
-    let densityValue = { parent?.density?.resolveOptionalValue(context: context) ?? .noValue }()
+    let densityValue = { parent?.density?.resolveOptionalValue(context: context, validator: ResolvedValue.densityValidator) ?? .noValue }()
     let isAnimatedValue = { parent?.isAnimated?.resolveOptionalValue(context: context) ?? .noValue }()
     let isEnabledValue = { parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue }()
     let particleSizeValue = { parent?.particleSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -92,7 +92,7 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "density" {
-           densityValue = deserialize(__dictValue).merged(with: densityValue)
+           densityValue = deserialize(__dictValue, validator: ResolvedValue.densityValidator).merged(with: densityValue)
           }
         }()
         _ = {
@@ -117,7 +117,7 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.density?.link {
-           densityValue = densityValue.merged(with: { deserialize(__dictValue) })
+           densityValue = densityValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.densityValidator) })
           }
         }()
         _ = {

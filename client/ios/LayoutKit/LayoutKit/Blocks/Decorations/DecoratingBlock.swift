@@ -7,6 +7,7 @@ final class DecoratingBlock: WrapperBlock {
   static let defaultBackgroundColor: Color = .clear
   static let defaultChildAlpha: CGFloat = 1
   static let defaultHighlightedBackgroundColor: Color? = nil
+  static let defaultCaptureFocusOnAction: Bool = true
 
   let child: Block
   let backgroundColor: Color
@@ -28,6 +29,7 @@ final class DecoratingBlock: WrapperBlock {
   let path: UIElementPath?
   let isEmpty: Bool
   let isFocused: Bool
+  let captureFocusOnAction: Bool
 
   init(
     child: Block,
@@ -49,7 +51,8 @@ final class DecoratingBlock: WrapperBlock {
     reuseId: String? = nil,
     path: UIElementPath? = nil,
     isEmpty: Bool = false,
-    isFocused: Bool = false
+    isFocused: Bool = false,
+    captureFocusOnAction: Bool = DecoratingBlock.defaultCaptureFocusOnAction
   ) {
     self.child = child
     self.backgroundColor = backgroundColor
@@ -71,6 +74,7 @@ final class DecoratingBlock: WrapperBlock {
     self.path = path
     self.isEmpty = isEmpty
     self.isFocused = isFocused
+    self.captureFocusOnAction = captureFocusOnAction
   }
 
   var intrinsicContentWidth: CGFloat {
@@ -162,7 +166,8 @@ extension DecoratingBlock {
     reuseId: String? = nil,
     path: UIElementPath? = nil,
     isEmpty: Bool? = nil,
-    isFocused: Bool? = nil
+    isFocused: Bool? = nil,
+    captureFocusOnAction: Bool? = nil
   ) -> DecoratingBlock {
     DecoratingBlock(
       child: child ?? self.child,
@@ -184,7 +189,8 @@ extension DecoratingBlock {
       reuseId: reuseId ?? self.reuseId,
       path: path ?? self.path,
       isEmpty: isEmpty ?? self.isEmpty,
-      isFocused: isFocused ?? self.isFocused
+      isFocused: isFocused ?? self.isFocused,
+      captureFocusOnAction: captureFocusOnAction ?? self.captureFocusOnAction
     )
   }
 }

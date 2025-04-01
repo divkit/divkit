@@ -1034,6 +1034,8 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     }
   }
 
+  public typealias Truncate = DivText.Truncate
+
   public static let type: String = "text"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?
@@ -1047,6 +1049,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
   public let autoEllipsize: Field<Expression<Bool>>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
+  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
   public let doubletapActions: Field<[DivActionTemplate]>?
@@ -1095,6 +1098,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
+  public let truncate: Field<Expression<Truncate>>? // default value: end
   public let underline: Field<Expression<DivLineStyle>>? // default value: none
   public let variableTriggers: Field<[DivTriggerTemplate]>?
   public let variables: Field<[DivVariableTemplate]>?
@@ -1117,6 +1121,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       autoEllipsize: dictionary.getOptionalExpressionField("auto_ellipsize"),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
+      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       doubletapActions: dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
@@ -1165,6 +1170,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
+      truncate: dictionary.getOptionalExpressionField("truncate"),
       underline: dictionary.getOptionalExpressionField("underline"),
       variableTriggers: dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
       variables: dictionary.getOptionalArray("variables", templateToType: templateToType),
@@ -1188,6 +1194,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     autoEllipsize: Field<Expression<Bool>>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
+    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     doubletapActions: Field<[DivActionTemplate]>? = nil,
@@ -1236,6 +1243,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
+    truncate: Field<Expression<Truncate>>? = nil,
     underline: Field<Expression<DivLineStyle>>? = nil,
     variableTriggers: Field<[DivTriggerTemplate]>? = nil,
     variables: Field<[DivVariableTemplate]>? = nil,
@@ -1256,6 +1264,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     self.autoEllipsize = autoEllipsize
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
@@ -1304,6 +1313,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.truncate = truncate
     self.underline = underline
     self.variableTriggers = variableTriggers
     self.variables = variables
@@ -1325,6 +1335,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     let autoEllipsizeValue = { parent?.autoEllipsize?.resolveOptionalValue(context: context) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let doubletapActionsValue = { parent?.doubletapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -1373,6 +1384,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     let transitionInValue = { parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionOutValue = { parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionTriggersValue = { parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue }()
+    let truncateValue = { parent?.truncate?.resolveOptionalValue(context: context) ?? .noValue }()
     let underlineValue = { parent?.underline?.resolveOptionalValue(context: context) ?? .noValue }()
     let variableTriggersValue = { parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let variablesValue = { parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -1392,6 +1404,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "auto_ellipsize", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
@@ -1440,6 +1453,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      truncateValue.errorsOrWarnings?.map { .nestedObjectError(field: "truncate", error: $0) },
       underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
       variableTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_triggers", error: $0) },
       variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
@@ -1468,6 +1482,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       autoEllipsize: { autoEllipsizeValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       doubletapActions: { doubletapActionsValue.value }(),
@@ -1516,6 +1531,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       transitionIn: { transitionInValue.value }(),
       transitionOut: { transitionOutValue.value }(),
       transitionTriggers: { transitionTriggersValue.value }(),
+      truncate: { truncateValue.value }(),
       underline: { underlineValue.value }(),
       variableTriggers: { variableTriggersValue.value }(),
       variables: { variablesValue.value }(),
@@ -1542,6 +1558,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     var autoEllipsizeValue: DeserializationResult<Expression<Bool>> = { parent?.autoEllipsize?.value() ?? .noValue }()
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
+    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -1590,6 +1607,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = { parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue }()
+    var truncateValue: DeserializationResult<Expression<DivText.Truncate>> = { parent?.truncate?.value() ?? .noValue }()
     var underlineValue: DeserializationResult<Expression<DivLineStyle>> = { parent?.underline?.value() ?? .noValue }()
     var variableTriggersValue: DeserializationResult<[DivTrigger]> = .noValue
     var variablesValue: DeserializationResult<[DivVariable]> = .noValue
@@ -1655,6 +1673,11 @@ public final class DivTextTemplate: TemplateValue, Sendable {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "capture_focus_on_action" {
+           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -1898,6 +1921,11 @@ public final class DivTextTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+          if key == "truncate" {
+           truncateValue = deserialize(__dictValue).merged(with: truncateValue)
+          }
+        }()
+        _ = {
           if key == "underline" {
            underlineValue = deserialize(__dictValue).merged(with: underlineValue)
           }
@@ -1985,6 +2013,11 @@ public final class DivTextTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.border?.link {
            borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.captureFocusOnAction?.link {
+           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -2228,6 +2261,11 @@ public final class DivTextTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.truncate?.link {
+           truncateValue = truncateValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.underline?.link {
            underlineValue = underlineValue.merged(with: { deserialize(__dictValue) })
           }
@@ -2315,6 +2353,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "auto_ellipsize", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
@@ -2363,6 +2402,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      truncateValue.errorsOrWarnings?.map { .nestedObjectError(field: "truncate", error: $0) },
       underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
       variableTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_triggers", error: $0) },
       variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
@@ -2391,6 +2431,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       autoEllipsize: { autoEllipsizeValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       doubletapActions: { doubletapActionsValue.value }(),
@@ -2439,6 +2480,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       transitionIn: { transitionInValue.value }(),
       transitionOut: { transitionOutValue.value }(),
       transitionTriggers: { transitionTriggersValue.value }(),
+      truncate: { truncateValue.value }(),
       underline: { underlineValue.value }(),
       variableTriggers: { variableTriggersValue.value }(),
       variables: { variablesValue.value }(),
@@ -2470,6 +2512,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       autoEllipsize: autoEllipsize ?? mergedParent.autoEllipsize,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
+      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
       doubletapActions: doubletapActions ?? mergedParent.doubletapActions,
@@ -2518,6 +2561,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       transitionIn: transitionIn ?? mergedParent.transitionIn,
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
+      truncate: truncate ?? mergedParent.truncate,
       underline: underline ?? mergedParent.underline,
       variableTriggers: variableTriggers ?? mergedParent.variableTriggers,
       variables: variables ?? mergedParent.variables,
@@ -2544,6 +2588,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       autoEllipsize: merged.autoEllipsize,
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
+      captureFocusOnAction: merged.captureFocusOnAction,
       columnSpan: merged.columnSpan,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       doubletapActions: merged.doubletapActions?.tryResolveParent(templates: templates),
@@ -2592,6 +2637,7 @@ public final class DivTextTemplate: TemplateValue, Sendable {
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
+      truncate: merged.truncate,
       underline: merged.underline,
       variableTriggers: merged.variableTriggers?.tryResolveParent(templates: templates),
       variables: merged.variables?.tryResolveParent(templates: templates),

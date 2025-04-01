@@ -22,6 +22,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
   public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
+  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnCount: Field<Expression<Int>>? // constraint: number > 0
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let crossContentAlignment: Field<Expression<CrossContentAlignment>>? // default value: start
@@ -69,6 +70,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
+      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnCount: dictionary.getOptionalExpressionField("column_count"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       crossContentAlignment: dictionary.getOptionalExpressionField("cross_content_alignment"),
@@ -117,6 +119,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
+    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnCount: Field<Expression<Int>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     crossContentAlignment: Field<Expression<CrossContentAlignment>>? = nil,
@@ -162,6 +165,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
+    self.captureFocusOnAction = captureFocusOnAction
     self.columnCount = columnCount
     self.columnSpan = columnSpan
     self.crossContentAlignment = crossContentAlignment
@@ -208,6 +212,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnCountValue = { parent?.columnCount?.resolveOptionalValue(context: context, validator: ResolvedValue.columnCountValidator) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let crossContentAlignmentValue = { parent?.crossContentAlignment?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -252,6 +257,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnCountValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_count", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       crossContentAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_content_alignment", error: $0) },
@@ -297,6 +303,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnCount: { columnCountValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       crossContentAlignment: { crossContentAlignmentValue.value }(),
@@ -348,6 +355,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
+    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnCountValue: DeserializationResult<Expression<Int>> = { parent?.columnCount?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var crossContentAlignmentValue: DeserializationResult<Expression<DivGallery.CrossContentAlignment>> = { parent?.crossContentAlignment?.value() ?? .noValue }()
@@ -422,6 +430,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "capture_focus_on_action" {
+           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -637,6 +650,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.border?.link {
            borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.captureFocusOnAction?.link {
+           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -856,6 +874,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnCountValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_count", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       crossContentAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_content_alignment", error: $0) },
@@ -901,6 +920,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
+      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnCount: { columnCountValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       crossContentAlignment: { crossContentAlignmentValue.value }(),
@@ -957,6 +977,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
+      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnCount: columnCount ?? mergedParent.columnCount,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       crossContentAlignment: crossContentAlignment ?? mergedParent.crossContentAlignment,
@@ -1008,6 +1029,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
+      captureFocusOnAction: merged.captureFocusOnAction,
       columnCount: merged.columnCount,
       columnSpan: merged.columnSpan,
       crossContentAlignment: merged.crossContentAlignment,
