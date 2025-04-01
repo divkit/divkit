@@ -35,5 +35,19 @@
                 "version_added": "30.24.0"
             }
         }
+    }, {
+        "id": "tabs_animation_type_duration",
+        "name": "Tabs <code>animation_type</code> and <code>animation_duration</code> properties",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "31.9.0"
+            }
+        }
     }]
 }
