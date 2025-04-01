@@ -3,7 +3,8 @@ import LayoutKit
 
 extension DivSeparator: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
+    let context = modifiedContextParentPath(context)
+    return try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: self
@@ -36,7 +37,7 @@ extension DivSeparator: DivBlockModeling {
     case .intrinsic:
       throw DivBlockModelingError(
         "DivSeparator has wrap_content size by orientation dimension",
-        path: context.parentPath
+        path: context.path
       )
     case let .fixed(size) where !needsBeWrappedInContainer:
       separatorBlock = SeparatorBlock(

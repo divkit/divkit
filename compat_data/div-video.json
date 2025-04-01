@@ -10,5 +10,19 @@
                 "version_added": "29.12.0"
             }
         }
+    }, {
+        "id": "video_custom_player",
+        "name": "Custom video player provider",
+        "compat": {
+            "android": {
+                "version_added": "24.4.0"
+            },
+            "ios": {
+                "version_added": "24.4.0"
+            },
+            "web": {
+                "version_added": "31.8.0"
+            }
+        }
     }]
 }

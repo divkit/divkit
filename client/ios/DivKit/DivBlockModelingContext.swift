@@ -37,8 +37,10 @@ public struct DivBlockModelingContext {
   public private(set) var expressionResolver: ExpressionResolver
   private let functionsProvider: FunctionsProvider
   public let variableTracker: DivVariableTracker?
-  public private(set) var parentPath: UIElementPath
-  private(set) var elementId: String?
+  public private(set) var path: UIElementPath
+  public private(set) var currentDivId: String?
+  // Overriden id for modified contexts of child divs, used in prototypes
+  private(set) var overridenId: String?
   private(set) var sizeModifier: DivSizeModifier?
   private(set) var localValues = [String: AnyHashable]()
   let layoutProviderHandler: DivLayoutProviderHandler?
@@ -46,11 +48,17 @@ public struct DivBlockModelingContext {
   let animatorController: DivAnimatorController?
   private(set) var accessibilityElementsStorage = DivAccessibilityElementsStorage()
 
+  // Deprecated, `parentPath` was changed to `path`
+  public var parentPath: UIElementPath {
+    path
+  }
+
   @_spi(Internal)
   public init(
     cardId: DivCardID,
     additionalId: String? = nil,
     stateManager: DivStateManager = DivStateManager(),
+    actionHandler: DivActionHandler? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     imageHolderFactory: DivImageHolderFactory,
     extensionHandlers: [DivExtensionHandler] = [],
@@ -60,7 +68,7 @@ public struct DivBlockModelingContext {
     self.init(
       viewId: DivViewId(cardId: cardId, additionalId: additionalId),
       stateManager: stateManager,
-      actionHandler: nil,
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: nil,
       lastVisibleBoundsCache: nil,
@@ -118,8 +126,8 @@ public struct DivBlockModelingContext {
     animatorController: DivAnimatorController?
   ) {
     self.viewId = viewId
-    let parentPath = makeParentPath(viewId: viewId)
-    self.parentPath = parentPath
+    let path = makePath(viewId: viewId)
+    self.path = path
     self.stateManager = stateManager
     self.actionHandler = actionHandler
     self.blockStateStorage = blockStateStorage
@@ -154,7 +162,7 @@ public struct DivBlockModelingContext {
     expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
       viewId: viewId,
-      path: parentPath,
+      path: path,
       variablesStorage: variablesStorage,
       functionsStorage: functionsStorage,
       localValues: nil,
@@ -168,24 +176,21 @@ public struct DivBlockModelingContext {
   }
 
   public func getExtensionHandlers(for div: DivBase) -> [DivExtensionHandler] {
-    guard let extensions = div.extensions else {
-      return []
-    }
-    return extensions.compactMap {
+    (div.extensions ?? []).compactMap {
       let id = $0.id
       if !extensionHandlers.keys.contains(id) {
         addError(message: "No DivExtensionHandler for: \(id)")
       }
       return extensionHandlers[id]
-    }
+    } + debugParams.widcardExtensionHandlers
   }
 
   public func addError(message: String) {
-    errorsStorage.add(DivBlockModelingError(message, path: parentPath))
+    errorsStorage.add(DivBlockModelingError(message, path: path))
   }
 
   public func addWarning(message: String) {
-    errorsStorage.add(DivBlockModelingWarning(message, path: parentPath))
+    errorsStorage.add(DivBlockModelingWarning(message, path: path))
   }
 
   func addError(error: Error) {
@@ -193,7 +198,7 @@ public struct DivBlockModelingContext {
       errorsStorage.add(divError)
       return
     }
-    errorsStorage.add(DivUnknownError(error, path: parentPath))
+    errorsStorage.add(DivUnknownError(error, path: path))
   }
 
   func makeBinding<T>(variableName: String?, defaultValue: T) -> Binding<T> {
@@ -204,13 +209,13 @@ public struct DivBlockModelingContext {
     let divVariableName = DivVariableName(rawValue: variableName)
     variableTracker?.onVariableUsed(id: viewId, variable: divVariableName)
     let value: T = variablesStorage
-      .getVariableValue(path: parentPath, name: divVariableName) ?? defaultValue
+      .getVariableValue(path: path, name: divVariableName) ?? defaultValue
     let valueProp = Property<T>(
       getter: { value },
-      setter: {
-        guard let newValue = DivVariableValue($0) else { return }
-        self.variablesStorage.update(
-          path: parentPath,
+      setter: { [weak variablesStorage] in
+        guard let variablesStorage, let newValue = DivVariableValue($0) else { return }
+        variablesStorage.update(
+          path: path,
           name: divVariableName,
           value: newValue
         )
@@ -220,16 +225,21 @@ public struct DivBlockModelingContext {
   }
 
   func modifying(
-    elementId: String? = nil,
+    overridenId: String? = nil,
     cardLogId: String? = nil,
-    parentPath: UIElementPath? = nil,
+    currentDivId: String? = nil,
+    pathSuffix: String? = nil,
     parentDivStatePath: DivStatePath? = nil,
     errorsStorage: DivErrorsStorage? = nil,
     sizeModifier: DivSizeModifier? = nil,
     prototypeParams: PrototypeParams? = nil
   ) -> Self {
     var context = self
-    context.elementId = elementId
+    // It is important to set nil value for elementId if nothing passed.
+    // This fiels is used for overriding ids in prototype items
+    context.overridenId = overridenId
+    context.currentDivId = currentDivId
+
     if let cardLogId {
       context.cardLogId = cardLogId
     }
@@ -240,7 +250,7 @@ public struct DivBlockModelingContext {
       context.sizeModifier = sizeModifier
     }
 
-    if parentPath == nil, errorsStorage == nil, prototypeParams == nil {
+    if pathSuffix == nil, errorsStorage == nil, prototypeParams == nil {
       return context
     }
 
@@ -251,12 +261,15 @@ public struct DivBlockModelingContext {
       context.localValues = localValues
     }
 
-    context.parentPath = parentPath ?? self.parentPath
+    if let pathSuffix {
+      context.path = context.path + pathSuffix
+    }
+
     context.errorsStorage = errorsStorage ?? self.errorsStorage
     context.expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
       viewId: viewId,
-      path: context.parentPath,
+      path: context.path,
       variablesStorage: variablesStorage,
       functionsStorage: functionsStorage,
       localValues: context.localValues,
@@ -271,7 +284,7 @@ public struct DivBlockModelingContext {
     var context = self
     let viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
     context.viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
-    context.parentPath = makeParentPath(viewId: viewId)
+    context.path = makePath(viewId: viewId)
     return context
   }
 }
@@ -311,7 +324,7 @@ private func makeExpressionResolver(
   )
 }
 
-private func makeParentPath(viewId: DivViewId) -> UIElementPath {
+private func makePath(viewId: DivViewId) -> UIElementPath {
   let cardIdPath = UIElementPath(viewId.cardId.rawValue)
   return if let additionalId = viewId.additionalId {
     cardIdPath + additionalId
@@ -326,7 +339,7 @@ extension [DivExtensionHandler] {
     for extensionHandler in self {
       let id = extensionHandler.id
       if extensionsHandlersDictionary[id] != nil {
-        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
+        DivKitLogger.error("Duplicate DivExtensionHandler for: \(id)")
         continue
       }
       extensionsHandlersDictionary[id] = extensionHandler

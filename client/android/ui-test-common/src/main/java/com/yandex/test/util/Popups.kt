@@ -1,5 +1,6 @@
 package com.yandex.test.util
 
+import android.annotation.SuppressLint
 import androidx.test.espresso.BaseLayerComponent
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Root
@@ -19,6 +20,7 @@ fun assertPopupDisplayed() {
 }
 
 internal val activeRoots: List<Root>
+    @SuppressLint("RestrictedApi")
     get() = performOnMain {
         Reflection.staticField("BASE")
             .ofType(BaseLayerComponent::class.java)

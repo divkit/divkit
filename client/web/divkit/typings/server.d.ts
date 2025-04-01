@@ -3,7 +3,9 @@ import type {
     ErrorCallback,
     Platform,
     Customization,
-    TypefaceProvider
+    TypefaceProvider,
+    Direction,
+    VideoPlayerProviderServer
 } from './common';
 import type { CustomComponentDescription } from './custom';
 import type { Store } from './store';
@@ -18,6 +20,9 @@ export function render(opts: {
     onError?: ErrorCallback;
     typefaceProvider?: TypefaceProvider;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
+    videoPlayerProvider?: VideoPlayerProviderServer;
 }): string;

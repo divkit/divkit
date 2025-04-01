@@ -22,6 +22,9 @@
             },
             "web": {
                 "version_added": "30.2.0"
+            },
+            "android": {
+                "version_added": "30.14.0"
             }
         }
     }, {
@@ -111,6 +114,9 @@
             },
             "ios": {
                 "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "31.0.0"
             }
         }
     }, {
@@ -183,6 +189,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
             }
         }
     }, {
@@ -191,6 +200,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
             }
         }
     }, {
@@ -199,6 +211,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.33.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
             }
         }
     }]

@@ -124,4 +124,23 @@ extension Field {
     }
     return result
   }
+
+  @inlinable
+  func resolveOptionalValue<U: ValidSerializationValue, E>(
+    context: TemplatesContext,
+    transform: (U) -> E?,
+    validator: AnyArrayValueValidator<Expression<E>>
+  ) -> DeserializationResult<T> where T == [Expression<E>] {
+    let result = resolveValue(
+      context: context,
+      transform: transform,
+      validator: validator
+    )
+    if case let .failure(errors) = result,
+       errors.count == 1,
+       case .noData = errors.first {
+      return .noValue
+    }
+    return result
+  }
 }

@@ -63,11 +63,12 @@ final class DivGifImageExtensionsTests: XCTestCase {
     XCTAssertThrowsError(
       try divData(divGifImage(
         gifUrl: "https://image.url",
+        id: "test_id",
         width: wrapContentSize()
       )).makeBlock(context: .default),
       DivBlockModelingError(
         "DivGifImage has wrap_content width",
-        path: .root + "0"
+        path: .root + "0" + "test_id"
       )
     )
   }
@@ -80,7 +81,7 @@ final class DivGifImageExtensionsTests: XCTestCase {
       )).makeBlock(context: .default),
       DivBlockModelingError(
         "DivGifImage without aspect has wrap_content height",
-        path: .root + "0"
+        path: .root + "0" + "gif"
       )
     )
   }

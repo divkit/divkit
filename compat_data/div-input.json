@@ -8,6 +8,9 @@
             },
             "web": {
                 "version_added": "29.9.0"
+            },
+            "ios": {
+                "version_added": "31.7.0"
             }
         }
     }, {
@@ -72,6 +75,12 @@
         "compat": {
             "ios": {
                 "version_added": "30.16.0"
+            },
+            "web": {
+                "version_added": "31.1.0"
+            },
+            "android": {
+                "version_added": "31.6.0"
             }
         }
     }, {
@@ -114,6 +123,20 @@
             },
             "web": {
                 "version_added": "30.28.0"
+            }
+        }
+    }, {
+        "id": "input_mask_phone",
+        "name": "<code>phone</code> input mask",
+        "compat": {
+            "ios": {
+                "version_added": "28.0.0"
+            },
+            "android": {
+                "version_added": "28.0.0"
+            },
+            "web": {
+                "version_added": "31.7.0"
             }
         }
     }]

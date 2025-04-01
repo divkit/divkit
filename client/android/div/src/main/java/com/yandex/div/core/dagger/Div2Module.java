@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
 import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivPreloader;
+import com.yandex.div.core.DivViewDataPreloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
@@ -100,7 +101,26 @@ abstract public class Div2Module {
             @NonNull DivExtensionController extensionController
       ) {
         return new DivPreloader(imagePreloader,
-          customContainerViewAdapter, extensionController, videoPreloader
+          customContainerViewAdapter, extensionController, videoPreloader,
+                DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
+        );
+    }
+
+    @Provides
+    @DivScope
+    @NonNull
+    public static DivViewDataPreloader provideDivViewDataPreloader(
+            @NonNull DivImagePreloader imagePreloader,
+            @NonNull DivCustomContainerViewAdapter customContainerViewAdapter,
+            @NonNull DivPlayerPreloader videoPreloader,
+            @NonNull DivExtensionController extensionController
+    ) {
+        return new DivViewDataPreloader(
+                imagePreloader,
+                customContainerViewAdapter,
+                extensionController,
+                videoPreloader,
+                DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
         );
     }
 }

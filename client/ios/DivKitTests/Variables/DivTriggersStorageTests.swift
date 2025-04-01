@@ -3,6 +3,7 @@ import LayoutKit
 import XCTest
 
 final class DivTriggerTests: XCTestCase {
+  private var flags: DivFlagsInfo = .default
   private let variablesStorage = DivVariablesStorage()
   private let persistentValuesStorage = DivPersistentValuesStorage()
 
@@ -21,7 +22,8 @@ final class DivTriggerTests: XCTestCase {
     functionsStorage: DivFunctionsStorage(),
     blockStateStorage: blockStateStorage,
     actionHandler: actionHandler,
-    persistentValuesStorage: persistentValuesStorage
+    persistentValuesStorage: persistentValuesStorage,
+    flagsInfo: flags
   )
 
   private var triggersCount = 0
@@ -59,6 +61,48 @@ final class DivTriggerTests: XCTestCase {
       mode: .value(.onCondition)
     )
     triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_set_Triggers_WhenConditionIsTrue_OnConditionMode_WithSeparateTriggerSetAndInit() {
+    flags = DivFlagsInfo(initializeTriggerOnSet: false)
+
+    setVariable("should_trigger", true)
+
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    XCTAssertEqual(triggersCount, 0)
+
+    triggerStorage.initialize(cardId: "id")
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_set_Triggers_WhenConditionIsTrue_OnConditionMode_WithModifiedVariableAndSeparateTriggerSetAndInit(
+  ) {
+    flags = DivFlagsInfo(initializeTriggerOnSet: false)
+
+    setVariable("should_trigger", true)
+
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    setVariable("should_trigger", false)
+    setVariable("should_trigger", true)
+
+    XCTAssertEqual(triggersCount, 0)
+
+    triggerStorage.initialize(cardId: "id")
 
     XCTAssertEqual(triggersCount, 1)
   }
@@ -304,6 +348,31 @@ final class DivTriggerTests: XCTestCase {
     triggerStorage.setIfNeeded(path: childPath, triggers: [trigger])
 
     variablesStorage.update(path: parentPath, name: "should_trigger", value: .bool(true))
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_LocalTriggers_WhenLocalVariableIsChanged_BeforeInitialization() throws {
+    flags = DivFlagsInfo(initializeTriggerOnSet: false)
+
+    let variables: DivVariables = [
+      "should_trigger": .bool(false),
+    ]
+    let path = UIElementPath("card_id") + "element_id"
+
+    variablesStorage.initializeIfNeeded(path: path, variables: variables)
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+
+    variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
+
+    XCTAssertEqual(triggersCount, 0)
+
+    triggerStorage.initialize(cardId: path.cardId)
 
     XCTAssertEqual(triggersCount, 1)
   }

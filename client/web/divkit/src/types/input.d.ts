@@ -27,7 +27,11 @@ export interface CurrencyInputMask extends MaskBase {
     locale?: string;
 }
 
-export type InputMask = FixedLengthInputMask | CurrencyInputMask;
+export interface PhoneInputMask extends MaskBase {
+    type: 'phone';
+}
+
+export type InputMask = FixedLengthInputMask | CurrencyInputMask | PhoneInputMask;
 
 export type InputAutocapitalization = 'auto' | 'none' | 'words' | 'sentences' | 'all_characters';
 
@@ -51,6 +55,18 @@ export interface InputValidatorExpression extends InputValidatorBase {
 
 export type InputValidator = InputValidatorRegex | InputValidatorExpression;
 
+export interface InputFilterRegex {
+    type: 'regex';
+    pattern: string;
+}
+
+export interface InputFilterExpression {
+    type: 'expression';
+    condition: BooleanInt;
+}
+
+export type InputFilter = InputFilterRegex | InputFilterExpression;
+
 export interface DivInputData extends DivBaseData {
     type: 'input';
 
@@ -59,6 +75,7 @@ export interface DivInputData extends DivBaseData {
     font_family?: string;
     font_weight?: FontWeight;
     font_weight_value?: number;
+    filters?: InputFilter[];
     text_color?: string;
     text_variable: string;
     text_alignment_horizontal?: AlignmentHorizontal;

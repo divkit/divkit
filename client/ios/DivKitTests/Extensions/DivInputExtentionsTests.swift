@@ -18,19 +18,9 @@ final class DivInputExtensionsTests: XCTestCase {
       context: context
     )
 
-    let expectedBlock = StateBlock(
-      child: DecoratingBlock(
-        child: TextInputBlock(
-          hint: NSAttributedString(string: ""),
-          textValue: context.makeBinding(variableName: "input_variable", defaultValue: ""),
-          textTypo: Typo(font: fontSpecifiers.text.font(weight: .regular, size: 12))
-            .with(color: Color.colorWithARGBHexCode(0xFF_00_00_00)),
-          path: .root + "0",
-          layoutDirection: .leftToRight
-        ),
-        accessibilityElement: accessibility(label: "Hello!")
-      ),
-      ids: []
+    let expectedBlock = makeExpectedBlockBlock(
+      accessibilityElement: accessibility(label: "Hello!"),
+      context: context
     )
 
     assertEqual(block, expectedBlock)
@@ -45,21 +35,56 @@ final class DivInputExtensionsTests: XCTestCase {
       context: context
     )
 
-    let expectedBlock = StateBlock(
-      child: DecoratingBlock(
-        child: TextInputBlock(
-          hint: NSAttributedString(string: ""),
-          textValue: context.makeBinding(variableName: "input_variable", defaultValue: ""),
-          textTypo: Typo(font: fontSpecifiers.text.font(weight: .regular, size: 12))
-            .with(color: Color.colorWithARGBHexCode(0xFF_00_00_00)),
-          path: .root + "0",
-          layoutDirection: .leftToRight
-        ),
-        accessibilityElement: accessibility(label: "Description")
-      ),
-      ids: []
+    let expectedBlock = makeExpectedBlockBlock(
+      accessibilityElement: accessibility(label: "Description"),
+      context: context
     )
 
     assertEqual(block, expectedBlock)
   }
+
+  func test_WithPasswordType() {
+    let block = makeBlock(
+      divInput(
+        keyboardType: .password,
+        textVariable: "input_variable"
+      ),
+      context: context
+    )
+
+    let expectedBlock = makeExpectedBlockBlock(
+      autocorrection: false,
+      isSecure: true,
+      multilineMode: false,
+      context: context
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+}
+
+private func makeExpectedBlockBlock(
+  accessibilityElement: AccessibilityElement? = nil,
+  autocorrection: Bool = true,
+  isSecure: Bool = false,
+  multilineMode: Bool = true,
+  context: DivBlockModelingContext
+) -> StateBlock {
+  StateBlock(
+    child: DecoratingBlock(
+      child: TextInputBlock(
+        hint: NSAttributedString(string: ""),
+        textValue: context.makeBinding(variableName: "input_variable", defaultValue: ""),
+        textTypo: Typo(font: fontSpecifiers.text.font(weight: .regular, size: 12))
+          .with(color: Color.colorWithARGBHexCode(0xFF_00_00_00)),
+        multiLineMode: multilineMode,
+        path: .root + "0" + "input",
+        layoutDirection: .leftToRight,
+        autocorrection: autocorrection,
+        isSecure: isSecure
+      ),
+      accessibilityElement: accessibilityElement ?? accessibility(label: "Hello!")
+    ),
+    ids: []
+  )
 }

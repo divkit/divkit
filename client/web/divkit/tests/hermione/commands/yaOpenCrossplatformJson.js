@@ -13,6 +13,7 @@
 module.exports = async function(jsonPath, params = {}) {
     await this.yaOpenExample('client/web/divkit/tests/hermione/static/index.html', {
         query: {
+            ...params,
             crossplatform_json: jsonPath
         }
     });

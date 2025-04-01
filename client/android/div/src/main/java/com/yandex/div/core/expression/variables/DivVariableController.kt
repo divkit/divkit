@@ -10,15 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
- * Allows to introduce new global variables and update existing.
- * 1. Global variables can be introduced only once and their types cannot change.
- * 2. Global variables cannot be removed.
- *
- * These limitations comes from ability to observe and set value of any [Variable].
- * If you remove variable "X" and add another "X" variable once again then observers of original "X"
- * won't be notified about changes in new "X". Moving observers and value outside of variable scope
- * will only increase complexity and simple api like variable.set("new_value") will be
- * transformed into "globalOrLocalVariableScope.findScopeOf(variable).set("new_value")".
+ * Allows to introduce new variables and update existing.
  */
 class DivVariableController(
     private val internalVariableController: DivVariableController? = null
@@ -38,7 +30,7 @@ class DivVariableController(
     internal val variableSource = MultiVariableSource(this, requestsObserver)
 
     /**
-     * Will declare new variable in the current instance of GlobalVariableController.
+     * Will declare new variable in the current instance of VariableController.
      * @throws VariableDeclarationException if variable already declared.
      */
     @Throws(VariableDeclarationException::class)
@@ -84,7 +76,7 @@ class DivVariableController(
     }
 
     /**
-     * Return true if variable already declared in this or internal GlobalVariableController.
+     * Return true if variable already declared in this or internal VariableController.
      */
     fun isDeclared(variableName: String): Boolean = synchronized(declaredVariableNames) {
         return if (isDeclaredLocal(variableName)) {
@@ -153,7 +145,7 @@ class DivVariableController(
                 val undeclaredVariableType = undeclaredVariables[variable.name]
                 if (undeclaredVariableType != null && undeclaredVariableType != variable::class.java.name) {
                     throw VariableMutationException("Cannot declare new variable with type = " +
-                        "${variable::class.java.name}, because this variable have been declared" +
+                        "${variable::class.java.name}, because this variable have been declared " +
                         "with another type = $undeclaredVariableType")
                 }
 
@@ -240,6 +232,13 @@ class DivVariableController(
         internalVariableController?.removeVariableRequestObserver(observer)
     }
 
+    /**
+     * Captures all variables from this instance and internal controllers recursively.
+     */
+    fun captureAllVariables(): List<Variable> {
+        return variables.values + (internalVariableController?.captureAllVariables() ?: emptyList())
+    }
+
     internal fun addDeclarationObserver(observer: DeclarationObserver) {
         declarationObservers.add(observer)
         internalVariableController?.addDeclarationObserver(observer)
@@ -270,9 +269,4 @@ class DivVariableController(
         }
         internalVariableController?.receiveVariablesUpdates(observer)
     }
-
-    internal fun captureAllVariables(): List<Variable> {
-        return variables.values + (internalVariableController?.captureAllVariables() ?: emptyList())
-    }
-
 }

@@ -11,9 +11,11 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div2.DivData
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -29,6 +31,7 @@ class DivJoinedStateSwitcherTest {
 
     private val activity = Robolectric.buildActivity(Activity::class.java).setup().get()
     private val viewBinder = mock<DivBinder>()
+    private val pathCaptor = argumentCaptor<DivStatePath>()
     private val div2Context = Div2Context(
         baseContext = activity,
         configuration = DivConfiguration.Builder(mock()).build()
@@ -52,7 +55,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(notActiveState), resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(DivStatePath.fromState(0)))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(DivStatePath.fromState(divDataState)))
     }
 
     @Test
@@ -62,7 +65,8 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
+        Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
     }
 
     @Test
@@ -72,7 +76,8 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
+        Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
     }
 
     @Test
@@ -107,7 +112,7 @@ class DivJoinedStateSwitcherTest {
         val firstPath = "0/state_container/first/container_item_one/two".path
         val secondPath = "0/state_container/second/second_state/hidden".path
         val paths = listOf(firstPath, secondPath)
-        val commonPath = DivStatePath.fromState(0)
+        val commonPath = DivStatePath.fromState(divDataState)
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 

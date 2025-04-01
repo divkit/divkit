@@ -22,14 +22,20 @@ export type FuncMatchError = {
     type: 'mismatch';
     expected: EvalTypes;
     found: EvalTypes;
+    def: Func;
+    hasOverloads: boolean;
 } | {
     type: 'few';
     expected: number;
     found: number;
+    def: Func;
+    hasOverloads: boolean;
 } | {
     type: 'many';
     expected: number;
     found: number;
+    def: Func;
+    hasOverloads: boolean;
 } | {
     type: 'missing';
 };
@@ -191,7 +197,7 @@ export function registerMethod(
     methodByArgs.set(funcKey, desc);
 }
 
-function matchFuncArgs(func: Func, args: EvalValue[]): {
+function matchFuncArgs(func: Func, args: EvalValue[], hasOverloads: boolean): {
     type: 'match';
     conversions: number;
 } | FuncMatchError {
@@ -208,13 +214,17 @@ function matchFuncArgs(func: Func, args: EvalValue[]): {
         return {
             type: 'few',
             expected: minArgs,
-            found: args.length
+            found: args.length,
+            def: func,
+            hasOverloads
         };
     } else if (args.length > maxArgs) {
         return {
             type: 'many',
             expected: maxArgs,
-            found: args.length
+            found: args.length,
+            def: func,
+            hasOverloads
         };
     }
 
@@ -235,7 +245,9 @@ function matchFuncArgs(func: Func, args: EvalValue[]): {
             return {
                 type: 'mismatch',
                 expected: funcArg.type,
-                found: args[i].type
+                found: args[i].type,
+                def: func,
+                hasOverloads
             };
         }
     }
@@ -260,7 +272,7 @@ export function findBestMatchedFunc(map: Map<string, Func[]>, funcName: string, 
         conversions: number;
     } | null = null;
     for (let i = 0; i < list.length; ++i) {
-        const match = matchFuncArgs(list[i], args);
+        const match = matchFuncArgs(list[i], args, list.length > 1);
         if (match.type === 'match') {
             if (!bestFunc || bestFunc.conversions > match.conversions) {
                 bestFunc = {

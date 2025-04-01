@@ -2,11 +2,11 @@ import LayoutKit
 
 final class TooltipActionHandler {
   private let performer: TooltipActionPerformer?
-  private let showTooltipAction: DivActionURLHandler.ShowTooltipAction?
+  private let showTooltipAction: DivActionHandler.ShowTooltipAction?
 
   init(
     performer: TooltipActionPerformer?,
-    showTooltip: DivActionURLHandler.ShowTooltipAction?
+    showTooltip: DivActionHandler.ShowTooltipAction?
   ) {
     self.performer = performer
     self.showTooltipAction = showTooltip

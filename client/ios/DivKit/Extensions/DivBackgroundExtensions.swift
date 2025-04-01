@@ -10,10 +10,7 @@ extension DivBackground {
     let expressionResolver = context.expressionResolver
     switch self {
     case let .divLinearGradient(gradient):
-      return Gradient.Linear(
-        colors: gradient.resolveColors(expressionResolver) ?? [],
-        angle: gradient.resolveAngle(expressionResolver)
-      ).map { .gradient(.linear($0)) }
+      return gradient.makeBlockLinearGradient(context).map { .gradient(.linear($0)) }
     case let .divRadialGradient(gradient):
       return Gradient.Radial(
         colors: gradient.resolveColors(expressionResolver) ?? [],

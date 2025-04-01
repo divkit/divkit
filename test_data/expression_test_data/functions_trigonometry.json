@@ -188,7 +188,8 @@
         "value": 0.0
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -198,7 +199,8 @@
         "value": 1.55740772465
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -215,7 +217,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -225,7 +228,9 @@
         "value": 0.0
       },
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -263,7 +268,8 @@
         "value": 1.570796326795
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -273,17 +279,19 @@
         "value": -0.523598775598
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
-      "expression": "@{asin(2)}",
+      "expression": "@{asin(2.0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [asin(2)]. Arcsine is undefined for the given value."
+        "value": "Failed to evaluate [asin(2.0)]. Arcsine is undefined for the given value."
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -293,7 +301,8 @@
         "value": 1.570796326795
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -303,7 +312,8 @@
         "value": 0.0
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -313,17 +323,19 @@
         "value": 2.094395102393
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
-      "expression": "@{acos(2)}",
+      "expression": "@{acos(2.0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [acos(2)]. Arccosine is undefined for the given value."
+        "value": "Failed to evaluate [acos(2.0)]. Arccosine is undefined for the given value."
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {

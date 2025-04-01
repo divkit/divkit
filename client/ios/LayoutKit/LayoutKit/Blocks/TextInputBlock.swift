@@ -8,17 +8,11 @@ public final class TextInputBlock: BlockWithTraits {
   public enum InputType: Equatable {
     public enum KeyboardType: Equatable {
       case `default`
-      case asciiCapable
-      case numbersAndPunctuation
       case URL
-      case numberPad
       case phonePad
       case namePhonePad
       case emailAddress
       case decimalPad
-      case twitter
-      case webSearch
-      case asciiCapableNumberPad
     }
 
     public struct SelectionItem: Equatable {
@@ -95,6 +89,8 @@ public final class TextInputBlock: BlockWithTraits {
   public let paddings: EdgeInsets?
   public let isEnabled: Bool
   public let maxLength: Int?
+  public let autocorrection: Bool
+  public let isSecure: Bool
 
   let shouldClearFocus: Variable<Bool>
 
@@ -128,7 +124,9 @@ public final class TextInputBlock: BlockWithTraits {
     paddings: EdgeInsets? = nil,
     isEnabled: Bool = true,
     maxLength: Int? = nil,
-    shouldClearFocus: Variable<Bool> = .constant(true)
+    shouldClearFocus: Variable<Bool> = .constant(true),
+    autocorrection: Bool = false,
+    isSecure: Bool = false
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -160,6 +158,8 @@ public final class TextInputBlock: BlockWithTraits {
     self.isEnabled = isEnabled
     self.maxLength = maxLength
     self.shouldClearFocus = shouldClearFocus
+    self.autocorrection = autocorrection
+    self.isSecure = isSecure
   }
 
   public var intrinsicContentWidth: CGFloat {
@@ -178,8 +178,8 @@ public final class TextInputBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(_, minSize, maxSize):
-      let width = width - (paddings?.horizontalInsets.sum ?? 0)
-      let verticalPaddings = paddings?.verticalInsets.sum ?? 0
+      let width = width - (paddings?.horizontal.sum ?? 0)
+      let verticalPaddings = paddings?.vertical.sum ?? 0
       guard let maxVisibleLines else {
         let textHeight = ceil(textForMeasuring.sizeForWidth(width).height)
         return clamp(textHeight + verticalPaddings, min: minSize, max: maxSize)
@@ -220,7 +220,10 @@ public final class TextInputBlock: BlockWithTraits {
 
 extension TextInputBlock {
   public static func ==(lhs: TextInputBlock, rhs: TextInputBlock) -> Bool {
-    lhs.heightTrait == rhs.heightTrait
+    lhs.autocapitalizationType == rhs.autocapitalizationType
+      && lhs.enterKeyType == rhs.enterKeyType
+      && lhs.enterKeyActions == rhs.enterKeyActions
+      && lhs.heightTrait == rhs.heightTrait
       && lhs.highlightColor == rhs.highlightColor
       && lhs.hint == rhs.hint
       && lhs.inputType == rhs.inputType
@@ -237,6 +240,8 @@ extension TextInputBlock {
       && lhs.textTypo == rhs.textTypo
       && lhs.textValue.value == rhs.textValue.value
       && lhs.widthTrait == rhs.widthTrait
+      && lhs.autocorrection == rhs.autocorrection
+      && lhs.isSecure == rhs.isSecure
   }
 }
 
@@ -277,7 +282,9 @@ extension TextInputBlock: ElementFocusUpdating {
       textAlignmentVertical: textAlignmentVertical,
       paddings: paddings,
       isEnabled: isEnabled,
-      maxLength: maxLength
+      maxLength: maxLength,
+      autocorrection: autocorrection,
+      isSecure: isSecure
     )
   }
 }

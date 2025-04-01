@@ -1,0 +1,167 @@
+{
+  "description": "Vertical pager with layout mode 'wrap_content' and different cross axis alignments.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      }
+    },
+    "text_page": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "paddings": {
+        "left": 8,
+        "top": 4,
+        "right": 8,
+        "bottom": 4
+      },
+      "font_size": 10
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "left": 10,
+        "right": 10
+      },
+      "default_item": 1,
+      "items": [
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "height": {
+            "type": "fixed",
+            "value": 33
+          },
+          "$alignment_horizontal": "item_0_alignment",
+          "$text": "item_0_text"
+        },
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 250
+          },
+          "height": {
+            "type": "fixed",
+            "value": 34
+          },
+          "$alignment_horizontal": "item_1_alignment",
+          "$text": "item_1_text"
+        },
+        {
+          "type": "text_page",
+          "width": {
+            "type": "fixed",
+            "value": 220
+          },
+          "height": {
+            "type": "fixed",
+            "value": 33
+          },
+          "$alignment_horizontal": "item_2_alignment",
+          "$text": "item_2_text"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Pager with layout_mode = wrap_content\n\npager width = wrap_content\ncross_axis_alignment = null (default = start)"
+            },
+            {
+              "type": "test_pager",
+              "width": {
+                "type": "wrap_content"
+              },
+              "item_0_alignment": "center",
+              "item_0_text": "alignment_horizontal = center",
+              "item_1_text": "alignment_horizontal = null (default = start), item is left aligned",
+              "item_2_alignment": "end",
+              "item_2_text": "alignment_horizontal = end, item is right aligned"
+            },
+            {
+              "type": "title",
+              "text": "pager width = 200\ncross_axis_alignment = center"
+            },
+            {
+              "type": "test_pager",
+              "width": {
+                "type": "fixed",
+                "value": 290
+              },
+              "cross_axis_alignment": "center",
+              "item_0_text": "alignment_horizontal = null (default = start), item is center aligned",
+              "item_1_alignment": "start",
+              "item_1_text": "alignment_horizontal = start, item is left aligned",
+              "item_2_alignment": "end",
+              "item_2_text": "alignment_horizontal = end, item is right aligned"
+            },
+            {
+              "type": "title",
+              "text": "pager width = match_parent\ncross_axis_alignment = end"
+            },
+            {
+              "type": "test_pager",
+              "cross_axis_alignment": "end",
+              "item_0_alignment": "center",
+              "item_0_text": "alignment_horizontal = center",
+              "item_1_alignment": "start",
+              "item_1_text": "alignment_horizontal = start, item is left aligned",
+              "item_2_text": "alignment_horizontal = null (default = start), item is right aligned"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

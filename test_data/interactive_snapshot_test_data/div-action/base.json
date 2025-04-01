@@ -2,7 +2,8 @@
   "description": "Typed actions",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

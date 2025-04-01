@@ -27,7 +27,7 @@
               }
             ],
             "width": {
-                "type": "match_parent"
+              "type": "match_parent"
             },
             "aspect": {
               "ratio": 1

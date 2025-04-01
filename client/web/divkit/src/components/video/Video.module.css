@@ -1,14 +1,17 @@
-.video__video {
+.video__video,
+.video__container {
     display: block;
     width: 100%;
     height: 100%;
+    pointer-events: auto;
 }
 
 .video__aspect-wrapper {
     position: relative;
 }
 
-.video_absolute .video__video {
+.video_absolute .video__video,
+.video_absolute .video__container {
     position: absolute;
     top: 0;
     left: 0;

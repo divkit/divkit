@@ -9,8 +9,8 @@
       ]
     },
     "url": {
-      "$description": "translations.json#/div_action_download_url",
-      "type": "string"
+      "$ref": "common.json#/url",
+      "$description": "translations.json#/div_action_download_url"
     },
     "on_fail_actions": {
       "type": "array",
@@ -29,6 +29,7 @@
   },
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "required": [

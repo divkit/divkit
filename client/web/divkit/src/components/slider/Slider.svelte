@@ -20,8 +20,11 @@
     import css from './Slider.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivSliderData } from '../../types/slider';
+    import type { DivSliderData, SliderRange } from '../../types/slider';
     import type { ComponentContext } from '../../types/componentContext';
+    import type { MaybeMissing } from '../../expressions/json';
+    import type { Direction } from '../../../typings/common';
+    import type { EdgeInsets } from '../../types/edgeInserts';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
     import { genClassName } from '../../utils/genClassName';
@@ -66,6 +69,14 @@
     let secondaryDescription = '';
     let isEnabled = true;
     let hasError = false;
+    let renderRanges: {
+        left: string;
+        right: string;
+        height: string;
+        borderRadius: string;
+        background: string;
+        boxShadow: string;
+    }[] = [];
 
     $: origJson = componentContext.origJson;
 
@@ -108,6 +119,7 @@
         componentContext.json.secondary_value_accessibility
     );
     $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
+    $: jsonRanges = componentContext.getDerivedFromVars(componentContext.json.ranges);
 
     $: {
         minValue = correctNumber($jsonMinValue, minValue);
@@ -261,8 +273,131 @@
     ].filter(isNonNegativeNumber)));
     $: trackPart = (value - minValue) / (maxValue - minValue);
     $: trackSecondaryPart = secondVariable ? (value2 - minValue) / (maxValue - minValue) : undefined;
-    $: trackActivePart = trackSecondaryPart !== undefined ? Math.abs(trackSecondaryPart - trackPart) : trackPart;
-    $: trackActiveOffset = trackSecondaryPart !== undefined ? Math.min(trackSecondaryPart, trackPart) : 0;
+    $: trackActiveOffset = trackSecondaryPart !== undefined ? Math.min(value, value2) : minValue;
+    $: trackActivePart = trackSecondaryPart !== undefined ? Math.abs(value2 - value) : value - minValue;
+
+    function updateRenderList({
+        direction,
+        minValue,
+        maxValue,
+        trackActiveOffset,
+        trackActivePart,
+        trackInactiveStyle,
+        trackActiveStyle,
+        ranges = []
+    }: {
+        direction: Direction;
+        minValue: number;
+        maxValue: number;
+        trackActiveOffset: number;
+        trackActivePart: number;
+        trackInactiveStyle: DrawableStyle;
+        trackActiveStyle: DrawableStyle;
+        ranges: MaybeMissing<SliderRange[]> | undefined;
+    }) {
+        const parts: {
+            left: number;
+            right: number;
+            totalLeft: number;
+            totalRight: number;
+            leftMargin: number;
+            rightMargin: number;
+            style: DrawableStyle;
+        }[] = [];
+
+        const pushParts = (type: 'active' | 'inactive', from: number, to: number) => {
+            const push = (start: number, end: number, style: DrawableStyle, margins?: EdgeInsets) => {
+                const intersectionStart = Math.max(start, from);
+                const intersectionEnd = Math.min(end, to);
+                if (intersectionEnd - intersectionStart > 0) {
+                    const leftMargin = margins ? (margins[direction === 'ltr' ? 'start' : 'end'] ?? margins.left ?? 0) : 0;
+                    const rightMargin = margins ? (margins[direction === 'ltr' ? 'end' : 'start'] ?? margins.right ?? 0) : 0;
+
+                    parts.push({
+                        left: start,
+                        right: end,
+                        totalLeft: from,
+                        totalRight: to,
+                        leftMargin,
+                        rightMargin,
+                        style
+                    });
+                }
+            };
+
+            if (!ranges[0] || (ranges[0].start ?? minValue) > from) {
+                push(from, ranges[0] ? (ranges[0].start ?? minValue) : to, type === 'inactive' ? trackInactiveStyle : trackActiveStyle);
+            }
+            ranges.forEach((range, index) => {
+                const selfStyle = range[type === 'inactive' ? 'track_inactive_style' : 'track_active_style'];
+                const fallbackStyle = type === 'inactive' ? trackInactiveStyle : trackActiveStyle;
+                const style = selfStyle ?
+                    correctDrawableStyle(selfStyle, TRACK_SHAPES, DEFAULT_DRAWABLE_STYLE) :
+                    fallbackStyle;
+                const prev = ranges[index - 1];
+                const next = ranges[index + 1];
+
+                const start = range.start ?? prev?.end ?? from;
+                const end = range.end ?? next?.start ?? to;
+
+                push(start, end, style, range.margins);
+            });
+            if (ranges[ranges.length - 1] && (ranges[ranges.length - 1].end ?? maxValue) < to) {
+                const start = ranges[ranges.length - 1].end ?? maxValue;
+                push(start, to, type === 'inactive' ? trackInactiveStyle : trackActiveStyle);
+            }
+        };
+        pushParts('inactive', minValue, maxValue);
+        pushParts('active', trackActiveOffset, trackActiveOffset + trackActivePart);
+
+        const total = maxValue - minValue;
+        renderRanges = parts.map(part => {
+            let rangeLeft = `${(part.left - minValue) * 100 / total}%`;
+            if (part.leftMargin) {
+                rangeLeft = `calc(${rangeLeft} + ${pxToEmWithUnits(part.leftMargin)})`;
+            }
+            let left;
+            if (part.totalLeft < part.left) {
+                left = rangeLeft;
+            } else if (part.leftMargin) {
+                left = `max(${(part.totalLeft - minValue) * 100 / total}%, ${rangeLeft})`;
+            } else {
+                left = `${(Math.max(part.totalLeft, part.left) - minValue) * 100 / total}%`;
+            }
+            let rangeRight = `${(1 - (part.right - minValue) / total) * 100}%`;
+            if (part.rightMargin) {
+                rangeRight = `calc(${rangeRight} + ${pxToEmWithUnits(part.rightMargin)})`;
+            }
+            let right;
+            if (part.totalRight > part.right) {
+                right = rangeRight;
+            } else if (part.rightMargin) {
+                right = `max(${(1 - (part.totalRight - minValue) / total) * 100}%, ${rangeRight})`;
+            } else {
+                right = `${(1 - (Math.max(part.totalRight, part.right) - minValue) / total) * 100}%`;
+            }
+
+            return {
+                left,
+                right,
+                height: pxToEm(part.style.height),
+                borderRadius: pxToEm(part.style.borderRadius),
+                background: part.style.background,
+                boxShadow: part.style.boxShadow || ''
+            };
+        });
+    }
+
+    $: updateRenderList({
+        direction: $direction,
+        minValue,
+        maxValue,
+        trackActiveOffset,
+        trackActivePart,
+        trackInactiveStyle,
+        trackActiveStyle,
+        ranges: $jsonRanges
+    });
 
     $: stl = {
         '--divkit-slider-thumb-width': pxToEm(thumbStyle.width),
@@ -400,30 +535,26 @@
         cls={genClassName('slider', css, mods)}
         style={stl}
         customDescription={true}
-        customActions={'slider'}
+        customActions="slider"
         hasInnerFocusable={true}
         {componentContext}
         {layoutParams}
     >
         <div class={css['slider__tracks-wrapper']}>
             <div class={css['slider__tracks-inner']} bind:this={tracksInner}>
-                <div
-                    class={css.slider__track}
-                    style:height={pxToEm(trackInactiveStyle.height)}
-                    style:border-radius={pxToEm(trackInactiveStyle.borderRadius)}
-                    style:background={trackInactiveStyle.background}
-                    style:box-shadow={trackInactiveStyle.boxShadow || ''}
-                ></div>
-                <div
-                    class={css['slider__active-track']}
-                    style:left={$direction === 'ltr' ? ((trackActiveOffset * 100).toFixed(2) + '%') : undefined}
-                    style:right={$direction === 'ltr' ? undefined : ((trackActiveOffset * 100).toFixed(2) + '%')}
-                    style:width={(trackActivePart * 100).toFixed(2) + '%'}
-                    style:height={pxToEm(trackActiveStyle.height)}
-                    style:border-radius={pxToEm(trackActiveStyle.borderRadius)}
-                    style:background={trackActiveStyle.background}
-                    style:box-shadow={trackActiveStyle.boxShadow || ''}
-                ></div>
+                <div class={css['slider__tracks-ranges'] + ($direction === 'rtl' ? ' ' + css['slider__tracks-ranges_rtl'] : '')}>
+                    {#each renderRanges as range}
+                        <div
+                            class={css.slider__track}
+                            style:left={range.left}
+                            style:right={range.right}
+                            style:height={range.height}
+                            style:border-radius={range.borderRadius}
+                            style:background={range.background}
+                            style:box-shadow={range.boxShadow}
+                        ></div>
+                    {/each}
+                </div>
                 {#each markActiveTicks as val}
                     <div class="{css.slider__tick} {css.slider__tick_active}" style:--divkit-slider-tick={val}></div>
                 {/each}

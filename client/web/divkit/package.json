@@ -1,6 +1,6 @@
 {
     "name": "@divkitframework/divkit",
-    "version": "30.33.0",
+    "version": "31.9.0",
     "description": "DivKit for the web",
     "keywords": [
         "server-driven-ui",
@@ -89,10 +89,14 @@
         "production": [
             "chrome >= 67",
             "safari >= 14",
-            "firefox >= 68"
+            "firefox >= 68",
+            "node >= 10"
         ],
         "ssr": [
-            "node >= 8"
+            "chrome >= 67",
+            "safari >= 14",
+            "firefox >= 68",
+            "node >= 10"
         ],
         "development": [
             "last 1 chrome version",

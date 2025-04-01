@@ -17,7 +17,7 @@ import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
-import com.yandex.div2.DivPager
+import com.yandex.div2.Div
 
 @Mockable
 internal class DivPagerView @JvmOverloads constructor(
@@ -25,7 +25,7 @@ internal class DivPagerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ViewPager2Wrapper(context, attrs, defStyleAttr),
-    DivHolderView<DivPager> by DivHolderViewMixin(),
+    DivHolderView<Div.Pager> by DivHolderViewMixin(),
     OnInterceptTouchEventListenerHost {
 
     internal var changePageCallbackForState: ViewPager2.OnPageChangeCallback? = null
@@ -42,6 +42,19 @@ internal class DivPagerView @JvmOverloads constructor(
         set(value) {
             field?.let(viewPager::unregisterOnPageChangeCallback)
             value?.let(viewPager::registerOnPageChangeCallback)
+            field = value
+        }
+
+    internal var changePageCallbackForOffScreenPages: OffScreenPagesUpdateCallback? = null
+        set(value) {
+            field?.let {
+                viewPager.unregisterOnPageChangeCallback(it)
+                getRecyclerView()?.removeOnLayoutChangeListener(it)
+            }
+            value?.let {
+                viewPager.registerOnPageChangeCallback(it)
+                getRecyclerView()?.addOnLayoutChangeListener(it)
+            }
             field = value
         }
 
@@ -151,5 +164,12 @@ internal class DivPagerView @JvmOverloads constructor(
 
     internal fun interface OnItemsUpdatedCallback {
         fun onItemsUpdated()
+    }
+
+    internal abstract class OffScreenPagesUpdateCallback : ViewPager2.OnPageChangeCallback(), OnLayoutChangeListener {
+        override fun onLayoutChange(
+            v: View?, left: Int, top: Int, right: Int, bottom: Int,
+            oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
+        ) = Unit
     }
 }

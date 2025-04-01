@@ -8,7 +8,7 @@
 
     export let value: VideoSource;
 
-    const { state, videoSource2Dialog, warnFileLimit, errorFileLimit } = getContext<AppContext>(APP_CTX);
+    const { state, videoSource2Dialog, warnFileLimit, errorFileLimit, fileLimits } = getContext<AppContext>(APP_CTX);
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { readOnly } = state;
 
@@ -32,7 +32,7 @@
         });
     }
 
-    $: fileSizeMod = calcFileSizeMod(currentSize, warnFileLimit, errorFileLimit);
+    $: fileSizeMod = calcFileSizeMod(currentSize, 'video', warnFileLimit, errorFileLimit, fileLimits);
 
     function onClick(): void {
         videoSource2Dialog().show({

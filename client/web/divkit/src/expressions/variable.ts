@@ -199,8 +199,12 @@ export class DictVariable extends Variable<object, 'dict'> {
         return value;
     }
 
-    protected fromString(_val: string): object {
-        throw new Error('Dict variable does not support setter from string');
+    protected fromString(val: string): object {
+        try {
+            return JSON.parse(val);
+        } catch (_err) {
+            throw new Error('Incorrect dict value');
+        }
     }
 
     getType(): 'dict' {
@@ -217,8 +221,12 @@ export class ArrayVariable extends Variable<unknown[], 'array'> {
         return value;
     }
 
-    protected fromString(_val: string): unknown[] {
-        throw new Error('Array variable does not support setter from string');
+    protected fromString(val: string): unknown[] {
+        try {
+            return JSON.parse(val);
+        } catch (_err) {
+            throw new Error('Incorrect array value');
+        }
     }
 
     getType(): 'array' {

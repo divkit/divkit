@@ -4,12 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.widget.SelectView
-import com.yandex.div2.DivSelect
+import com.yandex.div2.Div
 
 
 @Mockable
-internal class DivSelectView constructor(context: Context) : SelectView(context),
-    DivHolderView<DivSelect> by DivHolderViewMixin(),
+internal class DivSelectView(context: Context) : SelectView(context),
+    DivHolderView<Div.Select> by DivHolderViewMixin(),
     DivAnimator {
 
     var valueUpdater: ((String) -> Unit)? = null

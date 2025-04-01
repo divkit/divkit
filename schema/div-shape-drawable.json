@@ -29,6 +29,8 @@
     "web"
   ],
   "required": [
-    "type", "shape", "color"
+    "type",
+    "shape",
+    "color"
   ]
 }

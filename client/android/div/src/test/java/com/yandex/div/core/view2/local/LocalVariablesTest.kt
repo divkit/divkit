@@ -12,13 +12,16 @@ import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.textString
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div2.Div
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
-import java.lang.AssertionError
 import org.json.JSONObject
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
@@ -36,6 +39,10 @@ class LocalVariablesTest {
         lifecycleOwner = null,
         configuration = DivConfiguration.Builder(mock()).build()
     )
+    private val divBase = mock<DivBase>()
+    private val div = mock<Div> {
+        on { value() } doReturn divBase
+    }
     private val div2View = Div2View(div2Context)
 
     private val state get() = div2View.getChildAt(0) as DivStateLayout
@@ -53,9 +60,7 @@ class LocalVariablesTest {
     fun `elements with defined local variable can use card variables`() {
         setDivView(testJsonWithTwoStates)
 
-        Assert.assertEquals(
-            CARD_INPUT_INITIAL_VALUE, inputWithCardVariable.text.toString()
-        )
+        assertTextShown(CARD_INPUT_INITIAL_VALUE, inputWithCardVariable)
     }
 
     @Test
@@ -63,7 +68,7 @@ class LocalVariablesTest {
         setDivView(testJsonWithTwoStates)
         setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
 
-        Assert.assertEquals(LOCAL_INPUT_MODIFIED_VALUE, inputWithLocalVariable.text.toString())
+        assertTextShown(LOCAL_INPUT_MODIFIED_VALUE, inputWithLocalVariable)
     }
 
     @Test
@@ -72,10 +77,7 @@ class LocalVariablesTest {
         setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
 
         setState(2)
-        Assert.assertEquals(
-            LOCAL_INPUT_INITIAL_VALUE_SECOND_STATE,
-            inputWithLocalVariable.text.toString()
-        )
+        assertTextShown(LOCAL_INPUT_INITIAL_VALUE_SECOND_STATE, inputWithLocalVariable)
     }
 
     @Test
@@ -86,7 +88,7 @@ class LocalVariablesTest {
         setState(2)
         setState(1)
 
-        Assert.assertEquals(LOCAL_INPUT_MODIFIED_VALUE, inputWithLocalVariable.text.toString())
+        assertTextShown(LOCAL_INPUT_MODIFIED_VALUE, inputWithLocalVariable)
     }
 
     @Test
@@ -94,7 +96,7 @@ class LocalVariablesTest {
         setDivView(testJsonWithContainerWithVariablesAndChild)
 
         val text = container.getChildAt(0) as TextView
-        Assert.assertEquals("container_variable, text_variable", text.text)
+        assertTextShown("container_variable, text_variable", text)
     }
 
     @Test
@@ -103,12 +105,12 @@ class LocalVariablesTest {
 
         val textWithLocalVariable = container.getChildAt(0) as TextView
         val textWithParentVariable = container.getChildAt(1) as TextView
-        Assert.assertEquals("text", textWithLocalVariable.text)
-        Assert.assertEquals("text", textWithParentVariable.text)
+        assertTextShown("text", textWithLocalVariable)
+        assertTextShown("text", textWithParentVariable)
 
         setVariable("text", "changed text", "0/label/state_4")
-        Assert.assertEquals("text", textWithLocalVariable.text)
-        Assert.assertEquals("changed text", textWithParentVariable.text)
+        assertTextShown("text", textWithLocalVariable)
+        assertTextShown("changed text", textWithParentVariable)
     }
 
     private fun setState(stateNum: Int) {
@@ -124,9 +126,13 @@ class LocalVariablesTest {
 
     private fun setVariable(name: String, value: String, path: String) {
         val variableController = div2View.expressionsRuntime
-            ?.runtimeStore?.getOrCreateRuntime(path, null, null, null, null)?.variableController
+            ?.runtimeStore?.getOrCreateRuntime(path, div)?.variableController
         val variable = variableController?.getMutableVariable(name) ?: return
         variable.set(value)
+    }
+
+    private fun assertTextShown(expected: String, view: TextView) {
+        Assert.assertEquals(expected, view.textString)
     }
 }
 private val testJsonWithTwoStates = """

@@ -39,6 +39,7 @@ dependencies {
     implementation project(':div-rive')
     implementation project(':utils')
     implementation project(':div-pinch-to-zoom')
+    implementation project(':div-markdown')
 
     implementation libs.androidx.coreKtx
     implementation libs.androidx.activity

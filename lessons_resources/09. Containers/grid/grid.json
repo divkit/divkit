@@ -1,0 +1,99 @@
+{
+  "templates": {
+    "grid_element": {
+      "type": "container",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "height": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "margins": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    }
+  },
+  "card": {
+    "log_id": "grid_layout",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "grid",
+              "width": {
+                "type": "fixed",
+                "value": 288
+              },
+              "height": {
+                "type": "fixed",
+                "value": 370
+              },
+              "margins": {
+                "top": 16
+              },
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              },
+              "alignment_horizontal": "center",
+              "column_count": 3,
+              "items": [
+                {
+                  "type": "grid_element",
+                  "row_span": 2,
+                  "background_color": "#D098D3"
+                },
+                {
+                  "type": "grid_element",
+                  "background_color": "#FFCC00"
+                },
+                {
+                  "type": "grid_element",
+                  "background_color": "#e1bae3"
+                },
+                {
+                  "type": "grid_element",
+                  "column_span": 2,
+                  "background_color": "#ffe066"
+                },
+                {
+                  "type": "grid_element",
+                  "column_span": 3,
+                  "height": {
+                    "type": "fixed",
+                    "value": 200
+                  },
+                  "content_alignment_vertical": "space-around",
+                  "background_color": "#D098D3"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

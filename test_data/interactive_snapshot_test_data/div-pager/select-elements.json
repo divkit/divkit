@@ -119,7 +119,7 @@
         }
       ]
     }
-    },
+  },
   "steps": [
     {
       "expected_screenshot": "step0.png"
@@ -208,4 +208,3 @@
     }
   ]
 }
-

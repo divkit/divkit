@@ -83,5 +83,33 @@
                 "version_added": "30.29.0"
             }
         }
+    }, {
+        "id": "stroke_dashed",
+        "name": "Border stroke type <code>dashed</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.4.0"
+            },
+            "ios": {
+                "version_added": "31.4.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
+    }, {
+        "id": "background_linear_color_map",
+        "name": "Linear gradient in the background with positions using <code>color_map</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.4.0"
+            },
+            "ios": {
+                "version_added": "31.4.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
     }]
 }

@@ -9,12 +9,20 @@ public final class TextBlock: BlockWithTraits {
     public let holder: ImageHolder
     public let location: Int
     public let tintColor: Color?
+    public let tintMode: TintMode
 
-    public init(size: CGSize, holder: ImageHolder, location: Int, tintColor: Color? = nil) {
+    public init(
+      size: CGSize,
+      holder: ImageHolder,
+      location: Int,
+      tintColor: Color? = nil,
+      tintMode: TintMode = .sourceIn
+    ) {
       self.size = size
       self.holder = holder
       self.location = location
       self.tintColor = tintColor
+      self.tintMode = tintMode
     }
   }
 
@@ -32,6 +40,8 @@ public final class TextBlock: BlockWithTraits {
   public let additionalTextInsets: EdgeInsets
   public let truncationToken: NSAttributedString?
   public let truncationImages: [InlineImage]
+  public let autoEllipsize: Bool
+  public let path: UIElementPath?
 
   let attachments: [TextAttachment]
   let truncationAttachments: [TextAttachment]
@@ -53,7 +63,9 @@ public final class TextBlock: BlockWithTraits {
     truncationImages: [TextBlock.InlineImage] = [],
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
-    tightenWidth: Bool = false
+    tightenWidth: Bool = false,
+    autoEllipsize: Bool = true,
+    path: UIElementPath? = nil
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -76,6 +88,8 @@ public final class TextBlock: BlockWithTraits {
       self.truncationAttachments = []
     }
     self.additionalTextInsets = additionalTextInsets ?? .zero
+    self.autoEllipsize = autoEllipsize
+    self.path = path
   }
 
   public convenience init(
@@ -91,7 +105,9 @@ public final class TextBlock: BlockWithTraits {
     truncationImages: [TextBlock.InlineImage] = [],
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
-    tightenWidth: Bool = false
+    tightenWidth: Bool = false,
+    autoEllipsize: Bool = true,
+    path: UIElementPath? = nil
   ) {
     self.init(
       widthTrait: widthTrait,
@@ -107,7 +123,9 @@ public final class TextBlock: BlockWithTraits {
       truncationImages: truncationImages,
       additionalTextInsets: additionalTextInsets,
       canSelect: canSelect,
-      tightenWidth: tightenWidth
+      tightenWidth: tightenWidth,
+      autoEllipsize: autoEllipsize,
+      path: path
     )
   }
 
@@ -135,26 +153,15 @@ public final class TextBlock: BlockWithTraits {
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch heightTrait {
     case let .intrinsic(_, minSize, maxSize):
-      if let cached = cachedIntrinsicHeight,
-         cached.width.isApproximatelyEqualTo(width) {
-        return cached.height
-      }
-
-      let height = ceil(
-        text.heightForWidth(
-          width,
-          maxNumberOfLines: maxIntrinsicNumberOfLines,
-          minNumberOfHiddenLines: minNumberOfHiddenLines,
-          truncationToken: truncationToken
-        ) + additionalTextInsets.vertical.sum
+      clamp(
+        calculateTextIntrinsicContentHeight(for: width),
+        min: minSize,
+        max: maxSize
       )
-      let result = clamp(height, min: minSize, max: maxSize)
-      cachedIntrinsicHeight = (width: width, height: result)
-      return result
     case let .fixed(value):
-      return value
+      value
     case .weighted:
-      return 0
+      0
     }
   }
 
@@ -184,6 +191,28 @@ public final class TextBlock: BlockWithTraits {
       && lhs.images == rhs.images
       && lhs.accessibilityElement == rhs.accessibilityElement
       && lhs.tightenWidth == rhs.tightenWidth
+      && lhs.autoEllipsize == rhs.autoEllipsize
+      && lhs.path == rhs.path
+  }
+
+  public func calculateTextIntrinsicContentHeight(
+    for width: CGFloat
+  ) -> CGFloat {
+    if let cached = cachedIntrinsicHeight,
+       cached.width.isApproximatelyEqualTo(width) {
+      return cached.height
+    }
+
+    let height = ceil(
+      text.heightForWidth(
+        width,
+        maxNumberOfLines: maxIntrinsicNumberOfLines,
+        minNumberOfHiddenLines: minNumberOfHiddenLines,
+        truncationToken: truncationToken
+      ) + additionalTextInsets.vertical.sum
+    )
+    cachedIntrinsicHeight = (width: width, height: height)
+    return height
   }
 }
 
@@ -196,7 +225,31 @@ extension TextBlock.InlineImage {
 }
 
 extension TextBlock: LayoutCachingDefaultImpl {}
-extension TextBlock: ElementStateUpdatingDefaultImpl {}
+extension TextBlock: ElementStateUpdatingDefaultImpl {
+  public func updated(path: UIElementPath, isFocused _: Bool) throws -> TextBlock {
+    if path != self.path {
+      return self
+    }
+
+    return TextBlock(
+      widthTrait: widthTrait,
+      heightTrait: heightTrait,
+      text: text,
+      textGradient: textGradient,
+      verticalAlignment: verticalAlignment,
+      maxIntrinsicNumberOfLines: maxIntrinsicNumberOfLines,
+      minNumberOfHiddenLines: minNumberOfHiddenLines,
+      images: images,
+      accessibilityElement: accessibilityElement,
+      truncationToken: truncationToken,
+      truncationImages: truncationImages,
+      additionalTextInsets: additionalTextInsets,
+      canSelect: canSelect,
+      tightenWidth: tightenWidth,
+      path: path
+    )
+  }
+}
 
 private func setImagePlaceholders(
   for images: [TextBlock.InlineImage],
@@ -294,6 +347,6 @@ extension TextBlock.InlineImage {
   fileprivate var tintColorImage: Image? {
     let holderImage = holder.image
     guard let tintColor else { return holderImage }
-    return holderImage?.redrawn(withTintColor: tintColor)
+    return holderImage?.redrawn(withTintColor: tintColor, tintMode: tintMode)
   }
 }

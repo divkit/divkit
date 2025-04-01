@@ -454,7 +454,7 @@
                           },
                           {
                             "type": "text_block",
-                            "header":  "Item 1",
+                            "header": "Item 1",
                             "visibility_actions": [
                               {
                                 "log_id": "106",
@@ -465,7 +465,7 @@
                           },
                           {
                             "type": "text_block",
-                            "header":  "Item 2",
+                            "header": "Item 2",
                             "visibility_actions": [
                               {
                                 "log_id": "206",
@@ -476,7 +476,7 @@
                           },
                           {
                             "type": "text_block",
-                            "header":  "Item 3",
+                            "header": "Item 3",
                             "visibility_actions": [
                               {
                                 "log_id": "306",

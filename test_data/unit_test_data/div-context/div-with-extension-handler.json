@@ -1,13 +1,17 @@
 {
   "log_id": "logid",
-  "states": [{
-    "state_id": 0,
-    "div": {
-      "type": "text",
-      "text": "my_text",
-      "extensions": [{
-        "id": "sample_extension_id"
-      }]
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "text",
+        "text": "my_text",
+        "extensions": [
+          {
+            "id": "sample_extension_id"
+          }
+        ]
+      }
     }
-  }]
+  ]
 }

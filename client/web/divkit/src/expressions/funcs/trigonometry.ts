@@ -37,10 +37,39 @@ function cos(_ctx: EvalContext, rad: NumberValue): EvalValue {
     };
 }
 
+function tan(_ctx: EvalContext, rad: NumberValue): EvalValue {
+    return {
+        type: NUMBER,
+        value: Math.tan(rad.value)
+    };
+}
+
 function atan(_ctx: EvalContext, rad: NumberValue): EvalValue {
     return {
         type: NUMBER,
         value: Math.atan(rad.value)
+    };
+}
+
+function asin(_ctx: EvalContext, rad: NumberValue): EvalValue {
+    if (rad.value > 1 || rad.value < -1) {
+        throw new Error('Arcsine is undefined for the given value.');
+    }
+
+    return {
+        type: NUMBER,
+        value: Math.asin(rad.value)
+    };
+}
+
+function acos(_ctx: EvalContext, rad: NumberValue): EvalValue {
+    if (rad.value > 1 || rad.value < -1) {
+        throw new Error('Arccosine is undefined for the given value.');
+    }
+
+    return {
+        type: NUMBER,
+        value: Math.acos(rad.value)
     };
 }
 
@@ -50,5 +79,8 @@ export function registerTrigonometry(): void {
     registerFunc('toDegrees', [NUMBER], toDegrees);
     registerFunc('sin', [NUMBER], sin);
     registerFunc('cos', [NUMBER], cos);
+    registerFunc('tan', [NUMBER], tan);
     registerFunc('atan', [NUMBER], atan);
+    registerFunc('asin', [NUMBER], asin);
+    registerFunc('acos', [NUMBER], acos);
 }

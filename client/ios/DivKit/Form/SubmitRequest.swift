@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SubmitRequest {
+public struct SubmitRequest: Equatable {
   public let url: URL
   public let method: String
   public let headers: [String: String]

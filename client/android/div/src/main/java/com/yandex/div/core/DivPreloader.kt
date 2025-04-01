@@ -18,6 +18,7 @@ import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivBackground
 
 @PublicApi
 @Mockable
@@ -26,30 +27,53 @@ class DivPreloader internal constructor(
     private val customContainerViewAdapter: DivCustomContainerViewAdapter,
     private val extensionController: DivExtensionController,
     private val videoPreloader: DivPlayerPreloader,
+    private val preloadFilter: PreloadFilter
 ) {
 
-    constructor(context: Div2Context) : this(
+    @JvmOverloads
+    constructor(
+        configuration: DivConfiguration,
+        preloadFilter: PreloadFilter = PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
+    ) : this(
+        imagePreloader = DivImagePreloader(configuration.imageLoader),
+        customContainerViewAdapter = configuration.divCustomContainerViewAdapter,
+        extensionController = DivExtensionController(configuration.extensionHandlers),
+        videoPreloader = configuration.divPlayerPreloader,
+        preloadFilter = preloadFilter
+    )
+
+    @JvmOverloads
+    constructor(
+        context: Div2Context,
+        preloadFilter: PreloadFilter = PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
+    ) : this(
         imagePreloader = context.div2Component.imagePreloader,
         customContainerViewAdapter = context.div2Component.divCustomContainerViewAdapter,
         extensionController = context.div2Component.extensionController,
-        videoPreloader = context.div2Component.divVideoPreloader
+        videoPreloader = context.div2Component.divVideoPreloader,
+        preloadFilter = preloadFilter
     )
 
-    fun preload(div: Div, resolver: ExpressionResolver, callback: Callback = NO_CALLBACK): Ticket {
+    fun preload(
+        div: Div,
+        resolver: ExpressionResolver,
+        callback: Callback = NO_CALLBACK
+    ): Ticket {
         val downloadCallback = DownloadCallback(callback)
-        val ticket = PreloadVisitor(downloadCallback, callback, resolver).preload(div)
+        val ticket = PreloadVisitor(downloadCallback, callback, resolver, preloadFilter).preload(div)
         downloadCallback.onFullPreloadStarted()
         return ticket
     }
 
-    private companion object {
-        private val NO_CALLBACK = Callback { }
+    companion object {
+        internal val NO_CALLBACK = Callback { }
     }
 
     private inner class PreloadVisitor(
         private val downloadCallback: DownloadCallback,
         private val callback: Callback,
         private val resolver: ExpressionResolver,
+        private val preloadFilter: PreloadFilter
     ) : DivVisitor<Unit>() {
         private val ticket = TicketImpl()
 
@@ -59,7 +83,7 @@ class DivPreloader internal constructor(
         }
 
         override fun defaultVisit(data: Div, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
+            imagePreloader?.preloadImage(data, resolver, preloadFilter, downloadCallback)
                 ?.forEach { ticket.addImageReference(it) }
             extensionController.preprocessExtensions(data.value(), resolver)
         }
@@ -102,7 +126,7 @@ class DivPreloader internal constructor(
 
         override fun visit(data: Div.Video, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
-            if (data.value.preloadRequired.evaluate(resolver)) {
+            if (preloadFilter.shouldPreloadContent(data, resolver)) {
                 val sources = mutableListOf<Uri>()
                 data.value.videoSources.forEach {
                     sources.add(it.url.evaluate(resolver))
@@ -112,8 +136,10 @@ class DivPreloader internal constructor(
         }
     }
 
-    private class TicketImpl : Ticket {
-        val refs = mutableListOf<PreloadReference>()
+    internal class TicketImpl : Ticket {
+
+        private val refs = mutableListOf<PreloadReference>()
+
         fun addReference(reference: PreloadReference) {
             refs.add(reference)
         }
@@ -185,6 +211,37 @@ class DivPreloader internal constructor(
 
     interface Ticket {
         fun cancel()
+    }
+
+    interface PreloadFilter {
+        fun shouldPreloadContent(div: Div, resolver: ExpressionResolver): Boolean
+        fun shouldPreloadBackground(background: DivBackground, resolver: ExpressionResolver): Boolean
+
+        companion object {
+            @JvmField
+            val ONLY_PRELOAD_REQUIRED_FILTER = object : PreloadFilter {
+                override fun shouldPreloadContent(div: Div, resolver: ExpressionResolver) = when(div) {
+                    is Div.Video -> div.value.preloadRequired.evaluate(resolver)
+                    is Div.Image -> div.value.preloadRequired.evaluate(resolver)
+                    is Div.GifImage -> div.value.preloadRequired.evaluate(resolver)
+                    else -> false
+                }
+
+                override fun shouldPreloadBackground(
+                    background: DivBackground,
+                    resolver: ExpressionResolver
+                ) = when(background) {
+                    is DivBackground.Image -> background.value.preloadRequired.evaluate(resolver)
+                    else -> false
+                }
+            }
+
+            @JvmField
+            val PRELOAD_ALL_FILTER = object : PreloadFilter {
+                override fun shouldPreloadContent(div: Div, resolver: ExpressionResolver) = true
+                override fun shouldPreloadBackground(background: DivBackground, resolver: ExpressionResolver) = true
+            }
+        }
     }
 
     fun interface PreloadReference {

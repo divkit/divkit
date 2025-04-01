@@ -14,6 +14,8 @@ extension TextInputBlock {
     inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
     inputView.setInputAccessoryView(accessoryView)
+    inputView.setAutocorrection(autocorrection)
+    inputView.setSecure(isSecure)
     inputView.setAutocapitalizationType(autocapitalizationType)
     inputView.setEnterKeyType(enterKeyType)
     inputView.setValidators(validators)
@@ -90,14 +92,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.isEditable = true
     multiLineInput.isSelectable = true
     multiLineInput.showsVerticalScrollIndicator = false
-    multiLineInput.autocorrectionType = .no
     multiLineInput.backgroundColor = .clear
     multiLineInput.delegate = self
     multiLineInput.textContainer.lineFragmentPadding = 0
     multiLineInput.returnKeyType = .default
 
     singleLineInput.isHidden = true
-    singleLineInput.autocorrectionType = .no
     singleLineInput.backgroundColor = .clear
     singleLineInput.delegate = self
     singleLineInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -185,18 +185,34 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       multiLineInput.inputView = nil
       multiLineInput.tintColor = nil
       selectionItems = nil
-      multiLineInput.keyboardType = type.uiType
-      singleLineInput.keyboardType = type.uiType
+      setKeyboardType(type)
     case let .selection(items):
       selectionItems = items
       multiLineInput.tintColor = multiLineInput.backgroundColor
       multiLineInput.inputView = selectionView
+      setKeyboardType(.default)
     }
+  }
+
+  private func setKeyboardType(_ type: TextInputBlock.InputType.KeyboardType) {
+    multiLineInput.keyboardType = type.uiType
+    singleLineInput.keyboardType = type.uiType
   }
 
   func setInputAccessoryView(_ accessoryView: ViewType?) {
     multiLineInput.inputAccessoryView = accessoryView
     singleLineInput.inputAccessoryView = accessoryView
+  }
+
+  func setAutocorrection(_ isEnabled: Bool) {
+    let uiType: UITextAutocorrectionType = isEnabled ? .yes : .no
+    multiLineInput.autocorrectionType = uiType
+    singleLineInput.autocorrectionType = uiType
+  }
+
+  func setSecure(_ isSecure: Bool) {
+    multiLineInput.isSecureTextEntry = isSecure
+    singleLineInput.isSecureTextEntry = isSecure
   }
 
   func setAutocapitalizationType(_ type: TextInputBlock.AutocapitalizationType) {
@@ -371,11 +387,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     guard self.maskedViewModel == nil else {
       maskedViewModel?.rawText = rawTextValue.value
       maskedViewModel?.maskValidator = mask
+      maskedViewModel?.typo = typo
       return
     }
     self.maskedViewModel = MaskedInputViewModel(
       rawText: self.rawTextValue.value,
       maskValidator: mask,
+      typo: typo,
       signal: userInputPipe.signal
     )
     maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] range in
@@ -769,14 +787,8 @@ extension TextInputBlock.InputType.KeyboardType {
     switch self {
     case .default:
       .default
-    case .asciiCapable:
-      .asciiCapable
-    case .numbersAndPunctuation:
-      .numbersAndPunctuation
     case .URL:
       .URL
-    case .numberPad:
-      .numberPad
     case .phonePad:
       .phonePad
     case .namePhonePad:
@@ -785,12 +797,6 @@ extension TextInputBlock.InputType.KeyboardType {
       .emailAddress
     case .decimalPad:
       .decimalPad
-    case .twitter:
-      .twitter
-    case .webSearch:
-      .webSearch
-    case .asciiCapableNumberPad:
-      .asciiCapableNumberPad
     }
   }
 }

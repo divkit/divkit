@@ -1,0 +1,23 @@
+plugins {
+    id 'application'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
+}
+
+group = 'com.yandex.divkit.example.dsl'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.yandex.div:kotlin-json-builder:31.3.0"
+
+    implementation "com.fasterxml.jackson.core:jackson-core:2.18.2"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.18.2"
+}
+
+application {
+    mainClass = 'com.yandex.divkit.example.dsl.Application'
+}

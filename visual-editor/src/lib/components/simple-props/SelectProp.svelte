@@ -26,7 +26,7 @@
 
     $: filteredOptions = options.filter(
         it => it.show === undefined ||
-            processedJson && parentProcessedJson &&
+            processedJson &&
             evalCondition(processedJson, parentProcessedJson, it.show)
     );
 

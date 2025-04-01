@@ -16,7 +16,8 @@ function devtoolReal(
         node,
         json: componentContext.json,
         origJson: componentContext.origJson,
-        templateContext: componentContext.templateContext
+        templateContext: componentContext.templateContext,
+        componentContext,
     });
 
     return {
@@ -26,7 +27,8 @@ function devtoolReal(
                 node,
                 json: componentContext.json,
                 origJson: componentContext.origJson,
-                templateContext: componentContext.templateContext
+                templateContext: componentContext.templateContext,
+                componentContext
             });
         },
         destroy() {
@@ -35,7 +37,8 @@ function devtoolReal(
                 node,
                 json: componentContext.json,
                 origJson: componentContext.origJson,
-                templateContext: componentContext.templateContext
+                templateContext: componentContext.templateContext,
+                componentContext
             });
         }
     };

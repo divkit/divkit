@@ -9,6 +9,8 @@ import type { evalExpression } from '../expressions/eval';
 import type { Node } from '../expressions/ast';
 import type { CustomFunctions } from '../expressions/funcs/customFuncs';
 
+export type StateSetter = (stateId: string) => Promise<ComponentContext | undefined>;
+
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
     parent?: ComponentContext;
@@ -17,12 +19,15 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     origJson?: MaybeMissing<DivBaseData> | undefined;
     templateContext: TemplateContext;
     variables?: Map<string, Variable>;
+    selfVariables?: Set<string>;
     customFunctions?: CustomFunctions;
     isRootState?: boolean;
+    isTooltipRoot?: boolean;
     fakeElement?: boolean;
     parentContext?: ComponentContext;
     id: string;
     animators?: Record<string, MaybeMissing<Animator>>;
+    states?: Record<string, StateSetter[]>;
 
     logError(error: WrappedError): void;
     execAnyActions(
@@ -49,17 +54,13 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     produceChildContext(div: MaybeMissing<DivBaseData>, opts?: {
         path?: string | number | undefined;
         isRootState?: boolean;
+        isTooltipRoot?: boolean;
         fake?: boolean;
         variables?: Map<string, Variable>;
         id?: string;
-        tooltips?: {
-            internalId: number;
-            ownerNode: HTMLElement;
-            desc: MaybeMissing<Tooltip>;
-            timeoutId: number | null;
-        }[];
     }): ComponentContext;
     getVariable(varName: string, type?: VariableType): Variable | undefined;
     getAnimator(name: string): MaybeMissing<Animator> | undefined;
+    registerState(stateId: string, setState: StateSetter): () => void;
     destroy(): void;
 }

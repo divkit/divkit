@@ -16,7 +16,7 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.state.InMemoryDivStateCache
-import com.yandex.div2.DivState
+import com.yandex.div2.Div
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -48,6 +48,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     private val stateLayout = (viewCreator.create(divOne.div, ExpressionResolver.EMPTY) as DivStateLayout).apply {
         layoutParams = defaultLayoutParams()
     }
+    private val rootPath = DivStatePath.fromRootDiv(0, divOne.div)
 
     private val stateBinder = DivStateBinder(
         baseBinder = baseBinder,
@@ -68,32 +69,32 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
 
     @Test
     fun `initial bind do not call release`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
 
         verify(visitor, never()).release(any())
     }
 
     @Test
     fun `rebind do call release on old views`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
 
         val allChildren = stateLayout.childrenToFlatList()
 
-        stateBinder.bindView(bindingContext, stateLayout, divTwo.asDivState, rootPath())
+        stateBinder.bindView(bindingContext, stateLayout, divTwo.asDivState, rootPath)
 
         verifyAllChildrenReleased(allChildren)
     }
 
     @Test
     fun `change state release old views`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
         switchToState("second")
         val stateToBeSwitched: DivStateLayout = stateLayout
             .findStateLayout(DivStatePath.parse("0/state_container/first"))
             ?: throw AssertionError("failed to find state")
         val allChildren: List<View> = stateToBeSwitched.childrenToFlatList()
 
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
 
         verifyAllChildrenReleased(allChildren)
     }
@@ -112,5 +113,4 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     }
 }
 
-private val UnitTestData.asDivState: DivState
-    get() = this.div.value() as DivState
+private val UnitTestData.asDivState get() = div as Div.State

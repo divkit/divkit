@@ -5,19 +5,23 @@ import org.junit.Test
 
 
 class DivStatePathTest {
-    private val rootPath = DivStatePath.fromState(0)
-    private val firstLvlPath = DivStatePath.parse("0/a/s")
-    private val scndLvlPath = DivStatePath.parse("0/a/s/d/f")
-    private val thrdLvlPath = DivStatePath.parse("0/a/s/d/f/g/h")
+    private val rootPath = DivStatePath(0, emptyList(), listOf("0", "a"))
+    private val firstLvlPath = DivStatePath(0, listOf("a" to "s"), listOf("0", "a", "s", "d"))
+    private val scndLvlPath = DivStatePath(0, listOf("a" to "s", "d" to "f"), listOf("0", "a", "s", "d", "f", "g"))
+    private val thrdLvlPath = DivStatePath(
+        0,
+        listOf("a" to "s", "d" to "f", "g" to "h"),
+        listOf("0", "a", "s", "d", "f", "g", "h")
+    )
 
     @Test
     fun parse() {
         Assert.assertEquals(
-            DivStatePath(1, mutableListOf("foo" to "bar")),
+            DivStatePath(1, listOf("foo" to "bar"), listOf("1", "foo", "bar")),
             DivStatePath.parse("1/foo/bar"),
         )
         Assert.assertEquals(
-            DivStatePath(1, mutableListOf("foo" to "bar", "lol" to "kek")),
+            DivStatePath(1, listOf("foo" to "bar", "lol" to "kek"), listOf("1", "foo", "bar", "lol", "kek")),
             DivStatePath.parse("1/foo/bar/lol/kek"),
         )
     }
@@ -56,7 +60,7 @@ class DivStatePathTest {
     }
 
     @Test
-    fun `previousStep works correctly`() {
+    fun `parentState works correctly`() {
         var tested = thrdLvlPath.parentState()
 
         Assert.assertEquals(tested, scndLvlPath)

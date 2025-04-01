@@ -1,3 +1,4 @@
+import LayoutKitInterface
 import VGSL
 
 protocol DivPatchCallbacks {
@@ -19,11 +20,48 @@ extension DivData {
     applyPatch(patch, callbacks: Callbacks.empty)
   }
 
+  public func applyPatchWithActions(
+    _ patch: DivPatch,
+    context: DivBlockModelingContext
+  ) -> DivData {
+    var changedElementIds: [String] = []
+
+    let callbacks = Callbacks(
+      elementChanged: { id in
+        changedElementIds.append(id)
+      }
+    )
+
+    let patchedData = applyPatch(patch, callbacks: callbacks)
+
+    let allChangesApplied = changedElementIds.count == patch.changes.count
+    let isTransactional = patch.resolveMode(context.expressionResolver) == .transactional
+    let isPatchApplied = !isTransactional || allChangesApplied
+
+    if isPatchApplied {
+      changedElementIds.forEach { id in
+        context.triggersStorage?.reset(elementId: id)
+      }
+    }
+    let actions = isPatchApplied ? patch.onAppliedActions : patch.onFailedActions
+    actions?.forEach { action in
+      context.actionHandler?.handle(
+        action,
+        path: UIElementPath(context.cardId.rawValue),
+        source: .callback,
+        sender: nil
+      )
+    }
+
+    return isPatchApplied ? patchedData : self
+  }
+
   func applyPatch(_ patch: DivPatch, callbacks: DivPatchCallbacks) -> DivData {
     let states = states.map {
       State(div: $0.div.applySingleItemPatch(patch, callbacks: callbacks), stateId: $0.stateId)
     }
     return DivData(
+      functions: functions,
       logId: logId,
       states: states,
       timers: timers,
@@ -284,6 +322,7 @@ extension DivPager {
       background: background,
       border: border,
       columnSpan: columnSpan,
+      crossAxisAlignment: crossAxisAlignment,
       defaultItem: defaultItem,
       disappearActions: disappearActions,
       extensions: extensions,

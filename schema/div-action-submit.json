@@ -36,7 +36,13 @@
           "default_value": "post",
           "$description": "translations.json#/div_action_submit_request_method",
           "enum": [
-            "get", "post", "put", "patch", "delete", "head", "options"
+            "get",
+            "post",
+            "put",
+            "patch",
+            "delete",
+            "head",
+            "options"
           ]
         }
       },
@@ -76,7 +82,9 @@
     }
   },
   "platforms": [
-    "ios"
+    "android",
+    "ios",
+    "web"
   ],
   "required": [
     "type",

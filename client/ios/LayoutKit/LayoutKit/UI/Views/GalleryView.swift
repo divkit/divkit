@@ -129,7 +129,7 @@ public final class GalleryView: BlockView {
         deferredStateSetting = .pending(self.state)
       case .idle, .pending, .firstLayoutPerformed:
         if oldModel?.path == model.path {
-          updateContentOffset(to: self.state.contentPosition, animated: true)
+          updateContentOffset(to: self.state.contentPosition, animated: self.state.animated)
         } else {
           collectionView.performWithDetachedDelegate {
             updateContentOffset(to: self.state.contentPosition, animated: false)
@@ -238,7 +238,7 @@ public final class GalleryView: BlockView {
     }
     if case let .pending(state) = deferredStateSetting {
       collectionView.performWithDetachedDelegate {
-        updateContentOffset(to: state.contentPosition, animated: false)
+        updateContentOffset(to: state.contentPosition, animated: state.animated)
       }
     }
     deferredStateSetting = .idle
@@ -285,17 +285,21 @@ extension GalleryView: ScrollDelegate {
       break
     case let .autoPaging(inertionEnabled):
       guard !inertionEnabled else { return }
+      let startPage = layout.pageIndex(forContentOffset: scrollStartOffset)
       let isHorizontal = model.direction.isHorizontal
+
       let resultOffset: CGPoint
       if isHorizontal {
         let delta = CGPoint(x: targetContentOffset.pointee.x - scrollStartOffset, y: 0)
-        let absoluteDelta = CGPoint(x: min(bounds.width, abs(delta.x)), y: 0)
         let sign = CGPoint(x: delta.x == 0 ? 0 : delta.x / abs(delta.x), y: 1)
+        let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.x) - scrollStartOffset
+        let absoluteDelta = CGPoint(x: min(abs(maxDelta), abs(delta.x)), y: 0)
         resultOffset = CGPoint(x: scrollStartOffset + absoluteDelta.x * sign.x, y: 0)
       } else {
         let delta = CGPoint(x: 0, y: targetContentOffset.pointee.y - scrollStartOffset)
-        let absoluteDelta = CGPoint(x: 0, y: min(bounds.height, abs(delta.y)))
         let sign = CGPoint(x: 1, y: delta.y == 0 ? 0 : delta.y / abs(delta.y))
+        let maxDelta = layout.contentOffset(pageIndex: startPage + 1 * sign.y) - scrollStartOffset
+        let absoluteDelta = CGPoint(x: 0, y: min(abs(maxDelta), abs(delta.y)))
         resultOffset = CGPoint(x: 0, y: scrollStartOffset + absoluteDelta.y * sign.y)
       }
       targetContentOffset.pointee = resultOffset
@@ -310,7 +314,8 @@ extension GalleryView: ScrollDelegate {
       origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY },
       bufferSize: model.bufferSize,
       boundsSize: model.direction.isHorizontal ? bounds.width : bounds.height,
-      alignment: model.alignment
+      alignment: model.alignment,
+      insetMode: model.metrics.axialInsetMode
     ) {
       offset = newPosition.offset
       scrollStartOffset = offset
@@ -334,11 +339,13 @@ extension GalleryView: ScrollDelegate {
       contentPosition = .paging(index: pageIndex)
     }
 
+    let isScrolling = scrollView.isTracking || scrollView.isDecelerating || scrollView.isDragging
     let newState = GalleryViewState(
       contentPosition: contentPosition,
       itemsCount: model.items.count,
-      isScrolling: true,
-      scrollRange: state.scrollRange
+      isScrolling: isScrolling,
+      scrollRange: state.scrollRange,
+      animated: state.animated
     )
     setState(newState, notifyingObservers: true)
     updatesDelegate?.onContentOffsetChanged(offset, in: model)
@@ -370,7 +377,8 @@ extension GalleryView: ScrollDelegate {
       contentPosition: state.contentPosition,
       itemsCount: model.items.count,
       isScrolling: false,
-      scrollRange: state.scrollRange
+      scrollRange: state.scrollRange,
+      animated: false
     )
     setState(newState, notifyingObservers: true)
     visibilityDelegate?.onGalleryVisibilityChanged()
@@ -468,7 +476,8 @@ extension GalleryView {
       isScrolling: state.isScrolling,
       scrollRange: model.direction.isHorizontal ?
         layout.contentSize.width - bounds.width :
-        layout.contentSize.height - bounds.height
+        layout.contentSize.height - bounds.height,
+      animated: state.animated
     )
   }
 }

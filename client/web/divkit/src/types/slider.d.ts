@@ -4,6 +4,7 @@ import type { Dimension } from './sizes';
 import type { FontWeight } from './text';
 import type { Drawable } from './drawable';
 import type { BooleanInt } from '../../typings/common';
+import type { EdgeInsets } from './edgeInserts';
 
 export interface Point {
     x: Dimension;
@@ -17,6 +18,14 @@ export interface SliderTextStyle {
     font_weight_value?: number;
     text_color?: string;
     offset?: Point;
+}
+
+export interface SliderRange {
+    start?: number;
+    end?: number;
+    track_active_style?: Drawable;
+    track_inactive_style?: Drawable;
+    margins?: EdgeInsets;
 }
 
 export interface DivSliderData extends DivBaseData, DivActionableData {
@@ -34,6 +43,7 @@ export interface DivSliderData extends DivBaseData, DivActionableData {
     tick_mark_active_style?: Drawable;
     track_inactive_style: Drawable;
     tick_mark_inactive_style?: Drawable;
+    ranges?: SliderRange[];
     secondary_value_accessibility?: Accessibility;
     is_enabled?: BooleanInt;
 }

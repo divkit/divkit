@@ -7,6 +7,7 @@ typealias JsonPublisher = AnyPublisher<JsonDictionary, Never>
 
 struct PlaygroundJsonProvider {
   private let jsonSubject = PassthroughSubject<JsonDictionary, Never>()
+  private let state = State()
 
   var jsonPublisher: JsonPublisher {
     jsonSubject.eraseToAnyPublisher()
@@ -21,12 +22,29 @@ struct PlaygroundJsonProvider {
       let palette = Palette(json: (try? json.getOptionalField("palette")) ?? [:])
 
       await MainActor.run {
-        let paletteVaraibles = palette.makeVariables(theme: UserPreferences.playgroundTheme)
-        paletteVariableStorage.replaceAll(paletteVaraibles)
+        state.currentJson = json
+        state.pallete = palette
+
+        refreshPalette()
 
         jsonSubject.send(json)
       }
     }
+  }
+
+  @MainActor
+  func refreshPalette() {
+    guard let palette = state.pallete else {
+      return
+    }
+
+    let paletteVariables = palette.makeVariables(theme: UserPreferences.playgroundTheme)
+    paletteVariableStorage.replaceAll(paletteVariables)
+  }
+
+  private final class State: Sendable {
+    @MainActor var currentJson: JsonDictionary = [:]
+    @MainActor var pallete: Palette?
   }
 }
 

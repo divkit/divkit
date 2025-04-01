@@ -218,7 +218,11 @@
         separators = [];
 
         let children = [...parentElement.children]
-            .filter(it => it !== node && !it.classList.contains(outerCss.outer__border)) as HTMLElement[];
+            .filter(it => it !== node &&
+                it instanceof HTMLElement &&
+                !it.classList.contains(outerCss.outer__border) &&
+                getComputedStyle(it).display !== 'none'
+            ) as HTMLElement[];
         let rows: HTMLElement[][] = [];
 
         while (children.length) {

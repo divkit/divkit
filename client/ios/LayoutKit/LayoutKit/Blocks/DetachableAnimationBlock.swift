@@ -1,13 +1,14 @@
+import Foundation
 import VGSL
 
 public struct ChangeBoundsTransition: Equatable {
-  public let duration: Duration
-  public let delay: Delay
+  public let duration: TimeInterval
+  public let delay: TimeInterval
   public let timingFunction: TimingFunction
 
   public init(
-    duration: Duration,
-    delay: Delay,
+    duration: TimeInterval,
+    delay: TimeInterval,
     timingFunction: TimingFunction
   ) {
     self.duration = duration

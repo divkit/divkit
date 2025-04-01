@@ -18,10 +18,6 @@ final class DivBlockProvider {
 
   private(set) var id: DivViewId!
 
-  var cardId: DivCardID {
-    id.cardId
-  }
-
   private(set) var cardSize: DivViewSize? {
     didSet {
       if let cardSize, let id {
@@ -53,7 +49,12 @@ final class DivBlockProvider {
     }
   }
 
-  var lastVisibleBounds: CGRect = .zero
+  var cardId: DivCardID {
+    id.cardId
+  }
+
+  @ObservableProperty
+  private(set) var shouldRecalculateVisibility: Bool = true
 
   var accessibilityElementsStorage: DivAccessibilityElementsStorage?
 
@@ -167,7 +168,6 @@ final class DivBlockProvider {
 
   private func update(divData: DivData?) {
     guard divData !== self.divData else { return }
-    block = noDataBlock
     guard let divData else {
       self.divData = nil
       return
@@ -178,10 +178,9 @@ final class DivBlockProvider {
     self.divData = divData
   }
 
-  private func update(reasons: [DivActionURLHandler.UpdateReason]) {
+  func update(reasons: [DivCardUpdateReason]) {
     guard var divData else {
-      guard debugParams.isDebugInfoEnabled else { return }
-      block = makeErrorsBlock(dataErrors)
+      block = debugParams.isDebugInfoEnabled ? makeErrorsBlock(dataErrors) : noDataBlock
       return
     }
 
@@ -189,23 +188,6 @@ final class DivBlockProvider {
       return
     }
 
-    reasons.compactMap { $0.patch(for: self.cardId) }.forEach {
-      divData = divData.applyPatch(
-        $0,
-        callbacks: Callbacks(elementChanged: { [weak self] id in
-          self?.divKitComponents.triggersStorage.reset(elementId: id)
-        })
-      )
-      $0.onAppliedActions?.forEach { action in
-        divKitComponents.actionHandler.handle(
-          action,
-          path: UIElementPath(cardId.rawValue),
-          source: .callback,
-          sender: nil
-        )
-      }
-    }
-    self.divData = divData
     let context = divKitComponents.makeContext(
       cardId: cardId,
       additionalId: id.additionalId,
@@ -213,6 +195,20 @@ final class DivBlockProvider {
       debugParams: debugParams,
       parentScrollView: parentScrollView
     )
+
+    reasons.compactMap { $0.patch(for: self.cardId) }.forEach { patch in
+      divData = divData.applyPatchWithActions(
+        patch,
+        context: context
+      )
+    }
+
+    self.divData = divData
+
+    if reasons.filter(\.isVariable).isEmpty {
+      context.layoutProviderHandler?.resetUpdatedVariables()
+      shouldRecalculateVisibility = true
+    }
     dataErrors.forEach { context.errorsStorage.add($0) }
     do {
       block = try measurements.renderTime.updateMeasure {
@@ -225,6 +221,9 @@ final class DivBlockProvider {
       for error in context.errorsStorage.errors {
         divKitComponents.reporter.reportError(cardId: cardId, error: error)
       }
+      if !divKitComponents.flagsInfo.initializeTriggerOnSet {
+        divKitComponents.triggersStorage.initialize(cardId: cardId)
+      }
     } catch {
       divKitComponents.reporter.reportError(
         cardId: cardId,
@@ -234,7 +233,7 @@ final class DivBlockProvider {
     }
   }
 
-  private func needUpdateBlock(reasons: [DivActionURLHandler.UpdateReason]) -> Bool {
+  private func needUpdateBlock(reasons: [DivCardUpdateReason]) -> Bool {
     guard !reasons.isEmpty else { return true }
     for reason in reasons {
       let cardId: DivCardID
@@ -370,7 +369,7 @@ final class DivBlockProvider {
 
 private let noDataBlock = EmptyBlock.zeroSized
 
-extension DivActionURLHandler.UpdateReason {
+extension DivCardUpdateReason {
   fileprivate func patch(for divCardId: DivCardID) -> DivPatch? {
     switch self {
     case let .patch(cardId, patch):

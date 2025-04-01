@@ -1,6 +1,6 @@
 {
   "name": "@divkitframework/visual-editor",
-  "version": "0.4.5",
+  "version": "0.4.7",
   "description": "Visual editor for DivKit",
   "keywords": [
     "server-driven-ui",
@@ -36,7 +36,7 @@
     "@codemirror/state": "6.4.1",
     "@codemirror/theme-one-dark": "6.1.2",
     "@codemirror/view": "6.27.0",
-    "@divkitframework/divkit": "30.30.0-canary-0ac7ad5f4ccce7713c18ef8bde4ad0b62ea13068",
+    "@divkitframework/divkit": "31.2.0",
     "@rollup/plugin-typescript": "11.1.6",
     "@sveltejs/vite-plugin-svelte": "3.1.1",
     "@tsconfig/svelte": "5.0.4",
@@ -50,12 +50,12 @@
     "eslint-plugin-svelte": "2.39.0",
     "lottie-web": "5.11.0",
     "rollup-plugin-dts": "6.1.1",
-    "svelte": "4.2.17",
+    "svelte": "4.2.19",
     "svelte-check": "3.8.0",
     "terser": "5.17.7",
     "tslib": "^2.5.0",
     "typescript": "5.4.5",
-    "vite": "5.2.12",
+    "vite": "5.2.14",
     "vitest": "2.0.2"
   }
 }

@@ -33,6 +33,8 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   public struct Child: Equatable {
+    static let empty = Child(content: EmptyBlock.zeroSized)
+
     public var content: Block
     /// Alignment for dimension crossing container direction
     public let crossAlignment: CrossAlignment
@@ -486,20 +488,31 @@ private func makeChildrenWithSeparators(
   guard layoutMode == .noWrap, let separator else {
     return children
   }
-  return Array<ContainerBlock.Child>.build {
-    if separator.showAtStart {
-      separator.style
-    }
-    for (index, child) in children.enumerated() {
-      if separator.showBetween, index > 0 {
-        separator.style
+
+  var childrenWithSeparators: [ContainerBlock.Child] = []
+  var hasVisilbeItems = false
+  for (index, child) in children.enumerated() {
+    let isCurrentItemVisible = !child.content.isEmpty
+    if separator.showBetween, index > 0 {
+      if isCurrentItemVisible, hasVisilbeItems {
+        childrenWithSeparators.append(separator.style)
+      } else {
+        childrenWithSeparators.append(.empty)
       }
-      child
     }
-    if separator.showAtEnd {
-      separator.style
-    }
+    childrenWithSeparators.append(child)
+    hasVisilbeItems = hasVisilbeItems || isCurrentItemVisible
   }
+
+  if separator.showAtStart {
+    childrenWithSeparators.insert(hasVisilbeItems ? separator.style : .empty, at: 0)
+  }
+
+  if separator.showAtEnd {
+    childrenWithSeparators.append(hasVisilbeItems ? separator.style : .empty)
+  }
+
+  return childrenWithSeparators
 }
 
 extension ContainerBlock: Equatable {

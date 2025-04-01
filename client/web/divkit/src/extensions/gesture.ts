@@ -1,6 +1,4 @@
-import { tick } from 'svelte';
 import type { Action, DivExtension, DivExtensionContext } from '../../typings/common';
-import type { WrappedError } from '../utils/wrapError';
 
 interface Params {
     swipe_up?: Action[];
@@ -84,6 +82,11 @@ export class Gesture implements DivExtension {
         node.addEventListener('pointermove', this.onPointerMove);
         node.addEventListener('pointerup', this.onPointerUp);
         node.addEventListener('pointercancel', this.onPointerUp);
+        node.style.pointerEvents = 'auto';
+    }
+
+    updateView(node: HTMLElement): void {
+        node.style.pointerEvents = 'auto';
     }
 
     unmountView(node: HTMLElement, _context: DivExtensionContext): void {
@@ -91,5 +94,6 @@ export class Gesture implements DivExtension {
         node.removeEventListener('pointermove', this.onPointerMove);
         node.removeEventListener('pointerup', this.onPointerUp);
         node.removeEventListener('pointercancel', this.onPointerUp);
+        node.style.pointerEvents = '';
     }
 }

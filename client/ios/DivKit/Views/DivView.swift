@@ -15,8 +15,16 @@ import VGSL
 public final class DivView: VisibleBoundsTrackingView {
   private let divKitComponents: DivKitComponents
   private let preloader: DivViewPreloader
-  private var blockProvider: DivBlockProvider?
   private var blockSubscription: Disposable?
+  private var shouldRecalculateVisibilitySubscription: Disposable?
+
+  private var shouldRecalculateVisibility = true
+
+  private var blockProvider: DivBlockProvider? {
+    didSet {
+      onVisibleBoundsChanged(to: bounds)
+    }
+  }
 
   private var blockView: BlockView? {
     didSet {
@@ -24,10 +32,14 @@ public final class DivView: VisibleBoundsTrackingView {
         oldValue?.removeFromSuperview()
         blockView.flatMap(addSubview(_:))
       }
+
+      if blockView != nil {
+        shouldRecalculateVisibility = true
+      }
     }
   }
 
-  private var oldBounds: CGRect = .zero
+  private let boundsTracker = BoundsTracker()
 
   /// Initializes a new `DivView` instance.
   ///
@@ -41,6 +53,10 @@ public final class DivView: VisibleBoundsTrackingView {
     self.divKitComponents = divKitComponents
     preloader = divViewPreloader ?? DivViewPreloader(divKitComponents: divKitComponents)
     super.init(frame: .zero)
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    tapGestureRecognizer.delegate = self
+    tapGestureRecognizer.cancelsTouchesInView = false
+    addGestureRecognizer(tapGestureRecognizer)
   }
 
   /// Sets the source of the ``DivView`` and updates the layout.
@@ -62,6 +78,10 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    shouldRecalculateVisibilitySubscription = blockProvider?
+      .$shouldRecalculateVisibility.currentAndNewValues.addObserver { [weak self] in
+        self?.shouldRecalculateVisibility = $0
+      }
     preloader.setSourceTask?.cancel()
     await preloader.setSource(source, debugParams: debugParams)
   }
@@ -86,6 +106,10 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    shouldRecalculateVisibilitySubscription = blockProvider?
+      .$shouldRecalculateVisibility.currentAndNewValues.addObserver { [weak self] in
+        self?.shouldRecalculateVisibility = $0
+      }
     preloader.setSource(source, debugParams: debugParams)
   }
 
@@ -103,6 +127,10 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    shouldRecalculateVisibilitySubscription = blockProvider?
+      .$shouldRecalculateVisibility.currentAndNewValues.addObserver { [weak self] in
+        self?.shouldRecalculateVisibility = $0
+      }
   }
 
   /// Sets the parent scroll view for the DivView.
@@ -110,6 +138,14 @@ public final class DivView: VisibleBoundsTrackingView {
   /// This is used when you require a sub-scroll in a `DivInput`.
   public func setParentScrollView(_ parentScrollView: ScrollView) {
     blockProvider?.parentScrollView = parentScrollView
+  }
+
+  /// Applies the patch to the card with id.
+  /// - Parameters:
+  /// - patch: `DivPatch` that should be applied to the card.
+  /// - cardId: ID of the card to which the patch should be applied.
+  public func applyPatch(_ patch: DivPatch, cardId: DivCardID) {
+    blockProvider?.update(reasons: [.patch(cardId, patch)])
   }
 
   @available(*, unavailable)
@@ -120,12 +156,33 @@ public final class DivView: VisibleBoundsTrackingView {
   public override func layoutSubviews() {
     super.layoutSubviews()
     guard let blockView else { return }
-    blockView.onVisibleBoundsChanged(
-      from: oldBounds,
-      to: blockProvider?.lastVisibleBounds ?? .zero
-    )
+
     blockView.frame = bounds
     blockView.layoutIfNeeded()
+
+    if shouldRecalculateVisibility {
+      blockView.onVisibleBoundsChanged(
+        from: boundsTracker.previousBounds,
+        to: boundsTracker.lastVisibleBounds
+      )
+
+      shouldRecalculateVisibility = false
+      boundsTracker.updatePreviousBounds()
+    }
+  }
+
+  public override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
+
+    boundsDidChange()
+  }
+
+  public override func removeFromSuperview() {
+    super.removeFromSuperview()
+    blockView?.onVisibleBoundsChanged(
+      from: boundsTracker.lastVisibleBounds,
+      to: .zero
+    )
   }
 
   /// Returns ``DivCardSize`` of the ``DivView``.
@@ -202,11 +259,24 @@ public final class DivView: VisibleBoundsTrackingView {
     setNeedsLayout()
   }
 
+  private func boundsDidChange() {
+    if blockProvider?.cardSize?.width == .matchParent ||
+      blockProvider?.cardSize?.height == .matchParent {
+      invalidateIntrinsicContentSize()
+    }
+  }
+
+  @objc private func handleTap() {
+    clearFocus()
+  }
+
   /// Notifies the DivView about changes in its visible bounds.
   /// - Parameters:
   ///  - to: The new bounds rectangle.
   public func onVisibleBoundsChanged(to: CGRect) {
-    blockProvider?.lastVisibleBounds = to
+    guard boundsTracker.append(to) else { return }
+
+    shouldRecalculateVisibility = true
     if window == nil {
       forceLayout()
     } else {
@@ -230,6 +300,21 @@ extension DivView: ElementStateObserver {
     divKitComponents.blockStateStorage.focusedElementChanged(isFocused: isFocused, forPath: path)
     blockProvider?.update(path: path, isFocused: isFocused)
   }
+
+  public func clearFocus() {
+    let blockStateStorage = divKitComponents.blockStateStorage
+    let focusedElement = blockStateStorage.getFocusedElement()
+    guard focusedElement != nil else {
+      return
+    }
+    blockStateStorage.clearFocus()
+    UIApplication.shared.sendAction(
+      #selector(UIResponder.resignFirstResponder),
+      to: nil,
+      from: nil,
+      for: nil
+    )
+  }
 }
 
 extension DivView: UIActionEventPerforming {
@@ -248,21 +333,6 @@ extension DivView: UIActionEventPerforming {
 }
 
 extension DivView {
-  public override func layoutSublayers(of layer: CALayer) {
-    super.layoutSublayers(of: layer)
-    boundsDidChange(bounds: bounds)
-  }
-
-  private func boundsDidChange(bounds: CGRect) {
-    if oldBounds.width != bounds.width, blockProvider?.cardSize?.width == .matchParent {
-      invalidateIntrinsicContentSize()
-    }
-    if oldBounds.height != bounds.height, blockProvider?.cardSize?.height == .matchParent {
-      invalidateIntrinsicContentSize()
-    }
-    oldBounds = bounds
-  }
-
   public override var accessibilityElements: [Any]? {
     get {
       guard let elements = self.blockProvider?.accessibilityElementsStorage?
@@ -274,6 +344,26 @@ extension DivView {
       return elements
     }
     set {}
+  }
+
+  private class BoundsTracker {
+    private(set) var lastVisibleBounds = CGRect.zero
+    private(set) var previousBounds = CGRect.zero
+
+    func append(_ bounds: CGRect) -> Bool {
+      if lastVisibleBounds != bounds {
+        previousBounds = lastVisibleBounds
+        lastVisibleBounds = bounds
+
+        return true
+      }
+
+      return false
+    }
+
+    func updatePreviousBounds() {
+      previousBounds = lastVisibleBounds
+    }
   }
 }
 
@@ -299,5 +389,14 @@ extension UIViewController {
       alert.addAction(action)
     }
     present(alert, animated: true)
+  }
+}
+
+extension DivView: UIGestureRecognizerDelegate {
+  public func gestureRecognizer(
+    _: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
+  ) -> Bool {
+    true
   }
 }

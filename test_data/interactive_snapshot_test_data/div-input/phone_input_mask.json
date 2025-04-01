@@ -1,7 +1,8 @@
 {
   "description": "Phone input mask",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "card": {
@@ -91,4 +92,3 @@
     }
   ]
 }
-

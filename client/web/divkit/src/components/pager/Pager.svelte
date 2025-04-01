@@ -45,27 +45,30 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Orientation } from '../../types/orientation';
     import type { PagerData } from '../../stores/pagers';
-    import type { Overflow, SwitchElements } from '../../types/switch-elements';
+    import type { SwitchElements } from '../../types/switch-elements';
     import type { ComponentContext } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
     import type { Variable } from '../../expressions/variable';
+    import type { Overflow } from '../../../typings/common';
+    import type { EdgeInsets } from '../../types/edgeInserts';
 
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
     import { correctGeneralOrientation } from '../../utils/correctGeneralOrientation';
-    import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
     import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
     import { constStore } from '../../utils/constStore';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivPagerData>;
@@ -98,15 +101,27 @@
 
     let orientation: Orientation = 'horizontal';
     let itemSpacing = '0em';
+    let paddingObj: EdgeInsets = {};
     let padding = '';
     let sizeVal = '';
 
+    let childLayoutParams: LayoutParams = {};
+    let crossAxisAlignment: 'start' | 'center' | 'end' = 'start';
+    let scrollAxisAlignment: 'start' | 'center' | 'end' = 'center';
+
+    let scrollPaddings: EdgeInsets = {};
+
     let items: ComponentContext[] = [];
+    let prevContext: ComponentContext<DivPagerData> | undefined;
 
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
-        padding = '';
+        paddingObj = {};
+        childLayoutParams = {};
+        crossAxisAlignment = 'start';
+        scrollAxisAlignment = 'center';
+        scrollPaddings = {};
     }
 
     $: if (origJson) {
@@ -123,9 +138,11 @@
     $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
     $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
+    $: jsonCrossAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_axis_alignment);
+    $: jsonScrollAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.scroll_axis_alignment);
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
-        componentContext = {
+        componentContext = prevContext = {
             ...componentContext,
             json: {
                 ...componentContext.json,
@@ -155,17 +172,33 @@
             });
         }
 
-        items.forEach(context => {
-            context.destroy();
-        });
+        const unusedContexts = new Set(items);
+        const jsonToContextMap = new Map<unknown, ComponentContext>();
+
+        if (prevContext === componentContext) {
+            items.forEach(context => {
+                jsonToContextMap.set(context.json, context);
+            });
+        }
 
         items = newItems.map((item, index) => {
+            const found = jsonToContextMap.get(item.div);
+            if (found) {
+                unusedContexts.delete(found);
+                return found;
+            }
+
             return componentContext.produceChildContext(item.div, {
                 path: index,
                 variables: item.vars,
                 id: item.id
             });
         });
+
+        for (const ctx of unusedContexts) {
+            ctx.destroy();
+        }
+        prevContext = componentContext;
     }
 
     $: {
@@ -188,7 +221,7 @@
         if (!$jsonLayoutMode) {
             hasLayoutModeError = true;
             componentContext.logError(wrapError(new Error('Empty "layout_mode" prop for div "pager"')));
-        } else if ($jsonLayoutMode.type !== 'percentage' && $jsonLayoutMode.type !== 'fixed') {
+        } else if ($jsonLayoutMode.type !== 'percentage' && $jsonLayoutMode.type !== 'fixed' && $jsonLayoutMode.type !== 'wrap_content') {
             hasLayoutModeError = true;
             componentContext.logError(wrapError(new Error('Incorrect value of "layout_mode.type" for div "pager"')));
         } else {
@@ -208,7 +241,14 @@
     }
 
     $: {
-        padding = correctEdgeInserts($jsonPaddings, $direction, padding);
+        paddingObj = correctEdgeInsertsObject($jsonPaddings, paddingObj);
+        padding = edgeInsertsToCss(paddingObj, $direction);
+        scrollPaddings = {
+            top: paddingObj.top,
+            right: ($direction === 'ltr' ? paddingObj.start : paddingObj.end) ?? paddingObj.left ?? 0,
+            bottom: paddingObj.bottom,
+            left: ($direction === 'ltr' ? paddingObj.end : paddingObj.start) ?? paddingObj.right ?? 0
+        };
     }
 
     $: gridAuto = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
@@ -237,17 +277,38 @@
         } else if ($jsonLayoutMode?.type === 'percentage') {
             const pageWidth = $jsonLayoutMode.page_width?.value;
             sizeVal = `${Number(pageWidth)}%`;
+        } else if ($jsonLayoutMode?.type === 'wrap_content') {
+            sizeVal = 'minmax(max-content, auto)';
         }
+    }
+
+    $: if ($jsonCrossAxisAlignment === 'start' || $jsonCrossAxisAlignment === 'center' || $jsonCrossAxisAlignment === 'end') {
+        crossAxisAlignment = $jsonCrossAxisAlignment;
+
+        childLayoutParams = {
+            [orientation === 'horizontal' ? 'parentVAlign' : 'parentHAlign']: crossAxisAlignment
+        };
+    }
+
+    $: if ($jsonScrollAxisAlignment === 'start' || $jsonScrollAxisAlignment === 'center' || $jsonScrollAxisAlignment === 'end') {
+        scrollAxisAlignment = $jsonScrollAxisAlignment;
     }
 
     $: style = {
         'grid-gap': itemSpacing,
         padding,
-        [gridAuto]: sizeVal
+        [gridAuto]: sizeVal,
+        'scroll-padding-top': scrollPaddings.top ? pxToEm(scrollPaddings.top) : undefined,
+        'scroll-padding-right': scrollPaddings.right ? pxToEm(scrollPaddings.right) : undefined,
+        'scroll-padding-bottom': scrollPaddings.bottom ? pxToEm(scrollPaddings.bottom) : undefined,
+        'scroll-padding-left': scrollPaddings.left ? pxToEm(scrollPaddings.left) : undefined,
     };
 
     $: mods = {
-        orientation
+        clip: rootCtx.pagerChildrenClipEnabled,
+        orientation,
+        'cross-align': crossAxisAlignment,
+        'scroll-align': scrollAxisAlignment
     };
 
     $: hasError = hasLayoutModeError;
@@ -322,13 +383,25 @@
     $: runSelectedActions(currentItem);
 
     function scrollToPagerItem(index: number, behavior: ScrollBehavior = 'smooth'): void {
+        if (!pagerItemsWrapper) {
+            return;
+        }
+
         const isHorizontal = orientation === 'horizontal';
         const nextPagerItem = pagerItemsWrapper.children[index] as HTMLElement;
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
         const elementSize: keyof HTMLElement = isHorizontal ? 'offsetWidth' : 'offsetHeight';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
-        const position = nextPagerItem[elementOffset] + nextPagerItem[elementSize] / 2 -
-            pagerItemsWrapper[elementSize] / 2;
+        const scrollSize: keyof HTMLElement = isHorizontal ? 'scrollWidth' : 'scrollHeight';
+        let position;
+        if (index === 0) {
+            position = 0;
+        } else if (index === items.length - 1) {
+            position = pagerItemsWrapper[scrollSize];
+        } else {
+            position = nextPagerItem[elementOffset] + nextPagerItem[elementSize] / 2 -
+                pagerItemsWrapper[elementSize] / 2;
+        }
 
         pagerItemsWrapper.scroll({
             [scrollDirection]: position,
@@ -337,32 +410,30 @@
         currentItem = index;
     }
 
-    function setPreviousItem(step: number, overflow: Overflow) {
-        let previousItem = currentItem - step;
-
-        if (previousItem < 0) {
-            previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, items.length) : 0;
+    function clampIndex(index: number, overflow: Overflow): number {
+        if (index > items.length - 1) {
+            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : items.length - 1;
+        }
+        if (index < 0) {
+            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : 0;
         }
 
-        scrollToPagerItem(previousItem);
+        return index;
     }
 
-    function setNextItem(step: number, overflow: Overflow) {
-        let nextItem = currentItem + step;
+    function setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
+        let previousItem = clampIndex(currentItem - step, overflow);
 
-        if (nextItem > items.length - 1) {
-            nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, items.length) : items.length - 1;
-        }
-
-        scrollToPagerItem(nextItem);
+        scrollToPagerItem(previousItem, animated ? 'smooth' : 'instant');
     }
 
-    $: if (componentContext.json) {
-        const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
-        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
-            currentItem = prevSelectedItem = defaultItem;
-        }
+    function setNextItem(step: number, overflow: Overflow, animated: boolean) {
+        let nextItem = clampIndex(currentItem + step, overflow);
 
+        scrollToPagerItem(nextItem, animated ? 'smooth' : 'instant');
+    }
+
+    function init(): void {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
@@ -371,41 +442,60 @@
         if (componentContext.id && !componentContext.fakeElement) {
             prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
-                setCurrentItem(item: number) {
+                setCurrentItem(item: number, animated: boolean) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    scrollToPagerItem(item);
+                    scrollToPagerItem(item, animated ? 'smooth' : 'instant');
                 },
                 setPreviousItem,
                 setNextItem,
-                scrollToStart() {
-                    scrollToPagerItem(0);
+                scrollToStart(animated) {
+                    scrollToPagerItem(0, animated ? 'smooth' : 'instant');
                 },
-                scrollToEnd() {
-                    scrollToPagerItem(items.length - 1);
-                }
+                scrollToEnd(animated) {
+                    scrollToPagerItem(items.length - 1, animated ? 'smooth' : 'instant');
+                },
+                scrollCombined({
+                    step,
+                    overflow,
+                    animated
+                }) {
+                    if (step) {
+                        scrollToPagerItem(clampIndex(currentItem + step, overflow || 'clamp'), animated ? 'smooth' : 'instant');
+                    }
+                },
             });
         }
+    }
+
+    $: if (componentContext.json) {
+        const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
+        if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
+            currentItem = prevSelectedItem = defaultItem;
+            pagerDataUpdate(items.length, defaultItem);
+        }
+
+        init();
     }
 
     onMount(() => {
         mounted = true;
 
-        const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
+        if (pagerItemsWrapper) {
+            const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
 
-        if (isIndicatorExist) {
-            const pagerItems = [...pagerItemsWrapper.children] as HTMLElement[];
+            if (isIndicatorExist) {
+                const pagerItems = [...pagerItemsWrapper.children] as HTMLElement[];
 
-            for (const [index, item] of pagerItems.entries()) {
-                item.setAttribute('role', 'tabpanel');
-                item.setAttribute('id', `${instId}-panel-${index}`);
-                item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
+                for (const [index, item] of pagerItems.entries()) {
+                    item.setAttribute('role', 'tabpanel');
+                    item.setAttribute('id', `${instId}-panel-${index}`);
+                    item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
+                }
             }
-        }
 
-        if (currentItem > 0) {
             scrollToPagerItem(currentItem, 'instant');
         }
     });
@@ -443,6 +533,7 @@
                 <div class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}>
                     <Unknown
                         componentContext={item}
+                        layoutParams={childLayoutParams}
                     />
                 </div>
             {/each}
@@ -451,7 +542,7 @@
         {#if hasScrollLeft && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => ($direction === 'ltr' ? setPreviousItem : setNextItem)(1, 'clamp')}>
+            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => ($direction === 'ltr' ? setPreviousItem : setNextItem)(1, 'clamp', true)}>
                 {#if !leftClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
@@ -462,7 +553,7 @@
         {#if hasScrollRight && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => ($direction === 'ltr' ? setNextItem : setPreviousItem)(1, 'clamp')}>
+            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => ($direction === 'ltr' ? setNextItem : setPreviousItem)(1, 'clamp', true)}>
                 {#if !rightClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>

@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 #if os(iOS)
@@ -20,35 +21,41 @@ public struct BlockTooltip: Equatable {
     case center
   }
 
-  public let id: String
+  public enum Mode: Equatable {
+    case modal
+    case nonModal
+  }
+
+  public let params: BlockTooltipParams
+
   public let block: Block
-  public let duration: Duration
   public let offset: CGPoint
   public let position: Position
   public let useLegacyWidth: Bool
   public let tooltipViewFactory: TooltipViewFactory?
 
   public init(
-    id: String,
     block: Block,
-    duration: Duration,
+    params: BlockTooltipParams,
     offset: CGPoint,
     position: BlockTooltip.Position,
     useLegacyWidth: Bool = true,
     tooltipViewFactory: TooltipViewFactory? = nil
   ) {
-    self.id = id
     self.block = block
-    self.duration = duration
     self.offset = offset
     self.position = position
     self.useLegacyWidth = useLegacyWidth
     self.tooltipViewFactory = tooltipViewFactory
+    self.params = params
+  }
+
+  public var id: String {
+    params.id
   }
 
   public static func ==(lhs: BlockTooltip, rhs: BlockTooltip) -> Bool {
-    lhs.id == rhs.id &&
-      lhs.duration == rhs.duration &&
+    lhs.params == rhs.params &&
       lhs.offset == rhs.offset &&
       lhs.position == rhs.position &&
       lhs.useLegacyWidth == rhs.useLegacyWidth &&

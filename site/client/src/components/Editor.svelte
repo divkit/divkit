@@ -94,6 +94,7 @@
     import { show } from './PointingPopup.svelte';
     import type { ShortcutList } from '../utils/useShortcuts';
     import { shortcuts } from '../utils/useShortcuts';
+    import { divkitColorToCss } from '../utils/colors';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -111,6 +112,8 @@
     let currentLanguage: Language = 'json';
     let isRunning = false;
     let runButton: HTMLElement;
+    let colorDecorations: monaco.editor.IEditorDecorationsCollection | null = null;
+    let globalColors: string[] = [];
 
     function onLanguageChange(): void {
         if (currentLanguage === $editorMode) {
@@ -195,6 +198,7 @@
         valueStore.subscribe(val => {
             if (editor && editor.getValue() !== val) {
                 editor.setValue(val);
+                recolorJson();
             }
         });
 
@@ -204,6 +208,7 @@
                     editor.setModel(getModel(val));
                 }
                 currentLanguage = val;
+                recolorJson();
             }
         });
 
@@ -220,7 +225,9 @@
                 enabled: true,
                 independentColorPoolPerBracketType: true
             },
-            smoothScrolling: true
+            smoothScrolling: true,
+            // hand-made
+            colorDecorators: false
         };
 
         editor = monaco.editor.create(node, opts);
@@ -228,7 +235,54 @@
         editor.onDidChangeModelContent(() => {
             let val = editor && editor.getModel()?.getValue();
             $valueStore = val || '';
+
+            recolorJson();
         });
+
+        recolorJson();
+
+        function recolorJson(): void {
+            if (colorDecorations) {
+                colorDecorations.clear();
+                colorDecorations = null;
+            }
+            globalColors = [];
+            if ($editorMode !== 'json' || !editor) {
+                return;
+            }
+
+            const lines = editor.getValue().split('\n');
+            const colors: {
+                color: string;
+                range: monaco.Range;
+            }[] = [];
+            const COLOR_RE = /("#[0-9a-f]{3,8}")/gi;
+            lines.forEach((line, lineIndex) => {
+                let match: RegExpExecArray | null;
+                COLOR_RE.lastIndex = -1;
+                while ((match = COLOR_RE.exec(line))) {
+                    colors.push({
+                        color: divkitColorToCss(match[0].slice(1, match[0].length - 1)),
+                        range: new monaco.Range(lineIndex + 1, COLOR_RE.lastIndex - match[0].length + 1, lineIndex + 1, COLOR_RE.lastIndex - match[0].length + 1)
+                    });
+                }
+            });
+
+            if (colors.length) {
+                globalColors = colors.map((it, index) => `.editor-color-decorator_index_${index}{background:${it.color};}`);
+                colorDecorations = editor.createDecorationsCollection(colors.map((color, index) =>
+                    ({
+                        range: color.range,
+                        options: {
+                            beforeContentClassName: `editor__color-decorator editor-color-decorator_index_${index}`,
+                            hoverMessage: {
+                                value: 'Color in ARGB format'
+                            }
+                        }
+                    })
+                ));
+            }
+        }
     });
 
     onDestroy(() => {
@@ -242,6 +296,12 @@
         [runCodeShortcut, runCode]
     ];
 </script>
+
+<svelte:head>
+    <svelte:element this="style">
+        {@html globalColors.join('')}
+    </svelte:element>
+</svelte:head>
 
 <div class="editor" use:shortcuts={SHORTCUTS}>
     <PanelHeader>
@@ -387,6 +447,17 @@
     .editor__editor {
         flex: 1 0 0;
         min-height: 0;
+    }
+
+    :global(.editor__color-decorator) {
+        border: .1em solid #eee;
+        box-sizing: border-box;
+        /* cursor: pointer; */
+        display: inline-block;
+        height: .8em;
+        line-height: .8em;
+        margin: .1em .2em 0;
+        width: .8em;
     }
 
     @keyframes run-rotate {

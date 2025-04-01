@@ -1,3 +1,16 @@
+# DivKit Sample app
+
+Presents a minimalistic application showing the capabilities of the DivKit framework.
+
+The application uses fonts free for personal and commercial use, the intellectual rights to which belong to the following authors:
+Super Trivia Font:
+    Designed by: All Super Font https://nhfonts.etsy.com/
+    https://fontesk.com/super-trivia-font/
+
+Artika Font:
+    Designed by: Anastasiya Davydava https://www.behance.net/anastasdavydav
+    https://fontesk.com/artika-font/
+
 # DivKit Android. Quick start.
 ## Connect the library.
 To connect the library to the project, all you have to do is add three dependencies to build.gradle:

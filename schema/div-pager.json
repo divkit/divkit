@@ -1,5 +1,15 @@
 {
   "$description": "translations.json#/div_pager",
+  "definitions": {
+    "item_alignment": {
+      "type": "string",
+      "enum": [
+        "start",
+        "center",
+        "end"
+      ]
+    }
+  },
   "codegen": {
     "swift": {
       "generate_optional_arguments": false
@@ -18,16 +28,23 @@
           ]
         },
         "scroll_axis_alignment": {
-          "type": "string",
-          "enum": [
-            "start",
-            "center",
-            "end"
-          ],
+          "$ref": "#/definitions/item_alignment",
           "default_value": "center",
           "$description": "translations.json#/div_pager_scroll_axis_alignment",
           "platforms": [
-            "ios"
+            "android",
+            "ios",
+            "web"
+          ]
+        },
+        "cross_axis_alignment": {
+          "$ref": "#/definitions/item_alignment",
+          "default_value": "start",
+          "$description": "translations.json#/div_pager_cross_axis_alignment",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
           ]
         },
         "layout_mode": {
@@ -69,7 +86,8 @@
           "type": "string",
           "default_value": "horizontal",
           "enum": [
-            "horizontal", "vertical"
+            "horizontal",
+            "vertical"
           ],
           "$description": "translations.json#/div_pager_orientation"
         },

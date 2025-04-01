@@ -222,7 +222,9 @@ internal class DivActionBinder @Inject constructor(
         if (menuAction != null) {
             prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
                 setTapListener {
-                    it.clearFocusOnClick(context.divView.inputFocusTracker)
+                    if (context.divView.inputFocusTracker.isOutsideVisibleArea()) {
+                        it.clearFocusOnClick(context.divView.inputFocusTracker)
+                    }
                     it.requestFocus()
                     logger.logClick(context.divView, context.expressionResolver, target, menuAction)
                     divActionBeaconSender.sendTapActionBeacon(menuAction, context.expressionResolver)
@@ -231,7 +233,9 @@ internal class DivActionBinder @Inject constructor(
             }
         } else {
             setTapListener {
-                it.clearFocusOnClick(context.divView.inputFocusTracker)
+                if (context.divView.inputFocusTracker.isOutsideVisibleArea()) {
+                    it.clearFocusOnClick(context.divView.inputFocusTracker)
+                }
                 it.requestFocus()
                 handleBulkActions(context, target, actions)
             }

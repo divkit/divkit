@@ -19,6 +19,11 @@ public final class DivFunctionsStorage {
     self.reporter = reporter
   }
 
+  func set(cardId: DivCardID, functions: [DivFunction]) {
+    reset(cardId: cardId)
+    setIfNeeded(path: cardId.path, functions: functions)
+  }
+
   func setIfNeeded(path: UIElementPath, functions: [DivFunction]) {
     lock.withLock {
       if storages[path] != nil {

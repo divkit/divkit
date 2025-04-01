@@ -9,14 +9,14 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
   public let parent: String?
   public let onFailActions: Field<[DivActionTemplate]>?
   public let onSuccessActions: Field<[DivActionTemplate]>?
-  public let url: Field<Expression<String>>?
+  public let url: Field<Expression<URL>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
       onFailActions: dictionary.getOptionalArray("on_fail_actions", templateToType: templateToType),
       onSuccessActions: dictionary.getOptionalArray("on_success_actions", templateToType: templateToType),
-      url: dictionary.getOptionalExpressionField("url")
+      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
     )
   }
 
@@ -24,7 +24,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
     parent: String?,
     onFailActions: Field<[DivActionTemplate]>? = nil,
     onSuccessActions: Field<[DivActionTemplate]>? = nil,
-    url: Field<Expression<String>>? = nil
+    url: Field<Expression<URL>>? = nil
   ) {
     self.parent = parent
     self.onFailActions = onFailActions
@@ -35,7 +35,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionDownloadTemplate?) -> DeserializationResult<DivActionDownload> {
     let onFailActionsValue = { parent?.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let onSuccessActionsValue = { parent?.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let urlValue = { parent?.url?.resolveValue(context: context) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
     var errors = mergeErrors(
       onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
       onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_success_actions", error: $0) },
@@ -63,7 +63,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
     }
     var onFailActionsValue: DeserializationResult<[DivAction]> = .noValue
     var onSuccessActionsValue: DeserializationResult<[DivAction]> = .noValue
-    var urlValue: DeserializationResult<Expression<String>> = { parent?.url?.value() ?? .noValue }()
+    var urlValue: DeserializationResult<Expression<URL>> = { parent?.url?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable
@@ -81,7 +81,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "url" {
-           urlValue = deserialize(__dictValue).merged(with: urlValue)
+           urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
           }
         }()
         _ = {
@@ -96,7 +96,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue) })
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
           }
         }()
       }

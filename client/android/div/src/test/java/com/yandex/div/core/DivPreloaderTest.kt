@@ -58,24 +58,25 @@ class DivPreloaderTest {
         divImagePreloader,
         divCustomContainerViewAdapter,
         extensionHandlersController,
-        videoPreloader
+        videoPreloader,
+        DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
     )
 
     @Test
     fun `preload div background`() {
         underTest.preload(divInput, mock())
 
-        verify(divImagePreloader).preloadImage(eq(divInput), any(), any())
+        verify(divImagePreloader).preloadImage(eq(divInput), any(), any(), any())
     }
 
     @Test
     fun `preload div items background in containers`() {
         underTest.preload(divContainer, mock())
 
-        verify(divImagePreloader, times(1)).preloadImage(eq(divContainer), any(), any())
-        verify(divImagePreloader, times(1)).preloadImage(eq(divInput), any(), any())
-        verify(divImagePreloader, times(1)).preloadImage(eq(divText), any(), any())
-        verify(divImagePreloader, times(1)).preloadImage(eq(divCustom), any(), any())
+        verify(divImagePreloader, times(1)).preloadImage(eq(divContainer), any(), any(), any())
+        verify(divImagePreloader, times(1)).preloadImage(eq(divInput), any(), any(), any())
+        verify(divImagePreloader, times(1)).preloadImage(eq(divText), any(), any(), any())
+        verify(divImagePreloader, times(1)).preloadImage(eq(divCustom), any(), any(), any())
     }
 
     @Test
@@ -98,13 +99,13 @@ class DivPreloaderTest {
         val inputLoadReference = mock<LoadReference>()
         val textLoadReference = mock<LoadReference>()
         val customLoadReference = mock<LoadReference>()
-        whenever(divImagePreloader.preloadImage(eq(divContainer), any(), any()))
+        whenever(divImagePreloader.preloadImage(eq(divContainer), any(), any(), any()))
             .thenReturn(listOf(containerLoadReference))
-        whenever(divImagePreloader.preloadImage(eq(divInput), any(), any()))
+        whenever(divImagePreloader.preloadImage(eq(divInput), any(), any(), any()))
             .thenReturn(listOf(inputLoadReference))
-        whenever(divImagePreloader.preloadImage(eq(divText), any(), any()))
+        whenever(divImagePreloader.preloadImage(eq(divText), any(), any(), any()))
             .thenReturn(listOf(textLoadReference))
-        whenever(divImagePreloader.preloadImage(eq(divCustom), any(), any()))
+        whenever(divImagePreloader.preloadImage(eq(divCustom), any(), any(), any()))
             .thenReturn(listOf(customLoadReference))
         val ticket = underTest.preload(divContainer, mock())
 

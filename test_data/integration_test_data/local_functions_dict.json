@@ -1,0 +1,86 @@
+{
+  "description": "Local functions with dict arguments.",
+  "div_data": {
+    "card": {
+      "log_id": "local_functions",
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "boolean": true,
+            "integer": 1,
+            "number": 1.0,
+            "string": "value"
+          }
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "functions": [
+              {
+                "name": "containsKeyFunction",
+                "body": "@{dict.containsKey(key)}",
+                "return_type": "boolean",
+                "arguments": [
+                  {
+                    "name": "dict",
+                    "type": "dict"
+                  },
+                  {
+                    "name": "key",
+                    "type": "string"
+                  }
+                ]
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "url": "div-action://set_variable?name=result&value=@{containsKeyFunction(dict_var, 'number')}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check containsKeyFunction",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    }
+  ]
+}

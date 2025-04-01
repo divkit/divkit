@@ -46,11 +46,13 @@
   },
   "card": {
     "log_id": "alerts_gallery",
-    "variables": [{
-      "type": "string",
-      "name": "patch_status",
-      "value": "loading"
-    }],
+    "variables": [
+      {
+        "type": "string",
+        "name": "patch_status",
+        "value": "loading"
+      }
+    ],
     "states": [
       {
         "state_id": 0,
@@ -58,7 +60,7 @@
           "type": "container",
           "visibility_action": {
             "log_id": "visibility",
-            "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftranscation-callbacks.json"
+            "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftransaction-callbacks-2.json"
           },
           "width": {
             "type": "match_parent"
@@ -70,7 +72,7 @@
           "items": [
             {
               "type": "alert_card",
-              "id": "item1",
+              "id": "item2",
               "alert_text": "1 item"
             },
             {

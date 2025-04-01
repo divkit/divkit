@@ -40,7 +40,15 @@ final class BlockTooltipTests: XCTestCase {
 
   func test_TooltipWindowClose() {
     let tooltipView = TooltipContainerView(
-      tooltipView: TestView(),
+      tooltip: DefaultTooltipManager.Tooltip(
+        params: BlockTooltipParams(
+          id: "tooltip",
+          mode: .modal,
+          duration: 0,
+          closeByTapOutside: true
+        ),
+        view: TestView()
+      ),
       handleAction: { _ in },
       onCloseAction: {}
     )
@@ -78,9 +86,13 @@ extension CGRect {
 
 fileprivate func makeTooltip(offset: CGPoint, block: Block) -> BlockTooltip {
   BlockTooltip(
-    id: "tooltip",
     block: block,
-    duration: 0,
+    params: BlockTooltipParams(
+      id: "tooltip",
+      mode: .modal,
+      duration: 0,
+      closeByTapOutside: true
+    ),
     offset: offset,
     position: .center
   )

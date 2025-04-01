@@ -24,6 +24,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBlendMode
@@ -34,19 +35,15 @@ import javax.inject.Inject
 
 @DivScope
 internal class DivImageBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
     private val errorCollectors: ErrorCollectors,
-) : DivViewBinder<DivImage, DivImageView> {
+) : DivViewBinder<Div.Image, DivImage, DivImageView>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivImageView, div: DivImage) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
-
-        baseBinder.bindView(context, view, div, oldDiv)
-        view.applyDivActions(
-            context,
+    override fun DivImageView.bind(bindingContext: BindingContext, div: DivImage, oldDiv: DivImage?) {
+        applyDivActions(
+            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -59,16 +56,16 @@ internal class DivImageBinder @Inject constructor(
             div.accessibility,
         )
 
-        val divView = context.divView
-        val expressionResolver = context.expressionResolver
+        val divView = bindingContext.divView
+        val expressionResolver = bindingContext.expressionResolver
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
-        view.bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
-        view.bindImageScale(div, oldDiv, expressionResolver)
-        view.bindContentAlignment(div, oldDiv, expressionResolver)
-        view.bindPreviewAndImage(context, div, oldDiv, errorCollector)
-        view.bindTint(div, oldDiv, expressionResolver)
-        view.bindFilters(context, div, oldDiv)
+        bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
+        bindImageScale(div, oldDiv, expressionResolver)
+        bindContentAlignment(div, oldDiv, expressionResolver)
+        bindPreviewAndImage(bindingContext, div, oldDiv, errorCollector)
+        bindTint(div, oldDiv, expressionResolver)
+        bindFilters(bindingContext, div, oldDiv)
     }
 
     //region Image Scale

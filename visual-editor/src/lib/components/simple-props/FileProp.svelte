@@ -19,6 +19,10 @@
         getObjectProperty(processedJson, item.generateFromVideoProperty) as VideoSource[] :
         undefined;
 
+    $: generateFromLottie = (item.generateFromLottieProperty && processedJson) ?
+        getObjectProperty(processedJson, item.generateFromLottieProperty) as string :
+        undefined;
+
     function onChange() {
         dispatch('change', {
             value,
@@ -32,6 +36,7 @@
     fileType={item.subtype}
     disabled={$readOnly}
     {generateFromVideo}
+    {generateFromLottie}
     bind:value={value}
     on:change={onChange}
 />

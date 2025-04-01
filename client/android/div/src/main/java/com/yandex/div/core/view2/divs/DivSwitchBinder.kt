@@ -10,27 +10,26 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivSwitch
 import javax.inject.Inject
 
 @DivScope
 internal class DivSwitchBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayBooleanVariableBinder
-) : DivViewBinder<DivSwitch, DivSwitchView> {
+) : DivViewBinder<Div.Switch, DivSwitch, DivSwitchView>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivSwitchView, div: DivSwitch, path: DivStatePath) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
+    override fun DivSwitchView.bind(
+        bindingContext: BindingContext,
+        div: DivSwitch,
+        oldDiv: DivSwitch?,
+        path: DivStatePath
+    ) {
+        bindIsEnabled(div, oldDiv, bindingContext.expressionResolver)
+        bindOnColor(div, oldDiv, bindingContext.expressionResolver)
 
-        baseBinder.bindView(context, view, div, oldDiv)
-
-        view.apply {
-            bindIsEnabled(div, oldDiv, context.expressionResolver)
-            bindOnColor(div, oldDiv, context.expressionResolver)
-
-            observeVariable(div, context, path)
-        }
+        observeVariable(div, bindingContext, path)
     }
 
     private fun DivSwitchView.bindIsEnabled(div: DivSwitch, oldDiv: DivSwitch?, resolver: ExpressionResolver) {

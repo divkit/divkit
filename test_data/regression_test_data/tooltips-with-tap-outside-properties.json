@@ -1,0 +1,369 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "left": 12,
+        "right": 12
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "visibility",
+    "variables": [
+      {
+        "type": "string",
+        "name": "outside_actions_called",
+        "value": "false"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "button",
+              "text": "tooltip with close_by_tap_outside == false",
+              "tooltips": [
+                {
+                  "id": "tooltip_1",
+                  "position": "bottom",
+                  "close_by_tap_outside": false,
+                  "duration": 0,
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 4
+                    }
+                  },
+                  "div": {
+                    "type": "container",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "orientation": "overlap",
+                    "items": [
+                      {
+                        "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "paddings": {
+                          "left": 16,
+                          "top": 16,
+                          "right": 16,
+                          "bottom": 16
+                        },
+                        "items": [
+                          {
+                            "type": "text",
+                            "width": {
+                              "type": "wrap_content"
+                            },
+                            "paddings": {
+                              "left": 16,
+                              "top": 16,
+                              "right": 16,
+                              "bottom": 16
+                            },
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#799eb7"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "text_color": "#2C3E50",
+                            "text": "Title tooltip"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "image",
+                        "width": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "margins": {
+                          "left": 8,
+                          "top": 8
+                        },
+                        "action": {
+                          "log_id": "hide_tooltip",
+                          "url": "div-action://hide_tooltip?id=tooltip_1"
+                        },
+                        "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
+                        "tint_color": "#000000",
+                        "alignment_horizontal": "left",
+                        "alignment_vertical": "top"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=tooltip_1&multiple=true"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "tooltip with tap_outside_actions",
+              "tooltips": [
+                {
+                  "id": "tooltip_2",
+                  "position": "bottom",
+                  "tap_outside_actions": [
+                    {
+                      "log_id": "outside_actions",
+                      "typed": {
+                        "type": "set_variable",
+                        "variable_name": "outside_actions_called",
+                        "value": {
+                          "type": "string",
+                          "value": "true"
+                        }
+                      }
+                    }
+                  ],
+                  "duration": 0,
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 4
+                    }
+                  },
+                  "div": {
+                    "type": "container",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "orientation": "overlap",
+                    "items": [
+                      {
+                        "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "paddings": {
+                          "left": 16,
+                          "top": 16,
+                          "right": 16,
+                          "bottom": 16
+                        },
+                        "items": [
+                          {
+                            "type": "text",
+                            "width": {
+                              "type": "wrap_content"
+                            },
+                            "paddings": {
+                              "left": 16,
+                              "top": 16,
+                              "right": 16,
+                              "bottom": 16
+                            },
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#799eb7"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "text_color": "#2C3E50",
+                            "text": "Title tooltip"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "image",
+                        "width": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "margins": {
+                          "left": 8,
+                          "top": 8
+                        },
+                        "action": {
+                          "log_id": "hide_tooltip",
+                          "url": "div-action://hide_tooltip?id=tooltip_2"
+                        },
+                        "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
+                        "tint_color": "#000000",
+                        "alignment_horizontal": "left",
+                        "alignment_vertical": "top"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=tooltip_2&multiple=true"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Outside actions called: @{outside_actions_called}",
+              "text_color": "@{(outside_actions_called == 'true') ? '#00FF00' : '#000000'}"
+            },
+            {
+              "type": "button",
+              "text": "tooltip mode = non_modal",
+              "tooltips": [
+                {
+                  "id": "tooltip_3",
+                  "position": "bottom",
+                  "duration": 0,
+                  "offset": {
+                    "x": {
+                      "value": 0
+                    },
+                    "y": {
+                      "value": 50
+                    }
+                  },
+                  "mode": {
+                    "type": "non_modal"
+                  },
+                  "close_by_tap_outside": true,
+                  "div": {
+                    "type": "container",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "orientation": "overlap",
+                    "items": [
+                      {
+                        "type": "container",
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "paddings": {
+                          "left": 16,
+                          "top": 16,
+                          "right": 16,
+                          "bottom": 16
+                        },
+                        "items": [
+                          {
+                            "type": "text",
+                            "width": {
+                              "type": "wrap_content"
+                            },
+                            "paddings": {
+                              "left": 16,
+                              "top": 16,
+                              "right": 16,
+                              "bottom": 16
+                            },
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#799eb7"
+                              }
+                            ],
+                            "border": {
+                              "corner_radius": 6
+                            },
+                            "text_color": "#2C3E50",
+                            "text": "Non modal tooltip"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "image",
+                        "width": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 20
+                        },
+                        "margins": {
+                          "left": 8,
+                          "top": 8
+                        },
+                        "action": {
+                          "log_id": "hide_tooltip",
+                          "url": "div-action://hide_tooltip?id=tooltip_3"
+                        },
+                        "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
+                        "tint_color": "#000000",
+                        "alignment_horizontal": "left",
+                        "alignment_vertical": "top"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=tooltip_3&multiple=true"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

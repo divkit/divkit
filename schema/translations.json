@@ -272,8 +272,8 @@
     "ru": "Параметры HTTP-запроса, которые используются для конфигурации отправки данных."
   },
   "div_action_submit_request_headers": {
-    "en": "HTTP request headers.",
-    "ru": "Заголовки HTTP-запроса."
+    "en": "HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex JSON-builders.",
+    "ru": "Заголовки HTTP-запроса. Обратите внимание, что DivKit не очищает дублирующиеся заголовки, наличие которых может приводить к ошибкам в обработке запроса. Учитывайте это при сборке action'ов сложными JSON-builder'ами."
   },
   "div_action_submit_request_method": {
     "en": "HTTP request method.",
@@ -330,6 +330,10 @@
   "div_actionable_actions": {
     "en": "Multiple actions when clicking on an element.",
     "ru": "Несколько действий при нажатии на элемент."
+  },
+  "div_actionable_capture_focus_on_action": {
+    "en": "If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>",
+    "ru": "Если значение:<li>`true` — при активации экшена элемента фокус будет перенесён на него. Это означает, что фокус режима доступности будет перенесён, а виртуальная клавиатура скрыта, за исключением случаев, когда целевой элемент предполагает её наличие (например, `input`).</li><li>`false` — при нажатии на элемент фокус останется на текущем сфокусированном элементе.</li>"
   },
   "div_actionable_doubletap_actions": {
     "en": "Action when double-clicking on an element.",
@@ -514,6 +518,10 @@
   "div_base_border": {
     "en": "Element stroke.",
     "ru": "Рамка элемента."
+  },
+  "div_base_capture_focus_on_action": {
+    "en": "If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>",
+    "ru": "Если значение:<li>`true` — при активации экшена элемента фокус будет перенесён на него. Это означает, что фокус режима доступности будет перенесён, а виртуальная клавиатура скрыта, за исключением случаев, когда целевой элемент предполагает её наличие (например, `input`).</li><li>`false` — при нажатии на элемент фокус останется на текущем сфокусированном элементе.</li>"
   },
   "div_base_column_span": {
     "en": "Merges cells in a column of the [grid](div-grid.md) element.",
@@ -847,6 +855,10 @@
     "en": "State ID.",
     "ru": "Идентификатор состояния."
   },
+  "div_data_functions": {
+    "en": "User functions.",
+    "ru": "Пользовательские функции."
+  },
   "div_data_log_id": {
     "en": "Logging ID.",
     "ru": "Идентификатор для логирования."
@@ -1138,6 +1150,22 @@
   "div_gradient_linear_angle": {
     "en": "Angle of gradient direction.",
     "ru": "Угол направления градиента."
+  },
+  "div_gradient_color_map": {
+    "en": "Colors and positions of gradient points. When using this parameter, the `colors` parameter is ignored.",
+    "ru": "Цвета и расположение точек градиента. При использовании данного параметра игнорируется параметр `colors`."
+  },
+  "div_gradient_color_point": {
+    "en": "Describes color at particular gradient position.",
+    "ru": "Определяет цвет градиента на заданной позиции."
+  },
+  "div_gradient_color_point_color": {
+    "en": "Gradient color corresponding to gradient point.",
+    "ru": "Цвет градиента, соответствующий точке градиента."
+  },
+  "div_gradient_color_point_position": {
+    "en": "The position of the gradient point.",
+    "ru": "Расположение точки градиента."
   },
   "div_gradient_radial": {
     "en": "Radial gradient.",
@@ -1583,6 +1611,10 @@
     "en": "Pager. It contains a horizontal set of cards that can be scrolled page by page. It shows the main page and the beginning of the next one.",
     "ru": "Пейджер. Содержит горизонтальный набор карточек, которые можно скроллить постранично. Показывает основную страницу и начало следующей."
   },
+  "div_pager_cross_axis_alignment": {
+    "en": "Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>",
+    "ru": "Выравнивание элементов в направлении, перпендикулярном направлению скролла. В горизонтальном  пейджере:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li></p><p>В вертикальном пейджере:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li>"
+  },
   "div_pager_default_item": {
     "en": "Ordinal number of the pager element that will be opened by default.",
     "ru": "Порядковый номер элемента пейджера, который будет открываться по умолчанию."
@@ -1656,8 +1688,8 @@
     "ru": "При включенном параметре пейджер не будет передавать жест скролла родительскому элементу."
   },
   "div_pager_scroll_axis_alignment": {
-    "en": "Alignment of pager pages along the scroll axis. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
-    "ru": "Выравнивание страниц пейджера по оси скролла. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
+    "en": "Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.",
+    "ru": "Выравнивание страниц пейджера по направлению скролла. В горизонтальном  пейджере:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li></p><p>В вертикальном пейджере:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li>. Для выравнивания по краю отступ от края родителя равен значению соответствующего паддинга."
   },
   "div_pager_short": {
     "en": "Pager.",
@@ -2103,6 +2135,18 @@
     "en": "Stroke color.",
     "ru": "Цвет рамки."
   },
+  "div_stroke_style": {
+    "en": "Stroke style. Supported for border stroke only.",
+    "ru": "Стиль линии. Поддерживается только для линии обводки."
+  },
+  "div_stroke_style_dashed": {
+    "en": "Dashed stroke style.",
+    "ru": "Пунктирная линия."
+  },
+  "div_stroke_style_solid": {
+    "en": "Solid stroke style.",
+    "ru": "Сплошная линия."
+  },
   "div_stroke_width": {
     "en": "Stroke width.",
     "ru": "Толщина рамки."
@@ -2384,7 +2428,7 @@
     "ru": "Фон для диапазона символов."
   },
   "div_text_range_baseline_offset": {
-    "en": "Character baseline vertial offset. If set, vertical alignment is ignored.",
+    "en": "Vertical baseline offset in a character range. If set, vertical alignment is ignored.",
     "ru": "Вертикальное смещение базовой линии в диапазоне символов. Если параметр задан, то вертикальное выравнивание игнорируется."
   },
   "div_text_range_border": {
@@ -2500,8 +2544,8 @@
     "ru": "Ограничивать ширину текста максимальной шириной строки. Работает только с шириной `wrap_content`, `constrained=true` и выставленным `max_size`."
   },
   "div_text_truncate": {
-    "en": "Text cropping method. Use `ellipsis` instead.",
-    "ru": "Способ обрезания текста. Вместо него используйте `ellipsis`."
+    "en": "Location of text cropping marker.",
+    "ru": "Расположение маркера обрезки текста."
   },
   "div_text_underline": {
     "en": "Underline.",
@@ -2547,6 +2591,14 @@
     "en": "Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.",
     "ru": "Анимация исчезания подсказки. По умолчанию подсказка будет исчезать постепенно со смещением от якорной точки на 10 dp."
   },
+  "div_tooltip_background_accessibility_description": {
+    "en": "Description for accessibility of the tap action on the background of the tooltip.",
+    "ru": "Описание для доступности действия нажатия на фон тултипа."
+  },
+  "div_tooltip_close_by_tap_outside": {
+    "en": "Allows dismissing tooltip by tapping outside of it.",
+    "ru": "Позволяет закрывать подсказку при нажатии за ее пределами."
+  },
   "div_tooltip_div": {
     "en": "An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.",
     "ru": "Элемент, который будет показан в подсказке. Если внутри элемента есть подсказки, они не будут показываться."
@@ -2559,6 +2611,18 @@
     "en": "Tooltip ID. It is used to avoid re-showing. It must be unique for all element tooltips.",
     "ru": "Идентификатор подсказки. Используется, чтобы избежать повторного показа. Должен быть уникален для всех подсказок элемента."
   },
+  "div_tooltip_mode": {
+    "en": "Tooltip modes.",
+    "ru": "Режимы подсказки."
+  },
+  "div_tooltip_mode_modal": {
+    "en": "Modal mode. Clicks outside do not pass through to underlying elements. Restricts focus to the tooltip. Back button on Android and back gesture on iOS close the tooltip.",
+    "ru": "Модальный режим. Клик за пределами не проходит сквозь и не доступен элементам под подсказкой. Ограничивает фокус в пределах подсказки. Кнопка назад на Android и жест назад на iOS закрывают подсказку."
+  },
+  "div_tooltip_mode_non_modal": {
+    "en": "Non-modal mode. Clicks outside pass through to underlying elements. Does not restrict focus to the tooltip. Back button on Android and back gesture on iOS do not close the tooltip.",
+    "ru": "Немодальный режим. Клик за пределами обрабатывается элементами под подсказкой. Не ограничивает фокус в пределах подсказки. Кнопка назад на Android и жест назад на iOS не закрывают подсказку."
+  },
   "div_tooltip_offset": {
     "en": "Shift relative to an anchor point.",
     "ru": "Сдвиг относительно якорной точки."
@@ -2566,6 +2630,10 @@
   "div_tooltip_position": {
     "en": "The position of a tooltip relative to an element it belongs to.",
     "ru": "Положение подсказки относительно элемента, к которому она относится."
+  },
+  "div_tooltip_tap_outside_actions": {
+    "en": "Specifies actions triggered by tapping outside the tooltip.",
+    "ru": "Задает действия, выполняемые при нажатии за пределами подсказки."
   },
   "div_transform": {
     "en": "Transformation of the element.",

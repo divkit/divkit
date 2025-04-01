@@ -895,8 +895,7 @@
         {
           "type": "array",
           "name": "array",
-          "value": [
-          ]
+          "value": []
         }
       ],
       "platforms": [

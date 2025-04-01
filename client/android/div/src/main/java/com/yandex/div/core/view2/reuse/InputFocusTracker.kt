@@ -5,6 +5,7 @@ import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.ViewVisibilityCalculator
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -12,6 +13,7 @@ import javax.inject.Inject
 @DivViewScope
 internal class InputFocusTracker @Inject constructor(
     div2View: Div2View,
+    private val viewVisibilityCalculator: ViewVisibilityCalculator,
 ) {
     private var focusedInputTag: Any? = null
     private var changingState = false
@@ -48,6 +50,11 @@ internal class InputFocusTracker @Inject constructor(
             it.clearFocus()
             it.closeKeyboard()
         }
+    }
+
+    fun isOutsideVisibleArea(): Boolean {
+        val input: View = lastFocused?.get() ?: return true
+        return !viewVisibilityCalculator.isViewFullyVisible(input)
     }
 
     inner class InputFocusPersistentDivDataChangedObserver: PersistentDivDataObserver {

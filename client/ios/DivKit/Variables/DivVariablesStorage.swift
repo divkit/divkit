@@ -51,11 +51,11 @@ public final class DivVariablesStorage {
     changeEvents = Signal.merge(globalStorageEvents, changeEventsPipe.signal)
   }
 
-  func getVariables(cardId: DivCardID, elementId: String) -> DivVariables {
+  func getVariables(cardId: DivCardID, elementId: String) -> [DivVariables] {
     lock.withLock {
-      localStorages.first {
+      localStorages.filter {
         $0.key.leaf == elementId && $0.key.cardId == cardId
-      }?.value.values ?? [:]
+      }.map(\.value.values)
     }
   }
 
@@ -73,6 +73,15 @@ public final class DivVariablesStorage {
     name: DivVariableName
   ) -> T? {
     getVariableValue(path: cardId.path, name: name)
+  }
+
+  public func getVariableValue(
+    cardId: DivCardID,
+    name: DivVariableName
+  ) -> DivVariableValue? {
+    lock.withLock {
+      getNearestStorage(cardId.path).getVariableValue(name)
+    }
   }
 
   public func hasValue(cardId: DivCardID, name: DivVariableName) -> Bool {

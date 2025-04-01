@@ -16,7 +16,7 @@
           "$ref": "common.json#/id",
           "$description": "translations.json#/div_indicator_pager_id"
         },
-        "items_placement" : {
+        "items_placement": {
           "$ref": "div-indicator-item-placement.json",
           "$description": "translations.json#/div_indicator_item_placement"
         },
@@ -79,7 +79,9 @@
         "animation": {
           "type": "string",
           "enum": [
-            "scale", "worm", "slider"
+            "scale",
+            "worm",
+            "slider"
           ],
           "default_value": "scale",
           "$description": "translations.json#/div_indicator_animation",

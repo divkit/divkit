@@ -5,9 +5,11 @@ import com.yandex.div.core.asExpression
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
+import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import org.hamcrest.CoreMatchers.instanceOf
-import org.junit.Assert
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -20,7 +22,7 @@ class DivViewWithItemsTest {
             on { div } doReturn createDivGallery(DivGallery.ScrollMode.PAGING)
             on { resources } doReturn mock()
         }
-        Assert.assertThat(
+        assertThat(
             DivViewWithItems.create(
                 view,
                 mock()
@@ -35,7 +37,7 @@ class DivViewWithItemsTest {
             on { div } doReturn createDivGallery(DivGallery.ScrollMode.DEFAULT)
             on { resources } doReturn mock()
         }
-        Assert.assertThat(
+        assertThat(
             DivViewWithItems.create(
                 view,
                 mock()
@@ -49,7 +51,7 @@ class DivViewWithItemsTest {
         val view = mock<DivPagerView> {
             on { resources } doReturn mock()
         }
-        Assert.assertThat(
+        assertThat(
             DivViewWithItems.create(view, mock()) { Direction.NEXT },
             instanceOf(DivViewWithItems.Pager::class.java)
         )
@@ -60,7 +62,7 @@ class DivViewWithItemsTest {
         val view = mock<DivTabsLayout> {
             on { resources } doReturn mock()
         }
-        Assert.assertThat(
+        assertThat(
             DivViewWithItems.create(view, mock()) { Direction.NEXT },
             instanceOf(DivViewWithItems.Tabs::class.java)
         )
@@ -68,9 +70,9 @@ class DivViewWithItemsTest {
 
     @Test
     fun `cannot create`() {
-        Assert.assertNull(DivViewWithItems.create(mock<FrameLayout>(), mock()) { Direction.NEXT })
+        assertNull(DivViewWithItems.create(mock<FrameLayout>(), mock()) { Direction.NEXT })
     }
 
-    private fun createDivGallery(scrollMode: DivGallery.ScrollMode): DivGallery =
-        DivGallery(scrollMode = scrollMode.asExpression(), items = emptyList())
+    private fun createDivGallery(scrollMode: DivGallery.ScrollMode) =
+        Div.Gallery(DivGallery(scrollMode = scrollMode.asExpression(), items = emptyList()))
 }

@@ -28,6 +28,7 @@ import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
@@ -109,7 +110,7 @@ class DivTooltipControllerTest {
     }
 
     private val divTooltipViewBuilder = mock<DivTooltipViewBuilder> {
-        on { buildTooltipView(any(), any(), any(), any()) } doReturn tooltipWrapper
+        on { buildTooltipView(any(), any(), anyInt(), anyInt()) } doReturn tooltipWrapper
     }
 
     private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
@@ -165,7 +166,14 @@ class DivTooltipControllerTest {
     fun `visibility tracking is started on show`() {
         prepareDiv()
         underTest.showTooltip("tooltip_id", bindingContext)
-        verify(visibilityActionTracker).trackVisibilityActionsOf(eq(div2View), eq(expressionResolver), any(), eq(div), any())
+        verify(visibilityActionTracker).trackVisibilityActionsOf(
+            scope = eq(div2View),
+            resolver = eq(expressionResolver),
+            view = any(),
+            div = eq(div),
+            appearActions = any(),
+            disappearActions = any()
+        )
     }
 
     @Test
@@ -270,7 +278,6 @@ class DivTooltipControllerTest {
                 offset = null,
                 position = position.asExpression()
             ),
-            Rect(),
             ExpressionResolver.EMPTY,
         )
 

@@ -5,7 +5,8 @@ import type {
     ImageBackground,
     SolidBackground,
     RadialBackground,
-    RadialGradientCenter
+    RadialGradientCenter,
+    GradientColorPoint
 } from '../types/background';
 import type { ImageScale } from '../types/imageScale';
 import type { MaybeMissing } from '../expressions/json';
@@ -99,6 +100,28 @@ function solidUnique(opts: {
     };
 }
 
+function colorMapToList(colorMap: MaybeMissing<GradientColorPoint[]>): string | undefined {
+    if (!colorMap.every(it => it.color && typeof it.position === 'number' && it.position >= 0 && it.position <= 1)) {
+        return;
+    }
+
+    const colors = colorMap as {
+        color: string;
+        position: number;
+    }[];
+
+    const sortedColors = colors.sort((a, b) => {
+        if (Math.abs(a.position - b.position) < 1e-6) {
+            return 0;
+        }
+        return a.position - b.position;
+    });
+
+    return sortedColors
+        .map(color => `${correctColor(color.color)} ${(color.position * 100).toFixed(2)}%`)
+        .join(',');
+}
+
 function gradient(opts: {
     bg: MaybeMissing<GradientBackground>;
 }): {
@@ -106,26 +129,45 @@ function gradient(opts: {
     pos: string | undefined;
     image: string;
 } | undefined {
-    if (!Array.isArray(opts.bg?.colors)) {
+    if (!Array.isArray(opts.bg?.colors) && !Array.isArray(opts.bg?.color_map)) {
         return;
     }
 
-    const colors = opts.bg.colors.filter(Truthy) as string[];
-    if (!colors.length) {
+    const colors = opts.bg.colors?.filter(Truthy);
+    if (!colors?.length && !opts.bg?.color_map) {
         return;
     }
 
-    return {
-        size: undefined,
-        pos: undefined,
-        image:
-            'linear-gradient(' +
+    let image: string;
+    if (opts.bg.color_map) {
+        const list = colorMapToList(opts.bg.color_map);
+        if (!list) {
+            return;
+        }
+
+        image = 'linear-gradient(' +
+            (90 - Number(opts.bg.angle || 0) + 'deg') +
+            ',' +
+            list +
+            ')';
+    } else {
+        if (!colors) {
+            return;
+        }
+
+        image = 'linear-gradient(' +
             (90 - Number(opts.bg.angle || 0) + 'deg') +
             ',' +
             colors
                 .map(color => correctColor(color))
                 .join(',') +
-            ')'
+            ')';
+    }
+
+    return {
+        size: undefined,
+        pos: undefined,
+        image
     };
 }
 
@@ -155,12 +197,24 @@ function radial(opts: {
     pos: string | undefined;
     image: string;
 } | undefined {
-    if (!Array.isArray(opts.bg?.colors)) {
+    if (!Array.isArray(opts.bg?.colors) && !Array.isArray(opts.bg?.color_map)) {
         return;
     }
 
-    const colors = opts.bg.colors.filter(Truthy) as string[];
-    if (!colors.length) {
+    const colors = opts.bg.colors?.filter(Truthy);
+    if (!colors?.length && !opts.bg?.color_map) {
+        return;
+    }
+
+    let list;
+    if (opts.bg.color_map) {
+        list = colorMapToList(opts.bg.color_map);
+    } else if (colors) {
+        list = colors
+            .map(color => correctColor(color))
+            .join(',');
+    }
+    if (!list) {
         return;
     }
 
@@ -184,9 +238,7 @@ function radial(opts: {
             'radial-gradient(' +
             `circle ${size || 'farthest-corner'} at ${centerX} ${centerY}` +
             ',' +
-            colors
-                .map(color => correctColor(color))
-                .join(',') +
+            list +
             ')'
     };
 }

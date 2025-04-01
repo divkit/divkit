@@ -18,6 +18,7 @@ public final class DivData: Sendable {
     }
   }
 
+  public let functions: [DivFunction]?
   public let logId: String
   public let states: [State] // at least 1 elements
   public let timers: [DivTimer]?
@@ -33,6 +34,7 @@ public final class DivData: Sendable {
     makeArrayValidator(minItems: 1)
 
   init(
+    functions: [DivFunction]?,
     logId: String,
     states: [State],
     timers: [DivTimer]?,
@@ -40,6 +42,7 @@ public final class DivData: Sendable {
     variableTriggers: [DivTrigger]?,
     variables: [DivVariable]?
   ) {
+    self.functions = functions
     self.logId = logId
     self.states = states
     self.timers = timers
@@ -53,15 +56,20 @@ public final class DivData: Sendable {
 extension DivData: Equatable {
   public static func ==(lhs: DivData, rhs: DivData) -> Bool {
     guard
+      lhs.functions == rhs.functions,
       lhs.logId == rhs.logId,
-      lhs.states == rhs.states,
-      lhs.timers == rhs.timers
+      lhs.states == rhs.states
     else {
       return false
     }
     guard
+      lhs.timers == rhs.timers,
       lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
-      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
+    else {
+      return false
+    }
+    guard
       lhs.variables == rhs.variables
     else {
       return false
@@ -74,6 +82,7 @@ extension DivData: Equatable {
 extension DivData: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["log_id"] = logId
     result["states"] = states.map { $0.toDictionary() }
     result["timers"] = timers?.map { $0.toDictionary() }

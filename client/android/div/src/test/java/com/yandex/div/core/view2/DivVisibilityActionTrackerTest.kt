@@ -6,6 +6,7 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.asExpression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Assert.assertEquals
@@ -15,6 +16,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -46,9 +48,11 @@ class DivVisibilityActionTrackerTest {
     private val view2 = mockView()
     private val view3 = mockView()
     private val view4 = mockView()
+    private val view5 = mockView()
     private val action1 = DivVisibilityAction(logId = "visibility_action".asExpression())
     private val action2 = DivVisibilityAction(logId = "visibility_action2".asExpression())
     private val action3 = DivVisibilityAction(logId = "visibility_action3".asExpression())
+    private val disappearAction1 = DivDisappearAction(logId = "visibility_action".asExpression())
     private val lottaActions = listOf(action1, action2, action3)
     private val actionsWithThreeDifferentDelays = Array(6) {
         val delay: Long = when {
@@ -65,10 +69,12 @@ class DivVisibilityActionTrackerTest {
     private val divBase2 = DivText(text = "test2".asExpression(), visibilityActions = listOf(action2))
     private val divBase3 = DivText(text = "test3".asExpression(), visibilityActions = lottaActions)
     private val divBase4 = DivText(text = "test4".asExpression(), visibilityActions = actionsWithThreeDifferentDelays)
+    private val divBase5 = DivText(text = "test5".asExpression(), visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
     private val div1 = Div.Text(divBase1)
     private val div2 = Div.Text(divBase2)
     private val div3 = Div.Text(divBase3)
     private val div4 = Div.Text(divBase4)
+    private val div5 = Div.Text(divBase5)
 
     private val visibilityActionTracker = DivVisibilityActionTracker(
         viewVisibilityCalculator,
@@ -297,6 +303,28 @@ class DivVisibilityActionTrackerTest {
             eq(resolver),
             eq(view4),
             any()
+        )
+    }
+
+    @Test
+    fun `appear and disappear actions with the same log id does not dispatched together`() {
+        trackVisibilityAction(view5, div5, 100)
+        Robolectric.getForegroundThreadScheduler().advanceBy(1000L, TimeUnit.MILLISECONDS)
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view5),
+            argThat { this.size == 1 }
+        )
+        clearInvocations(visibilityActionDispatcher)
+
+        trackVisibilityAction(view5, div5, 0)
+        Robolectric.flushForegroundThreadScheduler()
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view5),
+            argThat { this.size == 1 }
         )
     }
 

@@ -11,9 +11,11 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div2.DivData
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -46,6 +48,7 @@ class DivMultipleStateSwitcherTest {
     }
 
     private val viewBinder = mock<DivBinder>()
+    private val pathCaptor = argumentCaptor<DivStatePath>()
     private val resolver = divView.expressionResolver
 
     private val stateSwitcher = DivMultipleStateSwitcher(divView, viewBinder)
@@ -67,14 +70,15 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
+        Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
     }
 
     @Test
     fun `switch to single state of missing state layout binds root div`() {
         val inactiveState = "0/state_container/second/second_state/hidden".path
         stateSwitcher.switchStates(divDataState, listOf(inactiveState), resolver)
-        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(0)))
+        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(divDataState)))
     }
 
     @Test
@@ -87,8 +91,11 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
-        verify(viewBinder).bind(any(), any(), eq(secondDiv), eq(secondPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), pathCaptor.capture())
+        Assert.assertEquals(firstPath.parentState().statesString, pathCaptor.firstValue.statesString)
+
+        verify(viewBinder).bind(any(), any(), eq(secondDiv), pathCaptor.capture())
+        Assert.assertEquals(secondPath.parentState().statesString, pathCaptor.firstValue.statesString)
     }
 
     @Test
@@ -112,7 +119,8 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), pathCaptor.capture())
+        Assert.assertEquals(firstPath.parentState().statesString, pathCaptor.firstValue.statesString)
     }
 
     @Test
@@ -125,7 +133,8 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), pathCaptor.capture())
+        Assert.assertEquals(firstPath.parentState().statesString, pathCaptor.firstValue.statesString)
         verify(viewBinder, never()).bind(any(), any(), eq(secondDiv), any())
     }
 
@@ -137,6 +146,6 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(0)))
+        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(divDataState)))
     }
 }

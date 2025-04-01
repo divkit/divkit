@@ -30,13 +30,13 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     }
     return handler.apply(
       block: block,
-      path: context.parentPath,
+      path: context.path,
       widthVariableName: widthVariableName,
       heightVariableName: heightVariableName
     )
   }
 
-  public func onCardUpdated(reasons: [DivActionURLHandler.UpdateReason]) {
+  public func onCardUpdated(reasons: [DivCardUpdateReason]) {
     let hasNotVariableReason = reasons.isEmpty || reasons.contains {
       switch $0 {
       case .variable:

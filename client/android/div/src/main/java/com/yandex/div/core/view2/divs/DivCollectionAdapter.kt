@@ -11,13 +11,18 @@ import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.toDivItemBuilderResult
 import com.yandex.div2.DivVisibility
 
-internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
+internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     items: List<DivItemBuilderResult>,
 ) : VisibilityAwareAdapter<VH>(items) {
 
     override fun getItemViewType(position: Int): Int {
         val item = visibleItems.getOrNull(position) ?: return 0
         return item.div.value().reuseId?.evaluate(item.expressionResolver).hashCode()
+    }
+
+    override fun onViewAttachedToWindow(holder: VH) {
+        super.onViewAttachedToWindow(holder)
+        holder.updateState()
     }
 
     fun applyPatch(
@@ -97,8 +102,25 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem = oldItems.getOrNull(oldItemPosition)
-            val newItem = newItems.getOrNull(newItemPosition) ?: return oldItem == null
-            oldItem ?: return false
+            val newItem = newItems.getOrNull(newItemPosition)
+
+            val oldReuseId = oldItem?.div?.value()?.reuseId?.evaluate(oldItem.expressionResolver)
+            val newReuseId = newItem?.div?.value()?.reuseId?.evaluate(newItem.expressionResolver)
+
+            return if (oldReuseId != null || newReuseId != null) {
+                oldReuseId == newReuseId
+            } else {
+                areContentsTheSame(oldItem, newItem)
+            }
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            areContentsTheSame(oldItems.getOrNull(oldItemPosition), newItems.getOrNull(newItemPosition))
+
+        private fun areContentsTheSame(oldItem: DivItemBuilderResult?, newItem: DivItemBuilderResult?): Boolean {
+            if (oldItem == null || newItem == null) {
+                return oldItem == newItem
+            }
 
             oldItem.suppressMissingVariableException(true)
             newItem.suppressMissingVariableException(true)
@@ -111,8 +133,6 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
         private fun DivItemBuilderResult.suppressMissingVariableException(suppress: Boolean) {
             (expressionResolver as? ExpressionResolverImpl)?.suppressMissingVariableException = suppress
         }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
     }
 
     private inner class UpdateCallBack(private val newItems: List<DivItemBuilderResult>) : ListUpdateCallback {

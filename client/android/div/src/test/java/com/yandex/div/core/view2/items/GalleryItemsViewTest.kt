@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import org.junit.Assert
 import org.junit.Test
@@ -196,8 +197,8 @@ class GalleryItemsViewTest {
         direction: Direction = Direction.NEXT
     ) = DivViewWithItems.create(drv, mock()) { direction }!!
 
-    private fun createDivGallery(scrollMode: DivGallery.ScrollMode): DivGallery =
-        DivGallery(scrollMode = scrollMode.asExpression(), items = emptyList())
+    private fun createDivGallery(scrollMode: DivGallery.ScrollMode) =
+        Div.Gallery(DivGallery(scrollMode = scrollMode.asExpression(), items = emptyList()))
 
     @Implements(LinearSmoothScroller::class)
     class ShadowSmoothScroller {

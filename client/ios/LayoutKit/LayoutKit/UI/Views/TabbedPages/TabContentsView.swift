@@ -199,7 +199,7 @@ final class TabContentsView: BlockView {
       pages: model.pages.map(\.block),
       footer: model.footer,
       size: collectionView.bounds.size,
-      pagesInsets: model.contentInsets.horizontalInsets
+      pagesInsets: model.contentInsets.horizontal
     )
     guard newLayout != layout else {
       return

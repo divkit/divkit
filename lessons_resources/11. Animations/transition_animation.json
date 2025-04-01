@@ -1,0 +1,151 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "in_out_transition_demo_block": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 88
+      },
+      "margins": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#3F28C3"
+        }
+      ],
+      "text_color": "#ffffff",
+      "font_size": 14,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "change_state",
+        "type": "string",
+        "value": "none"
+      },
+      {
+        "name": "set_state",
+        "type": "string",
+        "value": "visible"
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{change_state == 'set' && set_state == 'visible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=set_state&value=invisible"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'set' && set_state == 'invisible'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=set_state&value=visible"
+          }
+        ]
+      }
+    ],
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "in_out_transition_demo_block",
+              "id": "set_in_out",
+              "text": "Animated item",
+              "visibility": "@{set_state}",
+              "transition_out": {
+                "type": "set",
+                "items": [
+                  {
+                    "type": "fade",
+                    "duration": 1000
+                  },
+                  {
+                    "type": "scale",
+                    "duration": 1000
+                  }
+                ]
+              },
+              "transition_in": {
+                "type": "slide",
+                "edge": "right",
+                "duration": 1000
+              }
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Run",
+              "actions": [
+                {
+                  "log_id": "set_state",
+                  "url": "div-action://set_variable?name=change_state&value=set"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

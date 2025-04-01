@@ -2,6 +2,7 @@
   "description": "Text with shadow",
   "platforms": [
     "android",
+    "ios",
     "web",
     "flutter"
   ],

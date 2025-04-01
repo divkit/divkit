@@ -1,0 +1,124 @@
+{
+  "description": "Expression with several local functions.",
+  "div_data": {
+    "card": {
+      "log_id": "local_functions",
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 123
+        },
+        {
+          "name": "string_var",
+          "type": "string",
+          "value": "test"
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "functions": [
+              {
+                "name": "stringLen",
+                "body": "@{len(str)}",
+                "return_type": "integer",
+                "arguments": [
+                  {
+                    "name": "str",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "name": "increment",
+                "body": "@{value + 1}",
+                "return_type": "integer",
+                "arguments": [
+                  {
+                    "name": "value",
+                    "type": "integer"
+                  }
+                ]
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "url": "div-action://set_variable?name=result&value=@{stringLen(string_var) + increment(100)}"
+                  }
+                ]
+              },
+              {
+                "condition": "@{step == 1}",
+                "actions": [
+                  {
+                    "log_id": "step 1",
+                    "url": "div-action://set_variable?name=result&value=@{increment(increment(123))}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "check two local functions in one expression",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 105
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "check function in function",
+          "url": "div-action://set_variable?name=step&value=1"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 125
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    }
+  ]
+}

@@ -134,6 +134,8 @@ internal class DivLinearLayoutManager(
 
     override fun firstCompletelyVisibleItemPosition(): Int = findFirstCompletelyVisibleItemPosition()
 
+    override fun lastCompletelyVisibleItemPosition(): Int = findLastCompletelyVisibleItemPosition()
+
     override fun firstVisibleItemPosition(): Int = findFirstVisibleItemPosition()
 
     override fun lastVisibleItemPosition(): Int = findLastVisibleItemPosition()

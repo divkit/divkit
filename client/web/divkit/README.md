@@ -272,7 +272,7 @@ function typefaceProvider(fontFamily: string, opts?: {
 
 Function or object, optional.
 
-Used as a second parameter for `fetch` requests in the `div-action://download` actions.
+It is used as the second parameter for the `fetch` requests in the `download` and `submit` actions.
 
 ```ts
 function fetchInit(url: string) {
@@ -287,6 +287,22 @@ Or
 ```ts
 fetchInit: {
     credentials: 'include'
+}
+```
+
+#### onSubmit
+
+`/client` and `/client-hydratable`
+
+Function, optional.
+
+It is used to process the `submit` actions. If it is not specified, `fetch()` is used by default.
+
+```ts
+function onSubmit(action: ActionSubmit, values: Record<string, unknown>): Promise<void> {
+    return fetch(action.reqeust.url, {
+        body: JSON.stringify(values)
+    });
 }
 ```
 
@@ -380,6 +396,18 @@ Please note that these methods must be synchronous! DivKit does not have asynchr
 Number, optional. 0 by default.
 
 Affects the formatting of dates.
+
+#### pagerChildrenClipEnabled
+
+Boolean, optional. `true` by default.
+
+Whether cropping is enabled in the `pager` elements. It can be useful in cases with shadow elements.
+
+#### videoPlayerProvider
+
+Object, optional.
+
+A provider for implementing a custom video player. On the server side, the `videoPlayerProvider` must contain the `template` property, which is a string or a markup provider function for the video player. On the client side, the `videoPlayerProvider` must contain an `instance` function that creates an instance of the player.
 
 #### theme (DEPRECATED)
 

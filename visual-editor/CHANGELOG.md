@@ -1,3 +1,27 @@
+## 0.4.7
+
+* Added the `high_priority_image_show` flag to the interface
+* Added the ability to set different values for different themes for images and videos
+* Fixed the display of a dialog with an image if the url field contains the expressions
+* Added the ability to customize file limits in more detail, old properties have been deprecated
+* Fixed file size calculation if the field is empty
+* Fixed closing of the dialog by clicking past inside shadow root
+* Fixed showing the size `wrap_content` for the root element
+* Fixed the display of properties with colors from the palette
+
+## 0.4.6
+
+* Fixed the display of long variable names in the variable panel
+* Added RTL support and RTL switch (switched on separately)
+* Added generation of previews for Lottie from the first frame
+* Triggers from the root card are no longer lost
+* The gradient direction is visually displayed when editing
+* Fixed the display of Boolean properties in "complex properties"
+* Icons for all components have been completed
+* Closing the dialog with the color spectrum has been fixed if you "drag the color out"
+* Fixed hyphenated text editing
+* Updated DivKit (30.30.0 -> 31.2.0)
+
 ## 0.4.5
 
 * Fixed schema parsing for complex properties

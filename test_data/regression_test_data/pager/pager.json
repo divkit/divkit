@@ -33,6 +33,9 @@
       "height": {
         "type": "fixed",
         "value": 240
+      },
+      "accessibility": {
+          "description": "image"
       }
     }
   },
@@ -72,7 +75,6 @@
                           "log_id": "content_item_show:0",
                           "visibility_percentage": 80,
                           "visibility_duration": 0
-
                         }
                       ]
                     },

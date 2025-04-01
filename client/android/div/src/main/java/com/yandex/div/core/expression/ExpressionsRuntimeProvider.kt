@@ -172,7 +172,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     }
 }
 
-private val DivVariable.name: String
+internal val DivVariable.name: String
     get() {
         return when (this) {
             is DivVariable.Bool -> this.value.name

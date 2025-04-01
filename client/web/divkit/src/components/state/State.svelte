@@ -11,7 +11,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
-    import { STATE_CTX, type StateCtxValue, type StateInterface } from '../../context/state';
+    import { STATE_CTX, type StateCtxValue } from '../../context/state';
     import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';
@@ -24,7 +24,6 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
-    const stateCtx = getContext<StateCtxValue>(STATE_CTX);
 
     let hasError = false;
 
@@ -32,13 +31,12 @@
     let transitionChangeBoxes: Map<string, ChildTransitionChangeData> = new Map();
     let childrenIds = new Set<string>();
 
-    let childStateMap: Map<string, StateInterface> | null = null;
     let animationList: (AnimationItemWithMaxDuration | ChangeBoundsItem)[] = [];
     let childrenWithTransitionIn: ChildWithTransition[] = [];
     let childrenWithTransitionOut: ChildWithTransition[] = [];
     let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
-    let prevStateId: string | undefined;
+    let stateUnregister: (() => void) | undefined;
     $: stateId = componentContext.json.div_id || componentContext.id;
     let selectedId: string | undefined;
     let selectedComponentContext: ComponentContext | undefined;
@@ -106,7 +104,13 @@
             return;
         }
 
+        const changed = new Set<string>();
+
         items = states.map((it, index) => {
+            if (items[index].div !== newItems[index] && it.state_id) {
+                changed.add(it.state_id);
+            }
+
             return {
                 ...it,
                 div: newItems[index]
@@ -117,7 +121,7 @@
             ...componentContext.json,
             states: items
         };
-        if (selectedId) {
+        if (selectedId && changed.has(selectedId)) {
             selectState(items.find(it => it.state_id === selectedId) || null);
         }
     }
@@ -221,9 +225,9 @@
         return null;
     }
 
-    async function setState(stateId: string) {
+    async function setState(stateId: string): Promise<ComponentContext | undefined> {
         if (selectedId === stateId) {
-            return;
+            return componentContext;
         }
 
         rootCtx.setRunning('stateChange', true);
@@ -344,55 +348,22 @@
         transitionChangeBoxes.clear();
 
         rootCtx.setRunning('stateChange', false);
-    }
 
-    function getChild(id: string): StateInterface | undefined {
-        if (childStateMap && childStateMap.has(id)) {
-            return childStateMap.get(id);
-        }
-
-        componentContext.logError(wrapError(new Error('Missing state block with id'), {
-            additional: {
-                id
-            }
-        }));
-        return undefined;
+        return componentContext;
     }
 
     $: if (componentContext.json) {
-        if (prevStateId) {
-            stateCtx.unregisterInstance(prevStateId);
-            prevStateId = undefined;
+        if (stateUnregister) {
+            stateUnregister();
+            stateUnregister = undefined;
         }
 
         if (stateId && !componentContext?.fakeElement) {
-            prevStateId = stateId;
-            stateCtx.registerInstance(stateId, {
-                setState,
-                getChild
-            });
+            stateUnregister = componentContext.registerState(stateId, setState);
         }
     }
 
     setContext<StateCtxValue>(STATE_CTX, {
-        registerInstance(id: string, block: StateInterface) {
-            if (!childStateMap) {
-                childStateMap = new Map();
-            }
-
-            if (childStateMap.has(id)) {
-                componentContext.logError(wrapError(new Error('Duplicate state with id'), {
-                    additional: {
-                        id
-                    }
-                }));
-            } else {
-                childStateMap.set(id, block);
-            }
-        },
-        unregisterInstance(id: string) {
-            childStateMap?.delete(id);
-        },
         // eslint-disable-next-line max-params
         runVisibilityTransition(
             json: DivBaseData,
@@ -561,8 +532,9 @@
             selectedComponentContext.destroy();
         }
 
-        if (prevStateId) {
-            stateCtx.unregisterInstance(prevStateId);
+        if (stateUnregister) {
+            stateUnregister();
+            stateUnregister = undefined;
         }
     });
 </script>

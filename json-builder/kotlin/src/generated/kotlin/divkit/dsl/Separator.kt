@@ -46,6 +46,7 @@ data class Separator internal constructor(
             animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            captureFocusOnAction = additive.captureFocusOnAction ?: properties.captureFocusOnAction,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             delimiterStyle = additive.delimiterStyle ?: properties.delimiterStyle,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
@@ -124,6 +125,11 @@ data class Separator internal constructor(
          * Element stroke.
          */
         val border: Property<Border>?,
+        /**
+         * If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+         * Default value: `true`.
+         */
+        val captureFocusOnAction: Property<Boolean>?,
         /**
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
@@ -269,6 +275,7 @@ data class Separator internal constructor(
             result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("capture_focus_on_action", captureFocusOnAction)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("delimiter_style", delimiterStyle)
             result.tryPutProperty("disappear_actions", disappearActions)
@@ -368,6 +375,7 @@ data class Separator internal constructor(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -414,6 +422,7 @@ fun DivScope.separator(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -458,6 +467,7 @@ fun DivScope.separator(
         animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         columnSpan = valueOrNull(columnSpan),
         delimiterStyle = valueOrNull(delimiterStyle),
         disappearActions = valueOrNull(disappearActions),
@@ -504,6 +514,7 @@ fun DivScope.separator(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -550,6 +561,7 @@ fun DivScope.separatorProps(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -593,6 +605,7 @@ fun DivScope.separatorProps(
     animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    captureFocusOnAction = valueOrNull(captureFocusOnAction),
     columnSpan = valueOrNull(columnSpan),
     delimiterStyle = valueOrNull(delimiterStyle),
     disappearActions = valueOrNull(disappearActions),
@@ -638,6 +651,7 @@ fun DivScope.separatorProps(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -684,6 +698,7 @@ fun TemplateScope.separatorRefs(
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     delimiterStyle: ReferenceProperty<Separator.DelimiterStyle>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -727,6 +742,7 @@ fun TemplateScope.separatorRefs(
     animators = animators,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     columnSpan = columnSpan,
     delimiterStyle = delimiterStyle,
     disappearActions = disappearActions,
@@ -772,6 +788,7 @@ fun TemplateScope.separatorRefs(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -818,6 +835,7 @@ fun Separator.override(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -862,6 +880,7 @@ fun Separator.override(
         animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        captureFocusOnAction = valueOrNull(captureFocusOnAction) ?: properties.captureFocusOnAction,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         delimiterStyle = valueOrNull(delimiterStyle) ?: properties.delimiterStyle,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
@@ -908,6 +927,7 @@ fun Separator.override(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -954,6 +974,7 @@ fun Separator.defer(
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     delimiterStyle: ReferenceProperty<Separator.DelimiterStyle>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -998,6 +1019,7 @@ fun Separator.defer(
         animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         columnSpan = columnSpan ?: properties.columnSpan,
         delimiterStyle = delimiterStyle ?: properties.delimiterStyle,
         disappearActions = disappearActions ?: properties.disappearActions,
@@ -1037,6 +1059,7 @@ fun Separator.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1048,6 +1071,7 @@ fun Separator.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
@@ -1064,6 +1088,7 @@ fun Separator.evaluate(
         animators = properties.animators,
         background = properties.background,
         border = properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         columnSpan = columnSpan ?: properties.columnSpan,
         delimiterStyle = properties.delimiterStyle,
         disappearActions = properties.disappearActions,
@@ -1110,6 +1135,7 @@ fun Separator.evaluate(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -1156,6 +1182,7 @@ fun Component<Separator>.override(
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
     disappearActions: List<DisappearAction>? = null,
@@ -1201,6 +1228,7 @@ fun Component<Separator>.override(
         animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         columnSpan = valueOrNull(columnSpan),
         delimiterStyle = valueOrNull(delimiterStyle),
         disappearActions = valueOrNull(disappearActions),
@@ -1247,6 +1275,7 @@ fun Component<Separator>.override(
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
  * @param disappearActions Actions when an element disappears from the screen.
@@ -1293,6 +1322,7 @@ fun Component<Separator>.defer(
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     delimiterStyle: ReferenceProperty<Separator.DelimiterStyle>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
@@ -1338,6 +1368,7 @@ fun Component<Separator>.defer(
         animators = animators,
         background = background,
         border = border,
+        captureFocusOnAction = captureFocusOnAction,
         columnSpan = columnSpan,
         delimiterStyle = delimiterStyle,
         disappearActions = disappearActions,
@@ -1377,6 +1408,7 @@ fun Component<Separator>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1388,6 +1420,7 @@ fun Component<Separator>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
@@ -1405,6 +1438,7 @@ fun Component<Separator>.evaluate(
         animators = null,
         background = null,
         border = null,
+        captureFocusOnAction = captureFocusOnAction,
         columnSpan = columnSpan,
         delimiterStyle = null,
         disappearActions = null,

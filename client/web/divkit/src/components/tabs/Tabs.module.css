@@ -1,9 +1,12 @@
+@value outer, root__any-actions from "../Cls.module.css";
+
 .tabs {
     display: flex;
     flex-direction: column;
 }
 
 .tabs__list {
+    position: relative;
     display: flex;
     flex: 0 0 auto;
     padding: var(--divkit-tabs-title-padding, 0 1.2em .8em);
@@ -15,6 +18,15 @@
 
 .tabs__list::-webkit-scrollbar {
     display: none;
+}
+
+.tabs__items-bg {
+    position: absolute;
+    display: flex;
+}
+
+.tabs__items-text {
+    position: relative;
 }
 
 .tabs__item {
@@ -41,11 +53,33 @@
 }
 
 .tabs__item_selected {
-    background: var(--divkit-tabs-active-background-color, #ffdc60);
     color: var(--divkit-tabs-active-text-color, rgba(0, 0, 0, .8));
     cursor: default;
     font-weight: var(--divkit-tabs-active-font-weight, 400);
     font-family: var(--divkit-tabs-active-font-family, inherit);
+}
+
+.tabs_animation_fade .tabs__item_selected,
+.tabs_animation_none .tabs__item_selected {
+    background: var(--divkit-tabs-active-background-color, #ffdc60);
+}
+
+.tabs__items-bg .tabs__item {
+    color: transparent;
+}
+
+.tabs__items-text .tabs__item {
+    background: none;
+}
+
+.tabs__items-bg,
+.tabs__items-text {
+    display: flex;
+}
+
+.tabs_animation_fade .tabs__item.tabs__item {
+    /* from.root_platform_desktop .root__clickable */
+    transition: background-color var(--divkit-tabs-animation-duration, .3s) ease-in-out, opacity .15s ease-out;;
 }
 
 .tabs__item_selected.tabs__item_actionable {
@@ -69,7 +103,6 @@
     transition-property: transform;
     transition-timing-function: ease-out;
     transition-duration: 0s;
-    pointer-events: auto;
 }
 
 .tabs__swiper_animated {
@@ -84,7 +117,15 @@
 
 .tabs__panel {
     display: none;
+    pointer-events: auto;
+}
+
+.tabs__panel .outer {
     pointer-events: none;
+}
+
+.tabs__panel .root__any-actions {
+    pointer-events: auto;
 }
 
 .tabs__panel_visible {
@@ -107,4 +148,15 @@
     flex: 0 0 auto;
     align-self: center;
     margin-left: var(--divkit-tabs-items-spacing, 0);
+}
+
+.tabs__tabs-highlighter {
+    position: absolute;
+    top: 0;
+    font-size: var(--divkit-tabs-font-size, 1.2em);
+    border-radius: var(--divkit-tabs-border-radius, 100em);
+    background: var(--divkit-tabs-active-background-color, #ffdc60);
+    transition: var(--divkit-tabs-animation-duration, .3s) ease-in-out;
+    transition-property: left, width;
+    pointer-events: none;
 }

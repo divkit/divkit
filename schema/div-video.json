@@ -93,7 +93,8 @@
           "$description": "translations.json#/div_video_player_settings_payload",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "aspect": {

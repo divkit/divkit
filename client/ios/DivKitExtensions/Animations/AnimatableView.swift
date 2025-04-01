@@ -2,7 +2,6 @@ import Foundation
 import LayoutKit
 import VGSL
 
-
 public protocol AsyncSourceAnimatableViewFactory: AnyObject {
   func createAsyncSourceAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float)
     -> AsyncSourceAnimatableView
@@ -15,8 +14,10 @@ public protocol AnimatableViewFactory: AnyObject, AsyncSourceAnimatableViewFacto
 }
 
 extension AnimatableViewFactory {
-  public func createAsyncSourceAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float)
-  -> AsyncSourceAnimatableView {
+  public func createAsyncSourceAnimatableView(
+    withMode mode: AnimationRepeatMode,
+    repeatCount count: Float
+  ) -> AsyncSourceAnimatableView {
     createAnimatableView(withMode: mode, repeatCount: count)
   }
 }

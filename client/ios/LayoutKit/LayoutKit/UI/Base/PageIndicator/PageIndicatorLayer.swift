@@ -84,6 +84,7 @@ final class ScrollPageIndicatorLayer: CALayer {
 
   override func action(forKey key: String) -> CAAction? {
     guard Self.isAnimationKeySupported(key),
+          animation(forKey: key) == nil,
           let presentation = presentation(),
           let fromValue = presentation.value(forKey: key) else {
       return super.action(forKey: key)
@@ -228,23 +229,25 @@ extension ScrollPageIndicatorLayer {
     func run(forKey event: String, object anObject: Any, arguments _: [AnyHashable: Any]?) {
       guard let layer = anObject as? CALayer,
             let fromValue = self.fromValue as? Double,
-            let currentIndex = (layer.value(forKey: event) as? Int),
-            currentIndex != numberOfPages else {
+            let toValue = layer.value(forKey: event) as? Int,
+            toValue != numberOfPages else {
         return
       }
 
-      let addAnimation = { fromValue in
-        let animation = CABasicAnimation(keyPath: event)
-        animation.fromValue = fromValue
-        layer.addAnimation(animation)
+      let lastPage = numberOfPages - 1
+      let correctedFromValue = if fromValue.isApproximatelyLessOrEqualThan(0), toValue == lastPage {
+        Double(numberOfPages)
+      } else if fromValue.isApproximatelyGreaterOrEqualThan(Double(lastPage)), toValue == 0 {
+        Double(-1)
+      } else {
+        fromValue
       }
 
-      let fromIndex = Int(fromValue)
-      if fromIndex == numberOfPages, currentIndex == 0 {
-        addAnimation(-1)
-      } else {
-        addAnimation(fromValue)
-      }
+      let animation = CABasicAnimation(keyPath: event)
+      animation.fromValue = correctedFromValue
+      animation.toValue = toValue
+
+      layer.add(animation, forKey: event)
     }
   }
 }

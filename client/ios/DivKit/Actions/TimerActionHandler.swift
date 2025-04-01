@@ -19,7 +19,7 @@ final class TimerActionHandler {
       return
     }
 
-    handle(cardId: context.path.cardId, timerId: id, action: command.toDivTimerAction())
+    handle(cardId: context.cardId, timerId: id, action: command.toDivTimerAction())
   }
 
   func handle(cardId: DivCardID, timerId: String, action: DivTimerAction) {

@@ -17,6 +17,7 @@ public struct DivTooltipViewFactory {
   func makeView(div: Div, tooltipId: String) async -> VisibleBoundsTrackingView {
     let view = DivView(divKitComponents: divKitComponents)
     let divData = DivData(
+      functions: nil,
       logId: tooltipId,
       states: [.init(div: div, stateId: 0)],
       timers: nil,

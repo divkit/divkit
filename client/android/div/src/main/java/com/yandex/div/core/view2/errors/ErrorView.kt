@@ -6,6 +6,7 @@ import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
+import android.os.TransactionTooLargeException
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
@@ -77,7 +78,12 @@ internal class ErrorView(
             },
             onCopyAction = {
                 viewModel?.let {
-                    pasteToClipBoard(errorModel.generateFullReport())
+                    val fullReport = errorModel.generateReport()
+                    pasteToClipBoard(fullReport).onFailure {
+                        if (it.causedByTransactionTooLargeException()) {
+                            pasteToClipBoard(errorModel.generateReport(dumpCardContent = false))
+                        }
+                    }
                 }
             }
         )
@@ -90,24 +96,30 @@ internal class ErrorView(
         detailsView = view
     }
 
-    private fun pasteToClipBoard(s: String) {
+    private fun pasteToClipBoard(s: String): Result<Unit> {
         val clipboardManager =
             root.context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
                 ?: run {
                     Assert.fail("Failed to access clipboard manager!")
-                    return
+                    return Result.success(Unit)
                 }
 
-        clipboardManager.setPrimaryClip(
-            ClipData(
-                "Error report",
-                arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                ClipData.Item(s)
+        try {
+            clipboardManager.setPrimaryClip(
+                ClipData(
+                    "Error report",
+                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
+                    ClipData.Item(s)
+                )
             )
-        )
+        } catch (e: Exception) {
+            return Result.failure(RuntimeException("Failed paste report to clipboard!", e))
+        }
 
         Toast.makeText(root.context, "Errors, DivData and Variables are dumped to clipboard!",
             Toast.LENGTH_LONG).show()
+
+        return Result.success(Unit)
     }
 
     private fun tryAddCounterView() {
@@ -246,4 +258,9 @@ private class DetailsViewGroup(
         )
     }
 
+}
+
+private fun Throwable.causedByTransactionTooLargeException(): Boolean {
+    return this is TransactionTooLargeException ||
+            this.cause?.causedByTransactionTooLargeException() == true
 }

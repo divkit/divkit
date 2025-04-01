@@ -62,12 +62,13 @@ final class DivImageExtensionsTests: XCTestCase {
   func test_WhenWidthIsWrapContent_ThrowsError() {
     XCTAssertThrowsError(
       try divData(divImage(
+        id: "test_id",
         imageUrl: "https://image.url",
         width: wrapContentSize()
       )).makeBlock(context: .default),
       DivBlockModelingError(
         "DivImage has wrap_content width",
-        path: .root + "0"
+        path: .root + "0" + "test_id"
       )
     )
   }
@@ -80,7 +81,7 @@ final class DivImageExtensionsTests: XCTestCase {
       )).makeBlock(context: .default),
       DivBlockModelingError(
         "DivImage without aspect has wrap_content height",
-        path: .root + "0"
+        path: .root + "0" + "image"
       )
     )
   }

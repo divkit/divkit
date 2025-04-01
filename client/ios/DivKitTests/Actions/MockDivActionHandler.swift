@@ -8,17 +8,20 @@ extension DivActionHandler {
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     flags: DivFlagsInfo = .default,
     idToPath: IdToPath = IdToPath(),
+    patchProvider: DivPatchProvider = MockPatchProvider(),
+    submitter: DivSubmitter = MockSubmitter(),
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter = DefaultDivReporter(),
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction = { _ in },
+    stateManagement: DivStateManagement = DefaultDivStateManagement(),
+    updateCard: @escaping UpdateCardAction = { _ in },
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
     self.init(
-      stateUpdater: DefaultDivStateManagement(),
+      stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
-      patchProvider: MockPatchProvider(),
-      submitter: MockSubmitter(),
+      patchProvider: patchProvider,
+      submitter: submitter,
       variablesStorage: variablesStorage,
       functionsStorage: nil,
       updateCard: updateCard,
@@ -54,7 +57,17 @@ private final class MockSubmitter: DivSubmitter {
 }
 
 final class MockPatchProvider: DivPatchProvider {
-  func getPatch(url _: URL, completion _: @escaping DivPatchProviderCompletion) {}
+  private let delegate: (DivPatchProviderCompletion) -> Void
+
+  init(
+    delegate: @escaping (DivPatchProviderCompletion) -> Void = { _ in }
+  ) {
+    self.delegate = delegate
+  }
+
+  func getPatch(url _: URL, completion: @escaping DivPatchProviderCompletion) {
+    delegate(completion)
+  }
 
   func cancelRequests() {}
 }

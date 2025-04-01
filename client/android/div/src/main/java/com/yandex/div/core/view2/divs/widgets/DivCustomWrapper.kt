@@ -3,20 +3,19 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.view.View
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
 import androidx.core.view.marginTop
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.internal.widget.FrameContainerLayout
-import com.yandex.div2.DivCustom
+import com.yandex.div2.Div
 
 internal class DivCustomWrapper @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): FrameContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<DivCustom> by DivHolderViewMixin() {
+) : FrameContainerLayout(context, attrs, defStyleAttr),
+    DivHolderView<Div.Custom> by DivHolderViewMixin() {
 
     val customView get() = if (isNotEmpty()) get(0) else null
 

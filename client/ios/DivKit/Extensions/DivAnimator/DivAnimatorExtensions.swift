@@ -37,7 +37,7 @@ extension DivAnimator {
     switch self {
     case let .divColorAnimator(colorAnimator):
       guard let startValue = colorAnimator.resolveStartValue(resolver) ?? context.variablesStorage
-        .getVariableValue(path: context.parentPath, name: variableName) else {
+        .getVariableValue(path: context.path, name: variableName) else {
         incorrectValue(field: "startValue", id: base.id)
         return nil
       }
@@ -60,7 +60,7 @@ extension DivAnimator {
         configuration: configuration,
         cancelAction: cancelAction,
         endAction: endAction
-      ) { [weak variablesStorage = context.variablesStorage, parentPath = context.parentPath] in
+      ) { [weak variablesStorage = context.variablesStorage, parentPath = context.path] in
         variablesStorage?.update(
           path: parentPath,
           name: variableName,
@@ -69,7 +69,7 @@ extension DivAnimator {
       }
     case let .divNumberAnimator(numberAnimator):
       guard let startValue = numberAnimator.resolveStartValue(resolver) ?? context.variablesStorage
-        .getVariableValue(path: context.parentPath, name: variableName) else {
+        .getVariableValue(path: context.path, name: variableName) else {
         incorrectValue(field: "startValue", id: base.id)
         return nil
       }
@@ -92,7 +92,7 @@ extension DivAnimator {
         configuration: configuration,
         cancelAction: cancelAction,
         endAction: endAction
-      ) { [weak variablesStorage = context.variablesStorage, parentPath = context.parentPath] in
+      ) { [weak variablesStorage = context.variablesStorage, parentPath = context.path] in
         variablesStorage?.update(
           path: parentPath,
           name: variableName,

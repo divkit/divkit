@@ -1,6 +1,5 @@
 {
-  "templates": {
-  },
+  "templates": {},
   "entity": {
     "type": "entity_with_string_enum_property",
     "property": "second"

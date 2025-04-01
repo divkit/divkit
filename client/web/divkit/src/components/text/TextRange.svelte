@@ -28,12 +28,13 @@
     export let singleline = false;
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
     export let cloudBg = false;
+    export let cloudBgId = '';
     export let customLineHeight: number | null = null;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const direction = rootCtx.direction;
 
-    const cloudFilterId = cloudBg && rootCtx.genId('text-range') || '';
+    const cloudFilterId = cloudBg && cloudBgId || rootCtx.genId('text-range') || '';
 
     let decoration = 'none';
     let fontSize = 12;
@@ -42,12 +43,18 @@
     let fontWeight: number | undefined = undefined;
     let fontFamily = '';
     let color = '';
+    let colorOverride: string | undefined;
     let border: {
         color: string;
         width: number;
         corner_radius?: number;
     } | null = null;
     let verticalAlign: number | undefined = undefined;
+    let background: string | undefined;
+    let maskAnimated = false;
+    let maskColor: string | undefined;
+    let maskSize: string | undefined;
+    let maskDensity: string | undefined;
 
     $: if (componentContext.json) {
         decoration = 'none';
@@ -57,8 +64,14 @@
         fontWeight = undefined;
         fontFamily = '';
         color = '';
+        colorOverride = undefined;
         border = null;
         verticalAlign = undefined;
+        background = undefined;
+        maskAnimated = false;
+        maskColor = undefined;
+        maskSize = undefined;
+        maskDensity = undefined;
     }
 
     $: {
@@ -105,7 +118,7 @@
     }
 
     $: {
-        color = cloudBg ? 'transparent' : correctColor(textStyles.text_color, 1, color);
+        color = correctColor(textStyles.text_color, 1, color);
     }
 
     $: topOffset = textStyles.top_offset ? pxToEm(textStyles.top_offset) : '';
@@ -114,7 +127,51 @@
 
     $: cloudPadding = textStyles.background?.type === 'cloud' ? textStyles.background.paddings : undefined;
 
-    $: bg = textStyles.background?.type === 'solid' ? getBackground([textStyles.background]) : null;
+    $: {
+        const mask = textStyles.mask;
+        const hasMask = Boolean(
+            mask &&
+            (mask.type === 'solid' || mask.type === 'particles') &&
+            mask.is_enabled !== false && mask.color
+        );
+
+        if (cloudBg || hasMask) {
+            colorOverride = 'transparent';
+        } else {
+            colorOverride = undefined;
+        }
+
+        maskAnimated = false;
+        maskColor = undefined;
+        maskSize = undefined;
+        maskDensity = undefined;
+        if (cloudBg) {
+            if (hasCloudBg) {
+                background = correctColorWithAlpha((textStyles.background as CloudBackground).color, 255, 'transparent');
+            } else {
+                background = undefined;
+            }
+        } else if (mask && hasMask) {
+            if (mask.type === 'solid') {
+                background = correctColor(mask.color);
+            } else if (mask.type === 'particles') {
+                const size = correctPositiveNumber(mask.particle_size?.value, 1);
+                const sizeEm = pxToEm(size * 10 / fontSize);
+                const density = correctPositiveNumber(mask.density, .8);
+                const color = correctColor(mask.color);
+
+                background = undefined;
+                maskColor = color;
+                maskSize = sizeEm;
+                maskDensity = String(density);
+                maskAnimated = mask.is_animated === true;
+            }
+        } else if (textStyles.background?.type === 'solid') {
+            background = getBackground([textStyles.background]).color;
+        } else {
+            background = undefined;
+        }
+    }
 
     $: if (
         textStyles.border?.stroke &&
@@ -152,7 +209,9 @@
         decoration,
         align: customVerticalAlign,
         cloud: hasCloudBg,
-        'relative-vertical-align': Boolean(customLineHeight && verticalAlign)
+        'relative-vertical-align': Boolean(customLineHeight && verticalAlign),
+        'has-particles-mask': Boolean(maskColor),
+        'mask-animated': maskAnimated
     };
 
     $: style = {
@@ -169,13 +228,10 @@
         padding: cloudPadding ?
             edgeInsertsToCss(edgeInsertsMultiply(cloudPadding, 10 / fontSize), $direction) :
             undefined,
-        filter: cloudBg && hasCloudBg ? `url(#${cloudFilterId})` : shadow,
-        color,
-        // eslint-disable-next-line no-nested-ternary
-        background: cloudBg ?
-            (hasCloudBg ? correctColorWithAlpha((textStyles.background as CloudBackground).color, 255, 'transparent') : undefined) :
-            (bg?.color || undefined),
-        opacity: cloudBg && hasCloudBg ?
+        filter: cloudBg && hasCloudBg && !cloudBgId ? `url(#${cloudFilterId})` : shadow,
+        color: colorOverride || color,
+        background,
+        opacity: cloudBg && hasCloudBg && !cloudBgId ?
             (parseColor((textStyles.background as CloudBackground).color)?.a ?? 255) / 255 :
             undefined,
         /**
@@ -186,6 +242,9 @@
         'box-shadow': border ? `inset 0 0 0 ${pxToEm(border.width * 10 / fontSize)} ${border.color}` : undefined,
         'border-radius': borderRadius ? pxToEm(borderRadius * 10 / fontSize) : undefined,
         'font-feature-settings': textStyles.font_feature_settings || undefined,
+        '--divkit-text-mask-color': maskColor,
+        '--divkit-text-mask-size': maskSize,
+        '--divkit-text-mask-density': maskDensity,
     };
 </script>
 
@@ -195,6 +254,4 @@
     cls={genClassName('text-range', css, mods)}
     {actions}
     style={makeStyle(style)}
->
-    {text}
-</Actionable>
+><!-- zero-width space as default -->{#if maskColor}<div class={css['text-range__mask-animation']}></div><div class={css['text-range__mask-animation']}></div><div class={css['text-range__mask-animation']}></div><div class={css['text-range__mask-animation']}></div><div class={css['text-range__mask-animation']}></div><div class={css['text-range__mask-animation']}></div>{/if}{text || '​'}</Actionable>

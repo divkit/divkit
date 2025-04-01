@@ -3,37 +3,55 @@ import Serialization
 import VGSL
 
 extension DivData: DivBlockModeling {
+  public var id: String? {
+    nil
+  }
+
+  public static var type: String {
+    "DivData"
+  }
+
   static let rootPath = DivStatePath(rawValue: UIElementPath("{root}"))
 
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     guard let state = getCurrentState(context: context) else {
-      throw DivBlockModelingError("DivData has no states", path: context.parentPath)
+      throw DivBlockModelingError("DivData has no states", path: context.path)
     }
 
     let stateManager = context.stateManager
     if let previousRootState = getPreviousRootState(stateManager: stateManager) {
       context.lastVisibleBoundsCache.dropVisibleBounds(
-        prefix: context.parentPath + previousRootState.rawValue
+        prefix: context.path + previousRootState.rawValue
       )
     }
 
     let stateId = String(state.stateId)
     let statePath = DivStatePath(rawValue: UIElementPath(stateId))
+    let stateBlockPath: DivStatePath
+    let parentDivStatePath: DivStatePath
+    if let tooltipId = context.viewId.additionalId {
+      stateBlockPath = DivStatePath(rawValue: UIElementPath(tooltipId))
+      parentDivStatePath = stateBlockPath + stateId
+    } else {
+      stateBlockPath = DivData.rootPath
+      parentDivStatePath = statePath
+    }
+
+    let divContext = context
+      .modifying(
+        cardLogId: logId,
+        pathSuffix: String(stateId),
+        parentDivStatePath: parentDivStatePath
+      )
+
     let div = state.div
-
-    let divContext = context.modifying(
-      cardLogId: logId,
-      parentPath: context.parentPath + stateId,
-      parentDivStatePath: statePath
-    )
-
     stateManager.updateBlockIdsWithStateChangeTransition(
       statePath: statePath,
       div: div
     )
     let block = try div.value.makeBlock(context: divContext)
     stateManager.setState(
-      stateBlockPath: DivData.rootPath,
+      stateBlockPath: stateBlockPath,
       stateID: DivStateID(rawValue: stateId)
     )
     return block

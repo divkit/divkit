@@ -10,6 +10,15 @@ import separatorIcon from '../../assets/components/separator.svg?url';
 import galleryHorizontalIcon from '../../assets/components/gallery-horizontal.svg?url';
 import galleryVerticalIcon from '../../assets/components/gallery-vertical.svg?url';
 import switchIcon from '../../assets/components/switch.svg?url';
+import gridIcon from '../../assets/components/grid.svg?url';
+import pagerIcon from '../../assets/components/pager.svg?url';
+import tabsIcon from '../../assets/components/tabs.svg?url';
+import stateIcon from '../../assets/components/state.svg?url';
+import customIcon from '../../assets/components/custom.svg?url';
+import sliderIcon from '../../assets/components/slider.svg?url';
+import inputIcon from '../../assets/components/input.svg?url';
+import selectIcon from '../../assets/components/select.svg?url';
+import videoIcon from '../../assets/components/video.svg?url';
 import unknownIcon from '../../assets/components/unknown.svg?url';
 
 const MAP = {
@@ -20,7 +29,16 @@ const MAP = {
     image: imageIcon,
     indicator: indicatorIcon,
     separator: separatorIcon,
-    switch: switchIcon
+    switch: switchIcon,
+    grid: gridIcon,
+    pager: pagerIcon,
+    tabs: tabsIcon,
+    state: stateIcon,
+    custom: customIcon,
+    slider: sliderIcon,
+    input: inputIcon,
+    select: selectIcon,
+    video: videoIcon
 };
 
 const MAP_BY_ORIENTATION = {

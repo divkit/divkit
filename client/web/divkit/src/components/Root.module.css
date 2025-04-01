@@ -1,4 +1,4 @@
-@value root_platform_desktop, root__clickable, root__clickable-no-transition from "./Cls.module.css";
+@value root_platform_desktop, root__clickable, root__clickable-no-transition, root__any-actions from "./Cls.module.css";
 
 .root {
     position: relative;
@@ -24,6 +24,7 @@
 .root__clickable,
 .root__clickable-no-transition {
     cursor: pointer;
+    pointer-events: auto;
 }
 
 .root__any-actions {

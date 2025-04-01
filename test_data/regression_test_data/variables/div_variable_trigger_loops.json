@@ -154,7 +154,6 @@
         "type": "string",
         "value": ""
       },
-
       {
         "name": "red_int",
         "type": "integer",
@@ -165,7 +164,6 @@
         "type": "string",
         "value": "0"
       },
-
       {
         "name": "green_int",
         "type": "integer",
@@ -176,7 +174,6 @@
         "type": "string",
         "value": "0"
       },
-
       {
         "name": "blue_int",
         "type": "integer",
@@ -187,7 +184,6 @@
         "type": "string",
         "value": "0"
       },
-
       {
         "name": "sky_blue",
         "type": "color",

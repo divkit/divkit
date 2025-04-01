@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_tooltip_mode_modal",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "modal"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

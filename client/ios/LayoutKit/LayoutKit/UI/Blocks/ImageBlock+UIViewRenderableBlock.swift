@@ -70,8 +70,8 @@ extension RemoteImageViewContainer: VGSLUI.VisibleBoundsTrackingLeaf {}
 extension TransitioningAnimation {
   fileprivate func cast() -> ImageViewAnimation {
     ImageViewAnimation(
-      duration: duration.value,
-      delay: delay.value,
+      duration: duration,
+      delay: delay,
       startAlpha: start,
       endAlpha: end,
       options: [

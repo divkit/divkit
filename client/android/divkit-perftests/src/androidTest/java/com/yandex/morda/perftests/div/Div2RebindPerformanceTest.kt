@@ -16,7 +16,7 @@ import org.junit.Test
     packageName = PACKAGE_NAME,
     description = "Div2 rebinding performance test",
     owners = ["the-leo"],
-    defaultRepeat = 31,
+    defaultRepeat = 50,
     timeoutSeconds = 3000
 )
 class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
@@ -34,8 +34,6 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.JSON.Warm",
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
             "Div.Rebinding.Cold",
@@ -59,8 +57,6 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.JSON.Warm",
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
             "Div.Rebinding.Cold",
@@ -84,8 +80,6 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.JSON.Warm",
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
             "Div.Rebinding.Cold",

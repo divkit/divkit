@@ -31,7 +31,6 @@
         "type": "string",
         "value": "https://yastatic.net/s3/home/divkit/shape.png"
       }
-
     ],
     "log_id": "simple_tap",
     "states": [
@@ -59,6 +58,9 @@
                   "color": "#1F000000",
                   "width": 1
                 }
+              },
+              "aspect": {
+                "ratio": "@{ratio}"
               },
               "width": {
                 "type": "match_parent"

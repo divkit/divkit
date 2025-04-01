@@ -52,6 +52,7 @@ const editor = window.editor = DivProEditor.init({
         },
         cssValue: 'monospace'
     }],
+    directionSelector: true,
     card: {
         json: JSON.stringify({
             card: {
@@ -254,6 +255,14 @@ const editor = window.editor = DivProEditor.init({
                         }
                     }
                 ],
+                variable_triggers: [{
+                    mode: 'on_condition',
+                    condition: '@{tanker_props_lottie_url}',
+                    actions: [{
+                        log_id: 'test',
+                        url: 'my-action://'
+                    }]
+                }],
                 variables: [
                     {
                         type: 'dict',

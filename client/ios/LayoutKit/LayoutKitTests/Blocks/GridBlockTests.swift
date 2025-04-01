@@ -36,6 +36,89 @@ final class GridBlockTests: XCTestCase {
     XCTAssertEqual(block.intrinsicContentHeight(forWidth: 100), 0)
   }
 
+  func test_IntrinsicTraitsWithDefaultConstraints() {
+    let contentSize = CGSize(width: 50, height: 75)
+
+    let grid = makeGrid(
+      contentSize: contentSize,
+      widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: .infinity),
+      heightTrait: .intrinsic(constrained: false, minSize: 0, maxSize: .infinity)
+    )
+
+    assertIntrinsicContentSize(ofBlock: grid, equals: contentSize)
+  }
+
+  func test_IntrinsicTraitsWithMaxConstraints() {
+    let contentSize = CGSize(width: 50, height: 75)
+    let maxSize = CGSize(width: contentSize.width / 2, height: contentSize.height / 2)
+
+    let grid = makeGrid(
+      contentSize: contentSize,
+      widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxSize.width),
+      heightTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxSize.height)
+    )
+
+    assertIntrinsicContentSize(ofBlock: grid, equals: maxSize)
+  }
+
+  func test_IntrinsicTraitsWithMinConstraints() {
+    let contentSize = CGSize(width: 50, height: 75)
+    let minSize = CGSize(width: contentSize.width * 2, height: contentSize.height * 2)
+
+    let grid = makeGrid(
+      contentSize: contentSize,
+      widthTrait: .intrinsic(
+        constrained: false,
+        minSize: minSize.width,
+        maxSize: .infinity
+      ),
+      heightTrait: .intrinsic(
+        constrained: false,
+        minSize: minSize.height,
+        maxSize: .infinity
+      )
+    )
+
+    assertIntrinsicContentSize(ofBlock: grid, equals: minSize)
+  }
+
+  private func makeGrid(
+    contentSize: CGSize,
+    widthTrait: LayoutTrait,
+    heightTrait: LayoutTrait
+  ) -> GridBlock {
+    let itemBlock = EmptyBlock(
+      widthTrait: .fixed(contentSize.width),
+      heightTrait: .fixed(contentSize.height)
+    )
+
+    return try! GridBlock(
+      widthTrait: widthTrait,
+      heightTrait: heightTrait,
+      contentAlignment: .default,
+      items: [
+        .init(
+          weight: GridBlock.Item.Weight(),
+          contents: itemBlock
+        ),
+      ],
+      columnCount: 1
+    )
+  }
+
+  private func assertIntrinsicContentSize(
+    ofBlock block: GridBlock,
+    equals: CGSize
+  ) {
+    let width = block.intrinsicContentWidth
+    let height = block.intrinsicContentHeight(forWidth: width)
+
+    XCTAssertEqual(
+      CGSize(width: width, height: height),
+      equals
+    )
+  }
+
   func test_KeepWeightWhenUpdateState() {
     struct TestState: ElementState {}
 

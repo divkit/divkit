@@ -9,12 +9,12 @@ extension [Div] {
   ) -> [T] {
     iterativeFlatMap { div, index in
       let itemContext = context.modifying(
-        parentPath: context.parentPath + index,
+        pathSuffix: String(index),
         sizeModifier: sizeModifier
       )
       do {
         return try modifyError({
-          DivBlockModelingError($0.message, path: itemContext.parentPath)
+          DivBlockModelingError($0.message, path: itemContext.path)
         }) {
           let block = try div.value.makeBlock(context: itemContext)
           return modificator(div, block, itemContext)
@@ -28,5 +28,13 @@ extension [Div] {
 
   func makeBlocks(context: DivBlockModelingContext) -> [Block] {
     makeBlocks(context: context, mappedBy: { _, block, _ in block })
+  }
+}
+
+extension Array where Element: Hashable {
+  var nonUniqueElements: [Element] {
+    countElements()
+      .filter { $0.value > 1 }
+      .map(\.key)
   }
 }

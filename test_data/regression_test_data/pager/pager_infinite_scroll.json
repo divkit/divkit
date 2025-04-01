@@ -7,7 +7,6 @@
         "name": "selected",
         "value": 2
       }
-  
     ],
     "states": [
       {
@@ -15,121 +14,122 @@
         "div": {
           "type": "container",
           "items": [
-              {
-                  "type": "indicator",
-                  "active_item_color": "#000000",
-                  "active_item_size": 1.5,
-                  "height": {
-                      "type": "fixed",
-                      "value": 10
-                  },
-                  "margins": {
-                      "top": 10,
-                      "bottom": 10
-                  },
-                  "space_between_centers": {
-                    "type": "fixed",
-                    "value": 20
-                  },
-                  "inactive_item_color": "#D0D1D9",
-                  "pager_id": "pager",
-                  "shape": {
-                      "type": "rounded_rectangle",
-                      "corner_radius": {
-                          "type": "fixed",
-                          "value": 2
-                      },
-                      "item_height": {
-                          "type": "fixed",
-                          "value": 2
-                      },
-                      "item_width": {
-                          "type": "fixed",
-                          "value": 10
-                      }
-                  }
+            {
+              "type": "indicator",
+              "active_item_color": "#000000",
+              "active_item_size": 1.5,
+              "height": {
+                "type": "fixed",
+                "value": 10
               },
-              {
-                "type": "pager",
-                "default_item": "@{selected}",
-                "id": "pager",
-                "layout_mode": {
-                  "type": "percentage",
-                  "page_width": {
-                    "type": "percentage",
-                    "value": 80
-                  }
+              "margins": {
+                "top": 10,
+                "bottom": 10
+              },
+              "space_between_centers": {
+                "type": "fixed",
+                "value": 20
+              },
+              "inactive_item_color": "#D0D1D9",
+              "pager_id": "pager",
+              "shape": {
+                "type": "rounded_rectangle",
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 2
                 },
-                "orientation": "horizontal",
-                "infinite_scroll": true,
-                "item_spacing": {
+                "item_height": {
+                  "type": "fixed",
+                  "value": 2
+                },
+                "item_width": {
                   "type": "fixed",
                   "value": 10
-                },
-                "restrict_parent_scroll": 1,
-                "items": [
-                  {
-                    "type": "pager_item_content",
-                    "header_text": "Item 0",
-                    "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                    "content_id": "content_0",
-                    "button_id": "button_0",
-                    "content_expand_action": "div-action://set_state?state_id=0/content_0/expanded",
-                    "content_collapse_action": "div-action://set_state?state_id=0/content_0/collapsed",
-                    "text_expand_action": "div-action://set_state?state_id=0/button_0/text_expand",
-                    "text_collapse_action": "div-action://set_state?state_id=0/button_0/text_collapse",
-                    "selected_actions": [
-                      {
-                        "log_id": "selected_0",
-                        "url": "div-action://set_variable?name=selected&value=0"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "blocks_2",
-                    "expand_id": "expand_1",
-                    "type": "pager_item_content",
-                    "header_text": "Item 1",
-                    "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                    "content_id": "content_1",
-                    "button_id": "button_1",
-                    "content_expand_action": "div-action://set_state?state_id=0/content_1/expanded",
-                    "content_collapse_action": "div-action://set_state?state_id=0/content_1/collapsed",
-                    "text_expand_action": "div-action://set_state?state_id=0/button_1/text_expand",
-                    "text_collapse_action": "div-action://set_state?state_id=0/button_1/text_collapse",
-                    "selected_actions": [
-                      {
-                        "log_id": "selected_1",
-                        "url": "div-action://set_variable?name=selected&value=1"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "pager_item_content",
-                    "header_text": "Item 2",
-                    "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                    "content_id": "content_2",
-                    "button_id": "button_2",
-                    "content_expand_action": "div-action://set_state?state_id=0/content_2/expanded",
-                    "content_collapse_action": "div-action://set_state?state_id=0/content_2/collapsed",
-                    "text_expand_action": "div-action://set_state?state_id=0/button_2/text_expand",
-                    "text_collapse_action": "div-action://set_state?state_id=0/button_2/text_collapse",
-                    "selected_actions": [
-                      {
-                        "log_id": "selected_2",
-                        "url": "div-action://set_variable?name=selected&value=2"
-                      }
-                    ]
-                  }
-                ]
-              },{
-                "type": "text",
-                "text": "Seleted: @{selected}",
-                "margins": {
-                  "top": 20
-                },
-                "text_alignment_horizontal": "center"
+                }
               }
+            },
+            {
+              "type": "pager",
+              "default_item": "@{selected}",
+              "id": "pager",
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "type": "percentage",
+                  "value": 80
+                }
+              },
+              "orientation": "horizontal",
+              "infinite_scroll": true,
+              "item_spacing": {
+                "type": "fixed",
+                "value": 10
+              },
+              "restrict_parent_scroll": 1,
+              "items": [
+                {
+                  "type": "pager_item_content",
+                  "header_text": "Item 0",
+                  "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                  "content_id": "content_0",
+                  "button_id": "button_0",
+                  "content_expand_action": "div-action://set_state?state_id=0/content_0/expanded",
+                  "content_collapse_action": "div-action://set_state?state_id=0/content_0/collapsed",
+                  "text_expand_action": "div-action://set_state?state_id=0/button_0/text_expand",
+                  "text_collapse_action": "div-action://set_state?state_id=0/button_0/text_collapse",
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_0",
+                      "url": "div-action://set_variable?name=selected&value=0"
+                    }
+                  ]
+                },
+                {
+                  "id": "blocks_2",
+                  "expand_id": "expand_1",
+                  "type": "pager_item_content",
+                  "header_text": "Item 1",
+                  "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                  "content_id": "content_1",
+                  "button_id": "button_1",
+                  "content_expand_action": "div-action://set_state?state_id=0/content_1/expanded",
+                  "content_collapse_action": "div-action://set_state?state_id=0/content_1/collapsed",
+                  "text_expand_action": "div-action://set_state?state_id=0/button_1/text_expand",
+                  "text_collapse_action": "div-action://set_state?state_id=0/button_1/text_collapse",
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_1",
+                      "url": "div-action://set_variable?name=selected&value=1"
+                    }
+                  ]
+                },
+                {
+                  "type": "pager_item_content",
+                  "header_text": "Item 2",
+                  "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                  "content_id": "content_2",
+                  "button_id": "button_2",
+                  "content_expand_action": "div-action://set_state?state_id=0/content_2/expanded",
+                  "content_collapse_action": "div-action://set_state?state_id=0/content_2/collapsed",
+                  "text_expand_action": "div-action://set_state?state_id=0/button_2/text_expand",
+                  "text_collapse_action": "div-action://set_state?state_id=0/button_2/text_collapse",
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_2",
+                      "url": "div-action://set_variable?name=selected&value=2"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Seleted: @{selected}",
+              "margins": {
+                "top": 20
+              },
+              "text_alignment_horizontal": "center"
+            }
           ]
         }
       }
@@ -269,7 +269,7 @@
                     "$url": "text_collapse_action"
                   }
                 ],
-                "$id" : "expand_id"
+                "$id": "expand_id"
               }
             },
             {
@@ -295,5 +295,3 @@
     }
   }
 }
-
-

@@ -5,19 +5,21 @@ import LayoutKit
 import VGSL
 
 extension DivState: DivBlockModeling {
-  public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try addSwipeHandling(
+  public func makeBlock(context parentContext: DivBlockModelingContext) throws -> Block {
+    let stateId = parentContext.overridenId ?? divId ?? id ?? ""
+    let context = modifiedContextParentPath(parentContext)
+    return try addSwipeHandling(
       to: applyBaseProperties(
-        to: { try makeBaseBlock(context: context) },
+        to: { try makeBaseBlock(context: context, id: stateId) },
         context: context,
-        actionsHolder: nil
+        actionsHolder: nil,
+        clipToBounds: resolveClipToBounds(context.expressionResolver)
       ),
       context: context
     )
   }
 
-  private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let id = context.elementId ?? divId ?? id ?? ""
+  private func makeBaseBlock(context: DivBlockModelingContext, id: String) throws -> Block {
     if id == "" {
       context.addWarning(message: "DivState has no id")
     }
@@ -52,11 +54,13 @@ extension DivState: DivBlockModeling {
        previousState.stateId != activeStateId,
        let previousDiv = previousState.div {
       context.triggersStorage?
-        .disableTriggers(path: context.parentPath + id + previousState.stateId)
-      context.triggersStorage?.enableTriggers(path: context.parentPath + id + activeStateId)
+        .disableTriggers(path: context.path + previousState.stateId)
+      context.triggersStorage?.enableTriggers(path: context.path + activeStateId)
 
       // state changed -> drop visibility cache for all children
-      context.lastVisibleBoundsCache.dropVisibleBounds(prefix: context.parentPath)
+      if let parentPrefix = context.path.parent {
+        context.lastVisibleBoundsCache.dropVisibleBounds(prefix: parentPrefix)
+      }
       previousBlock = try previousDiv.value.makeBlock(
         context: context.makeContextForState(
           id: id,
@@ -130,7 +134,7 @@ extension DivState: DivBlockModeling {
     return SwipeContainerBlock(
       child: child,
       state: .default,
-      path: context.parentPath + DivState.type,
+      path: context.path,
       swipeOutActions: swipeOutActions.uiActions(context: context)
     )
   }
@@ -157,70 +161,8 @@ extension DivBlockModelingContext {
     stateId: String
   ) -> DivBlockModelingContext {
     modifying(
-      parentPath: parentPath + id + stateId,
+      pathSuffix: stateId,
       parentDivStatePath: parentDivStatePath + id + stateId
     )
-  }
-}
-
-extension TransitioningAnimation.Kind {
-  fileprivate func defaultStartValue(for type: TransitioningAnimationType) -> Double {
-    switch (self, type) {
-    case (.fade, .appearing), (.scaleXY, .appearing):
-      return 0
-    case (.fade, .disappearing), (.scaleXY, .disappearing):
-      return 1
-    case (.translationY, .appearing):
-      return TransitioningAnimation.defaultTrailingSlideDistance
-    case (.translationY, .disappearing):
-      return 0
-    case (.translationX, _):
-      assertionFailure()
-      return 0
-    }
-  }
-
-  fileprivate func defaultEndValue(for type: TransitioningAnimationType) -> Double {
-    defaultStartValue(for: type.inverted())
-  }
-}
-
-extension DivAnimation.Name {
-  fileprivate var kind: TransitioningAnimation.Kind? {
-    switch self {
-    case .fade: .fade
-    case .scale: .scaleXY
-    case .translate: .translationY
-    case .set, .noAnimation, .native: nil
-    }
-  }
-}
-
-extension DivAnimation {
-  fileprivate func makeTransitioningAnimations(
-    for type: TransitioningAnimationType,
-    with expressionResolver: ExpressionResolver
-  ) -> [TransitioningAnimation] {
-    let name = resolveName(expressionResolver) ?? .noAnimation
-    if name == .set {
-      return (items ?? []).flatMap {
-        $0.makeTransitioningAnimations(for: type, with: expressionResolver)
-      }
-    }
-
-    guard let kind = name.kind else {
-      return []
-    }
-
-    let animation = TransitioningAnimation(
-      kind: kind,
-      start: resolveStartValue(expressionResolver) ?? kind.defaultStartValue(for: type),
-      end: resolveEndValue(expressionResolver) ?? kind.defaultEndValue(for: type),
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
-      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)),
-      timingFunction: resolveInterpolator(expressionResolver).asTimingFunction()
-    )
-
-    return [animation]
   }
 }

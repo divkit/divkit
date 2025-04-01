@@ -107,98 +107,100 @@
           "height": {
             "type": "wrap_content"
           },
-          "items" :[{
-            "type": "container",
-            "height": {
-              "type": "wrap_content"
-            },
-            "margins": {
-              "left": 16,
-              "top": 16,
-              "right": 16,
-              "bottom": 16
-            },
-            "orientation": "vertical",
-            "items": [
-              {
-                "type": "button",
-                "text": "Item 1",
-                "accessibility": {
-                  "description": "This is Item 1",
-                  "hint": "@{element1} mode",
-                  "mode": "@{element1}"
-                },
-                "border": {
-                  "corner_radius": 8
-                }
+          "items": [
+            {
+              "type": "container",
+              "height": {
+                "type": "wrap_content"
               },
-              {
-                "type": "container",
-                "background": [
-                  {
-                    "type": "solid",
-                    "color": "#0e000000"
-                  }
-                ],
-                "border": {
-                  "corner_radius": 8
-                },
-                "margins": {
-                  "bottom": 16
-                },
-                "accessibility": {
-                  "mode": "@{element23}",
-                  "hint": "@{element23} mode"
-                },
-                "items": [
-                  {
-                    "type": "button",
-                    "text": "Item 2",
-                    "margins": {
-                      "left": 16,
-                      "top": 16,
-                      "right": 16,
-                      "bottom": 16
-                    },
-                    "accessibility": {
-                      "hint": "@{element2} mode",
-                      "description": "This is Item 2",
-                      "mode": "@{element2}"
-                    }
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "Item 1",
+                  "accessibility": {
+                    "description": "This is Item 1",
+                    "hint": "@{element1} mode",
+                    "mode": "@{element1}"
                   },
-                  {
-                    "type": "button",
-                    "text": "Item 3",
-                    "margins": {
-                      "left": 16,
-                      "right": 16,
-                      "bottom": 16
-                    },
-                    "accessibility": {
-                      "description": "This is Item 3",
-                      "hint": "@{element3} mode",
-                      "mode": "@{element3}"
-                    }
+                  "border": {
+                    "corner_radius": 8
                   }
-                ]
-              },
-              {
-                "type": "button",
-                "text_color": "#FFFFFF",
-                "text": "Item 4",
-                "accessibility": {
-                  "mode": "@{element4}",
-                  "hint": "@{element4} mode",
-                  "description": "This is Item 4"
                 },
-                "background": [
-                  {
-                    "type": "solid",
-                    "color": "#cc0605"
-                  }
-                ]
-              }
-            ]},
+                {
+                  "type": "container",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#0e000000"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 8
+                  },
+                  "margins": {
+                    "bottom": 16
+                  },
+                  "accessibility": {
+                    "mode": "@{element23}",
+                    "hint": "@{element23} mode"
+                  },
+                  "items": [
+                    {
+                      "type": "button",
+                      "text": "Item 2",
+                      "margins": {
+                        "left": 16,
+                        "top": 16,
+                        "right": 16,
+                        "bottom": 16
+                      },
+                      "accessibility": {
+                        "hint": "@{element2} mode",
+                        "description": "This is Item 2",
+                        "mode": "@{element2}"
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "text": "Item 3",
+                      "margins": {
+                        "left": 16,
+                        "right": 16,
+                        "bottom": 16
+                      },
+                      "accessibility": {
+                        "description": "This is Item 3",
+                        "hint": "@{element3} mode",
+                        "mode": "@{element3}"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text_color": "#FFFFFF",
+                  "text": "Item 4",
+                  "accessibility": {
+                    "mode": "@{element4}",
+                    "hint": "@{element4} mode",
+                    "description": "This is Item 4"
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#cc0605"
+                    }
+                  ]
+                }
+              ]
+            },
             {
               "type": "container",
               "height": {
@@ -224,28 +226,34 @@
                   "type": "controlButton",
                   "text": "Default",
                   "backgroundColor": "@{element1 == 'default' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element1&value=default"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element1&value=default"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Merge",
                   "backgroundColor": "@{element1 == 'merge' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element1&value=merge"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element1&value=merge"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Exclude",
                   "backgroundColor": "@{element1 == 'exclude' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element1&value=exclude"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element1&value=exclude"
+                    }
+                  ]
                 }
               ]
             },
@@ -274,28 +282,34 @@
                   "type": "controlButton",
                   "text": "Default",
                   "backgroundColor": "@{element2 == 'default' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element2&value=default"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element2&value=default"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Merge",
                   "backgroundColor": "@{element2 == 'merge' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element2&value=merge"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element2&value=merge"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Exclude",
                   "backgroundColor": "@{element2 == 'exclude' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element2&value=exclude"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element2&value=exclude"
+                    }
+                  ]
                 }
               ]
             },
@@ -324,28 +338,34 @@
                   "type": "controlButton",
                   "text": "Default",
                   "backgroundColor": "@{element3 == 'default' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element3&value=default"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element3&value=default"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Merge",
                   "backgroundColor": "@{element3 == 'merge' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element3&value=merge"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element3&value=merge"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Exclude",
                   "backgroundColor": "@{element3 == 'exclude' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element3&value=exclude"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element3&value=exclude"
+                    }
+                  ]
                 }
               ]
             },
@@ -374,28 +394,34 @@
                   "type": "controlButton",
                   "text": "Default",
                   "backgroundColor": "@{element23 == 'default' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element23&value=default"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element23&value=default"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Merge",
                   "backgroundColor": "@{element23 == 'merge' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element23&value=merge"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element23&value=merge"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Exclude",
                   "backgroundColor": "@{element23 == 'exclude' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element23&value=exclude"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element23&value=exclude"
+                    }
+                  ]
                 }
               ]
             },
@@ -424,28 +450,34 @@
                   "type": "controlButton",
                   "text": "Default",
                   "backgroundColor": "@{element4 == 'default' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element4&value=default"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element4&value=default"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Merge",
                   "backgroundColor": "@{element4 == 'merge' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element4&value=merge"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element4&value=merge"
+                    }
+                  ]
                 },
                 {
                   "type": "controlButton",
                   "text": "Exclude",
                   "backgroundColor": "@{element4 == 'exclude' ? '#59000000' : '#0E000000'}",
-                  "actions" : [{
-                    "log_id": "click",
-                    "url": "div-action://set_variable?name=element4&value=exclude"
-                  }]
+                  "actions": [
+                    {
+                      "log_id": "click",
+                      "url": "div-action://set_variable?name=element4&value=exclude"
+                    }
+                  ]
                 }
               ]
             }

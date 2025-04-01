@@ -2,12 +2,12 @@ package com.yandex.div.steps
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.yandex.div.utils.clickOutside
+import com.yandex.div.utils.swipeLeftOutside
 import com.yandex.div2.DivTooltip
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
@@ -22,11 +22,11 @@ internal class DivTooltipSteps {
     }
 
     fun clickOnTooltipWrapper(): Unit = step("Click on tooltip background") {
-        tooltipBackground().perform(click())
+        tooltip().perform(clickOutside())
     }
 
     fun swipeOnTooltipWrapper(): Unit = step("Swipe on tooltip background") {
-        tooltipBackground().perform(swipeDown())
+        tooltip().perform(swipeLeftOutside())
     }
 
     fun clickTooltip(): Unit = step("click on tooltip") {
@@ -56,4 +56,3 @@ internal class DivTooltipAssertions {
 }
 
 private fun tooltip() = onView(withText("tooltip_text")).inRoot(isPlatformPopup())
-private fun tooltipBackground() = onView(withChild(withText("tooltip_text")))

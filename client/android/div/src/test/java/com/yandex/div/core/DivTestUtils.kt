@@ -14,6 +14,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.textString
 import com.yandex.div.json.expressions.Expression
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -67,7 +68,7 @@ internal fun compareViews(first: View, second: View): Boolean {
     when (first) {
         is TextView -> {
             Assert.assertEquals(first.textSize, (second as TextView).textSize)
-            Assert.assertEquals(first.text, second.text)
+            Assert.assertEquals(first.textString, second.textString)
             Assert.assertEquals(first.maxLines, second.maxLines)
         }
     }

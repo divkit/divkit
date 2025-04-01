@@ -1,65 +1,44 @@
 package com.yandex.div.core.view2.divs
 
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.TextPaint
 import android.text.TextUtils
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.StrikethroughSpan
-import android.text.style.UnderlineSpan
 import android.util.DisplayMetrics
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.text.getSpans
-import androidx.core.view.ViewCompat
-import com.yandex.div.core.DivIdLoggingImageDownloadCallback
-import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
-import com.yandex.div.core.images.CachedBitmap
-import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.util.text.DivBackgroundSpan
-import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
+import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.observeColorPoint
+import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
-import com.yandex.div.core.view2.spannable.BaselineShiftSpan
-import com.yandex.div.core.view2.spannable.FontFeatureSpan
-import com.yandex.div.core.view2.spannable.FontSizeSpan
-import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
-import com.yandex.div.core.view2.spannable.ShadowSpan
-import com.yandex.div.core.view2.spannable.ShadowSpan.ShadowParams
-import com.yandex.div.core.view2.spannable.VerticalAlignmentSpan
+import com.yandex.div.core.view2.getTypeface
+import com.yandex.div.core.view2.spannable.ShadowData
+import com.yandex.div.core.view2.spannable.SpannedTextBuilder
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
-import com.yandex.div.internal.spannable.BitmapImageSpan
-import com.yandex.div.internal.spannable.ImagePlaceholderSpan
-import com.yandex.div.internal.spannable.LetterSpacingSpan
-import com.yandex.div.internal.spannable.NoStrikethroughSpan
-import com.yandex.div.internal.spannable.NoUnderlineSpan
-import com.yandex.div.internal.spannable.TextColorSpan
-import com.yandex.div.internal.spannable.TypefaceSpan
+import com.yandex.div.internal.graphics.Colormap
+import com.yandex.div.internal.graphics.checkIsNotEmpty
+import com.yandex.div.internal.util.compareNullableWith
 import com.yandex.div.internal.widget.EllipsizedTextView
 import com.yandex.div.internal.widget.checkHyphenationSupported
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
-import com.yandex.div2.DivAction
+import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivFontWeight
@@ -73,13 +52,11 @@ import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
-import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTextGradient
 import javax.inject.Inject
 import kotlin.math.min
 
 private const val SOFT_HYPHEN = '\u00AD'
-private const val WORD_JOINER = "\u2060"
 private const val LONGEST_WORD_BREAK = 10
 
 /**
@@ -87,19 +64,15 @@ private const val LONGEST_WORD_BREAK = 10
  */
 @DivScope
 internal class DivTextBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
-    private val imageLoader: DivImageLoader,
+    private val spannedTextBuilder: SpannedTextBuilder,
     @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationEnabled: Boolean
-) : DivViewBinder<DivText, DivLineHeightTextView> {
-
-    override fun bindView(context: BindingContext, view: DivLineHeightTextView, div: DivText) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
-
-        baseBinder.bindView(context, view, div, oldDiv)
-        view.applyDivActions(
-            context,
+) : DivViewBinder<Div.Text, DivText, DivLineHeightTextView>(baseBinder) {
+    
+    override fun DivLineHeightTextView.bind(bindingContext: BindingContext, div: DivText, oldDiv: DivText?) {
+        applyDivActions(
+            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -112,24 +85,23 @@ internal class DivTextBinder @Inject constructor(
             div.accessibility,
         )
 
-        val expressionResolver = context.expressionResolver
-        view.bindTypeface(div, oldDiv, expressionResolver)
-        view.bindTextAlignment(div, oldDiv, expressionResolver)
-        view.bindFontSize(div, oldDiv, expressionResolver)
-        view.bindFontFeatureSettings(div, oldDiv, expressionResolver)
-        view.bindLineHeight(context, div, oldDiv, expressionResolver)
-        view.bindTextColor(div, oldDiv, expressionResolver)
-        view.bindUnderline(div, oldDiv, expressionResolver)
-        view.bindStrikethrough(div, oldDiv, expressionResolver)
-        view.bindMaxLines(div, oldDiv, expressionResolver)
-        view.bindText(context, div, oldDiv)
-        view.bindEllipsis(context, div, oldDiv)
-        view.bindAutoEllipsize(div, oldDiv, expressionResolver)
-        view.bindTextGradient(div, oldDiv, expressionResolver)
-        view.bindTextShadow(div, oldDiv, expressionResolver)
-        view.bindSelectable(div, oldDiv, expressionResolver)
-        view.bindTightenWidth(div, oldDiv, expressionResolver)
-        view.updateFocusableState(div)
+        val expressionResolver = bindingContext.expressionResolver
+        bindTypeface(div, oldDiv, expressionResolver)
+        bindTextAlignment(div, oldDiv, expressionResolver)
+        bindFontSize(div, oldDiv, expressionResolver)
+        bindFontFeatureSettings(div, oldDiv, expressionResolver)
+        bindTextColor(div, oldDiv, expressionResolver)
+        bindUnderline(div, oldDiv, expressionResolver)
+        bindStrikethrough(div, oldDiv, expressionResolver)
+        bindMaxLines(div, oldDiv, expressionResolver)
+        bindText(bindingContext, div, oldDiv)
+        bindEllipsis(bindingContext, div, oldDiv)
+        bindAutoEllipsize(div, oldDiv, expressionResolver)
+        bindTextGradient(bindingContext.divView, div, oldDiv, expressionResolver)
+        bindTextShadow(div, oldDiv, expressionResolver)
+        bindSelectable(div, oldDiv, expressionResolver)
+        bindTightenWidth(div, oldDiv, expressionResolver)
+        updateFocusableState(div)
     }
 
     //region Text Alignment
@@ -343,37 +315,6 @@ internal class DivTextBinder @Inject constructor(
 
     //endregion
 
-    //region Line Height
-
-    private fun DivLineHeightTextView.bindLineHeight(
-        context: BindingContext,
-        newDiv: DivText,
-        oldDiv: DivText?,
-        resolver: ExpressionResolver,
-    ) {
-        if (newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight)
-            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)) {
-            return
-        }
-
-        applyLineHeight(newDiv.lineHeight?.evaluate(resolver), newDiv.fontSizeUnit.evaluate(resolver))
-
-        if (newDiv.lineHeight.isConstantOrNull() && newDiv.fontSizeUnit.isConstant()) {
-            return
-        }
-
-        val callback = { _: Any ->
-            applyLineHeight(newDiv.lineHeight?.evaluate(resolver), newDiv.fontSizeUnit.evaluate(resolver))
-            if (newDiv.ranges != null || newDiv.images != null) {
-                applyRichText(context, newDiv)
-            }
-        }
-        addSubscription(newDiv.lineHeight?.observe(resolver, callback))
-        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
-    }
-
-    //endregion
-
     //region Text Color
 
     private fun DivLineHeightTextView.bindTextColor(
@@ -533,58 +474,66 @@ internal class DivTextBinder @Inject constructor(
     //region Text Gradient
 
     private fun DivLineHeightTextView.bindTextGradient(
+        divView: Div2View,
         newDiv: DivText,
         oldDiv: DivText?,
         resolver: ExpressionResolver,
     ) {
         when (val textGradient = newDiv.textGradient) {
             null -> Unit
-            is DivTextGradient.Linear -> bindLinearTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
+            is DivTextGradient.Linear -> bindLinearTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
             is DivTextGradient.Radial -> bindRadialTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
         }
     }
 
     private fun DivLineHeightTextView.bindLinearTextGradient(
+        divView: Div2View,
         newTextGradient: DivLinearGradient,
         oldTextGradient: DivTextGradient?,
         resolver: ExpressionResolver,
     ) {
         if (oldTextGradient is DivTextGradient.Linear
             && newTextGradient.angle.equalsToConstant(oldTextGradient.value.angle)
-            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)) {
+            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)
+            && newTextGradient.colorMap.compareNullableWith(oldTextGradient.value.colorMap) { left, right -> left.equalsToConstant(right)}) {
             return
         }
 
         applyLinearTextGradientColor(
             newTextGradient.angle.evaluate(resolver),
-            newTextGradient.colors.evaluate(resolver)
+            newTextGradient.toColormap(resolver).checkIsNotEmpty(divView)
         )
 
-        if (newTextGradient.angle.isConstant() && newTextGradient.colors.isConstant()) {
+        if (newTextGradient.angle.isConstant()
+            && newTextGradient.colors.isConstantOrNull()
+            && newTextGradient.colorMap?.all { it.isConstant() } != false) {
             return
         }
 
         val callback = { _: Any ->
             applyLinearTextGradientColor(
                 newTextGradient.angle.evaluate(resolver),
-                newTextGradient.colors.evaluate(resolver)
+                newTextGradient.toColormap(resolver).checkIsNotEmpty(divView)
             )
         }
         addSubscription(newTextGradient.angle.observe(resolver, callback))
-        addSubscription(newTextGradient.colors.observe(resolver, callback))
+        addSubscription(newTextGradient.colors?.observe(resolver, callback))
+        newTextGradient.colorMap?.forEach { observeColorPoint(it, resolver, callback) }
     }
 
     private fun TextView.applyLinearTextGradientColor(
         angle: Long,
-        colors: List<Int>
+        colormap: Colormap
     ) {
         doOnActualLayout {
             this.paint.shader = LinearGradientDrawable.createLinearGradient(
                 angle = angle.toFloat(),
-                colors = colors.toIntArray(),
+                colors = colormap.colors,
+                positions = colormap.positions,
                 width = realTextWidth,
                 height = height - paddingBottom - paddingTop
             )
+            invalidate()
         }
     }
 
@@ -639,6 +588,7 @@ internal class DivTextBinder @Inject constructor(
                 width = realTextWidth,
                 height = height - paddingBottom - paddingTop
             )
+            invalidate()
         }
     }
 
@@ -701,7 +651,7 @@ internal class DivTextBinder @Inject constructor(
         oldDiv: DivText?,
     ) {
         if (newDiv.ranges == null && newDiv.images == null) {
-            bindPlainText(newDiv, oldDiv, bindingContext.expressionResolver)
+            bindPlainText(bindingContext, newDiv, oldDiv)
         } else {
             bindRichText(bindingContext, newDiv)
         }
@@ -759,23 +709,9 @@ internal class DivTextBinder @Inject constructor(
         bindingContext: BindingContext,
         div: DivText
     ) {
-        val resolver = bindingContext.expressionResolver
-        val ranger = DivTextRanger(
-            bindingContext,
-            this,
-            div.text.evaluate(resolver),
-            div.fontSize.evaluate(resolver),
-            div.fontSizeUnit.evaluate(resolver),
-            div.fontFamily?.evaluate(resolver),
-            div.lineHeight?.evaluate(resolver),
-            div.ranges,
-            null,
-            div.images
-        )
-        ranger.onTextChanged { text ->
-            setText(text, TextView.BufferType.NORMAL)
+        spannedTextBuilder.buildText(bindingContext, this, div) { spannedText ->
+            setText(spannedText, TextView.BufferType.NORMAL)
         }
-        ranger.run()
     }
 
     /**
@@ -783,31 +719,41 @@ internal class DivTextBinder @Inject constructor(
      * to bind [DivText.text] as quick as possible.
      */
     private fun DivLineHeightTextView.bindPlainText(
+        bindingContext: BindingContext,
         newDiv: DivText,
-        oldDiv: DivText?,
-        resolver: ExpressionResolver
+        oldDiv: DivText?
     ) {
-        if (newDiv.text.equalsToConstant(oldDiv?.text)) {
+        if (newDiv.text.equalsToConstant(oldDiv?.text)
+            && newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight)
+            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)) {
             return
         }
 
-        applyPlainText(newDiv.text.evaluate(resolver))
-        applyHyphenation(newDiv.text.evaluate(resolver))
+        val resolver = bindingContext.expressionResolver
 
-        if (newDiv.text.isConstant() && newDiv.text.isConstant()) {
+        val text = newDiv.text.evaluate(resolver)
+        applyPlainText(bindingContext, newDiv)
+        applyHyphenation(text)
+
+        if (newDiv.text.isConstant()
+            && newDiv.lineHeight.isConstantOrNull()
+            && newDiv.fontSizeUnit.isConstantOrNull()) {
             return
         }
 
-        addSubscription(
-            newDiv.text.observe(resolver) { text ->
-                applyPlainText(text)
-                applyHyphenation(text)
-            }
-        )
+        val callback = { _: Any ->
+            val newText = newDiv.text.evaluate(resolver)
+            applyPlainText(bindingContext, newDiv)
+            applyHyphenation(newText)
+        }
+
+        addSubscription(newDiv.text.observe(resolver, callback))
+        addSubscription(newDiv.lineHeight?.observe(resolver, callback))
+        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
     }
 
-    private fun TextView.applyPlainText(text: String) {
-        this.text = text
+    private fun TextView.applyPlainText(bindingContext: BindingContext, divText: DivText) {
+        this.text = spannedTextBuilder.buildPlainText(bindingContext, this, divText)
     }
 
     private fun TextView.applyHyphenation(text: String) {
@@ -925,23 +871,14 @@ internal class DivTextBinder @Inject constructor(
             return
         }
 
-        val resolver = bindingContext.expressionResolver
-        val ranger = DivTextRanger(
-            bindingContext,
-            this,
-            ellipsis.text.evaluate(resolver),
-            newDiv.fontSize.evaluate(resolver),
-            newDiv.fontSizeUnit.evaluate(resolver),
-            newDiv.fontFamily?.evaluate(resolver),
-            newDiv.lineHeight?.evaluate(resolver),
-            ellipsis.ranges,
-            ellipsis.actions,
-            ellipsis.images
-        )
-        ranger.onTextChanged { text ->
-            this.ellipsis = text
+        spannedTextBuilder.buildEllipsis(
+            bindingContext = bindingContext,
+            textView = this,
+            divText = newDiv,
+            ellipsis
+        ) { ellipsis ->
+            this.ellipsis = ellipsis
         }
-        ranger.run()
     }
 
     //endregion
@@ -965,7 +902,7 @@ internal class DivTextBinder @Inject constructor(
 
         val shadow = newDiv.textShadow
         val displayMetrics = resources.displayMetrics
-        applyTextShadow(shadow?.getShadowParams(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
+        applyTextShadow(shadow?.getShadowData(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
 
         if (newDiv.textShadow?.alpha.isConstantOrNull()
             && newDiv.textShadow?.blur.isConstantOrNull()
@@ -978,7 +915,7 @@ internal class DivTextBinder @Inject constructor(
         }
 
         val callback = { _: Any ->
-            applyTextShadow(shadow?.getShadowParams(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
+            applyTextShadow(shadow?.getShadowData(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
         }
 
         addSubscription(shadow?.alpha?.observe(resolver, callback))
@@ -990,7 +927,7 @@ internal class DivTextBinder @Inject constructor(
         addSubscription(shadow?.offset?.y?.unit?.observe(resolver, callback))
     }
 
-    private fun TextView.applyTextShadow(shadowParams: ShadowParams?) {
+    private fun TextView.applyTextShadow(shadowParams: ShadowData?) {
         if (shadowParams == null) {
             (parent as? DivViewWrapper)?.let {
                 it.clipChildren = true
@@ -1032,335 +969,25 @@ internal class DivTextBinder @Inject constructor(
 
     //endregion
 
-    // TODO: refactor to SpannedTextBuilder scoped by div context.
-    private inner class DivTextRanger(
-        private val bindingContext: BindingContext,
-        private val textView: TextView,
-        private val text: String,
-        private val fontSize: Long,
-        private val fontSizeUnit: DivSizeUnit,
-        private val fontFamily: String?,
-        private val lineHeight: Long?,
-        private val ranges: List<DivText.Range>?,
-        private val actions: List<DivAction>?,
-        images: List<DivText.Image>?
-    ) {
-
-        private val divView = bindingContext.divView
-        private val resolver = bindingContext.expressionResolver
-        private val context = divView.context
-        private val metrics = divView.resources.displayMetrics
-        private val sb: SpannableStringBuilder = SpannableStringBuilder(text)
-        private val images = images?.filter { it.start.evaluate(resolver) <= text.length }?.sortedBy { it.evaluateStartWithDirection(resolver) } ?: emptyList()
-
-        private var additionalCharsBeforeImage: IntArray? = null
-
-        private var textObserver: ((CharSequence) -> Unit)? = null
-
-        fun onTextChanged(action: (CharSequence) -> Unit) {
-            textObserver = action
-        }
-
-        fun run() {
-            (textView as? DivLineHeightTextView)?.clearImageSpans()
-
-            if (ranges.isNullOrEmpty() && images.isEmpty()) {
-                textObserver?.invoke(text)
-                return
-            }
-
-            if (textView is DivLineHeightTextView) textView.textRoundedBgHelper?.invalidateSpansCache()
-            ranges?.forEach { item -> sb.addTextRange(item) }
-            images.reversed().forEach {
-                sb.insert(it.evaluateStartWithDirection(resolver).toIntSafely(), "#")
-            }
-
-            // You can uncomment the line below for debug purposes.
-            // sb.setSpan(LineMetricsSpan(), 0, sb.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-
-            images.foldIndexed(Int.MIN_VALUE) { index, prevImageStart, image ->
-                additionalCharsBeforeImage?.takeIf { index > 0 }?.let { chars ->
-                    chars[index] = chars[index - 1]
-                }
-                val rawStart = image.evaluateStartWithDirection(resolver).toIntSafely()
-                val actualStart = rawStart + index + additionalCharsBeforeImage.getOrZero(index)
-                val notWhitespaceBefore = actualStart > 0 && !sb[actualStart - 1].isWhitespace()
-                val textBeforeImage = actualStart != prevImageStart + 1 && notWhitespaceBefore
-                if (textBeforeImage) {
-                    sb.insert(actualStart, WORD_JOINER)
-                    val charsBeforeImage = additionalCharsBeforeImage
-                            ?: IntArray(this.images.size).also { additionalCharsBeforeImage = it }
-                    charsBeforeImage[index]++
-                }
-                rawStart + index + additionalCharsBeforeImage.getOrZero(index)
-            }
-
-            images.forEachIndexed { index, image ->
-                val width = image.width.toPx(metrics, resolver)
-                val height = image.height.toPx(metrics, resolver)
-                val start = image.evaluateStartWithDirection(resolver).toIntSafely() + index +
-                        additionalCharsBeforeImage.getOrZero(index)
-                val alignment = image.alignmentVertical.evaluate(resolver).toTextVerticalAlignment()
-                val span = ImagePlaceholderSpan(width, height, lineHeight.unitToPx(metrics, fontSizeUnit), alignment)
-                sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-
-            actions?.let {
-                textView.movementMethod = LinkMovementMethod.getInstance()
-                sb.setSpan(DivClickableSpan(it), 0, sb.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-
-            textObserver?.invoke(sb)
-
-            images.forEachIndexed { index, image ->
-                val reference = imageLoader.loadImage(image.url.evaluate(resolver).toString(), ImageCallback(index))
-                divView.addLoadReference(reference, textView)
-            }
-        }
-
-        private fun IntArray?.getOrZero(index: Int) = this?.get(index) ?: 0
-
-        private fun DivText.Image.evaluateStartWithDirection(resolver: ExpressionResolver): Long {
-            val startIndex = start.evaluate(resolver)
-            return when(indexingDirection.evaluate(resolver)) {
-                DivText.Image.IndexingDirection.NORMAL -> startIndex
-                DivText.Image.IndexingDirection.REVERSED -> text.length - startIndex
-            }
-        }
-
-        private fun SpannableStringBuilder.addTextRange(range: DivText.Range) {
-            val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
-            val end = (range.end?.evaluate(resolver)?.toIntSafely() ?: text.length).coerceAtMost(text.length)
-            if (start > end) return
-
-            val alignment = range.alignmentVertical?.evaluate(resolver) ?: DivTextAlignmentVertical.BASELINE
-            val baselineOffset = range.baselineOffset.evaluate(resolver)
-            if (baselineOffset != 0.0) {
-                setSpan(
-                    BaselineShiftSpan(
-                        baselineShift = baselineOffset.unitToPx(metrics, fontSizeUnit),
-                        lineHeight = lineHeight.unitToPx(metrics, fontSizeUnit)
-                    ),
-                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            } else if (alignment != DivTextAlignmentVertical.BASELINE) {
-                val fontSize = range.fontSize?.evaluate(resolver) ?: fontSize
-                val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
-                setSpan(
-                    VerticalAlignmentSpan(
-                        fontSize = fontSize.unitToPx(metrics, fontSizeUnit),
-                        alignment = alignment.toTextVerticalAlignment(),
-                        layoutProvider = { textView.layout }
-                    ),
-                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-            range.fontSize?.evaluate(resolver)?.let { fontSize ->
-                val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
-                setSpan(
-                    FontSizeSpan(
-                        fontSize.unitToPx(metrics, fontSizeUnit),
-                        lineHeight.unitToPx(metrics, fontSizeUnit)
-                    ),
-                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-            range.fontFeatureSettings?.evaluate(resolver)?.let { settings ->
-                setSpan(FontFeatureSpan(settings), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-            range.textColor?.evaluate(resolver)?.let {
-                setSpan(TextColorSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-            range.letterSpacing?.evaluate(resolver)?.let {
-                val fontSize = range.fontSize?.evaluate(resolver) ?: fontSize
-                val letterSpacingEm = it.toFloat() / fontSize
-                setSpan(LetterSpacingSpan(letterSpacingEm), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-            range.strike?.let {
-                when (it.evaluate(resolver)) {
-                    DivLineStyle.SINGLE -> setSpan(StrikethroughSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                    DivLineStyle.NONE -> setSpan(NoStrikethroughSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                    else -> Unit
-                }
-            }
-            range.underline?.let {
-                when (it.evaluate(resolver)) {
-                    DivLineStyle.SINGLE -> setSpan(UnderlineSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                    DivLineStyle.NONE -> setSpan(NoUnderlineSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                    else -> Unit
-                }
-            }
-            range.fontWeight?.let {
-                setSpan(
-                    TypefaceSpan(
-                        typefaceResolver.getTypeface(
-                            fontFamily,
-                            it.evaluate(resolver),
-                            range.fontWeightValue?.evaluate(resolver)
-                        )
-                    ),
-                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                )
-            }
-            range.fontWeightValue?.let {
-                setSpan(
-                    TypefaceSpan(
-                        typefaceResolver.getTypeface(
-                            fontFamily,
-                            range.fontWeight?.evaluate(resolver),
-                            range.fontWeightValue?.evaluate(resolver)
-                        )
-                    ),
-                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                )
-            }
-            range.actions?.let {
-                textView.movementMethod = LinkMovementMethod.getInstance()
-                setSpan(DivClickableSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                ViewCompat.enableAccessibleClickableSpanSupport(textView)
-            }
-            if (range.border != null || range.background != null) {
-                val span = DivBackgroundSpan(range.border, range.background)
-                if (textView is DivLineHeightTextView && !textView.hasSuchSpan(this, span, start, end)) {
-                    setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                    textView.textRoundedBgHelper?.addBackgroundSpan(span)
-                }
-            }
-            if (range.lineHeight != null || range.topOffset != null) {
-                val offset = range.topOffset?.evaluate(resolver).unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))
-                val lineHeight = range.lineHeight?.evaluate(resolver).unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))
-                val textLineHeight = this@DivTextRanger.lineHeight.unitToPx(metrics, fontSizeUnit)
-                setSpan(
-                    LineHeightWithTopOffsetSpan(offset, lineHeight, textLineHeight),
-                    start,
-                    end,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                )
-            }
-            range.textShadow?.let {
-                val shadowParams = it.getShadowParams(
-                    resolver,
-                    textView.resources.displayMetrics,
-                    range.textColor?.evaluate(resolver) ?: textView.currentTextColor
-                )
-                setSpan(ShadowSpan(shadowParams), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-            }
-        }
-
-        private fun getActionsForPosition(position: Int): List<DivAction>? {
-            ranges ?: return null
-            val clickableSpans = ranges
-                .filter { range ->
-                    val start = range.start.evaluate(resolver)
-                    val end = range.end?.evaluate(resolver) ?: Long.MAX_VALUE
-                    range.actions != null && start <= position && position < end
-                }
-
-            if (clickableSpans.size > 1) {
-                divView.logWarning(Throwable("Two or more clickable ranges intersect."))
-            }
-
-            clickableSpans.getOrNull(0)?.let {
-                return it.actions
-            }
-
-            return null
-        }
-
-        private fun DivLineHeightTextView.hasSuchSpan(sb: SpannableStringBuilder, backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
-            if (textRoundedBgHelper == null) {
-                textRoundedBgHelper = DivTextRangesBackgroundHelper(this, resolver)
-                return false
-            }
-            return textRoundedBgHelper!!.hasSameSpan(sb, backgroundSpan, start, end)
-        }
-
-        private fun makeImageSpan(
-            range: DivText.Image,
-            bitmap: Bitmap,
-            lineHeight: Int
-        ): BitmapImageSpan {
-            val imageHeight = range.height.toPx(metrics, resolver)
-            val start = range.evaluateStartWithDirection(resolver).toIntSafely()
-
-            val onClickActions = getActionsForPosition(start)
-            val onClickAction = if (onClickActions == null) {
-                null
-            } else {
-                BitmapImageSpan.OnAccessibilityClickAction {
-                    val actionBinder = divView.div2Component.actionBinder
-                    actionBinder.handleTapClick(bindingContext, textView, onClickActions)
-                }
-            }
-
-            val type = when(range.accessibility?.type) {
-                null -> ""
-                DivText.Image.Accessibility.Type.NONE -> ""
-                DivText.Image.Accessibility.Type.BUTTON -> Button::class.qualifiedName
-                DivText.Image.Accessibility.Type.IMAGE -> ImageView::class.qualifiedName
-                DivText.Image.Accessibility.Type.TEXT -> TextView::class.qualifiedName
-                DivText.Image.Accessibility.Type.AUTO -> ImageView::class.qualifiedName
-            } ?: ""
-
-            return BitmapImageSpan(
-                context = context,
-                bitmap = bitmap,
-                lineHeight = lineHeight,
-                alignment = range.alignmentVertical.evaluate(resolver).toTextVerticalAlignment(),
-                width = range.width.toPx(metrics, resolver),
-                height = imageHeight,
-                tintColor = range.tintColor?.evaluate(resolver),
-                tintMode = range.tintMode.evaluate(resolver).toPorterDuffMode(),
-                isSquare = false,
-                accessibilityDescription = range.accessibility?.description?.evaluate(resolver),
-                accessibilityType = type,
-                onClickAccessibilityAction = onClickAction
-            )
-        }
-
-        private inner class ImageCallback(private val index: Int) : DivIdLoggingImageDownloadCallback(divView) {
-
-            override fun onSuccess(cachedBitmap: CachedBitmap) {
-                super.onSuccess(cachedBitmap)
-                val image = images[index]
-                val span = makeImageSpan(image, cachedBitmap.bitmap, lineHeight.unitToPx(metrics, fontSizeUnit))
-                val start = image.evaluateStartWithDirection(resolver).toIntSafely() + index +
-                        additionalCharsBeforeImage.getOrZero(index)
-                sb.getSpans<ImagePlaceholderSpan>(start, start + 1).forEach { sb.removeSpan(it) }
-                sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                (textView as? DivLineHeightTextView)?.addImageSpan(span)
-                textObserver?.invoke(sb)
-            }
-        }
-
-        private inner class DivClickableSpan(private val actions: List<DivAction>) : ClickableSpan() {
-            override fun onClick(p0: View) {
-                val actionBinder = divView.div2Component.actionBinder
-                actionBinder.handleTapClick(bindingContext, p0, actions)
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                // don't call super
-            }
-        }
-    }
-
     private fun View.updateFocusableState(div: DivText) {
         isFocusable = isFocusable || (div.focusedTextColor != null)
     }
 
-    private fun DivShadow.getShadowParams(
+    private fun DivShadow.getShadowData(
         resolver: ExpressionResolver,
         displayMetrics: DisplayMetrics,
         fontColor: Int
-    ): ShadowParams {
+    ): ShadowData {
         val fontAlpha = fontColor ushr 24
 
         val radius = blur.evaluate(resolver).dpToPxF(displayMetrics)
         val offsetX = offset.x.toPx(displayMetrics, resolver).toFloat()
         val offsetY = offset.y.toPx(displayMetrics, resolver).toFloat()
         val color = Paint().apply {
-            color = this@getShadowParams.color.evaluate(resolver)
-            alpha = (this@getShadowParams.alpha.evaluate(resolver) * fontAlpha).toInt()
+            color = this@getShadowData.color.evaluate(resolver)
+            alpha = (this@getShadowData.alpha.evaluate(resolver) * fontAlpha).toInt()
         }.color
 
-        return ShadowParams(offsetX, offsetY, radius, color)
+        return ShadowData(offsetX, offsetY, radius, color)
     }
 }

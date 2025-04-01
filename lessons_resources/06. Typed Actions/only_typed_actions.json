@@ -1,0 +1,185 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "variables": [
+      {
+        "name": "my_edit_text",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "in_text_state",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "state",
+              "id": "data_state",
+              "states": [
+                {
+                  "state_id": "url",
+                  "div": {
+                    "type": "button",
+                    "text": "Copy url",
+                    "actions": [
+                      {
+                        "typed": {
+                          "type": "copy_to_clipboard",
+                          "content": {
+                            "type": "url",
+                            "value": "https://ya.ru/"
+                          }
+                        },
+                        "log_id": "copy url"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "text",
+                  "div": {
+                    "type": "button",
+                    "text": "Copy string",
+                    "actions": [
+                      {
+                        "typed": {
+                          "type": "copy_to_clipboard",
+                          "content": {
+                            "type": "text",
+                            "value": "Copied string"
+                          }
+                        },
+                        "log_id": "copy string"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Switch content",
+              "actions": [
+                {
+                  "log_id": "switch_to_url",
+                  "is_enabled": "@{in_text_state}",
+                  "typed": {
+                    "type": "set_state",
+                    "state_id": "0/data_state/url"
+                  }
+                },
+                {
+                  "log_id": "switch_to_text",
+                  "is_enabled": "@{!in_text_state}",
+                  "typed": {
+                    "type": "set_state",
+                    "state_id": "0/data_state/text"
+                  }
+                },
+                {
+                  "log_id": "remember_state",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "in_text_state",
+                    "value": {
+                      "type": "boolean",
+                      "value": "@{!in_text_state}"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "input",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "top": 20,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 10,
+                "right": 16,
+                "bottom": 10
+              },
+              "alpha": 1,
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "hint_text": "Paste here",
+              "text_variable": "my_edit_text",
+              "line_height": 22,
+              "select_all_on_focus": 1,
+              "keyboard_type": "single_line_text"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

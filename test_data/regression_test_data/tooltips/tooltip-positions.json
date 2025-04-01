@@ -66,6 +66,7 @@
                       "value": 4
                     }
                   },
+                  "background_accessibility_description": "close tooltip",
                   "div": {
                     "type": "container",
                     "orientation": "overlap",

@@ -5,15 +5,17 @@
     import { getProp } from '../../data/props';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
 
+    const { directionSelector, state } = getContext<AppContext>(APP_CTX);
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { state } = getContext<AppContext>(APP_CTX);
-    const { highlightMode, readOnly } = state;
+    const { direction, highlightMode, readOnly } = state;
 
     interface EdgeInsetsObj {
         top?: number;
         right?: number;
         bottom?: number;
         left?: number;
+        start?: number;
+        end?: number;
     }
 
     export let item: ComponentProperty;
@@ -34,33 +36,77 @@
     let marginBottom = margins?.bottom ?? undefined;
     let marginLeft = margins?.left ?? undefined;
 
-    function updatePaddings(value: EdgeInsetsObj | undefined): void {
-        paddingTop = value?.top ?? undefined;
-        paddingRight = value?.right ?? undefined;
-        paddingBottom = value?.bottom ?? undefined;
-        paddingLeft = value?.left ?? undefined;
+    function updatePaddings(value: EdgeInsetsObj | undefined, direction: 'ltr' | 'rtl'): void {
+        const vals = edgeInsetsToVals(value, direction);
+
+        paddingTop = vals.top;
+        paddingRight = vals.right;
+        paddingBottom = vals.bottom;
+        paddingLeft = vals.left;
     }
 
-    function updateMargins(value: EdgeInsetsObj | undefined): void {
-        marginTop = value?.top ?? undefined;
-        marginRight = value?.right ?? undefined;
-        marginBottom = value?.bottom ?? undefined;
-        marginLeft = value?.left ?? undefined;
+    function updateMargins(value: EdgeInsetsObj | undefined, direction: 'ltr' | 'rtl'): void {
+        const vals = edgeInsetsToVals(value, direction);
+
+        marginTop = vals.top;
+        marginRight = vals.right;
+        marginBottom = vals.bottom;
+        marginLeft = vals.left;
     }
 
-    $: updatePaddings(paddings);
-    $: updateMargins(margins);
+    $: updatePaddings(paddings, $direction);
+    $: updateMargins(margins, $direction);
+
+    function edgeInsetsToVals(insets: EdgeInsetsObj | undefined, direction: 'ltr' | 'rtl'): EdgeInsetsObj {
+        if (!insets) {
+            return {
+                top: undefined,
+                right: undefined,
+                bottom: undefined,
+                left: undefined
+            };
+        }
+
+        const top = insets.top;
+        const bottom = insets.bottom;
+        const left = (direction === 'ltr' ? insets.start : insets.end) ?? insets.left;
+        const right = (direction === 'ltr' ? insets.end : insets.start) ?? insets.right;
+
+        return {
+            top,
+            right,
+            bottom,
+            left
+        };
+    }
+
+    function valsToEdgeInsets(vals: EdgeInsetsObj): EdgeInsetsObj | undefined {
+        if (!(vals.top || vals.right || vals.bottom || vals.left)) {
+            return;
+        }
+
+        if (directionSelector) {
+            return {
+                top: vals.top,
+                bottom: vals.bottom,
+                start: $direction === 'ltr' ? vals.left : vals.right,
+                end: $direction === 'ltr' ? vals.right : vals.left,
+            };
+        }
+
+        return vals;
+    }
 
     function onChange(type: 'paddings' | 'margins') {
         $highlightMode = type;
 
         if (type === 'paddings') {
-            paddings = (paddingTop || paddingRight || paddingBottom || paddingLeft) ? {
+            paddings = valsToEdgeInsets({
                 top: paddingTop ?? undefined,
                 right: paddingRight ?? undefined,
                 bottom: paddingBottom ?? undefined,
                 left: paddingLeft ?? undefined
-            } : undefined;
+            });
 
             dispatch('change', {
                 values: [{
@@ -70,12 +116,12 @@
                 item
             });
         } else {
-            margins = (marginTop || marginRight || marginBottom || marginLeft) ? {
+            margins = valsToEdgeInsets({
                 top: marginTop ?? undefined,
                 right: marginRight ?? undefined,
                 bottom: marginBottom ?? undefined,
                 left: marginLeft ?? undefined
-            } : undefined;
+            });
 
             dispatch('change', {
                 values: [{

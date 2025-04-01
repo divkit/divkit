@@ -1,11 +1,11 @@
 import CoreFoundation
-import CoreGraphics
 import Foundation
 import LayoutKit
 import VGSL
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    let context = modifiedContextParentPath(context)
     let expressionResolver = context.expressionResolver
     let lazyText = Lazy(getter: { [unowned self] in
       resolveText(expressionResolver) ?? ""
@@ -61,6 +61,9 @@ extension DivText: DivBlockModeling {
     case .none: break
     case .single: typo = typo.underlined(.single)
     }
+    if let textShadow = textShadow?.resolve(expressionResolver) {
+      typo = typo.shaded(textShadow.typoShadow)
+    }
 
     let attributedString = makeAttributedString(
       text: text.value as CFString,
@@ -107,7 +110,7 @@ extension DivText: DivBlockModeling {
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
       text: attributedString,
-      textGradient: resolveGradient(expressionResolver),
+      textGradient: resolveGradient(context),
       verticalAlignment: resolveTextAlignmentVertical(expressionResolver).alignment,
       maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
       minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,
@@ -117,7 +120,10 @@ extension DivText: DivBlockModeling {
       truncationImages: truncationImages,
       additionalTextInsets: additionalTextInsets,
       canSelect: resolveSelectable(expressionResolver),
-      tightenWidth: resolveTightenWidth(expressionResolver)
+      tightenWidth: resolveTightenWidth(expressionResolver),
+      autoEllipsize: resolveAutoEllipsize(expressionResolver)
+        ?? context.flagsInfo.defaultTextAutoEllipsize,
+      path: context.path
     )
   }
 
@@ -149,12 +155,12 @@ extension DivText: DivBlockModeling {
     guard let text else {
       return []
     }
-    return (images ?? [])
-      .filter {
-        let start = $0.resolveStart(context.expressionResolver) ?? 0
-        return start <= CFAttributedStringGetLength(text)
-      }
-      .map { $0.makeImage(context: context) }
+    return (images ?? []).compactMap {
+      $0.makeImage(
+        context: context,
+        textLength: CFAttributedStringGetLength(text)
+      )
+    }
   }
 
   private func apply(
@@ -198,9 +204,17 @@ extension DivText: DivBlockModeling {
     let baselineOffsetTypo = Typo(
       baselineOffset: range.resolveBaselineOffset(expressionResolver)
     )
+    let blockShadow = range.textShadow?.resolve(expressionResolver).typoShadow
+    let shadowTypo = blockShadow.map { Typo(shadow: $0) }
     let typos = [
-      fontTypo, colorTypo, heightTypo, spacingTypo,
-      strikethroughTypo, underlineTypo, baselineOffsetTypo
+      fontTypo,
+      colorTypo,
+      heightTypo,
+      spacingTypo,
+      strikethroughTypo,
+      underlineTypo,
+      baselineOffsetTypo,
+      shadowTypo,
     ].compactMap { $0 }
     let actions = range.actions?.uiActions(context: context)
     if typos.isEmpty, actions == nil, range.background == nil, range.border == nil {
@@ -220,16 +234,14 @@ extension DivText: DivBlockModeling {
     }
   }
 
-  private func resolveGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
+  private func resolveGradient(_ context: DivBlockModelingContext) -> Gradient? {
+    let expressionResolver = context.expressionResolver
     guard let textGradient else {
       return nil
     }
     switch textGradient {
     case let .divLinearGradient(gradient):
-      return Gradient.Linear(
-        colors: gradient.resolveColors(expressionResolver) ?? [],
-        angle: gradient.resolveAngle(expressionResolver)
-      ).map { .linear($0) }
+      return gradient.makeBlockLinearGradient(context).map { .linear($0) }
     case let .divRadialGradient(gradient):
       return Gradient.Radial(
         colors: gradient.resolveColors(expressionResolver) ?? [],
@@ -301,17 +313,33 @@ extension URLQueryItem {
 
 extension DivText.Image {
   fileprivate func makeImage(
-    context: DivBlockModelingContext
-  ) -> TextBlock.InlineImage {
+    context: DivBlockModelingContext,
+    textLength: Int
+  ) -> TextBlock.InlineImage? {
     let expressionResolver = context.expressionResolver
+    let start = resolveStart(expressionResolver) ?? 0
+
+    guard start <= textLength else {
+      return nil
+    }
+
+    let indexingDirection = resolveIndexingDirection(expressionResolver)
+    let location = switch indexingDirection {
+    case .normal:
+      start
+    case .reversed:
+      textLength - start
+    }
+
     return TextBlock.InlineImage(
       size: CGSize(
         width: CGFloat(width.resolveValue(expressionResolver) ?? 0),
         height: CGFloat(height.resolveValue(expressionResolver) ?? 0)
       ),
       holder: context.imageHolderFactory.make(resolveUrl(expressionResolver)),
-      location: resolveStart(expressionResolver) ?? 0,
-      tintColor: resolveTintColor(expressionResolver)
+      location: location,
+      tintColor: resolveTintColor(expressionResolver),
+      tintMode: resolveTintMode(expressionResolver).tintMode
     )
   }
 }
@@ -365,5 +393,15 @@ extension DivLineStyle {
     case .none: []
     case .single: .single
     }
+  }
+}
+
+extension BlockShadow {
+  fileprivate var typoShadow: Shadow {
+    Shadow(
+      offset: CGSize(width: offset.x, height: -offset.y),
+      blurRadius: blurRadius,
+      color: color.withAlphaComponent(CGFloat(opacity))
+    )
   }
 }

@@ -6,7 +6,7 @@
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import Button from './Button.svelte';
 
-    import { save } from '../data/sessionController';
+    import { CustomError, save } from '../data/sessionController';
     import CopyButton from './CopyButton.svelte';
 
     export let node: HTMLElement;
@@ -104,9 +104,10 @@
                 </div>
                 <img class="links-popup__qr" src={qr} alt={$l10n('qrCode')}>
             </div>
-        {:catch _err}
+        {:catch err}
             <div class="links-popup__content">
-                {$l10n('loadError')}
+                <div class="links-popup__error-icon"></div>
+                {err instanceof CustomError ? err.message : $l10n('loadError')}
             </div>
         {/await}
     {:else}
@@ -136,6 +137,7 @@
         background: var(--alt-bg);
         color: var(--alt-text);
         border-radius: 20px;
+        white-space: normal;
     }
 
     .links-popup__content {
@@ -206,6 +208,16 @@
         justify-content: center;
         gap: 12px;
         margin-top: 16px;
+    }
+
+    .links-popup__error-icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+        vertical-align: -0.1em;
+        background: no-repeat 50% 50% url(../assets/errors.svg);
+        background-size: contain;
     }
 
     @keyframes rotate {

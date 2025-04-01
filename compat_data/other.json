@@ -55,5 +55,27 @@
                 "version_added": "30.21.0"
             }
         }
+    }, {
+        "id": "set_variable_array_from_string",
+        "name": "Parse <code>array</code> from string and set it into the variable (including both programmic api and the <code>div-action://set_variable</code>)",
+        "compat": {
+            "android": {
+                "version_added": "31.5.0"
+            },
+            "web": {
+                "version_added": "31.6.0"
+            }
+        }
+    }, {
+        "id": "set_variable_dict_from_string",
+        "name": "Parse <code>dict</code> from string and set it into the variable (including both programmic api and the <code>div-action://set_variable</code>)",
+        "compat": {
+            "android": {
+                "version_added": "25.2.0"
+            },
+            "web": {
+                "version_added": "31.6.0"
+            }
+        }
     }]
 }

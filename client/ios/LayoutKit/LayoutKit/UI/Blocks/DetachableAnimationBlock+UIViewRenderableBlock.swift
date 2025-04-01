@@ -67,6 +67,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
   private var animationChange: ChangeBoundsTransition?
   private var queuedAnimation: DispatchWorkItem?
   private var child: Block?
+  private var isFirstLayout: Bool = true
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
@@ -90,13 +91,20 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     self.animationIn = animationIn
     self.animationOut = animationOut
     self.animationChange = animationChange
+
     setNeedsLayout()
   }
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    guard isFirstLayout || animationChange == nil else {
+      return
+    }
 
     childView?.frame = bounds
+    if frame != .zero {
+      isFirstLayout = false
+    }
   }
 
   public var hasAnimationIn: Bool {
@@ -122,35 +130,26 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
     self.childView = nil
 
-    let blockSize = CGSize(
-      width: startFrame.width,
-      height: child?.intrinsicContentHeight(forWidth: startFrame.width) ?? .zero
-    )
-    childView.frame.size = blockSize
-    childView.layoutIfNeeded()
-
     let animationContainer = UIView()
     animationContainer.frame = startFrame
-    animationContainer.clipsToBounds = true
+    animationContainer.clipsToBounds = false
     animationContainer.addSubview(childView)
 
     container.addSubview(animationContainer)
     container.layoutIfNeeded()
 
     UIView.animate(
-      withDuration: animationChange.duration.value,
-      delay: animationChange.delay.value,
+      withDuration: animationChange.duration,
+      delay: animationChange.delay,
       options: [animationChange.timingFunction.cast()],
       animations: {
         animationContainer.frame = finishFrame
-        childView.frame.size = CGSize(
-          width: finishFrame.width,
-          height: self.child?.intrinsicContentHeight(forWidth: finishFrame.width) ?? .zero
-        )
+        childView.frame.size = animationContainer.bounds.size
         childView.layoutIfNeeded()
         container.layoutIfNeeded()
       },
       completion: { [weak self] _ in
+        self?.animationChange = nil
         if animationContainer.superview == container {
           animationContainer.removeFromSuperview()
           self?.childView = childView
@@ -167,8 +166,9 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     childView.frame = convertFrame(to: container)
     self.childView = nil
     container.addSubview(childView)
-    childView.perform(animationOut, animated: true, completion: {
+    childView.perform(animationOut, animated: true, completion: { [weak self] in
       childView.removeFromSuperview()
+      self?.animationOut = nil
     })
   }
 
@@ -183,7 +183,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
     self.childView = nil
 
-    let minDelay = animationIn.sortedChronologically().first?.delay.value ?? 0
+    let minDelay = animationIn.sortedChronologically().first?.delay ?? 0
 
     let item = DispatchWorkItem { [weak self] in
       container.addSubview(childView)
@@ -192,6 +192,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
         completion: { [weak self] in
 
           self?.queuedAnimation = nil
+          self?.animationIn = nil
           if childView.superview == container {
             childView.frame = originalFrame
             self?.childView = childView

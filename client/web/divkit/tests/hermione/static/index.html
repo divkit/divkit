@@ -84,6 +84,7 @@
         const params = new URLSearchParams(location.search);
         const json = params.get('json');
         const crossplatformJson = params.get('crossplatform_json');
+        const resultType = params.get('result_type');
 
         function getJson(json) {
             return fetch(json)
@@ -149,24 +150,50 @@
             .then(() => fn())
             .then(json => {
                 const root = document.querySelector('#root');
-                window.divkitRoot = Ya.Divkit.render({
+
+                let globalVariablesController;
+                if (resultType) {
+                    globalVariablesController = Ya.DivKit.createGlobalVariablesController();
+
+                    let value = '';
+                    if (resultType === 'integer' || resultType === 'number') {
+                        value = 0;
+                    } else if (resultType === 'boolean') {
+                        value = false;
+                    } else if (resultType === 'color') {
+                        value = '#000';
+                    } else if (resultType === 'dict') {
+                        value = {};
+                    } else if (resultType === 'array') {
+                        value = [];
+                    }
+
+                    window.result = Ya.DivKit.createVariable('result', resultType, value);
+                    globalVariablesController.setVariable(window.result);
+                }
+
+                window.divkitRoot = Ya.DivKit.render({
                     id: 'test',
                     target: root,
                     json,
                     platform: 'touch',
                     direction: json.configuration && json.configuration.layout_direction === 'rtl' ? 'rtl' : 'ltr',
+                    globalVariablesController,
                     onStat(arg) {
                         window.divkitLogs.push(arg);
                     },
-                    onError(err) {
-                        if (err && err.error && err.error.level === 'warn') {
+                    onError(event) {
+                        if (event && event.error && event.error.level === 'warn') {
                             return;
                         }
 
                         const elem = document.createElement('p');
                         elem.className = 'log-item';
-                        elem.textContent = String(err && err.error || '<unknown>');
+                        elem.textContent = String(event && event.error || '<unknown>');
                         root.appendChild(elem);
+
+                        window.errors = window.errors || [];
+                        window.errors.push(event.error);
                     },
                     onComponent(details) {
                         if (details.type === 'mount' && details.json.id) {

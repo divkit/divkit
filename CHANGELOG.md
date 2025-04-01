@@ -1,3 +1,324 @@
+## 31.9.0
+
+# Android Client:
+* Fix animator on text gradient.
+
+# iOS Client:
+* Added Voice Over focus when focusing on `DivInput`.
+* Added support for `mode` with value "transactional" and `on_failed_actions` properties in `div-patch`.
+* Hide keyboard on tap outside.
+* Replace deprecated `EdgeInsets.horizontalInsets`/`EdgeInsets.verticalInsets` API usages with `EdgeInsets.horizontal`/`EdgeInsets.vertical`.
+* Visual animation no longer requires specifying an element ID.
+
+# Web Client:
+* Added support for `functions` in the `card` (div data). Previously, they were supported only in components.
+* Added support for the `animation_type` and `animation_duration` in `tabs`.
+* Fixed a bug with the importance of properties in action, now `typed` is more important than `url`.
+* Fixed an error message when a local function was found, but the arguments were incorrect.
+* The logic of the "nested actions" warning has been updated, nested `<button>` will no longer be rendered.
+
+
+## 31.8.1
+
+# iOS Client:
+* Fix pager infinite scrolling + scroll_axis_alignment start and paddings.
+
+
+## 31.8.0
+
+# Android Client:
+* Fixed an issue where `pager` padding was not applied properly.
+* Fixed local video files playback.
+* Fixed multiple UI update on variable change.
+* Open DivVariableController.captureAllVariables.
+
+# iOS Client:
+* Added public `applyPatch` function in `DivView` to allow applying patches from clients.
+* Added public func `getVariableValue` in `DivVariableStorage` to get `DivVariableValue` from the storage.
+* Fixed a bug with visibility actions not working when resizing the DivView.
+* Supported `animated` property for `scroll_by` action.
+* Updated `parentPath` property logic.
+
+# Web Client:
+* Added support for `background_accessibility_description` for the `tooltip`. If specified, the backdrop (background) of the `tooltip` is converted to a button with the specified text.
+* Added support for the `mask` in `text`.
+* Added the ability to provide a custom implementation of the video player using the `videoPlayerProvider` property.
+* Fixed a bug that caused the `indicator` elements to be non-clickable on the `desktop` platform.
+* Fixed a bug where the `video` component was not available for mouse/touch events (context menu, etc.).
+* Fixed an error with blinking the height of the `indicator` when changing the elements of the `pager`.
+* Fixed the `cloud` background of the `text` in Firefox (for the background of the entire text only).
+* Fixed the issue with the `pager` hanging if `default_item` was specified.
+* Fixed typings for the package.
+* The `indicator` has been updated, which will be hidden if there is one element or less in the `pager`.
+* The tooltip accessibility has been updated: it now has the appropriate ARIA role and closes when the `Escape` key is pressed.
+
+
+## 31.7.0
+
+# Android Client:
+* Added a way for shine animation to have onPause/onResume lifecycle from client through `pauseShineObservable`.
+* Do not hide keyboard by clicks on divs.
+* Fixed access to local variables in `state`.
+* Fixed access to variables in items built by `item_builder`.
+* Fixed video player cache.
+* Implemented independent tracking of `visibility_actions` and `disappear_actions`.
+* Supported elements comparing by`reuse_id` to optimize `item_builder` data updating.
+* Updated Gradle to 8.13 and Android Gradle Plugin to 8.8.2.
+
+# iOS Client:
+* Fixed `DefaultTooltipManager.reset()` to make it close showing tooltips.
+* Input with mask updates text color when color scheme changes.
+* Separated visibility counter storage for `visibility_actions` and `disappear_actions`. Fixed `log_limit` common `id` in both `visibility_actions` and `disappear_actions`. Added warning for common `id` in `visibility_actions` or `disappear_actions`.
+* Supported `animation_in`, `animation_out` properties for `div-tooltip`.
+* Supported `password` `keyboard_type`.
+
+# Web Client:
+* Added support for the `phone` `input` mask.
+* Added support for the `ranges` in `slider`.
+* Added support for the `scroll_to` and `scroll_by` actions.
+
+
+## 31.6.0
+
+# Android Client:
+* Supported `filters` property in `input`.
+* Added `Div2Context.closeTooltips()` method.
+* Made `item_builder` have a higher priority than `items`, just like other platforms.
+* Fixed scroll position restoring in `gallery` when first item is visible or in rtl-configuration.
+* Fixed `shine` gradient angle. Angle goes counterclockwise and rotates the gradient relative to the horizontal line.
+* Fixed gallery scroll in `paging` mode.
+
+# iOS Client:
+* `input` autocorrection value depends on `input_type`.
+* Fixed arrays parsing in typed actions.
+* Fixed calculation of sizes in `layout_provider`.
+
+# Web Client:
+* Added `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
+* Added support for parsing `array` and `dict` from a string (including both the `div-action://set_variable` and the `variable.set('value')` programming api). The format is json.
+* Added support for the `tap_outside_actions` and `close_by_tap_outside` in `tooltip`.
+* Fixed `switch` in rtl layout.
+* Fixed an error with an incorrect number of actions and `log_limit` (`visibility_actions` / `disappear_actions`).
+
+
+## 31.5.0
+
+# Android Client:
+* Added PreloadFilter interface for the DivPreloader, designed to allows you to control which content needs to be preloaded, regardless of the preloadRequired value for the element.
+* Added resume/pause for shine extension while gone.
+* Added support for the `submit` action.
+* Fixed `container` width calculating for text content with enabled `tighten_width`.
+* Fixed content alignment in `container` in rtl-configuration.
+* Fixed error handling at optional expression list parsing.
+* Fixed gallery snapping perfomed after fling gesture.
+* Fixed linear gradient size calculation.
+* Prevent patch from modifying items in containers so item_builder could continue working after patch.
+* Supported `Div2View.setVariable(name, value)` for array variables.
+
+# iOS Client:
+* Fixed transition animation when view size changes.
+* The size of resizable elements with a given weight is now calculated without taking margins into account. This means that if you make two or more elements in a container with the same weight, their size will be the same even if one or more of them have margins set.
+* Updated `div-tooltip` accessibility.
+
+# Web Client:
+* Added a warning for the `transition_id` / `transition_out` / `transition_change` properties without the required `id` property when changing state.
+* Added configuration flag `pagerChildrenClipEnabled`. It can be useful in cases with shadow elements of a `pager`.
+* Added support for the `color_map` property in the linear gradient.
+* Added support for the `cross_axis_alignment` in `pager`.
+* Added support for the `dashed` stroke style.
+* Added support for the `non_modal` mode in `tooltip`.
+* Added support for the `submit` action.
+* Added support for the `wrap_content` `layout_mode` in `pager`.
+* Fixed an issue with the tapable content inside `tabs`.
+* Fixed the default value of `column_count` for the `grid` component. Now it's required, as written in the schema.
+* Fixed the recreation of neighboring components when using the patch.
+* Fixed the styles of `menu_items`.
+* Fixed virtual keyboard in `input` with `keyboard_type` = `number`.
+
+
+## 31.4.0
+
+# Android Client:
+* Div2View.discardVisibilityTracking() now public for cancelling visibility tracking.
+* Fixed corner clipping of elements inside transient hierarchy.
+* Improved complex rebind.
+* Supported dashed stroke style.
+* Use a CME-safe collection to resolve crashes occurring during patch application with item_builder.
+
+# iOS Client:
+* Supported `color_map` parameter in linear gradient.
+* Supported `dashed` stroke style in `div-border`.
+* Updated `TooltipEvent` struct with `div-tooltip` properties.
+
+# Web Client:
+* Added `applyPatch` api for an DivKit instance.
+* Added support for the `is_playing` parameter in the `lottie` extension.
+* Fixed `functions` inheriting.
+* Fixed empty text height measurement.
+* The `derviedExpression` api for extensions has been added. It allows you to subscribe to any expression changes. Do not forget to unsubscribe!.
+* The `download` callbacks have been fixed, which will now be more reliable in several erroneous situations..
+* Throw errors when switching to ambiguous state.
+
+
+## 31.3.0
+
+# Android Client:
+* Fixed items creation by `item_builder` in `container` with local variables.
+* Removed redundant check for API 26.
+* Throw errors when switching to ambiguous state.
+* Supported non-modal tooltip mode and `close_by_tap_outside` flag.
+
+# iOS Client:
+* Add flag `defaultTextAutoEllipsize`. It allows to change default value of `auto_ellipsize` property to `false`.
+* Added `mode` support for `div-tooltip`.
+* Changed the definition of the number of lottie animation repetitions in the "repeat_mode": "reverse" mode.
+* Fixed memory leak in `DivStateManager`.
+* Fixed separators in `container` with gone items.
+* Now one animation playback in any direction is considered one unit.
+* Supported `div-text` `auto_ellipsize` property. Default value is `true`.
+* Supported `indexing_direction` and `tint_mode` properties for `image` in `div-text`.
+
+# Web Client:
+* Fixed an issue with `container` separators rendereed between invisible elements.
+* Fixed, which allows you to return dicts values and arrays in expressions inside actions.
+
+
+## 31.2.0
+
+# Android Client:
+* Fixed StackOverflowError at video playback during state change.
+* Fixed issue when text range `font_family` property was ignored.
+* Use Handler in timers instead of java.util.Timer.
+* Fixed empty text height measurement.
+
+# iOS Client:
+* Added `DivCardUpdateReason` typealias for `DivActionURLHandler.UpdateReason`.
+* Added `close_by_tap_outside`/`tap_outside_actions` support for tooltips.
+* Fixed shadow clipping during animation.
+* Fixed timers lifecycle.
+* Separated trigger set and init behind `DivFlagsInfo.initializeTriggerOnSet`.
+
+
+## 31.1.0
+
+# Android Client:
+* Supported `cross_axis_alignment` in `pager`.
+* Supported `scroll_axis_alignment` in `pager`.
+
+# iOS Client:
+* Added `download` action handler.
+* Fixed `DivFlagsInfo.useUrlHandlerForVisibilityActions` behavior.
+* Fixed `pager` paddings.
+* Fixed a bug where short taps on a button did not animate.
+* When rendering grid view, the min_size property for height is now respected.
+
+# Web Client:
+* Added support for switching states in the `tooltip`.
+* Added support for the `filters` property in the `input` component.
+* Added support for the functions `tan`, `asin`, `acos`.
+* Fixed types for the `direction` property.
+* The `focus_element` action has been changed to move the cursor to the end of the `input` component (to match the behavior of native clients).
+* The requirement for a unique `id` for visibility change transitions has been removed (this change corresponds to the current behavior of the Android client).
+
+
+## 31.0.0
+
+# Android Client:
+* Removed method `DivKitConfiguration.Builder.histogramConfiguration(HistogramConfiguration)`. Use `DivKitConfiguration.Builder.histogramConfiguration(Provider<HistogramConfiguration>)` instead.
+* Removed method `HistogramBridgerecordTimeHistogram(String, Long, Long, Long, TimeUnit, Long)`. Use `HistogramBridgerecordTimeHistogram(String, Long, Long, Long, TimeUnit, Int)` instead.
+* Removed constructor `Div2Context(Activity, DivConfiguration)`. Use `Div2Context(ContextThemeWrapper, DivConfiguration)`, `Div2Context(ContextThemeWrapper, DivConfiguration, Int)` or `Div2Context(ContextThemeWrapper, DivConfiguration, Int, lifecycleOwner?)` instead.
+* Removed property `Div2Context.globalVariableController`. Use `Div2Context.variableController` instead.
+* Removed method `Div2Context.warmUp2()`. Use `Div2Context.warmUp()` instead.
+* Removed method `Div2Context.resetVisibilityCounters()`. Use `Div2Context.reset(Div2Context.RESET_VISIBILITY_COUNTERS)` instead.
+* Removed class `GlobalVariableController`. Use `DivVariableController` instead.
+* Removed method `DivConfiguration.Builder.globalVariableController(GlobalVariableController)`. Use `DivConfiguration.Builder.variableController(DivVariableController)` instead.
+* Removed property `DivConfiguration.globalVariableController`. Use `DivConfiguration.variableController` instead.
+* Removed class `DivAutoLogger`.
+* Removed method `DivConfiguration.Builder.autoLogger(Any)`.
+* Removed method `DivConfiguration.Builder.divLogger(Any)`.
+* Removed class `DivCustomViewAdapter`.
+* Removed method `DivConfiguration.Builder.divCustomViewAdapter(DivCustomViewAdapter)`. Use `DivConfiguration.Builder.divCustomContainerViewAdapter(DivCustomContainerViewAdapter)` instead.
+* Removed class `DivCustomViewFactory`.
+* Removed method `DivConfiguration.Builder.divCustomViewFactory(DivCustomViewFactory)`. Use `DivConfiguration.Builder.divCustomContainerViewAdapter(DivCustomContainerViewAdapter)` instead.
+* Removed method `DivConfiguration.getDivVisibilityChangeListener()`. Use `DivConfiguration.getDivVisibilityChangeListeners()` instead.
+* Removed method `DivCustomContainerChildFactory.bindChildView(View, Div, DivStatePath, Div2View, ExpressionResolver)`. Use `DivCustomContainerChildFactory.bindChildView(View, Int, Div, DivStatePath, Div2View, ExpressionResolver)` instead.
+* Removed method `DivTypefaceProvider.getRegularLegacy()`. Use `DivTypefaceProvider.getRegular()` instead.
+* Removed method `DivTooltipRestrictor.canShowTooltip(View, DivTooltip)`. Use `DivTooltipRestrictor.canShowTooltip(Div2View, View, DivTooltip, Boolean)` instead.
+* Removed method `DivTooltipRestrictor.canShowTooltip(Div2View, View, DivTooltip)`. Use `DivTooltipRestrictor.canShowTooltip(Div2View, View, DivTooltip, Boolean)` instead.
+* Removed method `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipShown(View, DivTooltip)`. Use `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipShown(Div2View, View, DivTooltip)` instead.
+* Removed method `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipDismissed(View, DivTooltip)`. Use `DivTooltipRestrictor.DivTooltipShownCallback.onDivTooltipDismissed(Div2View, View, DivTooltip)` instead.
+* Removed constructor `DivPreloader(DivImagePreloader?, DivCustomViewAdapter?, List<DivExtensionHandler>)`. Use `DivPreloader(DivConfiguration)` or `DivPreloader(Div2Context)` instead.
+* Removed method `DivImagePreloader.preload(Div, ExpressionResolver, DivImagePreloader.Callback)`. Use `DivPreloader.preload(Div, ExpressionResolver, DivPreloader.Callback)` instead.
+* Removed method `ViewPreCreationProfile.FixedPreCreationProfile(...)`. Use constructor `ViewPreCreationProfile(...)` instead.
+* Removed class `LinearLayoutWithCenteredDividers`.
+* Removed interface `MainTemplateProvider`. Use `CachingTemplateProvider` instead.
+* Removed method `DivActionHandler.handleUri(Uri, DivViewFacade)`. Use `DivActionHandler.handleActionUrl(Uri?, DivViewFacade)` instead.
+* Removed extension method `DivVideo.createPreview(ExpressionResolver)`.
+* Marked as internal class `BuiltinFunctionProvider`.
+* Fix text appearance of ranges that overlap each other.
+* Removed custom XML attributes of `AspectImageView`.
+* Set cursor at the last position on focus action.
+* Supported `layout_mode` `wrap_content` in `pager`.
+* Fixed combination of line heights set for whole text and specific ranges.
+
+# iOS Client:
+* Breaking change. From now the default tooltip width is `match_parent` (previously was `wrap_content` which did not match the default `div-base` behavior).
+* Removed `DivActionHandler.handleDivActionUrl` method.
+* Removed `DivActionLogger` protocol. Use `DivReporter` instead.
+* Removed `DivActionURLHandler` public initializer.
+* Removed `DivActionURLHandler.PerformTimerAction` typealias.
+* Removed `DivActionURLHandler.UpdateCardAction` typealias.
+* Removed `DivBlockModelingContext.showToolip` property.
+* Removed `DivFlagsInfo.imageLoadingOptimizationEnabled`. This feature is already enabled by default.
+* Removed `DivKitComponents.UpdateCardAction` typealias.
+* Removed `DivTriggersStorage` public initializer. This class in not intended to be constructed outside DivKit. Use `DivKitComponents.triggersStorage` instead.
+* Removed `DivVariableUpdater` protocol.
+* Removed `DivVariablesStorage.ChangeEvent.newValues` property. Use `DivVariablesStorage` to access new values directly.
+* Removed `DivVisibilityCounting` protocol.
+* Removed `ExpressionResolver` public initializers. This class is not intended to be constructed outside DivKit.
+* Removed `ExpressionResolver.VariableTracker` typealias.
+* Removed `UIActionEventPerforming.perform(uiActionEvents:from:)` protocol requirement.
+* Removed `updateCardAction` argument from `DivKitComponents` initializer. Observe `updateCardSignal` property instead.
+* Removed `UserInterfaceAction.DivActionParams` initializer with `cardId` argument. Use another initializer with `path` argument instead.
+* Removed `Delay` and `Duration` types.
+* Changed return type of `DivStatePath.makeDivStatePath` method to non-optional.
+* Class `DivLastVisibleBoundsCache` marked with `@_spi(Internal)`.
+* Class `DivLayoutProviderHandler` marked with `@_spi(Internal)`.
+* Class `DivVisibilityCounter` marked with `@_spi(Internal)`.
+* Class `SizeProviderExtensionHandler` marked with `@_spi(Legacy)`. Use `div-base.layout_provider` API instead.
+* `ShowTooltipAction` typealias moved from `DivActionURLHandler` to `DivActionHandler`.
+* `DivActionHandler` initializer marked with `@_spi(Legacy)`.
+* `DivBlockModelingContext` initializer marked with `@_spi(Internal)`, removed some arguments. You should not create `DivBlockModelingContext` in your code. Use `DivKitComponents.makeContext` if you really need to.
+* Struct `DivBlockStateStorage.ChangeEvent` becomes internal.
+* Struct `IdAndCardId` becomes internal.
+* Method `DivVariablesStorage.makeVariables` marked with `@_spi(Legacy)`.
+* `DivData` marked as `Sendable`.
+* Added `DivFlagsInfo.useUrlHandlerForVisibilityActions`.
+* Added Xcode 16.2 / iOS 18.2 compatibility.
+* Supported `baseline_offset` for `range` in `div-text`.
+* Fixed `div-state` switching in tooltips.
+
+# Web Client:
+* Breaking change. Api `Ya.Divkit` in window is now deprecated, and the `Ya.DivKit` should be used (please note the big letter "K" instead of the small "K").
+* Breaking change. Browsers/Node,js now require BigInt support (Chrome 58 -> 67, Safari 11 -> 14, Firefox 67 -> 68, Node.js 8 -> 10.4). Integer values in markup expressions now always use BigInt. `subscribe` and other methods for integer variables now always return BigInt values.
+* Breaking change. Components with actions (not links) are now rendered using a `button`. This may change the default tap animation in iOS and other minor updates.
+* Breaking change. Store methods `getValue` / `setValue` are now deprecated. Provide methods `get` / `set` instead.
+* Breaking change. The build was redone using Vite/Rollup. This changes the situation a bit: there is no longer a css map, and the ESM file versions are no longer minimized. Browser and CJS versions with global variables are still minimized.
+* Breaking change. The logic of the `multiple` parameter for `tooltips` has been brought into line with other platforms, now tooltips without `multiple` are shown no more than once, and with - as many as you like (but no more than one at a time).
+* Breaking change. Tooltips are modal by default.
+* Breaking change: `doubletap_actions` now prevents `actions` from being called (to match Android behaviour).
+* Breaking change: non-interactive elements will now ignore clicks (to better match the native behavior of DivKit).
+* Added `getStoredArrayValue` and `getStoredDictValue` functions.
+* Added support for the `longtap_actions` on the non-touch platforms (desktop).
+* Added support for the `set_state` typed action.
+* Added support for the `set_stored_value` typed action.
+* Changed `doubletap_actions` detect logic.
+* Fixed `array` and `dict` variable types in d.ts.
+
+# Schema
+* Changed `div-action-download.url` property type to `url`.
+
+
 ## 30.33.0
 
 # Android Client:
@@ -303,7 +624,7 @@
 
 # Android Client:
 * Added implementation for local `variable_trigger` field.
-* Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables. 
+* Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables.
 * Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts.
 * Added support of variable animators.
 * Added support of `scope_id` property for `set_variable` actions.
@@ -611,7 +932,7 @@
 * Remove focus from focused `input` if some clickable div were clicked.
 * Removed `z`/`Z` patterns restriction from datetime formatting functions.
 * Added `max_length` property support for `input`.
-* Fixed crash by `gallery` when count of `items` was less then `column_count`. 
+* Fixed crash by `gallery` when count of `items` was less then `column_count`.
 * Supported `font_feature_settings` property for `div-text`.
 
 # iOS Client:

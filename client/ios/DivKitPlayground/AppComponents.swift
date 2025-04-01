@@ -1,5 +1,5 @@
-import Foundation
 import DivKit
+import Foundation
 @_spi(Legacy) import DivKitExtensions
 import DivKitMarkdownExtension
 import LayoutKit
@@ -38,6 +38,7 @@ enum AppComponents {
         MarkdownExtensionHandler(),
         ShineExtensionHandler(),
       ],
+      flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
       fontProvider: fontProvider,
       layoutDirection: layoutDirection,
       patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),

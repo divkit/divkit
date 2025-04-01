@@ -52,6 +52,16 @@ public final class DivVariableStorage {
 
   /// Gets variable value.
   /// If variable with the given name not exists gets value from the outer storage.
+  /// Returns `DivVariableValue`.
+  public func getVariableValue(_ name: DivVariableName) -> DivVariableValue? {
+    let variable = lock.withLock {
+      _values[name]
+    }
+    return variable ?? outerStorage?.getValue(name)
+  }
+
+  /// Gets variable value.
+  /// If variable with the given name not exists gets value from the outer storage.
   public func getValue<T>(_ name: DivVariableName) -> T? {
     let variable = lock.withLock {
       _values[name]

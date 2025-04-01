@@ -1,0 +1,108 @@
+{
+  "description": "item_builder has priority over items in the container.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "exampleCard": {
+      "type": "container",
+      "border": {
+        "corner_radius": 16,
+        "stroke": {
+          "color": "#aaaaaa",
+          "width": 1
+        }
+      },
+      "margins": {
+        "bottom": 6
+      },
+      "orientation": "vertical",
+      "paddings": {
+        "top": 12,
+        "bottom": 12,
+        "left": 12,
+        "right": 12
+      }
+    }
+  },
+  "card": {
+    "log_id": "prototypes",
+    "variables": [
+      {
+        "name": "data",
+        "type": "array",
+        "value": [
+          {
+            "style": "only_text",
+            "title": "item from item_builder"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "item_builder": {
+                "data": "@{data}",
+                "data_element_name": "item",
+                "prototypes": [
+                  {
+                    "selector": "@{getStringFromDict(item, 'style') == 'only_text'}",
+                    "div": {
+                      "type": "exampleCard",
+                      "items": [
+                        {
+                          "type": "text",
+                          "text": "@{getStringFromDict(item, 'title')}",
+                          "width": {
+                            "type": "wrap_content"
+                          },
+                          "font_size": 16,
+                          "margins": {
+                            "bottom": 4
+                          }
+                        }
+                      ],
+                      "width": {
+                        "type": "wrap_content"
+                      }
+                    }
+                  }
+                ]
+              },
+              "items": [
+                {
+                  "type": "exampleCard",
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "Item from items",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "font_size": 16,
+                      "margins": {
+                        "bottom": 4
+                      }
+                    }
+                  ],
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

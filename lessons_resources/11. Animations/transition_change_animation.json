@@ -1,0 +1,228 @@
+{
+  "templates": {
+    "image_block": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/divkit/samples/slide_04.jpeg",
+      "border": {
+        "corner_radius": 18
+      }
+    },
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "change_state",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "state",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{change_state && state}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=false"
+          },
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=state&value=false"
+          },
+          {
+            "log_id": "change state",
+            "url": "div-action://set_state?state_id=0/transition_change_demo_state/state1"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state && !state}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=false"
+          },
+          {
+            "log_id": "update state variable",
+            "url": "div-action://set_variable?name=state&value=true"
+          },
+          {
+            "log_id": "change state",
+            "url": "div-action://set_state?state_id=0/transition_change_demo_state/state2"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "margins": {
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#CDE3EF"
+                    }
+                  ],
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "border": {
+                    "corner_radius": 18
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Hidden text",
+                  "text_alignment_horizontal": "center",
+                  "font_size": 24,
+                  "margins": {
+                    "top": 30
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "That was revealed",
+                  "alignment_horizontal": "end",
+                  "alignment_vertical": "bottom",
+                  "text_alignment_horizontal": "center",
+                  "font_size": 24,
+                  "margins": {
+                    "bottom": 30,
+                    "end": 30
+                  },
+                  "width": {
+                    "type": "fixed",
+                    "value": 95
+                  }
+                },
+                {
+                  "type": "state",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 250
+                  },
+                  "id": "transition_change_demo_state",
+                  "states": [
+                    {
+                      "state_id": "state1",
+                      "div": {
+                        "type": "image_block",
+                        "id": "image",
+                        "width": {
+                          "type": "match_parent"
+                        },
+                        "height": {
+                          "type": "match_parent"
+                        },
+                        "transition_change": {
+                          "type": "change_bounds",
+                          "duration": 1000
+                        }
+                      }
+                    },
+                    {
+                      "state_id": "state2",
+                      "div": {
+                        "type": "image_block",
+                        "id": "image",
+                        "alignment_horizontal": "left",
+                        "alignment_vertical": "bottom",
+                        "width": {
+                          "type": "fixed",
+                          "value": 150
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 150
+                        },
+                        "transition_change": {
+                          "type": "change_bounds",
+                          "duration": 1000
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Run",
+              "actions": [
+                {
+                  "log_id": "set_state1",
+                  "url": "div-action://set_variable?name=change_state&value=true"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

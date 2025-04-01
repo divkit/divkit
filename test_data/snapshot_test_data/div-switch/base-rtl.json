@@ -1,0 +1,93 @@
+{
+  "description": "Basic switch rtl layout.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "margins": {
+        "top": 4,
+        "left": 12,
+        "right": 12,
+        "bottom": 12
+      }
+    },
+    "my_switch": {
+      "type": "switch",
+      "is_on_variable": "switch_value",
+      "width": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 12,
+        "right": 12,
+        "bottom": 4
+      }
+    }
+  },
+  "card": {
+    "log_id": "tests",
+    "variables": [
+      {
+        "name": "switch_value",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "switch_value2",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title",
+              "text": "Off switch"
+            },
+            {
+              "type": "my_switch"
+            },
+            {
+              "type": "title",
+              "text": "On switch"
+            },
+            {
+              "type": "my_switch",
+              "is_on_variable": "switch_value2"
+            },
+            {
+              "type": "title",
+              "text": "Colored off switch"
+            },
+            {
+              "type": "my_switch",
+              "on_color": "#fc0"
+            },
+            {
+              "type": "title",
+              "text": "Colored on switch"
+            },
+            {
+              "type": "my_switch",
+              "is_on_variable": "switch_value2",
+              "on_color": "#fc0"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

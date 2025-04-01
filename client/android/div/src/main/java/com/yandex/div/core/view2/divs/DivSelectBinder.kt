@@ -10,45 +10,43 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
-import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivSelect
 import javax.inject.Inject
 
 @DivScope
 internal class DivSelectBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
+    baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayStringVariableBinder,
     private val errorCollectors: ErrorCollectors
-) : DivViewBinder<DivSelect, DivSelectView> {
-    override fun bindView(context: BindingContext, view: DivSelectView, div: DivSelect, path: DivStatePath) {
-        val oldDiv = view.div
-        if (div === oldDiv) return
+) : DivViewBinder<Div.Select, DivSelect, DivSelectView>(baseBinder) {
 
-        val divView = context.divView
-        val expressionResolver = context.expressionResolver
+    override fun DivSelectView.bind(
+        bindingContext: BindingContext,
+        div: DivSelect,
+        oldDiv: DivSelect?,
+        path: DivStatePath
+    ) {
+        val divView = bindingContext.divView
+        val expressionResolver = bindingContext.expressionResolver
 
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
+        focusTracker = divView.inputFocusTracker
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        applyOptions(div, bindingContext)
+        observeVariable(div, bindingContext, path)
 
-        view.apply {
-            textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
-            focusTracker = context.divView.inputFocusTracker
+        observeFontSize(div, expressionResolver)
+        observeTypeface(div, expressionResolver)
+        observeTextColor(div, expressionResolver)
+        observeLineHeight(div, expressionResolver)
 
-            applyOptions(div, context)
-            observeVariable(div, context, errorCollector, path)
-
-            observeFontSize(div, expressionResolver)
-            observeTypeface(div, expressionResolver)
-            observeTextColor(div, expressionResolver)
-            observeLineHeight(div, expressionResolver)
-
-            observeHintText(div, expressionResolver)
-            observeHintColor(div, expressionResolver)
-        }
+        observeHintText(div, expressionResolver)
+        observeHintColor(div, expressionResolver)
     }
 
     private fun DivSelectView.applyOptions(div: DivSelect, bindingContext: BindingContext) {
@@ -84,10 +82,10 @@ internal class DivSelectBinder @Inject constructor(
     private fun DivSelectView.observeVariable(
         div: DivSelect,
         bindingContext: BindingContext,
-        errorCollector: ErrorCollector,
         path: DivStatePath,
     ) {
         val resolver = bindingContext.expressionResolver
+        val errorCollector = errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
 
         val subscription = variableBinder.bindVariable(
             bindingContext,

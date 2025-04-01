@@ -1,5 +1,5 @@
 import type { Action } from '@divkitframework/divkit/typings/common';
-import type { CardLocale, EditorInstance, EditorOptions, FontFaceDesc, GetTranslationKey, GetTranslationSuggest } from '../../lib';
+import type { CardLocale, EditorInstance, EditorOptions, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest } from '../../lib';
 import type { State } from '../data/state';
 import type { TreeLeaf } from './tree';
 import type { Background } from '../data/background';
@@ -86,6 +86,7 @@ export interface File2DialogShowProps {
     target: HTMLElement;
     disabled?: boolean;
     generateFromVideo?: VideoSource[];
+    generateFromLottie?: string;
     callback: File2DialogCallback;
     onHide?(): void;
 }
@@ -234,8 +235,11 @@ export interface AppContext {
     previewErrorFileLimit: number;
     warnFileLimit: number;
     errorFileLimit: number;
+    fileLimits: FileLimits | undefined;
     rootConfigurable: boolean;
     customFontFaces: FontFaceDesc[];
+    directionSelector: boolean;
+    perThemeProps: boolean;
 
     rendererApi: () => RendererApi;
     setRendererApi(api: RendererApi): void;

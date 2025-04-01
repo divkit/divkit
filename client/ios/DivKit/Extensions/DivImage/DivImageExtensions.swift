@@ -4,7 +4,8 @@ import VGSL
 
 extension DivImage: DivBlockModeling, DivImageProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
+    let context = modifiedContextParentPath(context)
+    return try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: self,
@@ -35,25 +36,6 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
   }
 }
 
-extension DivBlendMode {
-  fileprivate var tintMode: TintMode {
-    switch self {
-    case .sourceIn:
-      .sourceIn
-    case .sourceAtop:
-      .sourceAtop
-    case .darken:
-      .darken
-    case .lighten:
-      .lighten
-    case .multiply:
-      .multiply
-    case .screen:
-      .screen
-    }
-  }
-}
-
 extension DivImage {
   fileprivate func resolveEffects(_ expressionResolver: ExpressionResolver) -> [ImageEffect] {
     filters?.compactMap { $0.resolveEffect(expressionResolver) } ?? []
@@ -68,8 +50,8 @@ extension DivFadeTransition {
       kind: .fade,
       start: resolveAlpha(expressionResolver),
       end: 1,
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
-      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)),
+      duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
+      delay: TimeInterval(milliseconds: resolveStartDelay(expressionResolver)),
       timingFunction: resolveInterpolator(expressionResolver).asTimingFunction()
     )
   }

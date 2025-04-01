@@ -53,6 +53,16 @@ final class DivVariableSorageTest: XCTestCase {
     XCTAssertEqual(variables + newVariables, storage.allValues)
   }
 
+  func test_getVariableValue_GetsValue() {
+    storage.put(variables)
+
+    XCTAssertEqual(.string("value"), storage.getVariableValue("string_var"))
+    XCTAssertEqual(.integer(100), storage.getVariableValue("int_var"))
+    XCTAssertEqual(.number(123.34), storage.getVariableValue("number_var"))
+    XCTAssertEqual(.bool(true), storage.getVariableValue("bool_var"))
+    XCTAssertEqual(.url(testURL), storage.getVariableValue("url_var"))
+  }
+
   func test_getValue_GetsValue() {
     storage.put(variables)
 
@@ -249,7 +259,7 @@ final class DivVariableSorageTest: XCTestCase {
       [
         "int_var": .integer(100),
         "bool_var": .bool(true),
-        "url_var": .url(url("https://test.url")),
+        "url_var": .url(testURL),
       ],
       storage.allValues
     )
@@ -271,10 +281,12 @@ final class DivVariableSorageTest: XCTestCase {
   }
 }
 
+private let testURL = url("https://test.url")
+
 private let variables: DivVariables = [
   "string_var": .string("value"),
   "int_var": .integer(100),
   "number_var": .number(123.34),
   "bool_var": .bool(true),
-  "url_var": .url(url("https://test.url")),
+  "url_var": .url(testURL),
 ]

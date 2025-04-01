@@ -1,10 +1,11 @@
 package com.yandex.div.core.state
 
 import androidx.annotation.VisibleForTesting
+import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath.Companion.parse
-import java.lang.Math.min
-import java.util.ArrayList
-import kotlin.Comparator
+import com.yandex.div2.Div
+import com.yandex.div2.DivData
+import kotlin.math.min
 
 /**
  * Parsed path to switch states.
@@ -33,11 +34,11 @@ data class DivStatePath @VisibleForTesting internal constructor(
         get() = if (states.isEmpty()) {
             null
         } else {
-            DivStatePath(topLevelStateId, states.subList(0, states.size - 1)).toString() + "/" + states.last().divId
+            DivStatePath(topLevelStateId, states.subList(0, states.size - 1)).statesString + "/" + states.last().divId
         }
 
     internal val fullPath by lazy { path.joinToString("/") }
-    private val stringValue by lazy {
+    internal val statesString by lazy {
         if (states.isNotEmpty()) {
             "$topLevelStateId/" + states.flatMap { listOf(it.divId, it.stateId) }.joinToString("/")
         } else {
@@ -45,27 +46,23 @@ data class DivStatePath @VisibleForTesting internal constructor(
         }
     }
 
-    override fun toString(): String = stringValue
+    override fun toString(): String = fullPath
 
     fun append(divId: String, stateId: String): DivStatePath {
         val newStates = ArrayList<Pair<String, String>>(states.size + 1).apply {
             addAll(states)
             add(divId to stateId)
         }
-        val newFullPath = ArrayList<String>(path.size + 2).apply {
-            addAll(path)
-            add(divId)
-            add(stateId)
-        }
-        return DivStatePath(topLevelStateId, newStates, newFullPath)
+        return DivStatePath(topLevelStateId, newStates, createFullPath(stateId))
     }
 
-    fun appendDiv(divId: String): DivStatePath {
-        val newFullPath = ArrayList<String>(path.size + 1).apply {
+    fun appendDiv(divId: String) = DivStatePath(topLevelStateId, states, createFullPath(divId))
+
+    private fun createFullPath(divId: String): List<String> {
+        return ArrayList<String>(path.size + 1).apply {
             addAll(path)
             add(divId)
         }
-        return DivStatePath(topLevelStateId, states, newFullPath)
     }
 
     fun getStates(): List<Pair<String, String>> = states
@@ -80,8 +77,8 @@ data class DivStatePath @VisibleForTesting internal constructor(
             return this
         }
         val list = states.toMutableList()
-        list.removeLast()
-        return DivStatePath(topLevelStateId, list)
+        list.removeAt(list.lastIndex)
+        return DivStatePath(topLevelStateId, list, path.extractStates(states, false))
     }
 
     fun isRootPath(): Boolean = states.isEmpty()
@@ -121,10 +118,20 @@ data class DivStatePath @VisibleForTesting internal constructor(
             for (i in (1 until split.size).step(2)) {
                 list.add(split[i] to split[i + 1])
             }
-            return DivStatePath(topLevelStateId, list)
+            return DivStatePath(topLevelStateId, list, split)
         }
 
         fun fromState(stateId: Long) = DivStatePath(stateId, mutableListOf())
+
+        internal fun fromState(state: DivData.State) = fromRootDiv(state.stateId, state.div)
+
+        internal fun fromRootDiv(stateId: Long, div: Div): DivStatePath {
+            val path = mutableListOf(stateId.toString())
+            if (div is Div.State) {
+                path.add(div.value.getId())
+            }
+            return DivStatePath(stateId, emptyList(), path)
+        }
 
         /**
          * Search for shared ancestor for two [DivStatePath]. So path equal to
@@ -135,15 +142,33 @@ data class DivStatePath @VisibleForTesting internal constructor(
             if (somePath.topLevelStateId != otherPath.topLevelStateId) {
                 return null
             }
+            val sharedPairs = findSharedPairs(somePath, otherPath)
+            return DivStatePath(somePath.topLevelStateId, sharedPairs, somePath.path.extractStates(sharedPairs, true))
+        }
+
+        private fun findSharedPairs(somePath: DivStatePath, otherPath: DivStatePath): List<Pair<String, String>> {
             val sharedPairs = mutableListOf<Pair<String, String>>()
             somePath.states.forEachIndexed { index, pair ->
                 val otherPair = otherPath.states.getOrNull(index)
-                if (otherPair == null || pair != otherPair) {
-                    return DivStatePath(somePath.topLevelStateId, sharedPairs)
-                }
+                if (otherPair == null || pair != otherPair) return sharedPairs
+
                 sharedPairs.add(pair)
             }
-            return DivStatePath(somePath.topLevelStateId, sharedPairs)
+            return sharedPairs
+        }
+
+        private fun List<String>.extractStates(states: List<Pair<String, String>>, addChild: Boolean): List<String> {
+            var index = 0
+            states.forEach { index = findState(it, index) }
+            if (addChild) index++
+            return subList(0, index)
+        }
+
+        private fun List<String>.findState(state: Pair<String, String>, start: Int): Int {
+            for (i in start until size - 1) {
+                if (get(i) == state.divId && get(i + 1) == state.stateId) return i + 1
+            }
+            return size
         }
 
         internal fun alphabeticalComparator(): Comparator<DivStatePath> {
@@ -162,7 +187,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
                     }
                     val stateIdComparison = lhsPair.stateId.compareTo(rhsPair.stateId)
                     if (stateIdComparison != 0) {
-                        return@Comparator divIdComparison
+                        return@Comparator stateIdComparison
                     }
                 }
                 return@Comparator lhs.states.size - rhs.states.size
@@ -171,7 +196,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
     }
 }
 
-class PathFormatException constructor(message: String, cause: Throwable? = null) : Exception(message, cause)
+class PathFormatException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
 private val Pair<String, String>.divId get() = first
 private val Pair<String, String>.stateId get() = second

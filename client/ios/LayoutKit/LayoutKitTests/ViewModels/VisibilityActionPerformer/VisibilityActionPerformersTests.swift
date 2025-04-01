@@ -15,7 +15,7 @@ final class VisibilityActionPerformerTests: XCTestCase {
         actions: [
           VisibilityAction(
             uiAction: UserInterfaceAction(payload: .empty, path: "test"),
-            requiredDuration: TimeInterval(10),
+            requiredDuration: requiredDuration,
             targetPercentage: 50,
             limiter: ActionLimiter(
               canSend: { [unowned self] in self.actionCount < maxActionCount },
@@ -40,6 +40,7 @@ final class VisibilityActionPerformerTests: XCTestCase {
   private var lastVisibleArea = 0
   private var maxActionCount = 100
   private var actionCount = 0
+  private var requiredDuration = TimeInterval(10)
 
   func test_onVisibleBoundsChanged_UpdatesLastVisibleArea_PartiallyVisible() {
     actionPerformers.onVisibleBoundsChanged(to: rect(100, 50), bounds: rect(100, 100))
@@ -128,7 +129,7 @@ final class VisibilityActionPerformerTests: XCTestCase {
 
     runTimers()
 
-    XCTAssertEqual(view.eventCount, 1)
+    XCTAssertEqual(view.eventCount, 0)
   }
 
   func test_DoesNotPerformAction_WhenViewSizeIsChanged() {
@@ -183,14 +184,20 @@ final class VisibilityActionPerformerTests: XCTestCase {
 
   func test_PerformsDisappearAction_WhenViewIsGone() {
     actionType = .disappear
+    lastVisibleArea = 100
     isVisible = false
+    requiredDuration = 0
 
     actionPerformers.onVisibleBoundsChanged(to: rect(100, 100), bounds: rect(100, 100))
-    actionPerformers.onVisibleBoundsChanged(to: rect(100, 00), bounds: rect(0, 0))
+
+    isVisible = true
+    lastVisibleArea = 100
+
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 100), bounds: rect(0, 0))
 
     runTimers()
 
-    XCTAssertEqual(view.eventCount, 1)
+    XCTAssertEqual(view.eventCount, 2)
   }
 
   func test_InvalidatesTimer_WhenDestroyed() {

@@ -10,19 +10,29 @@ final class SubmitActionHandler {
   func handle(_ action: DivActionSubmit, context: DivActionHandlingContext) {
     let resolver = context.expressionResolver
 
-    guard let containerId = action.resolveContainerId(resolver) else {
-      DivKitLogger.error("Invalid container id: \(action.containerId)")
-      return
-    }
     guard let url = action.request.resolveUrl(resolver) else {
       DivKitLogger.error("Invalid submit URL: \(action.request.url)")
       return
     }
+    guard let containerId = action.resolveContainerId(resolver) else {
+      DivKitLogger.error("Invalid container id: \(action.containerId)")
+      return
+    }
 
-    let containerData = context.variablesStorage.getVariables(
-      cardId: context.path.cardId,
+    let containers = context.variablesStorage.getVariables(
+      cardId: context.cardId,
       elementId: containerId
-    ).map(
+    )
+    guard let container = containers.first else {
+      DivKitLogger.error("Element with id \(containerId) not found")
+      return
+    }
+    guard containers.count == 1 else {
+      DivKitLogger.error("Found multiple elements that respond to id: \(containerId)")
+      return
+    }
+
+    let containerData = container.map(
       key: { $0.rawValue },
       value: { $0.toString() }
     )

@@ -8,9 +8,10 @@ import XCTest
 func makeBlock(
   _ div: Div,
   context: DivBlockModelingContext = DivBlockModelingContext(),
-  ignoreErrors: Bool = false
+  ignoreErrors: Bool = false,
+  stateId: Int = 0
 ) -> StateBlock {
-  let block = try! divData(div).makeBlock(context: context) as! StateBlock
+  let block = try! divData(div, stateId: stateId).makeBlock(context: context) as! StateBlock
   if !ignoreErrors, let error = context.errorsStorage.errors.first {
     XCTFail(error.message)
   }
@@ -25,13 +26,15 @@ func separatorBlock() -> Block {
 
 func textBlock(
   widthTrait: LayoutTrait = .resizable,
-  text: String
+  text: String,
+  path: UIElementPath
 ) -> Block {
   TextBlock(
     widthTrait: widthTrait,
     text: text.withTypo(),
     verticalAlignment: .leading,
-    accessibilityElement: nil
+    accessibilityElement: nil,
+    path: path
   )
 }
 
@@ -81,8 +84,15 @@ extension UIElementPath {
 }
 
 extension DivAction {
-  func uiAction(path: UIElementPath) -> UserInterfaceAction? {
-    uiAction(context: .default.modifying(parentPath: path))
+  func uiAction(
+    pathSuffix: String
+  ) -> UserInterfaceAction? {
+    let pathComponents = pathSuffix.split(separator: "/")
+    var context = DivBlockModelingContext.default
+    for pathComponent in pathComponents {
+      context = context.modifying(pathSuffix: String(pathComponent))
+    }
+    return uiAction(context: context)
   }
 }
 
@@ -119,6 +129,13 @@ func divActionPayload(
       localValues: [:]
     )
   )
+}
+
+extension Block {
+  func unwrap<T>() throws -> T {
+    let wrapperBlock = try XCTUnwrap(self as? WrapperBlock)
+    return try XCTUnwrap(wrapperBlock.child as? T)
+  }
 }
 
 extension String {

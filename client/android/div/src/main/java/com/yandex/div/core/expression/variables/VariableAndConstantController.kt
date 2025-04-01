@@ -3,13 +3,14 @@ package com.yandex.div.core.expression.variables
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
+import com.yandex.div.json.expressions.ExpressionResolver
 
 internal class VariableAndConstantController(
     private val delegate: VariableController,
     private val constants: ConstantsProvider,
 ) : VariableController {
 
-    override fun get(name: String) = constants.get(name) ?: super.get(name)
+    override fun get(name: String) = constants.get(name).wrapVariableValue() ?: delegate.get(name)
 
     override fun subscribeToVariablesChange(
         names: List<String>,
@@ -37,8 +38,8 @@ internal class VariableAndConstantController(
 
     override fun declare(variable: Variable) = delegate.declare(variable)
 
-    override fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit) =
-        delegate.setOnAnyVariableChangeCallback(callback)
+    override fun setOnAnyVariableChangeCallback(owner: ExpressionResolver, callback: (Variable) -> Unit) =
+        delegate.setOnAnyVariableChangeCallback(owner, callback)
 
     override fun cleanupSubscriptions() = delegate.cleanupSubscriptions()
 

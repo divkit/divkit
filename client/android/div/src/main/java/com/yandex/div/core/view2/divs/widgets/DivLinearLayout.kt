@@ -5,14 +5,14 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.LinearContainerLayout
-import com.yandex.div2.DivContainer
+import com.yandex.div2.Div
 
 internal class DivLinearLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<DivContainer> by DivHolderViewMixin(),
+    DivHolderView<Div.Container> by DivHolderViewMixin(),
     DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 

@@ -1,5 +1,5 @@
+import type { VideoSource } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
-import type { VideoSource } from '../types/video';
 
 export interface PreparedVideoSource {
     src: string;

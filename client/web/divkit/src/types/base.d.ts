@@ -4,10 +4,9 @@ import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
-import type { Action, AnimatorDirection, AnimatorRepeatCount, BooleanInt, DisappearAction, DivVariable, Interpolation, VariableTrigger, VisibilityAction } from '../../typings/common';
+import type { Action, AnimatorDirection, AnimatorRepeatCount, BooleanInt, DisappearAction, DivFunction, DivVariable, Interpolation, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
-import type { EvalTypes } from '../expressions/eval';
 
 export type AccessibilityType = 'none' | 'button' | 'image' | 'text' | 'edit_text' |
     'header' | 'tab_bar' | 'list' | 'select' | 'checkbox' | 'radio' | 'auto';
@@ -91,6 +90,16 @@ export interface Extension {
     params?: object;
 }
 
+export interface TooltipModeModal {
+    type: 'modal';
+}
+
+export interface TooltipModeNonModal {
+    type: 'non_modal';
+}
+
+export type TooltipMode = TooltipModeModal | TooltipModeNonModal;
+
 export interface Tooltip {
     id: string;
     div: DivBaseData;
@@ -109,6 +118,11 @@ export interface Tooltip {
     };
     animation_in?: Animation;
     animation_out?: Animation;
+
+    mode?: TooltipMode;
+    tap_outside_actions?: Action[];
+    close_by_tap_outside?: boolean;
+    background_accessibility_description?: string;
 }
 
 export interface DivLayoutProvider {
@@ -141,18 +155,6 @@ export interface ColorAnimator extends AnimatorBase {
 }
 
 export type Animator = NumberAnimator | ColorAnimator;
-
-export interface DivFunctionArgument {
-    name: string;
-    type: EvalTypes;
-}
-
-export interface DivFunction {
-    name: string;
-    body: string;
-    return_type: EvalTypes;
-    arguments: DivFunctionArgument[];
-}
 
 export interface DivBaseData {
     type: string;

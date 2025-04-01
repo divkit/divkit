@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_stroke_style_solid",
+  "platforms": [
+    "android",
+    "ios",
+    "web",
+    "flutter"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "solid"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

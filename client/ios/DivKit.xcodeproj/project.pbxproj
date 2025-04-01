@@ -249,6 +249,7 @@
 		8CD907BB2A4C8AF3001C4B7B /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */; };
 		8CE488642B76F64D00BDDAB9 /* parsing_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8CE488632B76F64D00BDDAB9 /* parsing_test_data */; };
 		8CE488662B76F6BA00BDDAB9 /* DivDataParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE488652B76F6BA00BDDAB9 /* DivDataParsingTests.swift */; };
+		8CEA0FDB2D4BD39D007812B8 /* DivTimerStorageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0FDA2D4BD393007812B8 /* DivTimerStorageTest.swift */; };
 		8CF1296128B0018E00351F65 /* UrlInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296028B0018E00351F65 /* UrlInputView.swift */; };
 		8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296228B0021F00351F65 /* UserPreferences.swift */; };
 		8CF1296528B0036F00351F65 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296428B0036F00351F65 /* Styles.swift */; };
@@ -283,6 +284,7 @@
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
 		9D09984F2CA30D010098098C /* AccessoryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */; };
 		9D5BFB092CA1DA20005F8EB1 /* CustomFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */; };
+		9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */; };
 		9F89F0D92CEF4C9A00460B76 /* ShineExtensionParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */; };
 		9F89F0DB2CEF5AAC00460B76 /* ShimmerStyleTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */; };
 		9FE7D2FE2CF751E300BAF071 /* VGSL in Frameworks */ = {isa = PBXBuildFile; productRef = 9FE7D2FD2CF751E300BAF071 /* VGSL */; };
@@ -611,6 +613,7 @@
 		8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		8CE488632B76F64D00BDDAB9 /* parsing_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = parsing_test_data; path = ../../../test_data/parsing_test_data; sourceTree = "<group>"; };
 		8CE488652B76F6BA00BDDAB9 /* DivDataParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivDataParsingTests.swift; sourceTree = "<group>"; };
+		8CEA0FDA2D4BD393007812B8 /* DivTimerStorageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTimerStorageTest.swift; sourceTree = "<group>"; };
 		8CF1296028B0018E00351F65 /* UrlInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlInputView.swift; sourceTree = "<group>"; };
 		8CF1296228B0021F00351F65 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		8CF1296428B0036F00351F65 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
@@ -645,6 +648,7 @@
 		98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTooltipTests.swift; sourceTree = "<group>"; };
 		9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProvider.swift; sourceTree = "<group>"; };
 		9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunctionTests.swift; sourceTree = "<group>"; };
+		9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActionHandlerTests.swift; sourceTree = "<group>"; };
 		9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShineExtensionParamsTests.swift; sourceTree = "<group>"; };
 		9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerStyleTester.swift; sourceTree = "<group>"; };
 		9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivBlockModelingContext.swift; sourceTree = "<group>"; };
@@ -945,6 +949,7 @@
 		8C40BA002ABB3B45008405AD /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */,
 				8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */,
 				8C7B1B312865C01C0036EF4C /* DivActionIntentTests.swift */,
 				431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */,
@@ -1421,6 +1426,7 @@
 			isa = PBXGroup;
 			children = (
 				E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */,
+				8CEA0FDA2D4BD393007812B8 /* DivTimerStorageTest.swift */,
 				E945FC45293E1CA80066C3EA /* Utils.swift */,
 			);
 			path = Timers;
@@ -1985,6 +1991,7 @@
 				8C23F43329DDB3810069F3F7 /* EntityWithStringEnumProperty.swift in Sources */,
 				8C22BBC02B037BA20076BAEB /* WithDefault.swift in Sources */,
 				8C23F43B29DDB3810069F3F7 /* ArrayTests.swift in Sources */,
+				8CEA0FDB2D4BD39D007812B8 /* DivTimerStorageTest.swift in Sources */,
 				8C22BBBA2B037BA20076BAEB /* WithoutDefaultTemplate.swift in Sources */,
 				7EE2ED6E2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift in Sources */,
 				8CC357F92BFE24B4001C2CFE /* FontFeatureSettingsParserTests.swift in Sources */,
@@ -2010,6 +2017,7 @@
 				8C23F43E29DDB3810069F3F7 /* DefaultValueTests.swift in Sources */,
 				8C23F41E29DDB3810069F3F7 /* EntityWithComplexPropertyTemplate.swift in Sources */,
 				8C23F41629DDB3810069F3F7 /* EntityWithArrayOfExpressions.swift in Sources */,
+				9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */,
 				8C23F42629DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift in Sources */,
 				8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */,
 				8C23F44429DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift in Sources */,
@@ -2476,6 +2484,7 @@
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = DivKitPlayground/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -2498,6 +2507,7 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = DivKitPlayground/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -3125,7 +3135,7 @@
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
 				kind = exactVersion;
-				version = 4.2.0;
+				version = 4.3.0;
 			};
 		};
 		76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */ = {

@@ -33,12 +33,14 @@
     "mode": {
       "type": "string",
       "enum": [
-        "transactional", "partial"
+        "transactional",
+        "partial"
       ],
       "default_value": "partial",
       "$description": "translations.json#/div_patch_mode",
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     },
@@ -70,6 +72,7 @@
       "$description": "translations.json#/div_patch_on_failed_actions",
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     }

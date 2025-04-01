@@ -8,7 +8,7 @@ final class DivDataExtensionsTests: XCTestCase {
       .makeBlock(context: .default)
       .withoutStateBlock()
     let expectedBlock = try data.states[0].div.value
-      .makeBlock(context: .default)
+      .makeBlock(context: .default.modifying(pathSuffix: "0"))
     XCTAssertTrue(block == expectedBlock)
   }
 
@@ -22,7 +22,7 @@ final class DivDataExtensionsTests: XCTestCase {
       .makeBlock(context: context)
       .withoutStateBlock()
     let expectedBlock = try data.states[1].div.value
-      .makeBlock(context: .default)
+      .makeBlock(context: .default.modifying(pathSuffix: "1"))
     XCTAssertTrue(block == expectedBlock)
   }
 
@@ -36,7 +36,7 @@ final class DivDataExtensionsTests: XCTestCase {
       .makeBlock(context: context)
       .withoutStateBlock()
     let expectedBlock = try data.states[0].div.value
-      .makeBlock(context: .default)
+      .makeBlock(context: .default.modifying(pathSuffix: "0"))
     XCTAssertTrue(block == expectedBlock)
   }
 
@@ -49,9 +49,9 @@ final class DivDataExtensionsTests: XCTestCase {
       logId: "card_log_id"
     )
     .makeBlock(context: .default)
-    .withoutStateBlock() as? DecoratingBlock
+    .withoutStateBlock()
 
-    XCTAssertEqual(block?.actions?.first.path, UIElementPath("card_log_id") + "action_log_id")
+    XCTAssertEqual(block.actions?.first.path, UIElementPath("card_log_id") + "action_log_id")
   }
 
   func test_GalleryPathContainsRoot() throws {
@@ -66,7 +66,7 @@ final class DivDataExtensionsTests: XCTestCase {
       )
     )
     .makeBlock(context: .default)
-    .withoutStateBlock() as! WrapperBlock
+    .withoutStateBlock()
     let galleryBlock = block.child as! GalleryBlock
 
     XCTAssertEqual(galleryBlock.model.path, UIElementPath.root + 0 + "gallery")
@@ -108,11 +108,9 @@ private let data = divData(
 )
 
 extension Block {
-  fileprivate func withoutStateBlock() -> Block {
-    if let stateBlock = self as? StateBlock {
-      return stateBlock.child
-    }
-    return self
+  fileprivate func withoutStateBlock() throws -> DecoratingBlock {
+    let stateBlock = try XCTUnwrap(self as? StateBlock)
+    return try XCTUnwrap(stateBlock.child as? DecoratingBlock)
   }
 }
 

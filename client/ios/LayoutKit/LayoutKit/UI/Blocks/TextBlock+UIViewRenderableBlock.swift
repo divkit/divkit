@@ -13,6 +13,15 @@ extension TextBlock {
   ) {
     let textBlockContainer = view as! TextBlockContainer
     textBlockContainer.textGradient = textGradient
+
+    let intrinsicHeight: GetIntrinsicTextHeight? = if autoEllipsize {
+      nil
+    } else {
+      { [weak self] width in
+        self?.calculateTextIntrinsicContentHeight(for: width)
+      }
+    }
+
     textBlockContainer.model = .init(
       images: images + truncationImages,
       attachments: attachments + truncationAttachments,
@@ -22,7 +31,8 @@ extension TextBlock {
       accessibility: accessibilityElement,
       truncationToken: truncationToken,
       canSelect: canSelect,
-      additionalTextInsets: additionalTextInsets
+      additionalTextInsets: additionalTextInsets,
+      intrinsicHeight: intrinsicHeight
     )
   }
 
@@ -91,12 +101,26 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    textBlockView.frame = bounds
-    gradientView?.frame = bounds
+    let textFrame = if let intrinsicHeight = model.intrinsicHeight?(bounds.width),
+                       intrinsicHeight > bounds.height {
+      CGRect(
+        origin: bounds.origin,
+        size: CGSize(
+          width: bounds.width,
+          height: intrinsicHeight
+        )
+      )
+    } else {
+      bounds
+    }
+    textBlockView.frame = textFrame
+    gradientView?.frame = textFrame
 
     gradientView?.mask = textBlockView
   }
 }
+
+private typealias GetIntrinsicTextHeight = (CGFloat) -> CGFloat?
 
 private final class TextBlockView: UIView {
   struct Model: ReferenceEquatable {
@@ -109,6 +133,7 @@ private final class TextBlockView: UIView {
     let truncationToken: NSAttributedString?
     let canSelect: Bool
     let additionalTextInsets: EdgeInsets
+    let intrinsicHeight: GetIntrinsicTextHeight?
   }
 
   private var selectedRange: Range<Int>? {
@@ -463,8 +488,10 @@ private final class TextBlockView: UIView {
       [source = model.source, weak self] in
       guard let strongSelf = self, let image = $0,
             strongSelf.model.source.value === source.value else { return }
-      strongSelf.model.attachments[index].image = image
-        .withTintColor(modelImage.tintColor)
+      strongSelf.model.attachments[index].image = image.withTintColor(
+        modelImage.tintColor,
+        mode: modelImage.tintMode
+      )
       strongSelf.imagesReferences[index] = image
       strongSelf.setNeedsDisplay()
     }
@@ -483,9 +510,56 @@ extension TextBlockView: UIGestureRecognizerDelegate {
 }
 
 extension Image {
-  fileprivate func withTintColor(_ color: Color?) -> Image {
-    guard let color else { return self }
-    return self.redrawn(withTintColor: color)
+  fileprivate func withTintColor(_ color: Color?, mode: TintMode) -> Image {
+    guard
+      let color,
+      let coloredImage = ImageGeneratorType.constantColor(color: color.ciColor).imageGenerator(),
+      let ciImage = self.ciImage ?? CIImage(image: self) else {
+      return self
+    }
+
+    let tintModeFilter = { mode.composerType.imageComposer($0)(coloredImage) }
+
+    let contentRect = CIVector(
+      x: 0,
+      y: 0,
+      z: ciImage.extent.width,
+      w: ciImage.extent.height
+    )
+
+    guard let filteredCIImage = combine(
+      tintModeFilter,
+      ImageCropType.crop(rect: contentRect).imageFilter
+    )(ciImage) else {
+      return self
+    }
+
+    let ciContext = CIContext(options: nil)
+    guard let cgImage = ciContext.createCGImage(filteredCIImage, from: filteredCIImage.extent)
+    else {
+      return self
+    }
+
+    return Image(cgImage: cgImage)
+  }
+}
+
+extension TintMode {
+  fileprivate var composerType: ImageComposerType {
+    switch self {
+    case .sourceIn:
+      .sourceIn
+    case .sourceAtop:
+      .sourceAtop
+    case .darken:
+      .darken
+    case .lighten:
+      .lighten
+    case .multiply:
+      .multiply
+    case .screen:
+      .screen
+    }
   }
 }
 

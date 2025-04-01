@@ -33,12 +33,15 @@ export const namedTemplates: Record<string, TemplateDescription> = {
                 type: 'file',
                 subtype: 'lottie',
                 enableSources: true
+                // enablePerTheme: true
             }, {
                 name: 'props.preview',
                 prop: 'preview',
                 type: 'file',
+                generateFromLottieProperty: 'lottie_params.lottie_url',
                 subtype: 'image_preview',
                 enableSources: true
+                // enablePerTheme: true
             }, {
                 name: 'props.image_scale',
                 prop: 'scale',

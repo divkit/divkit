@@ -6,10 +6,9 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.types.Url
+import com.yandex.div.json.expressions.ExpressionResolver
 
 internal interface VariableController : VariableProvider {
-
-    override fun get(name: String) = getMutableVariable(name)?.getValue().wrapVariableValue()
 
     fun subscribeToVariablesChange(
         names: List<String>,
@@ -35,7 +34,7 @@ internal interface VariableController : VariableProvider {
 
     fun declare(variable: Variable)
 
-    fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit)
+    fun setOnAnyVariableChangeCallback(owner: ExpressionResolver, callback: (Variable) -> Unit)
 
     fun cleanupSubscriptions()
 

@@ -13,6 +13,7 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
+import com.yandex.div.internal.util.textString
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 import org.json.JSONObject
@@ -210,7 +211,7 @@ class VariableUpdatesTest {
     }
 
     private fun Div2View.assertVariableShown(value: String) {
-        Assert.assertEquals(value, (getChildAt(0) as TextView).text)
+        Assert.assertEquals(value, (getChildAt(0) as TextView).textString)
     }
 
     private fun setDataToDivView(name: String, divView: Div2View) {

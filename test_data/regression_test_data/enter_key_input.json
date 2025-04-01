@@ -64,16 +64,16 @@
               "keyboard_type": "single_line_text",
               "enter_key_type": "search",
               "enter_key_actions": [
-                  {
-                    "log_id": "clear focus",
-                    "typed": {
-                      "type": "clear_focus"
-                    }
-                  },
-                  {
-                    "log_id": "enter_key_tapped",
-                    "url": "div-action://set_variable?name=my_edit_text&value=Search key tapped!"
+                {
+                  "log_id": "clear focus",
+                  "typed": {
+                    "type": "clear_focus"
                   }
+                },
+                {
+                  "log_id": "enter_key_tapped",
+                  "url": "div-action://set_variable?name=my_edit_text&value=Search key tapped!"
+                }
               ]
             },
             {

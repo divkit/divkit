@@ -1,44 +1,12 @@
 {
   "description": "Vertical pager with different content_alignment",
   "platforms": [
-    "ios"
+    "android",
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {
-      "text_block": {
-        "type": "text",
-        "font_size": 14,
-        "text_alignment_horizontal": "center",
-        "text_alignment_vertical": "center",
-        "alignment_horizontal": "center",
-        "text_color": "#000000",
-        "paddings": {
-          "top": 4,
-          "bottom": 4,
-          "left": 8,
-          "right": 8
-        },
-        "margins": {
-          "left": 8,
-          "right": 8
-        },
-        "width": {
-          "type": "wrap_content"
-        },
-        "height": {
-          "type": "fixed",
-          "value": 50
-        },
-        "background": [
-          {
-            "type": "solid",
-            "color": "#FFFFFF"
-          }
-        ],
-        "border": {
-          "corner_radius": 6
-        }
-      },
       "text_page_wrap_content": {
         "type": "text",
         "background": [
@@ -47,17 +15,6 @@
             "type": "solid"
           }
         ]
-      },
-      "test_container": {
-        "type": "container",
-        "orientation": "horizontal",
-        "content_alignment_vertical": "center",
-        "width": {
-          "type": "wrap_content"
-        },
-        "height": {
-          "type": "wrap_content"
-        }
       }
     },
     "card": {
@@ -67,97 +24,74 @@
           "name": "alignment_var",
           "type": "string",
           "value": "start"
-        },
-        {
-          "name": "current_page",
-          "type": "integer",
-          "value": 0
         }
       ],
       "states": [
         {
           "state_id": 1,
           "div": {
-            "type": "test_container",
+            "type": "pager",
+            "id": "test_pager",
+            "item_spacing": {
+              "type": "fixed",
+              "value": 10
+            },
+            "layout_mode": {
+              "type": "wrap_content"
+            },
+            "scroll_axis_alignment": "@{alignment_var}",
+            "width": {
+              "type": "fixed",
+              "value": 150
+            },
+            "height": {
+              "type": "fixed",
+              "value": 200
+            },
+            "orientation": "vertical",
+            "default_item": 1,
             "items": [
               {
-                "type": "pager",
-                "id": "test_pager",
-                "item_spacing": {
-                  "type": "fixed",
-                  "value": 10
-                },
-                "layout_mode": {
-                  "type": "wrap_content"
-                },
-                "scroll_axis_alignment": "@{alignment_var}",
+                "type": "text_page_wrap_content",
                 "width": {
                   "type": "fixed",
+                  "unit": "dp",
+                  "value": 100
+                },
+                "height": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 100
+                },
+                "text": "Page 0"
+              },
+              {
+                "type": "text_page_wrap_content",
+                "width": {
+                  "type": "fixed",
+                  "unit": "dp",
                   "value": 150
                 },
                 "height": {
                   "type": "fixed",
-                  "value": 200
+                  "unit": "dp",
+                  "value": 150
                 },
-                "orientation": "vertical",
-                "items": [
-                  {
-                    "type": "text_page_wrap_content",
-                    "width": {
-                      "type": "fixed",
-                      "unit": "dp",
-                      "value": 100
-                    },
-                    "height": {
-                      "type": "fixed",
-                      "unit": "dp",
-                      "value": 100
-                    },
-                    "text": "Page 0. For millions of years mankind lived just like animals"
-                  },
-                  {
-                    "type": "text_page_wrap_content",
-                    "width": {
-                      "type": "fixed",
-                      "unit": "dp",
-                      "value": 150
-                    },
-                    "height": {
-                      "type": "fixed",
-                      "unit": "dp",
-                      "value": 150
-                    },
-                    "text": "Page 1. Then something happened which unleashed the power of our imagination"
-                  },
-                  {
-                    "type": "text_page_wrap_content",
-                    "width": {
-                      "type": "fixed",
-                      "unit": "dp",
-                      "value": 80
-                    },
-                    "height": {
-                      "type": "fixed",
-                      "unit": "dp",
-                      "value": 80
-                    },
-                    "text": "Page 2. We learned to talk"
-                  }
-                ]
+                "text": "Page 1\nPage is @{alignment_var} aligned."
               },
               {
-                "type": "container",
-                "orientation": "vertical",
-                "items": [
-                  {
-                    "type": "text_block",
-                    "text": "Current page: @{current_page}"
-                  },
-                  {
-                    "type": "text_block",
-                    "text": "Alignment: @{alignment_var}"
-                  }
-                ]
+                "type": "text_page_wrap_content",
+                "width": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 80
+                },
+                "height": {
+                  "type": "fixed",
+                  "unit": "dp",
+                  "value": 80
+                },
+                "text": "Page 2"
               }
             ]
           }
@@ -172,40 +106,8 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=current_page&value=1",
-          "log_id": "set_current_page"
-        },
-        {
-          "url": "div-action://set_current_item?id=test_pager&item=@{current_page}",
-          "log_id": "set_current_item"
-        }
-      ]
-    },
-    {
-      "div_actions": [
-        {
           "url": "div-action://set_variable?name=alignment_var&value=center",
           "log_id": "set_center_alignment"
-        },
-        {
-          "url": "div-action://set_variable?name=current_page&value=0",
-          "log_id": "set_current_page"
-        },
-        {
-          "url": "div-action://set_current_item?id=test_pager&item=@{current_page}",
-          "log_id": "set_current_item"
-        }
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=current_page&value=1",
-          "log_id": "set_current_page"
-        },
-        {
-          "url": "div-action://set_current_item?id=test_pager&item=@{current_page}",
-          "log_id": "set_current_item"
         }
       ]
     },
@@ -214,28 +116,17 @@
         {
           "url": "div-action://set_variable?name=alignment_var&value=end",
           "log_id": "set_end_alignment"
-        },
-        {
-          "url": "div-action://set_variable?name=current_page&value=0",
-          "log_id": "set_current_page"
-        },
-        {
-          "url": "div-action://set_current_item?id=test_pager&item=@{current_page}",
-          "log_id": "set_current_item"
         }
       ]
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=current_page&value=1",
-          "log_id": "set_current_page"
-        },
-        {
-          "url": "div-action://set_current_item?id=test_pager&item=@{current_page}",
-          "log_id": "set_current_item"
+          "url": "div-action://set_variable?name=alignment_var&value=start",
+          "log_id": "set_start_alignment"
         }
-      ]
+      ],
+      "expected_screenshot": "step0.png"
     }
   ]
 }

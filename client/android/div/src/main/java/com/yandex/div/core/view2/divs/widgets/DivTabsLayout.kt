@@ -6,13 +6,13 @@ import android.util.AttributeSet
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.internal.widget.tabs.TabsLayout
-import com.yandex.div2.DivTabs
+import com.yandex.div2.Div
 
 @Mockable
 internal class DivTabsLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : TabsLayout(context, attrs),
-    DivHolderView<DivTabs> by DivHolderViewMixin() {
+    DivHolderView<Div.Tabs> by DivHolderViewMixin() {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

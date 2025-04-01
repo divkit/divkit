@@ -5,7 +5,7 @@ import androidx.test.services.storage.TestStorage
 import java.io.OutputStream
 
 @JvmInline
-@SuppressLint("UnsafeOptInUsageError")
+@SuppressLint("RestrictedApi", "UnsafeOptInUsageError")
 value class TestFile(val path: String) {
     fun open(): OutputStream = testStorage.openOutputFile(path)
 

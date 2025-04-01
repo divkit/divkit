@@ -10,6 +10,8 @@ interface DivPlayerFactory {
 
     fun makePlayerView(context: Context): DivPlayerView
 
+    fun makePreloader(): DivPlayerPreloader = DivPlayerPreloader.STUB
+
     companion object {
         @JvmField
         val STUB: DivPlayerFactory = object : DivPlayerFactory {

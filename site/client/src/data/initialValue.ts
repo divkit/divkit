@@ -62,6 +62,9 @@ export const DEFAULT_JSON_VALUE = `{
                         {
                             "type": "image",
                             "image_url": "https://yastatic.net/s3/home/divkit/logo.png",
+                            "aspect": {
+                               "ratio": 3.9
+                            },
                             "margins": {
                                 "top": 10,
                                 "right": 60,

@@ -16,7 +16,7 @@ export interface ComponentProps {
     node: HTMLElement;
 }
 
-export type HighlightMode = '' | 'margins' | 'paddings';
+export type HighlightMode = '' | 'margins' | 'paddings' | 'gradient';
 
 export function getDepth(elem: HTMLElement): number {
     let depth = 0;

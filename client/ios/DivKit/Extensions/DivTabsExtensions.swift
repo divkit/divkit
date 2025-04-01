@@ -5,12 +5,11 @@ import VGSL
 
 extension DivTabs: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let path = context.parentPath + (id ?? DivTabs.type)
-    let tabsContext = context.modifying(parentPath: path)
-    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+    let context = modifiedContextParentPath(context)
+    return try modifyError({ DivBlockModelingError($0.message, path: context.path) }) {
       try applyBaseProperties(
-        to: { try makeBaseBlock(context: tabsContext) },
-        context: tabsContext,
+        to: { try makeBaseBlock(context: context) },
+        context: context,
         actionsHolder: nil
       )
     }
@@ -29,7 +28,7 @@ extension DivTabs: DivBlockModeling {
     if tabs.isEmpty {
       throw DivBlockModelingError(
         "Tabs error: missing children",
-        path: context.parentPath,
+        path: context.path,
         causes: itemContext.errorsStorage.errors
       )
     } else {
@@ -50,7 +49,7 @@ extension DivTabs: DivBlockModeling {
       pagesHeight: resolveDynamicHeight(expressionResolver)
         ? .bySelectedPage
         : .byHighestPage,
-      path: context.parentPath,
+      path: context.path,
       scrollingEnabled: resolveSwitchTabsByContentSwipeEnabled(expressionResolver),
       layoutDirection: context.layoutDirection
     )
@@ -83,7 +82,7 @@ extension DivTabs: DivBlockModeling {
     tabs: [Tab]
   ) -> TabViewState {
     let stateStorage = context.blockStateStorage
-    let path = context.parentPath
+    let path = context.path
     let index: CGFloat = if let state: TabViewState = stateStorage.getState(path) {
       state.selectedPageIndex
     } else {
@@ -183,12 +182,12 @@ extension Typo {
 
 extension DivTabs.Item {
   fileprivate func makeTab(context: DivBlockModelingContext, index: Int) throws -> Tab {
-    let titleContext = context.modifying(parentPath: context.parentPath + "title\(index)")
+    let titleContext = context.modifying(pathSuffix: "title\(index)")
     let title = makeTitle(context: titleContext)
-    let pageContext = context.modifying(parentPath: context.parentPath + index)
+    let pageContext = context.modifying(pathSuffix: "\(index)")
     let page = try div.value
       .makeBlock(context: pageContext)
-      .makeTabPage(with: pageContext.parentPath)
+      .makeTabPage(with: pageContext.path)
     return (title: title, page: page)
   }
 
@@ -197,7 +196,7 @@ extension DivTabs.Item {
     return UILink(
       text: resolveTitle(context.expressionResolver) ?? "",
       url: action?.url,
-      path: context.parentPath
+      path: context.path
     )
   }
 }

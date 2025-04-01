@@ -220,11 +220,7 @@ sealed class Variable {
             is ColorVariable -> value = newValue.parseAsColor()
             is UrlVariable -> value = newValue.parseAsUri()
             is DictVariable -> value = newValue.parseAsJsonObject()
-            is ArrayVariable -> {
-                throw VariableMutationException(
-                    "Url action set_variable not allowed for arrays, use property \"typed\" instead"
-                )
-            }
+            is ArrayVariable -> value = newValue.parseAsJsonArray()
         }
     }
 
@@ -310,6 +306,14 @@ sealed class Variable {
     private fun String.parseAsJsonObject(): JSONObject {
         return try {
             JSONObject(this)
+        } catch (e: JSONException) {
+            throw VariableMutationException(cause = e)
+        }
+    }
+
+    private fun String.parseAsJsonArray(): JSONArray {
+        return try {
+            JSONArray(this)
         } catch (e: JSONException) {
             throw VariableMutationException(cause = e)
         }

@@ -1,4 +1,4 @@
-import type { DivFunction } from '../../types/base';
+import type { DivFunction } from '../../../typings/common';
 import type { Node } from '../ast';
 import { evalExpression, type EvalTypes, type VariablesMap } from '../eval';
 import { parse } from '../expressions';
@@ -108,7 +108,7 @@ export function mergeCustomFunctions(
         return map1 || undefined;
     }
     if (!map1) {
-        return;
+        return map0 || undefined;
     }
 
     const merged = new Map();

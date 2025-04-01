@@ -52,7 +52,12 @@ export default defineConfig(({ isSsrBuild, mode }) => {
     const isProd = mode === 'production';
     const outputSubDir = FORMAT === 'iife' ? 'browser/' : (FORMAT === 'es' ? 'esm/' : '');
 
-    const plugins: PluginOption[] = [svelte()];
+    const plugins: PluginOption[] = [svelte({
+        compilerOptions: {
+            immutable: true,
+            hydratable: HYDRATABLE
+        }
+    })];
     if (FORMAT === 'iife') {
         plugins.push(
             moveEsbuildHelpersPlugin()
@@ -72,7 +77,7 @@ export default defineConfig(({ isSsrBuild, mode }) => {
             }
         },
         ssr: {
-            noExternal: ['clsx']
+            noExternal: ['clsx'],
         },
         build: {
             target: ['chrome67', 'safari14', 'firefox68'],
@@ -86,7 +91,7 @@ export default defineConfig(({ isSsrBuild, mode }) => {
                 formats: [FORMAT],
                 name: 'unused'
             },
-            minify: FORMAT === 'iife',
+            minify: true,
             rollupOptions: {
                 external: [],
                 output: {

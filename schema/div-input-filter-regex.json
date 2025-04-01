@@ -14,7 +14,9 @@
     }
   },
   "platforms": [
-    "ios"
+    "android",
+    "ios",
+    "web"
   ],
   "required": [
     "type",

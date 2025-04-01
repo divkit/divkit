@@ -1,12 +1,15 @@
 <script lang="ts">
     import { getContext } from 'svelte';
+    import type { ComponentProperty, SiblingComponentProperty } from '../../data/componentProps';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Text from '../controls/Text.svelte';
     import ContextDialog from './ContextDialog.svelte';
-    import type { VideoSourceShowProps } from '../../ctx/appContext';
+    import { APP_CTX, type AppContext, type VideoSourceShowProps } from '../../ctx/appContext';
     import type { VideoSource } from '../../utils/video';
+    import UnknownPropWithLabel from '../simple-props/UnknownPropWithLabel.svelte';
 
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
+    const { rendererApi } = getContext<AppContext>(APP_CTX);
 
     $: if (isShown && !readOnly && callback) {
         callback(value);
@@ -24,6 +27,12 @@
         isShown = false;
     }
 
+    $: evalValue = value ? (rendererApi().evalJson({
+        url: value.url
+    }) as {
+        url: string;
+    }).url : undefined;
+
     let target: HTMLElement;
     let isShown = false;
     let value: VideoSource;
@@ -33,24 +42,41 @@
     function onClose(): void {
         isShown = false;
     }
+
+    function onUrlChange(event: CustomEvent<{
+        value: unknown;
+        item: ComponentProperty | SiblingComponentProperty;
+    } | {
+        values: {
+            prop: string;
+            value: unknown;
+        }[];
+        item: ComponentProperty | SiblingComponentProperty;
+    }>): void {
+        if (!('value' in event.detail)) {
+            // Not supported
+            return;
+        }
+
+        value.url = String(event.detail.value);
+    }
 </script>
 
 {#if isShown && target}
     <ContextDialog {target} on:close={onClose} canMove={true}>
         <div class="video-sources-dialog__content">
             <div>
-                <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label>
-                    <div class="video-sources-dialog__label">
-                        {$l10n('video-url')}
-                    </div>
-                    <Text
-                        bind:value={value.url}
-                        subtype="file"
-                        fileType="video"
-                        disabled={readOnly}
-                    />
-                </label>
+                <UnknownPropWithLabel
+                    item={{
+                        type: 'file',
+                        subtype: 'video',
+                        enablePerTheme: true,
+                        name: 'video-url',
+                    }}
+                    value={value.url}
+                    {evalValue}
+                    on:change={onUrlChange}
+                />
             </div>
 
             <div>

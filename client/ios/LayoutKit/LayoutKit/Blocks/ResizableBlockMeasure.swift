@@ -3,7 +3,7 @@ import VGSL
 
 public struct ResizableBlockMeasure {
   public enum Measure {
-    case resizable(LayoutTrait.Weight)
+    case resizable(LayoutTrait.Weight, reservedSpace: CGFloat = 0)
     case nonResizable
   }
 
@@ -28,7 +28,7 @@ public struct ResizableBlockMeasure {
     switch measure {
     case .nonResizable:
       return 0
-    case let .resizable(weight):
+    case let .resizable(weight, marginsSpace):
       resizableBlockIndex += 1
       let blockLength = weight.rawValue * lengthAvailablePerWeightUnit
       var nextLength = cumulativeResizableBlockLength + blockLength
@@ -40,7 +40,7 @@ public struct ResizableBlockMeasure {
         nextLength.flooredToScreenScale - cumulativeResizableBlockLength.flooredToScreenScale
       cumulativeResizableBlockLength = nextLength
 
-      return measuredLength
+      return measuredLength + marginsSpace
     }
   }
 }

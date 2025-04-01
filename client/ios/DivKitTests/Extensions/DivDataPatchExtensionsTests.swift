@@ -1,4 +1,5 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
+import LayoutKit
 import VGSL
 import XCTest
 
@@ -7,6 +8,20 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   private lazy var divPatchCallbacks = Callbacks { _ in
     self.callbacksCount += 1
   }
+
+  private var flags: DivFlagsInfo = .default
+  private var isUpdateCardCalled = false
+
+  private lazy var handledUrls = [URL]()
+  private lazy var actionHandler = DivActionHandler(
+    urlHandler: DivUrlHandlerDelegate { [unowned self] url, _ in
+      handledUrls.append(url)
+    }
+  )
+
+  private lazy var context = DivBlockModelingContext(
+    actionHandler: actionHandler
+  )
 
   func test_WhenNoSuitableChanges_DoesNothing() throws {
     let originalData = divData(
@@ -417,6 +432,113 @@ final class DivDataPatchExtensionsTests: XCTestCase {
       callbacks: divPatchCallbacks
     )
     XCTAssertEqual(callbacksCount, 1)
+  }
+
+  func test_ApplyPatchWithActions_DefaultMode_AppliedPartialDataAndExecuteAppliedActions() throws {
+    let originalData = divData(
+      divContainer(
+        items: [
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(),
+        ]
+      )
+    )
+    let expectedData = divData(
+      divContainer(
+        items: [
+          newDivText1,
+          divSeparator(),
+        ]
+      )
+    )
+
+    let patch = DivPatch(
+      changes: [
+        DivPatch.Change(id: "div_to_replace", items: [newDivText1]),
+        DivPatch.Change(id: "error_div_id", items: [newDivText2]),
+      ],
+      mode: .value(.partial),
+      onAppliedActions: [divAction(logId: "applied", url: "action://applied")],
+      onFailedActions: [divAction(logId: "failed", url: "action://failed")]
+    )
+
+    let result = originalData.applyPatchWithActions(
+      patch,
+      context: context
+    )
+
+    XCTAssertEqual(result, expectedData)
+    XCTAssertEqual(handledUrls, [URL(string: "action://applied")!])
+  }
+
+  func test_ApplyPatchWithActions_TransactionalMode_AllChangesApplied_ExecutesOnAppliedActions(
+  ) throws {
+    let originalData = divData(
+      divContainer(
+        items: [
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(),
+          divText(id: "div_to_replace_2", text: "Old text 2"),
+        ]
+      )
+    )
+    let expectedData = divData(
+      divContainer(
+        items: [
+          newDivText1,
+          divSeparator(),
+          newDivText2,
+        ]
+      )
+    )
+
+    let patch = DivPatch(
+      changes: [
+        DivPatch.Change(id: "div_to_replace", items: [newDivText1]),
+        DivPatch.Change(id: "div_to_replace_2", items: [newDivText2]),
+      ],
+      mode: .value(.transactional),
+      onAppliedActions: [divAction(logId: "applied", url: "action://applied")],
+      onFailedActions: [divAction(logId: "failed", url: "action://failed")]
+    )
+
+    let result = originalData.applyPatchWithActions(
+      patch,
+      context: context
+    )
+
+    XCTAssertEqual(result, expectedData)
+    XCTAssertEqual(handledUrls, [URL(string: "action://applied")!])
+  }
+
+  func test_ApplyPatchWithActions_TransactionalMode_NotAllChangesApplied_ExecutesOnFailedActions(
+  ) throws {
+    let originalData = divData(
+      divContainer(
+        items: [
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(),
+        ]
+      )
+    )
+
+    let patch = DivPatch(
+      changes: [
+        DivPatch.Change(id: "div_to_replace", items: [newDivText1]),
+        DivPatch.Change(id: "non_existent_div", items: [newDivText2]),
+      ],
+      mode: .value(.transactional),
+      onAppliedActions: [divAction(logId: "applied", url: "action://applied")],
+      onFailedActions: [divAction(logId: "failed", url: "action://failed")]
+    )
+
+    let result = originalData.applyPatchWithActions(
+      patch,
+      context: context
+    )
+
+    XCTAssertEqual(result, originalData)
+    XCTAssertEqual(handledUrls, [URL(string: "action://failed")!])
   }
 }
 

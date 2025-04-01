@@ -51,7 +51,7 @@ internal object DivDownloadActionHandler {
         val url = action.url.evaluate(resolver)
         val actualOnFail = action.onFailActions ?: callbacks?.onFailActions
         val actualOnSuccess = action.onSuccessActions ?: callbacks?.onSuccessActions
-        return executeDownload(url, actualOnSuccess, actualOnFail, view, resolver)
+        return executeDownload(url.toString(), actualOnSuccess, actualOnFail, view, resolver)
     }
 
     private fun handleAction(

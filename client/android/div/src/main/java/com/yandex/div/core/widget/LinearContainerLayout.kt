@@ -12,7 +12,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.appcompat.widget.LinearLayoutCompat.VERTICAL
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isGone
 import com.yandex.div.core.util.getIndices
@@ -586,10 +585,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             totalLength += dividerWidthWithMargins
         }
         totalLength += horizontalPaddings
-        val resizedTotalLength = max(suggestedMinimumWidth, totalLength)
 
-        val widthSizeAndState = resolveSizeAndState(resizedTotalLength, widthMeasureSpec, childMeasuredState)
-        val widthSize = widthSizeAndState and MEASURED_SIZE_MASK
+        val widthSize = getWidthSizeAndState(widthMeasureSpec) and MEASURED_SIZE_MASK
         if (!exactWidth && aspectRatio != DEFAULT_ASPECT_RATIO) {
             heightSize = (widthSize / aspectRatio).roundToInt()
             heightSpec = makeExactSpec(heightSize)
@@ -610,7 +607,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         forEachSignificant { remeasureDynamicHeightChild(it, makeExactSpec(heightSize)) }
 
         setMeasuredDimension(
-            widthSizeAndState,
+            getWidthSizeAndState(widthMeasureSpec),
             resolveSizeAndState(heightSize, heightSpec, childMeasuredState shl MEASURED_HEIGHT_STATE_SHIFT)
         )
     }
@@ -671,6 +668,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (hasSignificantWidth(child, widthMeasureSpec)) return
         totalLength = getMaxLength(totalLength, child.lp.horizontalMargins)
     }
+
+    private fun getWidthSizeAndState(measureSpec: Int) =
+        resolveSizeAndState(max(suggestedMinimumWidth, totalLength), measureSpec, childMeasuredState)
 
     private fun remeasureChildrenHorizontalIfNeeded(
         widthMeasureSpec: Int,
@@ -829,7 +829,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             if (gravity < 0) {
                 gravity = horizontalGravity
             }
-            val layoutDirection = ViewCompat.getLayoutDirection(this)
+            val layoutDirection = getLayoutDirection()
             val childLeft = paddingLeft + when (GravityCompat.getAbsoluteGravity(gravity, layoutDirection)) {
                 Gravity.LEFT -> lp.leftMargin
                 Gravity.CENTER_HORIZONTAL -> (childSpace - childWidth + lp.leftMargin - lp.rightMargin) / 2
@@ -849,7 +849,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private fun layoutHorizontal(left: Int, top: Int, right: Int, bottom: Int) {
         val childSpace = bottom - top - verticalPaddings
-        val layoutDirection = ViewCompat.getLayoutDirection(this)
+        val layoutDirection = getLayoutDirection()
         val freeSpace = (right - left - totalLength).toFloat()
         var childLeft = paddingLeft.toFloat()
         val absoluteGravity = GravityCompat.getAbsoluteGravity(horizontalGravity, layoutDirection)

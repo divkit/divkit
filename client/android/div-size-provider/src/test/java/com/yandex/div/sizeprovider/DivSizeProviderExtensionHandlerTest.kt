@@ -42,7 +42,7 @@ class DivSizeProviderExtensionHandlerTest {
         on { addOnLayoutChangeListener(listener.capture()) } doAnswer {}
         on { resources } doReturn Resources.getSystem()
     }
-    private val data = DivData("", emptyList())
+    private val data = DivData(logId = "", states = emptyList())
     private val onPreDrawListener = argumentCaptor<ViewTreeObserver.OnPreDrawListener>()
     private val viewTreeObserver = mock<ViewTreeObserver> {
         on { addOnPreDrawListener(onPreDrawListener.capture()) } doAnswer {}

@@ -19,7 +19,6 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.view.animation.AccelerateDecelerateInterpolator
 import kotlin.math.abs
 import kotlin.math.tan
@@ -58,11 +57,9 @@ class ShineDrawable(
     }
 
     private val gradientPaint = Paint().apply {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            xfermode = PorterDuffXfermode(
-                PorterDuff.Mode.SRC_ATOP
-            )
-        }
+        xfermode = PorterDuffXfermode(
+            PorterDuff.Mode.SRC_ATOP
+        )
         isAntiAlias = true
         updateShader()
     }
@@ -82,6 +79,15 @@ class ShineDrawable(
         valueAnimator.removeAllUpdateListeners()
         valueAnimator.removeAllListeners()
         valueAnimator.cancel()
+    }
+
+    fun resume() {
+        if (!valueAnimator.isPaused) return
+        valueAnimator.resume()
+    }
+
+    fun pause() {
+        valueAnimator.pause()
     }
 
     override fun isRunning() = valueAnimator.isRunning

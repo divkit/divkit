@@ -9,7 +9,7 @@ ext {
     minSdkVersion = 21
     compileSdkVersion = 34
     targetSdkVersion = 34
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "35.0.0"
 }
 
 buildscript {
@@ -63,8 +63,8 @@ allprojects {
                     "-opt-in=com.yandex.div.core.annotations.InternalApi",
                     "-opt-in=com.yandex.div.core.annotations.ExperimentalApi"
             ]
-            languageVersion = KotlinVersion.KOTLIN_1_5
-            apiVersion = KotlinVersion.KOTLIN_1_5
+            languageVersion = KotlinVersion.KOTLIN_1_8
+            apiVersion = KotlinVersion.KOTLIN_1_8
             jvmTarget = JvmTarget.JVM_1_8
         }
     }
@@ -88,6 +88,12 @@ subprojects {
             }
         }
 
+        if (project.tasks.names.contains("lint")) {
+            project.tasks.named("lint").get().configure { task ->
+                unitTests.dependsOn(task)
+            }
+        }
+
         project.tasks.withType(PublishToMavenRepository).configureEach { task ->
             task.finalizedBy(reportBuildNumber)
         }
@@ -99,7 +105,7 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion "8.10.2"
+    gradleVersion "8.13"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }

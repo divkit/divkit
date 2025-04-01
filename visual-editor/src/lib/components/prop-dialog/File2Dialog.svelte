@@ -1,3 +1,14 @@
+<script lang="ts" context="module">
+    const SUBTYPE_TO_LIMIT = {
+        '': 'image',
+        image: 'image',
+        gif: 'image',
+        lottie: 'lottie',
+        video: 'video',
+        image_preview: 'preview'
+    } as const;
+</script>
+
 <script lang="ts">
     import { getContext } from 'svelte';
 
@@ -12,11 +23,18 @@
     import trashIcon from '../../../assets/trash.svg?raw';
     import generateIcon from '../../../assets/generate.svg?raw';
     import { loadFileAsBase64 } from '../../utils/loadFileAsBase64';
-    import { getFileSize } from '../../utils/fileSize';
+    import { calcFileSizeMod, getFileSize } from '../../utils/fileSize';
     import { hasRequestVideoFrame } from '../../utils/hasRequestVideoFrame';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
-    const { uploadFile, previewWarnFileLimit, previewErrorFileLimit, warnFileLimit, errorFileLimit } = getContext<AppContext>(APP_CTX);
+    const {
+        uploadFile,
+        previewWarnFileLimit,
+        previewErrorFileLimit,
+        warnFileLimit,
+        errorFileLimit,
+        fileLimits
+    } = getContext<AppContext>(APP_CTX);
 
     const FILE_FILTER = {
         image: 'image/png, image/jpeg',
@@ -83,6 +101,7 @@
         onHide = props.onHide;
         disabled = props.disabled || false;
         generateFromVideo = props.generateFromVideo;
+        generateFromLottie = props.generateFromLottie;
         showError = false;
         isShown = true;
         loadFileSize();
@@ -103,7 +122,7 @@
     };
     let callback: File2DialogCallback;
     let title = '';
-    let subtype = '';
+    let subtype: '' | 'image' | 'gif' | 'lottie' | 'video' | 'image_preview' = '';
     let commonSubtype = '';
     let lottieItem: AnimationItem | null;
     let previewNode: HTMLElement;
@@ -118,6 +137,7 @@
     let onHide: (() => void) | undefined;
     let disabled = false;
     let generateFromVideo: VideoSource[] | undefined;
+    let generateFromLottie: string | undefined;
     let dialog: ContextDialog | undefined;
 
     $: showFileSelect = !value.url;
@@ -132,7 +152,12 @@
     }
 
     function upload(file: File): Promise<void> {
-        if (file.size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
+        if (fileLimits?.upload) {
+            if (subtype !== 'image_preview' && fileLimits.upload.error !== undefined && file.size > fileLimits.upload.error) {
+                showError = 'big';
+                return Promise.resolve();
+            }
+        } else if (file.size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
             showError = 'big';
             return Promise.resolve();
         }
@@ -146,10 +171,7 @@
             value.url = url;
             loading = false;
 
-            if (file.size > (subtype === 'image_preview' ? previewWarnFileLimit : warnFileLimit) && subtype !== 'video') {
-                showError = 'big-warn';
-                return Promise.resolve();
-            }
+            loadFileSize();
         }).catch(_err => {
             loading = false;
             showError = 'load';
@@ -248,8 +270,16 @@
     function loadFileSize(): void {
         showError = false;
 
-        getFileSize(String(value), subtype).then(size => {
-            if (size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
+        getFileSize(String(value.url), subtype).then(size => {
+            if (fileLimits) {
+                const sizeMod = calcFileSizeMod(size, SUBTYPE_TO_LIMIT[subtype], Infinity, Infinity, fileLimits);
+
+                if (sizeMod === 'error') {
+                    showError = 'big';
+                } else if (sizeMod === 'warn') {
+                    showError = 'big-warn';
+                }
+            } else if (size > (subtype === 'image_preview' ? previewErrorFileLimit : errorFileLimit)) {
                 showError = 'big';
             } else if (size > (subtype === 'image_preview' ? previewWarnFileLimit : warnFileLimit)) {
                 showError = 'big-warn';
@@ -258,34 +288,95 @@
     }
 
     function generatePreview(): void {
-        if (!generateFromVideo) {
-            return;
-        }
+        if (generateFromLottie) {
+            Promise.all([
+                import('../../data/lottieApi'),
+                fetch(generateFromLottie)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('Response is not ok');
+                        }
+                        return res.json();
+                    })
+            ])
+                .then(([{ loadAnimation }, json]) => {
+                    if (!json.w || !json.h) {
+                        throw new Error('Incorrect json');
+                    }
 
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-            return;
-        }
+                    const wrapper = document.createElement('div');
+                    wrapper.style.width = json.w + 'px';
+                    wrapper.style.height = json.h + 'px';
 
-        const video = document.createElement('video');
-        for (const item of generateFromVideo) {
-            if (
-                item.url && typeof item.url === 'string' &&
-                item.mime_type && typeof item.mime_type === 'string'
-            ) {
-                const source = document.createElement('source');
-                source.setAttribute('src', item.url);
-                source.setAttribute('type', item.mime_type);
-                video.appendChild(source);
+                    return new Promise((resolve, reject) => {
+                        const animItem = loadAnimation({
+                            container: wrapper,
+                            animationData: json,
+                            renderer: 'svg',
+                            loop: false,
+                            autoplay: false
+                        });
+                        const svg = wrapper.querySelector<SVGImageElement>('svg');
+                        if (!svg) {
+                            reject(new Error('Missing svg context'));
+                            return;
+                        }
+                        const svgUrl = new XMLSerializer().serializeToString(svg);
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        if (!ctx) {
+                            reject(new Error('Missing canvas context'));
+                            return;
+                        }
+                        canvas.width = json.w;
+                        canvas.height = json.h;
+                        const img = new Image();
+                        img.onload = () => {
+                            ctx.drawImage(img, 0, 0);
+                            value.url = canvas.toDataURL();
+                            loadFileSize();
+                            resolve(value.url);
+                        };
+                        img.onerror = () => {
+                            reject(new Error('Failed to load an image'));
+                        };
+                        img.src = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(svgUrl);
+                        animItem.addEventListener('error', () => {
+                            reject(new Error('Lottie error'));
+                        });
+                    });
+                })
+                .catch(() => {
+                    // todo
+                });
+        } else if (generateFromVideo) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                return;
             }
+
+            const video = document.createElement('video');
+            for (const item of generateFromVideo) {
+                if (
+                    item.url && typeof item.url === 'string' &&
+                    item.mime_type && typeof item.mime_type === 'string'
+                ) {
+                    const source = document.createElement('source');
+                    source.setAttribute('src', item.url);
+                    source.setAttribute('type', item.mime_type);
+                    video.appendChild(source);
+                }
+            }
+            video.requestVideoFrameCallback((_now, meta) => {
+                canvas.width = meta.width;
+                canvas.height = meta.height;
+                ctx.drawImage(video, 0, 0);
+                value.url = canvas.toDataURL();
+                loadFileSize();
+            });
+            // todo on error
         }
-        video.requestVideoFrameCallback((_now, meta) => {
-            canvas.width = meta.width;
-            canvas.height = meta.height;
-            ctx.drawImage(video, 0, 0);
-            value.url = canvas.toDataURL();
-        });
     }
 </script>
 
@@ -376,10 +467,10 @@
                             </button>
                         {/if}
 
-                        {#if generateFromVideo && hasRequestVideoFrame}
+                        {#if generateFromVideo && hasRequestVideoFrame || generateFromLottie}
                             <button
                                 class="file2-dialog__text-inline-button file2-dialog__generate"
-                                title={$l10nString('file.generate_from_video')}
+                                title={generateFromVideo ? $l10nString('file.generate_from_video') : $l10nString('file.generate_from_lottie')}
                                 on:click={generatePreview}
                             >
                                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->

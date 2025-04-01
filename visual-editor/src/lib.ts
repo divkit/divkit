@@ -106,6 +106,19 @@ export interface Source {
     example: object;
 }
 
+export interface FileLimit {
+    warn?: number;
+    error?: number;
+}
+
+export interface FileLimits {
+    preview?: FileLimit;
+    image?: FileLimit;
+    lottie?: FileLimit;
+    video?: FileLimit;
+    upload?: FileLimit;
+}
+
 export interface DivProEditorOptions {
     renderTo: HTMLElement;
     shadowRoot?: ShadowRoot;
@@ -121,12 +134,20 @@ export interface DivProEditorOptions {
     paletteEnabled?: boolean;
     cardLocales?: CardLocale[];
     sources?: Source[];
+    /* @deprecated */
     previewWarnFileLimit?: number;
+    /* @deprecated */
     previewErrorFileLimit?: number;
+    /* @deprecated */
     warnFileLimit?: number;
+    /* @deprecated */
     errorFileLimit?: number;
+    fileLimits?: FileLimits;
     rootConfigurable?: boolean;
     customFontFaces?: FontFaceDesc[];
+    directionSelector?: boolean;
+    direction?: 'ltr' | 'rtl';
+    perThemeProps?: boolean;
 }
 
 export interface DivProEditorInstance {
@@ -155,6 +176,7 @@ export const DivProEditor = {
         state.readOnly.set(opts.readOnly || false);
         state.themeStore.set(opts.theme || 'light');
         state.locale.set(opts.cardLocales?.[0]?.id || '');
+        state.direction.set(opts.direction || 'ltr');
 
         if (Array.isArray(json?.card?.variables)) {
             const localPalette = json.card.variables.find((it?: JsonVariable) => it?.type === 'dict' && it.name === 'local_palette');
@@ -204,8 +226,11 @@ export const DivProEditor = {
                 previewErrorFileLimit: opts.previewErrorFileLimit,
                 warnFileLimit: opts.warnFileLimit,
                 errorFileLimit: opts.errorFileLimit,
+                fileLimits: opts.fileLimits,
                 rootConfigurable: opts.rootConfigurable,
                 customFontFaces: opts.customFontFaces,
+                directionSelector: opts.directionSelector,
+                perThemeProps: opts.perThemeProps,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,

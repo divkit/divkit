@@ -17,5 +17,87 @@
                 "version_added": "30.33.0"
             }
         }
+    }, {
+        "id": "tooltip_default_width",
+        "name": "The default width of the tooltip is <code>match_parent</code>",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": [{
+                "version_added": "27.4.0",
+                "partial_implementation": true,
+                "notes": "match_parent works as the width of the parent element, not as the width of the screen"
+            }, {
+                "version_added": "30.28.0"
+            }],
+            "ios": {
+                "version_added": "31.0.0"
+            }
+        }
+    }, {
+        "id": "tooltip_mode",
+        "name": "<code>mode</code> property for the tooltip",
+        "compat": {
+            "ios": {
+                "version_added": "31.3.0"
+            },
+            "android": {
+                "version_added": "31.3.0"
+            },
+            "web": {
+                "version_added": "31.5.0"
+            }
+        }
+    }, {
+        "id": "tooltip_tap_outside_actions",
+        "name": "<code>tap_outside_actions</code> property for the tooltip",
+        "compat": {
+            "ios": {
+                "version_added": "31.2.0"
+            },
+            "web": {
+                "version_added": "31.6.0"
+            }
+        }
+    }, {
+        "id": "tooltip_close_by_tap_outside",
+        "name": "<code>close_by_tap_outside</code> property for the tooltip",
+        "compat": {
+            "ios": {
+                "version_added": "31.2.0"
+            },
+            "android": {
+                "version_added": "31.3.0"
+            },
+            "web": {
+                "version_added": "31.6.0"
+            }
+        }
+    }, {
+        "id": "tooltip_background_accessibility_description",
+        "name": "<code>background_accessibility_description</code> property for the tooltip",
+        "compat": {
+            "ios": {
+                "version_added": "31.5.0"
+            },
+            "web": {
+                "version_added": "31.8.0"
+            }
+        }
+    }, {
+        "id": "tooltip_animation",
+        "name": "<code>animation_in</code> and <code>animation_out</code> properties for the tooltip",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "27.4.0"
+            },
+            "ios": {
+                "version_added": "31.7.0"
+            }
+        }
     }]
 }

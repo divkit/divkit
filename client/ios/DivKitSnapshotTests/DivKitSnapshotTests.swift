@@ -18,7 +18,12 @@ struct DivKitSnapshotTests {
     try await doTest(jsonFile)
   }
 
-  @Test("Interactive Snapshots", .serialized, .timeLimit(.minutes(1)), arguments: interactiveSnapshotTestsFiles)
+  @Test(
+    "Interactive Snapshots",
+    .serialized,
+    .timeLimit(.minutes(1)),
+    arguments: interactiveSnapshotTestsFiles
+  )
   func interactiveSnapshotTest(jsonFile: JsonFile) async throws {
     try await doTest(jsonFile)
   }
@@ -84,7 +89,7 @@ private class LabelImagePreviewProvider: ViewProvider {
 }
 
 private let defaultPagerViewState = [
-  pagerId: PagerViewState(numberOfPages: 11, currentPage: 1),
+  pagerId: PagerViewState(numberOfPages: 11, floatCurrentPage: 1.0),
 ]
 
 private let testPagerViewStates = [

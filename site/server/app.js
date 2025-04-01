@@ -75,6 +75,10 @@ router.post('/api/share', async ctx => {
 
         if (err instanceof DataViolationError) {
             ctx.status = 400;
+            ctx.body = {
+                ok: 0,
+                error: err.message
+            };
         } else {
             ctx.status = 500;
         }

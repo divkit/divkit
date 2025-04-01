@@ -43,12 +43,15 @@
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
     let componentContext: ComponentContext;
+    let modal = true;
 
     $: {
         if (componentContext) {
             componentContext.destroy();
         }
-        componentContext = parentComponentContext.produceChildContext(data.div || {});
+        componentContext = parentComponentContext.produceChildContext(data.div || {}, {
+            isTooltipRoot: true
+        });
     }
 
     $: position = parentComponentContext.getDerivedFromVars(data.position);
@@ -57,6 +60,12 @@
 
     $: animationIn = parentComponentContext.getDerivedFromVars(data.animation_in);
     $: animationOut = parentComponentContext.getDerivedFromVars(data.animation_out);
+
+    $: if (data.mode?.type === 'non_modal') {
+        modal = false;
+    } else {
+        modal = true;
+    }
 
     $: mods = {
         visible
@@ -155,16 +164,33 @@
         }
     }
 
-    function onWindowClick(event: Event): void {
+    function onOutClick(event: Event): void {
         if (Date.now() - creationTime < 100 || event.composedPath().includes(tooltipNode)) {
             return;
         }
 
-        rootCtx.onTooltipClose(internalId);
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (componentContext.getJsonWithVars(data.close_by_tap_outside) !== false) {
+            rootCtx.onTooltipClose(internalId);
+        }
+
+        if (data.tap_outside_actions) {
+            componentContext.execAnyActions(data.tap_outside_actions, {
+                processUrls: true
+            });
+        }
     }
 
     function onWindowResize(): void {
         reposition();
+    }
+
+    function onKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'Escape' && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+            rootCtx.onTooltipClose(internalId);
+        }
     }
 
     onMount(() => {
@@ -193,23 +219,44 @@
 </script>
 
 <svelte:window
-    on:click={onWindowClick}
     on:resize={onWindowResize}
 />
 
-{#if visible}
-    <div class={css.tooltip__overlay}></div>
+<svelte:body
+    on:click={onOutClick}
+/>
+
+{#if visible && modal}
+    {#if data.background_accessibility_description}
+        <button
+            class={css.tooltip__overlay}
+            type="button"
+            aria-label={data.background_accessibility_description}
+            on:click={onOutClick}
+        ></button>
+    {:else}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+            class={css.tooltip__overlay}
+            on:click={onOutClick}
+        ></div>
+    {/if}
 {/if}
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
     bind:this={tooltipNode}
     class="{genClassName('tooltip', css, mods)} {$isDesktop ? rootCss.root_platform_desktop : ''}"
+    role="dialog"
+    aria-modal={modal}
     style:top={tooltipY}
     style:left={tooltipX}
     style:width={tooltipWidth}
     style:height={tooltipHeight}
     in:inOutAnimation={{ animations: $animationIn || DEFAULT_ANIMATION, direction: 'in' }}
     out:inOutAnimation={{ animations: $animationOut || DEFAULT_ANIMATION, direction: 'out' }}
+    on:keydown={onKeyDown}
 >
     <Unknown
         {componentContext}

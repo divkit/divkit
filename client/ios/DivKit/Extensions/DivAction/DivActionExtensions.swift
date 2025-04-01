@@ -14,7 +14,7 @@ extension DivAction {
     } else {
       // don't make .divAction payloads for menu actions until DivActionHandler could handle it
       makeDivActionPayload(
-        path: context.parentPath,
+        path: context.path,
         source: .tap,
         localValues: context.localValues
       )

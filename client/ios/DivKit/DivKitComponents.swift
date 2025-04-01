@@ -31,7 +31,7 @@ public final class DivKitComponents {
   @_spi(Internal)
   public let visibilityCounter = DivVisibilityCounter()
 
-  public var updateCardSignal: Signal<[DivActionURLHandler.UpdateReason]> {
+  public var updateCardSignal: Signal<[DivCardUpdateReason]> {
     updateCardPipe.signal
   }
 
@@ -44,8 +44,8 @@ public final class DivKitComponents {
   private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
-  private let updateCard: DivActionURLHandler.UpdateCardAction
-  private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
+  private let updateCard: DivActionHandler.UpdateCardAction
+  private let updateCardPipe: SignalPipe<[DivCardUpdateReason]>
   private let variableTracker = DivVariableTracker()
   private var debugErrorCollectors = [DivCardID: DebugErrorCollector]()
 
@@ -99,7 +99,7 @@ public final class DivKitComponents {
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     reporter: DivReporter? = nil,
-    showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
+    showTooltip: DivActionHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     submitter: DivSubmitter? = nil,
     tooltipManager: TooltipManager? = nil,
@@ -121,7 +121,7 @@ public final class DivKitComponents {
     self.urlHandler = urlHandler
     self.variablesStorage = variablesStorage
 
-    let updateCardPipe = SignalPipe<[DivActionURLHandler.UpdateReason]>()
+    let updateCardPipe = SignalPipe<[DivCardUpdateReason]>()
     self.updateCardPipe = updateCardPipe
 
     layoutProviderHandler = DivLayoutProviderHandler(variablesStorage: variablesStorage)
@@ -165,7 +165,7 @@ public final class DivKitComponents {
       reporter: reporter,
       idToPath: idToPath,
       animatorController: animatorController,
-      flags: .default
+      flags: flagsInfo
     )
 
     triggersStorage = DivTriggersStorage(
@@ -174,6 +174,7 @@ public final class DivKitComponents {
       blockStateStorage: blockStateStorage,
       actionHandler: actionHandler,
       persistentValuesStorage: persistentValuesStorage,
+      flagsInfo: flagsInfo,
       reporter: reporter
     )
 
@@ -296,15 +297,10 @@ public final class DivKitComponents {
     let viewId = DivViewId(cardId: cardId, additionalId: additionalId)
     variableTracker.onModelingStarted(id: viewId)
 
-    // for now tooltip state management is broken
-    let stateManager = viewId.isTooltip
-      ? DivStateManager()
-      : stateManagement.getStateManagerForCard(cardId: cardId)
-
     let errorsStorage = DivErrorsStorage(errors: [])
     return DivBlockModelingContext(
       viewId: viewId,
-      stateManager: stateManager,
+      stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
       actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
@@ -344,6 +340,7 @@ public final class DivKitComponents {
   public func setCardData(divData: DivData, cardId: DivCardID) {
     setTimers(divData: divData, cardId: cardId)
     setVariablesAndTriggers(divData: divData, cardId: cardId)
+    functionsStorage.set(cardId: cardId, functions: divData.functions ?? [])
   }
 
   public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {

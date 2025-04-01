@@ -8,7 +8,6 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivSwitch
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
@@ -38,7 +37,7 @@ class DivSwitchBinderTest : DivBinderTest() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITH_ON_COLOR)
         underTest.bindView(bindingContext, view, divSwitch, path)
 
-        verify(variableBinder).bindVariable(any(), eq(divSwitch.isOnVariable), any(), any())
+        verify(variableBinder).bindVariable(any(), eq(divSwitch.value.isOnVariable), any(), any())
         verifyNoMoreInteractions(variableBinder)
     }
 
@@ -104,13 +103,13 @@ class DivSwitchBinderTest : DivBinderTest() {
         Assert.assertEquals(expectedValue, isChecked)
     }
 
-    private fun createDivAndView(jsonString: String): Pair<DivSwitch, DivSwitchView> {
+    private fun createDivAndView(jsonString: String): Pair<Div.Switch, DivSwitchView> {
         val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)
         val div = Div(environment, JSONObject(jsonString)) as Div.Switch
         val view = (viewCreator.create(div, ExpressionResolver.EMPTY) as DivSwitchView).apply {
             layoutParams = defaultLayoutParams()
         }
-        return div.value to view
+        return div to view
     }
 
     companion object {

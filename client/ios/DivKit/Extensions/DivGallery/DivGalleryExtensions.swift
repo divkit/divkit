@@ -4,12 +4,11 @@ import VGSL
 
 extension DivGallery: DivBlockModeling, DivGalleryProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let path = context.parentPath + (id ?? DivGallery.type)
-    let galleryContext = context.modifying(parentPath: path)
-    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+    let context = modifiedContextParentPath(context)
+    return try modifyError({ DivBlockModelingError($0.message, path: context.path) }) {
       try applyBaseProperties(
-        to: { try makeBaseBlock(context: galleryContext) },
-        context: galleryContext,
+        to: { try makeBaseBlock(context: context) },
+        context: context,
         actionsHolder: nil,
         applyPaddings: false
       )
@@ -42,9 +41,10 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     context: DivBlockModelingContext,
     itemsCount: Int
   ) -> GalleryViewState {
-    let path = context.parentPath
+    let path = context.path
     let index: CGFloat
     let scrollRange: CGFloat?
+    let animated: Bool
     if let state: GalleryViewState = context.blockStateStorage.getState(path) {
       switch state.contentPosition {
       case .offset:
@@ -53,6 +53,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
         index = savedIndex
       }
       scrollRange = state.scrollRange
+      animated = state.animated
     } else {
       index = CGFloat(resolveDefaultItem(context.expressionResolver))
       if index == 0 {
@@ -61,13 +62,15 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
         return newState
       }
       scrollRange = nil
+      animated = false
     }
 
     let newState = GalleryViewState(
       contentPosition: .paging(index: index.clamp(0.0...CGFloat(itemsCount - 1))),
       itemsCount: itemsCount,
       isScrolling: false,
-      scrollRange: scrollRange
+      scrollRange: scrollRange,
+      animated: animated
     )
     context.blockStateStorage.setState(path: path, state: newState)
     return newState

@@ -53,6 +53,17 @@
             }
         }
     }, {
+        "id": "ext_lottie_is_playing",
+        "name": "Lottie extension <code>is_playing</code> property",
+        "compat": {
+            "android": {
+                "version_added": "30.5.0"
+            },
+            "web": {
+                "version_added": "31.4.0"
+            }
+        }
+    }, {
         "id": "ext_gesture",
         "name": "<code>gesture</code> extension",
         "compat": {

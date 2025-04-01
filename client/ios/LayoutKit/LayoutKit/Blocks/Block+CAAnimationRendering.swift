@@ -6,7 +6,7 @@ extension BlockAnimation {
     result.keyPath = changes.keyPath
     result.values = changes.values
     result.keyTimes = keyTimes.map { $0.value as NSNumber }
-    result.duration = duration.value
+    result.duration = duration
     result.isAdditive = changes.isAdditive
     result.repeatCount = .infinity
     result.timingFunction = .from(blockTimingFunction: timingFunction)

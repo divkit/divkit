@@ -24,12 +24,12 @@ extension DivCollectionItemBuilder {
       let div = prototype.div
       let id = prototype.resolveId(prototypeContext.expressionResolver)
       let itemContext = prototypeContext.modifying(
-        elementId: id,
-        parentPath: context.parentPath + (id ?? div.id ?? String(index))
+        overridenId: id,
+        pathSuffix: String(index)
       )
       do {
         return try modifyError({
-          DivBlockModelingError($0.message, path: itemContext.parentPath)
+          DivBlockModelingError($0.message, path: itemContext.path)
         }) {
           let block = try div.value.makeBlock(context: itemContext)
           return modificator(div, block, itemContext)

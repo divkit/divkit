@@ -4,9 +4,15 @@ import type { FixedSize } from './sizes';
 import type { EdgeInsets } from './edgeInserts';
 import type { Filter } from './filter';
 
+export interface GradientColorPoint {
+    color: string;
+    position: number;
+}
+
 export interface GradientBackground {
     type: 'gradient';
-    colors: string[];
+    colors?: string[];
+    color_map?: GradientColorPoint[];
     angle?: number;
 }
 
@@ -54,7 +60,8 @@ export type RadialGradientCenter = RadialGradientFixedCenter | RadialGradientRel
 
 export interface RadialBackground {
     type: 'radial_gradient';
-    colors: string[];
+    colors?: string[];
+    color_map?: GradientColorPoint[];
     radius?: RadialBackgroundRadius;
     center_x?: RadialGradientCenter;
     center_y?: RadialGradientCenter;

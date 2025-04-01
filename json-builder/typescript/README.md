@@ -8,7 +8,7 @@
 ## Example
 
 ```typescript
-import { divCard, DivContainer, DivText, reference, rewritRefs, template, templateHelper } from '@divkitframework/jsonbuilder';
+import { divCard, DivContainer, DivText, reference, rewritRefs, template, templateHelper, rewriteRefs } from '@divkitframework/jsonbuilder';
 
 const templates = {
   sampleBlock: new DivContainer({

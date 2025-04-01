@@ -58,6 +58,7 @@ public struct GalleryViewState: ElementState, Equatable {
   public let itemsCount: Int
   public let isScrolling: Bool
   public let scrollRange: CGFloat?
+  public let animated: Bool
 
   public init(
     contentOffset: CGFloat,
@@ -67,28 +68,33 @@ public struct GalleryViewState: ElementState, Equatable {
     self.itemsCount = itemsCount
     self.isScrolling = false
     self.scrollRange = nil
+    self.animated = false
   }
 
   public init(
     contentPageIndex: CGFloat,
-    itemsCount: Int
+    itemsCount: Int,
+    animated: Bool
   ) {
     self.contentPosition = .paging(index: contentPageIndex)
     self.itemsCount = itemsCount
     self.isScrolling = false
     self.scrollRange = nil
+    self.animated = animated
   }
 
   public init(
     contentPosition: Position,
     itemsCount: Int,
     isScrolling: Bool,
-    scrollRange: CGFloat? = nil
+    scrollRange: CGFloat? = nil,
+    animated: Bool
   ) {
     self.contentPosition = contentPosition
     self.itemsCount = itemsCount
     self.isScrolling = isScrolling
     self.scrollRange = scrollRange
+    self.animated = animated
   }
 
   public static func ==(lhs: GalleryViewState, rhs: GalleryViewState) -> Bool {
@@ -104,6 +110,7 @@ public struct GalleryViewState: ElementState, Equatable {
       && lhs.itemsCount == lhs.itemsCount
       && lhs.isScrolling == rhs.isScrolling
       && areScrollRangesEqual
+      && lhs.animated == rhs.animated
   }
 }
 
@@ -130,7 +137,8 @@ extension GalleryViewState {
       contentPosition: newContentPosition,
       itemsCount: itemsCount,
       isScrolling: isScrolling,
-      scrollRange: scrollRange
+      scrollRange: scrollRange,
+      animated: animated
     )
   }
 }

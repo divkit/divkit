@@ -18,7 +18,7 @@ import org.junit.Test
     packageName = PACKAGE_NAME,
     description = "Div2 recycling performance test",
     owners = ["gulevsky"],
-    defaultRepeat = 31,
+    defaultRepeat = 50,
     timeoutSeconds = 3000
 )
 class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
@@ -35,8 +35,6 @@ class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
             "Div.Parsing.Data.Cold",
             "Div.Parsing.Data.Warm",
             "Div.Parsing.Templates.Cold",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Measure.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
         ]

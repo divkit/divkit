@@ -21,7 +21,10 @@ export function getProp(obj: any, prop: string, fallback?: any): any {
 
 function getAnyProp(obj: any, parentObj: any, prop: string, conditionsContext: Record<string, unknown>): any {
     if (prop.startsWith('$parent.')) {
-        return getProp(parentObj, prop.substring(8));
+        if (parentObj) {
+            return getProp(parentObj, prop.substring(8));
+        }
+        return undefined;
     }
     if (prop.startsWith('$')) {
         return conditionsContext[prop];

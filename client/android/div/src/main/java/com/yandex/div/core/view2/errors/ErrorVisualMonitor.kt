@@ -128,7 +128,7 @@ internal class ErrorModel(
         state = state.copy(showDetails = false)
     }
 
-    fun generateFullReport(): String {
+    fun generateReport(dumpCardContent: Boolean = true): String {
         val results = JSONObject()
 
         if (currentErrors.size > 0) {
@@ -159,7 +159,9 @@ internal class ErrorModel(
             results.put("warnings", warnings)
         }
 
-        results.put("card", dumpCardWithContextVariables())
+        if (dumpCardContent) {
+            results.put("card", dumpCardWithContextVariables())
+        }
         return results.toString(/*indentSpaces*/ 4)
     }
 

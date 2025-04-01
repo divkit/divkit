@@ -30,7 +30,7 @@ final class DivSeparatorExtensionsTests: XCTestCase {
       try makeBlock(fromFile: "horizontal_wrap_content_width"),
       DivBlockModelingError(
         "DivSeparator has wrap_content size by orientation dimension",
-        path: .root
+        path: .root + "separator"
       )
     )
   }
@@ -40,7 +40,25 @@ final class DivSeparatorExtensionsTests: XCTestCase {
       try makeBlock(fromFile: "vertical_wrap_content_height"),
       DivBlockModelingError(
         "DivSeparator has wrap_content size by orientation dimension",
-        path: .root
+        path: .root + "separator"
+      )
+    )
+  }
+
+  func test_WhenErrorOccuresAndSeparatorHasId_ErrorPathHasId() throws {
+    let context = DivBlockModelingContext(
+      cardId: "custom_card_id"
+    )
+    let div = divSeparator(
+      id: "custom_separator_id",
+      width: .divWrapContentSize(.init())
+    )
+
+    XCTAssertThrowsError(
+      try divData(div, stateId: 0).makeBlock(context: context),
+      DivBlockModelingError(
+        "DivSeparator has wrap_content size by orientation dimension",
+        path: "custom_card_id" + 0 + "custom_separator_id"
       )
     )
   }

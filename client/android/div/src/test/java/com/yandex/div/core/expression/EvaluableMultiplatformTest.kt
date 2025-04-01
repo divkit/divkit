@@ -1,14 +1,12 @@
 package com.yandex.div.core.expression
 
+import com.yandex.div.core.expression.ExpressionTestCaseUtils.toVariable
 import com.yandex.div.core.expression.variables.wrapVariableValue
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
-import com.yandex.div.test.expression.ExpressionTestCase
-import com.yandex.div.test.expression.ExpressionTestCaseUtils
-import com.yandex.div.test.expression.ExpressionTestCaseUtils.toVariable
 import com.yandex.div.test.expression.MultiplatformTestUtils
 import com.yandex.div.test.expression.TestCaseOrError
 import com.yandex.div.test.expression.withEvaluator

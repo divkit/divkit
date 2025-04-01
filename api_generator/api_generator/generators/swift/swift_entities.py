@@ -454,7 +454,7 @@ class SwiftProperty(Property):
             item_type = cast(SwiftPropertyType, self.property_type.property_type)
             method = self.expression_resolving_method_name(item_type)
             map_text = f'resolver.{method}($0)'
-            result += Text(f'{self.declaration_name}.map {{ {map_text} }}.compactMap {{ $0 }}').indented()
+            result += Text(f'{self.declaration_name}{"?" if self.should_be_optional else ""}.map {{ {map_text} }}.compactMap {{ $0 }}').indented()
         else:
             prop_type = cast(SwiftPropertyType, self.property_type)
             method = self.expression_resolving_method_name(prop_type)

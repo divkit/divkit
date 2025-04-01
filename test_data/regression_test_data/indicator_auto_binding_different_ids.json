@@ -1,0 +1,272 @@
+{
+  "templates": {
+    "item_image": {
+      "type": "image",
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "height": {
+        "type": "fixed",
+        "value": 200
+      }
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_horizontal": "center",
+          "items": [
+            {
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "pager",
+                  "id": "pager_1",
+                  "layout_mode": {
+                    "type": "wrap_content"
+                  },
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "items": [
+                    {
+                      "type": "item_image",
+                      "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg"
+                    },
+                    {
+                      "type": "item_image",
+                      "image_url": "https://yastatic.net/s3/home/divkit/ducks.jpg"
+                    },
+                    {
+                      "type": "item_image",
+                      "image_url": "https://yastatic.net/s3/home/divkit/pupduck.jpg"
+                    }
+                  ]
+                },
+                {
+                  "type": "indicator",
+                  "active_shape": {
+                    "type": "rounded_rectangle",
+                    "background_color": "#21201F",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 16
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 16
+                    },
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 16
+                    },
+                    "stroke": {
+                      "color": "#FFFFFF",
+                      "unit": "px",
+                      "width": 1
+                    }
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "bottom",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "inactive_minimum_shape": {
+                    "type": "rounded_rectangle",
+                    "background_color": "#4d21201F",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "stroke": {
+                      "color": "#FFFFFF",
+                      "unit": "px",
+                      "width": 1
+                    }
+                  },
+                  "inactive_shape": {
+                    "type": "rounded_rectangle",
+                    "background_color": "#4d21201F",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "stroke": {
+                      "color": "#FFFFFF",
+                      "unit": "px",
+                      "width": 1
+                    }
+                  },
+                  "margins": {
+                    "bottom": 5,
+                    "right": 6
+                  },
+                  "space_between_centers": {
+                    "type": "fixed",
+                    "value": 18
+                  },
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "indicator",
+                  "active_shape": {
+                    "type": "rounded_rectangle",
+                    "background_color": "#21201F",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 16
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 16
+                    },
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 16
+                    },
+                    "stroke": {
+                      "color": "#FFFFFF",
+                      "unit": "px",
+                      "width": 1
+                    }
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "bottom",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "inactive_minimum_shape": {
+                    "type": "rounded_rectangle",
+                    "background_color": "#4d21201F",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "stroke": {
+                      "color": "#FFFFFF",
+                      "unit": "px",
+                      "width": 1
+                    }
+                  },
+                  "inactive_shape": {
+                    "type": "rounded_rectangle",
+                    "background_color": "#4d21201F",
+                    "corner_radius": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "item_width": {
+                      "type": "fixed",
+                      "value": 14
+                    },
+                    "stroke": {
+                      "color": "#FFFFFF",
+                      "unit": "px",
+                      "width": 1
+                    }
+                  },
+                  "margins": {
+                    "bottom": 5,
+                    "right": 6
+                  },
+                  "space_between_centers": {
+                    "type": "fixed",
+                    "value": 18
+                  },
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                },
+                {
+                  "type": "pager",
+                  "id": "pager_2",
+                  "layout_mode": {
+                    "type": "wrap_content"
+                  },
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "items": [
+                    {
+                      "type": "item_image",
+                      "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg"
+                    },
+                    {
+                      "type": "item_image",
+                      "image_url": "https://yastatic.net/s3/home/divkit/ducks.jpg"
+                    },
+                    {
+                      "type": "item_image",
+                      "image_url": "https://yastatic.net/s3/home/divkit/pupduck.jpg"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

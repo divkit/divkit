@@ -1,3 +1,106 @@
+## 31.9.0 (March 31, 2025)
+
+* Added support for `functions` in the `card` (div data). Previously, they were supported only in components.
+* Added support for the `animation_type` and `animation_duration` in `tabs`.
+* Fixed a bug with the importance of properties in action, now `typed` is more important than `url`.
+* Fixed an error message when a local function was found, but the arguments were incorrect.
+* The logic of the "nested actions" warning has been updated, nested `<button>` will no longer be rendered.
+
+
+## 31.8.0 (March 24, 2025)
+
+* Added support for `background_accessibility_description` for the `tooltip`. If specified, the backdrop (background) of the `tooltip` is converted to a button with the specified text.
+* Added support for the `mask` in `text`.
+* Added the ability to provide a custom implementation of the video player using the `videoPlayerProvider` property.
+* Fixed a bug that caused the `indicator` elements to be non-clickable on the `desktop` platform.
+* Fixed a bug where the `video` component was not available for mouse/touch events (context menu, etc.).
+* Fixed an error with blinking the height of the `indicator` when changing the elements of the `pager`.
+* Fixed the `cloud` background of the `text` in Firefox (for the background of the entire text only).
+* Fixed the issue with the `pager` hanging if `default_item` was specified.
+* Fixed typings for the package.
+* The `indicator` has been updated, which will be hidden if there is one element or less in the `pager`.
+* The tooltip accessibility has been updated: it now has the appropriate ARIA role and closes when the `Escape` key is pressed.
+
+
+## 31.7.0 (March 17, 2025)
+
+* Added support for the `phone` `input` mask.
+* Added support for the `ranges` in `slider`.
+* Added support for the `scroll_to` and `scroll_by` actions.
+
+
+## 31.6.0 (March 10, 2025)
+
+* Added `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
+* Added support for parsing `array` and `dict` from a string (including both the `div-action://set_variable` and the `variable.set('value')` programming api). The format is json.
+* Added support for the `tap_outside_actions` and `close_by_tap_outside` in `tooltip`.
+* Fixed `switch` in rtl layout.
+* Fixed an error with an incorrect number of actions and `log_limit` (`visibility_actions` / `disappear_actions`).
+
+
+## 31.5.0 (March 3, 2025)
+
+* Added a warning for the `transition_id` / `transition_out` / `transition_change` properties without the required `id` property when changing state.
+* Added configuration flag `pagerChildrenClipEnabled`. It can be useful in cases with shadow elements of a `pager`.
+* Added support for the `color_map` property in the linear gradient.
+* Added support for the `cross_axis_alignment` in `pager`.
+* Added support for the `dashed` stroke style.
+* Added support for the `non_modal` mode in `tooltip`.
+* Added support for the `submit` action.
+* Added support for the `wrap_content` `layout_mode` in `pager`.
+* Fixed an issue with the tapable content inside `tabs`.
+* Fixed the default value of `column_count` for the `grid` component. Now it's required, as written in the schema.
+* Fixed the recreation of neighboring components when using the patch.
+* Fixed the styles of `menu_items`.
+* Fixed virtual keyboard in `input` with `keyboard_type` = `number`.
+
+
+## 31.4.0 (February 24, 2025)
+
+* Added `applyPatch` api for an DivKit instance.
+* Added support for the `is_playing` parameter in the `lottie` extension.
+* Fixed `functions` inheriting.
+* Fixed empty text height measurement.
+* The `derviedExpression` api for extensions has been added. It allows you to subscribe to any expression changes. Do not forget to unsubscribe!.
+* The `download` callbacks have been fixed, which will now be more reliable in several erroneous situations..
+* Throw errors when switching to ambiguous state.
+
+
+## 31.3.0 (February 17, 2025)
+
+* Fixed an issue with `container` separators rendereed between invisible elements.
+* Fixed, which allows you to return dicts values and arrays in expressions inside actions.
+
+
+## 31.1.0 (February 3, 2025)
+
+* Added support for switching states in the `tooltip`.
+* Added support for the `filters` property in the `input` component.
+* Added support for the functions `tan`, `asin`, `acos`.
+* Fixed types for the `direction` property.
+* The `focus_element` action has been changed to move the cursor to the end of the `input` component (to match the behavior of native clients).
+* The requirement for a unique `id` for visibility change transitions has been removed (this change corresponds to the current behavior of the Android client).
+
+
+## 31.0.0 (January 27, 2025)
+
+* Breaking change. Api `Ya.Divkit` in window is now deprecated, and the `Ya.DivKit` should be used (please note the big letter "K" instead of the small "K").
+* Breaking change. Browsers/Node,js now require BigInt support (Chrome 58 -> 67, Safari 11 -> 14, Firefox 67 -> 68, Node.js 8 -> 10.4). Integer values in markup expressions now always use BigInt. `subscribe` and other methods for integer variables now always return BigInt values.
+* Breaking change. Components with actions (not links) are now rendered using a `button`. This may change the default tap animation in iOS and other minor updates.
+* Breaking change. Store methods `getValue` / `setValue` are now deprecated. Provide methods `get` / `set` instead.
+* Breaking change. The build was redone using Vite/Rollup. This changes the situation a bit: there is no longer a css map, and the ESM file versions are no longer minimized. Browser and CJS versions with global variables are still minimized.
+* Breaking change. The logic of the `multiple` parameter for `tooltips` has been brought into line with other platforms, now tooltips without `multiple` are shown no more than once, and with - as many as you like (but no more than one at a time).
+* Breaking change. Tooltips are modal by default.
+* Breaking change: `doubletap_actions` now prevents `actions` from being called (to match Android behaviour).
+* Breaking change: non-interactive elements will now ignore clicks (to better match the native behavior of DivKit).
+* Added `getStoredArrayValue` and `getStoredDictValue` functions.
+* Added support for the `longtap_actions` on the non-touch platforms (desktop).
+* Added support for the `set_state` typed action.
+* Added support for the `set_stored_value` typed action.
+* Changed `doubletap_actions` detect logic.
+* Fixed `array` and `dict` variable types in d.ts.
+
+
 ## 30.33.0 (January 20, 2025)
 
 * Added `download` typed action support.

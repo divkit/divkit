@@ -48,7 +48,8 @@ extension DecoratingBlock {
       tooltips: tooltips,
       accessibility: accessibilityElement,
       reuseId: reuseId,
-      path: path
+      path: path,
+      isFocused: isFocused
     )
     view.configure(
       model: model,
@@ -123,6 +124,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let accessibility: AccessibilityElement?
     let reuseId: String?
     let path: UIElementPath?
+    let isFocused: Bool?
 
     var hasResponsiveUI: Bool {
       actions.hasPayload || longTapActions.hasPayload || doubleTapActions.hasPayload
@@ -154,6 +156,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private var visibilityActionPerformers: VisibilityActionPerformers?
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  private var hasFocused = false
+  private var isViewOnWindow: Bool { window != nil }
 
   private var tapRecognizer: UITapGestureRecognizer? {
     didSet {
@@ -242,6 +247,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     if tapRecognizer == nil {
       tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
     }
+    tapRecognizer?.cancelsTouchesInView = false
 
     if model.shouldHandleDoubleTap, doubleTapRecognizer == nil {
       let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -280,6 +286,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
   @objc private func handleTap(recognizer: UITapGestureRecognizer) {
+    observer?.clearFocus()
+
     // Sometimes there are late touches that were performed before layout.
     // This breaks UX due to UIView reusing, so just skip them here.
     guard bounds.contains(recognizer.location(in: self)) else { return }
@@ -298,6 +306,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     guard let actions = model.actions?.asArray() else {
       return false
     }
+    observer?.clearFocus()
     actions.perform(sendingFrom: self)
     return true
   }
@@ -316,7 +325,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
     let shouldMakeBorderLayer: Bool
     let boundary = model.boundary.makeInfo(for: bounds.size)
-    shouldMakeBorderLayer = boundary.layer != nil
+    shouldMakeBorderLayer = boundary.layer != nil || model.border?.style
+      .shouldMakeBorderLayer == true
     layer.cornerRadius = boundary.radius
     layer.maskedCorners = boundary.corners
     layer.mask = boundary.layer
@@ -348,6 +358,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     view.transform = .identity
     view.frame = bounds.inset(by: model.paddings)
     view.transform = currentTransform
+  }
+
+  override func didMoveToWindow() {
+    updateVoiceOverFocus()
   }
 
   func configure(
@@ -391,6 +405,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     applyAccessibilityFromScratch(model.accessibility)
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
+
+    hasFocused = oldModel?.isFocused == false && model.isFocused == true
+    updateVoiceOverFocus()
 
     if oldModel?.visibilityParams != model.visibilityParams {
       if let visibilityParams = model.visibilityParams {
@@ -486,7 +503,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     passVisibleBoundsChanged(from: from, to: to)
 
     if model.visibilityParams != nil {
-      if from == .zero, to == .zero { return }
       visibilityActionPerformers?.onVisibleBoundsChanged(to: to, bounds: bounds)
     }
   }
@@ -514,9 +530,16 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     )
     return TooltipEvent(
       info: info,
+      params: tooltipModel.params,
       tooltipView: tooltipView,
-      duration: tooltipModel.duration
+      tooltipAnchorView: self
     )
+  }
+
+  private func updateVoiceOverFocus() {
+    guard hasFocused, isViewOnWindow else { return }
+
+    UIAccessibility.post(notification: .layoutChanged, argument: self)
   }
 
   deinit {
@@ -586,6 +609,15 @@ extension BlurEffect {
     switch self {
     case .light: .light
     case .dark: .dark
+    }
+  }
+}
+
+extension BlockBorder.Style {
+  fileprivate var shouldMakeBorderLayer: Bool {
+    switch self {
+    case .dashed: true
+    case .solid: false
     }
   }
 }

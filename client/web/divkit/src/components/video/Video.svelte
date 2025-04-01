@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onDestroy } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
     import type { Unsubscriber } from 'svelte/store';
 
     import css from './Video.module.css';
@@ -7,6 +7,8 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivVideoData, VideoElements } from '../../types/video';
     import type { ComponentContext } from '../../types/componentContext';
+    import type { VideoPlayerInstance, VideoPlayerProviderClient, VideoPlayerProviderData, VideoPlayerProviderServer, VideoSource } from '../../../typings/common';
+    import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { createVariable } from '../../expressions/variable';
@@ -24,11 +26,13 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+    const videoPlayerProvider = rootCtx.videoPlayerProvider;
 
     let prevId: string | undefined;
     let hasError = false;
     let isSelfVariableSet = false;
     let videoElem: HTMLVideoElement;
+    let videoParentElem: HTMLElement;
     let sources: PreparedVideoSource[] = [];
     let loop = false;
     let autoplay = false;
@@ -39,6 +43,60 @@
     let aspectPaddingBottom = '0';
     let isAbsolute = false;
     let elapsedVariableUnsubscriber: Unsubscriber | undefined;
+    let providedVideoTemplate = '';
+    let customVideoInstance: VideoPlayerInstance | undefined;
+    let shouldUseVideoProvider = Boolean(videoPlayerProvider);
+
+    if (import.meta.env.SSR && videoPlayerProvider) {
+        const provider = videoPlayerProvider as VideoPlayerProviderServer;
+        if (typeof provider.template === 'string') {
+            providedVideoTemplate = provider.template;
+        } else {
+            const data = calcVideoProviderData(componentContext.json);
+            if (data) {
+                providedVideoTemplate = provider.template(data);
+            } else {
+                shouldUseVideoProvider = false;
+            }
+        }
+    }
+
+    function calcVideoProviderData(json: MaybeMissing<DivVideoData>): VideoPlayerProviderData | undefined {
+        const evalled = componentContext.getJsonWithVars({
+            sources: json.video_sources,
+            repeatable: json.repeatable,
+            autostart: json.autostart,
+            preloadRequired: json.preload_required,
+            muted: json.muted,
+            preview: json.preview,
+            aspect: json.aspect,
+            scale: json.scale,
+            payload: json.player_settings_payload
+        });
+        const repeatable = correctBooleanInt(evalled.repeatable, false);
+        const autostart = correctBooleanInt(evalled.autostart, false);
+        const preloadRequired = correctBooleanInt(evalled.preloadRequired, false);
+        const muted = correctBooleanInt(evalled.muted, false);
+        const aspect = evalled.aspect?.ratio && isPositiveNumber(evalled.aspect.ratio) ?
+            evalled.aspect.ratio :
+            undefined;
+
+        if (!evalled.sources?.length) {
+            return;
+        }
+
+        return {
+            sources: evalled.sources as VideoSource[],
+            repeatable,
+            autostart,
+            preloadRequired,
+            muted,
+            preview: evalled.preview,
+            aspect,
+            scale: evalled.scale,
+            payload: evalled.payload
+        };
+    }
 
     $: if (componentContext.json) {
         loop = false;
@@ -48,6 +106,23 @@
         poster = undefined;
         scale = 'fit';
         isAbsolute = false;
+        shouldUseVideoProvider = Boolean(videoPlayerProvider);
+    }
+
+    $: if (componentContext.json && customVideoInstance && (
+        $jsonSource ||
+        $jsonRepeatable ||
+        $jsonAutostart ||
+        $jsonMuted ||
+        $jsonPreload ||
+        $jsonPreview ||
+        $jsonScale ||
+        $jsonAspect
+    )) {
+        const data = calcVideoProviderData(componentContext.json);
+        if (data) {
+            customVideoInstance.update?.(data);
+        }
     }
 
     $: elapsedVariableName = componentContext.json.elapsed_time_variable;
@@ -58,7 +133,9 @@
             isSelfVariableSet = false;
             return;
         }
-        if (videoElem) {
+        if (customVideoInstance) {
+            customVideoInstance.seek?.(Number(val));
+        } else if (videoElem) {
             videoElem.currentTime = Number(val) / 1000;
         }
     }
@@ -118,10 +195,19 @@
     }
 
     function pause(): void {
-        videoElem?.pause();
+        if (customVideoInstance) {
+            customVideoInstance.pause();
+        } else {
+            videoElem?.pause();
+        }
     }
 
     function start(): void {
+        if (customVideoInstance) {
+            customVideoInstance.play();
+            return;
+        }
+
         const res = videoElem?.play();
         if (res) {
             res.catch(err => {
@@ -195,6 +281,20 @@
         componentContext.execAnyActions(actions);
     }
 
+    onMount(() => {
+        if (videoPlayerProvider && videoParentElem) {
+            const data = calcVideoProviderData(componentContext.json);
+            if (data) {
+                const res = (videoPlayerProvider as VideoPlayerProviderClient).instance(videoParentElem, data);
+                if (res) {
+                    customVideoInstance = res;
+                } else {
+                    shouldUseVideoProvider = false;
+                }
+            }
+        }
+    });
+
     onDestroy(() => {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
@@ -205,19 +305,62 @@
             elapsedVariableUnsubscriber();
             elapsedVariableUnsubscriber = undefined;
         }
+
+        if (customVideoInstance) {
+            customVideoInstance.destroy();
+            customVideoInstance = undefined;
+        }
     });
 </script>
 
 {#if !hasError}
     <Outer
         cls={genClassName('video', css, mods)}
-        customActions={'video'}
+        customActions="video"
         {componentContext}
         {layoutParams}
         heightByAspect={aspectPaddingBottom !== '0'}
     >
         {#if aspectPaddingBottom !== '0'}
             <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
+                {#if shouldUseVideoProvider}
+                    <div class={css.video__container} bind:this={videoParentElem}>
+                        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                        {@html providedVideoTemplate}
+                    </div>
+                {:else}
+                    <video
+                        bind:this={videoElem}
+                        class={css.video__video}
+                        style={makeStyle(style)}
+                        playsinline
+                        {loop}
+                        {autoplay}
+                        {muted}
+                        {poster}
+                        preload={preload ? 'metadata' : 'auto'}
+                        on:timeupdate={onTimeUpdate}
+                        on:ended={onEnd}
+                        on:playing={onPlaying}
+                        on:pause={onPause}
+                        on:waiting={onWaiting}
+                        on:error={onError}
+                    >
+                        {#each sources as source}
+                            {#key source}
+                                <source src={source.src} type={source.type} on:error={onError}>
+                            {/key}
+                        {/each}
+                    </video>
+                {/if}
+            </div>
+        {:else}
+            {#if shouldUseVideoProvider}
+                <div class={css.video__container} bind:this={videoParentElem}>
+                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                    {@html providedVideoTemplate}
+                </div>
+            {:else}
                 <video
                     bind:this={videoElem}
                     class={css.video__video}
@@ -241,31 +384,7 @@
                         {/key}
                     {/each}
                 </video>
-            </div>
-        {:else}
-            <video
-                bind:this={videoElem}
-                class={css.video__video}
-                style={makeStyle(style)}
-                playsinline
-                {loop}
-                {autoplay}
-                {muted}
-                {poster}
-                preload={preload ? 'metadata' : 'auto'}
-                on:timeupdate={onTimeUpdate}
-                on:ended={onEnd}
-                on:playing={onPlaying}
-                on:pause={onPause}
-                on:waiting={onWaiting}
-                on:error={onError}
-            >
-                {#each sources as source}
-                    {#key source}
-                        <source src={source.src} type={source.type} on:error={onError}>
-                    {/key}
-                {/each}
-            </video>
+            {/if}
         {/if}
     </Outer>
 {:else if process.env.DEVTOOL}

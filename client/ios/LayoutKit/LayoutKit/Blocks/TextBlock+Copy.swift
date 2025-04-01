@@ -23,7 +23,9 @@ extension TextBlock {
       accessibilityElement: nil,
       truncationToken: nil,
       additionalTextInsets: block.additionalTextInsets,
-      canSelect: block.canSelect
+      canSelect: block.canSelect,
+      autoEllipsize: block.autoEllipsize,
+      path: block.path
     )
   }
 }

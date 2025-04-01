@@ -6,22 +6,21 @@ public protocol TooltipEventPerforming {
 }
 
 public final class TooltipEvent: AppActionEventProtocol {
-  public let tooltipID: String
   public let tooltipView: VisibleBoundsTrackingView
-  public let duration: Duration
-  public let showsOnStart: Bool
-  public let multiple: Bool
+  public private(set) weak var tooltipAnchorView: ViewType?
+  public let info: TooltipInfo
+  public let params: BlockTooltipParams
 
   public init(
     info: TooltipInfo,
+    params: BlockTooltipParams,
     tooltipView: VisibleBoundsTrackingView,
-    duration: Duration
+    tooltipAnchorView: ViewType?
   ) {
-    self.tooltipID = info.id
     self.tooltipView = tooltipView
-    self.duration = duration
-    self.showsOnStart = info.showsOnStart
-    self.multiple = info.multiple
+    self.tooltipAnchorView = tooltipAnchorView
+    self.info = info
+    self.params = params
   }
 
   public func makeHandler(responder: UIResponder) -> Handler? {

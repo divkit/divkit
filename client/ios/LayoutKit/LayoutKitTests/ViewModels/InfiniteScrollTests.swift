@@ -1,7 +1,6 @@
-import XCTest
-
 @testable import LayoutKit
 @testable import VGSLUI
+import XCTest
 
 final class InfiniteScrollTests: XCTestCase {
   func test_newPosition() throws {
@@ -76,19 +75,39 @@ final class InfiniteScrollTests: XCTestCase {
     let alignment = Alignment.leading
 
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 38, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 38,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       .init(offset: 158, page: 3)
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 39, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 39,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       nil
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 160, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 160,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       .init(offset: 40, page: 1)
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 159, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 159,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       nil
     )
   }
@@ -98,19 +117,39 @@ final class InfiniteScrollTests: XCTestCase {
     let alignment = Alignment.center
 
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 39, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 39,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       .init(offset: 159, page: 3)
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 40, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 40,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       nil
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 161, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 161,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       .init(offset: 41, page: 1)
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 160, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 160,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       nil
     )
   }
@@ -120,19 +159,39 @@ final class InfiniteScrollTests: XCTestCase {
     let alignment = Alignment.trailing
 
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 40, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 40,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       .init(offset: 160, page: 3)
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 41, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 41,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       nil
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 162, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 162,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       .init(offset: 42, page: 1)
     )
     XCTAssertEqual(
-      InfiniteScroll.getNewPosition(currentOffset: 161, origins: origins, bufferSize: 1, alignment: alignment),
+      InfiniteScroll.getNewPosition(
+        currentOffset: 161,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment
+      ),
       nil
     )
   }
@@ -198,6 +257,68 @@ final class InfiniteScrollTests: XCTestCase {
       InfiniteScroll.oneBufferWithBoundsSizeAndTrailingAlignmentNewPosition(
         currentOffset: 101,
         origins: origins
+      ),
+      nil
+    )
+  }
+
+  func test_newPositionWithInsetsAndStartAlignment_lowerBound() throws {
+    let origins: [CGFloat] = [10, 50, 90, 130, 170]
+    let alignment = Alignment.leading
+    let insetMode = InsetMode.fixed(values: SideInsets(leading: 15, trailing: 10))
+
+    // origins[1] + alignment.correction - leading = 50 + (-1) - 15
+    let thresholdOffset: CGFloat = 34
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset - 1,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
+      ),
+      .init(offset: 153, page: 3)
+    )
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
+      ),
+      nil
+    )
+  }
+
+  func test_newPositionWithInsetsAndStartAlignment_upperBound() throws {
+    let origins: [CGFloat] = [10, 50, 90, 130, 170]
+    let alignment = Alignment.leading
+    let insetMode = InsetMode.fixed(values: SideInsets(leading: 15, trailing: 10))
+
+    // origins[4] + alignment.correction - trailing = 170 + (-1) - 10
+    let thresholdOffset: CGFloat = 159
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset + 1,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
+      ),
+      .init(offset: 40, page: 1)
+    )
+
+    XCTAssertEqual(
+      InfiniteScroll.getNewPosition(
+        currentOffset: thresholdOffset,
+        origins: origins,
+        bufferSize: 1,
+        alignment: alignment,
+        insetMode: insetMode
       ),
       nil
     )

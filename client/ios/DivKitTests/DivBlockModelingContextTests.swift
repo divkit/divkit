@@ -6,7 +6,7 @@ final class DivBlockModelingContextTests: XCTestCase {
   func test_parentPath_InitiallyEqualsToCardId() {
     let context = DivBlockModelingContext(cardId: "card_id")
 
-    XCTAssertEqual("card_id", context.parentPath)
+    XCTAssertEqual("card_id", context.path)
   }
 
   func test_parentPath_ContainsAdditionalId() {
@@ -15,7 +15,7 @@ final class DivBlockModelingContextTests: XCTestCase {
       additionalId: "additional_id"
     )
 
-    XCTAssertEqual(UIElementPath("card_id") + "additional_id", context.parentPath)
+    XCTAssertEqual(UIElementPath("card_id") + "additional_id", context.path)
   }
 
   func test_modifying_cardLogId() {
@@ -25,27 +25,31 @@ final class DivBlockModelingContextTests: XCTestCase {
     XCTAssertEqual(context.cardLogId, "new_card_log_id")
   }
 
-  func test_modifying_parentPath() {
-    let parentPath = UIElementPath("parent_path")
-    let context = DivBlockModelingContext()
-      .modifying(parentPath: parentPath)
+  func test_modifying_pathSuffix() {
+    let cardId = "custom_card_id"
+    let pathSuffix = "path_suffix"
+    let context = DivBlockModelingContext(
+      cardId: DivCardID(rawValue: cardId)
+    ).modifying(pathSuffix: pathSuffix)
 
-    XCTAssertEqual(context.parentPath, parentPath)
+    let expectedPath = UIElementPath(cardId) + pathSuffix
+    XCTAssertEqual(context.path, expectedPath)
 
     _ = context.expressionResolver.resolveString(expression("@{invalid}"))
 
-    XCTAssertEqual(context.errorsStorage.errors[0].path, parentPath)
+    XCTAssertEqual(context.errorsStorage.errors[0].path, expectedPath)
   }
 
   func test_modifying_parentPath_ProvidesAccessToLocalVariables() {
     let context = DivBlockModelingContext()
-    let elementPath = context.parentPath + "element_id"
+    let elementSuffix = "element_id"
+    let elementPath = context.path + "element_id"
     context.variablesStorage.initializeIfNeeded(
       path: elementPath,
       variables: ["local_var": .string("value")]
     )
 
-    let elementContext = context.modifying(parentPath: elementPath)
+    let elementContext = context.modifying(pathSuffix: elementSuffix)
 
     XCTAssertEqual(
       "value",
@@ -113,7 +117,8 @@ final class DivBlockModelingContextTests: XCTestCase {
 
   func test_cloneForTooltip() {
     let context = DivBlockModelingContext(cardId: "card_id")
-      .modifying(parentPath: UIElementPath("card_id") + "0" + "element_id")
+      .modifying(pathSuffix: "0")
+      .modifying(pathSuffix: "element_id")
 
     let tooltipContext = context.cloneForTooltip(tooltipId: "tooltip_id")
 
@@ -124,7 +129,7 @@ final class DivBlockModelingContextTests: XCTestCase {
 
     XCTAssertEqual(
       UIElementPath("card_id") + "tooltip_id",
-      tooltipContext.parentPath
+      tooltipContext.path
     )
   }
 
@@ -138,6 +143,41 @@ final class DivBlockModelingContextTests: XCTestCase {
     )
 
     XCTAssertEqual(context.errorsStorage.errors.count, 1)
+  }
+
+  func testWhenModifyOtherPropertiesToNil_contextIsNotChanged() throws {
+    let parentContext = DivBlockModelingContext().modifying(
+      cardLogId: "card_log_id",
+      pathSuffix: "path_suffix",
+      parentDivStatePath: .makeDivStatePath(from: "div_id")
+    )
+
+    let childContext = parentContext.modifying(
+      cardLogId: nil,
+      pathSuffix: nil,
+      parentDivStatePath: nil
+    )
+
+    XCTAssertEqual(childContext.cardLogId, parentContext.cardLogId)
+    XCTAssertEqual(childContext.path, parentContext.path)
+    XCTAssertEqual(childContext.parentDivStatePath, parentContext.parentDivStatePath)
+  }
+
+  func test_WhenModifyIdPropertiesToNil_propertiesAreNil() throws {
+    let parentContext = DivBlockModelingContext().modifying(
+      overridenId: "overriden_id",
+      currentDivId: "current_div_id",
+      pathSuffix: "arbitrary_parent_path_suffix"
+    )
+
+    let childContext = parentContext.modifying(
+      overridenId: nil,
+      currentDivId: nil,
+      pathSuffix: "arbitrary_child_path_suffix"
+    )
+
+    XCTAssertNil(childContext.overridenId)
+    XCTAssertNil(childContext.currentDivId)
   }
 }
 

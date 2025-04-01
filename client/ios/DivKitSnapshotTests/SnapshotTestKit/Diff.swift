@@ -21,7 +21,7 @@ extension UIImage {
     return other
   }
 
-  func compare(with other: UIImage, tolerance: Double = 0.005) -> Bool {
+  func compare(with other: UIImage, tolerance: Double = 0.003) -> Bool {
     let size = self.size
     guard size == other.size else {
       return false

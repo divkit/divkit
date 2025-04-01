@@ -18,6 +18,7 @@
         }
       },
       "platforms": [
+        "web"
       ],
       "required": [
         "color",

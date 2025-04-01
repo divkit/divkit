@@ -10,7 +10,9 @@ import type {
     Customization,
     DivExtensionClass,
     TypefaceProvider,
-    FetchInit
+    FetchInit,
+    Direction,
+    VideoPlayerProviderClient
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
 import type { WrappedError } from './common';
@@ -43,8 +45,11 @@ export function render(opts: {
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    pagerChildrenClipEnabled?: boolean;
+    videoPlayerProvider?: VideoPlayerProviderClient;
 }): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';

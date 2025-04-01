@@ -494,25 +494,22 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
 function logFunctionMatchError(funcName: string, args: EvalValue[], findRes: FuncMatchError): never {
     const argsType = args.map(arg => typeToString(arg.type)).join(', ');
     const prefix = `${funcName}(${argsToStr(args)})`;
-    const funcList = funcs.get(funcName) || [];
-    const firstFunc = funcList[0];
-    const hasOverloads = funcList.length > 1;
 
-    if (findRes.type === 'few' && args.length === 0 && hasOverloads) {
+    if (findRes.type === 'few' && args.length === 0 && findRes.hasOverloads) {
         evalError(prefix, 'Function requires non empty argument list.');
-    } else if (firstFunc && (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch')) {
-        if (hasOverloads) {
+    } else if (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch') {
+        if (findRes.hasOverloads) {
             evalError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
         } else {
             // eslint-disable-next-line no-lonely-if
             if (findRes.type === 'many' || findRes.type === 'few') {
-                if (firstFunc.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
-                    evalError(prefix, `At least ${firstFunc.args.length} argument(s) expected.`);
+                if (findRes.def.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
+                    evalError(prefix, `At least ${findRes.def.args.length} argument(s) expected.`);
                 } else {
-                    evalError(prefix, `Exactly ${firstFunc.args.length} argument(s) expected.`);
+                    evalError(prefix, `Exactly ${findRes.def.args.length} argument(s) expected.`);
                 }
             } else {
-                const expectedArgs = firstFunc.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
+                const expectedArgs = findRes.def.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
                 evalError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
             }
         }

@@ -34,23 +34,18 @@ internal class DivGridBinder @Inject constructor(
     private val divPatchManager: DivPatchManager,
     private val divBinder: Provider<DivBinder>,
     private val divViewCreator: Provider<DivViewCreator>,
-) : DivViewBinder<DivGrid, DivGridLayout> {
+) : DivViewBinder<Div.Grid, DivGrid, DivGridLayout>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivGridLayout, div: DivGrid, path: DivStatePath) {
-        val oldDiv = view.div
-        if (div === oldDiv) {
-            // todo MORDAANDROID-636
-            // return
-        }
+    override fun bindView(context: BindingContext, view: DivGridLayout, div: Div.Grid, path: DivStatePath) {
+        super.bindView(context, view, div, path)
+        view.bindItems(context, div.value, view.div?.value, path)
+    }
 
-        val divView = context.divView
-        val resolver = context.expressionResolver
+    override fun DivGridLayout.bind(bindingContext: BindingContext, div: DivGrid, oldDiv: DivGrid?) {
+        releaseViewVisitor = bindingContext.divView.releaseViewVisitor
 
-        view.releaseViewVisitor = divView.releaseViewVisitor
-        baseBinder.bindView(context, view, div, oldDiv)
-
-        view.applyDivActions(
-            context,
+        applyDivActions(
+            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -63,18 +58,30 @@ internal class DivGridBinder @Inject constructor(
             div.accessibility,
         )
 
-        view.addSubscription(
-            div.columnCount.observeAndGet(resolver) { columnCount -> view.columnCount = columnCount.toIntSafely() }
+        addSubscription(
+            div.columnCount.observeAndGet(bindingContext.expressionResolver) { columnCount = it.toIntSafely() }
         )
-        view.observeContentAlignment(div.contentAlignmentHorizontal, div.contentAlignmentVertical, resolver)
+        observeContentAlignment(
+            div.contentAlignmentHorizontal,
+            div.contentAlignmentVertical,
+            bindingContext.expressionResolver
+        )
+    }
 
+    private fun DivGridLayout.bindItems(
+        bindingContext: BindingContext,
+        div: DivGrid,
+        oldDiv: DivGrid?,
+        path: DivStatePath
+    ) {
+        val resolver = bindingContext.expressionResolver
         val items = div.nonNullItems
 
-        view.tryRebindPlainContainerChildren(divView, items.toDivItemBuilderResult(resolver), divViewCreator)
+        tryRebindPlainContainerChildren(bindingContext.divView, items.toDivItemBuilderResult(resolver), divViewCreator)
 
-        val dispatchedItems = view.dispatchBinding(context, items, path)
-        view.trackVisibilityActions(
-            divView,
+        val dispatchedItems = dispatchBinding(bindingContext, items, path)
+        trackVisibilityActions(
+            bindingContext.divView,
             dispatchedItems.toDivItemBuilderResult(resolver),
             oldDiv?.items?.toDivItemBuilderResult(resolver),
         )
@@ -181,9 +188,9 @@ internal class DivGridBinder @Inject constructor(
         }
     }
 
-    fun setDataWithoutBinding(bindingContext: BindingContext, view: DivGridLayout, div: DivGrid) {
+    fun setDataWithoutBinding(bindingContext: BindingContext, view: DivGridLayout, div: Div.Grid) {
         view.div = div
-        val items = div.nonNullItems
+        val items = div.value.nonNullItems
         for (gridIndex in items.indices) {
             val childView = view.getChildAt(gridIndex)
             val context = childView.bindingContext ?: bindingContext

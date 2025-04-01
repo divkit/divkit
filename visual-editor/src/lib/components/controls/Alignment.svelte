@@ -1,8 +1,38 @@
+<script lang="ts" context="module">
+    const HORIZONTAL = ['left', 'center', 'right'];
+    const HORIZONTAL_LOGICAL_LTR = ['start', 'center', 'end'];
+    const HORIZONTAL_LOGICAL_RTL = ['end', 'center', 'start'];
+    const VERTICAL = ['top', 'center', 'bottom'];
+
+    const HORIZONTAL_ALIGN_NORMALIZE: Record<'ltr' | 'rtl', Record<string, string>> = {
+        ltr: {
+            left: 'start',
+            right: 'end'
+        },
+        rtl: {
+            left: 'end',
+            right: 'start'
+        }
+    };
+
+    const TEXT_MAP: Record<string, string> = {
+        left: 'props.align_left',
+        center: 'props.align_center',
+        right: 'props.align_right',
+        top: 'props.align_top',
+        bottom: 'props.align_bottom',
+        start: 'props.align_start',
+        end: 'props.align_end',
+        '': 'default'
+    };
+</script>
+
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
     import { alignDown, alignLeft, alignRight, alignUp, clear } from '../../utils/keybinder/shortcuts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Select from '../Select.svelte';
+    import { APP_CTX, type AppContext } from '../../ctx/appContext';
 
     export let horizontal: string | undefined;
     export let vertical: string | undefined;
@@ -19,20 +49,12 @@
     export let parentOrientation: string | undefined = undefined;
     export let disabled = false;
 
+    const { state, directionSelector } = getContext<AppContext>(APP_CTX);
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
 
-    const dispatch = createEventDispatcher();
+    const { direction } = state;
 
-    const HORIZONTAL = ['left', 'center', 'right'];
-    const VERTICAL = ['top', 'center', 'bottom'];
-    const TEXT_MAP: Record<string, string> = {
-        left: 'props.align_left',
-        center: 'props.align_center',
-        right: 'props.align_right',
-        top: 'props.align_top',
-        bottom: 'props.align_bottom',
-        '': 'default'
-    };
+    const dispatch = createEventDispatcher();
 
     $: isHorizontalDisabled = isSelfAlign && (
         !width ||
@@ -46,7 +68,11 @@
         (parentType === 'gallery' && parentOrientation === 'vertical')
     );
 
-    $: horizontalList = isHorizontalDisabled ? ['left'] : HORIZONTAL;
+    // eslint-disable-next-line no-nested-ternary
+    $: horizontalList = isHorizontalDisabled ?
+        [directionSelector ? 'start' : 'left'] :
+        // eslint-disable-next-line no-nested-ternary
+        (directionSelector ? ($direction === 'ltr' ? HORIZONTAL_LOGICAL_LTR : HORIZONTAL_LOGICAL_RTL) : HORIZONTAL);
     $: verticalList = isVerticalDisabled ? ['top'] : VERTICAL;
 
     $: horizontalSelectValue = horizontal || '';
@@ -128,7 +154,7 @@
 </script>
 
 <div
-    class="alignment"
+    class="alignment alignment_direction_{$direction}"
     class:alignment_disabled={disabled}
     class:alignment_match_horizontal={isHorizontalDisabled}
     class:alignment_match_vertical={isVerticalDisabled}
@@ -148,7 +174,10 @@
                 <div
                     class="alignment__val alignment__val_horizontal_{horizontalItem} alignment__val_vertical_{verticalItem}"
                     class:alignment__val_selected={
-                        horizontal === horizontalItem &&
+                        (
+                            horizontal === horizontalItem ||
+                            horizontal && horizontalItem === HORIZONTAL_ALIGN_NORMALIZE[$direction][horizontal]
+                        ) &&
                         vertical === verticalItem &&
                         !(isHorizontalDisabled && isVerticalDisabled)
                     }
@@ -180,11 +209,17 @@
                             text: $l10n(TEXT_MAP.left),
                             value: 'left'
                         }, {
+                            text: $l10n(TEXT_MAP.start),
+                            value: 'start'
+                        }, {
                             text: $l10n(TEXT_MAP.center),
                             value: 'center'
                         }, {
                             text: $l10n(TEXT_MAP.right),
                             value: 'right'
+                        }, {
+                            text: $l10n(TEXT_MAP.end),
+                            value: 'end'
                         }, {
                             text: $l10n(TEXT_MAP['']),
                             value: ''
@@ -232,9 +267,9 @@
             <div
                 class="alignment__preview alignment__preview_{orientation}"
                 class:alignment__preview_showed={isHovered}
-                class:alignment__preview_halign_left={horizontalAlignHovered === 'left'}
+                class:alignment__preview_halign_left={horizontalAlignHovered === 'left' || horizontalAlignHovered === 'start' && $direction === 'ltr' || horizontalAlignHovered === 'end' && $direction === 'rtl'}
                 class:alignment__preview_halign_center={horizontalAlignHovered === 'center'}
-                class:alignment__preview_halign_right={horizontalAlignHovered === 'right'}
+                class:alignment__preview_halign_right={horizontalAlignHovered === 'right' || horizontalAlignHovered === 'end' && $direction === 'ltr' || horizontalAlignHovered === 'start' && $direction === 'rtl'}
                 class:alignment__preview_valign_top={verticalAlignHovered === 'top'}
                 class:alignment__preview_valign_center={verticalAlignHovered === 'center'}
                 class:alignment__preview_valign_bottom={verticalAlignHovered === 'bottom'}
@@ -348,7 +383,9 @@
         height: calc(100% - 14px);
     }
 
-    .alignment__val_horizontal_left {
+    .alignment__val_horizontal_left,
+    .alignment_direction_ltr .alignment__val_horizontal_start ,
+    .alignment_direction_rtl .alignment__val_horizontal_end {
         justify-content: start;
     }
 
@@ -356,7 +393,9 @@
         justify-content: center;
     }
 
-    .alignment__val_horizontal_right {
+    .alignment__val_horizontal_right,
+    .alignment_direction_ltr .alignment__val_horizontal_end ,
+    .alignment_direction_rtl .alignment__val_horizontal_start {
         justify-content: end;
     }
 

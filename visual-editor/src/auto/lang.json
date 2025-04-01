@@ -39,6 +39,8 @@
         "props.align_right": "Справа",
         "props.align_top": "Сверху",
         "props.align_bottom": "Снизу",
+        "props.align_start": "В начале",
+        "props.align_end": "В конце",
         "props.alpha": "Непрозрачность",
         "props.rotation": "Поворот",
         "props.insets": "Отступы",
@@ -114,6 +116,7 @@
         "props.select_options": "Список опций",
         "props.is_enabled": "Включён",
         "props.on_color": "Цвет включённого состояния",
+        "props.high_priority_preview_show": "Ускоренный предпросмотр",
         "actions_count": [
             "%s действие",
             "%s действия",
@@ -164,6 +167,7 @@
         "redo": "Вернуть",
         "previewSize": "Размер окна предварительного просмотра",
         "previewLang": "Выбранный язык для отображения",
+        "previewDirection": "Направление ввода текст",
         "components.image": "Картинка",
         "components.gif": "Gif-картинка",
         "components.text": "Текст",
@@ -233,6 +237,7 @@
         "file.insert_image": "Вставить изображение",
         "file.too_big": "Слишком большой файл",
         "file.generate_from_video": "Сгенерировать из видео",
+        "file.generate_from_lottie": "Сгенерировать из анимации",
         "link.placeholder": "Введите адрес ссылки",
         "textStyle": "Стилизация",
         "commands.add_component": "Добавление компонента",
@@ -248,6 +253,7 @@
         "commands.change_custom_variables": "Изменение переменных",
         "commands.change_timers": "Изменение таймеров",
         "tankerTitle": "Танкер",
+        "perThemeProps": "Тема",
         "tankerEnterValue": "Введите ключ",
         "tankerKey": "Ключ:",
         "tankerDialogTitle": "Введите ключ из танкера",
@@ -297,7 +303,9 @@
         "timersTickInterval": "Периодический интервал",
         "timersValueVariable": "Переменная",
         "timersTickActions": "Периодические действия",
-        "timersEndActions": "Действия при окончании"
+        "timersEndActions": "Действия при окончании",
+        "rtl.switchToRtl": "Включить написание справа-налево",
+        "rtl.switchToLTR": "Включить написание слева-направо"
     },
     "en": {
         "collapse": "Collapse",
@@ -339,6 +347,8 @@
         "props.align_right": "Right",
         "props.align_top": "Top",
         "props.align_bottom": "Bottom",
+        "props.align_start": "Start",
+        "props.align_end": "End",
         "props.alpha": "Alpha",
         "props.rotation": "Rotation",
         "props.insets": "Margins and paddings",
@@ -414,6 +424,7 @@
         "props.select_options": "Select options",
         "props.is_enabled": "Is enabled",
         "props.on_color": "Color of the enabled state",
+        "props.high_priority_preview_show": "Faster preview",
         "actions_count": [
             "%s action",
             "%s actions",
@@ -464,6 +475,7 @@
         "redo": "Redo",
         "previewSize": "Preview size",
         "previewLang": "Preview language",
+        "previewDirection": "Text direction",
         "components.image": "Image",
         "components.gif": "Gif-image",
         "components.text": "Text",
@@ -533,6 +545,7 @@
         "file.insert_image": "Insert image",
         "file.too_big": "The file is too large",
         "file.generate_from_video": "Generate from video",
+        "file.generate_from_lottie": "Generate from animation",
         "link.placeholder": "Input link address",
         "textStyle": "Styles",
         "commands.add_component": "Component addition",
@@ -548,6 +561,7 @@
         "commands.change_custom_variables": "Change variables",
         "commands.change_timers": "Change timers",
         "tankerTitle": "Tanker",
+        "perThemeProps": "Theme",
         "tankerEnterValue": "Input a key",
         "tankerKey": "Key:",
         "tankerDialogTitle": "Enter tanker key",
@@ -597,6 +611,8 @@
         "timersTickInterval": "Tick interval",
         "timersValueVariable": "Value variable",
         "timersTickActions": "Tick actions",
-        "timersEndActions": "End actions"
+        "timersEndActions": "End actions",
+        "rtl.switchToRTL": "Turn on RTL layout",
+        "rtl.switchToLTR": "Turn on LTR layout"
     }
 }

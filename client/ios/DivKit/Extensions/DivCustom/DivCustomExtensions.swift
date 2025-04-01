@@ -4,6 +4,7 @@ import VGSL
 
 extension DivCustom: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    let context = modifiedContextParentPath(context)
     let children = items?.makeBlocks(
       context: context
     ) ?? []

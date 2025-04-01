@@ -14,13 +14,16 @@ import androidx.core.view.LayoutInflaterCompat
 import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.DivDataTag
 import com.yandex.div.R
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
+import kotlin.jvm.internal.DefaultConstructorMarker
 
 /**
  * Context to be used to create instance of [Div2View]
@@ -46,6 +49,10 @@ class Div2Context @MainThread private constructor(
     internal val lifecycleOwner: LifecycleOwner? = null
 ) : ContextWrapper(baseContext) {
 
+    @Deprecated("Do not use this property")
+    @InternalApi
+    val globalVariableController by lazy { GlobalVariableController(div2Component.divVariableController) }
+
     val divVariableController: DivVariableController
         get() = div2Component.divVariableController
 
@@ -63,6 +70,7 @@ class Div2Context @MainThread private constructor(
 
     private var inflater: LayoutInflater? = null
 
+    @JvmOverloads
     constructor(
         baseContext: ContextThemeWrapper,
         configuration: DivConfiguration,
@@ -80,6 +88,16 @@ class Div2Context @MainThread private constructor(
             .build(),
         lifecycleOwner
     )
+
+    @Deprecated("Do not use this constructor")
+    @InternalApi
+    constructor(
+        baseContext: ContextThemeWrapper,
+        configuration: DivConfiguration,
+        @StyleRes themeId: Int,
+        mask: Int,
+        marker: DefaultConstructorMarker?
+    ) : this(baseContext, configuration, themeId, lifecycleOwner = null)
 
     init {
         div2Component.divCreationTracker.onContextCreationFinished()
@@ -127,6 +145,13 @@ class Div2Context @MainThread private constructor(
         if (flags and RESET_VISIBILITY_COUNTERS != 0) {
             div2Component.visibilityActionDispatcher.reset(tags)
         }
+    }
+
+    /**
+     * @return `true` if at least one tooltip was cancelled, `false` otherwise.
+     */
+    fun cancelTooltips(): Boolean {
+        return div2Component.tooltipController.cancelAllTooltips()
     }
 
     fun childContext(baseContext: ContextThemeWrapper): Div2Context {

@@ -2,11 +2,13 @@ package com.yandex.div.core;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.variables.DivVariableController;
+import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.image.DivImageLoaderWrapper;
@@ -396,6 +398,12 @@ public class DivConfiguration {
         return mDivVariableController;
     }
 
+    @Deprecated
+    @InternalApi
+    public GlobalVariableController getGlobalVariableController() {
+        return new GlobalVariableController(mDivVariableController);
+    }
+
     public static class Builder {
 
         @NonNull
@@ -515,6 +523,7 @@ public class DivConfiguration {
         }
 
         @NonNull
+        @Deprecated // Use DivPlayerFactory to setup preloader
         public Builder divPlayerPreloader(@NonNull DivPlayerPreloader divPlayerPreloader) {
             mDivPlayerPreloader = divPlayerPreloader;
             return this;
@@ -676,8 +685,15 @@ public class DivConfiguration {
         }
 
         @NonNull
-        public Builder divVariableController(DivVariableController divVariableController) {
-            mDivVariableController = divVariableController;
+        public Builder divVariableController(DivVariableController variableController) {
+            mDivVariableController = variableController;
+            return this;
+        }
+
+        @Deprecated
+        @InternalApi
+        @NonNull
+        public Builder globalVariableController(GlobalVariableController variableController) {
             return this;
         }
 
@@ -690,6 +706,10 @@ public class DivConfiguration {
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
+            DivPlayerFactory divPlayerFactory =
+                    mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory;
+            DivPlayerPreloader divPlayerPreloader =
+                    mDivPlayerPreloader == null ? divPlayerFactory.makePreloader() : mDivPlayerPreloader;
             return new DivConfiguration(
                     new DivImageLoaderWrapper(mImageLoader),
                     mActionHandler == null ? new DivActionHandler() : mActionHandler,
@@ -701,8 +721,8 @@ public class DivConfiguration {
                     mDivVisibilityChangeListeners,
                     mDivCustomContainerViewAdapter == null ? DivCustomContainerViewAdapter.STUB
                             : mDivCustomContainerViewAdapter,
-                    mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory,
-                    mDivPlayerPreloader == null ? DivPlayerPreloader.STUB : mDivPlayerPreloader,
+                    divPlayerFactory,
+                    divPlayerPreloader,
                     mTooltipRestrictor == null ? DivTooltipRestrictor.STUB : mTooltipRestrictor,
                     mExtensionHandlers,
                     mDivDownloader == null ? DivDownloader.STUB : mDivDownloader,

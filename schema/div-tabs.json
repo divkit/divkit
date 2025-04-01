@@ -170,7 +170,8 @@
               "$description": "translations.json#/div_tabs_tab_title_style_animation_type",
               "platforms": [
                 "android",
-                "ios"
+                "ios",
+                "web"
               ]
             },
             "animation_duration": {

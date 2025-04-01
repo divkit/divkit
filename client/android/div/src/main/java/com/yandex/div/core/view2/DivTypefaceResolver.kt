@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.divs.getTypeface
 import com.yandex.div.core.view2.divs.getTypefaceValue
 import com.yandex.div2.DivFontWeight
@@ -15,7 +16,17 @@ internal class DivTypefaceResolver @Inject constructor(
     private val typefaceProviders: Map<String, DivTypefaceProvider>,
     private val defaultTypeface: DivTypefaceProvider,
 ) {
-    internal fun getTypeface(fontFamily: String?, fontWeight: DivFontWeight?, fontWeightValue: Long?): Typeface {
+
+    internal fun getTypeface(fontFamily: String?, fontWeightValue: Int): Typeface {
+        val typefaceProvider = if (fontFamily == null) {
+            defaultTypeface
+        } else {
+            typefaceProviders[fontFamily] ?: defaultTypeface
+        }
+        return getTypeface(fontWeightValue, typefaceProvider)
+    }
+
+    internal fun getTypeface(fontFamily: String?, fontWeight: DivFontWeight?, fontWeightValue: Int?): Typeface {
         val typefaceProvider = if (fontFamily == null) {
             defaultTypeface
         } else {
@@ -23,4 +34,12 @@ internal class DivTypefaceResolver @Inject constructor(
         }
         return getTypeface(getTypefaceValue(fontWeight, fontWeightValue), typefaceProvider)
     }
+}
+
+internal fun DivTypefaceResolver.getTypeface(
+    fontFamily: String?,
+    fontWeight: DivFontWeight?,
+    fontWeightValue: Long?
+): Typeface {
+    return getTypeface(fontFamily, fontWeight, fontWeightValue?.toIntSafely())
 }

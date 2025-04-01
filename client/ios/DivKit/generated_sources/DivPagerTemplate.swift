@@ -5,9 +5,9 @@ import Serialization
 import VGSL
 
 public final class DivPagerTemplate: TemplateValue, Sendable {
-  public typealias Orientation = DivPager.Orientation
+  public typealias ItemAlignment = DivPager.ItemAlignment
 
-  public typealias ScrollAxisAlignment = DivPager.ScrollAxisAlignment
+  public typealias Orientation = DivPager.Orientation
 
   public static let type: String = "pager"
   public let parent: String?
@@ -19,6 +19,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
+  public let crossAxisAlignment: Field<Expression<ItemAlignment>>? // default value: start
   public let defaultItem: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
   public let extensions: Field<[DivExtensionTemplate]>?
@@ -39,7 +40,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
   public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
-  public let scrollAxisAlignment: Field<Expression<ScrollAxisAlignment>>? // default value: center
+  public let scrollAxisAlignment: Field<Expression<ItemAlignment>>? // default value: center
   public let selectedActions: Field<[DivActionTemplate]>?
   public let tooltips: Field<[DivTooltipTemplate]>?
   public let transform: Field<DivTransformTemplate>?
@@ -65,6 +66,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
+      crossAxisAlignment: dictionary.getOptionalExpressionField("cross_axis_alignment"),
       defaultItem: dictionary.getOptionalExpressionField("default_item"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
@@ -112,6 +114,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
+    crossAxisAlignment: Field<Expression<ItemAlignment>>? = nil,
     defaultItem: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
@@ -132,7 +135,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     restrictParentScroll: Field<Expression<Bool>>? = nil,
     reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
-    scrollAxisAlignment: Field<Expression<ScrollAxisAlignment>>? = nil,
+    scrollAxisAlignment: Field<Expression<ItemAlignment>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
@@ -156,6 +159,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
+    self.crossAxisAlignment = crossAxisAlignment
     self.defaultItem = defaultItem
     self.disappearActions = disappearActions
     self.extensions = extensions
@@ -201,6 +205,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
+    let crossAxisAlignmentValue = { parent?.crossAxisAlignment?.resolveOptionalValue(context: context) ?? .noValue }()
     let defaultItemValue = { parent?.defaultItem?.resolveOptionalValue(context: context, validator: ResolvedValue.defaultItemValidator) ?? .noValue }()
     let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let extensionsValue = { parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -244,6 +249,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      crossAxisAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_axis_alignment", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -296,6 +302,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
       columnSpan: { columnSpanValue.value }(),
+      crossAxisAlignment: { crossAxisAlignmentValue.value }(),
       defaultItem: { defaultItemValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       extensions: { extensionsValue.value }(),
@@ -346,6 +353,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
+    var crossAxisAlignmentValue: DeserializationResult<Expression<DivPager.ItemAlignment>> = { parent?.crossAxisAlignment?.value() ?? .noValue }()
     var defaultItemValue: DeserializationResult<Expression<Int>> = { parent?.defaultItem?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
@@ -366,7 +374,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = { parent?.restrictParentScroll?.value() ?? .noValue }()
     var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
     var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
-    var scrollAxisAlignmentValue: DeserializationResult<Expression<DivPager.ScrollAxisAlignment>> = { parent?.scrollAxisAlignment?.value() ?? .noValue }()
+    var scrollAxisAlignmentValue: DeserializationResult<Expression<DivPager.ItemAlignment>> = { parent?.scrollAxisAlignment?.value() ?? .noValue }()
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
@@ -423,6 +431,11 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
         _ = {
           if key == "column_span" {
            columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
+          }
+        }()
+        _ = {
+          if key == "cross_axis_alignment" {
+           crossAxisAlignmentValue = deserialize(__dictValue).merged(with: crossAxisAlignmentValue)
           }
         }()
         _ = {
@@ -636,6 +649,11 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.crossAxisAlignment?.link {
+           crossAxisAlignmentValue = crossAxisAlignmentValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.defaultItem?.link {
            defaultItemValue = defaultItemValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.defaultItemValidator) })
           }
@@ -846,6 +864,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      crossAxisAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_axis_alignment", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -898,6 +917,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
       columnSpan: { columnSpanValue.value }(),
+      crossAxisAlignment: { crossAxisAlignmentValue.value }(),
       defaultItem: { defaultItemValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       extensions: { extensionsValue.value }(),
@@ -953,6 +973,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
+      crossAxisAlignment: crossAxisAlignment ?? mergedParent.crossAxisAlignment,
       defaultItem: defaultItem ?? mergedParent.defaultItem,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
@@ -1003,6 +1024,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
+      crossAxisAlignment: merged.crossAxisAlignment,
       defaultItem: merged.defaultItem,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),

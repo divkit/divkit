@@ -7,6 +7,8 @@ import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivPager.ItemAlignment
+import kotlin.math.roundToInt
 
 internal class DivPagerPaddingsHolder(
     paddings: DivEdgeInsets?,
@@ -14,6 +16,7 @@ internal class DivPagerPaddingsHolder(
     parent: View,
     private val metrics: DisplayMetrics,
     isHorizontal: Boolean,
+    alignment: ItemAlignment,
 ) {
 
     private val hasRelativePaddings = paddings?.start != null || paddings?.end != null
@@ -47,4 +50,24 @@ internal class DivPagerPaddingsHolder(
         parent.isLayoutRtl() -> left
         else -> right
     }
+
+    val alignedLeft = if (!isHorizontal ||
+        (alignment == ItemAlignment.START && !parent.isLayoutRtl()) ||
+        (alignment == ItemAlignment.END && parent.isLayoutRtl())) {
+        left.roundToInt()
+    } else {
+        null
+    }
+
+    val alignedTop = if (isHorizontal || alignment == ItemAlignment.START) top.roundToInt() else null
+
+    val alignedRight = if (!isHorizontal ||
+        (alignment == ItemAlignment.START && parent.isLayoutRtl()) ||
+        (alignment == ItemAlignment.END && !parent.isLayoutRtl())) {
+        right.roundToInt()
+    } else {
+        null
+    }
+
+    val alignedBottom = if (isHorizontal || alignment == ItemAlignment.END) bottom.roundToInt() else null
 }

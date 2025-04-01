@@ -1,8 +1,6 @@
 package com.yandex.div.core.view2.animations
 
 import android.animation.Animator
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
@@ -22,7 +20,6 @@ internal class DivAnimatorController @Inject constructor(
 ) {
 
     private val runningAnimators = mutableMapOf<Pair<String, String>, Animator>()
-    private val handler = Handler(Looper.getMainLooper())
 
     fun startAnimator(
         scopeId: String,
@@ -47,7 +44,8 @@ internal class DivAnimatorController @Inject constructor(
     private fun findAnimator(view: View, animatorId: String): DivAnimator? {
         return when (view) {
             is DivHolderView<*> -> {
-                findAnimator(view.div?.animators, animatorId) ?: (view.parent as? View)?.let { findAnimator(it, animatorId) }
+                findAnimator(view.div?.value()?.animators, animatorId)
+                    ?: (view.parent as? View)?.let { findAnimator(it, animatorId) }
             }
             is Div2View -> {
                 divView.logWarning(RuntimeException("Unable to find animator with id '$animatorId'"))

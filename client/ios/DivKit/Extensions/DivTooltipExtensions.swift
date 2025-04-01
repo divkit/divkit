@@ -18,11 +18,34 @@ extension DivTooltip {
       return await tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
     }
 
+    let mode: BlockTooltip.Mode = switch mode {
+    case .divTooltipModeModal:
+      .modal
+    case .divTooltipModeNonModal:
+      .nonModal
+    }
+
     return try BlockTooltip(
-      id: id,
       // Legacy behavior. Views should be created with tooltipViewFactory.
       block: div.value.makeBlock(context: context),
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
+      params: BlockTooltipParams(
+        id: id,
+        mode: mode,
+        duration: TimeInterval(milliseconds: resolveDuration(expressionResolver)),
+        closeByTapOutside: resolveCloseByTapOutside(expressionResolver),
+        tapOutsideActions: tapOutsideActions?.uiActions(context: context) ?? [],
+        backgroundAccessibilityDescription: resolveBackgroundAccessibilityDescription(
+          expressionResolver
+        ),
+        animationIn: animationIn?.makeTransitioningAnimations(
+          for: .appearing,
+          with: expressionResolver
+        ),
+        animationOut: animationOut?.makeTransitioningAnimations(
+          for: .disappearing,
+          with: expressionResolver
+        )
+      ),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
@@ -56,7 +79,7 @@ extension [DivTooltip]? {
       context.errorsStorage.add(
         DivBlockModelingError(
           "Tooltip can not host another tooltips",
-          path: context.parentPath
+          path: context.path
         )
       )
       return []
