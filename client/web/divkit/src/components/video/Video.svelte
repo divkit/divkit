@@ -45,6 +45,7 @@
     let elapsedVariableUnsubscriber: Unsubscriber | undefined;
     let providedVideoTemplate = '';
     let customVideoInstance: VideoPlayerInstance | undefined;
+    let shouldUseVideoProvider = Boolean(videoPlayerProvider);
 
     if (import.meta.env.SSR && videoPlayerProvider) {
         const provider = videoPlayerProvider as VideoPlayerProviderServer;
@@ -54,6 +55,8 @@
             const data = calcVideoProviderData(componentContext.json);
             if (data) {
                 providedVideoTemplate = provider.template(data);
+            } else {
+                shouldUseVideoProvider = false;
             }
         }
     }
@@ -103,6 +106,7 @@
         poster = undefined;
         scale = 'fit';
         isAbsolute = false;
+        shouldUseVideoProvider = Boolean(videoPlayerProvider);
     }
 
     $: if (componentContext.json && customVideoInstance && (
@@ -284,6 +288,8 @@
                 const res = (videoPlayerProvider as VideoPlayerProviderClient).instance(videoParentElem, data);
                 if (res) {
                     customVideoInstance = res;
+                } else {
+                    shouldUseVideoProvider = false;
                 }
             }
         }
@@ -317,7 +323,7 @@
     >
         {#if aspectPaddingBottom !== '0'}
             <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
-                {#if videoPlayerProvider}
+                {#if shouldUseVideoProvider}
                     <div class={css.video__container} bind:this={videoParentElem}>
                         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                         {@html providedVideoTemplate}
@@ -349,7 +355,7 @@
                 {/if}
             </div>
         {:else}
-            {#if videoPlayerProvider}
+            {#if shouldUseVideoProvider}
                 <div class={css.video__container} bind:this={videoParentElem}>
                     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                     {@html providedVideoTemplate}
