@@ -291,4 +291,76 @@ extension TextInputBlock: ElementFocusUpdating {
 
 extension TextInputBlock: PathHolder {}
 
+extension TextInputBlock {
+  public func modifying(
+    widthTrait: LayoutTrait? = nil,
+    heightTrait: LayoutTrait? = nil,
+    hint: NSAttributedString? = nil,
+    textValue: Binding<String>? = nil,
+    rawTextValue: Binding<String>? = nil,
+    textTypo: Typo? = nil,
+    multiLineMode: Bool? = nil,
+    inputType: InputType? = nil,
+    accessoryView: ViewType? = nil,
+    autocapitalizationType: AutocapitalizationType? = nil,
+    enterKeyType: EnterKeyType? = nil,
+    highlightColor: Color? = nil,
+    maxVisibleLines: Int? = nil,
+    selectAllOnFocus: Bool? = nil,
+    maskValidator: MaskValidator? = nil,
+    path: UIElementPath? = nil,
+    isFocused: Bool? = nil,
+    onFocusActions: [UserInterfaceAction]? = nil,
+    onBlurActions: [UserInterfaceAction]? = nil,
+    enterKeyActions: [UserInterfaceAction]? = nil,
+    parentScrollView: ScrollView? = nil,
+    filters: [TextInputFilter]? = nil,
+    validators: [TextInputValidator]? = nil,
+    layoutDirection: UserInterfaceLayoutDirection? = nil,
+    textAlignmentHorizontal: TextAlignmentHorizontal? = nil,
+    textAlignmentVertical: TextAlignmentVertical? = nil,
+    paddings: EdgeInsets? = nil,
+    isEnabled: Bool? = nil,
+    maxLength: Int? = nil,
+    shouldClearFocus: Variable<Bool>? = nil,
+    autocorrection: Bool? = nil,
+    isSecure: Bool? = nil
+  ) -> TextInputBlock {
+    TextInputBlock(
+      widthTrait: widthTrait ?? self.widthTrait,
+      heightTrait: heightTrait ?? self.heightTrait,
+      hint: hint ?? self.hint,
+      textValue: textValue ?? self.textValue,
+      rawTextValue: rawTextValue ?? self.rawTextValue,
+      textTypo: textTypo ?? self.textTypo,
+      multiLineMode: multiLineMode ?? self.multiLineMode,
+      inputType: inputType ?? self.inputType,
+      accessoryView: accessoryView ?? self.accessoryView,
+      autocapitalizationType: autocapitalizationType ?? self.autocapitalizationType,
+      enterKeyType: enterKeyType ?? self.enterKeyType,
+      highlightColor: highlightColor ?? self.highlightColor,
+      maxVisibleLines: maxVisibleLines ?? self.maxVisibleLines,
+      selectAllOnFocus: selectAllOnFocus ?? self.selectAllOnFocus,
+      maskValidator: maskValidator ?? self.maskValidator,
+      path: path ?? self.path,
+      isFocused: isFocused ?? self.isFocused,
+      onFocusActions: onFocusActions ?? self.onFocusActions,
+      onBlurActions: onBlurActions ?? self.onBlurActions,
+      enterKeyActions: enterKeyActions ?? self.enterKeyActions,
+      parentScrollView: parentScrollView ?? self.parentScrollView,
+      filters: filters ?? self.filters,
+      validators: validators ?? self.validators,
+      layoutDirection: layoutDirection ?? self.layoutDirection,
+      textAlignmentHorizontal: textAlignmentHorizontal ?? self.textAlignmentHorizontal,
+      textAlignmentVertical: textAlignmentVertical ?? self.textAlignmentVertical,
+      paddings: paddings ?? self.paddings,
+      isEnabled: isEnabled ?? self.isEnabled,
+      maxLength: maxLength ?? self.maxLength,
+      shouldClearFocus: shouldClearFocus ?? self.shouldClearFocus,
+      autocorrection: autocorrection ?? self.autocorrection,
+      isSecure: isSecure ?? self.isSecure
+    )
+  }
+}
+
 private let defaultTextForMeasuring = "A"

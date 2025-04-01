@@ -37,6 +37,7 @@ enum AppComponents {
         GestureExtensionHandler(),
         MarkdownExtensionHandler(),
         ShineExtensionHandler(),
+        InputAutocorrectionExtensionHandler()
       ],
       flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
       fontProvider: fontProvider,
