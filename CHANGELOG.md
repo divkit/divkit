@@ -1,3 +1,22 @@
+## 31.10.0
+
+# Android Client:
+* Fixed preloading in case when tree includes `item-builder`s or local variables.
+* `Indicator` now attaches to the nearest `pager` if no `pager_id` is specified.
+
+# iOS Client:
+* Added `InputAutocorrectionExtensionHandler`.
+* Added support for `capture_focus_on_action` property.
+* Added support for `clip_to_bounds` property in `div-state`.
+
+# Web Client:
+* Added support for the `color_map` in `radial_gradient`.
+* Added support for the `scroll_axis_alignment` in `pager`.
+* Fixed an issue with an incorrect default state in `pager` when `default_item` is provided.
+* The case when the `videoPlayerProvider` does not return anything is better handled.
+* The elements in the `pager` now use the `paddings` values when snapping the scroll.
+
+
 ## 31.9.0
 
 # Android Client:

@@ -1,3 +1,12 @@
+## 31.10.0 (April 7, 2025)
+
+* Added support for the `color_map` in `radial_gradient`.
+* Added support for the `scroll_axis_alignment` in `pager`.
+* Fixed an issue with an incorrect default state in `pager` when `default_item` is provided.
+* The case when the `videoPlayerProvider` does not return anything is better handled.
+* The elements in the `pager` now use the `paddings` values when snapping the scroll.
+
+
 ## 31.9.0 (March 31, 2025)
 
 * Added support for `functions` in the `card` (div data). Previously, they were supported only in components.
