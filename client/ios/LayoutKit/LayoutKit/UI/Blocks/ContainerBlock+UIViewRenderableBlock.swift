@@ -37,6 +37,7 @@ extension ContainerBlock {
       clipContent: clipContent,
       accessibility: accessibilityElement
     )
+
     view.configure(
       model: model,
       observer: observer,
@@ -74,7 +75,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
   // layoutSubivews is called multiple times for same view size and model, so we optimize out
   // redundant calls
   private var modelAndLastLayoutSize: (model: Model?, lastLayoutSize: CGSize?)
-  private var preventLayout = false
+  private var preventLayoutAndConfig = false
 
   private var model: Model! {
     modelAndLastLayoutSize.model
@@ -90,9 +91,9 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
-    guard
-      model != modelAndLastLayoutSize.model ||
-      observer !== self.observer
+    guard model != modelAndLastLayoutSize.model ||
+      observer !== self.observer,
+      !preventLayoutAndConfig
     else {
       return
     }
@@ -105,7 +106,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
 
     // Configuring views may lead to unpredictable side effects,
     // including view hierarchy layout.
-    preventLayout = true
+    preventLayoutAndConfig = true
     blockViews = blockViews.reused(
       with: model.children.map(\.content),
       attachTo: self,
@@ -113,7 +114,8 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
       overscrollDelegate: overscrollDelegate,
       renderingDelegate: renderingDelegate
     )
-    preventLayout = false
+
+    preventLayoutAndConfig = false
 
     setNeedsLayout()
 
@@ -127,7 +129,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
   }
 
   override func layoutSubviews() {
-    guard !preventLayout else { return }
+    guard !preventLayoutAndConfig else { return }
 
     super.layoutSubviews()
 

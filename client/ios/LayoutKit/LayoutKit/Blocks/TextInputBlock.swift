@@ -249,7 +249,8 @@ extension TextInputBlock: LayoutCachingDefaultImpl {}
 extension TextInputBlock: ElementStateUpdatingDefaultImpl {}
 extension TextInputBlock: ElementFocusUpdating {
   public func updated(path: UIElementPath, isFocused: Bool) throws -> TextInputBlock {
-    if path != self.path {
+    guard path == self.path,
+          isFocused != self.isFocused else {
       return self
     }
 

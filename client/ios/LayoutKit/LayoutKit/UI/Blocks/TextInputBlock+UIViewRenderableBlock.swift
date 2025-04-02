@@ -2,7 +2,9 @@ import UIKit
 import VGSL
 
 extension TextInputBlock {
-  public static func makeBlockView() -> BlockView { TextInputBlockView() }
+  public static func makeBlockView() -> BlockView {
+    TextInputBlockView()
+  }
 
   public func configureBlockView(
     _ view: BlockView,
@@ -573,6 +575,8 @@ extension TextInputBlockView {
   }
 
   private func onFocus() {
+    guard !isInputFocused else { return }
+
     onFocusActions.perform(sendingFrom: self)
     isInputFocused = true
     guard let path else { return }

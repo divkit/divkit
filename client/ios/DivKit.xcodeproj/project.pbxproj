@@ -278,6 +278,7 @@
 		8CF91B042D0AE4ED0082FDC1 /* MockDivActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */; };
 		8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD4C9D2B2C5B780092814C /* Theme.swift */; };
 		982A7F142C9C08F30081DE74 /* PagerViewLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982A7F132C9C08F30081DE74 /* PagerViewLayoutTests.swift */; };
+		9860E7E72D9C326E00F93B48 /* TextInputBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9860E7E62D9C325B00F93B48 /* TextInputBlockTests.swift */; };
 		986F579A2CD68E8400990A2A /* TooltipsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986F57992CD68E8400990A2A /* TooltipsUITests.swift */; };
 		986F579C2CD68E8400990A2A /* AppLaunchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */; };
 		98AF8DD62CC97CF600DE1B58 /* BlockTooltipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */; };
@@ -642,6 +643,7 @@
 		8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivActionHandler.swift; sourceTree = "<group>"; };
 		8CFD4C9D2B2C5B780092814C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		982A7F132C9C08F30081DE74 /* PagerViewLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagerViewLayoutTests.swift; sourceTree = "<group>"; };
+		9860E7E62D9C325B00F93B48 /* TextInputBlockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputBlockTests.swift; sourceTree = "<group>"; };
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		986F57992CD68E8400990A2A /* TooltipsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipsUITests.swift; sourceTree = "<group>"; };
 		986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUITests.swift; sourceTree = "<group>"; };
@@ -1378,6 +1380,7 @@
 				431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */,
 				8CF329402875D5C8003F799A /* GalleryBlockTests.swift */,
 				8CF329442875D5C8003F799A /* GridBlockTests.swift */,
+				9860E7E62D9C325B00F93B48 /* TextInputBlockTests.swift */,
 				8CF329492875D5C8003F799A /* LayeredBlockLayoutTests.swift */,
 				8CF3293D2875D5C8003F799A /* LayeredBlockTests.swift */,
 				8CF329452875D5C8003F799A /* PagerBlockTests.swift */,
@@ -2153,6 +2156,7 @@
 				8CF3294B2875D5C8003F799A /* GenericCollectionLayoutTests.swift in Sources */,
 				8CF3294F2875D5C8003F799A /* VisibilityActionPerformersTests.swift in Sources */,
 				8CF3295C2875D5C8003F799A /* SwitchableContainerBlockTests.swift in Sources */,
+				9860E7E72D9C326E00F93B48 /* TextInputBlockTests.swift in Sources */,
 				8CF3295B2875D5C8003F799A /* WrapperBlockTests.swift in Sources */,
 				982A7F142C9C08F30081DE74 /* PagerViewLayoutTests.swift in Sources */,
 				818EB5742A8E289E007F1007 /* BlockErrorExtensions.swift in Sources */,
