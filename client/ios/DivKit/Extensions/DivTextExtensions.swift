@@ -65,6 +65,21 @@ extension DivText: DivBlockModeling {
       typo = typo.shaded(textShadow.typoShadow)
     }
 
+    let truncateMode = resolveTruncate(expressionResolver)
+    let lineBreakMode: LineBreakMode? = switch truncateMode {
+    case .none:
+      .byClipping
+    case .start:
+      .byTruncatingHead
+    case .end:
+      nil
+    case .middle:
+      .byTruncatingMiddle
+    }
+    if let lineBreakMode {
+      typo = typo.with(lineBreakMode: lineBreakMode)
+    }
+
     let attributedString = makeAttributedString(
       text: text.value as CFString,
       typo: typo,
