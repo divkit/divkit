@@ -155,17 +155,6 @@ internal class SpannedTextBuilder @Inject constructor(
             spannedText.setSpan(LineMetricsSpan(), 0, spannedText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
-        val hasAdditionalRanges = ranges?.any { range ->
-            range.actions != null
-                || range.background != null
-                || range.border != null
-        } ?: false
-
-        if (spans.isEmpty() && sortedImages.isEmpty() && !hasAdditionalRanges) {
-            textConsumer?.invoke(spannedText)
-            return spannedText
-        }
-
         (textView as? DivLineHeightTextView)?.apply {
             clearImageSpans()
             textRoundedBgHelper?.invalidateSpansCache()
@@ -174,6 +163,12 @@ internal class SpannedTextBuilder @Inject constructor(
         spans.forEach { span ->
             addSpan(textView, spannedText, textData, span)
         }
+
+        val hasAdditionalRanges = ranges?.any { range ->
+            range.actions != null
+                || range.background != null
+                || range.border != null
+        } ?: false
 
         if (hasAdditionalRanges) {
             ranges?.forEach { range ->
@@ -184,15 +179,15 @@ internal class SpannedTextBuilder @Inject constructor(
             }
         }
 
-        actions?.let {
-            textView.movementMethod = LinkMovementMethod.getInstance()
-            spannedText.setSpan(
-                PerformActionSpan(bindingContext, it),
-                0,
-                spannedText.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
+        addActionSpan(
+            bindingContext,
+            textView,
+            spannedText,
+            0,
+            spannedText.length,
+            actions,
+            enableClickableSpanSupport = false
+        )
 
         for (index in sortedImages.indices.reversed()) {
             val image = sortedImages[index]
@@ -450,7 +445,8 @@ internal class SpannedTextBuilder @Inject constructor(
         spannedText: Spannable,
         start: Int,
         end: Int,
-        actions: List<DivAction>?
+        actions: List<DivAction>?,
+        enableClickableSpanSupport: Boolean = true,
     ) {
         if (actions.isNullOrEmpty()) return
 
@@ -461,7 +457,9 @@ internal class SpannedTextBuilder @Inject constructor(
             end,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        ViewCompat.enableAccessibleClickableSpanSupport(textView)
+        if (enableClickableSpanSupport) {
+            ViewCompat.enableAccessibleClickableSpanSupport(textView)
+        }
     }
 
     private fun addDecorationSpan(

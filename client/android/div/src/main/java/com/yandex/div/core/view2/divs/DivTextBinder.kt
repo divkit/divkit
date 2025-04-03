@@ -480,7 +480,7 @@ internal class DivTextBinder @Inject constructor(
         resolver: ExpressionResolver,
     ) {
         when (val textGradient = newDiv.textGradient) {
-            null -> Unit
+            null -> paint.shader = null
             is DivTextGradient.Linear -> bindLinearTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
             is DivTextGradient.Radial -> bindRadialTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
         }
@@ -725,7 +725,8 @@ internal class DivTextBinder @Inject constructor(
     ) {
         if (newDiv.text.equalsToConstant(oldDiv?.text)
             && newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight)
-            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)) {
+            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)
+            && newDiv.extensions.compareNullableWith(oldDiv?.extensions) { new, old -> new.id == old.id }) {
             return
         }
 
