@@ -46,6 +46,7 @@
     import type { ComponentContext } from '../../types/componentContext';
     import type { PhoneInputMask } from '../../utils/mask/phoneInputMask';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { wrapError } from '../../utils/wrapError';
@@ -76,6 +77,7 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+    const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
 
     const direction = rootCtx.direction;
 
@@ -173,11 +175,20 @@
     $: jsonValidators = componentContext.getDerivedFromVars(componentContext.json.validators);
     $: jsonFilters = componentContext.getDerivedFromVars(componentContext.json.filters);
 
-    $: if (variable) {
-        hasError = false;
-    } else {
-        hasError = true;
-        componentContext.logError(wrapError(new Error('Missing "text_variable" in "input"')));
+    $: {
+        let newHasError = false;
+
+        if (!variable) {
+            hasError = true;
+            componentContext.logError(wrapError(new Error('Missing "text_variable" in "input"')));
+        } else if (actionCtx.hasAction() || $jsonAccessibility?.mode === 'exclude') {
+            newHasError = true;
+            componentContext.logError(wrapError(new Error('Cannot show "input" inside component with an action or inside accessibility mode=exclude')));
+        }
+
+        if (hasError !== newHasError) {
+            hasError = newHasError;
+        }
     }
 
     function updateMaskData(mask: MaybeMissing<InputMask> | undefined): void {

@@ -11,13 +11,15 @@ import type { Animation } from './animation';
 export type AccessibilityType = 'none' | 'button' | 'image' | 'text' | 'edit_text' |
     'header' | 'tab_bar' | 'list' | 'select' | 'checkbox' | 'radio' | 'auto';
 
+export type AccessibilityMode = 'default' | 'merge' | 'exclude';
+
 export interface Accessibility {
     description?: string;
     type?: AccessibilityType;
     // state_description
     // hint
     is_checked?: BooleanInt;
-    // mode
+    mode?: AccessibilityMode;
 }
 
 export interface TransitionBase {

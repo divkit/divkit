@@ -243,7 +243,7 @@
         let newHasError = false;
 
         if (actionCtx.hasAction()) {
-            componentContext.logError(wrapError(new Error('Cannot show "slider" inside component with action')));
+            componentContext.logError(wrapError(new Error('Cannot show "slider" inside component with an action or inside accessibility mode=exclude')));
             newHasError = true;
         } else if (thumbStyle === DEFAULT_DRAWABLE_STYLE) {
             componentContext.logError(wrapError(new Error('Missing "thumb_style" in slider')));

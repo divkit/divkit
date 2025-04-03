@@ -8,6 +8,7 @@
     import type { DivSelectData } from '../../types/select';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { ACTION_CTX, type ActionCtxValue } from '../../context/action';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
     import { wrapError } from '../../utils/wrapError';
@@ -27,6 +28,7 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+    const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
 
     const direction = rootCtx.direction;
 
@@ -86,11 +88,20 @@
         componentContext.logError(wrapError(new Error('Empty selection "items" in "select"')));
     }
 
-    $: if (variable) {
-        hasError = false;
-    } else {
-        hasError = true;
-        componentContext.logError(wrapError(new Error('Missing "value_variable" in "select"')));
+    $: {
+        let newHasError = false;
+
+        if (!variable) {
+            hasError = true;
+            componentContext.logError(wrapError(new Error('Missing "value_variable" in "select"')));
+        } else if (actionCtx.hasAction() || $jsonAccessibility?.mode === 'exclude') {
+            newHasError = true;
+            componentContext.logError(wrapError(new Error('Cannot show "select" inside component with an action or inside accessibility mode=exclude')));
+        }
+
+        if (hasError !== newHasError) {
+            hasError = newHasError;
+        }
     }
 
     $: {

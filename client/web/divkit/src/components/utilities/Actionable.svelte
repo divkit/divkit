@@ -51,7 +51,7 @@
 
     setContext<ActionCtxValue>(ACTION_CTX, {
         hasAction(): boolean {
-            return Boolean(actionCtx.hasAction() || actions?.length);
+            return Boolean(actionCtx.hasAction() || actions?.length || customAccessibility?.mode === 'exclude');
         }
     });
 
@@ -68,6 +68,11 @@
     let clickTimer: number;
     let role: string | undefined;
     let isChecked: boolean | undefined;
+    let ariaHidden = false;
+
+    $: {
+        ariaHidden = customAccessibility?.mode === 'exclude';
+    }
 
     $: {
         if (Array.isArray(actions) && actions?.length) {
@@ -83,9 +88,9 @@
         }
 
         hasJSAction = Boolean(customAction);
-        if ((href || Array.isArray(actions) && actions?.length) && actionCtx.hasAction()) {
+        if ((href || Array.isArray(actions) && actions?.length) && (actionCtx.hasAction() || ariaHidden)) {
             href = '';
-            componentContext.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element'), {
+            componentContext.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element or inside accessibility mode=exlucde'), {
                 level: 'warn',
                 additional: {
                     actions
@@ -416,6 +421,7 @@
         {style}
         {role}
         aria-checked={isChecked}
+        aria-hidden={ariaHidden || undefined}
         on:click
         on:keydown={onKeydown}
         on:focus

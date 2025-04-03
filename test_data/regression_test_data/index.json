@@ -703,7 +703,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "steps": [
         "Turn on Screen reader",
