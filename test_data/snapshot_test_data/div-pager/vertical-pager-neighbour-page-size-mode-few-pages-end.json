@@ -1,7 +1,8 @@
 {
   "description": "Vertical pager with layout mode 'fixed', scroll_axis_alignment 'end' and few small pages",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "text_page_match_parent_height": {
@@ -89,7 +90,7 @@
               "margins": {
                 "bottom": 20
               },
-              "text": "Pager height = 300\nneighbour_page_width = 100\nitem_spacing = 10\npaddings = 10\nscroll_axis_alignment = end\n\nPager is always scrolled to start"
+              "text": "Pager height = 300\nneighbour_page_width = 210\nitem_spacing = 10\npaddings = 10\nscroll_axis_alignment = end\n\nPager is always scrolled to start"
             },
             {
               "type": "container",

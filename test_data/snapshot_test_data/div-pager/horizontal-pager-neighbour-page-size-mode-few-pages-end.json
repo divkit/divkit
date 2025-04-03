@@ -1,7 +1,8 @@
 {
   "description": "Horizontal pager with layout_mode 'fixed', scroll_axis_alignment 'end' and few small pages",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "title": {
@@ -95,7 +96,7 @@
           "items": [
             {
               "type": "title",
-              "text": "Pager width = 300\nneighbour_page_width = 100\nitem_spacing = 10\npaddings = 10\nscroll_axis_alignment = end",
+              "text": "Pager width = 300\nneighbour_page_width = 210\nitem_spacing = 10\npaddings = 10\nscroll_axis_alignment = end",
               "margins": {
                 "bottom": 20
               }

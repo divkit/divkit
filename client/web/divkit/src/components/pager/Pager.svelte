@@ -251,29 +251,43 @@
         };
     }
 
-    $: gridAuto = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
+    $: gridSizeProp = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
+
+    $: if ($jsonScrollAxisAlignment === 'start' || $jsonScrollAxisAlignment === 'center' || $jsonScrollAxisAlignment === 'end') {
+        scrollAxisAlignment = $jsonScrollAxisAlignment;
+    }
 
     $: {
         if ($jsonLayoutMode?.type === 'fixed') {
-            const paddings = orientation === 'horizontal' ?
+            const paddings = componentContext.json.paddings;
+            const paddingStart = orientation === 'horizontal' ?
                 pxToEmWithUnits(
-                    (($direction === 'ltr' ?
-                        componentContext.json.paddings?.start :
-                        componentContext.json.paddings?.end
-                    ) || componentContext.json.paddings?.left || 0) +
-                    (($direction === 'ltr' ?
-                        componentContext.json.paddings?.end :
-                        componentContext.json.paddings?.start
-                    ) || componentContext.json.paddings?.right || 0)
+                    paddings?.start ||
+                    ($direction === 'ltr' ? paddings?.left : paddings?.right) ||
+                    0
                 ) :
                 pxToEmWithUnits(
-                    (componentContext.json.paddings?.top || 0) +
-                    (componentContext.json.paddings?.bottom || 0)
+                    paddings?.top || 0
                 );
-            const neighbourPageWidth = $jsonLayoutMode.neighbour_page_width?.value;
-            sizeVal = neighbourPageWidth ?
-                `calc(100% + ${paddings} - 2 * ${pxToEmWithUnits(neighbourPageWidth)} - 2 * ${itemSpacing})` :
-                '100%';
+            const paddingEnd = orientation === 'horizontal' ?
+                pxToEmWithUnits(
+                    paddings?.end ||
+                    ($direction === 'ltr' ? paddings?.right : paddings?.left) ||
+                    0
+                ) :
+                pxToEmWithUnits(
+                    paddings?.bottom || 0
+                );
+            const sumPadding = paddingStart + paddingEnd;
+            const neighbourPageWidth = $jsonLayoutMode.neighbour_page_width?.value || 0;
+
+            if (scrollAxisAlignment === 'center') {
+                sizeVal = `calc(100% + ${paddingStart} + ${paddingEnd} - 2 * ${pxToEmWithUnits(neighbourPageWidth)} - 2 * ${itemSpacing})`;
+            } else if (scrollAxisAlignment === 'start') {
+                sizeVal = `calc(100% + ${paddingEnd} - ${pxToEmWithUnits(neighbourPageWidth)} - ${itemSpacing})`;
+            } else {
+                sizeVal = `calc(100% + ${paddingStart} - ${pxToEmWithUnits(neighbourPageWidth)} - ${itemSpacing})`;
+            }
         } else if ($jsonLayoutMode?.type === 'percentage') {
             const pageWidth = $jsonLayoutMode.page_width?.value;
             sizeVal = `${Number(pageWidth)}%`;
@@ -290,14 +304,10 @@
         };
     }
 
-    $: if ($jsonScrollAxisAlignment === 'start' || $jsonScrollAxisAlignment === 'center' || $jsonScrollAxisAlignment === 'end') {
-        scrollAxisAlignment = $jsonScrollAxisAlignment;
-    }
-
     $: style = {
         'grid-gap': itemSpacing,
         padding,
-        [gridAuto]: sizeVal,
+        [gridSizeProp]: sizeVal,
         'scroll-padding-top': scrollPaddings.top ? pxToEm(scrollPaddings.top) : undefined,
         'scroll-padding-right': scrollPaddings.right ? pxToEm(scrollPaddings.right) : undefined,
         'scroll-padding-bottom': scrollPaddings.bottom ? pxToEm(scrollPaddings.bottom) : undefined,

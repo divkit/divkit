@@ -63,15 +63,15 @@
       "items": [
         {
           "type": "text_page_fixed_height",
-          "text": "First page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nLeft padding = 20\nNeighbour page visible part = 40"
+          "text": "First page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nLeft padding = 20\nNeighbour page visible part = 50"
         },
         {
           "type": "text_page_fixed_height",
-          "text": "Middle page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nLeft neighbour = 40\nRight neighbour = 10"
+          "text": "Middle page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nLeft neighbour = 50\nRight neighbour = 10"
         },
         {
           "type": "text_page_fixed_height",
-          "text": "Last page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nRight padding = 20\nNeighbour page visible part = 40"
+          "text": "Last page, alignment = end\nneighbour_page_width = 50\npaddings = 20, item_spacing = 10\nRight padding = 20\nNeighbour page visible part = 50"
         }
       ]
     },
