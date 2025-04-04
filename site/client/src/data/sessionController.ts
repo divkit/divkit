@@ -44,6 +44,7 @@ async function init() {
         isFeatures.set(true);
     } else if (design) {
         isDesign.set(true);
+        initialValueStore.set(DEFAULT_EDITOR_VALUE);
         valueStore.set(DEFAULT_EDITOR_VALUE);
     } else if (samples) {
         isSamples.set(true);
