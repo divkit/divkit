@@ -1,6 +1,7 @@
 {
   "description": "Text with different truncate modes",
   "platforms": [
+    "android",
     "ios"
   ],
   "templates": {

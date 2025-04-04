@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.text.Layout
 import android.text.TextUtils
+import android.text.TextUtils.TruncateAt
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
@@ -96,7 +97,7 @@ internal class DivTextBinder @Inject constructor(
         bindMaxLines(div, oldDiv, expressionResolver)
         bindText(bindingContext, div, oldDiv)
         bindEllipsis(bindingContext, div, oldDiv)
-        bindAutoEllipsize(div, oldDiv, expressionResolver)
+        bindEllipsize(div, oldDiv, expressionResolver)
         bindTextGradient(bindingContext.divView, div, oldDiv, expressionResolver)
         bindTextShadow(div, oldDiv, expressionResolver)
         bindSelectable(div, oldDiv, expressionResolver)
@@ -950,22 +951,36 @@ internal class DivTextBinder @Inject constructor(
 
     //endregion
 
-    //region Auto Ellipsize
+    //region Ellipsize
 
-    private fun DivLineHeightTextView.bindAutoEllipsize(
+    private fun DivLineHeightTextView.bindEllipsize(
         newDiv: DivText,
         oldDiv: DivText?,
         resolver: ExpressionResolver
     ) {
-        if (newDiv.autoEllipsize.equalsToConstant(oldDiv?.autoEllipsize)) {
+        if (newDiv.autoEllipsize.equalsToConstant(oldDiv?.autoEllipsize) &&
+            newDiv.truncate.equalsToConstant(oldDiv?.truncate)) {
             return
         }
 
-        applyAutoEllipsize(newDiv.autoEllipsize?.evaluate(resolver) ?: false)
+        applyEllipsize(newDiv, resolver)
+
+        if (newDiv.autoEllipsize.isConstantOrNull() && newDiv.truncate.isConstant()) return
+
+        val callback = { _: Any -> applyEllipsize(newDiv, resolver) }
+        newDiv.autoEllipsize?.let { addSubscription(it.observe(resolver, callback))}
+        addSubscription(newDiv.truncate.observe(resolver, callback))
     }
 
-    private fun DivLineHeightTextView.applyAutoEllipsize(ellipsize: Boolean) {
-        autoEllipsize = ellipsize
+    private fun DivLineHeightTextView.applyEllipsize(div: DivText, resolver: ExpressionResolver) {
+        val location = div.truncate.evaluate(resolver)
+        ellipsisLocation = when (location) {
+            DivText.Truncate.NONE -> null
+            DivText.Truncate.START -> TruncateAt.START
+            DivText.Truncate.MIDDLE -> TruncateAt.MIDDLE
+            DivText.Truncate.END -> TruncateAt.END
+        }
+        autoEllipsize = location != DivText.Truncate.NONE && div.autoEllipsize?.evaluate(resolver) ?: false
     }
 
     //endregion

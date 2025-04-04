@@ -5,7 +5,7 @@ import android.os.Build
 import android.text.Layout
 import android.text.SpannableStringBuilder
 import android.text.StaticLayout
-import android.text.TextUtils
+import android.text.TextUtils.TruncateAt
 import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
@@ -30,6 +30,15 @@ open class EllipsizedTextView @JvmOverloads constructor(
         set(value) {
             field = value
             autoEllipsizeHelper.isEnabled = value
+        }
+
+    var ellipsisLocation: TruncateAt? = TruncateAt.END
+        set(value) {
+            field = value
+            if (value == null) {
+                autoEllipsize = false
+            }
+            onEllipsisChanged(ellipsis)
         }
 
     private var isRemeasureNeeded = false
@@ -83,7 +92,7 @@ open class EllipsizedTextView @JvmOverloads constructor(
     private fun onEllipsisChanged(ellipsis: CharSequence) {
         when {
             noMaxLines() -> super.setEllipsize(null)
-            ellipsis == DEFAULT_ELLIPSIS -> super.setEllipsize(TextUtils.TruncateAt.END)
+            ellipsis == DEFAULT_ELLIPSIS -> super.setEllipsize(ellipsisLocation)
             else -> {
                 super.setEllipsize(null)
                 requestEllipsize()
@@ -117,7 +126,7 @@ open class EllipsizedTextView @JvmOverloads constructor(
         invalidateEllipsis()
     }
 
-    override fun setEllipsize(where: TextUtils.TruncateAt?) = Unit
+    override fun setEllipsize(where: TruncateAt?) = Unit
 
     override fun onTextChanged(text: CharSequence?, start: Int, lengthBefore: Int, lengthAfter: Int) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
