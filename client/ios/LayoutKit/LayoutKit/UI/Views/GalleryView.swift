@@ -34,6 +34,7 @@ public final class GalleryView: BlockView {
   private var layoutFactory: LayoutFactory!
   private var deferredStateSetting = DeferredStateSetting.idle
   private var scrollStartOffset: CGFloat = 0
+  private var targetContentOffset: CGPoint?
   public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { [collectionView] }
 
   private weak var overscrollDelegate: ScrollDelegate? {
@@ -264,7 +265,8 @@ public final class GalleryView: BlockView {
     case .horizontal:
       CGPoint(x: offset, y: 0)
     }
-    if collectionView.contentOffset != contentOffset {
+    if collectionView.contentOffset != contentOffset, targetContentOffset != contentOffset {
+      targetContentOffset = contentOffset
       collectionView.setContentOffset(contentOffset, animated: animated)
     }
   }
@@ -373,6 +375,7 @@ extension GalleryView: ScrollDelegate {
   }
 
   private func onDidEndScroll(_ scrollView: ScrollView) {
+    targetContentOffset = nil
     let newState = GalleryViewState(
       contentPosition: state.contentPosition,
       itemsCount: model.items.count,
