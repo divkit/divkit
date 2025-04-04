@@ -464,7 +464,7 @@ internal fun DivBackground?.isConstant(): Boolean {
         is DivBackground.RadialGradient -> {
             value.centerX.isConstant()
                 && value.centerY.isConstant()
-                && value.colors.isConstant()
+                && value.colors.isConstantOrNull()
                 && value.radius.isConstant()
         }
 

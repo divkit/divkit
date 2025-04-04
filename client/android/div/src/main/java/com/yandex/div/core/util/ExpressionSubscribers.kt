@@ -249,7 +249,7 @@ internal fun ExpressionSubscriber.observeBackground (
 
         is DivBackground.RadialGradient -> {
             val radialGradientBackground = background.value
-            addSubscription(radialGradientBackground.colors.observe(resolver, callback))
+            addSubscription(radialGradientBackground.colors?.observe(resolver, callback))
             observeRadialGradientCenter(radialGradientBackground.centerX, resolver, callback)
             observeRadialGradientCenter(radialGradientBackground.centerY, resolver, callback)
             observeRadialGradientRadius(radialGradientBackground.radius, resolver, callback)

@@ -154,28 +154,20 @@ public final class DivRadialGradientTemplate: TemplateValue, Sendable {
     let centerXValue = { parent?.centerX?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let centerYValue = { parent?.centerY?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let colorMapValue = { parent?.colorMap?.resolveOptionalValue(context: context, validator: ResolvedValue.colorMapValidator, useOnlyLinks: true) ?? .noValue }()
-    let colorsValue = { parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue }()
+    let colorsValue = { parent?.colors?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue }()
     let radiusValue = { parent?.radius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       centerXValue.errorsOrWarnings?.map { .nestedObjectError(field: "center_x", error: $0) },
       centerYValue.errorsOrWarnings?.map { .nestedObjectError(field: "center_y", error: $0) },
       colorMapValue.errorsOrWarnings?.map { .nestedObjectError(field: "color_map", error: $0) },
       colorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "colors", error: $0) },
       radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
-    if case .noValue = colorsValue {
-      errors.append(.requiredFieldIsMissing(field: "colors"))
-    }
-    guard
-      let colorsNonNil = colorsValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivRadialGradient(
       centerX: { centerXValue.value }(),
       centerY: { centerYValue.value }(),
       colorMap: { colorMapValue.value }(),
-      colors: { colorsNonNil }(),
+      colors: { colorsValue.value }(),
       radius: { radiusValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
@@ -253,26 +245,18 @@ public final class DivRadialGradientTemplate: TemplateValue, Sendable {
       _ = { colorMapValue = colorMapValue.merged(with: { parent.colorMap?.resolveOptionalValue(context: context, validator: ResolvedValue.colorMapValidator, useOnlyLinks: true) }) }()
       _ = { radiusValue = radiusValue.merged(with: { parent.radius?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       centerXValue.errorsOrWarnings?.map { .nestedObjectError(field: "center_x", error: $0) },
       centerYValue.errorsOrWarnings?.map { .nestedObjectError(field: "center_y", error: $0) },
       colorMapValue.errorsOrWarnings?.map { .nestedObjectError(field: "color_map", error: $0) },
       colorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "colors", error: $0) },
       radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
-    if case .noValue = colorsValue {
-      errors.append(.requiredFieldIsMissing(field: "colors"))
-    }
-    guard
-      let colorsNonNil = colorsValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivRadialGradient(
       centerX: { centerXValue.value }(),
       centerY: { centerYValue.value }(),
       colorMap: { colorMapValue.value }(),
-      colors: { colorsNonNil }(),
+      colors: { colorsValue.value }(),
       radius: { radiusValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)

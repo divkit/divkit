@@ -33,11 +33,11 @@ public final class DivRadialGradient: Sendable {
   public let centerX: DivRadialGradientCenter // default value: .divRadialGradientRelativeCenter(DivRadialGradientRelativeCenter(value: .value(0.5)))
   public let centerY: DivRadialGradientCenter // default value: .divRadialGradientRelativeCenter(DivRadialGradientRelativeCenter(value: .value(0.5)))
   public let colorMap: [ColorPoint]? // at least 2 elements
-  public let colors: [Expression<Color>] // at least 2 elements
+  public let colors: [Expression<Color>]? // at least 2 elements
   public let radius: DivRadialGradientRadius // default value: .divRadialGradientRelativeRadius(DivRadialGradientRelativeRadius(value: .value(.farthestCorner)))
 
   public func resolveColors(_ resolver: ExpressionResolver) -> [Color]? {
-    colors.map { resolver.resolveColor($0) }.compactMap { $0 }
+    colors?.map { resolver.resolveColor($0) }.compactMap { $0 }
   }
 
   static let colorMapValidator: AnyArrayValueValidator<DivRadialGradient.ColorPoint> =
@@ -50,7 +50,7 @@ public final class DivRadialGradient: Sendable {
     centerX: DivRadialGradientCenter? = nil,
     centerY: DivRadialGradientCenter? = nil,
     colorMap: [ColorPoint]? = nil,
-    colors: [Expression<Color>],
+    colors: [Expression<Color>]? = nil,
     radius: DivRadialGradientRadius? = nil
   ) {
     self.centerX = centerX ?? .divRadialGradientRelativeCenter(DivRadialGradientRelativeCenter(value: .value(0.5)))
@@ -89,7 +89,7 @@ extension DivRadialGradient: Serializable {
     result["center_x"] = centerX.toDictionary()
     result["center_y"] = centerY.toDictionary()
     result["color_map"] = colorMap?.map { $0.toDictionary() }
-    result["colors"] = colors.map { $0.toValidSerializationValue() }
+    result["colors"] = colors?.map { $0.toValidSerializationValue() }
     result["radius"] = radius.toDictionary()
     return result
   }

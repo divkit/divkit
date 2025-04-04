@@ -31,7 +31,8 @@
       },
       "minItems": 2,
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ],
       "$description": "translations.json#/div_gradient_color_map"
     },
@@ -66,7 +67,6 @@
     }
   },
   "required": [
-    "colors",
     "type"
   ]
 }

@@ -12,12 +12,7 @@ extension DivBackground {
     case let .divLinearGradient(gradient):
       return gradient.makeBlockLinearGradient(context).map { .gradient(.linear($0)) }
     case let .divRadialGradient(gradient):
-      return Gradient.Radial(
-        colors: gradient.resolveColors(expressionResolver) ?? [],
-        end: gradient.resolveRadius(expressionResolver),
-        centerX: gradient.resolveCenterX(expressionResolver),
-        centerY: gradient.resolveCenterY(expressionResolver)
-      ).map { .gradient(.radial($0)) }
+      return gradient.makeBlockRadialGradient(context).map { .gradient(.radial($0)) }
     case let .divImageBackground(imageBackground):
       let image = BackgroundImage(
         imageHolder: context.imageHolderFactory.make(

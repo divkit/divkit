@@ -54,6 +54,28 @@ extension Gradient.Linear.Direction {
 
 extension Gradient.Radial {
   init?(
+    points: [Gradient.Point],
+    end: Gradient.Radial.Radius,
+    centerX: Gradient.Radial.CenterPoint,
+    centerY: Gradient.Radial.CenterPoint
+  ) {
+    guard points.count >= 2 else { return nil }
+    let sortedPoints = points.stableSort(isLessOrEqual: { $0.location <= $1.location })
+
+    guard let first = sortedPoints.first, let last = sortedPoints.last
+    else { return nil }
+
+    self.init(
+      centerX: centerX,
+      centerY: centerY,
+      end: end,
+      centerColor: first.color,
+      intermediatePoints: sortedPoints,
+      outerColor: last.color
+    )
+  }
+
+  init?(
     colors: [Color],
     end: Gradient.Radial.Radius,
     centerX: Gradient.Radial.CenterPoint,
@@ -114,6 +136,41 @@ extension DivLinearGradient {
 }
 
 extension DivRadialGradient {
+  func makeBlockRadialGradient(
+    _ context: DivBlockModelingContext
+  ) -> Gradient.Radial? {
+    let expressionResolver = context.expressionResolver
+
+    if let colorMap {
+      let points: [Gradient.Point] = colorMap.compactMap { positionedColor -> Gradient.Point? in
+        if let color = positionedColor.resolveColor(expressionResolver),
+           let position = positionedColor.resolvePosition(expressionResolver) {
+          return (color: color, location: CGFloat(position))
+        }
+        return nil
+      }
+
+      return Gradient.Radial(
+        points: points,
+        end: resolveRadius(expressionResolver),
+        centerX: resolveCenterX(expressionResolver),
+        centerY: resolveCenterY(expressionResolver)
+      )
+    } else if let colors = resolveColors(expressionResolver) {
+      return Gradient.Radial(
+        colors: colors,
+        end: resolveRadius(expressionResolver),
+        centerX: resolveCenterX(expressionResolver),
+        centerY: resolveCenterY(expressionResolver)
+      )
+    } else {
+      context.addError(
+        message: "No colors specified in the radial gradient in the `colors` or `color_map` fields"
+      )
+      return nil
+    }
+  }
+
   func resolveRadius(_ resolver: ExpressionResolver) -> Gradient.Radial.Radius {
     switch radius {
     case let .divFixedSize(size):

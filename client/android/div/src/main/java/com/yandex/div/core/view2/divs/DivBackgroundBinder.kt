@@ -301,7 +301,7 @@ internal class DivBackgroundBinder @Inject constructor(
         is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
             centerX = value.centerX.toBackgroundState(metrics, resolver),
             centerY = value.centerY.toBackgroundState(metrics, resolver),
-            colors = value.colors.evaluate(resolver),
+            colors = value.colors?.evaluate(resolver) ?: emptyList(),
             radius = value.radius.toBackgroundState(metrics, resolver)
         )
         is DivBackground.Image -> DivBackgroundState.Image(

@@ -250,7 +250,6 @@ extension DivText: DivBlockModeling {
   }
 
   private func resolveGradient(_ context: DivBlockModelingContext) -> Gradient? {
-    let expressionResolver = context.expressionResolver
     guard let textGradient else {
       return nil
     }
@@ -258,12 +257,7 @@ extension DivText: DivBlockModeling {
     case let .divLinearGradient(gradient):
       return gradient.makeBlockLinearGradient(context).map { .linear($0) }
     case let .divRadialGradient(gradient):
-      return Gradient.Radial(
-        colors: gradient.resolveColors(expressionResolver) ?? [],
-        end: gradient.resolveRadius(expressionResolver),
-        centerX: gradient.resolveCenterX(expressionResolver),
-        centerY: gradient.resolveCenterY(expressionResolver)
-      ).map { .radial($0) }
+      return gradient.makeBlockRadialGradient(context).map { .radial($0) }
     }
   }
 

@@ -556,14 +556,14 @@ internal class DivTextBinder @Inject constructor(
             newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
             newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
             newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
-            newTextGradient.colors.evaluate(resolver)
+            newTextGradient.colors?.evaluate(resolver) ?: emptyList()
         )
 
-        if (newTextGradient.colors.isConstant()) {
+        if (newTextGradient.colors.isConstantOrNull()) {
             return
         }
 
-        addSubscription(newTextGradient.colors.observe(resolver) { colors ->
+        addSubscription(newTextGradient.colors?.observe(resolver) { colors ->
             applyRadialTextGradientColor(
                 newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
                 newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
