@@ -10,7 +10,7 @@ public final class InputAutocorrectionExtensionHandler: DivExtensionHandler {
   public func applyBeforeBaseProperties(
     to block: Block,
     div: DivBase,
-    context _: DivBlockModelingContext
+    context: DivBlockModelingContext
   ) -> Block {
     guard let textInputBlock = block as? TextInputBlock else {
       return block
@@ -18,7 +18,10 @@ public final class InputAutocorrectionExtensionHandler: DivExtensionHandler {
 
     let params = getExtensionParams(div)
 
-    guard let autocorrectionEnabled = params["enabled"] as? Bool else {
+    guard let autocorrectionEnabled = try? params.getOptionalBool(
+      "enabled",
+      expressionResolver: context.expressionResolver
+    ) else {
       return block
     }
 
