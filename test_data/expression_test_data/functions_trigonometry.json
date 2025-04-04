@@ -228,8 +228,27 @@
         "value": 0.0
       },
       "platforms": [
+        "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "expression": "@{asin(sin_var)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5707963267948966
+      },
+      "variables": [
+        {
+          "name": "sin_var",
+          "type": "number",
+          "value": 1.0
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
       ]
     },
     {
@@ -250,6 +269,7 @@
         "value": -0.523598775598
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
