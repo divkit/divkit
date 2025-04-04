@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -17,11 +18,12 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.TextView
 import androidx.annotation.MainThread
+import androidx.core.graphics.scale
 import androidx.core.graphics.withSave
-import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
@@ -60,6 +62,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
@@ -355,9 +358,6 @@ internal fun View.applyAlpha(alpha: Double) {
 internal fun DivContainer.isHorizontal(resolver: ExpressionResolver) =
     orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL
 
-internal fun DivContainer.isVertical(resolver: ExpressionResolver) =
-    orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL
-
 internal fun DivContainer.isWrapContainer(resolver: ExpressionResolver) = when {
     layoutMode.evaluate(resolver) != DivContainer.LayoutMode.WRAP -> false
     orientation.evaluate(resolver) == DivContainer.Orientation.OVERLAP -> false
@@ -570,7 +570,7 @@ internal fun View.createAnimatedTouchListener(
     // Avoid creating GestureDetector if unnecessary cause it's expensive.
     val gestureDetector = divGestureListener
         ?.takeUnless { it.onSingleTapListener == null && it.onDoubleTapListener == null }
-        ?.let { GestureDetectorCompat(context.divView.context, divGestureListener) }
+        ?.let { GestureDetector(context.divView.context, divGestureListener) }
 
     return if (animations != null || gestureDetector != null) {
         { v, event ->
@@ -735,7 +735,7 @@ internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Floa
 
 internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
     children
-        .filter { it.visibility == View.VISIBLE }
+        .filter { it.isVisible }
         .forEach { child -> child.drawShadow(canvas) }
 }
 
@@ -751,14 +751,14 @@ internal fun View.extractParentContentAlignmentVertical(
     resolver: ExpressionResolver
 ): DivContentAlignmentVertical? {
     val div = (parent as? DivHolderView<*>)?.div
-    return (div as? DivContainer)?.contentAlignmentVertical?.evaluate(resolver)
+    return (div as? Div.Container)?.value?.contentAlignmentVertical?.evaluate(resolver)
 }
 
 internal fun View.extractParentContentAlignmentHorizontal(
     resolver: ExpressionResolver
 ): DivContentAlignmentHorizontal? {
     val div = (parent as? DivHolderView<*>)?.div
-    return (div as? DivContainer)?.contentAlignmentHorizontal?.evaluate(resolver)
+    return (div as? Div.Container)?.value?.contentAlignmentHorizontal?.evaluate(resolver)
 }
 
 internal fun DivBorder?.isConstantlyEmpty(): Boolean {
@@ -876,7 +876,7 @@ internal fun View.applyBitmapFilters(
     filters: List<DivFilter>?,
     actionAfterFilters: (Bitmap) -> Unit
 ) {
-    if (filters == null) {
+    if (filters.isNullOrEmpty()) {
         actionAfterFilters(bitmap)
         return
     }
@@ -886,12 +886,7 @@ internal fun View.applyBitmapFilters(
 
     doOnActualLayout {
         val scale = max(height / bitmap.height.toFloat(), width / bitmap.width.toFloat())
-        var result = Bitmap.createScaledBitmap(
-            /* src = */ bitmap,
-            /* dstWidth = */ (scale * bitmap.width).toInt(),
-            /* dstHeight = */ (scale * bitmap.height).toInt(),
-            /* filter = */ false
-        )
+        var result = bitmap.scale((scale * bitmap.width).toInt(), (scale * bitmap.height).toInt(), false)
         for (filter in filters) {
             when (filter) {
                 is DivFilter.Blur -> {
@@ -958,8 +953,12 @@ internal fun sendAccessibilityEventUnchecked(
     view ?: return
     if (accessibilityStateProvider.isAccessibilityEnabled(view.context)) {
         view.sendAccessibilityEventUnchecked(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) AccessibilityEvent(event)
-            else AccessibilityEvent.obtain(event)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                AccessibilityEvent(event)
+            } else {
+                @Suppress("DEPRECATION")
+                AccessibilityEvent.obtain(event)
+            }
         )
     }
 }
