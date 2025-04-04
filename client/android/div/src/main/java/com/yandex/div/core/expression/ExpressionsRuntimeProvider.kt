@@ -147,10 +147,12 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         }
 
         val expressionResolver = ExpressionResolverImpl(
-            variableController,
-            evaluator,
-            errorCollector,
-            callback,
+            path = "dataTag: '${tag.id}'",
+            runtimeStore = runtimeStore,
+            variableController = variableController,
+            evaluator = evaluator,
+            errorCollector = errorCollector,
+            onCreateCallback = callback,
         )
 
         val triggersController = TriggersController(

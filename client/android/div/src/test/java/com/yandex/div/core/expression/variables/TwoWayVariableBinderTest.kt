@@ -48,7 +48,7 @@ class TwoWayVariableBinderTest {
     private val evaluator = mock<Evaluator> {
         on { evaluationContext } doReturn evaluationContext
     }
-    private val expressionResolver = ExpressionResolverImpl(mock(), evaluator, mock(), mock())
+    private val expressionResolver = ExpressionResolverImpl("", mock(), mock(), evaluator, mock(), mock())
     private val expressionsRuntime = ExpressionsRuntime(expressionResolver, variableController, mock(), mock(), store)
     private val expressionsRuntimeProvider = mock<ExpressionsRuntimeProvider> {
         on { getOrCreate(any(), any(), any()) } doReturn expressionsRuntime

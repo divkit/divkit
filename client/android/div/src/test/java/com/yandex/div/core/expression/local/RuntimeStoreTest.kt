@@ -51,14 +51,14 @@ class RuntimeStoreTest {
         underTest.putRuntime(runtimeFromCallback!!)
     }
 
-    private val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
+    private val resolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
     private val rootVariableController: VariableController = mock<VariableController>()
     private val functionProvider = mock<FunctionProviderDecorator>()
     private val divBase = mock<DivBase>()
     private val div = mock<Div> {
         on { value() } doReturn divBase
     }
-    private val rootResolver = ExpressionResolverImpl(rootVariableController, evaluator, errorCollector, callback)
+    private val rootResolver = ExpressionResolverImpl("", mock(), rootVariableController, evaluator, errorCollector, callback)
     private val rootRuntime: ExpressionsRuntime =
         ExpressionsRuntime(rootResolver, rootVariableController, null, functionProvider, underTest)
 
@@ -74,7 +74,7 @@ class RuntimeStoreTest {
 
     @Test
     fun `setPathToRuntimeWith links path to created runtime`() {
-        val newResolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
+        val newResolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
         underTest.resolveRuntimeWith(path.fullPath, div, newResolver, newResolver)
 
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(newResolver))
@@ -99,7 +99,7 @@ class RuntimeStoreTest {
 
     @Test
     fun `getOrCreateRuntime returns runtime for path if exist`() {
-        val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
+        val resolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
         val runtime = ExpressionsRuntime(resolver, mock(), null, functionProvider, underTest)
         underTest.putRuntime(runtime, PATH, rootRuntime)
 
@@ -110,7 +110,7 @@ class RuntimeStoreTest {
 
     @Test
     fun `getOrCreateRuntime returns parent runtime for path if no variables provided`() {
-        val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
+        val resolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
         val parentVariableController = mock<VariableController>()
         val runtime = ExpressionsRuntime(resolver, parentVariableController, null, functionProvider, underTest)
         underTest.putRuntime(runtime, PARENT_PATH, rootRuntime)
@@ -121,7 +121,7 @@ class RuntimeStoreTest {
 
     @Test
     fun `getOrCreateRuntime returns wrapped parent runtime with new variables if new variables provided`() {
-        val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
+        val resolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
         val parentVariableController = mock<VariableController> {
             on { getMutableVariable(PARENT_VARIABLE) } doReturn Variable.StringVariable(PARENT_VARIABLE, "123")
         }
@@ -153,7 +153,7 @@ class RuntimeStoreTest {
 
     @Test
     fun `setPathToRuntimeWith links path to runtime`() {
-        val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
+        val resolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
         underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)
 
         Assert.assertNotNull(runtimeFromCallback)
@@ -174,7 +174,7 @@ class RuntimeStoreTest {
             on { getMutableVariable(PARENT_VARIABLE) } doReturn Variable.StringVariable(PARENT_VARIABLE, "123")
         }
         val resolver = ExpressionResolverImpl(
-            parentVariableController, evaluator, errorCollector, callback
+            "", mock(), parentVariableController, evaluator, errorCollector, callback
         )
 
         underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)

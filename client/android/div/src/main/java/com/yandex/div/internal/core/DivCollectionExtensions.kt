@@ -3,6 +3,7 @@ package com.yandex.div.internal.core
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.ConstantsProvider
+import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -69,7 +70,20 @@ private fun DivCollectionItemBuilder.getItemResolver(
         dataElementName to validElement,
         INDEX_VARIABLE_NAME to index.toLong()
     ))
-    return resolverImpl + localDataProvider
+
+    val itemResolver = resolverImpl.withConstants(
+        pathSegment = "${dataElement}:$index", localDataProvider)
+    val runtime = resolverImpl.runtimeStore.resolveRuntimeWith(
+        itemResolver.path,
+        div = null,
+        resolver = itemResolver,
+        parentResolver = resolverImpl,
+    )
+    return runtime?.expressionResolver ?: run {
+        Assert.fail(
+            "Failed to acquire ExpressionResolver from store! This may lead to leaks and errors!")
+        itemResolver
+    }
 }
 
 private fun Div.copy(id: String? = value().id): Div {

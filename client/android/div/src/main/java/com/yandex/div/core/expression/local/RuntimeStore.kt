@@ -98,7 +98,7 @@ internal class RuntimeStore(
 
     internal fun resolveRuntimeWith(
         path: String,
-        div: Div,
+        div: Div?,
         resolver: ExpressionResolver,
         parentResolver: ExpressionResolver?,
     ): ExpressionsRuntime? {
@@ -157,6 +157,8 @@ internal class RuntimeStore(
 
         val evaluator = Evaluator(evaluationContext)
         val resolver = ExpressionResolverImpl(
+            path = path + "/" + (baseRuntime.expressionResolver as? ExpressionResolverImpl)?.path,
+            runtimeStore = this,
             variableController = localVariableController,
             evaluator = evaluator,
             errorCollector = errorCollector,
@@ -185,7 +187,7 @@ internal class RuntimeStore(
 
     private fun getRuntimeOrCreateChild(
         path: String,
-        div: Div,
+        div: Div?,
         existingRuntime: ExpressionsRuntime? = null,
         parentResolver: ExpressionResolver? = null,
         parentRuntime: ExpressionsRuntime? = null,
@@ -201,9 +203,9 @@ internal class RuntimeStore(
 
         val parentRuntime = parentRuntime ?: parentResolver?.let { getRuntimeWithOrNull(it) }
 
-        val variables = div.value().variables?.toVariables()
-        val variableTriggers = div.value().variableTriggers
-        val functions = div.value().functions
+        val variables = div?.value()?.variables?.toVariables()
+        val variableTriggers = div?.value()?.variableTriggers
+        val functions = div?.value()?.functions
 
         if (needLocalRuntime(variables, variableTriggers, functions)) {
             return createChildRuntime(runtime, parentRuntime, path, variables, variableTriggers, functions)

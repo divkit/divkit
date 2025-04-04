@@ -2,6 +2,7 @@ package com.yandex.div.core.expression
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.variables.ConstantsProvider
 import com.yandex.div.core.expression.variables.VariableAndConstantController
 import com.yandex.div.core.expression.variables.VariableController
@@ -26,10 +27,15 @@ import com.yandex.div.json.typeMismatch
 import org.json.JSONObject
 
 internal class ExpressionResolverImpl(
+    /**
+     * Unique path by which resolver could be found at [RuntimeStore].
+     */
+    internal val path: String,
+    internal val runtimeStore: RuntimeStore,
     private val variableController: VariableController,
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
-    private val onCreateCallback: OnCreateCallback
+    private val onCreateCallback: OnCreateCallback,
 ) : ExpressionResolver {
 
     private val evaluationsCache = mutableMapOf<String, Any>()
@@ -230,9 +236,12 @@ internal class ExpressionResolverImpl(
         }
     }
 
-    operator fun plus(constants: ConstantsProvider): ExpressionResolverImpl {
+    internal fun withConstants(pathSegment: String,
+                               constants: ConstantsProvider): ExpressionResolverImpl {
         val variableAndConstantController = VariableAndConstantController(variableController, constants)
         return ExpressionResolverImpl(
+            path = this.path + "/" + pathSegment,
+            runtimeStore = this.runtimeStore,
             variableController = variableAndConstantController,
             evaluator = Evaluator(
                 evaluationContext = EvaluationContext(
@@ -252,6 +261,26 @@ internal class ExpressionResolverImpl(
             errorCollector.logError(typeMismatch(index, element))
             null
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        if (other !is ExpressionResolverImpl) {
+            return false
+        }
+
+        if (this.runtimeStore !== other.runtimeStore) {
+            return false
+        }
+
+        return path == other.path
+    }
+
+    override fun hashCode(): Int {
+        return 31 * path.hashCode() + runtimeStore.hashCode()
     }
 
     /**
