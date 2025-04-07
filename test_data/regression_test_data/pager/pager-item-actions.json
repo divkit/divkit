@@ -1,5 +1,47 @@
 {
   "templates": {
+    "custom_indicator": {
+      "type": "container",
+      "alignment_horizontal": "center",
+      "content_alignment_horizontal": "center",
+      "items": [
+        {
+          "type": "indicator",
+          "active_item_color": "#000000",
+          "active_item_size": 1.5,
+          "height": {
+            "type": "fixed",
+            "value": 10
+          },
+          "width": {
+            "type": "fixed",
+            "value": 60
+          },
+          "margins": {
+            "top": 10,
+            "bottom": 10
+          },
+          "space_between_centers": 10,
+          "inactive_item_color": "#D0D1D9",
+          "pager_id": "my_pager",
+          "shape": {
+            "type": "rounded_rectangle",
+            "corner_radius": {
+              "type": "fixed",
+              "value": 2
+            },
+            "item_height": {
+              "type": "fixed",
+              "value": 2
+            },
+            "item_width": {
+              "type": "fixed",
+              "value": 10
+            }
+          }
+        }
+      ]
+    },
     "button": {
       "type": "text",
       "height": {
@@ -72,6 +114,13 @@
   },
   "card": {
     "log_id": "card",
+    "variables": [
+      {
+        "name": "last_logged_item",
+        "type": "string",
+        "value": "-"
+      }
+    ],
     "states": [
       {
         "div": {
@@ -96,6 +145,7 @@
                   "visibility_actions": [
                     {
                       "log_id": "content_item_show:0",
+                      "url": "div-action://set_variable?name=last_logged_item&value=item0",
                       "visibility_percentage": 80,
                       "visibility_duration": 0
                     }
@@ -106,6 +156,7 @@
                   "visibility_actions": [
                     {
                       "log_id": "content_item_show:1",
+                      "url": "div-action://set_variable?name=last_logged_item&value=item1",
                       "visibility_percentage": 80,
                       "visibility_duration": 0
                     }
@@ -117,6 +168,7 @@
                   "visibility_actions": [
                     {
                       "log_id": "content_item_show:2",
+                      "url": "div-action://set_variable?name=last_logged_item&value=item2",
                       "visibility_percentage": 80,
                       "visibility_duration": 0
                     }
@@ -127,6 +179,7 @@
                   "visibility_actions": [
                     {
                       "log_id": "content_item_show:3",
+                      "url": "div-action://set_variable?name=last_logged_item&value=item3",
                       "visibility_percentage": 80,
                       "visibility_duration": 0
                     }
@@ -138,6 +191,7 @@
                   "visibility_actions": [
                     {
                       "log_id": "content_item_show:4",
+                      "url": "div-action://set_variable?name=last_logged_item&value=item4",
                       "visibility_percentage": 80,
                       "visibility_duration": 0
                     }
@@ -148,6 +202,7 @@
                   "visibility_actions": [
                     {
                       "log_id": "content_item_show:5",
+                      "url": "div-action://set_variable?name=last_logged_item&value=item5",
                       "visibility_percentage": 80,
                       "visibility_duration": 0
                     }
@@ -163,6 +218,14 @@
               },
               "restrict_parent_scroll": 1,
               "type": "pager"
+            },
+            {
+              "type": "custom_indicator"
+            },
+            {
+              "type": "text",
+              "text": "Last logged item: @{last_logged_item}",
+              "text_alignment_horizontal": "center"
             },
             {
               "items": [
