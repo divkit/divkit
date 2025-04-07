@@ -2,6 +2,7 @@
 
 # Android Client:
 * Fixed preloading in case when tree includes `item-builder`s or local variables.
+* Supported `truncate` property in `text`.
 * `Indicator` now attaches to the nearest `pager` if no `pager_id` is specified.
 
 # iOS Client:
@@ -9,6 +10,7 @@
 * Added support for `capture_focus_on_action` property.
 * Added support for `clip_to_bounds` property in `div-state`.
 * Added support for `truncate` property for `div-text`.
+* Fix transition_change animation.
 * Fixed pager scroll actions interruption with visibility_actions.
 
 # Web Client:
