@@ -482,6 +482,7 @@
           "default_value": "end",
           "$description": "translations.json#/div_text_truncate",
           "platforms": [
+            "android",
             "ios"
           ]
         },
