@@ -176,6 +176,28 @@ extension BlocksState {
       first(where: { pagerPath.matches($0.key) })?.value as? PagerViewState
     }
   }
+
+  func pagerViewState(
+    for pagerControlPath: UIElementPath?
+  ) -> PagerViewState? {
+    pagerControlPath.flatMap { pagerControlPath in
+      var currentPath: UIElementPath? = pagerControlPath
+
+      while let current = currentPath {
+        let relatedPaths = keys.filter { $0.starts(with: current) }
+
+        for relatedPath in relatedPaths {
+          if self[relatedPath] is PagerViewState {
+            return self[relatedPath] as? PagerViewState
+          }
+        }
+
+        currentPath = current.parent
+      }
+
+      return nil
+    }
+  }
 }
 
 extension PagerPath {

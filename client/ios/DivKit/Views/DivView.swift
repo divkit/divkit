@@ -293,7 +293,7 @@ public final class DivView: VisibleBoundsTrackingView {
 extension DivView: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
-    blockProvider?.update(withStates: [path: state])
+    blockProvider?.update(withStates: divKitComponents.blockStateStorage.states)
   }
 
   public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {

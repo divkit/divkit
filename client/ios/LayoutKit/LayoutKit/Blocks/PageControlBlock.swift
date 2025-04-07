@@ -10,6 +10,7 @@ public final class PageControlBlock: BlockWithTraits {
   public typealias State = PagerViewState
 
   public let layoutDirection: UserInterfaceLayoutDirection
+  public let pageControlPath: UIElementPath?
   public let pagerPath: PagerPath?
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
@@ -18,6 +19,7 @@ public final class PageControlBlock: BlockWithTraits {
 
   public init(
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
+    pageControlPath: UIElementPath? = nil,
     pagerPath: PagerPath?,
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait,
@@ -25,6 +27,7 @@ public final class PageControlBlock: BlockWithTraits {
     state: State
   ) {
     self.layoutDirection = layoutDirection
+    self.pageControlPath = pageControlPath
     self.pagerPath = pagerPath
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -72,11 +75,14 @@ public final class PageControlBlock: BlockWithTraits {
   public func getImageHolders() -> [ImageHolder] { [] }
 
   public func updated(withStates states: BlocksState) throws -> PageControlBlock {
-    guard let newState = states.pagerViewState(for: pagerPath) else {
+    guard let newState = states.pagerViewState(for: pagerPath) ??
+      states.pagerViewState(for: pageControlPath) else {
       return self
     }
+
     return PageControlBlock(
       layoutDirection: layoutDirection,
+      pageControlPath: pageControlPath,
       pagerPath: pagerPath,
       widthTrait: widthTrait,
       heightTrait: heightTrait,
@@ -87,7 +93,8 @@ public final class PageControlBlock: BlockWithTraits {
 }
 
 public func ==(lhs: PageControlBlock, rhs: PageControlBlock) -> Bool {
-  lhs.pagerPath == rhs.pagerPath &&
+  lhs.pageControlPath == rhs.pageControlPath &&
+    lhs.pagerPath == rhs.pagerPath &&
     lhs.widthTrait == rhs.widthTrait &&
     lhs.heightTrait == rhs.heightTrait &&
     lhs.configuration == rhs.configuration &&

@@ -91,15 +91,15 @@ extension DivIndicator: DivBlockModeling {
         ?? .fixed(spaceBetweenCenters: spaceBetweenCenters)
     )
 
-    return
-      PageControlBlock(
-        layoutDirection: context.layoutDirection,
-        pagerPath: pagerPath,
-        widthTrait: resolveContentWidthTrait(context),
-        heightTrait: resolveContentHeightTrait(context),
-        configuration: configuration,
-        state: state
-      )
+    return PageControlBlock(
+      layoutDirection: context.layoutDirection,
+      pageControlPath: context.parentPath,
+      pagerPath: pagerPath,
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context),
+      configuration: configuration,
+      state: state
+    )
   }
 
   private func makeRoundedRectangle(
