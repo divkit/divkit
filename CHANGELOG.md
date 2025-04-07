@@ -9,6 +9,7 @@
 * Added support for `capture_focus_on_action` property.
 * Added support for `clip_to_bounds` property in `div-state`.
 * Added support for `truncate` property for `div-text`.
+* Fixed pager scroll actions interruption with visibility_actions.
 
 # Web Client:
 * Added support for the `color_map` in `radial_gradient`.
