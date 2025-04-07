@@ -35,6 +35,8 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     didSet {
       guard childView !== oldValue else { return }
 
+      isFirstChildLayout = true
+
       switch (oldValue, childView) {
       case (.none, .none):
         break
@@ -67,7 +69,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
   private var animationChange: ChangeBoundsTransition?
   private var queuedAnimation: DispatchWorkItem?
   private var child: Block?
-  private var isFirstLayout: Bool = true
+  private var isFirstChildLayout: Bool = true
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
@@ -97,13 +99,13 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
   override func layoutSubviews() {
     super.layoutSubviews()
-    guard isFirstLayout || animationChange == nil else {
+    guard isFirstChildLayout || animationChange == nil else {
       return
     }
 
     childView?.frame = bounds
     if frame != .zero {
-      isFirstLayout = false
+      isFirstChildLayout = false
     }
   }
 
