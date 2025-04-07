@@ -84,6 +84,7 @@ internal class DivTextBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.accessibility,
+            div.captureFocusOnAction,
         )
 
         val expressionResolver = bindingContext.expressionResolver

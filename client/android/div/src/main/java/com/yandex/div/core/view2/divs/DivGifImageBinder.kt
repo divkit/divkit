@@ -60,6 +60,7 @@ internal class DivGifImageBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.accessibility,
+            div.captureFocusOnAction,
         )
 
         bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)

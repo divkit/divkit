@@ -31,6 +31,7 @@ internal class DivSeparatorBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.accessibility,
+            div.captureFocusOnAction,
         )
 
         bindStyle(div.delimiterStyle, oldDiv?.delimiterStyle, bindingContext.expressionResolver)

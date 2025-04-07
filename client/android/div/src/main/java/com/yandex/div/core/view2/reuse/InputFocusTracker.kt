@@ -52,11 +52,6 @@ internal class InputFocusTracker @Inject constructor(
         }
     }
 
-    fun isOutsideVisibleArea(): Boolean {
-        val input: View = lastFocused?.get() ?: return true
-        return !viewVisibilityCalculator.isViewFullyVisible(input)
-    }
-
     inner class InputFocusPersistentDivDataChangedObserver: PersistentDivDataObserver {
         var focusRequestedDuringChangeState = false
 

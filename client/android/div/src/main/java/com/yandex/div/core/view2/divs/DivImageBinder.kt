@@ -54,6 +54,7 @@ internal class DivImageBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.accessibility,
+            div.captureFocusOnAction,
         )
 
         val divView = bindingContext.divView

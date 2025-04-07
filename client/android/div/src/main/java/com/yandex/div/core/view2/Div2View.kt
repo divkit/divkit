@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.net.Uri
 import android.os.SystemClock
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +54,7 @@ import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.DivLayoutProviderVariablesHolder
 import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.bindingContext
+import com.yandex.div.core.view2.divs.clearFocusOnClick
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
@@ -181,6 +183,14 @@ class Div2View private constructor(
             renderConfig
         )
     }
+
+    private val gestureDetector = GestureDetector(this.context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            clearFocusOnClick(inputFocusTracker)
+            return performClick()
+        }
+    })
+
     internal val inputFocusTracker = viewComponent.inputFocusTracker
 
     internal val layoutSizes = mutableMapOf<ExpressionResolver, MutableMap<String, Int>>()
@@ -592,6 +602,15 @@ class Div2View private constructor(
             constructorCallTime, timeCreated, div2Component.histogramReporter, viewCreateCallType
         )
         timeCreated = -1
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        gestureDetector.onTouchEvent(event)
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            return true
+        }
+        return super.onTouchEvent(event)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {

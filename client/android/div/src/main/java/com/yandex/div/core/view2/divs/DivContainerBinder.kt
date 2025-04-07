@@ -110,6 +110,7 @@ internal class DivContainerBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.accessibility,
+            div.captureFocusOnAction,
         )
 
         val resolver = bindingContext.expressionResolver

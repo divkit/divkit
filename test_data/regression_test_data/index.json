@@ -3716,6 +3716,7 @@
       "title": "Input with capture on focus actions",
       "case_id": 220,
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [

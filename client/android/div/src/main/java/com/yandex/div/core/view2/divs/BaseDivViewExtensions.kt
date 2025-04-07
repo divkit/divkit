@@ -542,6 +542,7 @@ internal fun View.applyDivActions(
     pressEndActions: List<DivAction>?,
     actionAnimation: DivAnimation,
     accessibility: DivAccessibility?,
+    captureFocusOnAction: Expression<Boolean>,
 ) {
     val actionBinder = context.divView.div2Component.actionBinder
     val tapActions = if (actions.isNullOrEmpty()) {
@@ -549,9 +550,20 @@ internal fun View.applyDivActions(
     } else {
         actions
     }
-    actionBinder.bindDivActions(context, this, tapActions, longTapActions, doubleTapActions,
-        hoverStartActions, hoverEndActions, pressStartActions, pressEndActions, actionAnimation,
-        accessibility)
+    actionBinder.bindDivActions(
+        context,
+        this,
+        tapActions,
+        longTapActions,
+        doubleTapActions,
+        hoverStartActions,
+        hoverEndActions,
+        pressStartActions,
+        pressEndActions,
+        actionAnimation,
+        accessibility,
+        captureFocusOnAction,
+    )
 }
 
 internal fun View.setAnimatedTouchListener(

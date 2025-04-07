@@ -26,6 +26,7 @@ internal fun assertActionApplied(context: BindingContext, target: View, actionUr
         pressEndActions = anyOrNull(),
         actionAnimation = any(),
         accessibility = anyOrNull(),
+        captureFocusOnAction = any(),
     )
 
     val action = actionCaptor.firstValue.find {

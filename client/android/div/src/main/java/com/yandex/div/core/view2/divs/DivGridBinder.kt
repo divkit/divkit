@@ -56,6 +56,7 @@ internal class DivGridBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.accessibility,
+            div.captureFocusOnAction,
         )
 
         addSubscription(

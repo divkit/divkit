@@ -107,7 +107,7 @@
                   "log_id": "test"
                 }
               ],
-              "text": "capture_focus_on_action = true",
+              "text": "Tap: capture_focus_on_action = true",
               "focus": {
                 "background": [
                   {
@@ -125,7 +125,61 @@
                 }
               ],
               "capture_focus_on_action": false,
-              "text": "capture_focus_on_action = false"
+              "text": "Tap: capture_focus_on_action = false"
+            },
+            {
+              "type": "text_block",
+              "doubletap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "text": "Double tap: capture_focus_on_action = true",
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text_block",
+              "doubletap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "capture_focus_on_action": false,
+              "text": "Double tap: capture_focus_on_action = false"
+            },
+            {
+              "type": "text_block",
+              "longtap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "text": "Long tap: capture_focus_on_action = true",
+              "focus": {
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ff5500"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text_block",
+              "longtap_actions": [
+                {
+                  "log_id": "test"
+                }
+              ],
+              "capture_focus_on_action": false,
+              "text": "Long tap: capture_focus_on_action = false"
             }
           ]
         }
