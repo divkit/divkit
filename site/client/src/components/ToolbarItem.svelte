@@ -73,6 +73,10 @@
         background-image: url(../assets/divkitpro/sources.svg);
     }
 
+    .toolbar-item__icon_timers {
+        background-image: url(../assets/divkitpro/timers.svg);
+    }
+
     .toolbar-item__tooltip {
         position: absolute;
         z-index: 1;

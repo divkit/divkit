@@ -19,11 +19,13 @@
         'components',
         'palette',
         'sources',
+        'timers',
     ] as const;
     $: TOOLBAR_TEXTS = {
         components: $l10n('designComponents'),
         palette: $l10n('designPalette'),
         sources: $l10n('designVariables'),
+        timers: $l10n('designTimers'),
     };
 
     function getEditorLayoutByPanel(panel: string): Layout {
@@ -35,6 +37,8 @@
             leftList = ['custom-variables'];
         } else if (panel === 'tanker') {
             leftList = ['tanker-overview'];
+        } else if (panel === 'timers') {
+            leftList = ['timers'];
         } else {
             leftList = ['new-component', 'component-tree'];
         }
