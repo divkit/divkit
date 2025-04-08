@@ -95,7 +95,8 @@
       "$description": "translations.json#/div_actionable_capture_focus_on_action",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   }

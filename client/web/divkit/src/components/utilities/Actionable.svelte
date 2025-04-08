@@ -45,6 +45,7 @@
     export let isNativeActionAnimation = true;
     export let hasInnerFocusable = false;
     export let customAccessibility: MaybeMissing<Accessibility> | undefined = undefined;
+    export let captureFocusOnAction = true;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
@@ -168,6 +169,12 @@
             node.addEventListener('pointerleave', onPointerLeave);
         } else {
             node.removeEventListener('pointerleave', onPointerLeave);
+        }
+
+        if (captureFocusOnAction === false) {
+            node.addEventListener('mousedown', onMousedown);
+        } else {
+            node.removeEventListener('mousedown', onMousedown);
         }
 
         hasAnyActions = Boolean(
@@ -325,6 +332,11 @@
         }
 
         componentContext.execAnyActions(hoverEndActions, { node });
+    }
+
+    function onMousedown(event: MouseEvent): void {
+        // prevent focus blur
+        event.preventDefault();
     }
 
     function onKeydown(event: KeyboardEvent): void {

@@ -11,4 +11,5 @@ export interface DivActionableData {
     hover_end_actions?: Action[];
     press_start_actions?: Action[];
     press_end_actions?: Action[];
+    capture_focus_on_action?: boolean;
 }

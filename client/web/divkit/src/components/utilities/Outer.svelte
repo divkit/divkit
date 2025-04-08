@@ -189,6 +189,7 @@
     let layoutProviderResizeObserver: ResizeObserver | undefined;
 
     let hasCustomFocus = false;
+    let captureFocusOnAction = true;
 
     let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
     let prevTriggersUnsubscribe: (() => void) | undefined = undefined;
@@ -211,6 +212,7 @@
         pivotYNum = 0;
         transformOrigin = undefined;
         transform = undefined;
+        captureFocusOnAction = true;
 
         jsonTransitionTriggers = componentContext.fakeElement ?
             [] :
@@ -285,6 +287,7 @@
     $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
     $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
     $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
+    $: jsonCaptureFocusOnAction = componentContext.getDerivedFromVars(componentContext.json.capture_focus_on_action);
 
     $: {
         prevChilds.forEach(id => {
@@ -773,6 +776,10 @@
         }
     }
 
+    $: if (typeof $jsonCaptureFocusOnAction === 'boolean') {
+        captureFocusOnAction = $jsonCaptureFocusOnAction;
+    }
+
     function hasNativeAnimation(list: MaybeMissing<AnyAnimation>[]) {
         return list.some(it => it.name === 'native');
     }
@@ -1176,6 +1183,7 @@
         {hasInnerFocusable}
         isNativeActionAnimation={!actionAnimationList.length || hasNativeAnimation(actionAnimationList)}
         customAccessibility={$jsonAccessibility}
+        {captureFocusOnAction}
         on:focus={focusHandler}
         on:blur={blurHandler}
     >
