@@ -27,6 +27,10 @@ final class DebugErrorCollector: DivReporter {
     wrappedDivReporter.reportAction(cardId: cardId, info: info)
   }
 
+  func reportViewWasCreated(cardId: DivCardID) {
+    wrappedDivReporter.reportViewWasCreated(cardId: cardId)
+  }
+
   var totalErrorCount: Int {
     errorStorage.errors.count + layoutErrors.count
   }

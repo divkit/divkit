@@ -23,6 +23,7 @@ extension UIViewRenderable {
     renderingDelegate: RenderingDelegate? = nil
   ) -> BlockView {
     let result = type(of: self).makeBlockView()
+    renderingDelegate?.reportViewWasCreated()
     configureBlockView(
       result,
       observer: observer,

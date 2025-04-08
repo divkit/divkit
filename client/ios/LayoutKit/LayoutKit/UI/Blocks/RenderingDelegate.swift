@@ -7,6 +7,9 @@ public protocol RenderingDelegate: AnyObject {
   func tooltipAnchorViewAdded(anchorView: TooltipAnchorView)
   func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView)
   func reportRenderingError(message: String, isWarning: Bool, path: UIElementPath)
+
+  @_spi(Internal)
+  func reportViewWasCreated()
 }
 
 public typealias BlockViewID = Tagged<BlockViewProtocol, String>
@@ -17,6 +20,7 @@ public protocol DivViewMetaProviding: AnyObject {
 
 extension RenderingDelegate {
   public func reportRenderingError(message _: String, isWarning _: Bool, path _: UIElementPath) {}
+  public func reportViewWasCreated() {}
 }
 #else
 public protocol RenderingDelegate {}

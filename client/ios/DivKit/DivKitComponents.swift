@@ -445,6 +445,10 @@ private final class ErrorsReportingRenderingDelegate: RenderingDelegate {
     divReporter.reportError(cardId: cardId, error: error)
   }
 
+  func reportViewWasCreated() {
+    divReporter?.reportViewWasCreated(cardId: cardId)
+  }
+
   func mapView(_ view: any LayoutKit.BlockView, to id: LayoutKit.BlockViewID) {
     wrappedRenderingDelegate.mapView(view, to: id)
   }

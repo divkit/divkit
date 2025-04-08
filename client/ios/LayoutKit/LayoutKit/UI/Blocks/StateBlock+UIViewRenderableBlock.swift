@@ -76,6 +76,10 @@ private final class SubviewStorage: RenderingDelegate {
     )
   }
 
+  func reportViewWasCreated() {
+    wrappedRenderingDelegate?.reportViewWasCreated()
+  }
+
   func getView(_ id: BlockViewID) -> DetachableAnimationBlockView? {
     views.first { $0.id == id }?.view
   }
