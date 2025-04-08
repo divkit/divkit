@@ -484,14 +484,18 @@ private final class TextBlockView: UIView {
 
   private func requestImage(at index: Int) -> Cancellable? {
     let modelImage = model.images[index]
+
     return modelImage.holder.requestImageWithCompletion {
       [source = model.source, weak self] in
       guard let strongSelf = self, let image = $0,
             strongSelf.model.source.value === source.value else { return }
-      strongSelf.model.attachments[index].image = image.withTintColor(
+
+      let tintedImage = image.withTintColor(
         modelImage.tintColor,
         mode: modelImage.tintMode
       )
+
+      strongSelf.model.attachments[index].image = tintedImage
       strongSelf.imagesReferences[index] = image
       strongSelf.setNeedsDisplay()
     }
@@ -512,13 +516,22 @@ extension TextBlockView: UIGestureRecognizerDelegate {
 extension Image {
   fileprivate func withTintColor(_ color: Color?, mode: TintMode) -> Image {
     guard
-      let color,
+      let color else {
+      return self
+    }
+
+    if mode == .sourceIn {
+      return self.redrawn(withTintColor: color)
+    }
+
+    guard
       let coloredImage = ImageGeneratorType.constantColor(color: color.ciColor).imageGenerator(),
       let ciImage = self.ciImage ?? CIImage(image: self) else {
       return self
     }
 
-    let tintModeFilter = { mode.composerType.imageComposer($0)(coloredImage) }
+    let tintModeFilter = { mode.composerType.imageComposer($0)(coloredImage)
+    }
 
     let contentRect = CIVector(
       x: 0,
