@@ -3,7 +3,8 @@
   "platforms": [
     "android",
     "ios",
-    "flutter"
+    "flutter",
+    "web"
   ],
   "templates": {
     "chess_card": {
