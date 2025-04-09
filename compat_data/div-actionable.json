@@ -21,5 +21,13 @@
                 "version_added": "30.33.0"
             }
         }
+    }, {
+        "id": "actionable_capture_focus_on_action",
+        "name": "<code>capture_focus_on_action</code> property for the actionable components",
+        "compat": {
+            "ios": {
+                "version_added": "31.10.0"
+            }
+        }
     }]
 }

@@ -1,0 +1,11 @@
+{
+    "features": [{
+        "id": "indicator_nearest_pager_search",
+        "name": "Search for the nearest <code>pager</code> in the <code>indicator</code>",
+        "compat": {
+            "android": {
+                "version_added": "31.10.0"
+            }
+        }
+    }]
+}

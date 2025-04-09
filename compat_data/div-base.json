@@ -111,5 +111,13 @@
                 "version_added": "31.5.0"
             }
         }
+    }, {
+        "id": "background_radial_color_map",
+        "name": "Radial gradient in the background with positions using <code>color_map</code>",
+        "compat": {
+            "web": {
+                "version_added": "31.10.0"
+            }
+        }
     }]
 }

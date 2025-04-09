@@ -3,15 +3,14 @@
         "id": "text_truncate",
         "name": "Text <code>truncate</code> property",
         "status": {
-            "deprecated": true,
-            "notes": "Property is deprecated and should not be used. Use <code>ellipsis</code> instead"
+            "notes": "The property was deprecated, and then lost this status and was re-implemented."
         },
         "compat": {
             "android": {
-                "version_added": "1.0.0"
+                "version_added": "31.10.0"
             },
             "ios": {
-                "version_added": "1.0.0"
+                "version_added": "31.10.0"
             }
         }
     }, {
