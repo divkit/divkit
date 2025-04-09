@@ -122,28 +122,26 @@ public class DefaultTooltipManager: TooltipManager {
 
       let mainWindow = tooltipWindowManager.mainWindow
       // Passing the statusBarStyle control to `rootViewController` of the main window
-      let vc = ProxyViewController(
-        viewController: mainWindow.rootViewController ?? UIViewController(),
-        viewDidAppear: { UIAccessibility.post(notification: .screenChanged, argument: view) }
-      )
-      vc.view = view
-      proxyVC = vc
 
       if tooltip.params.mode == .modal {
+        let vc = ProxyViewController(
+          viewController: mainWindow.rootViewController ?? UIViewController()
+        )
+        vc.view = view
+        proxyVC = vc
+
         // Window won't rotate if `rootViewController` is not set
         modalWindow.rootViewController = vc
         tooltipWindowManager.showModalWindow()
-        view.frame = modalWindow.bounds
       } else {
-        guard let rootViewController = mainWindow.rootViewController else {
-          return assertionFailure("Failed to read root view controller of key window")
-        }
-        rootViewController.addChild(vc)
-        rootViewController.view.addSubview(view)
-        view.frame = rootViewController.view.bounds
+        mainWindow.addSubview(view)
       }
 
+      view.frame = modalWindow.bounds
+
       view.animateAppear()
+
+      UIAccessibility.postDelayed(notification: .screenChanged, argument: view)
 
       showingTooltips[info.id] = view
       let duration = tooltip.params.duration
@@ -244,14 +242,9 @@ extension TooltipAnchorView {
 
 private final class ProxyViewController: UIViewController {
   private let viewController: UIViewController
-  private let viewDidAppear: Action
 
-  init(
-    viewController: UIViewController,
-    viewDidAppear: @escaping Action
-  ) {
+  init(viewController: UIViewController) {
     self.viewController = viewController
-    self.viewDidAppear = viewDidAppear
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -262,11 +255,6 @@ private final class ProxyViewController: UIViewController {
 
   override var preferredStatusBarStyle: UIStatusBarStyle {
     viewController.preferredStatusBarStyle
-  }
-
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    viewDidAppear()
   }
 }
 
@@ -304,4 +292,18 @@ public final class DefaultTooltipManager: TooltipManager {
 extension TooltipManager {
   public func mapView(_: BlockView, to _: BlockViewID) {}
   public func reset() {}
+}
+
+extension UIAccessibility {
+  fileprivate static func postDelayed(
+    notification: UIAccessibility.Notification,
+    argument: Any?
+  ) {
+    after(0.2) {
+      UIAccessibility.post(
+        notification: notification,
+        argument: argument
+      )
+    }
+  }
 }
