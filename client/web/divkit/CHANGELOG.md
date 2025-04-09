@@ -1,3 +1,10 @@
+## 31.11.0 (April 14, 2025)
+
+* Added support for the `accessibility` `mode` = `exclude`. Interactive components are prohibited in it.
+* Added support for the `capture_focus_on_action` property.
+* `input` / `select` / `switch` is now prohibited inside components with actions (as is `select`, as well as any other interactive components with actions).
+
+
 ## 31.10.0 (April 7, 2025)
 
 * Added support for the `color_map` in `radial_gradient`.

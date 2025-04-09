@@ -1,3 +1,22 @@
+## 31.11.0
+
+# Android Client:
+* Added support for `capture_focus_on_action` property.
+* Fix leaks and StackOverflows by stopping generation of expression resolvers outside RuntimeStore.
+* Supported expressions in lottie extension params.
+
+# iOS Client:
+* Added support for `color_map` property in `div-radial-gradient`.
+* Fix transition_change animation.
+* Fixed performance degradation for images with tint filter in text.
+* Supported search for the nearest pager if `pager_id` is not specified in `div-indicator`.
+
+# Web Client:
+* Added support for the `accessibility` `mode` = `exclude`. Interactive components are prohibited in it.
+* Added support for the `capture_focus_on_action` property.
+* `input` / `select` / `switch` is now prohibited inside components with actions (as is `select`, as well as any other interactive components with actions).
+
+
 ## 31.10.0
 
 # Android Client:
