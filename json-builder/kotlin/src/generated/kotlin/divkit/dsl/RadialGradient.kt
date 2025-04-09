@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [radialGradient].
  * 
- * Required parameters: `type, colors`.
+ * Required parameters: `type`.
  */
 @Generated
 data class RadialGradient internal constructor(
