@@ -111,6 +111,11 @@ private final class DebugBlockView: BlockView, VisibleBoundsTrackingContainer {
     guard let showDebugInfo, let errorCollector, errorCollector.totalErrorCount > 0 else { return }
     showDebugInfo(ErrorListView(errors: errorCollector.errorList))
   }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
+  }
 }
 
 private let showOverlayURL = URL(string: "debugInfo://show")!
