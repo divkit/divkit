@@ -26,10 +26,10 @@ internal class DivLottieCompositionRepository(
         }
     }
 
-    internal fun preloadLottieComposition(url: String) {
-        when (Uri.parse(url).scheme) {
+    internal fun preloadLottieComposition(url: Uri) {
+        when (url.scheme) {
             HTTP_SCHEME, HTTPS_SCHEME -> {
-                networkCache.cacheComposition(url)
+                networkCache.cacheComposition(url.toString())
             }
         }
     }

@@ -2084,6 +2084,16 @@
       "file": "animations/lottie/lottie_gallery.json"
     },
     {
+      "title": "Lottie gallery with expressions",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/lottie_gallery_with_expressions.json"
+    },
+    {
       "title": "Lottie cycled animations",
       "case_id": 154,
       "platforms": [
