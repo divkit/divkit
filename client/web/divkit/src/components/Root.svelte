@@ -79,7 +79,6 @@
         type MaybeMissing,
         prepareVars
     } from '../expressions/json';
-    import { storesMap } from '../stores';
     import { evalExpression } from '../expressions/eval';
     import { parse } from '../expressions/expressions';
     import { gatherVarsFromAst } from '../expressions/utils';
@@ -103,7 +102,6 @@
     import { checkSubmitAction } from '../utils/checkSubmitAction';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
-  import Actionable from './utilities/Actionable.svelte';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -1663,9 +1661,10 @@
         tooltip: MaybeMissing<Tooltip>;
     }> = new Map();
     const componentContextMap: Map<string, Set<ComponentContext>> = new Map();
-    function registerInstance<T>(id: string, block: T) {
+    function registerInstance<T>(id: string, block: T, duplicateErrorLevel: 'error' | 'warn' = 'error') {
         if (instancesMap.has(id)) {
             logError(wrapError(new Error('Duplicate instance id'), {
+                level: duplicateErrorLevel,
                 additional: {
                     id
                 }
@@ -1741,24 +1740,6 @@
         if (tooltips.some(it => it.desc.id === id)) {
             tooltips = tooltips.filter(it => it.desc.id !== id);
         }
-    }
-
-    const stores = new Map<string, Writable<any>>();
-
-    function setStore(id: string) {
-        if (stores.has(id)) {
-            return;
-        }
-
-        stores.set(id, storesMap[id]());
-    }
-
-    function getStore<T>(id: string): Writable<T> {
-        if (!stores.has(id)) {
-            setStore(id);
-        }
-
-        return stores.get(id) as Writable<T>;
     }
 
     function awaitVariableChanges(variableName: string): Readable<any> {
@@ -2018,6 +1999,97 @@
                     }
                 };
             },
+            registerPager(pagerId) {
+                const targetCtx = ctx.parent;
+
+                if (!targetCtx) {
+                    return {
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        update() {},
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        destroy() {}
+                    };
+                }
+
+                targetCtx.pagers = targetCtx.pagers || new Map();
+                if (targetCtx.pagers.has(pagerId)) {
+                    return {
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        update() {},
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        destroy() {}
+                    };
+                }
+
+                targetCtx.pagers.set(pagerId, null);
+
+                return {
+                    update(data) {
+                        if (targetCtx.pagers) {
+                            targetCtx.pagers.set(pagerId, data);
+                        }
+
+                        const listeners = pagerId ? targetCtx.pagerListeners?.get(pagerId) : undefined;
+                        const listeners2 = targetCtx.pagerListeners?.get(undefined);
+                        const totalListeners = [...(listeners || []), ...(listeners2 || [])];
+
+                        if (totalListeners) {
+                            totalListeners.forEach(listener => {
+                                listener(data);
+                            });
+                        }
+                    },
+                    destroy() {
+                        if (targetCtx.pagers) {
+                            targetCtx.pagers.delete(pagerId);
+                        }
+                    }
+                };
+            },
+            listenPager(pagerId, listener) {
+                let targetCtx = ctx.parent;
+
+                while (
+                    targetCtx &&
+                    !(targetCtx.pagers && (pagerId ? targetCtx.pagers.get(pagerId) : targetCtx.pagers?.size))
+                ) {
+                    targetCtx = targetCtx.parent;
+                }
+
+                if (!targetCtx) {
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    return () => {};
+                }
+
+                targetCtx.pagerListeners = ctx.pagerListeners || new Map();
+                const list = targetCtx.pagerListeners.get(pagerId) || [];
+                if (!targetCtx.pagerListeners.has(pagerId)) {
+                    targetCtx.pagerListeners.set(pagerId, list);
+                }
+                list.push(listener);
+
+                const targetPagerId = pagerId ? pagerId : (targetCtx.pagers?.keys().next().value || undefined);
+                const data = targetCtx.pagers?.get(targetPagerId);
+                if (data) {
+                    listener(data);
+                }
+
+                return () => {
+                    if (!targetCtx.pagerListeners) {
+                        return;
+                    }
+
+                    let list = targetCtx.pagerListeners.get(targetPagerId);
+                    if (list) {
+                        list = list.filter(it => it !== listener) || [];
+                        if (list.length) {
+                            targetCtx.pagerListeners.set(pagerId, list);
+                        } else {
+                            targetCtx.pagerListeners.delete(pagerId);
+                        }
+                    }
+                };
+            },
             destroy() {
                 const set = componentContextMap.get(ctx.id);
                 if (set) {
@@ -2079,7 +2151,6 @@
         registerId,
         getComponentId,
         preparePrototypeVariables,
-        getStore,
         getCustomization,
         getBuiltinProtocols,
         getExtension,

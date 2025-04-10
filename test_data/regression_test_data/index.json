@@ -3693,7 +3693,8 @@
       "case_id": 200,
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivIndicator"
@@ -3711,7 +3712,8 @@
       "case_id": 201,
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivIndicator"

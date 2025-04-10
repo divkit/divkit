@@ -6,17 +6,16 @@
 </script>
 
 <script lang="ts">
-    import { getContext, tick } from 'svelte';
+    import { getContext, onDestroy, onMount, tick } from 'svelte';
 
     import rootCss from '../Root.module.css';
     import css from './Indicator.module.css';
 
     import type { DivIndicatorData } from '../../types/indicator';
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { PagerData } from '../../stores/pagers';
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivIndicatorDefaultItemPlacement, DivIndicatorStretchItemPlacement } from '../../types/indicator';
-    import type { ComponentContext } from '../../types/componentContext';
+    import type { ComponentContext, PagerData } from '../../types/componentContext';
 
     import Outer from '../utilities/Outer.svelte';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
@@ -56,6 +55,8 @@
     let scroller: HTMLElement;
     let indicatorItemsWrapper: HTMLElement;
     let pagerData: PagerData;
+    let pagerDataUnsubscribe: (() => void) | undefined;
+    let mounted = false;
 
     $: origJson = componentContext.origJson;
 
@@ -80,6 +81,10 @@
 
     $: if (origJson) {
         rebind();
+    }
+
+    $: if (origJson && mounted) {
+        init();
     }
 
     $: jsonShape = componentContext.getDerivedFromVars(componentContext.json.shape);
@@ -141,30 +146,24 @@
             spaceBetweenCenters = correctNonNegativeNumber($jsonSpaceBetweenCenters.value, spaceBetweenCenters);
         }
     }
-    $: pagers = rootCtx.getStore<Map<string, PagerData>>('pagers');
-    $: {
-        onPagerDataUpdate($pagers);
-    }
 
-    async function onPagerDataUpdate(pagersMap: Map<string, PagerData>): Promise<void> {
-        if (componentContext.json.pager_id && pagersMap.has(componentContext.json.pager_id)) {
-            pagerData = pagersMap.get(componentContext.json.pager_id) as PagerData;
+    async function onPagerDataUpdate(data: PagerData): Promise<void> {
+        pagerData = data;
 
-            await tick();
+        await tick();
 
-            if (indicatorItemsWrapper) {
-                // if not destroyed yet
+        if (indicatorItemsWrapper) {
+            // if not destroyed yet
 
-                const elem = indicatorItemsWrapper.children[pagerData.currentItem] as HTMLElement;
+            const elem = indicatorItemsWrapper.children[pagerData.currentItem] as HTMLElement;
 
-                if (elem) {
-                    const currentItemOffsetLeft = elem.offsetLeft;
+            if (elem) {
+                const currentItemOffsetLeft = elem.offsetLeft;
 
-                    scroller.scroll({
-                        left: currentItemOffsetLeft - scroller.clientWidth / 2,
-                        behavior: 'smooth'
-                    });
-                }
+                scroller.scroll({
+                    left: currentItemOffsetLeft - scroller.clientWidth / 2,
+                    behavior: 'smooth'
+                });
             }
         }
     }
@@ -214,6 +213,24 @@
         direction: $direction,
         visible: pagerData?.size > 1
     };
+
+    function init() {
+        pagerDataUnsubscribe?.();
+        pagerDataUnsubscribe = undefined;
+
+        const pagerId = componentContext.json.pager_id;
+        pagerDataUnsubscribe = componentContext.listenPager(pagerId, onPagerDataUpdate);
+    }
+
+    onMount(() => {
+        mounted = true;
+    });
+
+    onDestroy(() => {
+        mounted = false;
+        pagerDataUnsubscribe?.();
+        pagerDataUnsubscribe = undefined;
+    });
 </script>
 
 <Outer

@@ -3,13 +3,28 @@ import type { Action, TemplateContext } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { WrappedError } from '../utils/wrapError';
-import type { Animator, DivBaseData, Tooltip } from './base';
+import type { Animator, DivBaseData } from './base';
 import type { Store } from '../../typings/store';
 import type { evalExpression } from '../expressions/eval';
 import type { Node } from '../expressions/ast';
 import type { CustomFunctions } from '../expressions/funcs/customFuncs';
+import type { PagerData } from '../stores/pagers';
 
 export type StateSetter = (stateId: string) => Promise<ComponentContext | undefined>;
+
+export interface PagerData {
+    instId: string;
+    size: number;
+    currentItem: number;
+    scrollToPagerItem(index: number): void;
+}
+
+export type PagerListener = (data: PagerData) => void;
+
+export interface PagerRegisterData {
+    update: PagerListener;
+    destroy: () => void;
+}
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
@@ -28,6 +43,8 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     id: string;
     animators?: Record<string, MaybeMissing<Animator>>;
     states?: Record<string, StateSetter[]>;
+    pagers?: Map<string | undefined, PagerData | null>;
+    pagerListeners?: Map<string | undefined, PagerListener[]>;
 
     logError(error: WrappedError): void;
     execAnyActions(
@@ -62,5 +79,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     getVariable(varName: string, type?: VariableType): Variable | undefined;
     getAnimator(name: string): MaybeMissing<Animator> | undefined;
     registerState(stateId: string, setState: StateSetter): () => void;
+    registerPager(pagerId: string | undefined): PagerRegisterData;
+    listenPager(pagerId: string | undefined, listener: PagerListener): () => void;
     destroy(): void;
 }

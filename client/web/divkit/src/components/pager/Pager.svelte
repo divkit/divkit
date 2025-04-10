@@ -44,9 +44,8 @@
     import type { DivPagerData } from '../../types/pager';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Orientation } from '../../types/orientation';
-    import type { PagerData } from '../../stores/pagers';
     import type { SwitchElements } from '../../types/switch-elements';
-    import type { ComponentContext } from '../../types/componentContext';
+    import type { ComponentContext, PagerRegisterData } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
     import type { Variable } from '../../expressions/variable';
@@ -113,6 +112,8 @@
 
     let items: ComponentContext[] = [];
     let prevContext: ComponentContext<DivPagerData> | undefined;
+
+    let registerData: PagerRegisterData | undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -364,13 +365,14 @@
         }
     }
 
-    $: pagers = rootCtx.getStore<Map<string, PagerData>>('pagers');
-
     function pagerDataUpdate(size: number, currentItem: number): void {
-        const pagerId = componentContext.id;
-        if (pagerId) {
-            const newPagersMap = new Map($pagers);
-            $pagers = newPagersMap.set(pagerId, { instId, size, currentItem, scrollToPagerItem });
+        if (registerData) {
+            registerData.update({
+                instId,
+                currentItem,
+                size,
+                scrollToPagerItem
+            });
         }
     }
 
@@ -444,9 +446,16 @@
     }
 
     function init(): void {
+        registerData?.destroy();
+        registerData = undefined;
+
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
+        }
+
+        if (!componentContext.fakeElement) {
+            registerData = componentContext.registerPager(componentContext.id || undefined);
         }
 
         if (componentContext.id && !componentContext.fakeElement) {
@@ -476,7 +485,7 @@
                         scrollToPagerItem(clampIndex(currentItem + step, overflow || 'clamp'), animated ? 'smooth' : 'instant');
                     }
                 },
-            });
+            }, 'warn');
         }
     }
 
@@ -494,18 +503,6 @@
         mounted = true;
 
         if (pagerItemsWrapper) {
-            const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
-
-            if (isIndicatorExist) {
-                const pagerItems = [...pagerItemsWrapper.children] as HTMLElement[];
-
-                for (const [index, item] of pagerItems.entries()) {
-                    item.setAttribute('role', 'tabpanel');
-                    item.setAttribute('id', `${instId}-panel-${index}`);
-                    item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
-                }
-            }
-
             scrollToPagerItem(currentItem, 'instant');
         }
     });
@@ -521,6 +518,9 @@
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
         }
+
+        registerData?.destroy();
+        registerData = undefined;
     });
 </script>
 
@@ -540,7 +540,12 @@
             on:scroll={onScrollDebounced}
         >
             {#each items as item, index}
-                <div class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}>
+                <div
+                    class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}
+                    role="tabpanel"
+                    id="{instId}-panel-{index}"
+                    aria-labelledby="{instId}-tab-{index}"
+                >
                     <Unknown
                         componentContext={item}
                         layoutParams={childLayoutParams}

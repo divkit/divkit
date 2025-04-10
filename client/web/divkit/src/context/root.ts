@@ -43,7 +43,7 @@ export interface RootCtxValue {
     ): (() => void) | undefined;
     isRunning(type: Running): boolean;
     setRunning(type: Running, val: boolean): void;
-    registerInstance<T>(id: string, block: T): void;
+    registerInstance<T>(id: string, block: T, duplicateErrorLevel?: 'error' | 'warn'): void;
     unregisterInstance(id: string): void;
     registerParentOf(id: string, methods: ParentMethods): void;
     unregisterParentOf(id: string): void;
@@ -58,7 +58,6 @@ export interface RootCtxValue {
     registerId(id: string, getter: NodeGetter): () => void;
     getComponentId(id: string): string;
     preparePrototypeVariables(name: string, data: Record<string, unknown>, index: number): Map<string, Variable>;
-    getStore<T>(id: string): Writable<T>;
     getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined;
     getBuiltinProtocols(): Set<string>;
     getExtension(id: string, params: object | undefined): DivExtension | undefined;
