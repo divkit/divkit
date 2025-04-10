@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.errors
 
+import android.net.Uri
 import android.view.ViewGroup
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.actions.logError
@@ -11,7 +12,11 @@ import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
+import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.util.map
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
+import com.yandex.div2.DivAction
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
@@ -178,6 +183,27 @@ internal class ErrorModel(
             result[path] = runtime.variableController
         }
         return result
+    }
+
+    fun executeAction(action: String) {
+        val parsingEnvironment = DivParsingEnvironment(ParsingErrorLogger.LOG)
+        val actions = runCatching { JSONArray(action) }
+            .mapCatching { jsonArray ->
+                jsonArray.map { actionJson ->
+                    DivAction(parsingEnvironment, actionJson as JSONObject)
+                }
+            }
+            .recoverCatching {
+                val jsonObject = JSONObject(action)
+                listOf(DivAction(parsingEnvironment, jsonObject))
+            }
+            .getOrElse {
+                val uri = Uri.parse(action)
+                div2View.handleUri(uri)
+                return
+            }
+
+        actions.forEach(div2View::handleAction)
     }
 
     fun getErrorHandler(): (Throwable) -> Unit {
