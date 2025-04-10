@@ -3,7 +3,9 @@ package com.yandex.div.core.view2.divs.pager
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import com.yandex.div.core.view2.divs.drawChildrenShadows
+import android.view.View
+import androidx.core.view.isVisible
+import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeUnspecifiedSpec
@@ -38,9 +40,11 @@ internal class DivPagerPageLayout(
 
     private fun getMinimumSize(parentSpec: Int) = if (isUnspecified(parentSpec)) 0 else MeasureSpec.getSize(parentSpec)
 
-    override fun dispatchDraw(canvas: Canvas) {
-        drawChildrenShadows(canvas)
-        super.dispatchDraw(canvas)
+    override fun drawChild(canvas: Canvas, child: View?, drawingTime: Long): Boolean {
+        if (child != null && child.isVisible) {
+            child.drawShadow(canvas)
+        }
+        return super.drawChild(canvas, child, drawingTime)
     }
 
     private fun getSpec(size: Int, parentSpec: Int, alongScrollAxis: Boolean): Int {

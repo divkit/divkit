@@ -18,8 +18,4 @@ internal class DivSwitchView(context: Context) : SwitchView(context),
     override fun draw(canvas: Canvas) {
         drawBorderClipped(canvas) { super.draw(it) }
     }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
-    }
 }

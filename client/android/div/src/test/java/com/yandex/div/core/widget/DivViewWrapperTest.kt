@@ -22,13 +22,10 @@ class DivViewWrapperTest {
     private val divView = mock<Div2View>()
     private val divBorder = DivBorder()
     private val viewWithBorder = object : DivBorderSupports, View(context) {
-        override var isDrawing: Boolean
-            get() = false
-            set(value) {}
 
         override var needClipping: Boolean
             get() = true
-            set(value) {}
+            set(value) = Unit
 
         override fun getDivBorderDrawer(): DivBorderDrawer = divBorderDrawer
 

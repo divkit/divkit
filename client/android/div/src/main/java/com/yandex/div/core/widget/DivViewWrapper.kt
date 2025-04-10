@@ -38,10 +38,6 @@ internal open class DivViewWrapper @JvmOverloads constructor(
         super.addView(child, 0, params)
     }
 
-    override var isDrawing: Boolean
-        get() = (child as? DivBorderSupports)?.isDrawing == true
-        set(value) {(child as? DivBorderSupports)?.isDrawing = value}
-
     override var needClipping
         get() = (child as? DivBorderSupports)?.needClipping ?: true
         set(value) {

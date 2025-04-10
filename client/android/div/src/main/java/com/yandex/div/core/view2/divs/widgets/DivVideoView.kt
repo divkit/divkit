@@ -10,7 +10,6 @@ import com.yandex.div.core.view2.Releasable
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div2.Div
-import com.yandex.div2.DivVideo
 
 internal class DivVideoView @JvmOverloads constructor(
     context: Context,
@@ -28,10 +27,6 @@ internal class DivVideoView @JvmOverloads constructor(
 
     override fun draw(canvas: Canvas) {
         drawBorderClipped(canvas) { super.draw(it) }
-    }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
     }
 
     override fun release() {

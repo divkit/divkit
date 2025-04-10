@@ -2,7 +2,9 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
-import com.yandex.div.core.view2.divs.drawChildrenShadows
+import android.view.View
+import androidx.core.view.isVisible
+import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.widget.wraplayout.WrapContainerLayout
 import com.yandex.div2.Div
 
@@ -20,8 +22,10 @@ internal class DivWrapLayout(context: Context) : WrapContainerLayout(context),
         drawBorderClipped(canvas) { super.draw(canvas) }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        drawChildrenShadows(canvas)
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(canvas) }
+    override fun drawChild(canvas: Canvas, child: View?, drawingTime: Long): Boolean {
+        if (child != null && child.isVisible) {
+            child.drawShadow(canvas)
+        }
+        return super.drawChild(canvas, child, drawingTime)
     }
 }

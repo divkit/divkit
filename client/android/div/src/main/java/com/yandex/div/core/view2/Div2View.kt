@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
+import androidx.core.view.isVisible
 import androidx.transition.Scene
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -55,7 +56,7 @@ import com.yandex.div.core.view2.divs.DivLayoutProviderVariablesHolder
 import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.clearFocusOnClick
-import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -1134,12 +1135,19 @@ class Div2View private constructor(
         if (drawWasSkipped) {
             histogramReporter.onDrawStarted()
         }
-        drawChildrenShadows(canvas)
 
         super.dispatchDraw(canvas)
+
         if (drawWasSkipped) {
             histogramReporter.onDrawFinished()
         }
+    }
+
+    override fun drawChild(canvas: Canvas, child: View?, drawingTime: Long): Boolean {
+        if (child != null && child.isVisible) {
+            child.drawShadow(canvas)
+        }
+        return super.drawChild(canvas, child, drawingTime)
     }
 
     internal fun bindViewToDiv(view: View, div: Div) {

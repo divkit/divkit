@@ -39,10 +39,6 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
         drawBorderClipped(canvas) { super.draw(it) }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
-    }
-
     override fun startDivAnimation() {
         super.startDivAnimation()
         animationStarted = true

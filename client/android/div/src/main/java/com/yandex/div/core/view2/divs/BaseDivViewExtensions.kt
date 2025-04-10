@@ -745,12 +745,6 @@ internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Floa
     }.toFloat()
 }
 
-internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
-    children
-        .filter { it.isVisible }
-        .forEach { child -> child.drawShadow(canvas) }
-}
-
 internal fun View.drawShadow(canvas: Canvas) {
     canvas.withSave {
         translate(x, y)

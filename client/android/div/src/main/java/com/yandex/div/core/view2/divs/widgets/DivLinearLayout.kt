@@ -3,7 +3,9 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import com.yandex.div.core.view2.divs.drawChildrenShadows
+import android.view.View
+import androidx.core.view.isVisible
+import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.widget.LinearContainerLayout
 import com.yandex.div2.Div
 
@@ -25,8 +27,10 @@ internal class DivLinearLayout @JvmOverloads constructor(
         drawBorderClipped(canvas) { super.draw(it) }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        drawChildrenShadows(canvas)
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
+    override fun drawChild(canvas: Canvas, child: View?, drawingTime: Long): Boolean {
+        if (child != null && child.isVisible) {
+            child.drawShadow(canvas)
+        }
+        return super.drawChild(canvas, child, drawingTime)
     }
 }

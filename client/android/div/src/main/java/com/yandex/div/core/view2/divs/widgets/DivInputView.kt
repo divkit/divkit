@@ -85,11 +85,7 @@ internal class DivInputView @JvmOverloads constructor(
     }
 
     override fun draw(canvas: Canvas) {
-        drawBorderClippedAndTranslated(canvas, scrollX, scrollY) { super.draw(it) }
-    }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        dispatchDrawBorderClippedAndTranslated(canvas, scrollX, scrollY) { super.dispatchDraw(it) }
+        drawBorderClipped(canvas, scrollX, scrollY) { super.draw(it) }
     }
 
     override fun setFocusable(focusable: Boolean) {

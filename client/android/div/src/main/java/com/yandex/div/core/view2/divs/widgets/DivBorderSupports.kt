@@ -7,8 +7,6 @@ import com.yandex.div2.DivBorder
 
 internal interface DivBorderSupports {
 
-    var isDrawing: Boolean
-
     var needClipping: Boolean
 
     fun getDivBorderDrawer(): DivBorderDrawer?
@@ -30,42 +28,18 @@ internal interface DivBorderSupports {
     }
 }
 
-internal inline fun DivBorderSupports.drawBorderClipped(canvas: Canvas, callback: (Canvas) -> Unit) {
-    isDrawing = true
-    getDivBorderDrawer()?.drawClipped(canvas, callback) ?: callback(canvas)
-    isDrawing = false
-}
-
-internal inline fun DivBorderSupports.dispatchDrawBorderClipped(canvas: Canvas, callback: (Canvas) -> Unit) {
-    if (isDrawing) {
-        callback(canvas)
-    } else {
-        getDivBorderDrawer()?.drawClipped(canvas, callback) ?: callback(canvas)
-    }
-}
-
-internal inline fun DivBorderSupports.drawBorderClippedAndTranslated(
+internal inline fun DivBorderSupports.drawBorderClipped(
     canvas: Canvas,
-    translationX: Int,
-    translationY: Int,
+    translationX: Int = 0,
+    translationY: Int = 0,
     callback: (Canvas) -> Unit
 ) {
-    isDrawing = true
-    getDivBorderDrawer()?.drawClippedAndTranslated(canvas, translationX, translationY, callback)
-        ?: callback(canvas)
-    isDrawing = false
-}
-
-internal inline fun DivBorderSupports.dispatchDrawBorderClippedAndTranslated(
-    canvas: Canvas,
-    translationX: Int,
-    translationY: Int,
-    callback: (Canvas) -> Unit
-) {
-    if (isDrawing) {
+    val borderDrawer = getDivBorderDrawer()
+    if (borderDrawer == null) {
         callback(canvas)
+    } else if (translationX == 0 && translationY == 0) {
+        borderDrawer.drawClipped(canvas, callback)
     } else {
-        getDivBorderDrawer()?.drawClippedAndTranslated(canvas, translationX, translationY, callback)
-            ?: callback(canvas)
+        borderDrawer.drawClippedAndTranslated(canvas, translationX, translationY, callback)
     }
 }

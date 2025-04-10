@@ -13,7 +13,7 @@ import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
-import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.gallery.DivGridLayoutManager
 import com.yandex.div.core.view2.divs.gallery.PagerSnapStartHelper
 import com.yandex.div.core.widget.DivViewWrapper
@@ -202,9 +202,11 @@ internal class DivRecyclerView @JvmOverloads constructor(
         drawBorderClipped(canvas) { super.draw(it) }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        drawChildrenShadows(canvas)
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
+    override fun drawChild(canvas: Canvas, child: View?, drawingTime: Long): Boolean {
+        if (child != null && child.visibility == VISIBLE) {
+            child.drawShadow(canvas)
+        }
+        return super.drawChild(canvas, child, drawingTime)
     }
 
     override fun release() {

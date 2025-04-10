@@ -8,7 +8,7 @@ import com.yandex.div2.DivBorder
 internal class DivBorderSupportsMixin: DivBorderSupports {
 
     private var borderDrawer: DivBorderDrawer? = null
-    override var isDrawing = false
+
     override var needClipping = true
         set(value) {
             borderDrawer?.needClipping = value

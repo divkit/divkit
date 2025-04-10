@@ -18,10 +18,6 @@ internal class DivSelectView(context: Context) : SelectView(context),
         drawBorderClipped(canvas) { super.draw(it) }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
-    }
-
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
         super.onSizeChanged(width, height, oldWidth, oldHeight)
         onBoundsChanged(width, height)

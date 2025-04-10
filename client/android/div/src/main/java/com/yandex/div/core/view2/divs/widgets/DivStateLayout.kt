@@ -14,8 +14,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.math.MathUtils
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.isVisible
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div2.Div
 import kotlin.math.abs
@@ -96,9 +97,11 @@ internal class DivStateLayout @JvmOverloads constructor(
         drawBorderClipped(canvas) { super.draw(it) }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        drawChildrenShadows(canvas)
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
+    override fun drawChild(canvas: Canvas, child: View?, drawingTime: Long): Boolean {
+        if (child != null && child.isVisible) {
+            child.drawShadow(canvas)
+        }
+        return super.drawChild(canvas, child, drawingTime)
     }
 
     private inner class SwipeListener : GestureDetector.SimpleOnGestureListener() {

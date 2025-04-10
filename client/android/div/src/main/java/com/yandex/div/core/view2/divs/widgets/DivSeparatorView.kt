@@ -26,10 +26,6 @@ internal class DivSeparatorView  @JvmOverloads constructor(
         drawBorderClipped(canvas) { super.draw(it) }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
-    }
-
     companion object {
         const val DEFAULT_DIVIDER_COLOR = 0x14000000
     }

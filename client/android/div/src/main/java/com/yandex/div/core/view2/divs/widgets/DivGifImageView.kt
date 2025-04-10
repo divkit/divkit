@@ -35,8 +35,4 @@ internal open class DivGifImageView @JvmOverloads constructor(
     override fun draw(canvas: Canvas) {
         drawBorderClipped(canvas) { super.draw(it) }
     }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
-    }
 }
