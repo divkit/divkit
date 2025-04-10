@@ -4,8 +4,18 @@
     position: absolute;
     top: 0;
     left: 0;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
     visibility: hidden;
+    border: none;
+    background: none;
     pointer-events: none;
+}
+
+.tooltip::backdrop {
+    background: transparent;
 }
 
 .tooltip_visible {
@@ -15,6 +25,15 @@
 
 .tooltip > .outer:not(.root__clickable):not(.root__clickable-no-transition):not(.root__selectable) {
     pointer-events: none;
+}
+
+.tooltip__inner {
+    position: relative;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .tooltip__overlay {

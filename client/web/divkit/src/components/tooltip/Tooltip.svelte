@@ -23,6 +23,7 @@
     import { genClassName } from '../../utils/genClassName';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
     import { inOutAnimation } from '../../utils/inOutAnimation';
+    import { hasDialogSupport } from '../../utils/hasDialogSupport';
 
     export let ownerNode: HTMLElement;
     export let data: MaybeMissing<Tooltip>;
@@ -35,7 +36,7 @@
 
     const creationTime = Date.now();
 
-    let tooltipNode: HTMLElement;
+    let tooltipNode: HTMLDialogElement | HTMLElement;
     let visible = false;
     let tooltipX = '';
     let tooltipY = '';
@@ -44,6 +45,7 @@
     let resizeObserver: ResizeObserver | null = null;
     let componentContext: ComponentContext;
     let modal = true;
+    let prevFocusedElement: Element | null = null;
 
     $: {
         if (componentContext) {
@@ -102,7 +104,7 @@
         let calcedHeight = 0;
 
         const jsonWidth = parentComponentContext.getJsonWithVars(data.div?.width);
-        const jsonHeight = parentComponentContext.getJsonWithVars(data.div?.width);
+        const jsonHeight = parentComponentContext.getJsonWithVars(data.div?.height);
 
         if (!jsonWidth || jsonWidth.type === 'match_parent') {
             calcedWidth = width = window.innerWidth;
@@ -165,10 +167,19 @@
     }
 
     function onOutClick(event: Event): void {
-        if (Date.now() - creationTime < 100 || event.composedPath().includes(tooltipNode)) {
+        const path = event.composedPath();
+
+        if (
+            Date.now() - creationTime < 100 ||
+            path.includes(tooltipNode) && !(hasDialogSupport && path[0] === tooltipNode)
+        ) {
             return;
         }
 
+        closeByOutside(event);
+    }
+
+    function closeByOutside(event: Event): void {
         event.stopPropagation();
         event.preventDefault();
 
@@ -193,13 +204,26 @@
         }
     }
 
+    function onClose(event: Event): void {
+        rootCtx.onTooltipClose(internalId);
+        event.preventDefault();
+    }
+
     onMount(() => {
+        try {
+            prevFocusedElement = document.activeElement;
+        } catch (_err) {}
+
         if (rootCtx.tooltipRoot) {
             const computed = window.getComputedStyle(tooltipNode);
             tooltipNode.style.fontSize = computed.fontSize;
             tooltipNode.style.fontFamily = computed.fontFamily;
             tooltipNode.style.lineHeight = computed.lineHeight;
             rootCtx.tooltipRoot.appendChild(tooltipNode);
+        }
+
+        if (hasDialogSupport && tooltipNode && tooltipNode instanceof HTMLDialogElement) {
+            tooltipNode[modal ? 'showModal' : 'show']();
         }
     });
 
@@ -215,6 +239,18 @@
         }
 
         resizeObserver?.disconnect();
+
+        if (modal && prevFocusedElement && prevFocusedElement instanceof HTMLElement) {
+            if (hasDialogSupport && tooltipNode && tooltipNode instanceof HTMLDialogElement) {
+                tooltipNode.close();
+            }
+
+            try {
+                prevFocusedElement.focus({
+                    preventScroll: true
+                });
+            } catch (_err) {}
+        }
     });
 </script>
 
@@ -226,39 +262,74 @@
     on:click={onOutClick}
 />
 
-{#if visible && modal}
-    {#if data.background_accessibility_description}
-        <button
-            class={css.tooltip__overlay}
-            type="button"
-            aria-label={data.background_accessibility_description}
-            on:click={onOutClick}
-        ></button>
-    {:else}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-            class={css.tooltip__overlay}
-            on:click={onOutClick}
-        ></div>
-    {/if}
-{/if}
+{#if hasDialogSupport}
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <dialog
+        bind:this={tooltipNode}
+        class="{genClassName('tooltip', css, mods)} {$isDesktop ? rootCss.root_platform_desktop : ''}"
+        style:top={tooltipY}
+        style:left={tooltipX}
+        style:width={tooltipWidth}
+        style:height={tooltipHeight}
+        in:inOutAnimation|global={{ animations: $animationIn || DEFAULT_ANIMATION, direction: 'in' }}
+        out:inOutAnimation|global={{ animations: $animationOut || DEFAULT_ANIMATION, direction: 'out' }}
+        on:keydown={onKeyDown}
+        on:close={onClose}
+        on:cancel={onClose}
+        on:click={onOutClick}
+    >
+        {#if visible && modal && data.background_accessibility_description}
+            <button
+                class={css.tooltip__overlay}
+                type="button"
+                aria-label={data.background_accessibility_description}
+                on:click={closeByOutside}
+            ></button>
+        {/if}
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div
-    bind:this={tooltipNode}
-    class="{genClassName('tooltip', css, mods)} {$isDesktop ? rootCss.root_platform_desktop : ''}"
-    role="dialog"
-    aria-modal={modal}
-    style:top={tooltipY}
-    style:left={tooltipX}
-    style:width={tooltipWidth}
-    style:height={tooltipHeight}
-    in:inOutAnimation={{ animations: $animationIn || DEFAULT_ANIMATION, direction: 'in' }}
-    out:inOutAnimation={{ animations: $animationOut || DEFAULT_ANIMATION, direction: 'out' }}
-    on:keydown={onKeyDown}
->
-    <Unknown
-        {componentContext}
-    />
-</div>
+        <div class={css.tooltip__inner}>
+            <Unknown
+                {componentContext}
+            />
+        </div>
+    </dialog>
+{:else}
+    {#if visible && modal}
+        {#if data.background_accessibility_description}
+            <button
+                class={css.tooltip__overlay}
+                type="button"
+                aria-label={data.background_accessibility_description}
+                on:click={closeByOutside}
+            ></button>
+        {:else}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div
+                class={css.tooltip__overlay}
+                on:click={closeByOutside}
+            ></div>
+        {/if}
+    {/if}
+
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <div
+        bind:this={tooltipNode}
+        class="{genClassName('tooltip', css, mods)} {$isDesktop ? rootCss.root_platform_desktop : ''}"
+        role="dialog"
+        aria-modal={modal}
+        style:top={tooltipY}
+        style:left={tooltipX}
+        style:width={tooltipWidth}
+        style:height={tooltipHeight}
+        in:inOutAnimation|global={{ animations: $animationIn || DEFAULT_ANIMATION, direction: 'in' }}
+        out:inOutAnimation|global={{ animations: $animationOut || DEFAULT_ANIMATION, direction: 'out' }}
+        on:keydown={onKeyDown}
+    >
+        <div class={css.tooltip__inner}>
+            <Unknown
+                {componentContext}
+            />
+        </div>
+    </div>
+{/if}
