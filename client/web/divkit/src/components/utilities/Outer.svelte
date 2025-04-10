@@ -42,7 +42,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { CornersRadius } from '../../types/border';
-    import type { WrapContentSize } from '../../types/sizes';
+    import type { FixedSize, MatchParentSize, WrapContentSize } from '../../types/sizes';
     import type { Background } from '../../types/background';
     import type { Animation, AnyAnimation } from '../../types/animation';
     import type { ComponentContext } from '../../types/componentContext';
@@ -426,10 +426,10 @@
         let newWidthFill = false;
         let newWidthError = false;
 
-        const type = $jsonWidth?.type;
+        const type = componentContext.json.width?.type;
 
         if (type === 'fixed') {
-            widthNum = correctNonNegativeNumber($jsonWidth?.value, widthNum);
+            widthNum = correctNonNegativeNumber(($jsonWidth as FixedSize)?.value, widthNum);
             newWidth = pxToEm(widthNum);
         } else if (
             type === 'wrap_content' ||
@@ -437,7 +437,7 @@
         ) {
             widthType = 'content';
             if (
-                type === 'wrap_content' && $jsonWidth?.constrained ||
+                type === 'wrap_content' && ($jsonWidth as WrapContentSize)?.constrained ||
                 (type === 'match_parent' || !type) && layoutParams.parentHorizontalWrapContent
             ) {
                 newWidthMods['width-constrained'] = true;
@@ -533,13 +533,13 @@
         let newHeightFill = false;
         let newHeightError = false;
 
-        const type = $jsonHeight?.type;
+        const type = componentContext.json.height?.type;
 
         if (heightByAspect) {
             // auto height
             // no special css needed, so no special heightType
         } else if (type === 'fixed') {
-            heightNum = correctNonNegativeNumber($jsonHeight?.value, heightNum);
+            heightNum = correctNonNegativeNumber(($jsonHeight as FixedSize)?.value, heightNum);
             newHeight = pxToEm(heightNum);
         } else if (type === 'match_parent' && !layoutParams.parentVerticalWrapContent) {
             heightType = 'parent';
@@ -562,7 +562,7 @@
                     newHeight = totalHeight;
                 }
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
-                newFlexGrow = $jsonHeight?.weight || 1;
+                newFlexGrow = ($jsonHeight as MatchParentSize)?.weight || 1;
                 if (layoutParams.parentContainerWrap) {
                     newHeightFill = true;
                 }
@@ -570,7 +570,7 @@
         } else {
             heightType = 'content';
             if (
-                type === 'wrap_content' && $jsonHeight?.constrained ||
+                type === 'wrap_content' && ($jsonHeight as WrapContentSize)?.constrained ||
                 type === 'match_parent' && layoutParams.parentVerticalWrapContent
             ) {
                 newHeightMods['height-constrained'] = true;
