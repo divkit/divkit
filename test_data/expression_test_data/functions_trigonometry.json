@@ -148,6 +148,7 @@
         "value": 1.0
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -159,6 +160,7 @@
         "value": 0.0
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -177,6 +179,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
