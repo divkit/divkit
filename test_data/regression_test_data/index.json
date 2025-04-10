@@ -3692,7 +3692,8 @@
       "title": "Indicator auto-binding (different pager ids)",
       "case_id": 200,
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "DivIndicator"
@@ -3709,7 +3710,8 @@
       "title": "Indicator auto-binding (same pager ids)",
       "case_id": 201,
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "DivIndicator"

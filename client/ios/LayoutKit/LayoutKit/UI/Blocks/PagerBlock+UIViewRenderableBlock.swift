@@ -77,13 +77,15 @@ private final class PagerView: BlockView {
     self.model = model
     self.selectedActions = selectedActions
 
-    if isNewModel {
-      onMainThreadAsync {
+    onMainThreadAsync { [isNewModel] in
+      if isNewModel {
         self.setState(
           path: model.path,
           state: state.synchronized(with: model),
           selectedActions: selectedActions
         )
+      } else {
+        observer?.elementStateChanged(state, forPath: model.path)
       }
     }
   }
