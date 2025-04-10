@@ -359,7 +359,8 @@
         "value": "Failed to evaluate [cot(0.0)]. Cotangent is undefined for the given value."
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -369,7 +370,8 @@
         "value": "Failed to evaluate [cot(3.141592653589793)]. Cotangent is undefined for the given value."
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -379,7 +381,8 @@
         "value": 0.0
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -389,7 +392,8 @@
         "value": 1.0
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -399,7 +403,8 @@
         "value": -1.0
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -416,7 +421,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

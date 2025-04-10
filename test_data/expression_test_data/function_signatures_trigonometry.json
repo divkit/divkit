@@ -149,7 +149,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
