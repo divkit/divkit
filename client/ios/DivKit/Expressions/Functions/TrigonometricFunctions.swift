@@ -11,6 +11,7 @@ extension [String: Function] {
     addFunction("atan", _atanFunction)
     addFunction("toRadians", _toRadians)
     addFunction("toDegrees", _toDegrees)
+    addFunction("cot", _cotFunction)
   }
 }
 
@@ -24,6 +25,14 @@ private let _cosFunction = FunctionUnary { (radians: Double) in
 
 private let _tanFunction = FunctionUnary { (radians: Double) in
   tan(radians)
+}
+
+private let _cotFunction = FunctionUnary { (radians: Double) in
+  let result = tan(radians)
+  if result.isAlmostZero() {
+    throw ExpressionError("Cotangent is undefined for the given value.")
+  }
+  return 1 / result
 }
 
 private let _asinFunction = FunctionUnary { (value: Double) in
