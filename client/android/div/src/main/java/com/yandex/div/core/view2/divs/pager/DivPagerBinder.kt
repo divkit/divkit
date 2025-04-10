@@ -50,7 +50,8 @@ internal class DivPagerBinder @Inject constructor(
 ) : DivViewBinder<Div.Pager, DivPager, DivPagerView>(baseBinder) {
 
     override fun bindView(context: BindingContext, view: DivPagerView, div: Div.Pager, path: DivStatePath) {
-        div.value.id?.let { pagerIndicatorConnector.submitPager(view, div.value) }
+        pagerIndicatorConnector.submitPager(view, div.value)
+
         val oldDiv = view.div
         if (div === oldDiv) {
             val pager = view.viewPager
