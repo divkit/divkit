@@ -560,10 +560,11 @@ internal class DivContainerBinder @Inject constructor(
         divView: Div2View,
     ) {
         if (!divView.complexRebindInProgress
+            && oldChildDiv != null
             && newDiv.contentAlignmentHorizontal.equalsToConstant(oldDiv?.contentAlignmentHorizontal)
             && newDiv.contentAlignmentVertical.equalsToConstant(oldDiv?.contentAlignmentVertical)
-            && newChildDiv.alignmentHorizontal.equalsToConstant(oldChildDiv?.alignmentHorizontal)
-            && newChildDiv.alignmentVertical.equalsToConstant(oldChildDiv?.alignmentVertical)) {
+            && newChildDiv.alignmentHorizontal.equalsToConstant(oldChildDiv.alignmentHorizontal)
+            && newChildDiv.alignmentVertical.equalsToConstant(oldChildDiv.alignmentVertical)) {
             return
         }
 
