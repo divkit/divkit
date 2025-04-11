@@ -20,6 +20,7 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.observeBackground
 import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.util.toColormap
@@ -458,7 +459,8 @@ internal class DivBackgroundBinder @Inject constructor(
                 val scaleDrawable = ScalingDrawable()
                 scaleDrawable.alpha = (alpha * 255).toInt()
                 scaleDrawable.customScaleType = scale.toScaleType()
-                scaleDrawable.alignmentHorizontal = contentAlignmentHorizontal.toHorizontalAlignment()
+                scaleDrawable.alignmentHorizontal =
+                    contentAlignmentHorizontal.toHorizontalAlignment(target.isLayoutRtl())
                 scaleDrawable.alignmentVertical = contentAlignmentVertical.toVerticalAlignment()
 
                 val url = imageUrl.toString()

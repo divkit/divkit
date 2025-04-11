@@ -493,11 +493,15 @@ internal fun DivImageScale.toScaleType(): ScalingDrawable.ScaleType {
     }
 }
 
-internal fun DivAlignmentHorizontal.toHorizontalAlignment(): ScalingDrawable.AlignmentHorizontal {
+internal fun DivAlignmentHorizontal.toHorizontalAlignment(isRtl: Boolean): ScalingDrawable.AlignmentHorizontal {
     return when(this) {
+        DivAlignmentHorizontal.LEFT -> ScalingDrawable.AlignmentHorizontal.LEFT
         DivAlignmentHorizontal.CENTER -> ScalingDrawable.AlignmentHorizontal.CENTER
         DivAlignmentHorizontal.RIGHT -> ScalingDrawable.AlignmentHorizontal.RIGHT
-        else -> ScalingDrawable.AlignmentHorizontal.LEFT
+        DivAlignmentHorizontal.START ->
+            if (isRtl) ScalingDrawable.AlignmentHorizontal.RIGHT else ScalingDrawable.AlignmentHorizontal.LEFT
+        DivAlignmentHorizontal.END ->
+            if (isRtl) ScalingDrawable.AlignmentHorizontal.LEFT else ScalingDrawable.AlignmentHorizontal.RIGHT
     }
 }
 
