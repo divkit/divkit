@@ -231,6 +231,7 @@
         "value": 0.0
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -242,6 +243,7 @@
         "value": 1.570796326795
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -253,6 +255,7 @@
         "value": -0.523598775598
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -264,6 +267,25 @@
         "value": "Failed to evaluate [asin(2.0)]. Arcsine is undefined for the given value."
       },
       "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{asin(sin_var)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5707963267948966
+      },
+      "variables": [
+        {
+          "name": "sin_var",
+          "type": "number",
+          "value": 1.0
+        }
+      ],
+      "platforms": [
+        "android",
         "ios",
         "web"
       ]
