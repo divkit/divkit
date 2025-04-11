@@ -54,9 +54,7 @@
         ActionScrollBy,
         Overflow,
         VideoPlayerProvider,
-
         DivFunction
-
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -201,7 +199,7 @@
     const builtinSet = new Set(builtinProtocols);
 
     let hasError = false;
-    let hsaIdError = false;
+    let hasIdError = false;
 
     $: {
         hasError = false;
@@ -214,7 +212,7 @@
     }
 
     if (!id) {
-        hsaIdError = true;
+        hasIdError = true;
         logError(wrapError(new Error('"id" prop is required')));
     }
 
@@ -2379,7 +2377,7 @@
     }
 
     let rootStateComponentContext: ComponentContext | undefined;
-    $: if (states && !hasError && !hsaIdError) {
+    $: if (states && !hasError && !hasIdError) {
         const rootStateDiv: DivBaseData = {
             type: 'state',
             id: 'root',
@@ -2460,7 +2458,7 @@
     });
 </script>
 
-{#if !hasError && !hsaIdError && rootStateComponentContext}
+{#if !hasError && !hasIdError && rootStateComponentContext}
     <div
         class="{css.root}{$isDesktop ? ` ${css.root_platform_desktop}` : ''}{mix ? ` ${mix}` : ''}"
         on:touchstart={emptyTouchstartHandler}

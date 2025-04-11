@@ -313,7 +313,7 @@
         }
 
         if (parentOfSimpleMode) {
-            const newItemsLen = Array.isArray(items) && items.length || 0;
+            const newItemsLen = Array.isArray(items) ? items.length : 0;
             if (newItemsLen !== 1) {
                 return;
             }
