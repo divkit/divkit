@@ -168,9 +168,8 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     childView.frame = convertFrame(to: container)
     self.childView = nil
     container.addSubview(childView)
-    childView.perform(animationOut, animated: true, completion: { [weak self] in
+    childView.perform(animationOut, animated: true, completion: {
       childView.removeFromSuperview()
-      self?.animationOut = nil
     })
   }
 
