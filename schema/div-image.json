@@ -29,7 +29,8 @@
           "$description": "translations.json#/div_image_high_priority_preview_show",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "type": {

@@ -24,7 +24,7 @@ export interface DivImageData extends DivBaseData, DivActionableData {
     preview?: string;
     preload_required?: BooleanInt;
     aspect?: DivAspect;
-    // high_priority_preview_show?: BooleanInt;
+    high_priority_preview_show?: BooleanInt;
     tint_color?: string;
     tint_mode?: TintMode;
     appearance_animation?: FadeTransition;

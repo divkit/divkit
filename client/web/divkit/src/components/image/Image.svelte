@@ -31,6 +31,7 @@
     import { correctTintMode } from '../../utils/correctTintMode';
     import { getCssFilter } from '../../utils/filters';
     import { prepareBase64 } from '../../utils/prepareBase64';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
@@ -63,6 +64,8 @@
     let filter = '';
     let filterClipPath = '';
     let isRTLMirror = false;
+    let highPriorityPreview = false;
+    let highPrority = false;
 
     $: origJson = componentContext.origJson;
 
@@ -70,6 +73,8 @@
         scale = 'none';
         position = '50% 50%';
         tintMode = 'source_in';
+        highPriorityPreview = false;
+        highPrority = false;
     }
 
     $: if (origJson) {
@@ -94,6 +99,8 @@
     $: jsonAppearanceAnimation = componentContext.getDerivedFromVars(componentContext.json.appearance_animation);
     $: jsonFilters = componentContext.getDerivedFromVars(componentContext.json.filters);
     $: jsonPreloadRequired = componentContext.getDerivedFromVars(componentContext.json.preload_required);
+    $: jsonHighPriorityPreviewShow =
+        componentContext.getDerivedFromVars(componentContext.json.high_priority_preview_show);
 
     $: {
         let img = componentContext.json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
@@ -108,6 +115,10 @@
         state = STATE_LOADING;
     }
     $: updateImageUrl(imageUrl);
+
+    $: {
+        highPriorityPreview = correctBooleanInt($jsonHighPriorityPreviewShow, highPriorityPreview);
+    }
 
     $: {
         if (!imageUrl) {
@@ -127,8 +138,10 @@
 
         if ((state === STATE_LOADING || state === STATE_ERROR || isEmpty) && preview) {
             backgroundImage = `url("${prepareBase64(preview)}")`;
+            highPrority = highPriorityPreview;
         } else {
             backgroundImage = '';
+            highPrority = false;
         }
     }
 
@@ -255,8 +268,8 @@
                         bind:this={img}
                         class={css.image__image}
                         src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                        loading={$jsonPreloadRequired ? 'eager' : 'lazy'}
-                        decoding="async"
+                        loading={($jsonPreloadRequired || highPrority) ? 'eager' : 'lazy'}
+                        decoding={highPrority ? 'sync' : 'async'}
                         style={makeStyle(style)}
                         {alt}
                         aria-hidden={alt ? null : 'true'}
@@ -269,8 +282,8 @@
                     bind:this={img}
                     class={css.image__image}
                     src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                    loading={$jsonPreloadRequired ? 'eager' : 'lazy'}
-                    decoding="async"
+                    loading={($jsonPreloadRequired || highPrority) ? 'eager' : 'lazy'}
+                    decoding={highPrority ? 'sync' : 'async'}
                     style={makeStyle(style)}
                     {alt}
                     aria-hidden={alt ? null : 'true'}
