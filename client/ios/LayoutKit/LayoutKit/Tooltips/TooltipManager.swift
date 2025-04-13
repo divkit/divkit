@@ -278,6 +278,20 @@ final class TooltipWindowManager {
     modalWindow.isHidden = true
   }
 }
+
+extension UIAccessibility {
+  fileprivate static func postDelayed(
+    notification: UIAccessibility.Notification,
+    argument: Any?
+  ) {
+    after(0.2) {
+      UIAccessibility.post(
+        notification: notification,
+        argument: argument
+      )
+    }
+  }
+}
 #else
 public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {}
 
@@ -292,18 +306,4 @@ public final class DefaultTooltipManager: TooltipManager {
 extension TooltipManager {
   public func mapView(_: BlockView, to _: BlockViewID) {}
   public func reset() {}
-}
-
-extension UIAccessibility {
-  fileprivate static func postDelayed(
-    notification: UIAccessibility.Notification,
-    argument: Any?
-  ) {
-    after(0.2) {
-      UIAccessibility.post(
-        notification: notification,
-        argument: argument
-      )
-    }
-  }
 }
