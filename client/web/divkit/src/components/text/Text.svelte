@@ -81,6 +81,7 @@
     let wholeTextCloudBgId = '';
     let wholeTextCloudBgOpacity: number | undefined;
     let usedTintColors: [string, TintMode][] = [];
+    let rootTextStyles: typeof $jsonRootTextStyles = {};
 
     $: if (componentContext.json) {
         fontSize = 12;
@@ -133,6 +134,13 @@
             text = '';
             componentContext.logError(wrapError(new Error('Incorrect text value type')));
         }
+    }
+
+    $: {
+        rootTextStyles = gradient ? {
+            ...$jsonRootTextStyles,
+            text_color: ''
+        } : $jsonRootTextStyles;
     }
 
     $: {
@@ -195,7 +203,7 @@
         );
 
 
-    $: isOnlyOneColorDefined = Boolean($jsonTextColor) !==
+    $: isOnlyOneColorDefined = Boolean(!gradient && $jsonTextColor) !==
         Boolean($jsonRanges && $jsonRanges[0] && $jsonRanges[0].text_color);
 
     $: {
@@ -440,7 +448,7 @@
             undefined;
     }
 
-    $: updateRenderList(text, $jsonRanges, $jsonImages, $jsonRootTextStyles);
+    $: updateRenderList(text, $jsonRanges, $jsonImages, rootTextStyles);
 
     $: mods = {
         singleline,
@@ -577,7 +585,7 @@
                 {componentContext}
                 {text}
                 rootFontSize={fontSize}
-                textStyles={$jsonRootTextStyles}
+                textStyles={rootTextStyles}
                 {singleline}
                 {customLineHeight}
             />
