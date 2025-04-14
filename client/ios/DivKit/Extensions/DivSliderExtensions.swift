@@ -242,7 +242,7 @@ extension DivSlider.TextStyle {
       unit: resolveFontSizeUnit(expressionResolver),
       featureSettings: nil
     )
-    let typo = Typo(font: context.fontProvider.font(fontParams))
+    let typo = Typo(font: context.font(fontParams))
       .with(color: resolveTextColor(expressionResolver))
       .with(alignment: .center)
     return TextBlock(

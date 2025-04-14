@@ -16,7 +16,7 @@ public final class MarkdownExtensionHandler: DivExtensionHandler {
       return block
     }
     let fontParams = div.resolveFontParams(context.expressionResolver)
-    let typo = Typo(font: context.fontProvider.font(fontParams)).allowHeightOverrun
+    let typo = Typo(font: context.font(fontParams)).allowHeightOverrun
     var builder = MarkdownStringBuilder(typo: typo, path: context.path)
     let string = builder.attributedString(from: block.text.string)
     return TextBlock(

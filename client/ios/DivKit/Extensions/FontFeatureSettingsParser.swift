@@ -75,6 +75,7 @@ private struct Feature {
 private let featureParams: [String: (Int, Int)] = [
   "c2sc": (kUpperCaseType, kUpperCaseSmallCapsSelector),
   "frac": (kFractionsType, kDiagonalFractionsSelector),
+  "lnum": (kNumberCaseType, kUpperCaseNumbersSelector),
   "ordn": (kVerticalPositionType, kOrdinalsSelector),
   "pnum": (kNumberSpacingType, kProportionalNumbersSelector),
   "smcp": (kLowerCaseType, kLowerCaseSmallCapsSelector),

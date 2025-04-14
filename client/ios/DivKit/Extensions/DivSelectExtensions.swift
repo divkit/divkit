@@ -17,7 +17,7 @@ extension DivSelect: DivBlockModeling {
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
 
-    let font = context.fontProvider.font(resolveFontParams(expressionResolver))
+    let font = context.font(resolveFontParams(expressionResolver))
     var typo = Typo(font: font).allowHeightOverrun
 
     let kern = CGFloat(resolveLetterSpacing(expressionResolver))

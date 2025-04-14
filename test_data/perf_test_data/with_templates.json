@@ -2,6 +2,7 @@
   "templates": {
     "base_text": {
       "type": "text",
+      "font_feature_settings": "'lnum' on, 'pnum' on",
       "text_color": "@{argb(getColorAlpha('#FFECF0F1'), getColorRed('#FFECF0F1'), getColorGreen('#FFECF0F1'), getColorBlue('#FFECF0F1'))}"
     },
     "base_separator": {

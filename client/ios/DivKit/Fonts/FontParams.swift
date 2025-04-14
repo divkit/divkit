@@ -34,18 +34,35 @@ extension FontParamsProvider {
   }
 }
 
-extension DivFontProvider {
+extension DivBlockModelingContext {
   public func font(_ params: FontParams) -> Font {
-    let font = font(
-      family: params.family,
-      weight: params.weight,
-      size: params.unit.makeScaledValue(params.size)
-    )
-    #if os(iOS)
-    if let featureSettings = params.featureSettings {
-      return font.withFontFeatureSettings(featureSettings)
+    if flagsInfo.fontCacheEnabled {
+      fontCache.withLock { fontCache in
+        if let cached = fontCache[params] {
+          return cached
+        }
+        let font = makeFont(provider: self.fontProvider, params: params)
+        fontCache[params] = font
+        return font
+      }
+    } else {
+      makeFont(provider: self.fontProvider, params: params)
     }
-    #endif
-    return font
   }
 }
+
+private func makeFont(provider: DivFontProvider, params: FontParams) -> Font {
+  let font = provider.font(
+    family: params.family,
+    weight: params.weight,
+    size: params.unit.makeScaledValue(params.size)
+  )
+  #if os(iOS)
+  if let featureSettings = params.featureSettings {
+    return font.withFontFeatureSettings(featureSettings)
+  }
+  #endif
+  return font
+}
+
+private var fontCache = AllocatedUnfairLock<[FontParams: Font]>(uncheckedState: [:])
