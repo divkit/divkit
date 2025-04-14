@@ -9,6 +9,7 @@
 * Added support for `color_map` property in `div-radial-gradient`.
 * Fix transition_change animation.
 * Fixed performance degradation for images with tint filter in text.
+* Fixed the transition_out animation when switching back to the default state.
 * Supported search for the nearest pager if `pager_id` is not specified in `div-indicator`.
 
 # Web Client:
