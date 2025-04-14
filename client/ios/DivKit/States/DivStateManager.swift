@@ -235,10 +235,8 @@ extension DivBase {
     if transitionIn == nil, transitionOut == nil, transitionChange == nil {
       return false
     }
-    guard let triggers = transitionTriggers else {
-      return trigger == .stateChange || trigger == .visibilityChange
-    }
-    return triggers.contains(trigger)
+
+    return transitionTriggersOrDefault.contains(trigger)
   }
 }
 

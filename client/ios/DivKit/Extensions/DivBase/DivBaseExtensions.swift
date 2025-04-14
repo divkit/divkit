@@ -186,6 +186,10 @@ enum ApplyExtensionHandlersStage {
 }
 
 extension DivBase {
+  var transitionTriggersOrDefault: [DivTransitionTrigger] {
+    transitionTriggers ?? [.stateChange, .visibilityChange]
+  }
+
   func getTransformedWidth(_ context: DivBlockModelingContext) -> DivSize {
     context.sizeModifier?.transformWidth(width) ?? width
   }

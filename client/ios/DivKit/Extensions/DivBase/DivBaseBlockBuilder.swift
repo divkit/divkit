@@ -122,6 +122,35 @@ final class DivBaseBlockBuilder {
     return stateManager.isBlockAdded(identity, stateBlockPath: statePath.stateBlockPath)
   }
 
+  private func addAnimationWarningsIfNeeded(isPresentAnimationIn: Bool) {
+    guard context.currentDivId == nil,
+          let block = block as? DetachableAnimationBlock else { return }
+
+    func warningMessage(_ animation: String) -> String {
+      "The component id with the \(animation) property for state change is missing. Either specify the id, or specify the \"transition_trigger\" property without \"state_change\" value."
+    }
+
+    if isPresentAnimationIn,
+       div.transitionTriggersOrDefault.contains(.stateChange) {
+      context.addWarning(
+        message: warningMessage("\"transition_in\"")
+      )
+    }
+
+    if block.animationOut != nil,
+       div.transitionTriggersOrDefault.contains(.stateChange) {
+      context.addWarning(
+        message: warningMessage("\"transition_out\"")
+      )
+    }
+
+    if block.animationChange != nil {
+      context.addWarning(
+        message: warningMessage("\"transition_change\"")
+      )
+    }
+  }
+
   func applyExtensionHandlers(
     stage: ApplyExtensionHandlersStage
   ) -> Self {
@@ -255,8 +284,13 @@ final class DivBaseBlockBuilder {
   func applyTransitioningAnimations() -> Self {
     let expressionResolver = context.expressionResolver
 
+    let initialAnimationIn = div.transitionIn?.resolveAnimations(
+      expressionResolver,
+      type: .appearing
+    )
+
     let animationIn: [TransitioningAnimation]? = if isAppearing() {
-      div.transitionIn?.resolveAnimations(expressionResolver, type: .appearing)
+      initialAnimationIn
     } else {
       nil
     }
@@ -272,6 +306,10 @@ final class DivBaseBlockBuilder {
         animationIn: animationIn,
         animationOut: animationOut,
         animationChange: animationChange
+      )
+
+      addAnimationWarningsIfNeeded(
+        isPresentAnimationIn: initialAnimationIn != nil
       )
     }
 
