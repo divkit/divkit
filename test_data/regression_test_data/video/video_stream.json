@@ -18,10 +18,11 @@
             {
               "type": "video",
               "id": "stream_video",
+              "player_settings_payload": {},
               "video_sources": [
                 {
                   "type": "video_source",
-                  "url": "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8",
+                  "url": "https://strm.yandex.ru/kal/demo_channel/demo_channel0.m3u8",
                   "mime_type": "application/x-mpegURL"
                 }
               ],

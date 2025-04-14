@@ -2590,7 +2590,8 @@
       "case_id": 152,
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivVideo"
