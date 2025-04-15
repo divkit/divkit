@@ -1,7 +1,8 @@
 {
   "description": "Ranges with font family",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "test_text": {

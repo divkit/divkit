@@ -62,6 +62,12 @@ window.root = new Root({
                 element: 'new-custom-container'
             }]
         ]),
+        typefaceProvider(fontFamily) {
+            if (fontFamily === 'condensed') {
+                return 'YS Text Condenced';
+            }
+            return '';
+        },
         store: {
             get(name, type) {
                 try {

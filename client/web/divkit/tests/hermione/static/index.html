@@ -38,6 +38,38 @@
             src: url(https://yastatic.net/s3/home/fonts/ys/1/text-bold.woff2) format('woff2');
         }
 
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 300;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-light.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 400;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-regular.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 500;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-medium.woff2) format('woff2');
+        }
+
+        @font-face {
+            font-family: 'YS Text Condenced';
+            font-weight: 700;
+            font-style: normal;
+            font-stretch: normal;
+            src: url(//yastatic.net/s3/home/fonts/ys/4/text-cond-bold.woff2) format('woff2');
+        }
+
         body {
             font-family: 'YS Text', 'Helvetica Neue', Arial, sans-serif;
             -webkit-font-feature-settings: 'liga', 'kern';
@@ -179,6 +211,12 @@
                     platform: 'touch',
                     direction: json.configuration && json.configuration.layout_direction === 'rtl' ? 'rtl' : 'ltr',
                     globalVariablesController,
+                    typefaceProvider(fontFamily) {
+                        if (fontFamily === 'condensed') {
+                            return 'YS Text Condenced';
+                        }
+                        return '';
+                    },
                     onStat(arg) {
                         window.divkitLogs.push(arg);
                     },
