@@ -12,6 +12,7 @@
     border: none;
     background: none;
     pointer-events: none;
+    overflow: visible;
 }
 
 .tooltip::backdrop {
