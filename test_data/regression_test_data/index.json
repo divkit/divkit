@@ -17,7 +17,7 @@
       "file": "actions/copy-to-clipboard.json"
     },
     {
-      "title": "Focus action",
+      "title": "Focus action 2",
       "case_id": 14,
       "platforms": [
         "web"
@@ -61,7 +61,8 @@
       "title": "Focus action",
       "case_id": 14,
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivAction"
@@ -98,7 +99,8 @@
       "title": "Long tap",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivAction"
@@ -131,7 +133,8 @@
         "Button state changes to 'Not pressed'"
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "file": "actions/hover-and-press.json"
     },
@@ -560,7 +563,8 @@
     {
       "title": "Focus events",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "steps": [
         "Switch focus to handler",
@@ -662,7 +666,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "steps": [
         "Turn on Screen reader",
