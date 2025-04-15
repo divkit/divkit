@@ -103,8 +103,8 @@
         let calcedWidth = 0;
         let calcedHeight = 0;
 
-        const jsonWidth = parentComponentContext.getJsonWithVars(data.div?.width);
-        const jsonHeight = parentComponentContext.getJsonWithVars(data.div?.height);
+        const jsonWidth = componentContext?.json?.width;
+        const jsonHeight = componentContext?.json?.height;
 
         if (!jsonWidth || jsonWidth.type === 'match_parent') {
             calcedWidth = width = window.innerWidth;
