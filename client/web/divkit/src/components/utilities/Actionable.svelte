@@ -7,7 +7,8 @@
         'button',
         'image',
         'checkbox',
-        'radio'
+        'radio',
+        'header'
     ]);
 </script>
 
@@ -115,7 +116,11 @@
 
     $: {
         if (customAccessibility?.type && SUPPORTED_ACCESSIBILITY_TYPES.has(customAccessibility.type)) {
-            role = customAccessibility.type;
+            if (customAccessibility.type === 'header') {
+                role = 'heading';
+            } else {
+                role = customAccessibility.type;
+            }
         } else if (href) {
             role = undefined;
         } else if (hasJSAction) {
