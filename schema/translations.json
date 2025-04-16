@@ -333,7 +333,7 @@
   },
   "div_actionable_capture_focus_on_action": {
     "en": "If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>",
-    "ru": "Если значение:<li>`true` — при активации экшена элемента фокус будет перенесён на него. Это означает, что фокус режима доступности будет перенесён, а виртуальная клавиатура скрыта, за исключением случаев, когда целевой элемент предполагает её наличие (например, `input`).</li><li>`false` — при нажатии на элемент фокус останется на текущем сфокусированном элементе.</li>"
+    "ru": "Если значение:<li>`true` — при активации экшена элемента фокус будет перенесён на него. Это означает, что фокус режима доступности будет перенесён, а виртуальная клавиатура скрыта, кроме случаев, когда целевой элемент предполагает её наличие (например, `input`).</li><li>`false` — при нажатии на элемент фокус останется на текущем сфокусированном элементе.</li>"
   },
   "div_actionable_doubletap_actions": {
     "en": "Action when double-clicking on an element.",
@@ -521,7 +521,7 @@
   },
   "div_base_capture_focus_on_action": {
     "en": "If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>",
-    "ru": "Если значение:<li>`true` — при активации экшена элемента фокус будет перенесён на него. Это означает, что фокус режима доступности будет перенесён, а виртуальная клавиатура скрыта, за исключением случаев, когда целевой элемент предполагает её наличие (например, `input`).</li><li>`false` — при нажатии на элемент фокус останется на текущем сфокусированном элементе.</li>"
+    "ru": "Если значение:<li>`true` — при активации экшена элемента фокус будет перенесён на него. Это означает, что фокус режима доступности будет перенесен, а виртуальная клавиатура скрыта, кроме случаев, когда целевой элемент предполагает ее наличие (например, `input`).</li><li>`false` — при нажатии на элемент фокус останется на текущем сфокусированном элементе.</li>"
   },
   "div_base_column_span": {
     "en": "Merges cells in a column of the [grid](div-grid.md) element.",
