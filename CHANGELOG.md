@@ -1,3 +1,34 @@
+## 31.12.0
+
+# Android Client:
+* Added `cos` and `asin` functions.
+* Fix for image vertical alignment after animation.
+* Fixed `indicator` doesn't bind to `pager` with no `id`.
+* Removed overrides of`dispatchDraw()`. Border clipping is performed by `draw()` calls.
+* Supported `start` and `end` horizontal alignment for image background.
+
+# iOS Client:
+* Added `cot` function.
+* Changed non-modal `DivToolip` presentation.
+* Displays a warning if the animation cannot be shown because the element does not have an id.
+* Fixed the transition_out animation when switching back to the default state.
+* Font cache support implemented. Enabled by default. Can be disabled via `DivFlagsInfo.fontCacheEnabled`.
+
+# Web Client:
+* Added `cot` function.
+* Added support for the `header` value of `accessibility.type`.
+* Added support for the `high_priority_preview_show` in `image`.
+* Added support in some form for the `state_description` and `hint` properties in `accessibility`.
+* Disabled support for expressions in the `type` property for the values `width` and `height` (support was a mistake, this change will correspond to the current behavior of Android/iOS).
+* Fixed `tooltips` with templates.
+* Fixed an issue with the incorrect custom `height` of the `tooltips`.
+* Fixed the priority of `text_radient` over `text_color` in `text`.
+* The `pager_id` in `indicator` and the `id` in `pager` are now optional.
+* The accessibility of modal `tooltips` has been updated: now modal tooltips will loop focus inside the component when opening, and also return focus to the previously focused component after closing.
+* The error about `pagers` with the same `id` now issueas a warning instead of error. Please note that somebody may try to scroll them using an action, and this action will lead to unexpected behaviour.
+* The lookup logic for the `indicator` and `pager` has been changed, so `indicator` will find the nearest `pager`.
+
+
 ## 31.11.0
 
 # Android Client:
