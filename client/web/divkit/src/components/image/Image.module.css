@@ -42,7 +42,21 @@
     display: block;
 }
 
-.image_aspect .image__image {
+.image_aspect-content .image__aspect-wrapper {
+    display: grid;
+    height: 0;
+    align-content: center;
+}
+
+.image_aspect-content.image_aspect-valign_top .image__aspect-wrapper {
+    align-content: start;
+}
+
+.image_aspect-content.image_aspect-valign_bottom .image__aspect-wrapper {
+    align-content: end;
+}
+
+.image_aspect:not(.image_aspect-content) .image__image {
     position: absolute;
     top: 0;
     left: 0;

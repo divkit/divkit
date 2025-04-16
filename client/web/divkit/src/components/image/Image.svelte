@@ -53,7 +53,10 @@
     // Exactly "none", "scale-down" would not match android
     let scale = 'none';
     let position = '50% 50%';
+    let aspectPaddingTop = '0';
     let aspectPaddingBottom = '0';
+    let aspectContent = false;
+    let aspectContentVAlign = 'center';
     let tintColor: string | undefined = undefined;
     let tintMode: TintMode = 'source_in';
     let svgFilterId = '';
@@ -70,6 +73,7 @@
     $: origJson = componentContext.origJson;
 
     function rebind(): void {
+        aspectContent = false;
         scale = 'none';
         position = '50% 50%';
         tintMode = 'source_in';
@@ -166,9 +170,28 @@
     $: alt = $jsonA11y?.description || '';
 
     $: {
+        aspectContentVAlign = 'center';
+        aspectPaddingTop = '0';
+        aspectPaddingBottom = '0';
+
         const newRatio = $jsonAspect?.ratio;
         if (newRatio && isPositiveNumber(newRatio)) {
-            aspectPaddingBottom = (100 / Number(newRatio)).toFixed(2);
+            const height = 100 / Number(newRatio);
+            aspectContent = componentContext.json.width?.type === 'wrap_content';
+
+            if (aspectContent) {
+                if ($jsonPosition.content_alignment_vertical === 'top') {
+                    aspectPaddingBottom = height.toFixed(2);
+                    aspectContentVAlign = 'top';
+                } else if ($jsonPosition.content_alignment_vertical === 'bottom') {
+                    aspectPaddingTop = height.toFixed(2);
+                    aspectContentVAlign = 'bottom';
+                } else {
+                    aspectPaddingTop = aspectPaddingBottom = (height / 2).toFixed(2);
+                }
+            } else {
+                aspectPaddingBottom = height.toFixed(2);
+            }
         } else {
             aspectPaddingBottom = '0';
         }
@@ -210,7 +233,9 @@
     }
 
     $: mods = {
-        aspect: aspectPaddingBottom !== '0',
+        aspect: aspectPaddingBottom !== '0' || aspectPaddingTop !== '0',
+        'aspect-content': aspectContent,
+        'aspect-valign': aspectContentVAlign !== 'center' ? aspectContentVAlign : undefined,
         'is-width-content': isWidthContent,
         'is-height-content': isHeightContent,
         loaded: state === STATE_LOADED,
@@ -263,7 +288,11 @@
         <!-- Safari does not redraw images when changing the svg filter, a complete reconstruction of the DOM is required -->
         {#key svgFilterId}
             {#if mods.aspect}
-                <span class={css['image__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
+                <span
+                    class={css['image__aspect-wrapper']}
+                    style:padding-top="{aspectPaddingTop}%"
+                    style:padding-bottom="{aspectPaddingBottom}%"
+                >
                     <img
                         bind:this={img}
                         class={css.image__image}
