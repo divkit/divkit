@@ -1,7 +1,9 @@
 import type { TreeLeaf } from '../ctx/tree';
 import { stringifyWithLoc } from '../utils/stringifyWithLoc';
 
-export const EMPTY_IMAGE = 'https://yastatic.net/s3/home/divkit/empty2.png';
+export const EMPTY_IMAGE = 'empty://';
+export const DIVKIT_EMPY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+export const CHESS_EMPTY_IMAGE = 'https://yastatic.net/s3/home/divkit/empty2.png';
 
 export function stringifyObjectAndStoreRanges({
     object,

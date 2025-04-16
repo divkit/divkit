@@ -41,6 +41,7 @@
     import type { TankerMeta } from '../../lib';
     import { getRotationFromMatrix } from '../utils/getRotationFromMatrix';
     import { rectAngleIntersection } from '../utils/rectAngleIntersection';
+    import { CHESS_EMPTY_IMAGE, DIVKIT_EMPY_IMAGE } from '../data/doc';
 
     export let viewport: string;
     export let theme: 'light' | 'dark';
@@ -729,6 +730,14 @@
         }
 
         if ((type === 'mount' || type === 'update') && origJson.__leafId) {
+            if (node && (json?.type === 'gif' || json?.type === 'image')) {
+                const img = node.querySelector<HTMLImageElement>('img');
+
+                if (img && img.src === DIVKIT_EMPY_IMAGE) {
+                    img.src = CHESS_EMPTY_IMAGE;
+                }
+            }
+
             const leaf = findLeaf($tree, origJson.__leafId);
 
             if (leaf) {

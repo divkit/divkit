@@ -3,6 +3,7 @@ import buttonIcon from '../../assets/components/button.svg?url';
 import closeIcon from '../../assets/components/close.svg?url';
 import listItemIcon from '../../assets/components/list-item.svg?url';
 import type { ComponentProperty } from './componentProps';
+import { EMPTY_IMAGE } from './doc';
 
 interface TemplateDescription {
     nameKey: string;
@@ -87,7 +88,7 @@ export const namedTemplates: Record<string, TemplateDescription> = {
                     $params: 'lottie_params'
                 }
             ],
-            gif_url: 'https://yastatic.net/s3/home/divkit/empty2.png'
+            gif_url: EMPTY_IMAGE
         }
     },
     _template_button: {

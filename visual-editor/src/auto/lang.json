@@ -297,7 +297,7 @@
         "userDefinedComponents": "Пользовательские компоненты",
         "timersTitle": "Таймеры",
         "timersAdd": "Добавить таймер",
-        "timersEmptyId": "Пустой идентифекатор переменной",
+        "timersEmptyId": "Пустой идентификатор переменной",
         "timersId": "Идентификатор",
         "timersDuration": "Длительность",
         "timersTickInterval": "Периодический интервал",
