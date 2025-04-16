@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+    const VERTICAL_GAP = 20;
+</script>
+
 <script lang="ts">
     import { createEventDispatcher, onMount } from 'svelte';
     import { cancel } from '../../utils/keybinder/shortcuts';
@@ -109,7 +113,8 @@
         } else {
             top = window.scrollY + targetBbox.bottom + offsetY;
         }
-        top = Math.max(top, 0);
+        top = Math.min(top, window.innerHeight - dialogBbox.height - VERTICAL_GAP);
+        top = Math.max(top, VERTICAL_GAP);
 
         return [left, top];
     }

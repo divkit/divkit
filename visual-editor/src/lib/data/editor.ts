@@ -1,12 +1,39 @@
 import { EditorView, basicSetup } from 'codemirror';
-import { Decoration, type DecorationSet } from '@codemirror/view';
+import { Decoration, drawSelection, dropCursor, keymap, type DecorationSet, type ViewUpdate } from '@codemirror/view';
+import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
+import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete';
+import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 import { Compartment, EditorState, StateField, StateEffect, Transaction } from '@codemirror/state';
 import { json, jsonParseLinter } from '@codemirror/lang-json';
-import { linter } from '@codemirror/lint';
-import type { ViewUpdate } from '@codemirror/view';
+import { linter, type Diagnostic } from '@codemirror/lint';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { styleTags, tags as t } from '@lezer/highlight';
+import { LRLanguage, LanguageSupport, bracketMatching, defaultHighlightStyle, syntaxHighlighting, syntaxTree } from '@codemirror/language';
 import type { Loc, Range } from '../utils/stringifyWithLoc';
 import type { EditorInstance } from '../../lib';
+import { parser } from '../grammar/div';
+import { submit } from '../utils/keybinder/shortcuts';
+
+const parserWithMetadata = parser.configure({
+    props: [
+        styleTags({
+            'Identifier StrictIdentifier': t.variableName,
+            Boolean: t.bool,
+            String: t.string,
+            'Number Integer': t.number,
+            '( )': t.paren,
+            '@{ }': t.brace
+        })
+    ]
+});
+
+const exampleLanguage = LRLanguage.define({
+    parser: parserWithMetadata
+});
+
+function divLangauge() {
+    return new LanguageSupport(exampleLanguage, []);
+}
 
 export type RangeType = 'highlight' | 'select';
 
@@ -31,6 +58,23 @@ const themeExt = EditorView.theme({
     }
 });
 
+const divThemeExt = EditorView.theme({
+    '&': {
+        backgroundColor: 'var(--background-primary) !important',
+        color: 'var(--text-primary) !important'
+    },
+    '& .cm-gutters': {
+        backgroundColor: 'var(--fill-opaque-1) !important'
+    },
+    '& .cm-search': {
+        fontSize: '20px',
+        overflow: 'auto'
+    },
+    '& cm-selectionBackground': {
+        backgroundColor: 'var(--fill-transparent-2) !important'
+    }
+});
+
 const addHighlight = StateEffect.define<{ from: number, to: number, type: RangeType }>({
     map: ({ from, to, type }, change) => ({
         type: type,
@@ -40,7 +84,7 @@ const addHighlight = StateEffect.define<{ from: number, to: number, type: RangeT
 });
 
 const clearHighlight = StateEffect.define<object>({
-    map: ({}, _change) => ({})
+    map: ({ }, _change) => ({})
 });
 
 const highlightField = StateField.define<DecorationSet>({
@@ -198,6 +242,131 @@ export function createEditor(opts: {
                 ]));
             }
             editor.dispatch({ effects });
+        },
+        isFocused(): boolean {
+            return editor.hasFocus;
+        },
+        destroy(): void {
+            editor.destroy();
+        }
+    };
+}
+
+export interface DivEditorInstance {
+    setValue(value: string): void;
+    setTheme(theme: 'light' | 'dark'): void;
+    setReadOnly(readOnly: boolean): void;
+    isFocused(): boolean;
+    destroy(): void;
+}
+
+const divBasicSetup = () => [
+    history(),
+    drawSelection(),
+    dropCursor(),
+    EditorState.allowMultipleSelections.of(true),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    highlightSelectionMatches(),
+    keymap.of([
+        ...closeBracketsKeymap,
+        ...defaultKeymap,
+        ...searchKeymap,
+        ...historyKeymap,
+        ...completionKeymap
+    ])
+];
+
+function divLint(view: EditorView): readonly Diagnostic[] {
+    const diagnostics: Diagnostic[] = [];
+
+    syntaxTree(view.state).iterate({
+        enter(node) {
+            if (node.type.isError) {
+                diagnostics.push({
+                    from: node.from,
+                    to: node.to,
+                    severity: 'error',
+                    message: 'Syntax error.'
+                });
+            }
+        },
+    });
+
+    return diagnostics;
+}
+
+export function createDivEditor(opts: {
+    node: HTMLElement;
+    shadowRoot?: ShadowRoot | undefined;
+    value: string;
+    theme: 'light' | 'dark';
+    readOnly?: boolean;
+    onChange(value: string): void;
+    onEnter(): void;
+}): DivEditorInstance {
+    const editorTheme = new Compartment();
+    const editorReadOnly = new Compartment();
+    const divLinter = linter(divLint);
+
+    const editor = new EditorView({
+        state: EditorState.create({
+            doc: opts.value,
+            extensions: [
+                divBasicSetup(),
+                divLangauge(),
+                divLinter,
+                editorTheme.of(opts.theme === 'dark' ? darkTheme : lightTheme),
+                divThemeExt,
+                editorReadOnly.of(EditorState.readOnly.of(opts.readOnly || false)),
+                EditorView.lineWrapping,
+                EditorView.updateListener.of((update: ViewUpdate) => {
+                    if (update.docChanged) {
+                        const val = update.state.sliceDoc();
+
+                        opts.onChange(val);
+                    }
+                })
+            ]
+        }),
+        parent: opts.node,
+        root: opts.shadowRoot,
+    });
+
+    editor.dom.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (submit.isPressed(event)) {
+            event.preventDefault();
+            opts.onEnter();
+        }
+    });
+
+    editor.focus();
+
+    return {
+        setValue(value: string): void {
+            if (editor.state.sliceDoc() !== value) {
+                editor.dispatch({
+                    changes: {
+                        from: 0,
+                        to: editor.state.doc.length,
+                        insert: value,
+                    },
+                });
+            }
+        },
+        setTheme(theme: 'light' | 'dark'): void {
+            editor.dispatch({
+                effects: editorTheme.reconfigure(
+                    theme === 'dark' ? darkTheme : lightTheme
+                )
+            });
+        },
+        setReadOnly(readOnly: boolean): void {
+            editor.dispatch({
+                effects: editorReadOnly.reconfigure(EditorState.readOnly.of(readOnly))
+            });
         },
         isFocused(): boolean {
             return editor.hasFocus;

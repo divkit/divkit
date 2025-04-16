@@ -1,0 +1,99 @@
+@top Json { jsonContents* }
+
+@precedence {
+    call,
+    method,
+    unary @right,
+    factor @left,
+    sum @left,
+    comparasion @left,
+    equal @left,
+    and @left,
+    or @left,
+    try @left
+}
+
+@skip { space }
+
+@skip {} {
+    String {
+        "'" stringContent* "'"
+    }
+}
+
+jsonContents {
+    ("@{" expression? "}") |
+    jsonContentsChar |
+    "\\" ("'" | "@{")
+}
+
+expression {
+    anyId |
+    Boolean |
+    String |
+    Number |
+    Integer |
+    "(" expression ")" |
+    Call |
+    Method |
+    UnaryExpression |
+    BinaryExpression
+}
+
+BinaryExpression {
+    expression !try "!:" expression |
+    expression !or "||" expression |
+    expression !and "&&" expression |
+    expression !equal ("==" | "!=") expression |
+    expression !comparasion (">=" | ">" | "<=" | "<") expression |
+    expression !sum ("+" | "-") expression |
+    expression !factor ("/" | "*" | "%") expression
+}
+
+UnaryExpression {
+    !unary ("+" | "-") expression
+}
+
+Method {
+    StrictIdentifier !method methodDot StrictIdentifier "(" arguments ")"
+}
+
+Call {
+    StrictIdentifier !call "(" arguments ")"
+}
+
+arguments {
+    "" | expression ("," expression)*
+}
+
+anyId {
+    StrictIdentifier |
+    Identifier
+}
+
+@tokens {
+    @precedence { jsonContentsChar, stringContent, methodDot, Number, Integer, Boolean, StrictIdentifier, Identifier, space }
+
+    space { $[\t\r\n ]+ }
+    StrictIdentifier { $[a-zA-Z_]$[a-zA-Z_0-9]* }
+    Number {
+        ($[0-9]* "." $[0-9]+ ( ( "e" | "E" ) ( "+" | "-" )? $[0-9]+)?) |
+        ($[0-9]+ ( "e" | "E" ) ( "+" | "-" )? $[0-9]+)
+    }
+    Integer { $[0-9]+ }
+    methodDot { "." }
+    stringContent {
+        ![\\'] |
+        ("\\" "'") |
+        ("\\" "@{")
+    }
+    Boolean { "true" | "false" }
+    Identifier {
+        $[a-zA-Z_]
+        (
+            $[a-zA-Z_0-9] |
+            "." ($[a-zA-Z_0-9] | @eof)
+        )*
+    }
+    jsonContentsChar { ![\\] }
+}
