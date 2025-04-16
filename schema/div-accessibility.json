@@ -36,7 +36,8 @@
       "$description": "translations.json#/div_accessibility_state_description",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "hint": {
@@ -44,7 +45,8 @@
       "$description": "translations.json#/div_accessibility_hint",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "is_checked": {
@@ -75,7 +77,10 @@
       "$description": "translations.json#/div_accessibility_mute_after_action",
       "platforms": [
         "ios"
-      ]
+      ],
+      "unsupported_platforms": {
+        "web": "iOS-specific functionality, no such feature"
+      }
     }
   },
   "platforms": [

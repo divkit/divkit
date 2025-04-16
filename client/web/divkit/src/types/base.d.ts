@@ -16,8 +16,8 @@ export type AccessibilityMode = 'default' | 'merge' | 'exclude';
 export interface Accessibility {
     description?: string;
     type?: AccessibilityType;
-    // state_description
-    // hint
+    state_description?: string;
+    hint?: string;
     is_checked?: BooleanInt;
     mode?: AccessibilityMode;
 }

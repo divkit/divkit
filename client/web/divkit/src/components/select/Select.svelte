@@ -21,6 +21,7 @@
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { makeStyle } from '../../utils/makeStyle';
+    import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
@@ -166,7 +167,7 @@
     }
 
     $: if ($jsonAccessibility?.description) {
-        description = $jsonAccessibility.description;
+        description = composeAccessibilityDescription($jsonAccessibility);
     } else {
         componentContext.logError(wrapError(new Error('Missing accessibility "description" for select'), {
             level: 'warn'

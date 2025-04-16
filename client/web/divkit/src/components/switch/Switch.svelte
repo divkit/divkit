@@ -14,6 +14,7 @@
     import { createVariable } from '../../expressions/variable';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { booleanInt } from '../../utils/booleanInt';
+    import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
@@ -90,7 +91,7 @@
     }
 
     $: if ($jsonAccessibility?.description) {
-        description = $jsonAccessibility.description;
+        description = composeAccessibilityDescription($jsonAccessibility);
     } else {
         componentContext.logError(wrapError(new Error('Missing accessibility "description" for switch'), {
             level: 'warn'

@@ -78,6 +78,7 @@
     import { layoutProvider } from '../../use/layoutProvider';
     import { ENABLED_CTX, type EnabledCtxValue } from '../../context/enabled';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
+    import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -639,9 +640,12 @@
 
     $: {
         attrs = undefined;
-        if ($jsonAccessibility && !customDescription && $jsonAccessibility.description) {
-            attrs = {};
-            attrs['aria-label'] = $jsonAccessibility.description;
+        if ($jsonAccessibility && !customDescription) {
+            const descr = composeAccessibilityDescription($jsonAccessibility);
+            if (descr) {
+                attrs = {};
+                attrs['aria-label'] = descr;
+            }
         }
     }
 

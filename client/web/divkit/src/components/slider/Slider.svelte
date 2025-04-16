@@ -39,6 +39,7 @@
     import { createVariable } from '../../expressions/variable';
     import { debounce } from '../../utils/debounce';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
+    import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivSliderData>;
@@ -220,7 +221,7 @@
     }
 
     $: if ($jsonAccessibility?.description) {
-        description = $jsonAccessibility.description;
+        description = composeAccessibilityDescription($jsonAccessibility);
     } else {
         componentContext.logError(wrapError(new Error('Missing accessibility "description" for slider'), {
             level: 'warn'
@@ -232,7 +233,7 @@
     }
 
     $: if ($jsonSecondaryAccessibility?.description) {
-        secondaryDescription = $jsonSecondaryAccessibility.description;
+        secondaryDescription = composeAccessibilityDescription($jsonSecondaryAccessibility);
     } else if (secondVariable) {
         componentContext.logError(wrapError(new Error('Missing second accessibility "description" for slider'), {
             level: 'warn'
