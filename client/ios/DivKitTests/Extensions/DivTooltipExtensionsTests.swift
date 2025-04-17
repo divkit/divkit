@@ -29,7 +29,8 @@ final class DivTooltipExtensionsTests: XCTestCase {
             block: DecoratingBlock(
               child: ContainerBlock(
                 layoutDirection: .vertical,
-                children: []
+                children: [],
+                path: UIElementPath("test_card_id") + "tooltip1" + "container"
               ),
               accessibilityElement: .default
             ),

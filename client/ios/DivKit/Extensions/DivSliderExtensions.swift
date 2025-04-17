@@ -101,7 +101,8 @@ extension DivSlider: DivBlockModeling {
       maxValue: maxValue,
       marksConfiguration: marksConfiguration,
       ranges: makeRanges(ranges, with: context),
-      layoutDirection: context.layoutDirection
+      layoutDirection: context.layoutDirection,
+      path: context.path
     )
     return SliderBlock(
       sliderModel: sliderModel,

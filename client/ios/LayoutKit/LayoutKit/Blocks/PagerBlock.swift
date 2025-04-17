@@ -16,6 +16,9 @@ public final class PagerBlock: BlockWithTraits {
   public let state: PagerViewState
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
+  public var path: UIElementPath? {
+    gallery.path
+  }
 
   let selectedActions: [[UserInterfaceAction]]
 

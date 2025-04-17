@@ -107,7 +107,7 @@ final class TabContentsView: BlockView {
       if let backgroundView,
          let background = model.background,
          background.canConfigureBlockView(backgroundView) {
-        background.configureBlockView(
+        background.configureBlockViewWithReporting(
           backgroundView,
           observer: observer,
           overscrollDelegate: overscrollDelegate,

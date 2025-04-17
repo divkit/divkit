@@ -148,13 +148,13 @@ final class Array_UIViewRenderableTests: XCTestCase {
   }
 
   func test_PathHolderBlocksReuseOrder() {
-    let blocks = [PathHolderTestBlock("path1"), PathHolderTestBlock("path2")]
+    let blocks = [TestBlock("path1"), TestBlock("path2")]
     let views = [TestView(frame: .zero), TestView(frame: .zero)]
     for (block, view) in zip(blocks, views) {
       view.block = block
     }
 
-    let newBlocks = [PathHolderTestBlock("path1"), PathHolderTestBlock("path2")]
+    let newBlocks = [TestBlock("path1"), TestBlock("path2")]
     newBlocks[0].valuableContent = 2
 
     let newViews = (views as [BlockView]).reused(
@@ -171,7 +171,7 @@ final class Array_UIViewRenderableTests: XCTestCase {
   func test_DecoratingBlockIsBestViewForReuse() {
     let oldBlock = DecoratingBlock(
       child: DecoratingBlock(
-        child: PathHolderTestBlock("path1")
+        child: TestBlock("path1")
       )
     )
     let view = DecoratingBlock.makeBlockView()
@@ -185,7 +185,7 @@ final class Array_UIViewRenderableTests: XCTestCase {
 
     let newBlock = DecoratingBlock(
       child: DecoratingBlock(
-        child: modified(PathHolderTestBlock("path1")) { $0.valuableContent = 20 }
+        child: modified(TestBlock("path1")) { $0.valuableContent = 20 }
       )
     )
 
@@ -199,6 +199,8 @@ private class TestBlock: BlockWithTraits {
   var intrinsicContentWidth: CGFloat = 0.0
 
   var valuableContent = 1
+
+  let path: UIElementPath?
 
   func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
     0.0
@@ -233,7 +235,11 @@ private class TestBlock: BlockWithTraits {
   static func makeBlockView() -> BlockView { TestView() }
 
   func isBestViewForReuse(_ view: BlockView) -> Bool {
-    (view as? TestView)?.block == self
+    if let path, path == ((view as? TestView)?.block as? TestBlock)?.path {
+      true
+    } else {
+      (view as? TestView)?.block == self
+    }
   }
 
   func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -249,28 +255,14 @@ private class TestBlock: BlockWithTraits {
     (view as! TestView).block = self
   }
 
-  init() {}
+  init(_ path: UIElementPath? = nil) {
+    self.path = path
+  }
 }
 
 private final class TestView: BlockView, VisibleBoundsTrackingLeaf {
   var block: TestBlock?
   var effectiveBackgroundColor: UIColor? { backgroundColor }
-}
-
-private final class PathHolderTestBlock: TestBlock, PathHolder {
-  let path: UIElementPath
-
-  init(_ path: UIElementPath) {
-    self.path = path
-  }
-
-  override func isBestViewForReuse(_ view: BlockView) -> Bool {
-    if path == ((view as? TestView)?.block as? PathHolderTestBlock)?.path {
-      true
-    } else {
-      (view as? TestView)?.block == self
-    }
-  }
 }
 
 private final class OtherTestBlock: UIViewRenderable {

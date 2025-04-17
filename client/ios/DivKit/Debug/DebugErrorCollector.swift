@@ -1,3 +1,4 @@
+import LayoutKit
 import VGSLFundamentals
 
 final class DebugErrorCollector: DivReporter {
@@ -29,6 +30,14 @@ final class DebugErrorCollector: DivReporter {
 
   func reportViewWasCreated(cardId: DivCardID) {
     wrappedDivReporter.reportViewWasCreated(cardId: cardId)
+  }
+
+  func reportBlockDidConfigure(path: UIElementPath) {
+    wrappedDivReporter.reportBlockDidConfigure(path: path)
+  }
+
+  func reportBlockWillConfigure(path: UIElementPath) {
+    wrappedDivReporter.reportBlockWillConfigure(path: path)
   }
 
   var totalErrorCount: Int {

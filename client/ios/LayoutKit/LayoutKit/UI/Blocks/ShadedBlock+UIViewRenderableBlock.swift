@@ -63,7 +63,7 @@ private final class ShadedBlockView: ViewWithShadow, BlockViewProtocol,
     self.model = model
     self.observer = observer
     if let blockView, model.block.canConfigureBlockView(blockView) {
-      model.block.configureBlockView(
+      model.block.configureBlockViewWithReporting(
         blockView,
         observer: observer,
         overscrollDelegate: overscrollDelegate,

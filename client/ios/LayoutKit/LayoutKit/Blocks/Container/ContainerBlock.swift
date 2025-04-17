@@ -102,6 +102,7 @@ public final class ContainerBlock: BlockWithLayout {
   public let childrenTransform: CGAffineTransform
   public let clipContent: Bool
   public let accessibilityElement: AccessibilityElement?
+  public let path: UIElementPath?
 
   private var cached = CachedSizes()
 
@@ -121,7 +122,8 @@ public final class ContainerBlock: BlockWithLayout {
     anchorPoint: AnchorPoint = ContainerBlock.defaultAnchorPoint,
     childrenTransform: CGAffineTransform = .identity,
     clipContent: Bool = true,
-    accessibilityElement: AccessibilityElement? = nil
+    accessibilityElement: AccessibilityElement? = nil,
+    path: UIElementPath? = nil
   ) throws {
     let gaps = gaps ?? Array(repeating: 0, times: try! UInt(value: children.count + 1))
 
@@ -156,6 +158,7 @@ public final class ContainerBlock: BlockWithLayout {
     self.childrenTransform = childrenTransform
     self.clipContent = clipContent
     self.accessibilityElement = accessibilityElement
+    self.path = path
 
     if !children.isEmpty {
       try validateLayoutTraits()
@@ -529,7 +532,8 @@ extension ContainerBlock: Equatable {
       lhs.childrenTransform == rhs.childrenTransform &&
       lhs.separator == rhs.separator &&
       lhs.lineSeparator == rhs.lineSeparator &&
-      lhs.accessibilityElement == rhs.accessibilityElement
+      lhs.accessibilityElement == rhs.accessibilityElement &&
+      lhs.path == rhs.path
   }
 }
 

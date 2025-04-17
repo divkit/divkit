@@ -12,7 +12,8 @@ final class DivContainerExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: ContainerBlock(
           layoutDirection: .vertical,
-          children: []
+          children: [],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),
@@ -31,7 +32,8 @@ final class DivContainerExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: ContainerBlock(
           layoutDirection: .vertical,
-          children: []
+          children: [],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),
@@ -54,7 +56,8 @@ final class DivContainerExtensionsTests: XCTestCase {
         child: ContainerBlock(
           layoutDirection: .vertical,
           widthTrait: .intrinsic,
-          children: []
+          children: [],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),
@@ -95,7 +98,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 label: "Hello!"
               )
             ),
-          ]
+          ],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),
@@ -127,7 +131,8 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: .default
             ),
           ],
-          clipContent: false
+          clipContent: false,
+          path: defaultContainerPath
         ),
         boundary: .noClip,
         accessibilityElement: .default
@@ -180,7 +185,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 label: "Item 2"
               )
             ),
-          ]
+          ],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),
@@ -238,7 +244,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 identifier: "item_1"
               )
             ),
-          ]
+          ],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),
@@ -247,7 +254,7 @@ final class DivContainerExtensionsTests: XCTestCase {
 
     assertEqual(block, expectedBlock)
   }
-  
+
   func test_ItemBuilder_PathsWithPrototypeId() throws {
     let context = DivBlockModelingContext(
       cardId: "custom_card_id"
@@ -302,7 +309,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 identifier: "item_1"
               )
             ),
-          ]
+          ],
+          path: UIElementPath("custom_card_id") + "777" + "container"
         ),
         accessibilityElement: .default
       ),
@@ -344,7 +352,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 label: "itemBuilder"
               )
             ),
-          ]
+          ],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),
@@ -413,11 +422,13 @@ final class DivContainerExtensionsTests: XCTestCase {
                       label: "Nested item"
                     )
                   ),
-                ]
+                ],
+                path: defaultContainerPath + "2" + "container"
               ),
               accessibilityElement: .default
             ),
-          ]
+          ],
+          path: defaultContainerPath
         ),
         accessibilityElement: accessibility(
           traits: .button,
@@ -467,7 +478,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 label: "Hello!"
               )
             ),
-          ]
+          ],
+          path: defaultContainerPath
         ),
         accessibilityElement: .default
       ),

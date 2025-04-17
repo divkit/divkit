@@ -290,8 +290,6 @@ extension TextInputBlock: ElementFocusUpdating {
   }
 }
 
-extension TextInputBlock: PathHolder {}
-
 extension TextInputBlock {
   public func modifying(
     widthTrait: LayoutTrait? = nil,

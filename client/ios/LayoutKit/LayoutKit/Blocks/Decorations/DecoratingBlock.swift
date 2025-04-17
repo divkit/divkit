@@ -201,7 +201,7 @@ extension DecoratingBlock {
     case let child as DecoratingBlock:
       child.childPath
 
-    case let child as PathHolder:
+    case let child as PathIdentifiable:
       child.path
 
     default:

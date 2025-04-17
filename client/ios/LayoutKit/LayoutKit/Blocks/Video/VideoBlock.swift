@@ -8,6 +8,9 @@ public final class VideoBlock: BlockWithTraits {
   public let model: VideoBlockViewModel
   public let state: VideoBlockViewState
   public let playerFactory: PlayerFactory
+  public var path: UIElementPath? {
+    model.path
+  }
 
   public init(
     widthTrait: LayoutTrait,

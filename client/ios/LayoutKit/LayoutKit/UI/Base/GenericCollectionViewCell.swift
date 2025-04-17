@@ -27,7 +27,7 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
     self.model = model
 
     if let view, model.canConfigureBlockView(view) {
-      model.configureBlockView(
+      model.configureBlockViewWithReporting(
         view,
         observer: observer,
         overscrollDelegate: overscrollDelegate,

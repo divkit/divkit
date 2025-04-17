@@ -184,7 +184,7 @@ extension BackgroundView {
 
     case let .block(block):
       let blockView = innerView as! BlockView
-      block.configureBlockView(
+      block.configureBlockViewWithReporting(
         blockView,
         observer: observer,
         overscrollDelegate: overscrollDelegate,
@@ -193,13 +193,13 @@ extension BackgroundView {
 
     case let .composite(background1, background2, blendingCoefficient):
       let compositeView = innerView as! CompositeView
-      background1.configureBlockView(
+      background1.configureBlockViewWithReporting(
         compositeView.backView,
         observer: observer,
         overscrollDelegate: overscrollDelegate,
         renderingDelegate: renderingDelegate
       )
-      background2.configureBlockView(
+      background2.configureBlockViewWithReporting(
         compositeView.frontView,
         observer: observer,
         overscrollDelegate: overscrollDelegate,
@@ -209,7 +209,7 @@ extension BackgroundView {
 
     case let .withInsets(background, contentInsets):
       let viewWithContentInsets = innerView as! ViewWithContentInsets
-      background.configureBlockView(
+      background.configureBlockViewWithReporting(
         viewWithContentInsets.innerView,
         observer: observer,
         overscrollDelegate: overscrollDelegate,

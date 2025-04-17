@@ -17,6 +17,10 @@ public final class PageControlBlock: BlockWithTraits {
   public let configuration: PageIndicatorConfiguration
   public let state: State
 
+  public var path: UIElementPath? {
+    pageControlPath
+  }
+
   public init(
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     pageControlPath: UIElementPath? = nil,

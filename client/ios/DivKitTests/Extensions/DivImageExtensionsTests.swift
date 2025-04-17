@@ -20,7 +20,8 @@ final class DivImageExtensionsTests: XCTestCase {
           imageHolder: FakeImageHolder(),
           widthTrait: .fixed(100),
           heightTrait: .fixed(200),
-          contentMode: ImageContentMode(scale: .aspectFill)
+          contentMode: ImageContentMode(scale: .aspectFill),
+          path: defaultPath
         ),
         accessibilityElement: accessibility(traits: .image)
       ),
@@ -46,7 +47,8 @@ final class DivImageExtensionsTests: XCTestCase {
           imageHolder: FakeImageHolder(),
           widthTrait: .fixed(100),
           heightTrait: .fixed(200),
-          contentMode: ImageContentMode(scale: .aspectFill)
+          contentMode: ImageContentMode(scale: .aspectFill),
+          path: defaultPath
         ),
         accessibilityElement: accessibility(
           traits: .image,
@@ -86,3 +88,5 @@ final class DivImageExtensionsTests: XCTestCase {
     )
   }
 }
+
+private let defaultPath = UIElementPath("test_card_id") + "0" + "image"

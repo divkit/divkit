@@ -10,6 +10,9 @@ public final class SliderBlock: BlockWithTraits {
   // MARK: - SliderBlock
 
   let sliderModel: SliderModel
+  public var path: UIElementPath? {
+    sliderModel.path
+  }
 
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {

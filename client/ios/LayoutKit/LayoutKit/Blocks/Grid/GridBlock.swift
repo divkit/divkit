@@ -71,6 +71,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
   public let contentAlignment: BlockAlignment2D
   public let items: [Item]
   public let columnCount: Int
+  public let path: UIElementPath?
   let grid: Grid
 
   private var cachedIntrinsicWidth: CGFloat?
@@ -82,7 +83,8 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     contentAlignment: BlockAlignment2D,
     items: [Item],
     columnCount: Int,
-    grid: Grid
+    grid: Grid,
+    path: UIElementPath?
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -90,6 +92,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     self.items = items
     self.columnCount = columnCount
     self.grid = grid
+    self.path = path
   }
 
   public convenience init(
@@ -97,7 +100,8 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     heightTrait: LayoutTrait,
     contentAlignment: BlockAlignment2D = .default,
     items: [Item],
-    columnCount: Int
+    columnCount: Int,
+    path: UIElementPath? = nil
   ) throws {
     try self.init(
       widthTrait: widthTrait,
@@ -105,7 +109,8 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       contentAlignment: contentAlignment,
       items: items,
       columnCount: columnCount,
-      grid: Grid(spans: items.map(\.span), columnCount: columnCount)
+      grid: Grid(spans: items.map(\.span), columnCount: columnCount),
+      path: path
     )
     try validateLayoutTraits()
   }
@@ -194,6 +199,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       && contentAlignment == other.contentAlignment
       && items == other.items
       && columnCount == other.columnCount
+      && path == other.path
     // grid is calculated from items + columnCount, so no need to check it
   }
 
@@ -208,7 +214,8 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       contentAlignment: contentAlignment,
       items: laidOutItems,
       columnCount: columnCount,
-      grid: grid
+      grid: grid,
+      path: path
     )
 
     return (block, layout)
@@ -235,7 +242,8 @@ extension GridBlock {
         contentAlignment: contentAlignment,
         items: newItems,
         columnCount: columnCount,
-        grid: grid
+        grid: grid,
+        path: path
       )
       : self
   }
@@ -261,7 +269,8 @@ extension GridBlock: ElementFocusUpdating {
         contentAlignment: contentAlignment,
         items: newItems,
         columnCount: columnCount,
-        grid: grid
+        grid: grid,
+        path: path
       )
       : self
   }

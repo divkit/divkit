@@ -132,7 +132,8 @@ extension DivContainer: DivBlockModeling {
       children: children,
       separator: resolveSeparator(context),
       lineSeparator: resolveLineSeparator(context),
-      clipContent: params.clipToBounds && paddings == .zero
+      clipContent: params.clipToBounds && paddings == .zero,
+      path: context.path
     )
   }
 

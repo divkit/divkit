@@ -12,7 +12,7 @@ extension [BlockView] {
     let reuseResult = calculateReusability(self, blocks: blocks)
     let newViews: [BlockView] = reuseResult.reusability.map { block, view in
       if let view {
-        block.configureBlockView(
+        block.configureBlockViewWithReporting(
           view,
           observer: observer,
           overscrollDelegate: overscrollDelegate,

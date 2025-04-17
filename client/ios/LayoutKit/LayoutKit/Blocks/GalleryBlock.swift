@@ -10,6 +10,10 @@ public final class GalleryBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
+  public var path: UIElementPath? {
+    model.path
+  }
+
   public init(
     model: GalleryViewModel,
     state: GalleryViewState,

@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import VGSL
 
-public protocol UIViewRenderable {
+public protocol UIViewRenderable: PathIdentifiable {
   static func makeBlockView() -> BlockView
 
   func configureBlockView(
@@ -17,6 +17,31 @@ public protocol UIViewRenderable {
 }
 
 extension UIViewRenderable {
+  func configureBlockViewWithReporting(
+    _ view: BlockView,
+    observer: ElementStateObserver?,
+    overscrollDelegate: ScrollDelegate?,
+    renderingDelegate: RenderingDelegate?
+  ) {
+    let configure = {
+      configureBlockView(
+        view,
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate
+      )
+    }
+
+    guard let renderingDelegate else {
+      configure()
+      return
+    }
+
+    renderingDelegate.reportConfigure(path: path) {
+      configure()
+    }
+  }
+
   public func makeBlockView(
     observer: ElementStateObserver? = nil,
     overscrollDelegate: ScrollDelegate? = nil,
@@ -24,7 +49,7 @@ extension UIViewRenderable {
   ) -> BlockView {
     let result = type(of: self).makeBlockView()
     renderingDelegate?.reportViewWasCreated()
-    configureBlockView(
+    configureBlockViewWithReporting(
       result,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
@@ -38,7 +63,7 @@ extension UIViewRenderable {
   }
 
   public func configureBlockView(_ view: BlockView) {
-    configureBlockView(
+    configureBlockViewWithReporting(
       view,
       observer: nil,
       overscrollDelegate: nil,
@@ -88,7 +113,7 @@ extension UIViewRenderable {
     subviewPosition: SubviewPosition = .trailing
   ) -> BlockView {
     if let view, canConfigureBlockView(view) {
-      configureBlockView(
+      configureBlockViewWithReporting(
         view,
         observer: observer,
         overscrollDelegate: overscrollDelegate,

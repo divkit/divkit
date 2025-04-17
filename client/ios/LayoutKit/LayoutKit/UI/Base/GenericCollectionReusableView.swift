@@ -19,7 +19,7 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
     self.model = model
 
     if let view, model.canConfigureBlockView(view) {
-      model.configureBlockView(
+      model.configureBlockViewWithReporting(
         view,
         observer: observer,
         overscrollDelegate: nil,

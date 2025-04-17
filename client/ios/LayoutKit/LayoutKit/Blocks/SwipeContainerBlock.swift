@@ -101,5 +101,3 @@ extension SwipeContainerBlock: ElementFocusUpdating {
     )
   }
 }
-
-extension SwipeContainerBlock: PathHolder {}

@@ -15,7 +15,7 @@ extension AspectBlock {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
-    content.configureBlockView(
+    content.configureBlockViewWithReporting(
       view,
       observer: observer,
       overscrollDelegate: overscrollDelegate,

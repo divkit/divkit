@@ -8,6 +8,10 @@ public final class TabsBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
+  public var path: UIElementPath? {
+    model.contentsModel.path
+  }
+
   public init(
     model: TabViewModel,
     state: TabViewState,

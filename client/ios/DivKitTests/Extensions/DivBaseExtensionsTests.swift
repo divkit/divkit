@@ -135,7 +135,8 @@ final class DivBaseExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: ContainerBlock(
           layoutDirection: .vertical,
-          children: []
+          children: [],
+          path: UIElementPath("test_card_id") + "0" + "container"
         ),
         actions: NonEmptyArray(actions.compactMap {
           $0.uiAction(

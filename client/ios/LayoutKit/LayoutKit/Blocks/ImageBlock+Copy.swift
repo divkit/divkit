@@ -12,7 +12,8 @@ extension ImageBlock {
       effects: effects,
       accessibilityElement: accessibilityElement,
       blurUsingMetal: blurUsingMetal,
-      tintUsingMetal: tintUsingMetal
+      tintUsingMetal: tintUsingMetal,
+      path: path
     )
   }
 }

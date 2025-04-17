@@ -7,12 +7,18 @@ public protocol DivReporter {
   func reportError(cardId: DivCardID, error: DivError)
   func reportAction(cardId: DivCardID, info: DivActionInfo)
 
-  @_spi(Internal)
+  @_spi(Performance)
   func reportViewWasCreated(cardId: DivCardID)
+  @_spi(Performance)
+  func reportBlockWillConfigure(path: UIElementPath)
+  @_spi(Performance)
+  func reportBlockDidConfigure(path: UIElementPath)
 }
 
 extension DivReporter {
   public func reportViewWasCreated(cardId _: DivCardID) {}
+  public func reportBlockWillConfigure(path _: UIElementPath) {}
+  public func reportBlockDidConfigure(path _: UIElementPath) {}
   public func reportAction(cardId _: DivCardID, info _: DivActionInfo) {}
 
   func asExpressionErrorTracker(cardId: DivCardID) -> ExpressionErrorTracker {

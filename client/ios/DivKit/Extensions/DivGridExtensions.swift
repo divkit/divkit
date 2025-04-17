@@ -53,7 +53,8 @@ extension DivGrid: DivBlockModeling {
       heightTrait: resolveContentHeightTrait(context),
       contentAlignment: resolveContentAlignment(expressionResolver),
       items: items,
-      columnCount: resolveColumnCount(expressionResolver) ?? 0
+      columnCount: resolveColumnCount(expressionResolver) ?? 0,
+      path: path
     )
   }
 

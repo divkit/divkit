@@ -15,7 +15,8 @@ extension ContainerBlock {
     anchorPoint: AnchorPoint? = nil,
     childrenTransform: CGAffineTransform? = nil,
     clipContent: Bool? = nil,
-    accessibilityElement: AccessibilityElement? = nil
+    accessibilityElement: AccessibilityElement? = nil,
+    path: UIElementPath? = nil
   ) throws -> ContainerBlock {
     try ContainerBlock(
       layoutDirection: layoutDirection ?? self.layoutDirection,
@@ -30,7 +31,8 @@ extension ContainerBlock {
       anchorPoint: anchorPoint ?? self.anchorPoint,
       childrenTransform: childrenTransform ?? self.childrenTransform,
       clipContent: clipContent ?? self.clipContent,
-      accessibilityElement: accessibilityElement ?? self.accessibilityElement
+      accessibilityElement: accessibilityElement ?? self.accessibilityElement,
+      path: path ?? self.path
     )
   }
 
@@ -47,7 +49,8 @@ extension ContainerBlock {
     anchorPoint: AnchorPoint = ContainerBlock.defaultAnchorPoint,
     childrenTransform: CGAffineTransform = .identity,
     clipContent: Bool = true,
-    accessibilityElement: AccessibilityElement? = nil
+    accessibilityElement: AccessibilityElement? = nil,
+    path: UIElementPath? = nil
   ) throws {
     let axialAlignment: AxialAlignment
     let crossAlignment: CrossAlignment
@@ -78,7 +81,8 @@ extension ContainerBlock {
       anchorPoint: anchorPoint,
       childrenTransform: childrenTransform,
       clipContent: clipContent,
-      accessibilityElement: accessibilityElement
+      accessibilityElement: accessibilityElement,
+      path: path
     )
   }
 }

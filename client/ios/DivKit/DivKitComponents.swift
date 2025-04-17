@@ -449,6 +449,14 @@ private final class ErrorsReportingRenderingDelegate: RenderingDelegate {
     divReporter?.reportViewWasCreated(cardId: cardId)
   }
 
+  func reportBlockWillConfigure(path: UIElementPath) {
+    divReporter?.reportBlockWillConfigure(path: path)
+  }
+
+  func reportBlockDidConfigure(path: UIElementPath) {
+    divReporter?.reportBlockDidConfigure(path: path)
+  }
+
   func mapView(_ view: any LayoutKit.BlockView, to id: LayoutKit.BlockViewID) {
     wrappedRenderingDelegate.mapView(view, to: id)
   }
