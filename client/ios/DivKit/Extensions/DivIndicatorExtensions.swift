@@ -93,7 +93,7 @@ extension DivIndicator: DivBlockModeling {
 
     return PageControlBlock(
       layoutDirection: context.layoutDirection,
-      pageControlPath: context.path,
+      pageControlPath: context.parentPath,
       pagerPath: pagerPath,
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
