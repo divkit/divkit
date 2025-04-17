@@ -544,9 +544,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   }
 
   private func captureFocusIfNeeded() {
-    if model.captureFocusOnAction, let path = model?.path {
+    if model.captureFocusOnAction {
       observer?.clearFocus()
-      observer?.focusedElementChanged(isFocused: true, forPath: path)
     }
   }
 
