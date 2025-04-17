@@ -3,7 +3,7 @@ import VGSL
 import XCTest
 
 final class RunLoopCardUpdateAggregatorTests: XCTestCase {
-  private var mainThreadBlock: Action!
+  private var mainThreadBlock: (@MainActor () -> Void)!
   private var updateReasons: [DivCardUpdateReason] = []
 
   private lazy var aggregator = RunLoopCardUpdateAggregator(
@@ -15,7 +15,9 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
     aggregator.aggregate(.variable(["first": []]))
     aggregator.aggregate(.variable(["second": []]))
 
-    mainThreadBlock()
+    onMainThread {
+      self.mainThreadBlock()
+    }
 
     XCTAssertEqual([.variable(["first": [], "second": []])], updateReasons)
   }
@@ -24,7 +26,9 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
     let change: DivCardUpdateReason = .state("cardId")
     aggregator.aggregate(change)
 
-    mainThreadBlock()
+    onMainThread {
+      self.mainThreadBlock()
+    }
 
     XCTAssertEqual([change], updateReasons)
   }
@@ -38,7 +42,9 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
     for reasons in reasonBatches {
       reasons.forEach(aggregator.aggregate(_:))
 
-      mainThreadBlock()
+      onMainThread {
+        self.mainThreadBlock()
+      }
 
       XCTAssertEqual(reasons, updateReasons)
     }
@@ -58,7 +64,9 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
     aggregator.flushUpdateActions()
     updateReasons = []
 
-    mainThreadBlock()
+    onMainThread {
+      self.mainThreadBlock()
+    }
 
     XCTAssertEqual([], updateReasons)
   }

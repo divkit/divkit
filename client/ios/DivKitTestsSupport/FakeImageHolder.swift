@@ -21,7 +21,7 @@ public final class FakeImageHolder: ImageHolder {
     nil
   }
 
-  public func requestImageWithCompletion(_: @escaping ((Image?) -> Void)) -> Cancellable? {
+  public func requestImageWithCompletion(_: @escaping @MainActor (Image?) -> Void) -> Cancellable? {
     nil
   }
 

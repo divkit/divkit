@@ -178,7 +178,7 @@ private class ImageHolderStub: ImageHolder {
   let placeholder: ImagePlaceholder? = nil
 
   func requestImageWithCompletion(
-    _: @escaping ((Image?) -> Void)
+    _: @escaping @MainActor (Image?) -> Void
   ) -> Cancellable? {
     EmptyCancellable()
   }

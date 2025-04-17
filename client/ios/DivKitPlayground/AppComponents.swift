@@ -37,7 +37,7 @@ enum AppComponents {
         GestureExtensionHandler(),
         MarkdownExtensionHandler(),
         ShineExtensionHandler(),
-        InputAutocorrectionExtensionHandler()
+        InputAutocorrectionExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
       fontProvider: fontProvider,
@@ -66,6 +66,7 @@ private func makeCachingPlayerFactory(requester: URLResourceRequesting) -> Playe
     name: "divkit.playground.VideoAssetCache",
     ioQueue: cacheQueue,
     maxCapacity: 10_485_760,
+    fileManager: FileManager(),
     reportError: nil
   )
   let requester = CachedURLResourceRequester(
@@ -75,3 +76,5 @@ private func makeCachingPlayerFactory(requester: URLResourceRequesting) -> Playe
   )
   return DefaultPlayerFactory(itemsProvider: requester)
 }
+
+extension FileManager: @retroactive @unchecked Sendable {}

@@ -3155,7 +3155,7 @@
 			repositoryURL = "https://github.com/yandex/vgsl.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 6.4.0;
+				minimumVersion = 7.0.0;
 			};
 		};
 		98C920F22C8F46EE00B2FFD8 /* XCRemoteSwiftPackageReference "LookinServer" */ = {
