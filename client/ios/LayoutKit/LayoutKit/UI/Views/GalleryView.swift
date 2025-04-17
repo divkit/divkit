@@ -28,6 +28,7 @@ public final class GalleryView: BlockView {
     }
   }
 
+  public var layoutReporter: LayoutReporter?
   private var model: GalleryViewModel!
   private var layout: GalleryViewLayouting!
   private(set) var state: GalleryViewState!
@@ -231,6 +232,7 @@ public final class GalleryView: BlockView {
     guard !bounds.isEmpty else {
       return
     }
+    layoutReporter?.willLayoutSubviews()
     collectionView.frame = bounds
 
     if let model, layout?.isEqual(to: model, boundsSize: bounds.size) != true {
@@ -243,6 +245,7 @@ public final class GalleryView: BlockView {
       }
     }
     deferredStateSetting = .idle
+    layoutReporter?.didLayoutSubviews()
   }
 
   private func updateContentOffset(

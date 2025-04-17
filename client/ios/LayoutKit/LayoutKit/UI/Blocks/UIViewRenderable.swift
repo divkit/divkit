@@ -23,6 +23,17 @@ extension UIViewRenderable {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
+    var view = view
+    view.layoutReporter = LayoutReporter(
+      willLayoutSubviews: {
+        guard let path else { return }
+        renderingDelegate?.reportViewWillLayout(path: path)
+      },
+      didLayoutSubviews: {
+        guard let path else { return }
+        renderingDelegate?.reportViewDidLayout(path: path)
+      }
+    )
     let configure = {
       configureBlockView(
         view,
@@ -32,14 +43,14 @@ extension UIViewRenderable {
       )
     }
 
-    guard let renderingDelegate else {
+    guard let renderingDelegate, let path else {
       configure()
       return
     }
 
-    renderingDelegate.reportConfigure(path: path) {
-      configure()
-    }
+    renderingDelegate.reportBlockWillConfigure(path: path)
+    configure()
+    renderingDelegate.reportBlockDidConfigure(path: path)
   }
 
   public func makeBlockView(

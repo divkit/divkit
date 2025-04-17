@@ -31,6 +31,8 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     [videoView].compactMap { $0 }
   }
 
+  var layoutReporter: LayoutReporter?
+
   init() {
     super.init(frame: .zero)
 
@@ -152,10 +154,12 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    layoutReporter?.willLayoutSubviews()
     videoView?.frame = bounds
     if preview.currentValue != nil {
       preview.value.frame = adjustPreviewFrame()
     }
+    layoutReporter?.didLayoutSubviews()
   }
 
   private func adjustPreviewFrame() -> CGRect {

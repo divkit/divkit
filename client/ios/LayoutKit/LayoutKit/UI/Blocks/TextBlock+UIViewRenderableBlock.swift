@@ -42,6 +42,7 @@ extension TextBlock {
 }
 
 private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
+  var layoutReporter: LayoutReporter?
   private let textBlockView = TextBlockView()
   private var gradientView: UIView?
 
@@ -100,6 +101,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    layoutReporter?.willLayoutSubviews()
 
     let textFrame = if let intrinsicHeight = model.intrinsicHeight?(bounds.width),
                        intrinsicHeight > bounds.height {
@@ -117,6 +119,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
     gradientView?.frame = textFrame
 
     gradientView?.mask = textBlockView
+    layoutReporter?.didLayoutSubviews()
   }
 }
 

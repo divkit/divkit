@@ -14,6 +14,10 @@ public protocol RenderingDelegate: AnyObject {
   func reportBlockWillConfigure(path: UIElementPath)
   @_spi(Performance)
   func reportBlockDidConfigure(path: UIElementPath)
+  @_spi(Performance)
+  func reportViewWillLayout(path: UIElementPath)
+  @_spi(Performance)
+  func reportViewDidLayout(path: UIElementPath)
 }
 
 public typealias BlockViewID = Tagged<BlockViewProtocol, String>
@@ -27,17 +31,8 @@ extension RenderingDelegate {
   public func reportViewWasCreated() {}
   public func reportBlockWillConfigure(path _: UIElementPath) {}
   public func reportBlockDidConfigure(path _: UIElementPath) {}
-
-  func reportConfigure(path: UIElementPath?, configure: () -> Void) {
-    guard let path else {
-      configure()
-      return
-    }
-
-    reportBlockWillConfigure(path: path)
-    configure()
-    reportBlockDidConfigure(path: path)
-  }
+  public func reportViewWillLayout(path _: UIElementPath) {}
+  public func reportViewDidLayout(path _: UIElementPath) {}
 }
 #else
 public protocol RenderingDelegate {}

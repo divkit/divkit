@@ -40,6 +40,14 @@ final class DebugErrorCollector: DivReporter {
     wrappedDivReporter.reportBlockWillConfigure(path: path)
   }
 
+  func reportViewDidLayout(path: UIElementPath) {
+    wrappedDivReporter.reportViewDidLayout(path: path)
+  }
+
+  func reportViewWillLayout(path: UIElementPath) {
+    wrappedDivReporter.reportViewWillLayout(path: path)
+  }
+
   var totalErrorCount: Int {
     errorStorage.errors.count + layoutErrors.count
   }

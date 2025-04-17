@@ -457,6 +457,14 @@ private final class ErrorsReportingRenderingDelegate: RenderingDelegate {
     divReporter?.reportBlockDidConfigure(path: path)
   }
 
+  func reportViewWillLayout(path: UIElementPath) {
+    divReporter?.reportViewWillLayout(path: path)
+  }
+
+  func reportViewDidLayout(path: UIElementPath) {
+    divReporter?.reportViewDidLayout(path: path)
+  }
+
   func mapView(_ view: any LayoutKit.BlockView, to id: LayoutKit.BlockViewID) {
     wrappedRenderingDelegate.mapView(view, to: id)
   }

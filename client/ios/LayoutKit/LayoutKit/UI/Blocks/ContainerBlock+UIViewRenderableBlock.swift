@@ -69,6 +69,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
 
   private var blockViews: [BlockView] = []
 
+  var layoutReporter: LayoutReporter?
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
   var effectiveBackgroundColor: UIColor? { blockViews.first?.effectiveBackgroundColor }
 
@@ -138,6 +139,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     if let lastLayoutSize = modelAndLastLayoutSize.lastLayoutSize, bounds.size == lastLayoutSize {
       return
     }
+    layoutReporter?.willLayoutSubviews()
 
     let layout = model.layout ?? ContainerBlockLayout(
       children: model.children,
@@ -176,6 +178,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     }
 
     modelAndLastLayoutSize = (model: model, lastLayoutSize: bounds.size)
+    layoutReporter?.didLayoutSubviews()
   }
 
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

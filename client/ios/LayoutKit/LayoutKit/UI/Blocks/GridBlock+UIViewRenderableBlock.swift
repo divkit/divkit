@@ -46,6 +46,7 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
   private var blockViews: [BlockView] = []
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+  var layoutReporter: LayoutReporter?
 
   private weak var observer: ElementStateObserver?
   private var modelAndLastLayoutSize: (model: Model?, lastLayoutSize: CGSize?)
@@ -93,6 +94,7 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
           modelAndLastLayoutSize.lastLayoutSize != bounds.size else {
       return
     }
+    layoutReporter?.willLayoutSubviews()
     modelAndLastLayoutSize.lastLayoutSize = bounds.size
 
     let layout = model.layout ?? GridBlock.Layout(
@@ -105,5 +107,6 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
     zip(layout.itemFrames, blockViews).forEach {
       $1.frame = $0
     }
+    layoutReporter?.didLayoutSubviews()
   }
 }

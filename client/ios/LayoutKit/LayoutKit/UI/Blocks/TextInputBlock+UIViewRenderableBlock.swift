@@ -85,6 +85,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   var paddings: EdgeInsets = .zero
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+  var layoutReporter: LayoutReporter?
 
   override init(frame: CGRect) {
     textValue = .zero
@@ -126,6 +127,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    layoutReporter?.willLayoutSubviews()
 
     multiLineInput.frame = bounds
     multiLineInput.textContainerInset = paddings
@@ -141,6 +143,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapGesture(sender:)))
     addGestureRecognizer(tapGesture)
+    layoutReporter?.didLayoutSubviews()
   }
 
   @objc func onTapGesture(sender _: UITapGestureRecognizer) {

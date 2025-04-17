@@ -25,6 +25,7 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
   public let visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView]
 
   public var effectiveBackgroundColor: UIColor? { tabContentsView.effectiveBackgroundColor }
+  public var layoutReporter: LayoutReporter?
 
   public func configure(
     model: TabViewModel,
@@ -86,11 +87,14 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
     guard newLayout != layout else {
       return
     }
+    layoutReporter?.willLayoutSubviews()
 
     layout = newLayout
     tabListView.frame = layout.listFrame
     tabContentsView.frame = layout.contentsFrame
     separatorView?.frame = layout.separatorFrame
+
+    layoutReporter?.didLayoutSubviews()
   }
 
   private func configureSeparatorView() {

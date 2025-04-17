@@ -88,6 +88,14 @@ private final class SubviewStorage: RenderingDelegate {
     wrappedRenderingDelegate?.reportBlockWillConfigure(path: path)
   }
 
+  func reportViewDidLayout(path: UIElementPath) {
+    wrappedRenderingDelegate?.reportViewDidLayout(path: path)
+  }
+
+  func reportViewWillLayout(path: UIElementPath) {
+    wrappedRenderingDelegate?.reportViewWillLayout(path: path)
+  }
+
   func getView(_ id: BlockViewID) -> DetachableAnimationBlockView? {
     views.first { $0.id == id }?.view
   }
