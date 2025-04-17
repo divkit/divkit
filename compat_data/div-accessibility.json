@@ -27,5 +27,21 @@
                 "version_added": "30.30.0"
             }
         }
+    }, {
+        "id": "accessibility_mode",
+        "name": "accessibility <code>mode</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "31.11.0",
+                "partial_implementation": true,
+                "notes": "Partial implementation on the Web due to support for only the \"exclude\" value"
+            }
+        }
     }]
 }

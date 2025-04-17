@@ -117,6 +117,9 @@
         "compat": {
             "web": {
                 "version_added": "31.10.0"
+            },
+            "ios": {
+                "version_added": "31.11.0"
             }
         }
     }]
