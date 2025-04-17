@@ -30,6 +30,7 @@ from .entities import (
     Color,
     String,
     Dictionary,
+    RawObject,
     BoolInt,
     RawArray,
     _build_documentation_generator_properties
@@ -276,9 +277,11 @@ def type_property_build(dictionary: Dict[str, any],
                                                           mode=mode,
                                                           config=config)
         return Array(property_type=property_type, min_items=min_items), declarations
+    elif type_value == 'dict':
+        return Dictionary(), []
     elif type_value == 'object':
         if dictionary.get('additionalProperties', False) and 'properties' not in dictionary:
-            return Dictionary(), []
+            return RawObject(), []
         entity: Entity = Entity(name=name,
                                 original_name=outer_name,
                                 dictionary=dictionary,

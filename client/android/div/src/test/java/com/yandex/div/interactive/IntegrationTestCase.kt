@@ -1,6 +1,7 @@
 package com.yandex.div.interactive
 
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.getVariableValue
+import com.yandex.div.core.expression.ExpressionTestCaseUtils.type
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import org.json.JSONObject
@@ -16,7 +17,7 @@ class IntegrationTestCase(
     sealed interface ExpectedResult {
 
         class Variable(val name: String, json: JSONObject): ExpectedResult {
-            val type: String = json.getString("type")
+            val type: String = json.type
             val value = json.getVariableValue(type)
         }
 

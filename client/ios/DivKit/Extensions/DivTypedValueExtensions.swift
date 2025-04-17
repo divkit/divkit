@@ -22,8 +22,9 @@ extension DivTypedValue {
       }
       return nil
     case let .dictValue(value):
-      if let dictValue = DivDictionary.fromAny(value.value) {
-        return .dict(dictValue)
+      if let dictValue = value.resolveValue(expressionResolver),
+         let divDict = DivDictionary.fromAny(dictValue) {
+        return .dict(divDict)
       }
       return nil
     case let .integerValue(value):
@@ -69,7 +70,10 @@ extension DivTypedValue {
       }
       return nil
     case let .dictValue(value):
-      return DivDictionary.fromAny(value.value)
+        if let dictValue = value.resolveValue(expressionResolver) {
+          return DivDictionary.fromAny(dictValue)
+        }
+      return nil
     case let .integerValue(value):
       if let integerValue = value.resolveValue(expressionResolver) {
         return integerValue

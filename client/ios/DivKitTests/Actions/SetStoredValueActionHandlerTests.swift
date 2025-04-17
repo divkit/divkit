@@ -123,7 +123,7 @@ final class SetStoredValueActionHandlerTests: XCTestCase {
     handle(
       action(
         name: "name",
-        value: .dictValue(DictValue(value: ["key": "value"]))
+        value: .dictValue(DictValue(value: .value(["key": "value"])))
       )
     )
 

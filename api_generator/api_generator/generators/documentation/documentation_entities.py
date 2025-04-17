@@ -14,6 +14,7 @@ from ...schema.modeling.entities import (
     BoolInt,
     Color,
     Dictionary,
+    RawObject,
     RawArray,
     Double,
     Int,
@@ -105,6 +106,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = DocumentationColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = DocumentationDictionary
+    elif isinstance(property_type, RawObject):
+        property_type.__class__ = DocumentationRawObject
     elif isinstance(property_type, RawArray):
         property_type.__class__ = DocumentationRawArray
     elif isinstance(property_type, Double):
@@ -265,13 +268,23 @@ class DocumentationDictionary(Dictionary, DocumentationPropertyType):
 
     @property
     def description(self) -> str:
+        return 'dictionary'
+
+    def constraints(self, dictionary: Dict[str, str]) -> str:
+        return ''
+
+
+class DocumentationRawObject(RawObject, DocumentationPropertyType):
+
+    @property
+    def description(self) -> str:
         return 'object'
 
     def constraints(self, dictionary: Dict[str, str]) -> str:
         return ''
 
 
-class DocumentationRawArray(Dictionary, DocumentationPropertyType):
+class DocumentationRawArray(RawArray, DocumentationPropertyType):
 
     @property
     def description(self) -> str:

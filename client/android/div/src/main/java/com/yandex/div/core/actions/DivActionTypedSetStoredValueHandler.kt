@@ -52,7 +52,7 @@ internal class DivActionTypedSetStoredValueHandler @Inject constructor() : DivAc
         is DivTypedValue.Color -> StoredValue.ColorStoredValue(name, Color(value.value.value.evaluate(resolver)))
         is DivTypedValue.Url -> StoredValue.UrlStoredValue(name, Url.from(value.value.value.evaluate(resolver).toString()))
         is DivTypedValue.Array -> StoredValue.ArrayStoredValue(name, value.value.value.evaluate(resolver))
-        is DivTypedValue.Dict -> StoredValue.DictStoredValue(name, value.value.value)
+        is DivTypedValue.Dict -> StoredValue.DictStoredValue(name, value.value.value.evaluate(resolver))
     }
 
 }

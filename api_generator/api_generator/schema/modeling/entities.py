@@ -797,9 +797,9 @@ def default_value(lang: GeneratedLanguage,
 class PropertyType(ABC):
     @property
     def supports_expressions(self) -> bool:
-        if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url, RawArray)):
+        if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url, RawArray, Dictionary)):
             return True
-        elif isinstance(self, (Dictionary, StaticString)):
+        elif isinstance(self, (RawObject, StaticString)):
             return False
         elif isinstance(self, Array):
             if isinstance(self.property_type, Object) and \
@@ -837,7 +837,7 @@ class PropertyType(ABC):
 
     @property
     def as_json(self) -> Dict:
-        if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, Color, Url, Dictionary)):
+        if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, Color, Url, Dictionary, RawObject)):
             return {
                 'value': str(type(self).__name__)
             }
@@ -904,6 +904,11 @@ class Url(PropertyType):
 
 @dataclass
 class Dictionary(PropertyType):
+    pass
+
+
+@dataclass
+class RawObject(PropertyType):
     pass
 
 

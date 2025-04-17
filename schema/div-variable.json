@@ -176,8 +176,7 @@
         },
         "value": {
           "supports_expressions": false,
-          "type": "object",
-          "additionalProperties": true,
+          "type": "dict",
           "$description": "translations.json#/div_variable_value"
         }
       },

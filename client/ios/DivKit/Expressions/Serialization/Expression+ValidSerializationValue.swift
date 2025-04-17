@@ -89,3 +89,14 @@ extension Expression where T: RawRepresentable, T.RawValue == String {
     }
   }
 }
+
+extension Expression where T == [String: Any] {
+  func toValidSerializationValue() -> ValidSerializationValue {
+    switch self {
+    case let .value(value):
+      value
+    case let .link(link):
+      link.rawValue
+    }
+  }
+}

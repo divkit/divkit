@@ -20,6 +20,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawObject,
     RawArray,
     StringEnumeration,
     EntityEnumeration,
@@ -46,6 +47,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = DartColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = DartDictionary
+    elif isinstance(property_type, RawObject):
+        property_type.__class__ = DartRawObject
     elif isinstance(property_type, RawArray):
         property_type.__class__ = DartRawArray
     elif isinstance(property_type, Double):
@@ -208,7 +211,7 @@ class DartProperty(Property):
             return f"safeParseBool{expr}({src},{fallback})"
         elif isinstance(prop_type, (String, StaticString)):
             return f"safeParseStr{expr}({src},{fallback})"
-        elif isinstance(prop_type, Dictionary):
+        elif isinstance(prop_type, (Dictionary, RawObject)):
             return f"safeParseMap{expr}({src},{fallback})"
         elif isinstance(prop_type, RawArray):
             return f"safeParseList{expr}({src},{fallback})"
@@ -233,7 +236,7 @@ class DartProperty(Property):
                 strategy = "reqProp<bool>(safeParseBool(v),)"
             elif isinstance(list_item_type, (String, StaticString)):
                 strategy = "reqProp<String>(safeParseStr(v),)"
-            elif isinstance(list_item_type, Dictionary):
+            elif isinstance(list_item_type, (Dictionary, RawObject)):
                 strategy = "reqProp<Obj>(safeParseMap(v),)"
             elif isinstance(list_item_type, RawArray):
                 strategy = "reqProp<Arr>(safeParseList(v),)"
@@ -333,7 +336,7 @@ class DartPropertyType(PropertyType):
             return 'String'
         elif isinstance(self, Color):
             return 'Color'
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return 'Obj'
         elif isinstance(self, RawArray):
             return 'Arr'
@@ -474,6 +477,10 @@ class DartColor(DartPropertyType, Color):
 
 
 class DartDictionary(DartPropertyType, Dictionary):
+    pass
+
+
+class DartRawObject(DartPropertyType, RawObject):
     pass
 
 

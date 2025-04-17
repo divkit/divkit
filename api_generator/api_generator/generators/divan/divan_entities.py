@@ -21,6 +21,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawObject,
     RawArray,
     DivanGeneratorProperties,
 )
@@ -123,6 +124,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = DivanColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = DivanDictionary
+    elif isinstance(property_type, RawObject):
+        property_type.__class__ = DivanRawObject
     elif isinstance(property_type, RawArray):
         property_type.__class__ = DivanRawArray
     elif isinstance(property_type, Double):
@@ -628,7 +631,7 @@ class DivanPropertyType(PropertyType):
             return 'Color'
         elif isinstance(self, Url):
             return 'Url'
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return 'Map<String, Any>'
         elif isinstance(self, RawArray):
             return 'List<Any>'
@@ -656,7 +659,7 @@ class DivanPropertyType(PropertyType):
     def is_primitive(self) -> bool:
         if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, Color, Url, RawArray)):
             return True
-        elif isinstance(self, (Dictionary, Array)):
+        elif isinstance(self, (Dictionary, RawObject, Array)):
             return False
         elif isinstance(self, Object):
             inner_obj = self.object
@@ -687,6 +690,10 @@ class DivanColor(DivanPropertyType, Color):
 
 
 class DivanDictionary(DivanPropertyType, Dictionary):
+    pass
+
+
+class DivanRawObject(DivanPropertyType, RawObject):
     pass
 
 

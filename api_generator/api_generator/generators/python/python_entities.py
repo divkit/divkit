@@ -11,6 +11,7 @@ from ...schema.modeling.entities import (
     BoolInt,
     Color,
     Dictionary,
+    RawObject,
     RawArray,
     Double,
     Int,
@@ -43,6 +44,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = PythonColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = PythonDictionary
+    elif isinstance(property_type, RawObject):
+        property_type.__class__ = PythonRawObject
     elif isinstance(property_type, RawArray):
         property_type.__class__ = PythonRawArray
     elif isinstance(property_type, Double):
@@ -288,7 +291,7 @@ class PythonPropertyType(PropertyType):
             return 'str'
         elif isinstance(self, StaticString):
             raise TypeError(f'{self} is a static type')
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return 'typing.Dict[str, typing.Any]'
         elif isinstance(self, RawArray):
             return 'typing.Sequence[typing.Any]'
@@ -306,7 +309,7 @@ class PythonPropertyType(PropertyType):
 
     @property
     def constraints(self) -> str:
-        if isinstance(self, (Bool, BoolInt, Dictionary, RawArray)):
+        if isinstance(self, (Bool, BoolInt, Dictionary, RawObject, RawArray)):
             return ''
         elif isinstance(self, Array):
             result = ''
@@ -355,6 +358,10 @@ class PythonColor(PythonPropertyType, Color):
 
 
 class PythonDictionary(PythonPropertyType, Dictionary):
+    pass
+
+
+class PythonRawObject(PythonPropertyType, RawObject):
     pass
 
 

@@ -3,6 +3,7 @@ package com.yandex.div.internal.parser
 import android.graphics.Color
 import android.net.Uri
 import org.json.JSONArray
+import org.json.JSONObject
 
 interface TypeHelper<T> {
 
@@ -62,4 +63,10 @@ val TYPE_HELPER_COLOR = object : TypeHelper<Int> {
 val TYPE_HELPER_JSON_ARRAY = object : TypeHelper<JSONArray> {
     override val typeDefault = JSONArray()
     override fun isTypeValid(value: Any) = value is JSONArray
+}
+
+@JvmField
+val TYPE_HELPER_DICT = object : TypeHelper<JSONObject> {
+    override val typeDefault = JSONObject()
+    override fun isTypeValid(value: Any) = value is JSONObject
 }

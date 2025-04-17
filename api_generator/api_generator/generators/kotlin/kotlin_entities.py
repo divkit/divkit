@@ -22,6 +22,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawObject,
     RawArray,
     ObjectFormat,
     KotlinGeneratorProperties
@@ -73,6 +74,7 @@ class KotlinEntity(Entity):
         Color.__bases__ = (KotlinPropertyType, PropertyType,)
         String.__bases__ = (KotlinPropertyType, PropertyType,)
         Dictionary.__bases__ = (KotlinPropertyType, PropertyType,)
+        RawObject.__bases__ = (KotlinPropertyType, PropertyType,)
         RawArray.__bases__ = (KotlinPropertyType, PropertyType,)
         for prop in self.properties:
             prop.__class__ = KotlinProperty
@@ -1280,7 +1282,7 @@ class KotlinPropertyType(PropertyType):
                 args.append(f'{prop.declaration_name} = {declaration}')
             args = ', '.join(args)
             return wrap(f'{entity.resolved_prefixed_declaration}({args})')
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return wrap(f'JSONObject("""\n{default_value}\n""")')
         else:
             return None
@@ -1335,7 +1337,7 @@ class KotlinPropertyType(PropertyType):
             return 'Boolean'
         elif isinstance(self, String):
             return 'CharSequence' if self.formatted else 'String'
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return 'JSONObject'
         elif isinstance(self, RawArray):
             return 'JSONArray'
@@ -1513,6 +1515,8 @@ class KotlinPropertyType(PropertyType):
             return f'{prefix}INT'
         elif isinstance(self, Double):
             return f'{prefix}DOUBLE'
+        elif isinstance(self, Dictionary):
+            return f'{prefix}DICT'
         elif isinstance(self, RawArray):
             return f'{prefix}JSON_ARRAY'
         elif isinstance(self, Array):

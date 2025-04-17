@@ -16,6 +16,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawObject,
     RawArray,
     Declarable,
     TypeScriptGeneratorProperties
@@ -67,7 +68,7 @@ def _type_script_type_name(property_type: PropertyType, supports_expressions: bo
         return 'string'
     elif isinstance(property_type, StaticString):
         raise TypeError('Is a static type')
-    elif isinstance(property_type, Dictionary):
+    elif isinstance(property_type, (Dictionary, RawObject)):
         return '{}'
     elif isinstance(property_type, RawArray):
         return 'unknown[]'

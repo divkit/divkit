@@ -120,8 +120,7 @@
           ]
         },
         "value": {
-          "type": "object",
-          "additionalProperties": true
+          "type": "dict"
         }
       },
       "required": [

@@ -20,6 +20,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawObject,
     RawArray,
     ObjectFormat,
     SwiftGeneratorProperties,
@@ -84,6 +85,7 @@ class SwiftEntity(Entity):
         Color.__bases__ = (SwiftPropertyType, PropertyType,)
         String.__bases__ = (SwiftPropertyType, PropertyType,)
         Dictionary.__bases__ = (SwiftPropertyType, PropertyType,)
+        RawObject.__bases__ = (SwiftPropertyType, PropertyType,)
         RawArray.__bases__ = (SwiftPropertyType, PropertyType,)
         for prop in self.properties:
             prop.__class__ = SwiftProperty
@@ -476,6 +478,8 @@ class SwiftProperty(Property):
             return 'resolveNumeric'
         elif isinstance(property_type, Object) and isinstance(property_type.object, StringEnumeration):
             return 'resolveEnum'
+        elif isinstance(property_type, Dictionary):
+            return 'resolveDict'
         elif isinstance(property_type, RawArray):
             return 'resolveArray'
         elif isinstance(property_type, Array):
@@ -678,7 +682,7 @@ class SwiftPropertyType(PropertyType):
             return 'URL'
         elif isinstance(self, Color):
             return 'Color'
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return '[String: Any]'
         elif isinstance(self, RawArray):
             return '[Any]'
@@ -783,7 +787,7 @@ class SwiftPropertyType(PropertyType):
                 args.append(f'{prop.declaration_name}: {default_value}')
             args = ', '.join(args)
             return f'{entity.declaration_prefix}{utils.capitalize_camel_case(entity.original_name)}({args})'
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return f'(try! JSONSerialization.jsonObject(jsonString: """\n{default_value}\n""") as! [String: Any])'
         else:
             return None
@@ -806,7 +810,7 @@ class SwiftPropertyType(PropertyType):
 
     @property
     def is_equatable(self) -> bool:
-        if isinstance(self, (Dictionary, RawArray)):
+        if isinstance(self, (Dictionary, RawObject, RawArray)):
             return False
         elif isinstance(self, Array):
             return cast(SwiftPropertyType, self.property_type).is_equatable
@@ -814,9 +818,9 @@ class SwiftPropertyType(PropertyType):
             return True
 
     def serialization_suffix(self, use_expressions: bool) -> str:
-        if isinstance(self, (Dictionary)):
+        if isinstance(self, RawObject):
             return ''
-        elif isinstance(self, (String, Int, Double, Bool, BoolInt, RawArray)):
+        elif isinstance(self, (String, Int, Double, Bool, BoolInt, Dictionary, RawArray)):
             return '.toValidSerializationValue()' if use_expressions else ''
         elif isinstance(self, Object):
             if isinstance(self.object, StringEnumeration):

@@ -7,18 +7,18 @@ import VGSL
 public final class DictValueTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "dict"
   public let parent: String?
-  public let value: Field<[String: Any]>?
+  public let value: Field<Expression<[String: Any]>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
-      value: dictionary.getOptionalField("value")
+      value: dictionary.getOptionalExpressionField("value")
     )
   }
 
   init(
     parent: String?,
-    value: Field<[String: Any]>? = nil
+    value: Field<Expression<[String: Any]>>? = nil
   ) {
     self.parent = parent
     self.value = value
@@ -47,7 +47,7 @@ public final class DictValueTemplate: TemplateValue, @unchecked Sendable {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var valueValue: DeserializationResult<[String: Any]> = { parent?.value?.value() ?? .noValue }()
+    var valueValue: DeserializationResult<Expression<[String: Any]>> = { parent?.value?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable

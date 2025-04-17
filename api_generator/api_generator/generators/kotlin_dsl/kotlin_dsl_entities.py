@@ -18,6 +18,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawObject,
     RawArray
 )
 from ... import utils
@@ -47,6 +48,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = KotlinDSLColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = KotlinDSLDictionary
+    elif isinstance(property_type, RawObject):
+        property_type.__class__ = KotlinDSLRawObject
     elif isinstance(property_type, RawArray):
         property_type.__class__ = KotlinDSLRawArray
     elif isinstance(property_type, Double):
@@ -274,7 +277,7 @@ class KotlinDSLPropertyType(PropertyType):
             return 'Color'
         elif isinstance(self, Url):
             return 'URI'
-        elif isinstance(self, Dictionary):
+        elif isinstance(self, (Dictionary, RawObject)):
             return 'Map<String, Any>'
         elif isinstance(self, RawArray):
             return 'List<Any>'
@@ -319,6 +322,10 @@ class KotlinDSLColor(KotlinDSLPropertyType, Color):
 
 
 class KotlinDSLDictionary(KotlinDSLPropertyType, Dictionary):
+    pass
+
+
+class KotlinDSLRawObject(KotlinDSLPropertyType, RawObject):
     pass
 
 

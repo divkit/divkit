@@ -247,7 +247,7 @@ final class DivActionHandlerTests: XCTestCase {
     handle(.divActionArraySetValue(
       DivActionArraySetValue(
         index: .value(1),
-        value: .dictValue(DictValue(value: ["key1": "value", "key2": 123.45])),
+        value: dictValue(["key1": "value", "key2": 123.45]),
         variableName: .value("array_var")
       )
     ))
@@ -306,7 +306,7 @@ final class DivActionHandlerTests: XCTestCase {
     handle(.divActionDictSetValue(
       DivActionDictSetValue(
         key: .value("key"),
-        value: .dictValue(DictValue(value: ["new_key": "new value"])),
+        value: dictValue(["new_key": "new value"]),
         variableName: .value("dict_var")
       )
     ))
@@ -325,7 +325,7 @@ final class DivActionHandlerTests: XCTestCase {
       divAction(
         typed: .divActionDictSetValue(DivActionDictSetValue(
           key: .value("key"),
-          value: .dictValue(DictValue(value: ["new_key": "new value"])),
+          value: dictValue(["new_key": "new value"]),
           variableName: .value("dict_var")
         ))
       ),
@@ -507,7 +507,7 @@ final class DivActionHandlerTests: XCTestCase {
     let value: [String: Any] = ["key1": "value", "key2": 123.45, "nested": ["key": "value"]]
     handle(.divActionSetVariable(
       DivActionSetVariable(
-        value: .dictValue(DictValue(value: value)),
+        value: dictValue(value),
         variableName: .value("dict_var")
       )
     ))
@@ -619,6 +619,10 @@ private func arrayValue(_ value: [Any]) -> DivTypedValue {
 
 private func stringValue(_ value: String) -> DivTypedValue {
   .stringValue(StringValue(value: .value(value)))
+}
+
+private func dictValue(_ value: [String: Any]) -> DivTypedValue {
+  .dictValue(DictValue(value: .value(value)))
 }
 
 private let cardId: DivCardID = "test_card"

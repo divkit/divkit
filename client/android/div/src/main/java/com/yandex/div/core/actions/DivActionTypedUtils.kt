@@ -31,7 +31,7 @@ internal fun DivTypedValue.evaluate(expressionResolver: ExpressionResolver): Any
         is DivTypedValue.Number -> value.value.evaluate(expressionResolver)
         is DivTypedValue.Url -> value.value.evaluate(expressionResolver)
         is DivTypedValue.Array -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Dict -> value.value
+        is DivTypedValue.Dict -> value.value.evaluate(expressionResolver)
     }
     return newValue
 }
@@ -46,7 +46,7 @@ internal fun DivTypedValue.longValue(expressionResolver: ExpressionResolver): Lo
 internal fun DivTypedValue.doubleValue(expressionResolver: ExpressionResolver): Double? {
     return when (this) {
         is DivTypedValue.Integer -> value.value.evaluate(expressionResolver).toDouble()
-        is DivTypedValue.Number -> value.value.evaluate(expressionResolver).toDouble()
+        is DivTypedValue.Number -> value.value.evaluate(expressionResolver)
         else -> null
     }
 }

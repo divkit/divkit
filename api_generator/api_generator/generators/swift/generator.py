@@ -15,6 +15,7 @@ from ... import utils
 from ...schema.modeling.entities import (
     Declarable,
     Dictionary,
+    RawObject,
     EntityEnumeration,
     Entity,
     Property,
@@ -290,7 +291,7 @@ class SwiftGenerator(Generator):
         properties_to_declare = entity.properties_to_declare_swift
         if properties_to_declare:
             for prop in properties_to_declare:
-                if isinstance(prop.property_type, Dictionary) or isinstance(prop.property_type, RawArray):
+                if isinstance(prop.property_type, (Dictionary, RawObject, RawArray)):
                     sendable_conformance = '@unchecked Sendable'
         protocols = list(filter(None, [entity.protocol_plus_super_entities(), sendable_conformance]))
         conformance = f': {", ".join(protocols)}'
