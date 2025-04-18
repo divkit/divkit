@@ -141,8 +141,10 @@
             return;
         }
 
-        x -= parentBbox.left;
-        y -= parentBbox.top;
+        if (!(hasDialogSupport && modal)) {
+            x -= parentBbox.left;
+            y -= parentBbox.top;
+        }
 
         x += $offsetX || 0;
         y += $offsetY || 0;
