@@ -211,6 +211,9 @@
                     platform: 'touch',
                     direction: json.configuration && json.configuration.layout_direction === 'rtl' ? 'rtl' : 'ltr',
                     globalVariablesController,
+                    extensions: new Map([
+                        ['size_provider', Ya.DivKit.SizeProvider],
+                    ]),
                     typefaceProvider(fontFamily) {
                         if (fontFamily === 'condensed') {
                             return 'YS Text Condenced';

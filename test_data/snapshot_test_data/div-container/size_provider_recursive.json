@@ -2,7 +2,8 @@
   "description": "SizeProvider extension recursive",
   "platforms": [
     "android",
-    "flutter"
+    "flutter",
+    "web"
   ],
   "templates": {
     "block": {
