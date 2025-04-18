@@ -1027,6 +1027,10 @@
     "en": "List of OpenType font features. The format matches the CSS attribute \"font-feature-settings\". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop",
     "ru": "Список свойств шрифтов OpenType. Формат соответствует атрибуту CSS font-feature-settings. Подробнее: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop"
   },
+  "div_font_variation_settings": {
+    "en": "List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.",
+    "ru": "Список свойств шрифтов TrueType/OpenType. Словарь состоит из пар значений тега оси и стиля. Тег оси должен содержать четыре символа ASCII."
+  },
   "div_font_size": {
     "en": "Font size.",
     "ru": "Размер шрифта."
@@ -2251,6 +2255,10 @@
     "en": "Background color of the active tab title.",
     "ru": "Цвет фона заголовка активного таба."
   },
+  "div_tabs_tab_title_style_active_font_variation_settings": {
+    "en": "List of TrueType/OpenType font features of the active tab title.",
+    "ru": "Список свойств шрифтов TrueType/OpenType заголовка активного таба."
+  },
   "div_tabs_tab_title_style_active_font_weight": {
     "en": "Active tab title style.",
     "ru": "Начертание заголовка активного таба."
@@ -2290,6 +2298,10 @@
   "div_tabs_tab_title_style_inactive_background_color": {
     "en": "Background color of the inactive tab title.",
     "ru": "Цвет фона заголовка неактивного таба."
+  },
+  "div_tabs_tab_title_style_inactive_font_variation_settings": {
+    "en": "List of TrueType/OpenType font features of the inactive tab title.",
+    "ru": "Список свойств шрифтов TrueType/OpenType заголовка неактивного таба."
   },
   "div_tabs_tab_title_style_inactive_font_weight": {
     "en": "Inactive tab title style.",

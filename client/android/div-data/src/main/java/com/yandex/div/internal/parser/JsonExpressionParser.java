@@ -123,13 +123,13 @@ public class JsonExpressionParser {
     }
 
     @Nullable
-    public static Expression<String> readOptionalExpression(
+    public static <V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<String> typeHelper
+            @NonNull final TypeHelper<V> typeHelper
     ) {
-        return readOptionalExpression(context, jsonObject, key, typeHelper, doNotConvert(), alwaysValidString(), null);
+        return readOptionalExpression(context, jsonObject, key, typeHelper, doNotConvert(), alwaysValid(), null);
     }
 
     @Nullable

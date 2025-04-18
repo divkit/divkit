@@ -19,44 +19,14 @@
       "$ref": "div-base.json"
     },
     {
+      "$ref": "div-font-base.json"
+    },
+    {
       "properties": {
         "type": {
           "type": "string",
           "enum": [
             "input"
-          ]
-        },
-        "font_size": {
-          "$ref": "common.json#/non_negative_integer",
-          "default_value": "12",
-          "$description": "translations.json#/div_font_size"
-        },
-        "font_size_unit": {
-          "$ref": "div-size-unit.json",
-          "default_value": "sp",
-          "$description": "translations.json#/div_font_size_unit"
-        },
-        "font_family": {
-          "type": "string",
-          "$description": "translations.json#/div_font_family",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
-        },
-        "font_weight": {
-          "$ref": "div-font-weight.json",
-          "default_value": "regular",
-          "$description": "translations.json#/div_font_weight"
-        },
-        "font_weight_value": {
-          "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_font_weight_value",
-          "platforms": [
-            "ios",
-            "web",
-            "android"
           ]
         },
         "filters": {

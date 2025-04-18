@@ -3,43 +3,24 @@
   "definitions": {
     "text_style": {
       "type": "object",
-      "properties": {
-        "font_size": {
-          "$ref": "common.json#/non_negative_integer",
-          "$description": "translations.json#/div_font_size"
+      "allOf": [
+        {
+          "$ref": "div-font-base.json"
         },
-        "font_size_unit": {
-          "$ref": "div-size-unit.json",
-          "default_value": "sp",
-          "platforms": [
-            "android",
-            "ios"
-          ]
-        },
-        "font_weight": {
-          "$ref": "div-font-weight.json",
-          "default_value": "regular",
-          "$description": "translations.json#/div_font_weight"
-        },
-        "font_weight_value": {
-          "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_font_weight_value",
-          "platforms": [
-            "ios",
-            "web",
-            "android"
-          ]
-        },
-        "text_color": {
-          "$ref": "common.json#/color",
-          "default_value": "#FF000000",
-          "$description": "translations.json#/div_text_color"
-        },
-        "offset": {
-          "$ref": "div-point.json",
-          "$description": "translations.json#/div_slider_text_style_offset"
+        {
+          "properties": {
+            "text_color": {
+              "$ref": "common.json#/color",
+              "default_value": "#FF000000",
+              "$description": "translations.json#/div_text_color"
+            },
+            "offset": {
+              "$ref": "div-point.json",
+              "$description": "translations.json#/div_slider_text_style_offset"
+            }
+          }
         }
-      },
+      ],
       "required": [
         "font_size"
       ]

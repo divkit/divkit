@@ -19,7 +19,6 @@ import java.util.List;
 
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValid;
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValidList;
-import static com.yandex.div.internal.parser.JsonParsers.alwaysValidString;
 import static com.yandex.div.internal.parser.JsonParsers.doNotConvert;
 import static com.yandex.div.internal.parser.JsonTemplateParserKt.suppressMissingValueOrThrow;
 
@@ -273,16 +272,16 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static Field<Expression<String>> readOptionalFieldWithExpression(
+    public static <V> Field<Expression<V>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull TypeHelper<String> typeHelper,
+            @NonNull TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<String>> fallback
+            @Nullable final Field<Expression<V>> fallback
     ) {
         return readOptionalFieldWithExpression(
-                context, json, key, typeHelper, overridable, fallback, doNotConvert(), alwaysValidString());
+                context, json, key, typeHelper, overridable, fallback, doNotConvert(), alwaysValid());
     }
 
     @NonNull
