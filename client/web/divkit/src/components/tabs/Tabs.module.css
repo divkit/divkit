@@ -94,6 +94,10 @@
     overflow: hidden;
 }
 
+.tabs_own-height > .tabs__panels {
+    flex-shrink: 0;
+}
+
 .tabs__swiper {
     position: relative;
     display: flex;

@@ -41,6 +41,7 @@
     import Actionable from '../utilities/Actionable.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
     import EnabledContext from '../utilities/EnabledContext.svelte';
+  import type { WrapContentSize } from '../../types/sizes';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -139,8 +140,6 @@
         };
     });
 
-    $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
-    $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
     $: jsonSelectedTab = componentContext.getJsonWithVars(componentContext.json.selected_tab);
     $: jsonTabStyle = componentContext.getDerivedFromVars(componentContext.json.tab_title_style);
     $: jsonSeparator = componentContext.getDerivedFromVars(componentContext.json.has_separator);
@@ -213,10 +212,10 @@
             parentContainerOrientation: 'horizontal'
         };
 
-        if ($jsonWidth?.type === 'wrap_content') {
+        if (componentContext.json.width?.type === 'wrap_content') {
             newLayoutParams.parentHorizontalWrapContent = true;
         }
-        if (!$jsonHeight || $jsonHeight.type === 'wrap_content') {
+        if (!componentContext.json.height || componentContext.json.height.type === 'wrap_content') {
             newLayoutParams.parentVerticalWrapContent = true;
         }
 
@@ -512,7 +511,7 @@
     }
 
     async function updateWrapperHeight(): Promise<void> {
-        if ($jsonHeight?.type === 'match_parent') {
+        if (componentContext.json.height?.type === 'match_parent') {
             return;
         }
 
@@ -748,7 +747,9 @@
     }
 
     $: mods = {
-        'height-parent': $jsonHeight?.type === 'match_parent' ? 'yes' : '',
+        'height-parent': componentContext.json.height?.type === 'match_parent' ? 'yes' : '',
+        'own-height': (componentContext.json.height?.type === 'match_parent' || componentContext.json.height?.type === 'fixed') &&
+            !(items[selected]?.div?.height?.type === 'wrap_content' && (items[selected].div?.height as WrapContentSize).constrained),
         animation: animationType
     };
 
