@@ -112,7 +112,8 @@
         "Menu with buttons 'show' and 'hide' is appearing",
         "longtap_actions logged"
       ],
-      "file": "long_tap.json"
+      "file": "long_tap.json",
+      "case_id": 443
     },
     {
       "title": "Hover and press",
@@ -558,7 +559,8 @@
       "expected_results": [
         "Elements focus changes in order to switch"
       ],
-      "file": "focus.json"
+      "file": "focus.json",
+      "case_id": 444
     },
     {
       "title": "Focus events",
@@ -575,7 +577,8 @@
         "When handler gets focus, state of the right element is 'focus'",
         "When handler lost focus, state of the right element is 'blur'"
       ],
-      "file": "focus_actions.json"
+      "file": "focus_actions.json",
+      "case_id": 445
     },
     {
       "title": "Accessibility descriptions",
@@ -643,7 +646,8 @@
       "expected_results": [
         "Screen reader should read elements correctly according to their accessibility types."
       ],
-      "file": "accessibility/types.json"
+      "file": "accessibility/types.json",
+      "case_id": 446
     },
     {
       "title": "Accessibility auto types",
@@ -679,7 +683,8 @@
         "When focusing on group of 2 and 3 items you will hear 'Это Элемент 2, Это Элемент 3'",
         "Can't focus 4 element"
       ],
-      "file": "accessibility/mode/default.json"
+      "file": "accessibility/mode/default.json",
+      "case_id": 447
     },
     {
       "title": "Merge Accessibility mode",
@@ -700,7 +705,8 @@
         "On activation menu with text 'Элемент 1, Элемент 2, Элемент 3' appears",
         "On focus Screen reader should not say 'Коснитесь дважды и удерживайте'"
       ],
-      "file": "accessibility/mode/merge.json"
+      "file": "accessibility/mode/merge.json",
+      "case_id": 448
     },
     {
       "title": "Exclude Accessibility mode",
@@ -721,7 +727,8 @@
         "Услышим 'Это Элемент 5'",
         "При выключенном Screen reader на каждой кнопке при тапе должно появляться меню с названием этой кнопки"
       ],
-      "file": "accessibility/mode/exclude.json"
+      "file": "accessibility/mode/exclude.json",
+      "case_id": 449
     },
     {
       "title": "Accessibility mode changes",
@@ -741,7 +748,8 @@
         "Elements should be focusable if their accessibility mode is default or merge and they have no ancestors with merge accessibility mode",
         "Elements shouldn't be focusable if their accessibility mode if exclude"
       ],
-      "file": "accessibility/mode/mode_change.json"
+      "file": "accessibility/mode/mode_change.json",
+      "case_id": 450
     },
     {
       "title": "Checkbox with accessibility",
@@ -810,7 +818,8 @@
         "Click on save button copy json with errors",
         "Click on text 'Generate error!' add errors 'Value 'wrong_value' for key 'alignment_horizontal' at path '@{alignment}' is not valid'"
       ],
-      "file": "error_visual_monitor.json"
+      "file": "error_visual_monitor.json",
+      "case_id": 451
     },
     {
       "title": "Synchronizing multiple change bounds animations. Fade full",
@@ -827,7 +836,8 @@
       "expected_results": [
         "Image should appears and disappears changing the transparency"
       ],
-      "file": "animations/transition/fade_full_src.json"
+      "file": "animations/transition/fade_full_src.json",
+      "case_id": 452
     },
     {
       "title": "Synchronizing multiple change bounds animations. Fade part",
@@ -844,7 +854,8 @@
       "expected_results": [
         "Image should appears and disappears changing the transparency starting or ending with transparency = 0.5"
       ],
-      "file": "animations/transition/fade_part_src.json"
+      "file": "animations/transition/fade_part_src.json",
+      "case_id": 453
     },
     {
       "title": "Synchronizing multiple change bounds animations. Scale full",
@@ -861,7 +872,8 @@
       "expected_results": [
         "Image should appears and disappears changing the scale"
       ],
-      "file": "animations/transition/scale_full_src.json"
+      "file": "animations/transition/scale_full_src.json",
+      "case_id": 454
     },
     {
       "title": "Synchronizing multiple change bounds animations. Scale part",
@@ -878,7 +890,8 @@
       "expected_results": [
         "Image should appears and disappears changing the scale starting or ending with scale = 0.75"
       ],
-      "file": "animations/transition/scale_part_src.json"
+      "file": "animations/transition/scale_part_src.json",
+      "case_id": 455
     },
     {
       "title": "Synchronizing multiple change bounds animations. Slide full",
@@ -895,7 +908,8 @@
       "expected_results": [
         "Image should appears and disappears sliding from under the top edge of the card"
       ],
-      "file": "animations/transition/slide_full_src.json"
+      "file": "animations/transition/slide_full_src.json",
+      "case_id": 456
     },
     {
       "title": "Synchronizing multiple change bounds animations. Slide part",
@@ -912,7 +926,8 @@
       "expected_results": [
         "Image should appears and disappears sliding from under the top edge of the card, but not reaching it"
       ],
-      "file": "animations/transition/slide_part_src.json"
+      "file": "animations/transition/slide_part_src.json",
+      "case_id": 457
     },
     {
       "title": "Synchronizing multiple change bounds animations. Set",
@@ -929,7 +944,8 @@
       "expected_results": [
         "Image should appears and disappears changing transparency and sliding from center to edge"
       ],
-      "file": "animations/transition/set_src.json"
+      "file": "animations/transition/set_src.json",
+      "case_id": 458
     },
     {
       "title": "Synchronizing multiple change bounds animations. Diff ids",
@@ -946,7 +962,8 @@
       "expected_results": [
         "Image should appears from different edges of card"
       ],
-      "file": "animations/transition/change_bounds_diff_ids_src.json"
+      "file": "animations/transition/change_bounds_diff_ids_src.json",
+      "case_id": 459
     },
     {
       "title": "Synchronizing multiple change bounds animations. Diff sizes",
@@ -963,7 +980,8 @@
       "expected_results": [
         "Image should change it's size"
       ],
-      "file": "animations/transition/change_bounds_diff_sizes_src.json"
+      "file": "animations/transition/change_bounds_diff_sizes_src.json",
+      "case_id": 460
     },
     {
       "title": "Synchronizing multiple change bounds animations. Diff types",
@@ -980,7 +998,8 @@
       "expected_results": [
         "Image should change text moving across the screen"
       ],
-      "file": "animations/transition/change_bounds_diff_types_src.json"
+      "file": "animations/transition/change_bounds_diff_types_src.json",
+      "case_id": 461
     },
     {
       "title": "Synchronizing multiple change bounds animations. Change bounds same ids",
@@ -997,7 +1016,8 @@
       "expected_results": [
         "Image should move horizontally across the screen"
       ],
-      "file": "animations/transition/change_bounds_same_ids_src.json"
+      "file": "animations/transition/change_bounds_same_ids_src.json",
+      "case_id": 462
     },
     {
       "title": "Synchronizing multiple change bounds animations. Article",
@@ -1184,7 +1204,8 @@
       "expected_results": [
         "Spinner changes spin direction 3 times and stops"
       ],
-      "file": "animations/lottie/spinner_reverse_repeat_mode.json"
+      "file": "animations/lottie/spinner_reverse_repeat_mode.json",
+      "case_id": 463
     },
     {
       "title": "Lottie animation (repeat_mode=restart, repeat_count=-1)",
@@ -1200,7 +1221,8 @@
       "expected_results": [
         "Infinite spinner animation."
       ],
-      "file": "animations/lottie/spinner.json"
+      "file": "animations/lottie/spinner.json",
+      "case_id": 464
     },
     {
       "title": "Lottie params",
@@ -1873,7 +1895,8 @@
       "expected_results": [
         "Text should be revealed on click. Text layout should not change, masked and non-masked text should have the same width and height. Mask should not contain any extra space inside of it"
       ],
-      "file": "text-mask.json"
+      "file": "text-mask.json",
+      "case_id": 465
     },
     {
       "title": "Nested change bounds transitions",
@@ -2097,7 +2120,8 @@
       "tags": [
         "lottie"
       ],
-      "file": "animations/lottie/lottie_gallery_with_expressions.json"
+      "file": "animations/lottie/lottie_gallery_with_expressions.json",
+      "case_id": 466
     },
     {
       "title": "Lottie cycled animations",
@@ -2177,7 +2201,8 @@
       "expected_results": [
         "Gallery with seven cards playing different rive animations"
       ],
-      "file": "animations/rive/rive_gallery.json"
+      "file": "animations/rive/rive_gallery.json",
+      "case_id": 467
     },
     {
       "title": "Rive animation (loop=pingPong)",
@@ -2242,7 +2267,8 @@
       "expected_results": [
         "If item 'Visible' or 'Invisible' - blue background visible, otherwise hidden"
       ],
-      "file": "animations/transition/transition_triggers_complex_src.json"
+      "file": "animations/transition/transition_triggers_complex_src.json",
+      "case_id": 468
     },
     {
       "title": "Gallery items posing",
@@ -2740,7 +2766,8 @@
         "Tooltips are hidden when tapping into an empty area",
         "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
       ],
-      "file": "tooltips/tooltip-positions.json"
+      "file": "tooltips/tooltip-positions.json",
+      "case_id": 469
     },
     {
       "title": "Tooltips with animations",
@@ -2760,7 +2787,8 @@
         "Tooltips are shown with custom animations",
         "Tooltips are hidden with custom animations"
       ],
-      "file": "tooltips/tooltips-animations.json"
+      "file": "tooltips/tooltips-animations.json",
+      "case_id": 470
     },
     {
       "title": "Switching state in the tooltip",
