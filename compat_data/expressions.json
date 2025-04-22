@@ -170,6 +170,9 @@
             },
             "web": {
                 "version_added": "30.33.0"
+            },
+            "android": {
+                "version_added": "31.12.0"
             }
         }
     }, {
@@ -203,6 +206,9 @@
             },
             "web": {
                 "version_added": "31.1.0"
+            },
+            "android": {
+                "version_added": "31.12.0"
             }
         }
     }, {
@@ -214,6 +220,17 @@
             },
             "web": {
                 "version_added": "31.1.0"
+            }
+        }
+    }, {
+        "id": "fn_cot",
+        "name": "<code>cot</code> function",
+        "compat": {
+            "ios": {
+                "version_added": "31.12.0"
+            },
+            "web": {
+                "version_added": "31.12.0"
             }
         }
     }]

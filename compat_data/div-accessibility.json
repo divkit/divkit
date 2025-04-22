@@ -43,5 +43,33 @@
                 "notes": "Partial implementation on the Web due to support for only the \"exclude\" value"
             }
         }
+    }, {
+        "id": "accessibility_state_description",
+        "name": "accessibility <code>state_description</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "31.12.0"
+            }
+        }
+    }, {
+        "id": "accessibility_hint",
+        "name": "accessibility <code>hint</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "31.12.0"
+            }
+        }
     }]
 }
