@@ -2,7 +2,7 @@ import DivKit
 import VGSL
 import XCTest
 
-final class DivVariableSorageTest: XCTestCase {
+final class DivVariableStorageTest: XCTestCase {
   private let storage = DivVariableStorage()
   private let disposePool = AutodisposePool()
 

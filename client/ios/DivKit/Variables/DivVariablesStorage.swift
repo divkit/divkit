@@ -300,11 +300,19 @@ private func makeDivVariableValue(
       newValue = nil
     }
   case .dict:
-    newValue = nil
-    DivKitLogger.warning("Unsupported variable type: dict")
+    let newDictValue: DivDictionary? = parseCollectionVar(value)
+    if let newDictValue {
+      newValue = .dict(newDictValue)
+    } else {
+      newValue = nil
+    }
   case .array:
-    newValue = nil
-    DivKitLogger.warning("Unsupported variable type: array")
+    let newDictValue: DivArray? = parseCollectionVar(value)
+    if let newDictValue {
+      newValue = .array(newDictValue)
+    } else {
+      newValue = nil
+    }
   }
 
   if newValue == nil {
@@ -312,6 +320,19 @@ private func makeDivVariableValue(
   }
 
   return newValue
+}
+
+private func parseCollectionVar<T>(_ val: String) -> T? {
+  guard let data = val.data(using: .utf8) else { return nil }
+
+  if let json = try? JSONSerialization.jsonObject(
+    with: data,
+    options: []
+  ) {
+    return json as? T
+  }
+
+  return nil
 }
 
 extension Collection<DivVariable> {

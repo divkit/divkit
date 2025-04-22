@@ -82,6 +82,35 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertNil(handledUrl)
   }
 
+  func test_UrlChangeDictVar() {
+    variablesStorage.set(
+      cardId: cardId,
+      variables: ["palette": .dict(["light": ["text_color": "#AAA"]])]
+    )
+
+    let newDict = ["light": ["text_color": "%23e0bae3"]]
+    handle(
+      divAction(
+        url: "div-action://set_variable?name=palette&value={\"light\":{\"text_color\":\"%23e0bae3\"}}"
+      )
+    )
+
+    let resultingDict = getVariableValue("palette") as DivDictionary?
+    XCTAssertEqual(newDict, resultingDict)
+  }
+
+  func test_UrlChangeArrayVar() {
+    variablesStorage.set(cardId: cardId, variables: ["sample": .array([])])
+
+    let newArr = [1, true, "test"] as DivArray
+    handle(
+      divAction(url: "div-action://set_variable?name=sample&value=[1, true, \"test\"]")
+    )
+
+    let resultingArr = getVariableValue("sample") as DivArray?
+    XCTAssertEqual(newArr, resultingArr)
+  }
+
   func test_UrlWithExpression() {
     variablesStorage.set(cardId: cardId, variables: ["host": .string("test.url")])
 

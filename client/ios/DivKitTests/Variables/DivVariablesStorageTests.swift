@@ -117,6 +117,41 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertEqual(true, getVariable("bool_var"))
   }
 
+  func test_update_UpdatesArrayVariable() {
+    let originalArr = DivArray.fromAny([1, 2, "string"])!
+    let newArr = DivArray.fromAny(["string", 3.14, 2, false, "%23e0bae3", "http://example.com"])!
+    storage.set(cardId: cardId, variables: ["array_var": .array(originalArr)])
+    storage.update(
+      cardId: cardId,
+      name: "array_var",
+      value: "[\"string\", 3.14, 2, false, \"%23e0bae3\", \"http://example.com\"]"
+    )
+
+    let resultArray: DivArray? = getVariable("array_var")
+    XCTAssertEqual(newArr, resultArray)
+  }
+
+  func test_update_UpdatesDictVariable() {
+    let originalDict = DivDictionary.fromAny(["1": 2, "2": true])!
+    let newDict = DivDictionary
+      .fromAny([
+        "light": ["text_color": "%23e0bae3"],
+        "int": 2,
+        "double": 3.14,
+        "boolean": false,
+        "str": "Any",
+      ])!
+    storage.set(cardId: cardId, variables: ["dict_var": .dict(originalDict)])
+    storage.update(
+      cardId: cardId,
+      name: "dict_var",
+      value: "{\"light\":{\"text_color\":\"%23e0bae3\"},\"int\":2,\"double\":3.14,\"boolean\":false,\"str\":\"Any\"}"
+    )
+
+    let resultDict: DivDictionary? = getVariable("dict_var")
+    XCTAssertEqual(newDict, resultDict)
+  }
+
   func test_update_DoesNothing_ForUnknownVariable() {
     storage.update(cardId: cardId, name: "string_var", value: "new value")
 
