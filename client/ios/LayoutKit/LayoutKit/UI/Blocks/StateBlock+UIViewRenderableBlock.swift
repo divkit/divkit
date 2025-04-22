@@ -211,7 +211,7 @@ private final class StateBlockView: BlockView {
 
   private func addWithAnimations(_ views: [DetachableAnimationBlockView]) {
     for view in views {
-      view.addWithAnimation(in: self)
+      view.addWithAnimation()
     }
   }
 

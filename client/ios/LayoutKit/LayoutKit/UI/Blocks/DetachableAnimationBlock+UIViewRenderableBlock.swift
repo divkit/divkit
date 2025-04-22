@@ -173,31 +173,20 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     })
   }
 
-  public func addWithAnimation(in container: UIView) {
+  public func addWithAnimation() {
     guard let childView,
           let animationIn else {
       return
     }
 
-    let originalFrame = childView.frame
-    childView.frame = convertFrame(to: container)
-
-    self.childView = nil
-
     let minDelay = animationIn.sortedChronologically().first?.delay ?? 0
 
     let item = DispatchWorkItem { [weak self] in
-      container.addSubview(childView)
       childView.setInitialParamsAndAnimate(
         animations: animationIn.withDelay(-minDelay),
         completion: { [weak self] in
-
           self?.queuedAnimation = nil
           self?.animationIn = nil
-          if childView.superview == container {
-            childView.frame = originalFrame
-            self?.childView = childView
-          }
         }
       )
     }
