@@ -1120,6 +1120,13 @@
                 if (first) {
                     componentContext = first;
                 }
+            } else {
+                log(wrapError(new Error('The scope with the specified scope_id is missing'), {
+                    additional: {
+                        scopeId
+                    }
+                }));
+                return;
             }
         }
 
