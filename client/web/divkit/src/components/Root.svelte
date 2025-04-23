@@ -1096,7 +1096,7 @@
     }
 
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
-        execActionInternal(getJsonWithVars(logError, action));
+        execActionInternal(getJsonWithVars(logError, action, undefined, true));
     }
 
     async function execActionInternal(

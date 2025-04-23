@@ -209,7 +209,7 @@ function evalTemplateLiteral(ctx: EvalContext, expr: TemplateLiteral): EvalValue
 
     for (let i = 0; i < expr.expressions.length; ++i) {
         result += expr.quasis[i].value;
-        result += valToString(evalAny(ctx, expr.expressions[i]));
+        result += valToString(evalAny(ctx, expr.expressions[i]), true);
     }
     result += expr.quasis[expr.quasis.length - 1].value;
 

@@ -31,7 +31,7 @@ function convertVals(val: EvalResult) {
     } else if (val.type === 'datetime' && val.value instanceof Date) {
         return {
             type: 'datetime',
-            value: valToString(val)
+            value: valToString(val, false)
         };
     }
 

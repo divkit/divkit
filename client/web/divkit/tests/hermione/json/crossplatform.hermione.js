@@ -117,7 +117,7 @@ function createIntegrationTestCase(testCase, testPath) {
                         }, expected.variable_name);
 
                         result.type.should.equal(expected.value.type);
-                        result.value.should.equal(expected.value.value);
+                        result.value.should.deep.equal(expected.value.value);
                     } else if (expected.type === 'error') {
                         const errors = await this.browser.execute(() => {
                             if (!window.errors) {

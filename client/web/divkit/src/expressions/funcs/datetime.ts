@@ -79,7 +79,7 @@ function setDay(_ctx: EvalContext, datetime: DatetimeValue, day: IntegerValue): 
     const intVal = Number(day.value);
 
     if (intVal <= 0 && intVal !== -1 || intVal > getMaxDate(copy)) {
-        throw new Error(`Unable to set day ${intVal} for date ${valToString(datetime)}.`);
+        throw new Error(`Unable to set day ${intVal} for date ${valToString(datetime, false)}.`);
     }
 
     copy.setUTCDate(intVal === -1 ? 0 : intVal);

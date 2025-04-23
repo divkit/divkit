@@ -117,7 +117,7 @@ function calcPad(
     }
 
     let part = '';
-    const str = val.type === STRING ? val.value : valToString(val);
+    const str = val.type === STRING ? val.value : valToString(val, false);
 
     while (part.length + str.length < len.value) {
         part += pad.value;
@@ -139,7 +139,7 @@ function padStart(
 
     return {
         type: STRING,
-        value: prefix + valToString(val)
+        value: prefix + valToString(val, false)
     };
 }
 
@@ -153,7 +153,7 @@ function padEnd(
 
     return {
         type: STRING,
-        value: valToString(val) + suffix
+        value: valToString(val, false) + suffix
     };
 }
 
