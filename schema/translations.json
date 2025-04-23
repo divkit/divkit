@@ -1027,10 +1027,6 @@
     "en": "List of OpenType font features. The format matches the CSS attribute \"font-feature-settings\". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop",
     "ru": "Список свойств шрифтов OpenType. Формат соответствует атрибуту CSS font-feature-settings. Подробнее: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop"
   },
-  "div_font_variation_settings": {
-    "en": "List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.",
-    "ru": "Список свойств шрифтов TrueType/OpenType. Словарь состоит из пар значений тега оси и стиля. Тег оси должен содержать четыре символа ASCII."
-  },
   "div_font_size": {
     "en": "Font size.",
     "ru": "Размер шрифта."
@@ -1038,6 +1034,10 @@
   "div_font_size_unit": {
     "en": "Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>",
     "ru": "Единица измерения:<li>`px` — физический пиксель.</li><li>`dp` — логический пиксель, который не зависит от плотности экрана.</li><li>`sp` — логический пиксель, который зависит от размера шрифта на устройстве. Указывайте в `sp` высоту. Доступен только на Android.</li>"
+  },
+  "div_font_variation_settings": {
+    "en": "List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.",
+    "ru": "Список свойств шрифтов TrueType/OpenType. Словарь состоит из пар значений тега оси и стиля. Тег оси должен содержать четыре символа ASCII."
   },
   "div_font_weight": {
     "en": "Style.",
