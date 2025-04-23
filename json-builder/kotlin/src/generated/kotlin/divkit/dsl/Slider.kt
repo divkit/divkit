@@ -409,8 +409,10 @@ data class Slider internal constructor(
 
         operator fun plus(additive: Properties): TextStyle = TextStyle(
             Properties(
+                fontFamily = additive.fontFamily ?: properties.fontFamily,
                 fontSize = additive.fontSize ?: properties.fontSize,
                 fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
+                fontVariationSettings = additive.fontVariationSettings ?: properties.fontVariationSettings,
                 fontWeight = additive.fontWeight ?: properties.fontWeight,
                 fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
                 offset = additive.offset ?: properties.offset,
@@ -420,13 +422,23 @@ data class Slider internal constructor(
 
         data class Properties internal constructor(
             /**
+             * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+             */
+            val fontFamily: Property<String>?,
+            /**
              * Font size.
+             * Default value: `12`.
              */
             val fontSize: Property<Int>?,
             /**
+             * Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
              * Default value: `sp`.
              */
             val fontSizeUnit: Property<SizeUnit>?,
+            /**
+             * List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
+             */
+            val fontVariationSettings: Property<Map<String, Any>>?,
             /**
              * Style.
              * Default value: `regular`.
@@ -449,8 +461,10 @@ data class Slider internal constructor(
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
+                result.tryPutProperty("font_family", fontFamily)
                 result.tryPutProperty("font_size", fontSize)
                 result.tryPutProperty("font_size_unit", fontSizeUnit)
+                result.tryPutProperty("font_variation_settings", fontVariationSettings)
                 result.tryPutProperty("font_weight", fontWeight)
                 result.tryPutProperty("font_weight_value", fontWeightValue)
                 result.tryPutProperty("offset", offset)
@@ -1825,7 +1839,10 @@ fun Slider.Range.evaluate(
 fun Slider.Range.asList() = listOf(this)
 
 /**
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
@@ -1834,16 +1851,20 @@ fun Slider.Range.asList() = listOf(this)
 @Generated
 fun DivScope.sliderTextStyle(
     `use named arguments`: Guard = Guard.instance,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
+    fontVariationSettings: Map<String, Any>? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
+        fontFamily = valueOrNull(fontFamily),
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
+        fontVariationSettings = valueOrNull(fontVariationSettings),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
         offset = valueOrNull(offset),
@@ -1852,7 +1873,10 @@ fun DivScope.sliderTextStyle(
 )
 
 /**
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
@@ -1861,15 +1885,19 @@ fun DivScope.sliderTextStyle(
 @Generated
 fun DivScope.sliderTextStyleProps(
     `use named arguments`: Guard = Guard.instance,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
+    fontVariationSettings: Map<String, Any>? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ) = Slider.TextStyle.Properties(
+    fontFamily = valueOrNull(fontFamily),
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
+    fontVariationSettings = valueOrNull(fontVariationSettings),
     fontWeight = valueOrNull(fontWeight),
     fontWeightValue = valueOrNull(fontWeightValue),
     offset = valueOrNull(offset),
@@ -1877,7 +1905,10 @@ fun DivScope.sliderTextStyleProps(
 )
 
 /**
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
@@ -1886,15 +1917,19 @@ fun DivScope.sliderTextStyleProps(
 @Generated
 fun TemplateScope.sliderTextStyleRefs(
     `use named arguments`: Guard = Guard.instance,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
+    fontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ) = Slider.TextStyle.Properties(
+    fontFamily = fontFamily,
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
+    fontVariationSettings = fontVariationSettings,
     fontWeight = fontWeight,
     fontWeightValue = fontWeightValue,
     offset = offset,
@@ -1902,7 +1937,10 @@ fun TemplateScope.sliderTextStyleRefs(
 )
 
 /**
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
@@ -1911,16 +1949,20 @@ fun TemplateScope.sliderTextStyleRefs(
 @Generated
 fun Slider.TextStyle.override(
     `use named arguments`: Guard = Guard.instance,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
+    fontVariationSettings: Map<String, Any>? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
+        fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
+        fontVariationSettings = valueOrNull(fontVariationSettings) ?: properties.fontVariationSettings,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         offset = valueOrNull(offset) ?: properties.offset,
@@ -1929,7 +1971,10 @@ fun Slider.TextStyle.override(
 )
 
 /**
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
@@ -1938,16 +1983,20 @@ fun Slider.TextStyle.override(
 @Generated
 fun Slider.TextStyle.defer(
     `use named arguments`: Guard = Guard.instance,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
+    fontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
+        fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         offset = offset ?: properties.offset,
@@ -1956,7 +2005,9 @@ fun Slider.TextStyle.defer(
 )
 
 /**
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
  * @param textColor Text color.
@@ -1964,6 +2015,7 @@ fun Slider.TextStyle.defer(
 @Generated
 fun Slider.TextStyle.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1971,8 +2023,10 @@ fun Slider.TextStyle.evaluate(
     textColor: ExpressionProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
+        fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontVariationSettings = properties.fontVariationSettings,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         offset = properties.offset,
