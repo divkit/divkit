@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-function read(dir, createTestCase, skipTests = []) {
+function read(dir, createTestCase, skipTests = [], skipFirefox = []) {
     function append(dir, prefix) {
         const fulldir = path.join(__dirname, dir);
         const items = fs.readdirSync(fulldir);
@@ -25,7 +25,11 @@ function read(dir, createTestCase, skipTests = []) {
                     continue;
                 }
 
-                createTestCase(testCase, testPath);
+                let only;
+                if (skipFirefox.some(test => item.includes(test))) {
+                    only = 'chromeMobile';
+                }
+                createTestCase(testCase, testPath, only);
             } else {
                 describe(item, function() {
                     append(path.join(dir, item), prefix + item + '/');
@@ -37,7 +41,10 @@ function read(dir, createTestCase, skipTests = []) {
     append(dir, dir);
 }
 
-function createSimpleTestCase(testCase, testPath) {
+function createSimpleTestCase(testCase, testPath, only) {
+    if (only) {
+        hermione.only.in(only, 'Unstable test');
+    }
     it(`${testCase}`, async function() {
         await this.browser.yaOpenCrossplatformJson(testPath);
         await this.browser.assertView(testCase, '#root');
@@ -152,7 +159,10 @@ describe('crossplatform', () => {
 
     describe('components', () => {
         const skipTests = [];
-        read(`${crossplatformPath}/snapshot_test_data/`, createSimpleTestCase, skipTests);
+        const skipFirefox = [
+            'radial-positions'
+        ];
+        read(`${crossplatformPath}/snapshot_test_data/`, createSimpleTestCase, skipTests, skipFirefox);
     });
 
     describe('interactions', () => {

@@ -1,0 +1,55 @@
+{
+  "description": "Background should be drawn at the right side.",
+  "platforms": [
+    "web",
+    "ios",
+    "android"
+  ],
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "container",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#141414"
+                },
+                {
+                  "type": "image",
+                  "content_alignment_horizontal": "end",
+                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "scale": "fit"
+                }
+              ],
+              "paddings": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "LONG\nSAMPLE\nTEXT",
+                  "text_color": "#FFFFFF"
+                }
+              ]
+            }
+          ],
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          }
+        }
+      }
+    ]
+  }
+}

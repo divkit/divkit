@@ -231,7 +231,7 @@
         let newGradient = '';
 
         if ($jsonTextGradient) {
-            const bg = getBackground([$jsonTextGradient]);
+            const bg = getBackground([$jsonTextGradient], $direction);
             if (bg.image) {
                 newGradient = bg.image;
             }

@@ -167,7 +167,7 @@
                 maskAnimated = mask.is_animated === true;
             }
         } else if (textStyles.background?.type === 'solid') {
-            background = getBackground([textStyles.background]).color;
+            background = getBackground([textStyles.background], $direction).color;
         } else {
             background = undefined;
         }

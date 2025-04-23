@@ -11,23 +11,23 @@ describe('background', () => {
         expect(getBackground([{
             type: 'solid',
             color: '#fc0'
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'gradient',
             colors: ['#fc0', '#f00']
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'gradient',
             colors: ['#fc0', '#f00'],
             angle: 123
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'image',
             image_url: 'https://ya.ru'
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'image',
@@ -35,21 +35,39 @@ describe('background', () => {
             content_alignment_horizontal: 'right',
             content_alignment_vertical: 'bottom',
             scale: 'fit'
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
     });
 
     test('escape', () => {
         expect(getBackground([{
             type: 'image',
             image_url: '"<script&'
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
+    });
+
+    test('rtl', () => {
+        expect(getBackground([{
+            type: 'image',
+            image_url: 'https://ya.ru',
+            content_alignment_horizontal: 'end',
+            content_alignment_vertical: 'bottom',
+            scale: 'fit'
+        }], 'ltr')).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'image',
+            image_url: 'https://ya.ru',
+            content_alignment_horizontal: 'end',
+            content_alignment_vertical: 'bottom',
+            scale: 'fit'
+        }], 'rtl')).toMatchSnapshot();
     });
 
     test('radial', () => {
         expect(getBackground([{
             type: 'radial_gradient',
             colors: ['#fc0', '#f00']
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -58,7 +76,7 @@ describe('background', () => {
                 type: 'fixed',
                 value: 100
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -67,7 +85,7 @@ describe('background', () => {
                 type: 'relative',
                 value: 'nearest_corner'
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -76,7 +94,7 @@ describe('background', () => {
                 type: 'relative',
                 value: 'nearest_side'
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -85,7 +103,7 @@ describe('background', () => {
                 type: 'relative',
                 value: 'farthest_side'
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -94,7 +112,7 @@ describe('background', () => {
                 type: 'relative',
                 value: 'farthest_corner'
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -103,7 +121,7 @@ describe('background', () => {
                 type: 'fixed',
                 value: 100
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -116,7 +134,7 @@ describe('background', () => {
                 type: 'fixed',
                 value: 150
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
 
         expect(getBackground([{
             type: 'radial_gradient',
@@ -133,6 +151,6 @@ describe('background', () => {
                 type: 'relative',
                 value: 'nearest_side'
             }
-        }])).toMatchSnapshot();
+        }], 'ltr')).toMatchSnapshot();
     });
 });

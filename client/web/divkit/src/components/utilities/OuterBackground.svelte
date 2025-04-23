@@ -28,7 +28,7 @@
             stl['border-image'] = `url("${bg.image_url}") ${bg.insets.top || 0} ${bg.insets.right || 0} ${bg.insets.bottom || 0} ${bg.insets.left || 0} fill`;
             stl['border-image-width'] = 'auto';
         } else {
-            const res = getBackground([bg]);
+            const res = getBackground([bg], direction);
 
             if (bg.type === 'solid') {
                 stl['background-color'] = res.color;

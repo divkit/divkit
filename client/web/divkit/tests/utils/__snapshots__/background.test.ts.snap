@@ -119,3 +119,19 @@ exports[`background > radial 9`] = `
   "size": "auto",
 }
 `;
+
+exports[`background > rtl 1`] = `
+{
+  "image": "url("https://ya.ru")",
+  "position": "100% 100%",
+  "size": "contain",
+}
+`;
+
+exports[`background > rtl 2`] = `
+{
+  "image": "url("https://ya.ru")",
+  "position": "0% 100%",
+  "size": "contain",
+}
+`;

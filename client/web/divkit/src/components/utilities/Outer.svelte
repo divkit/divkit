@@ -659,7 +659,7 @@
                 Boolean(backgroundRadius);
 
             if (!hasSeparateBg) {
-                const res = getBackground(background);
+                const res = getBackground(background, $direction);
                 backgroundStyle['background-color'] = res.color;
                 backgroundStyle['background-image'] = res.image;
                 backgroundStyle['background-size'] = res.size;

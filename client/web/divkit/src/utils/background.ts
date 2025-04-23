@@ -15,7 +15,7 @@ import { htmlFilter } from './htmlFilter';
 import { Truthy } from './truthy';
 import { pxToEmWithUnits } from './pxToEm';
 
-export function getBackground(bgs: MaybeMissing<Background>[]): {
+export function getBackground(bgs: MaybeMissing<Background>[], direction: 'ltr' | 'rtl'): {
     color?: string;
     image?: string;
     size?: string;
@@ -39,7 +39,8 @@ export function getBackground(bgs: MaybeMissing<Background>[]): {
                 });
             } else if (bg.type === 'image') {
                 return image({
-                    bg
+                    bg,
+                    direction
                 });
             } else if (bg.type === 'radial_gradient') {
                 return radial({
@@ -245,6 +246,7 @@ function radial(opts: {
 
 function image(opts: {
     bg: MaybeMissing<ImageBackground>;
+    direction: 'ltr' | 'rtl'
 }): {
     size: string | undefined;
     pos: string | undefined;
@@ -258,7 +260,7 @@ function image(opts: {
 
     return {
         size: imageSize(opts.bg.scale),
-        pos: imagePos(opts.bg),
+        pos: imagePos(opts.bg, opts.direction),
         image: 'url("' + htmlFilter(image) + '")'
     };
 }
@@ -279,13 +281,21 @@ export function imageSize(scale?: ImageScale): string {
 export function imagePos(obj: {
     content_alignment_horizontal?: AlignmentHorizontal;
     content_alignment_vertical?: AlignmentVertical;
-}): string {
+}, direction: 'ltr' | 'rtl'): string {
     let hpos: string;
     let vpos: string;
 
-    if (obj.content_alignment_horizontal === 'left') {
+    if (
+        obj.content_alignment_horizontal === 'left' ||
+        direction === 'ltr' && obj.content_alignment_horizontal === 'start' ||
+        direction === 'rtl' && obj.content_alignment_horizontal === 'end'
+    ) {
         hpos = '0%';
-    } else if (obj.content_alignment_horizontal === 'right') {
+    } else if (
+        obj.content_alignment_horizontal === 'right' ||
+        direction === 'ltr' && obj.content_alignment_horizontal === 'end' ||
+        direction === 'rtl' && obj.content_alignment_horizontal === 'start'
+    ) {
         hpos = '100%';
     } else {
         hpos = '50%';
