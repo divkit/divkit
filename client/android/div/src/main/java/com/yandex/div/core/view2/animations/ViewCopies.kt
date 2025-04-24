@@ -62,12 +62,15 @@ private fun ImageView.setScreenshotFromView(view: View) {
     }
 
     val drawAndSet = {
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888).applyCanvas {
-            translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
-            view.draw(this)
-        }
+        if (view.width > 0 && view.height > 0) {
+            val bitmap =
+                Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888).applyCanvas {
+                    translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
+                    view.draw(this)
+                }
 
-        setImageBitmap(bitmap)
+            setImageBitmap(bitmap)
+        }
     }
 
     if (view.isActuallyLaidOut) {
