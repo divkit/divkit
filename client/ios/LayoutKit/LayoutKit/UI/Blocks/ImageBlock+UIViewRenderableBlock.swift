@@ -27,8 +27,8 @@ extension ImageBlock {
     contentView.filter = filter
     contentView.isUserInteractionEnabled = false
     remoteImageViewContainer.contentView = contentView
-    if remoteImageViewContainer.imageHolder !== imageHolder {
-      remoteImageViewContainer.imageHolder = imageHolder
+    if compare(remoteImageViewContainer.imageHolder, imageHolder) == false {
+        remoteImageViewContainer.imageHolder = imageHolder
     }
     remoteImageViewContainer.isUserInteractionEnabled = false
     remoteImageViewContainer.applyAccessibilityFromScratch(accessibilityElement)
