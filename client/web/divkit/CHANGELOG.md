@@ -1,3 +1,11 @@
+## 31.13.0 (April 28, 2025)
+
+* Fixed an erroneous situation where an action with a `scope_id` was launched and no such scope was found, the action will now fail.
+* Fixed the logic of the size of the `image` with `aspect` and `wrap_content`.
+* Fixed the overflow logic of the `tabs` component with the height of `match_parent` and `fixed`.
+* The default conversion to string for the values `dict` and `array` has been changed to match Android/iOS.
+
+
 ## 31.12.0 (April 21, 2025)
 
 * Added `cot` function.
