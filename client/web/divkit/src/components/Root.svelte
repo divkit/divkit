@@ -617,7 +617,13 @@
 
         if (ctx.variables) {
             for (const [key, variable] of ctx.variables) {
-                vals[key] = variable.getValue();
+                const val = variable.getValue();
+
+                if (typeof val === 'bigint') {
+                    vals[key] = Number(val);
+                } else {
+                    vals[key] = val;
+                }
             }
         }
 
