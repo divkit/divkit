@@ -61,16 +61,6 @@ class DivTextBinderTest : DivBinderTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.O])
-    fun `set hyphenation frequency to none if word break is to long`() {
-        val (divText, view) = createTestData("with_hyphenation_long_word_break.json")
-
-        binder.bindView(bindingContext, view, divText)
-
-        Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NONE, view.hyphenationFrequency)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun `set hyphenation frequency to none if hyphenation is not supported`() {
         val binder = createBinder(isHyphenationEnabled = false)
         val (divText, view) = createTestData("with_hyphenation.json")

@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Paint
 import android.text.Layout
-import android.text.TextUtils
 import android.text.TextUtils.TruncateAt
 import android.util.DisplayMetrics
 import android.view.View
@@ -55,10 +54,8 @@ import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 import javax.inject.Inject
-import kotlin.math.min
 
 private const val SOFT_HYPHEN = '\u00AD'
-private const val LONGEST_WORD_BREAK = 10
 
 /**
  * Class for binding div text to templated view
@@ -766,12 +763,7 @@ internal class DivTextBinder @Inject constructor(
         val oldHyphenFreq = hyphenationFrequency
         val newHyphenFreq = when {
             !isHyphenationEnabled -> Layout.HYPHENATION_FREQUENCY_NONE
-            TextUtils.indexOf(
-                text,
-                SOFT_HYPHEN,
-                0,
-                min(text.length, LONGEST_WORD_BREAK)
-            ) > 0 -> {
+            text.contains(SOFT_HYPHEN) -> {
                 // This enables word break not only on soft hyphens, but on dashes and hyphens.
                 // See all characters that lead to word break https://cs.android.com/android/platform/superproject/+/master:frameworks/minikin/libs/minikin/Hyphenator.cpp;l=146
                 Layout.HYPHENATION_FREQUENCY_NORMAL
