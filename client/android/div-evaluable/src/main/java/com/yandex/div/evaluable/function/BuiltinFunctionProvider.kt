@@ -70,7 +70,11 @@ internal object BuiltinFunctionProvider : FunctionProvider {
         registry.register(RadiansToDegrees)
         registry.register(Sine)
         registry.register(Cos)
+        registry.register(Tan)
         registry.register(Asin)
+        registry.register(Acos)
+        registry.register(Atan)
+        registry.register(Atan2)
 
         // Color functions
         registry.register(ColorAlphaComponentGetter)

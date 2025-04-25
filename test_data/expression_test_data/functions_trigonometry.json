@@ -191,6 +191,7 @@
         "value": 0.0
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -202,6 +203,7 @@
         "value": 1.55740772465
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -220,6 +222,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -297,6 +300,7 @@
         "value": 1.570796326795
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -308,6 +312,7 @@
         "value": 0.0
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -319,6 +324,7 @@
         "value": 2.094395102393
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -341,6 +347,7 @@
         "value": 0.0
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -352,6 +359,7 @@
         "value": 0.665773750028
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -370,8 +378,81 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "expression": "@{atan2(y,x)}",
+      "expected": {
+        "type": "number",
+        "value": 0.78539816340
+      },
+      "variables": [
+        {
+          "name": "y",
+          "type": "number",
+          "value": 1.0
+        },
+        {
+          "name": "x",
+          "type": "number",
+          "value": 1.0
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{atan2(0.0,0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{atan2(0.0,1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 0.0
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{atan2(0.0,-1.0)}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{atan2(1.0,0.0)}",
+      "expected": {
+        "type": "number",
+        "value": 1.5707963267948966
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "expression": "@{atan2(-1.0,0.0)}",
+      "expected": {
+        "type": "number",
+        "value": -1.5707963267948966
+      },
+      "platforms": [
+        "android"
       ]
     },
     {
