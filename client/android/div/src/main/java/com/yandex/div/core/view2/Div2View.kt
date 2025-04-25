@@ -212,7 +212,7 @@ class Div2View private constructor(
         expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
         expressionsRuntime?.runtimeStore?.updateSubscriptions()
         if (oldExpressionsRuntime != expressionsRuntime) {
-            runtimeStore?.clearBindings()
+            runtimeStore?.clearBindings(this)
         }
         runtimeStore = expressionsRuntime?.runtimeStore
         bindingContext = bindingContext.getFor(expressionResolver, runtimeStore)

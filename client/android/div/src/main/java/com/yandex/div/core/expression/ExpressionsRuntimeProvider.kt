@@ -62,7 +62,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
     internal fun cleanupRuntime(view: Div2View) {
         divDataTags[view]?.forEach { tag ->
-            runtimes[tag]?.runtimeStore?.cleanup()
+            runtimes[tag]?.runtimeStore?.cleanup(view)
         }
         divDataTags.remove(view)
     }

@@ -161,7 +161,7 @@ internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Bo
         }
     }
     return when (this) {
-        is Div.Container -> value.buildItems(resolver)
+        is Div.Container -> value.buildItems(divView = null, resolver = resolver)
             .any { it.div.containsStateInnerTransitions(it.expressionResolver) }
         is Div.Grid -> value.nonNullItems.any { it.containsStateInnerTransitions(resolver) }
         is Div.Text -> false

@@ -89,7 +89,8 @@ class DivPreloader internal constructor(
         }
 
         override fun visit(data: Div.Container, resolver: ExpressionResolver) {
-            data.value.buildItems(resolver).forEach { (item, newResolver) -> visit(item, newResolver) }
+            data.value.buildItems(divView = null, resolver = resolver)
+                .forEach { (item, newResolver) -> visit(item, newResolver) }
             defaultVisit(data, resolver)
         }
 
@@ -99,12 +100,14 @@ class DivPreloader internal constructor(
         }
 
         override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
-            data.value.buildItems(resolver).forEach { (item, newResolver) -> visit(item, newResolver) }
+            data.value.buildItems(divView = null, resolver = resolver)
+                .forEach { (item, newResolver) -> visit(item, newResolver) }
             defaultVisit(data, resolver)
         }
 
         override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
-            data.value.buildItems(resolver).forEach { (item, newResolver) -> visit(item, newResolver) }
+            data.value.buildItems(divView = null, resolver = resolver)
+                .forEach { (item, newResolver) -> visit(item, newResolver) }
             defaultVisit(data, resolver)
         }
 
