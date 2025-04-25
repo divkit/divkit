@@ -90,7 +90,7 @@ private struct AssetsImageProvider: DivImageHolderFactory {
   func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
     var localImage: ImageHolder?
     if url?.scheme == "divkit-asset", let name = url?.host {
-      localImage = Image(named: "divkit/\(name)")
+      localImage = Image(named: name)
     }
     return localImage ?? imageHolderFactory.make(url, placeholder)
   }
