@@ -13,10 +13,15 @@ public struct BlockShadow: Equatable {
   public static let maxOffset: CGFloat = 8
 
   public let cornerRadii: CornerRadii
-  public let blurRadius: CGFloat
   public let offset: CGPoint
   public let opacity: Float
   public let color: Color
+
+  public var blurRadius: CGFloat {
+    absoluteBlurRadius / 2
+  }
+
+  private let absoluteBlurRadius: CGFloat
 
   public init(
     cornerRadii: CornerRadii,
@@ -26,7 +31,7 @@ public struct BlockShadow: Equatable {
     color: Color = Defaults.color
   ) {
     self.cornerRadii = cornerRadii
-    self.blurRadius = blurRadius
+    self.absoluteBlurRadius = blurRadius
     self.offset = offset
     self.opacity = opacity
     self.color = color
