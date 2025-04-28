@@ -6,6 +6,7 @@
 
 # iOS Client:
 * Added the ability to set collection variables (array and dictionary) from URL.
+* Change wrong image name prefix for asset url.
 * Fixed views popping to the foreground when performing animation in overlap containers.
 * Support expressions in `set_variable` action for `dict` variables.
 
