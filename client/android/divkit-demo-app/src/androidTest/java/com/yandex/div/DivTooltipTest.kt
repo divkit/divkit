@@ -57,6 +57,68 @@ class DivTooltipTest {
         }
     }
 
+    @Test
+    fun tooltipIsNotDismissedWhenCloseByTapOutsideIsFalse() {
+        tooltipDiv {
+            showNonCloseByTapOutsideTooltip()
+            
+            assert {
+                tooltipShown()
+            }
+
+            clickOnTooltipWrapper()
+            assert {
+                tooltipShown()
+            }
+
+            closeTooltip()
+
+            assert {
+                noTooltipsDisplayed()
+            }
+        }
+    }
+
+    @Test
+    fun tooltipTapOutsideActionsAreExecuted() {
+        tooltipDiv {
+            assert {
+                outsideActionsCalledIsFalse()
+            }
+
+            showTooltipWithTapOutsideActions()
+            clickOnTooltipWrapper()
+
+            assert {
+                outsideActionsCalledIsTrue()
+                noTooltipsDisplayed()
+            }
+        }
+    }
+
+    @Test
+    fun nonModalTooltipAllowsClickingUnderlyingElements() {
+        tooltipDiv {
+            assert {
+                nonModalButtonClickedIsFalse()
+            }
+
+            val buttonPosition = getUnderlyingButtonPosition()
+            showNonModalTooltip()
+            
+            assert {
+                tooltipShown()
+            }
+
+            clickAtPoint(buttonPosition)
+
+            assert {
+                nonModalButtonClickedIsTrue()
+                noTooltipsDisplayed()
+            }
+        }
+    }
+
     private fun checkTooltip(position: Position) = step("Checking tooltip with position: $position") {
         tooltipDiv {
             showTooltip(position)

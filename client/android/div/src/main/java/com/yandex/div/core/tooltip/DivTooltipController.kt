@@ -17,6 +17,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.os.postDelayed
 import androidx.core.view.children
 import com.yandex.div.R
+import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.actions.logError
@@ -36,6 +37,7 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltipMode
 import javax.inject.Inject
@@ -211,7 +213,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     this,
                     tooltipView,
                     divTooltip.isModal(),
-                    divTooltip.shouldDismissByOutsideTouch(resolver)
+                    isOutsideTouchable,
+                    divTooltip.tapOutsideActions,
+                    context
                 )
             )
             setupAnimation(divTooltip, resolver)
@@ -319,7 +323,9 @@ private class PopupWindowTouchListener(
     private val popupWindow: PopupWindow,
     private val tooltipView: View,
     private val isModal: Boolean,
-    private val shouldDismissByOutsideTouch: Boolean
+    private val shouldDismissByOutsideTouch: Boolean,
+    private val tapOutsideActions: List<DivAction>?,
+    private val bindingContext: BindingContext
 ) : View.OnTouchListener {
 
     private val hitRect = Rect()
@@ -330,7 +336,24 @@ private class PopupWindowTouchListener(
             hitRect.contains(event.x.toInt(), event.y.toInt()) -> false
 
             else -> {
-                if (shouldDismissByOutsideTouch) popupWindow.dismiss()
+                if (event.action == MotionEvent.ACTION_UP) {
+                    tapOutsideActions?.let { actions ->
+                        val resolver = bindingContext.expressionResolver
+                        val divView = bindingContext.divView
+                        actions.filter { it.isEnabled.evaluate(resolver) }.forEach { action ->
+                            divView.div2Component.actionHandler.handleActionWithReason(
+                                action,
+                                divView,
+                                resolver,
+                                DivActionHandler.DivActionReason.CLICK
+                            )
+                        }
+                    }
+
+                    if (shouldDismissByOutsideTouch) {
+                        popupWindow.dismiss()
+                    }
+                }
                 isModal
             }
         }
