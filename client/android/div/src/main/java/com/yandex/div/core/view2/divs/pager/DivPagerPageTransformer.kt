@@ -4,7 +4,6 @@ import android.util.SparseArray
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.util.ViewProperty
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.json.expressions.Expression
@@ -20,7 +19,7 @@ internal class DivPagerPageTransformer(
     private val recyclerView: RecyclerView,
     private val resolver: ExpressionResolver,
     private val pageTranslations: SparseArray<Float>,
-    private val parentSize: ViewProperty<Int>,
+    private val parentSize: Int,
     private val pageTransformation: DivPageTransformation?,
     private val offsetProvider: DivPagerPageOffsetProvider,
     private val isHorizontal: Boolean,
@@ -88,7 +87,7 @@ internal class DivPagerPageTransformer(
          * This initial values is used to stick edge items to the edges of the pager.
          */
         var offset = - if (overlap) {
-            parentSize.get() * position
+            parentSize * position
         } else {
             offsetProvider.getPageOffset(position, pagePosition, pageTransformation is DivPageTransformation.Overlap)
         }

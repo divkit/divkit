@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs.pager
 import android.util.SparseArray
 import android.view.View
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -13,9 +14,8 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
-import com.yandex.div.core.util.heightProperty
+import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.util.widthProperty
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
@@ -102,8 +102,6 @@ internal class DivPagerBinder @Inject constructor(
         orientation =
             if (div.isHorizontal(resolver)) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
         adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
-
-        applyDecorations(div, resolver, pageTranslations, adapter)
 
         val reusableObserver = { _: Any -> applyDecorations(div, resolver, pageTranslations, adapter) }
 
@@ -202,8 +200,10 @@ internal class DivPagerBinder @Inject constructor(
         orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
         adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
 
+        if (!isActuallyLaidOut) return
+
         val metrics = resources.displayMetrics
-        val parentSize = if (isHorizontal) viewPager.widthProperty() else viewPager.heightProperty()
+        val parentSize = if (isHorizontal) viewPager.width else viewPager.height
         val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
         val infiniteScroll = div.infiniteScroll.evaluate(resolver)
         val scrollAxisAlignment = div.scrollAxisAlignment.evaluate(resolver)
@@ -281,6 +281,11 @@ internal class DivPagerBinder @Inject constructor(
 
             init {
                 addOnLayoutChangeListener(this)
+                doOnPreDraw {
+                    val newSize = getSize()
+                    observer(newSize)
+                    oldSize = newSize
+                }
             }
 
             override fun close() {
@@ -291,7 +296,7 @@ internal class DivPagerBinder @Inject constructor(
                 v: View, left: Int, top: Int, right: Int, bottom: Int,
                 oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
             ) {
-                val newSize = if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) width else height
+                val newSize = getSize()
                 if (oldSize == newSize) {
                     if (div.layoutMode is DivPagerLayoutMode.PageContentSize) {
                         requestTransform()
@@ -302,6 +307,8 @@ internal class DivPagerBinder @Inject constructor(
                 oldSize = newSize
                 observer.invoke(newSize)
             }
+
+            private fun getSize() = if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) width else height
         }
     }
 
