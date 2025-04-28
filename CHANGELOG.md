@@ -1,6 +1,7 @@
 ## 31.13.0
 
 # Android Client:
+* Fixed images drawing in `pager`.
 * Support expressions in `set_variable` action for `dict` variables.
 
 # iOS Client:
