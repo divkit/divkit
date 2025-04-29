@@ -64,6 +64,9 @@
             },
             "web": {
                 "version_added": "31.6.0"
+            },
+            "ios": {
+                "version_added": "31.13.0"
             }
         }
     }, {
@@ -75,6 +78,9 @@
             },
             "web": {
                 "version_added": "31.6.0"
+            },
+            "ios": {
+                "version_added": "31.13.0"
             }
         }
     }, {
