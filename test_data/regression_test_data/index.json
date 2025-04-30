@@ -3642,7 +3642,8 @@
         "DivIndicator"
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "steps": [
         "Swipe pages in both directions"

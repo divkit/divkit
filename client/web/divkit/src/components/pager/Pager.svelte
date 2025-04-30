@@ -5,6 +5,7 @@
     interface ChildInfo {
         width?: MaybeMissing<Size>;
         height?: MaybeMissing<Size>;
+        visibility?: Visibility;
     }
 
     const SIZE_MAP: Record<Size['type'], string> = {
@@ -13,7 +14,10 @@
         match_parent: 'parent'
     };
 
-    function getItemMods(orientation: Orientation, childInfo: ChildInfo): Mods {
+    function getItemMods(orientation: Orientation, childInfo: {
+        width?: MaybeMissing<Size>;
+        height?: MaybeMissing<Size>;
+    }): Mods {
         if (orientation === 'horizontal') {
             const heightType = childInfo.height?.type || '';
 
@@ -40,7 +44,7 @@
     import rootCss from '../Root.module.css';
     import arrowsCss from '../utilities/Arrows.module.css';
 
-    import type { DivBaseData } from '../../types/base';
+    import type { DivBaseData, Visibility } from '../../types/base';
     import type { DivPagerData } from '../../types/pager';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Orientation } from '../../types/orientation';
@@ -111,6 +115,14 @@
     let scrollPaddings: EdgeInsets = {};
 
     let items: ComponentContext[] = [];
+    let visibleItems: {
+        width?: MaybeMissing<Size>;
+        height?: MaybeMissing<Size>;
+        index: number;
+        componentContext: ComponentContext;
+    }[] = [];
+    let visibleToAllMap: Record<number, number> = {};
+    let allToVisibleMap: Record<number, number> = {};
     let prevContext: ComponentContext<DivPagerData> | undefined;
 
     let registerData: PagerRegisterData | undefined;
@@ -209,13 +221,32 @@
             children.push(
                 componentContext.getDerivedFromVars({
                     width: item.json.width,
-                    height: item.json.height
+                    height: item.json.height,
+                    visibility: item.json.visibility
                 })
             );
         });
 
         // Create a new array every time so that it is not equal to the previous one
         childStore = derived(children, val => [...val]);
+    }
+
+    $: {
+        allToVisibleMap = {};
+        visibleToAllMap = {};
+        visibleItems = $childStore.map((it, index) => {
+            return {
+                width: it.width,
+                height: it.height,
+                index,
+                componentContext: items[index]
+            };
+        }).filter((_it, index) => $childStore[index].visibility !== 'gone');
+
+        visibleItems.forEach((it, index) => {
+            visibleToAllMap[index] = it.index;
+            allToVisibleMap[it.index] = index;
+        });
     }
 
     $: {
@@ -279,7 +310,6 @@
                 pxToEmWithUnits(
                     paddings?.bottom || 0
                 );
-            const sumPadding = paddingStart + paddingEnd;
             const neighbourPageWidth = $jsonLayoutMode.neighbour_page_width?.value || 0;
 
             if (scrollAxisAlignment === 'center') {
@@ -326,9 +356,13 @@
 
     $: shouldCheckArrows = $isDesktop && mounted && !hasError;
 
-    $: hasScrollLeft = $direction === 'ltr' ? currentItem > 0 : currentItem + 1 < items.length;
+    $: hasScrollLeft = $direction === 'ltr' ?
+        allToVisibleMap[currentItem] > 0 :
+        allToVisibleMap[currentItem] + 1 < visibleItems.length;
 
-    $: hasScrollRight = $direction === 'ltr' ? currentItem + 1 < items.length : currentItem > 0;
+    $: hasScrollRight = $direction === 'ltr' ?
+        allToVisibleMap[currentItem] + 1 < visibleItems.length :
+        allToVisibleMap[currentItem] > 0;
 
     function checkIsFullyIntersecting(scroller: DOMRect, item: DOMRect): boolean {
         if (orientation === 'horizontal') {
@@ -350,7 +384,7 @@
             return firstFullyVisibleElement;
         }
 
-        return currentItem;
+        return allToVisibleMap[currentItem];
     }
 
     function onScroll(): void {
@@ -359,7 +393,7 @@
             return;
         }
 
-        const nextItem = calculateCurrentElementIndex();
+        const nextItem = visibleToAllMap[calculateCurrentElementIndex()];
         if (nextItem !== currentItem) {
             currentItem = nextItem;
         }
@@ -369,9 +403,11 @@
         if (registerData) {
             registerData.update({
                 instId,
-                currentItem,
+                currentItem: allToVisibleMap[currentItem],
                 size,
-                scrollToPagerItem
+                scrollToPagerItem(index: number) {
+                    scrollToPagerItem(visibleToAllMap[index]);
+                }
             });
         }
     }
@@ -390,7 +426,7 @@
         componentContext.execAnyActions(actions);
     }
 
-    $: pagerDataUpdate(items.length, currentItem);
+    $: pagerDataUpdate(visibleItems.length, currentItem);
 
     $: runSelectedActions(currentItem);
 
@@ -398,9 +434,12 @@
         if (!pagerItemsWrapper) {
             return;
         }
+        if (allToVisibleMap[index] === undefined) {
+            return;
+        }
 
         const isHorizontal = orientation === 'horizontal';
-        const nextPagerItem = pagerItemsWrapper.children[index] as HTMLElement;
+        const nextPagerItem = pagerItemsWrapper.children[allToVisibleMap[index]] as HTMLElement;
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
         const elementSize: keyof HTMLElement = isHorizontal ? 'offsetWidth' : 'offsetHeight';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
@@ -422,25 +461,25 @@
         currentItem = index;
     }
 
-    function clampIndex(index: number, overflow: Overflow): number {
-        if (index > items.length - 1) {
-            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : items.length - 1;
+    function clampIndex(visibleIndex: number, overflow: Overflow): number {
+        if (visibleIndex > visibleItems.length - 1) {
+            return overflow === 'ring' ? nonNegativeModulo(visibleIndex, visibleItems.length) : visibleItems.length - 1;
         }
-        if (index < 0) {
-            return overflow === 'ring' ? nonNegativeModulo(index, items.length) : 0;
+        if (visibleIndex < 0) {
+            return overflow === 'ring' ? nonNegativeModulo(visibleIndex, visibleItems.length) : 0;
         }
 
-        return index;
+        return visibleIndex;
     }
 
     function setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
-        let previousItem = clampIndex(currentItem - step, overflow);
+        let previousItem = visibleToAllMap[clampIndex(allToVisibleMap[currentItem] - step, overflow)];
 
         scrollToPagerItem(previousItem, animated ? 'smooth' : 'instant');
     }
 
     function setNextItem(step: number, overflow: Overflow, animated: boolean) {
-        let nextItem = clampIndex(currentItem + step, overflow);
+        let nextItem = visibleToAllMap[clampIndex(allToVisibleMap[currentItem] + step, overflow)];
 
         scrollToPagerItem(nextItem, animated ? 'smooth' : 'instant');
     }
@@ -471,10 +510,10 @@
                 setPreviousItem,
                 setNextItem,
                 scrollToStart(animated) {
-                    scrollToPagerItem(0, animated ? 'smooth' : 'instant');
+                    scrollToPagerItem(visibleItems[0].index, animated ? 'smooth' : 'instant');
                 },
                 scrollToEnd(animated) {
-                    scrollToPagerItem(items.length - 1, animated ? 'smooth' : 'instant');
+                    scrollToPagerItem(visibleItems[visibleItems.length - 1].index, animated ? 'smooth' : 'instant');
                 },
                 scrollCombined({
                     step,
@@ -482,7 +521,7 @@
                     animated
                 }) {
                     if (step) {
-                        scrollToPagerItem(clampIndex(currentItem + step, overflow || 'clamp'), animated ? 'smooth' : 'instant');
+                        scrollToPagerItem(visibleToAllMap[clampIndex(allToVisibleMap[currentItem] + step, overflow || 'clamp')], animated ? 'smooth' : 'instant');
                     }
                 },
             }, 'warn');
@@ -539,15 +578,15 @@
             bind:this={pagerItemsWrapper}
             on:scroll={onScrollDebounced}
         >
-            {#each items as item, index}
+            {#each visibleItems as item}
                 <div
-                    class={genClassName('pager__item', css, getItemMods(orientation, $childStore[index]))}
+                    class={genClassName('pager__item', css, getItemMods(orientation, item))}
                     role="tabpanel"
-                    id="{instId}-panel-{index}"
-                    aria-labelledby="{instId}-tab-{index}"
+                    id="{instId}-panel-{item.index}"
+                    aria-labelledby="{instId}-tab-{item.index}"
                 >
                     <Unknown
-                        componentContext={item}
+                        componentContext={item.componentContext}
                         layoutParams={childLayoutParams}
                     />
                 </div>
