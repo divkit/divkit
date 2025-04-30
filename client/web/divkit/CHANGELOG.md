@@ -1,3 +1,10 @@
+## 31.14.0 (May 5, 2025)
+
+* Fixed an error with the `integer` variables in the `submit` action (the bigint variable could not be converted to a string).
+* Fixed and issue with the `start` and `end` positions of the background.
+* Fixed the behavior of the `pager` with elements that have `visibility` = `gone`.
+
+
 ## 31.13.0 (April 28, 2025)
 
 * Fixed an erroneous situation where an action with a `scope_id` was launched and no such scope was found, the action will now fail.

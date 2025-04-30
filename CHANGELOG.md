@@ -1,3 +1,21 @@
+## 31.14.0
+
+# Android Client:
+* Fixed an issue when triggers may not work in for multiple div views.
+* Support of tan, acos, atan, atan2 functions.
+* Tap_outside_actions - property in tooltips implemented.
+* ViewCopiesKt: IllegalArgumentException: width and height must be > 0 fix.
+* We used to check if there is a soft hyphen in the first 10 chars of a text, now we check if it's present in the text.
+
+# iOS Client:
+* Shadow rendering has been adjusted to match other platforms.
+
+# Web Client:
+* Fixed an error with the `integer` variables in the `submit` action (the bigint variable could not be converted to a string).
+* Fixed and issue with the `start` and `end` positions of the background.
+* Fixed the behavior of the `pager` with elements that have `visibility` = `gone`.
+
+
 ## 31.13.0
 
 # Android Client:
