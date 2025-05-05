@@ -261,7 +261,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   func setIsFocused(_ isFocused: Bool, shouldClear: Bool) {
-    isInputFocused = isFocused
     if isFocused {
       if allSuperviewsAreVisible() {
         focusTextInput()
@@ -587,6 +586,8 @@ extension TextInputBlockView {
   }
 
   private func onBlur() {
+    guard isInputFocused else { return }
+
     onBlurActions.perform(sendingFrom: self)
     isInputFocused = false
     guard let path else { return }
