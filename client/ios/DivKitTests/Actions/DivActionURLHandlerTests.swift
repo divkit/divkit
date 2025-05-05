@@ -281,31 +281,31 @@ private enum SetItemAction {
   }
 
   static let firstElementState: [ElementState] = [
-    PagerViewState(numberOfPages: 10, currentPage: 0, animated: true, isScrolling: false),
+    PagerViewState(numberOfPages: 10, currentPage: 0, animated: true),
     GalleryViewState(contentPageIndex: 0, itemsCount: 10, animated: true),
     TabViewState(selectedPageIndex: 0, countOfPages: 10),
   ]
 
   static let secondElementState: [ElementState] = [
-    PagerViewState(numberOfPages: 10, currentPage: 1, animated: true, isScrolling: false),
+    PagerViewState(numberOfPages: 10, currentPage: 1, animated: true),
     GalleryViewState(contentPageIndex: 1, itemsCount: 10, animated: true),
     TabViewState(selectedPageIndex: 1, countOfPages: 10),
   ]
 
   static let thirdElementState: [ElementState] = [
-    PagerViewState(numberOfPages: 10, currentPage: 2, animated: true, isScrolling: false),
+    PagerViewState(numberOfPages: 10, currentPage: 2, animated: true),
     GalleryViewState(contentPageIndex: 2, itemsCount: 10, animated: true),
     TabViewState(selectedPageIndex: 2, countOfPages: 10),
   ]
 
   static let lastElementState: [ElementState] = [
-    PagerViewState(numberOfPages: 10, currentPage: 9, animated: true, isScrolling: false),
+    PagerViewState(numberOfPages: 10, currentPage: 9, animated: true),
     GalleryViewState(contentPageIndex: 9, itemsCount: 10, animated: true),
     TabViewState(selectedPageIndex: 9, countOfPages: 10),
   ]
 
   static let emptyStates: [ElementState] = [
-    PagerViewState(numberOfPages: 0, currentPage: 0, animated: true, isScrolling: false),
+    PagerViewState(numberOfPages: 0, currentPage: 0, animated: true),
     GalleryViewState(contentPageIndex: 0, itemsCount: 0, animated: true),
     TabViewState(selectedPageIndex: 0, countOfPages: 0),
   ]

@@ -127,7 +127,7 @@ extension GalleryBlock {
         contentPosition: contentPosition,
         itemsCount: children.count,
         isScrolling: false,
-        animated: false
+        animated: true
       ),
       widthTrait: widthTrait,
       heightTrait: heightTrait,

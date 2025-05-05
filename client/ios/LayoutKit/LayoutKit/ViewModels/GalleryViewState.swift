@@ -68,7 +68,7 @@ public struct GalleryViewState: ElementState, Equatable {
     self.itemsCount = itemsCount
     self.isScrolling = false
     self.scrollRange = nil
-    self.animated = false
+    self.animated = true
   }
 
   public init(

@@ -44,8 +44,7 @@ private final class PageControlBlockView: BlockView, VisibleBoundsTrackingLeaf {
       }
 
       // Animate indicator on user interaction and action animations
-      let animated = !isFirstConfiguration && (model.state.animated || model.state.isScrolling)
-      configureIndicatorView(animated: animated)
+      configureIndicatorView(animated: model.state.animated)
     }
   }
 

@@ -5,28 +5,24 @@ public struct PagerViewState: ElementState, Equatable {
   public let numberOfPages: Int
   public let currentPage: CGFloat
   public let animated: Bool
-  public let isScrolling: Bool
 
-  public init(numberOfPages: Int, currentPage: Int, animated: Bool, isScrolling: Bool) {
+  public init(numberOfPages: Int, currentPage: Int, animated: Bool) {
     self.numberOfPages = numberOfPages
     self.currentPage = CGFloat(currentPage)
     self.animated = animated
-    self.isScrolling = isScrolling
   }
 
   // init for testing
   init(numberOfPages: Int, floatCurrentPage: CGFloat) {
     self.numberOfPages = numberOfPages
     self.currentPage = floatCurrentPage
-    self.animated = false
-    self.isScrolling = false
+    self.animated = true
   }
 
   public static let `default` = Self(
     numberOfPages: 0,
     currentPage: 0,
-    animated: false,
-    isScrolling: false
+    animated: true
   )
 }
 
@@ -40,8 +36,7 @@ extension PagerViewState {
     return PagerViewState(
       numberOfPages: model.itemsCountWithoutInfinite,
       currentPage: clampedCurrentPage,
-      animated: animated,
-      isScrolling: isScrolling
+      animated: animated
     )
   }
 }

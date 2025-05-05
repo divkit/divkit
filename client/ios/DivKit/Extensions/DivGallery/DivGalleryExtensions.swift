@@ -62,7 +62,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
         return newState
       }
       scrollRange = nil
-      animated = false
+      animated = true
     }
 
     let newState = GalleryViewState(

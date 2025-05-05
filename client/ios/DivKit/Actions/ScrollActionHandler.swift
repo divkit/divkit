@@ -286,8 +286,7 @@ extension PagerViewState: CollectionTypeViewState {
       PagerViewState(
         numberOfPages: itemsCount,
         currentPage: clampedIndex,
-        animated: animated,
-        isScrolling: false
+        animated: animated
       )
     }
   }
@@ -295,9 +294,7 @@ extension PagerViewState: CollectionTypeViewState {
 
 extension TabViewState: CollectionTypeViewState {
   // Animation for Tabs is not supported
-  var animated: Bool {
-    false
-  }
+  var animated: Bool { true }
 
   var itemsCount: Int {
     countOfPages

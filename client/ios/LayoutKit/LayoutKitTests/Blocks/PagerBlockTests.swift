@@ -58,8 +58,7 @@ private func makePagerBlock(
     state: PagerViewState(
       numberOfPages: 5,
       currentPage: currentPage,
-      animated: false,
-      isScrolling: false
+      animated: false
     ),
     widthTrait: widthTrait,
     heightTrait: heightTrait

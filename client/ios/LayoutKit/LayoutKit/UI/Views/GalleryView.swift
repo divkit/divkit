@@ -35,7 +35,6 @@ public final class GalleryView: BlockView {
   private var layoutFactory: LayoutFactory!
   private var deferredStateSetting = DeferredStateSetting.idle
   private var scrollStartOffset: CGFloat = 0
-  private var targetContentOffset: CGPoint?
   public var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { [collectionView] }
 
   private weak var overscrollDelegate: ScrollDelegate? {
@@ -131,7 +130,11 @@ public final class GalleryView: BlockView {
         deferredStateSetting = .pending(self.state)
       case .idle, .pending, .firstLayoutPerformed:
         if oldModel?.path == model.path {
-          updateContentOffset(to: self.state.contentPosition, animated: self.state.animated)
+          let animated = self.state.animated
+          updateContentOffset(to: self.state.contentPosition, animated: animated)
+          if !animated {
+            onDidEndScroll(collectionView)
+          }
         } else {
           collectionView.performWithDetachedDelegate {
             updateContentOffset(to: self.state.contentPosition, animated: false)
@@ -241,7 +244,7 @@ public final class GalleryView: BlockView {
     }
     if case let .pending(state) = deferredStateSetting {
       collectionView.performWithDetachedDelegate {
-        updateContentOffset(to: state.contentPosition, animated: state.animated)
+        updateContentOffset(to: state.contentPosition, animated: false)
       }
     }
     deferredStateSetting = .idle
@@ -268,8 +271,7 @@ public final class GalleryView: BlockView {
     case .horizontal:
       CGPoint(x: offset, y: 0)
     }
-    if collectionView.contentOffset != contentOffset, targetContentOffset != contentOffset {
-      targetContentOffset = contentOffset
+    if collectionView.contentOffset != contentOffset {
       collectionView.setContentOffset(contentOffset, animated: animated)
     }
   }
@@ -344,13 +346,12 @@ extension GalleryView: ScrollDelegate {
       contentPosition = .paging(index: pageIndex)
     }
 
-    let isScrolling = scrollView.isTracking || scrollView.isDecelerating || scrollView.isDragging
     let newState = GalleryViewState(
       contentPosition: contentPosition,
       itemsCount: model.items.count,
-      isScrolling: isScrolling,
+      isScrolling: true,
       scrollRange: state.scrollRange,
-      animated: state.animated
+      animated: true
     )
     setState(newState, notifyingObservers: true)
     updatesDelegate?.onContentOffsetChanged(offset, in: model)
@@ -378,13 +379,12 @@ extension GalleryView: ScrollDelegate {
   }
 
   private func onDidEndScroll(_ scrollView: ScrollView) {
-    targetContentOffset = nil
     let newState = GalleryViewState(
       contentPosition: state.contentPosition,
       itemsCount: model.items.count,
       isScrolling: false,
       scrollRange: state.scrollRange,
-      animated: false
+      animated: true
     )
     setState(newState, notifyingObservers: true)
     visibilityDelegate?.onGalleryVisibilityChanged()

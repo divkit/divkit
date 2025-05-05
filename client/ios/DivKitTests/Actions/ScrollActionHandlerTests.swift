@@ -518,8 +518,7 @@ private func pagerState(index: Int, itemCount: Int, animated: Bool = true) -> Pa
   PagerViewState(
     numberOfPages: itemCount,
     currentPage: index,
-    animated: animated,
-    isScrolling: false
+    animated: animated
   )
 }
 
