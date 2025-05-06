@@ -123,7 +123,8 @@ apiValidation {
     ignoredPackages += ["com.yandex.div.internal"]
     nonPublicMarkers += [
             "com.yandex.yatagan.internal.YataganGenerated",
-            "com.yandex.div.core.annotations.ExperimentalApi"
+            "com.yandex.div.core.annotations.ExperimentalApi",
+            "com.yandex.div.core.annotations.InternalApi"
     ]
 }
 
