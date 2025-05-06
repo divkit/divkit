@@ -16,7 +16,6 @@ public final class DivVideo: DivBase, @unchecked Sendable {
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let bufferingActions: [DivAction]?
-  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let elapsedTimeVariable: String?
@@ -69,10 +68,6 @@ public final class DivVideo: DivBase, @unchecked Sendable {
 
   public func resolveAutostart(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(autostart) ?? false
-  }
-
-  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -137,7 +132,6 @@ public final class DivVideo: DivBase, @unchecked Sendable {
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     bufferingActions: [DivAction]? = nil,
-    captureFocusOnAction: Expression<Bool>? = nil,
     columnSpan: Expression<Int>? = nil,
     disappearActions: [DivDisappearAction]? = nil,
     elapsedTimeVariable: String? = nil,
@@ -186,7 +180,6 @@ public final class DivVideo: DivBase, @unchecked Sendable {
     self.background = background
     self.border = border
     self.bufferingActions = bufferingActions
-    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.elapsedTimeVariable = elapsedTimeVariable
@@ -254,90 +247,89 @@ extension DivVideo: Equatable {
     }
     guard
       lhs.bufferingActions == rhs.bufferingActions,
-      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.columnSpan == rhs.columnSpan,
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
-      lhs.disappearActions == rhs.disappearActions,
       lhs.elapsedTimeVariable == rhs.elapsedTimeVariable,
-      lhs.endActions == rhs.endActions
+      lhs.endActions == rhs.endActions,
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
-      lhs.extensions == rhs.extensions,
       lhs.fatalActions == rhs.fatalActions,
-      lhs.focus == rhs.focus
+      lhs.focus == rhs.focus,
+      lhs.functions == rhs.functions
     else {
       return false
     }
     guard
-      lhs.functions == rhs.functions,
       lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.id == rhs.id,
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
-      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.muted == rhs.muted
+      lhs.muted == rhs.muted,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
       lhs.pauseActions == rhs.pauseActions,
-      lhs.preloadRequired == rhs.preloadRequired
+      lhs.preloadRequired == rhs.preloadRequired,
+      lhs.preview == rhs.preview
     else {
       return false
     }
     guard
-      lhs.preview == rhs.preview,
       lhs.repeatable == rhs.repeatable,
-      lhs.resumeActions == rhs.resumeActions
+      lhs.resumeActions == rhs.resumeActions,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.scale == rhs.scale,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.transform == rhs.transform,
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
-      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionOut == rhs.transitionOut,
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
-      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variables == rhs.variables,
+      lhs.videoSources == rhs.videoSources
     else {
       return false
     }
     guard
-      lhs.videoSources == rhs.videoSources,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -361,7 +353,6 @@ extension DivVideo: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["buffering_actions"] = bufferingActions?.map { $0.toDictionary() }
-    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["elapsed_time_variable"] = elapsedTimeVariable

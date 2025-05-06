@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivSelect: DivBase, Sendable {
+public final class DivSelect: DivBase, @unchecked Sendable {
   public final class Option: Sendable {
     public let text: Expression<String>?
     public let value: Expression<String>
@@ -34,7 +34,6 @@ public final class DivSelect: DivBase, Sendable {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
-  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
@@ -42,6 +41,7 @@ public final class DivSelect: DivBase, Sendable {
   public let fontFamily: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
+  public let fontVariationSettings: Expression<[String: Any]>?
   public let fontWeight: Expression<DivFontWeight> // default value: regular
   public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let functions: [DivFunction]?
@@ -85,10 +85,6 @@ public final class DivSelect: DivBase, Sendable {
     resolver.resolveNumeric(alpha) ?? 1.0
   }
 
-  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumeric(captureFocusOnAction) ?? true
-  }
-
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(columnSpan)
   }
@@ -103,6 +99,10 @@ public final class DivSelect: DivBase, Sendable {
 
   public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
     resolver.resolveEnum(fontSizeUnit) ?? DivSizeUnit.sp
+  }
+
+  public func resolveFontVariationSettings(_ resolver: ExpressionResolver) -> [String: Any]? {
+    resolver.resolveDict(fontVariationSettings)
   }
 
   public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
@@ -177,7 +177,6 @@ public final class DivSelect: DivBase, Sendable {
     animators: [DivAnimator]? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
-    captureFocusOnAction: Expression<Bool>? = nil,
     columnSpan: Expression<Int>? = nil,
     disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
@@ -185,6 +184,7 @@ public final class DivSelect: DivBase, Sendable {
     fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
+    fontVariationSettings: Expression<[String: Any]>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
     fontWeightValue: Expression<Int>? = nil,
     functions: [DivFunction]? = nil,
@@ -223,7 +223,6 @@ public final class DivSelect: DivBase, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
-    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
@@ -231,6 +230,7 @@ public final class DivSelect: DivBase, Sendable {
     self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
+    self.fontVariationSettings = fontVariationSettings
     self.fontWeight = fontWeight ?? .value(.regular)
     self.fontWeightValue = fontWeightValue
     self.functions = functions
@@ -265,6 +265,7 @@ public final class DivSelect: DivBase, Sendable {
 }
 
 #if DEBUG
+// WARNING: this == is incomplete because of [String: Any] in class fields
 extension DivSelect: Equatable {
   public static func ==(lhs: DivSelect, rhs: DivSelect) -> Bool {
     guard
@@ -283,90 +284,89 @@ extension DivSelect: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.columnSpan == rhs.columnSpan,
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
-      lhs.disappearActions == rhs.disappearActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.focus == rhs.focus,
+      lhs.fontFamily == rhs.fontFamily
     else {
       return false
     }
     guard
-      lhs.fontFamily == rhs.fontFamily,
       lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit
+      lhs.fontSizeUnit == rhs.fontSizeUnit,
+      lhs.fontWeight == rhs.fontWeight
     else {
       return false
     }
     guard
-      lhs.fontWeight == rhs.fontWeight,
       lhs.fontWeightValue == rhs.fontWeightValue,
-      lhs.functions == rhs.functions
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
       lhs.hintColor == rhs.hintColor,
-      lhs.hintText == rhs.hintText
+      lhs.hintText == rhs.hintText,
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.letterSpacing == rhs.letterSpacing,
+      lhs.lineHeight == rhs.lineHeight
     else {
       return false
     }
     guard
-      lhs.lineHeight == rhs.lineHeight,
       lhs.margins == rhs.margins,
-      lhs.options == rhs.options
+      lhs.options == rhs.options,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.rowSpan == rhs.rowSpan,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.textColor == rhs.textColor,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.valueVariable == rhs.valueVariable
+      lhs.valueVariable == rhs.valueVariable,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
-      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
-      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -388,7 +388,6 @@ extension DivSelect: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
-    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
@@ -396,6 +395,7 @@ extension DivSelect: Serializable {
     result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
+    result["font_variation_settings"] = fontVariationSettings?.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["functions"] = functions?.map { $0.toDictionary() }

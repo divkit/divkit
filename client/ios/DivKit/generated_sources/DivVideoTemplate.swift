@@ -17,7 +17,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
   public let bufferingActions: Field<[DivActionTemplate]>?
-  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
   public let elapsedTimeVariable: Field<String>?
@@ -69,7 +68,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
       bufferingActions: dictionary.getOptionalArray("buffering_actions", templateToType: templateToType),
-      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       elapsedTimeVariable: dictionary.getOptionalField("elapsed_time_variable"),
@@ -122,7 +120,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     bufferingActions: Field<[DivActionTemplate]>? = nil,
-    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     elapsedTimeVariable: Field<String>? = nil,
@@ -172,7 +169,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     self.background = background
     self.border = border
     self.bufferingActions = bufferingActions
-    self.captureFocusOnAction = captureFocusOnAction
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.elapsedTimeVariable = elapsedTimeVariable
@@ -223,7 +219,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let bufferingActionsValue = { parent?.bufferingActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let elapsedTimeVariableValue = { parent?.elapsedTimeVariable?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -272,7 +267,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       bufferingActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "buffering_actions", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       elapsedTimeVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "elapsed_time_variable", error: $0) },
@@ -330,7 +324,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
       bufferingActions: { bufferingActionsValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       elapsedTimeVariable: { elapsedTimeVariableValue.value }(),
@@ -386,7 +379,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var bufferingActionsValue: DeserializationResult<[DivAction]> = .noValue
-    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var elapsedTimeVariableValue: DeserializationResult<String> = { parent?.elapsedTimeVariable?.value() ?? .noValue }()
@@ -477,11 +469,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "buffering_actions" {
            bufferingActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: bufferingActionsValue)
-          }
-        }()
-        _ = {
-          if key == "capture_focus_on_action" {
-           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -720,11 +707,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
-         if key == parent?.captureFocusOnAction?.link {
-           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
          if key == parent?.columnSpan?.link {
            columnSpanValue = columnSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator) })
           }
@@ -954,7 +936,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       bufferingActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "buffering_actions", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       elapsedTimeVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "elapsed_time_variable", error: $0) },
@@ -1012,7 +993,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
       bufferingActions: { bufferingActionsValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       elapsedTimeVariable: { elapsedTimeVariableValue.value }(),
@@ -1073,7 +1053,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       bufferingActions: bufferingActions ?? mergedParent.bufferingActions,
-      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
       elapsedTimeVariable: elapsedTimeVariable ?? mergedParent.elapsedTimeVariable,
@@ -1129,7 +1108,6 @@ public final class DivVideoTemplate: TemplateValue, @unchecked Sendable {
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       bufferingActions: merged.bufferingActions?.tryResolveParent(templates: templates),
-      captureFocusOnAction: merged.captureFocusOnAction,
       columnSpan: merged.columnSpan,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       elapsedTimeVariable: merged.elapsedTimeVariable,

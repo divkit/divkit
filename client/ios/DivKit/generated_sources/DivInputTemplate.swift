@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivInputTemplate: TemplateValue, Sendable {
+public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
   public final class NativeInterfaceTemplate: TemplateValue, Sendable {
     public let color: Field<Expression<Color>>?
 
@@ -103,7 +103,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
   public let autocapitalization: Field<Expression<Autocapitalization>>? // default value: auto
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
-  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
   public let enterKeyActions: Field<[DivActionTemplate]>?
@@ -114,6 +113,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
   public let fontFamily: Field<Expression<String>>?
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
+  public let fontVariationSettings: Field<Expression<[String: Any]>>?
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
   public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
   public let functions: Field<[DivFunctionTemplate]>?
@@ -166,7 +166,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       autocapitalization: dictionary.getOptionalExpressionField("autocapitalization"),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
-      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       enterKeyActions: dictionary.getOptionalArray("enter_key_actions", templateToType: templateToType),
@@ -177,6 +176,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       fontFamily: dictionary.getOptionalExpressionField("font_family"),
       fontSize: dictionary.getOptionalExpressionField("font_size"),
       fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
+      fontVariationSettings: dictionary.getOptionalExpressionField("font_variation_settings"),
       fontWeight: dictionary.getOptionalExpressionField("font_weight"),
       fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
@@ -230,7 +230,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     autocapitalization: Field<Expression<Autocapitalization>>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
-    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     enterKeyActions: Field<[DivActionTemplate]>? = nil,
@@ -241,6 +240,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     fontFamily: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
+    fontVariationSettings: Field<Expression<[String: Any]>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
     fontWeightValue: Field<Expression<Int>>? = nil,
     functions: Field<[DivFunctionTemplate]>? = nil,
@@ -291,7 +291,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     self.autocapitalization = autocapitalization
     self.background = background
     self.border = border
-    self.captureFocusOnAction = captureFocusOnAction
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.enterKeyActions = enterKeyActions
@@ -302,6 +301,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     self.fontFamily = fontFamily
     self.fontSize = fontSize
     self.fontSizeUnit = fontSizeUnit
+    self.fontVariationSettings = fontVariationSettings
     self.fontWeight = fontWeight
     self.fontWeightValue = fontWeightValue
     self.functions = functions
@@ -353,7 +353,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     let autocapitalizationValue = { parent?.autocapitalization?.resolveOptionalValue(context: context) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let enterKeyActionsValue = { parent?.enterKeyActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -364,6 +363,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     let fontFamilyValue = { parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue }()
     let fontSizeValue = { parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue }()
     let fontSizeUnitValue = { parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue }()
+    let fontVariationSettingsValue = { parent?.fontVariationSettings?.resolveOptionalValue(context: context) ?? .noValue }()
     let fontWeightValue = { parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue }()
     let fontWeightValueValue = { parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue }()
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -413,7 +413,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       enterKeyActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "enter_key_actions", error: $0) },
@@ -424,6 +423,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+      fontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_variation_settings", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
@@ -482,7 +482,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       autocapitalization: { autocapitalizationValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       enterKeyActions: { enterKeyActionsValue.value }(),
@@ -493,6 +492,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       fontFamily: { fontFamilyValue.value }(),
       fontSize: { fontSizeValue.value }(),
       fontSizeUnit: { fontSizeUnitValue.value }(),
+      fontVariationSettings: { fontVariationSettingsValue.value }(),
       fontWeight: { fontWeightValue.value }(),
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
@@ -549,7 +549,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     var autocapitalizationValue: DeserializationResult<Expression<DivInput.Autocapitalization>> = { parent?.autocapitalization?.value() ?? .noValue }()
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
-    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var enterKeyActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -560,6 +559,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
     var fontFamilyValue: DeserializationResult<Expression<String>> = { parent?.fontFamily?.value() ?? .noValue }()
     var fontSizeValue: DeserializationResult<Expression<Int>> = { parent?.fontSize?.value() ?? .noValue }()
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = { parent?.fontSizeUnit?.value() ?? .noValue }()
+    var fontVariationSettingsValue: DeserializationResult<Expression<[String: Any]>> = { parent?.fontVariationSettings?.value() ?? .noValue }()
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = { parent?.fontWeight?.value() ?? .noValue }()
     var fontWeightValueValue: DeserializationResult<Expression<Int>> = { parent?.fontWeightValue?.value() ?? .noValue }()
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
@@ -646,11 +646,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-          if key == "capture_focus_on_action" {
-           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
-          }
-        }()
-        _ = {
           if key == "column_span" {
            columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
           }
@@ -698,6 +693,11 @@ public final class DivInputTemplate: TemplateValue, Sendable {
         _ = {
           if key == "font_size_unit" {
            fontSizeUnitValue = deserialize(__dictValue).merged(with: fontSizeUnitValue)
+          }
+        }()
+        _ = {
+          if key == "font_variation_settings" {
+           fontVariationSettingsValue = deserialize(__dictValue).merged(with: fontVariationSettingsValue)
           }
         }()
         _ = {
@@ -941,11 +941,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.captureFocusOnAction?.link {
-           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
          if key == parent?.columnSpan?.link {
            columnSpanValue = columnSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator) })
           }
@@ -993,6 +988,11 @@ public final class DivInputTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.fontSizeUnit?.link {
            fontSizeUnitValue = fontSizeUnitValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.fontVariationSettings?.link {
+           fontVariationSettingsValue = fontVariationSettingsValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -1236,7 +1236,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       enterKeyActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "enter_key_actions", error: $0) },
@@ -1247,6 +1246,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+      fontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_variation_settings", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
@@ -1305,7 +1305,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       autocapitalization: { autocapitalizationValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       enterKeyActions: { enterKeyActionsValue.value }(),
@@ -1316,6 +1315,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       fontFamily: { fontFamilyValue.value }(),
       fontSize: { fontSizeValue.value }(),
       fontSizeUnit: { fontSizeUnitValue.value }(),
+      fontVariationSettings: { fontVariationSettingsValue.value }(),
       fontWeight: { fontWeightValue.value }(),
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
@@ -1377,7 +1377,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       autocapitalization: autocapitalization ?? mergedParent.autocapitalization,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
-      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
       enterKeyActions: enterKeyActions ?? mergedParent.enterKeyActions,
@@ -1388,6 +1387,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       fontFamily: fontFamily ?? mergedParent.fontFamily,
       fontSize: fontSize ?? mergedParent.fontSize,
       fontSizeUnit: fontSizeUnit ?? mergedParent.fontSizeUnit,
+      fontVariationSettings: fontVariationSettings ?? mergedParent.fontVariationSettings,
       fontWeight: fontWeight ?? mergedParent.fontWeight,
       fontWeightValue: fontWeightValue ?? mergedParent.fontWeightValue,
       functions: functions ?? mergedParent.functions,
@@ -1444,7 +1444,6 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       autocapitalization: merged.autocapitalization,
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
-      captureFocusOnAction: merged.captureFocusOnAction,
       columnSpan: merged.columnSpan,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       enterKeyActions: merged.enterKeyActions?.tryResolveParent(templates: templates),
@@ -1455,6 +1454,7 @@ public final class DivInputTemplate: TemplateValue, Sendable {
       fontFamily: merged.fontFamily,
       fontSize: merged.fontSize,
       fontSizeUnit: merged.fontSizeUnit,
+      fontVariationSettings: merged.fontVariationSettings,
       fontWeight: merged.fontWeight,
       fontWeightValue: merged.fontWeightValue,
       functions: merged.functions?.tryResolveParent(templates: templates),

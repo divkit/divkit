@@ -239,7 +239,7 @@ extension DivSlider.TextStyle {
       family: "",
       weight: resolveFontWeightValue(expressionResolver)
         ?? resolveFontWeight(expressionResolver).toInt(),
-      size: resolveFontSize(expressionResolver) ?? 16,
+      size: resolveFontSize(expressionResolver),
       unit: resolveFontSizeUnit(expressionResolver),
       featureSettings: nil
     )

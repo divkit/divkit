@@ -45,7 +45,7 @@ public final class DivTabs: DivBase, Sendable {
     }
   }
 
-  public final class TabTitleStyle: Sendable {
+  public final class TabTitleStyle: @unchecked Sendable {
     @frozen
     public enum AnimationType: String, CaseIterable, Sendable {
       case slide = "slide"
@@ -54,6 +54,7 @@ public final class DivTabs: DivBase, Sendable {
     }
 
     public let activeBackgroundColor: Expression<Color> // default value: #FFFFDC60
+    public let activeFontVariationSettings: Expression<[String: Any]>?
     public let activeFontWeight: Expression<DivFontWeight>?
     public let activeTextColor: Expression<Color> // default value: #CC000000
     public let animationDuration: Expression<Int> // constraint: number >= 0; default value: 300
@@ -65,6 +66,7 @@ public final class DivTabs: DivBase, Sendable {
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight> // default value: regular
     public let inactiveBackgroundColor: Expression<Color>?
+    public let inactiveFontVariationSettings: Expression<[String: Any]>?
     public let inactiveFontWeight: Expression<DivFontWeight>?
     public let inactiveTextColor: Expression<Color> // default value: #80000000
     public let itemSpacing: Expression<Int> // constraint: number >= 0; default value: 0
@@ -74,6 +76,10 @@ public final class DivTabs: DivBase, Sendable {
 
     public func resolveActiveBackgroundColor(_ resolver: ExpressionResolver) -> Color {
       resolver.resolveColor(activeBackgroundColor) ?? Color.colorWithARGBHexCode(0xFFFFDC60)
+    }
+
+    public func resolveActiveFontVariationSettings(_ resolver: ExpressionResolver) -> [String: Any]? {
+      resolver.resolveDict(activeFontVariationSettings)
     }
 
     public func resolveActiveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
@@ -116,6 +122,10 @@ public final class DivTabs: DivBase, Sendable {
       resolver.resolveColor(inactiveBackgroundColor)
     }
 
+    public func resolveInactiveFontVariationSettings(_ resolver: ExpressionResolver) -> [String: Any]? {
+      resolver.resolveDict(inactiveFontVariationSettings)
+    }
+
     public func resolveInactiveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
       resolver.resolveEnum(inactiveFontWeight)
     }
@@ -153,6 +163,7 @@ public final class DivTabs: DivBase, Sendable {
 
     init(
       activeBackgroundColor: Expression<Color>? = nil,
+      activeFontVariationSettings: Expression<[String: Any]>? = nil,
       activeFontWeight: Expression<DivFontWeight>? = nil,
       activeTextColor: Expression<Color>? = nil,
       animationDuration: Expression<Int>? = nil,
@@ -164,6 +175,7 @@ public final class DivTabs: DivBase, Sendable {
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
       inactiveBackgroundColor: Expression<Color>? = nil,
+      inactiveFontVariationSettings: Expression<[String: Any]>? = nil,
       inactiveFontWeight: Expression<DivFontWeight>? = nil,
       inactiveTextColor: Expression<Color>? = nil,
       itemSpacing: Expression<Int>? = nil,
@@ -172,6 +184,7 @@ public final class DivTabs: DivBase, Sendable {
       paddings: DivEdgeInsets? = nil
     ) {
       self.activeBackgroundColor = activeBackgroundColor ?? .value(Color.colorWithARGBHexCode(0xFFFFDC60))
+      self.activeFontVariationSettings = activeFontVariationSettings
       self.activeFontWeight = activeFontWeight
       self.activeTextColor = activeTextColor ?? .value(Color.colorWithARGBHexCode(0xCC000000))
       self.animationDuration = animationDuration ?? .value(300)
@@ -183,6 +196,7 @@ public final class DivTabs: DivBase, Sendable {
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontWeight = fontWeight ?? .value(.regular)
       self.inactiveBackgroundColor = inactiveBackgroundColor
+      self.inactiveFontVariationSettings = inactiveFontVariationSettings
       self.inactiveFontWeight = inactiveFontWeight
       self.inactiveTextColor = inactiveTextColor ?? .value(Color.colorWithARGBHexCode(0x80000000))
       self.itemSpacing = itemSpacing ?? .value(0)
@@ -200,7 +214,6 @@ public final class DivTabs: DivBase, Sendable {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
-  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let dynamicHeight: Expression<Bool> // default value: false
@@ -248,10 +261,6 @@ public final class DivTabs: DivBase, Sendable {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
-  }
-
-  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -320,7 +329,6 @@ public final class DivTabs: DivBase, Sendable {
     animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
-    captureFocusOnAction: Expression<Bool>?,
     columnSpan: Expression<Int>?,
     disappearActions: [DivDisappearAction]?,
     dynamicHeight: Expression<Bool>?,
@@ -365,7 +373,6 @@ public final class DivTabs: DivBase, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
-    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.dynamicHeight = dynamicHeight ?? .value(false)
@@ -424,90 +431,89 @@ extension DivTabs: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.columnSpan == rhs.columnSpan,
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
-      lhs.disappearActions == rhs.disappearActions,
       lhs.dynamicHeight == rhs.dynamicHeight,
-      lhs.extensions == rhs.extensions
+      lhs.extensions == rhs.extensions,
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.focus == rhs.focus,
       lhs.functions == rhs.functions,
-      lhs.hasSeparator == rhs.hasSeparator
+      lhs.hasSeparator == rhs.hasSeparator,
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.items == rhs.items
+      lhs.items == rhs.items,
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
-      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.paddings == rhs.paddings,
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.rowSpan == rhs.rowSpan,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.selectedTab == rhs.selectedTab,
-      lhs.separatorColor == rhs.separatorColor
+      lhs.separatorColor == rhs.separatorColor,
+      lhs.separatorPaddings == rhs.separatorPaddings
     else {
       return false
     }
     guard
-      lhs.separatorPaddings == rhs.separatorPaddings,
       lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled,
-      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter
+      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter,
+      lhs.tabTitleStyle == rhs.tabTitleStyle
     else {
       return false
     }
     guard
-      lhs.tabTitleStyle == rhs.tabTitleStyle,
       lhs.titlePaddings == rhs.titlePaddings,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -528,7 +534,6 @@ extension DivTabs: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
-    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["dynamic_height"] = dynamicHeight.toValidSerializationValue()
@@ -570,36 +575,7 @@ extension DivTabs: Serializable {
 }
 
 #if DEBUG
-extension DivTabs.Item: Equatable {
-  public static func ==(lhs: DivTabs.Item, rhs: DivTabs.Item) -> Bool {
-    guard
-      lhs.div == rhs.div,
-      lhs.title == rhs.title,
-      lhs.titleClickAction == rhs.titleClickAction
-    else {
-      return false
-    }
-    return true
-  }
-}
-#endif
-
-#if DEBUG
-extension DivTabs.TabTitleDelimiter: Equatable {
-  public static func ==(lhs: DivTabs.TabTitleDelimiter, rhs: DivTabs.TabTitleDelimiter) -> Bool {
-    guard
-      lhs.height == rhs.height,
-      lhs.imageUrl == rhs.imageUrl,
-      lhs.width == rhs.width
-    else {
-      return false
-    }
-    return true
-  }
-}
-#endif
-
-#if DEBUG
+// WARNING: this == is incomplete because of [String: Any] in class fields
 extension DivTabs.TabTitleStyle: Equatable {
   public static func ==(lhs: DivTabs.TabTitleStyle, rhs: DivTabs.TabTitleStyle) -> Bool {
     guard
@@ -649,6 +625,36 @@ extension DivTabs.TabTitleStyle: Equatable {
 }
 #endif
 
+#if DEBUG
+extension DivTabs.Item: Equatable {
+  public static func ==(lhs: DivTabs.Item, rhs: DivTabs.Item) -> Bool {
+    guard
+      lhs.div == rhs.div,
+      lhs.title == rhs.title,
+      lhs.titleClickAction == rhs.titleClickAction
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+#if DEBUG
+extension DivTabs.TabTitleDelimiter: Equatable {
+  public static func ==(lhs: DivTabs.TabTitleDelimiter, rhs: DivTabs.TabTitleDelimiter) -> Bool {
+    guard
+      lhs.height == rhs.height,
+      lhs.imageUrl == rhs.imageUrl,
+      lhs.width == rhs.width
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
 extension DivTabs.Item: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
@@ -673,6 +679,7 @@ extension DivTabs.TabTitleStyle: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["active_background_color"] = activeBackgroundColor.toValidSerializationValue()
+    result["active_font_variation_settings"] = activeFontVariationSettings?.toValidSerializationValue()
     result["active_font_weight"] = activeFontWeight?.toValidSerializationValue()
     result["active_text_color"] = activeTextColor.toValidSerializationValue()
     result["animation_duration"] = animationDuration.toValidSerializationValue()
@@ -684,6 +691,7 @@ extension DivTabs.TabTitleStyle: Serializable {
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
     result["inactive_background_color"] = inactiveBackgroundColor?.toValidSerializationValue()
+    result["inactive_font_variation_settings"] = inactiveFontVariationSettings?.toValidSerializationValue()
     result["inactive_font_weight"] = inactiveFontWeight?.toValidSerializationValue()
     result["inactive_text_color"] = inactiveTextColor.toValidSerializationValue()
     result["item_spacing"] = itemSpacing.toValidSerializationValue()

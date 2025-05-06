@@ -14,7 +14,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
   public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
-  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let customProps: Field<[String: Any]>?
   public let customType: Field<String>?
@@ -54,7 +53,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
-      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       customProps: dictionary.getOptionalField("custom_props"),
       customType: dictionary.getOptionalField("custom_type"),
@@ -95,7 +93,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
     animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
-    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     customProps: Field<[String: Any]>? = nil,
     customType: Field<String>? = nil,
@@ -133,7 +130,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
     self.animators = animators
     self.background = background
     self.border = border
-    self.captureFocusOnAction = captureFocusOnAction
     self.columnSpan = columnSpan
     self.customProps = customProps
     self.customType = customType
@@ -172,7 +168,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let customPropsValue = { parent?.customProps?.resolveOptionalValue(context: context) ?? .noValue }()
     let customTypeValue = { parent?.customType?.resolveValue(context: context) ?? .noValue }()
@@ -209,7 +204,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       customPropsValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_props", error: $0) },
       customTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_type", error: $0) },
@@ -255,7 +249,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       customProps: { customPropsValue.value }(),
       customType: { customTypeNonNil }(),
@@ -299,7 +292,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
-    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var customPropsValue: DeserializationResult<[String: Any]> = { parent?.customProps?.value() ?? .noValue }()
     var customTypeValue: DeserializationResult<String> = { parent?.customType?.value() ?? .noValue }()
@@ -366,11 +358,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
-          }
-        }()
-        _ = {
-          if key == "capture_focus_on_action" {
-           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -549,11 +536,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
-         if key == parent?.captureFocusOnAction?.link {
-           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
-          }
-        }()
-        _ = {
          if key == parent?.columnSpan?.link {
            columnSpanValue = columnSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator) })
           }
@@ -729,7 +711,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       customPropsValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_props", error: $0) },
       customTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_type", error: $0) },
@@ -775,7 +756,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       customProps: { customPropsValue.value }(),
       customType: { customTypeNonNil }(),
@@ -824,7 +804,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
       animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
-      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       customProps: customProps ?? mergedParent.customProps,
       customType: customType ?? mergedParent.customType,
@@ -868,7 +847,6 @@ public final class DivCustomTemplate: TemplateValue, @unchecked Sendable {
       animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
-      captureFocusOnAction: merged.captureFocusOnAction,
       columnSpan: merged.columnSpan,
       customProps: merged.customProps,
       customType: merged.customType,

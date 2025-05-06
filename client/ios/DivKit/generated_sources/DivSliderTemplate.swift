@@ -164,9 +164,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     }
   }
 
-  public final class TextStyleTemplate: TemplateValue, Sendable {
-    public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
+  public final class TextStyleTemplate: TemplateValue, @unchecked Sendable {
+    public let fontFamily: Field<Expression<String>>?
+    public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
+    public let fontVariationSettings: Field<Expression<[String: Any]>>?
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
     public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
     public let offset: Field<DivPointTemplate>?
@@ -174,8 +176,10 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
+        fontFamily: dictionary.getOptionalExpressionField("font_family"),
         fontSize: dictionary.getOptionalExpressionField("font_size"),
         fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
+        fontVariationSettings: dictionary.getOptionalExpressionField("font_variation_settings"),
         fontWeight: dictionary.getOptionalExpressionField("font_weight"),
         fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
         offset: dictionary.getOptionalField("offset", templateToType: templateToType),
@@ -184,15 +188,19 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     }
 
     init(
+      fontFamily: Field<Expression<String>>? = nil,
       fontSize: Field<Expression<Int>>? = nil,
       fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
+      fontVariationSettings: Field<Expression<[String: Any]>>? = nil,
       fontWeight: Field<Expression<DivFontWeight>>? = nil,
       fontWeightValue: Field<Expression<Int>>? = nil,
       offset: Field<DivPointTemplate>? = nil,
       textColor: Field<Expression<Color>>? = nil
     ) {
+      self.fontFamily = fontFamily
       self.fontSize = fontSize
       self.fontSizeUnit = fontSizeUnit
+      self.fontVariationSettings = fontVariationSettings
       self.fontWeight = fontWeight
       self.fontWeightValue = fontWeightValue
       self.offset = offset
@@ -200,31 +208,29 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: TextStyleTemplate?) -> DeserializationResult<DivSlider.TextStyle> {
-      let fontSizeValue = { parent?.fontSize?.resolveValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue }()
+      let fontFamilyValue = { parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue }()
+      let fontSizeValue = { parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue }()
       let fontSizeUnitValue = { parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue }()
+      let fontVariationSettingsValue = { parent?.fontVariationSettings?.resolveOptionalValue(context: context) ?? .noValue }()
       let fontWeightValue = { parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue }()
       let fontWeightValueValue = { parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue }()
       let offsetValue = { parent?.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let textColorValue = { parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
-      var errors = mergeErrors(
+      let errors = mergeErrors(
+        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
         fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
         fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+        fontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_variation_settings", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
         fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
         offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) }
       )
-      if case .noValue = fontSizeValue {
-        errors.append(.requiredFieldIsMissing(field: "font_size"))
-      }
-      guard
-        let fontSizeNonNil = fontSizeValue.value
-      else {
-        return .failure(NonEmptyArray(errors)!)
-      }
       let result = DivSlider.TextStyle(
-        fontSize: { fontSizeNonNil }(),
+        fontFamily: { fontFamilyValue.value }(),
+        fontSize: { fontSizeValue.value }(),
         fontSizeUnit: { fontSizeUnitValue.value }(),
+        fontVariationSettings: { fontVariationSettingsValue.value }(),
         fontWeight: { fontWeightValue.value }(),
         fontWeightValue: { fontWeightValueValue.value }(),
         offset: { offsetValue.value }(),
@@ -237,8 +243,10 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
+      var fontFamilyValue: DeserializationResult<Expression<String>> = { parent?.fontFamily?.value() ?? .noValue }()
       var fontSizeValue: DeserializationResult<Expression<Int>> = { parent?.fontSize?.value() ?? .noValue }()
       var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = { parent?.fontSizeUnit?.value() ?? .noValue }()
+      var fontVariationSettingsValue: DeserializationResult<Expression<[String: Any]>> = { parent?.fontVariationSettings?.value() ?? .noValue }()
       var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = { parent?.fontWeight?.value() ?? .noValue }()
       var fontWeightValueValue: DeserializationResult<Expression<Int>> = { parent?.fontWeightValue?.value() ?? .noValue }()
       var offsetValue: DeserializationResult<DivPoint> = .noValue
@@ -249,6 +257,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         // upfront even when we don't actually visit a relevant branch
         for (key, __dictValue) in context.templateData {
           _ = {
+            if key == "font_family" {
+             fontFamilyValue = deserialize(__dictValue).merged(with: fontFamilyValue)
+            }
+          }()
+          _ = {
             if key == "font_size" {
              fontSizeValue = deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator).merged(with: fontSizeValue)
             }
@@ -256,6 +269,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
           _ = {
             if key == "font_size_unit" {
              fontSizeUnitValue = deserialize(__dictValue).merged(with: fontSizeUnitValue)
+            }
+          }()
+          _ = {
+            if key == "font_variation_settings" {
+             fontVariationSettingsValue = deserialize(__dictValue).merged(with: fontVariationSettingsValue)
             }
           }()
           _ = {
@@ -279,6 +297,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
+           if key == parent?.fontFamily?.link {
+             fontFamilyValue = fontFamilyValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
            if key == parent?.fontSize?.link {
              fontSizeValue = fontSizeValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator) })
             }
@@ -286,6 +309,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
           _ = {
            if key == parent?.fontSizeUnit?.link {
              fontSizeUnitValue = fontSizeUnitValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.fontVariationSettings?.link {
+             fontVariationSettingsValue = fontVariationSettingsValue.merged(with: { deserialize(__dictValue) })
             }
           }()
           _ = {
@@ -313,25 +341,21 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       if let parent = parent {
         _ = { offsetValue = offsetValue.merged(with: { parent.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       }
-      var errors = mergeErrors(
+      let errors = mergeErrors(
+        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
         fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
         fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+        fontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_variation_settings", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
         fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
         offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) }
       )
-      if case .noValue = fontSizeValue {
-        errors.append(.requiredFieldIsMissing(field: "font_size"))
-      }
-      guard
-        let fontSizeNonNil = fontSizeValue.value
-      else {
-        return .failure(NonEmptyArray(errors)!)
-      }
       let result = DivSlider.TextStyle(
-        fontSize: { fontSizeNonNil }(),
+        fontFamily: { fontFamilyValue.value }(),
+        fontSize: { fontSizeValue.value }(),
         fontSizeUnit: { fontSizeUnitValue.value }(),
+        fontVariationSettings: { fontVariationSettingsValue.value }(),
         fontWeight: { fontWeightValue.value }(),
         fontWeightValue: { fontWeightValueValue.value }(),
         offset: { offsetValue.value }(),
@@ -348,8 +372,10 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       let merged = try mergedWithParent(templates: templates)
 
       return TextStyleTemplate(
+        fontFamily: merged.fontFamily,
         fontSize: merged.fontSize,
         fontSizeUnit: merged.fontSizeUnit,
+        fontVariationSettings: merged.fontVariationSettings,
         fontWeight: merged.fontWeight,
         fontWeightValue: merged.fontWeightValue,
         offset: merged.offset?.tryResolveParent(templates: templates),
@@ -367,7 +393,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
   public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
-  public let captureFocusOnAction: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
   public let extensions: Field<[DivExtensionTemplate]>?
@@ -419,7 +444,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
-      captureFocusOnAction: dictionary.getOptionalExpressionField("capture_focus_on_action"),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
@@ -472,7 +496,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
-    captureFocusOnAction: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
@@ -522,7 +545,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
-    self.captureFocusOnAction = captureFocusOnAction
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
@@ -573,7 +595,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let captureFocusOnActionValue = { parent?.captureFocusOnAction?.resolveOptionalValue(context: context) ?? .noValue }()
     let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
     let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let extensionsValue = { parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -622,7 +643,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -688,7 +708,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       extensions: { extensionsValue.value }(),
@@ -744,7 +763,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
-    var captureFocusOnActionValue: DeserializationResult<Expression<Bool>> = { parent?.captureFocusOnAction?.value() ?? .noValue }()
     var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
@@ -823,11 +841,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         _ = {
           if key == "border" {
            borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
-          }
-        }()
-        _ = {
-          if key == "capture_focus_on_action" {
-           captureFocusOnActionValue = deserialize(__dictValue).merged(with: captureFocusOnActionValue)
           }
         }()
         _ = {
@@ -1063,11 +1076,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         _ = {
          if key == parent?.border?.link {
            borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.captureFocusOnAction?.link {
-           captureFocusOnActionValue = captureFocusOnActionValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -1315,7 +1323,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
-      captureFocusOnActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "capture_focus_on_action", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -1381,7 +1388,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       animators: { animatorsValue.value }(),
       background: { backgroundValue.value }(),
       border: { borderValue.value }(),
-      captureFocusOnAction: { captureFocusOnActionValue.value }(),
       columnSpan: { columnSpanValue.value }(),
       disappearActions: { disappearActionsValue.value }(),
       extensions: { extensionsValue.value }(),
@@ -1442,7 +1448,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
-      captureFocusOnAction: captureFocusOnAction ?? mergedParent.captureFocusOnAction,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
@@ -1498,7 +1503,6 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
-      captureFocusOnAction: merged.captureFocusOnAction,
       columnSpan: merged.columnSpan,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),

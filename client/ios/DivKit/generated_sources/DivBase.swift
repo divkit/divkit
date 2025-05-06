@@ -12,7 +12,6 @@ public protocol DivBase: DivBlockModeling {
   var animators: [DivAnimator]? { get }
   var background: [DivBackground]? { get }
   var border: DivBorder? { get }
-  var captureFocusOnAction: Expression<Bool> { get } // default value: true
   var columnSpan: Expression<Int>? { get } // constraint: number >= 0
   var disappearActions: [DivDisappearAction]? { get }
   var extensions: [DivExtension]? { get }
@@ -41,7 +40,6 @@ public protocol DivBase: DivBlockModeling {
   func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal?
   func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical?
   func resolveAlpha(_ resolver: ExpressionResolver) -> Double
-  func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool
   func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int?
   func resolveReuseId(_ resolver: ExpressionResolver) -> String?
   func resolveRowSpan(_ resolver: ExpressionResolver) -> Int?

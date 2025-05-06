@@ -38,7 +38,6 @@ public final class DivGallery: DivBase, Sendable {
   public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
-  public let captureFocusOnAction: Expression<Bool> // default value: true
   public let columnCount: Expression<Int>? // constraint: number > 0
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let crossContentAlignment: Expression<CrossContentAlignment> // default value: start
@@ -86,10 +85,6 @@ public final class DivGallery: DivBase, Sendable {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
-  }
-
-  public func resolveCaptureFocusOnAction(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumeric(captureFocusOnAction) ?? true
   }
 
   public func resolveColumnCount(_ resolver: ExpressionResolver) -> Int? {
@@ -176,7 +171,6 @@ public final class DivGallery: DivBase, Sendable {
     animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
-    captureFocusOnAction: Expression<Bool>?,
     columnCount: Expression<Int>?,
     columnSpan: Expression<Int>?,
     crossContentAlignment: Expression<CrossContentAlignment>?,
@@ -221,7 +215,6 @@ public final class DivGallery: DivBase, Sendable {
     self.animators = animators
     self.background = background
     self.border = border
-    self.captureFocusOnAction = captureFocusOnAction ?? .value(true)
     self.columnCount = columnCount
     self.columnSpan = columnSpan
     self.crossContentAlignment = crossContentAlignment ?? .value(.start)
@@ -280,90 +273,89 @@ extension DivGallery: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.captureFocusOnAction == rhs.captureFocusOnAction,
-      lhs.columnCount == rhs.columnCount
+      lhs.columnCount == rhs.columnCount,
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
-      lhs.columnSpan == rhs.columnSpan,
       lhs.crossContentAlignment == rhs.crossContentAlignment,
-      lhs.crossSpacing == rhs.crossSpacing
+      lhs.crossSpacing == rhs.crossSpacing,
+      lhs.defaultItem == rhs.defaultItem
     else {
       return false
     }
     guard
-      lhs.defaultItem == rhs.defaultItem,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions
+      lhs.extensions == rhs.extensions,
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.focus == rhs.focus,
       lhs.functions == rhs.functions,
-      lhs.height == rhs.height
+      lhs.height == rhs.height,
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
       lhs.itemBuilder == rhs.itemBuilder,
-      lhs.itemSpacing == rhs.itemSpacing
+      lhs.itemSpacing == rhs.itemSpacing,
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
-      lhs.items == rhs.items,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.margins == rhs.margins
+      lhs.margins == rhs.margins,
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
-      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollMode == rhs.scrollMode
+      lhs.scrollMode == rhs.scrollMode,
+      lhs.scrollbar == rhs.scrollbar
     else {
       return false
     }
     guard
-      lhs.scrollbar == rhs.scrollbar,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -384,7 +376,6 @@ extension DivGallery: Serializable {
     result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
-    result["capture_focus_on_action"] = captureFocusOnAction.toValidSerializationValue()
     result["column_count"] = columnCount?.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["cross_content_alignment"] = crossContentAlignment.toValidSerializationValue()
