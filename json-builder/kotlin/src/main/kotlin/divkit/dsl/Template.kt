@@ -48,6 +48,16 @@ fun <T : Div> template(name: String, builder: TemplateScope.() -> T): Template<T
     )
 }
 
+fun <T : Div> template(nameBuilder: (Div) -> String, builder: TemplateScope.() -> T): Template<T> {
+    val scope = TemplateScope()
+    val template = builder.invoke(scope)
+    return Template(
+        name = nameBuilder(template),
+        div = template,
+        dependencies = scope.templates.values.toList(),
+        supplements = scope.supplements,
+    )
+}
 
 // JvmName is set to prevent jvm signature clash
 @JvmName("renderDiv")
