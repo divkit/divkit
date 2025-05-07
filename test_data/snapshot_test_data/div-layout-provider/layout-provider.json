@@ -1,0 +1,161 @@
+{
+  "description": "Layout-provider, which needs two cycles of layout recalculation to render correctly",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "block": {
+      "type": "container",
+      "margins": {
+        "left": 10,
+        "right": 10,
+        "top": 10,
+        "bottom": 10
+      },
+      "items": [
+        {
+          "type": "text",
+          "$text": "text",
+          "font_size": 16,
+          "width": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          }
+        }
+      ],
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0FFA0"
+        }
+      ]
+    },
+    "width_square": {
+      "type": "text",
+      "text": "",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0FFA0"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": "@{block1_height}"
+      },
+      "height": {
+        "type": "fixed",
+        "value": "@{block1_height}"
+      },
+      "border": {
+        "stroke": {
+          "color": "#000"
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "variables": [
+      {
+        "name": "block1_height",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "block1_width",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "variables": [
+            {
+              "name": "block2_width",
+              "type": "integer",
+              "value": 0
+            }
+          ],
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_vertical": "center",
+              "width": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "block",
+                  "text": "width = height x 3\nheight = wrap_content",
+                  "width": {
+                    "type": "fixed",
+                    "value": "@{block1_height * 3}"
+                  },
+                  "layout_provider": {
+                    "height_variable_name": "block1_height",
+                    "width_variable_name": "block1_width"
+                  }
+                },
+                {
+                  "type": "width_square"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "alignment_horizontal": "left",
+              "width": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "width_square",
+                  "margins": {
+                    "left": 10
+                  }
+                },
+                {
+                  "type": "width_square"
+                },
+                {
+                  "type": "width_square"
+                }
+              ]
+            },
+            {
+              "type": "block",
+              "width": {
+                "type": "fixed",
+                "value": "@{block1_width}"
+              },
+              "height": {
+                "type": "fixed",
+                "value": "@{block1_width}"
+              },
+              "text": "width = block1_width \nheight = block1_width"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

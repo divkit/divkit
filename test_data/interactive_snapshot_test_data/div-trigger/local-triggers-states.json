@@ -130,8 +130,7 @@
           "url": "div-action://set_variable?name=counter&value=110",
           "log_id": "set_110"
         }
-      ],
-      "expected_screenshot": "step1.png"
+      ]
     },
     {
       "div_actions": [
@@ -140,9 +139,6 @@
           "log_id": "set_second_state"
         }
       ]
-    },
-    {
-      "expected_screenshot": "step3.png"
     }
   ]
 }

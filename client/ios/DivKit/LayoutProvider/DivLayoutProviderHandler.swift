@@ -57,9 +57,9 @@ public final class DivLayoutProviderHandler {
     }
 
     if updatedVariables.contains(variableName) {
-      if updateVariablesCounter > 3 {
+      if updateVariablesCounter > 1 {
         DivKitLogger.warning(
-          "[DivLayoutProviderHandler] Variable '\(variableName)' was already updated more then 3 times during the layout cycle. It looks like there is a circular dependency in the layout."
+          "[DivLayoutProviderHandler] Variable '\(variableName)' was already updated more then 2 times during the layout cycle. It looks like there is a circular dependency in the layout."
         )
         return
       } else {

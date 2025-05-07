@@ -8,7 +8,7 @@ let testCardId = DivCardID(rawValue: "test_card_id")
 
 @MainActor
 final class SnapshotTestRunner {
-  private typealias CheckAction = (_ view: UIView?) throws -> Void
+  private typealias CheckAction = (_ view: UIView?) async throws -> Void
 
   #if UPDATE_SNAPSHOTS
   let mode = TestMode.update
@@ -59,7 +59,7 @@ final class SnapshotTestRunner {
         view.forceLayout()
 
         let check: CheckAction = { additionalView in
-          try self.checkSnapshots(
+          try await self.checkSnapshots(
             view: view,
             caseName: caseName,
             stepName: step.name ?? "step\(index)",
@@ -74,7 +74,7 @@ final class SnapshotTestRunner {
         )
       }
     } else {
-      try checkSnapshots(view: view, caseName: caseName)
+      try await checkSnapshots(view: view, caseName: caseName)
     }
   }
 
@@ -83,7 +83,7 @@ final class SnapshotTestRunner {
     check: CheckAction
   ) async throws {
     guard let tooltipWindow = manager.tooltipWindowManager?.modalWindow else {
-      return try check(nil)
+      return try await check(nil)
     }
 
     while !tooltipWindow.isKeyWindow {
@@ -91,17 +91,10 @@ final class SnapshotTestRunner {
     }
 
     guard let tooltipView = tooltipWindow.subviews.first else {
-      return try check(nil)
+      return try await check(nil)
     }
 
-    tooltipView.forceLayout()
-
-    // Time to layout tooltips
-    for _ in 0..<2 {
-      await Task.yield()
-    }
-
-    try check(tooltipView)
+    try await check(tooltipView)
   }
 
   private func getLayoutDirection(
@@ -126,7 +119,12 @@ final class SnapshotTestRunner {
     caseName: String,
     stepName: String? = nil,
     additionalView: UIView? = nil
-  ) throws {
+  ) async throws {
+    for _ in 0..<2 {
+      view.layoutIfNeeded()
+      await Task.yield()
+    }
+
     let screen = Screen.makeForScale(UIScreen.main.scale)
     let cardSize = view.cardSize?.sizeFor(parentViewSize: screen.size) ?? .zero
     view.frame = CGRect(origin: .zero, size: cardSize)
