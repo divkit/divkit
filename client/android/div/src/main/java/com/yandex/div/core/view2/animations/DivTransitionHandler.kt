@@ -63,6 +63,10 @@ internal class DivTransitionHandler(
     }
 
     private fun beginDelayedTransitions(root: ViewGroup = divView, endTransitions: Boolean = true) {
+        if (!root.isAttachedToWindow) {
+            pendingTransitions.clear()
+            return
+        }
         if (endTransitions) {
             TransitionManager.endTransitions(root)
         }
