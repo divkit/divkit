@@ -126,7 +126,7 @@ public final class DivActionSubmitTemplate: TemplateValue, Sendable {
       self.init(
         headers: dictionary.getOptionalArray("headers", templateToType: templateToType),
         method: dictionary.getOptionalExpressionField("method"),
-        url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+        url: dictionary.getOptionalExpressionField("url", transform: URL.init(stringToEncode:))
       )
     }
 
@@ -143,7 +143,7 @@ public final class DivActionSubmitTemplate: TemplateValue, Sendable {
     private static func resolveOnlyLinks(context: TemplatesContext, parent: RequestTemplate?) -> DeserializationResult<DivActionSubmit.Request> {
       let headersValue = { parent?.headers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let methodValue = { parent?.method?.resolveOptionalValue(context: context) ?? .noValue }()
-      let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+      let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
       var errors = mergeErrors(
         headersValue.errorsOrWarnings?.map { .nestedObjectError(field: "headers", error: $0) },
         methodValue.errorsOrWarnings?.map { .nestedObjectError(field: "method", error: $0) },
@@ -189,7 +189,7 @@ public final class DivActionSubmitTemplate: TemplateValue, Sendable {
           }()
           _ = {
             if key == "url" {
-             urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
+             urlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: urlValue)
             }
           }()
           _ = {
@@ -204,7 +204,7 @@ public final class DivActionSubmitTemplate: TemplateValue, Sendable {
           }()
           _ = {
            if key == parent?.url?.link {
-             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
             }
           }()
         }

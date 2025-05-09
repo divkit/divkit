@@ -12,7 +12,7 @@ public final class ContentUrlTemplate: TemplateValue, Sendable {
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
-      value: dictionary.getOptionalExpressionField("value", transform: URL.init(string:))
+      value: dictionary.getOptionalExpressionField("value", transform: URL.init(stringToEncode:))
     )
   }
 
@@ -25,7 +25,7 @@ public final class ContentUrlTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: ContentUrlTemplate?) -> DeserializationResult<ContentUrl> {
-    let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
@@ -55,12 +55,12 @@ public final class ContentUrlTemplate: TemplateValue, Sendable {
       for (key, __dictValue) in context.templateData {
         _ = {
           if key == "value" {
-           valueValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: valueValue)
+           valueValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: valueValue)
           }
         }()
         _ = {
          if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+           valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
           }
         }()
       }

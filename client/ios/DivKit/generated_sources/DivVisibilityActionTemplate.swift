@@ -24,10 +24,10 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
       logId: dictionary.getOptionalExpressionField("log_id"),
       logLimit: dictionary.getOptionalExpressionField("log_limit"),
       payload: dictionary.getOptionalField("payload"),
-      referer: dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
+      referer: dictionary.getOptionalExpressionField("referer", transform: URL.init(stringToEncode:)),
       scopeId: dictionary.getOptionalField("scope_id"),
       typed: dictionary.getOptionalField("typed", templateToType: templateToType),
-      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:)),
+      url: dictionary.getOptionalExpressionField("url", transform: URL.init(stringToEncode:)),
       visibilityDuration: dictionary.getOptionalExpressionField("visibility_duration"),
       visibilityPercentage: dictionary.getOptionalExpressionField("visibility_percentage")
     )
@@ -65,10 +65,10 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
     let logIdValue = { parent?.logId?.resolveValue(context: context) ?? .noValue }()
     let logLimitValue = { parent?.logLimit?.resolveOptionalValue(context: context, validator: ResolvedValue.logLimitValidator) ?? .noValue }()
     let payloadValue = { parent?.payload?.resolveOptionalValue(context: context) ?? .noValue }()
-    let refererValue = { parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let refererValue = { parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
     let scopeIdValue = { parent?.scopeId?.resolveOptionalValue(context: context) ?? .noValue }()
     let typedValue = { parent?.typed?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
     let visibilityDurationValue = { parent?.visibilityDuration?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityDurationValidator) ?? .noValue }()
     let visibilityPercentageValue = { parent?.visibilityPercentage?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityPercentageValidator) ?? .noValue }()
     var errors = mergeErrors(
@@ -155,7 +155,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
         }()
         _ = {
           if key == "referer" {
-           refererValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: refererValue)
+           refererValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: refererValue)
           }
         }()
         _ = {
@@ -170,7 +170,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
         }()
         _ = {
           if key == "url" {
-           urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
+           urlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: urlValue)
           }
         }()
         _ = {
@@ -210,7 +210,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
         }()
         _ = {
          if key == parent?.referer?.link {
-           refererValue = refererValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+           refererValue = refererValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
           }
         }()
         _ = {
@@ -225,7 +225,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
         }()
         _ = {
          if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
           }
         }()
         _ = {

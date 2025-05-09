@@ -22,7 +22,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, Sendable {
       contentAlignmentHorizontal: dictionary.getOptionalExpressionField("content_alignment_horizontal"),
       contentAlignmentVertical: dictionary.getOptionalExpressionField("content_alignment_vertical"),
       filters: dictionary.getOptionalArray("filters", templateToType: templateToType),
-      imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.init(string:)),
+      imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.init(stringToEncode:)),
       preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
       scale: dictionary.getOptionalExpressionField("scale")
     )
@@ -53,7 +53,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, Sendable {
     let contentAlignmentHorizontalValue = { parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
     let contentAlignmentVerticalValue = { parent?.contentAlignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
     let filtersValue = { parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
     let preloadRequiredValue = { parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue }()
     let scaleValue = { parent?.scale?.resolveOptionalValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
@@ -123,7 +123,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "image_url" {
-           imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
+           imageUrlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: imageUrlValue)
           }
         }()
         _ = {
@@ -158,7 +158,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.imageUrl?.link {
-           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
           }
         }()
         _ = {

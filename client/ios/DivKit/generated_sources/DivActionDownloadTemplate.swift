@@ -16,7 +16,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
       parent: dictionary["type"] as? String,
       onFailActions: dictionary.getOptionalArray("on_fail_actions", templateToType: templateToType),
       onSuccessActions: dictionary.getOptionalArray("on_success_actions", templateToType: templateToType),
-      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+      url: dictionary.getOptionalExpressionField("url", transform: URL.init(stringToEncode:))
     )
   }
 
@@ -35,7 +35,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionDownloadTemplate?) -> DeserializationResult<DivActionDownload> {
     let onFailActionsValue = { parent?.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let onSuccessActionsValue = { parent?.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
     var errors = mergeErrors(
       onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
       onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_success_actions", error: $0) },
@@ -81,7 +81,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "url" {
-           urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
+           urlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: urlValue)
           }
         }()
         _ = {
@@ -96,7 +96,7 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
           }
         }()
       }

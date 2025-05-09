@@ -143,7 +143,7 @@ public final class DivVideoSourceTemplate: TemplateValue, Sendable {
       bitrate: dictionary.getOptionalExpressionField("bitrate"),
       mimeType: dictionary.getOptionalExpressionField("mime_type"),
       resolution: dictionary.getOptionalField("resolution", templateToType: templateToType),
-      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+      url: dictionary.getOptionalExpressionField("url", transform: URL.init(stringToEncode:))
     )
   }
 
@@ -165,7 +165,7 @@ public final class DivVideoSourceTemplate: TemplateValue, Sendable {
     let bitrateValue = { parent?.bitrate?.resolveOptionalValue(context: context) ?? .noValue }()
     let mimeTypeValue = { parent?.mimeType?.resolveValue(context: context) ?? .noValue }()
     let resolutionValue = { parent?.resolution?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
     var errors = mergeErrors(
       bitrateValue.errorsOrWarnings?.map { .nestedObjectError(field: "bitrate", error: $0) },
       mimeTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mime_type", error: $0) },
@@ -223,7 +223,7 @@ public final class DivVideoSourceTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "url" {
-           urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
+           urlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: urlValue)
           }
         }()
         _ = {
@@ -243,7 +243,7 @@ public final class DivVideoSourceTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
           }
         }()
       }
