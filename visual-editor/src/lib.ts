@@ -150,9 +150,15 @@ export interface DivProEditorOptions {
     perThemeProps?: boolean;
 }
 
+export interface EditorError {
+    message: string;
+    level: 'error' | 'warn';
+}
+
 export interface DivProEditorInstance {
     getValue(): string;
     getCard(): Card;
+    getErrors(): EditorError[];
     setTheme(theme: Theme): void;
     setLayout(layout: Layout): void;
     setLocale(locale: Locale): void;
@@ -167,6 +173,8 @@ export const DivProEditor = {
         const json = JSON.parse(opts.card?.json || opts.value || '{}');
 
         const state = new State({
+            locale: opts.locale || 'en',
+            fileLimits: opts.fileLimits,
             getTranslationKey: opts.api?.getTranslationKey
         });
 
@@ -218,7 +226,6 @@ export const DivProEditor = {
             props: {
                 state,
                 layout: opts.layout,
-                locale: opts.locale,
                 shadowRoot: opts.shadowRoot,
                 actionLogUrlVariable: opts.actionLogUrlVariable,
                 cardLocales: opts.cardLocales,
@@ -269,7 +276,7 @@ export const DivProEditor = {
                 app.setLayout(layout);
             },
             setLocale(locale) {
-                app.setLocale(locale);
+                state.lang.set(locale);
             },
             setReadOnly(readOnly) {
                 state.readOnly.set(readOnly);
@@ -279,6 +286,9 @@ export const DivProEditor = {
             },
             setPaletteEnabled(toggle) {
                 state.paletteEnabled.set(toggle);
+            },
+            getErrors() {
+                return state.getEditorErrors();
             },
             destroy() {
                 app.$destroy();

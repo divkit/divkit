@@ -742,6 +742,7 @@
 
             if (leaf) {
                 leaf.props.processedJson = json;
+                leaf.props.evalledJson = evalJson(json);
 
                 // If a component was moved in the tree
                 const isSelected = $selectedLeaf && $selectedLeaf.id === origJson.__leafId;

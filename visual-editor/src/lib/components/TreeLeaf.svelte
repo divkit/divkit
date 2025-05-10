@@ -19,7 +19,7 @@
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state, showErrors, contextMenu } = getContext<AppContext>(APP_CTX);
-    const { userDefinedTemplates, copiedLeaf, rendererErrors, readOnly, themeStore } = state;
+    const { userDefinedTemplates, copiedLeaf, totalErrors, readOnly, themeStore } = state;
 
     const dispatch = createEventDispatcher();
 
@@ -111,7 +111,7 @@
 
     let errorType: 'errors' | 'warnings' | '' = '';
     $: {
-        const errorsList = $rendererErrors[leaf.id];
+        const errorsList = $totalErrors[leaf.id];
         if (errorsList?.every(isViewerWarning)) {
             errorType = 'warnings';
         } else if (errorsList) {

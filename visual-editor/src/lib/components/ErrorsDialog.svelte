@@ -14,7 +14,7 @@
         highlightLeaf,
         highlightElem,
         highlightRanges,
-        rendererErrors,
+        totalErrors,
         themeStore,
         tree
     } = state;
@@ -35,11 +35,11 @@
 
     $: {
         if (leafId) {
-            errors = $rendererErrors[leafId];
+            errors = $totalErrors[leafId];
         } else {
             const list: ViewerError[] = [];
-            for (const key in $rendererErrors) {
-                list.push(...$rendererErrors[key]);
+            for (const key in $totalErrors) {
+                list.push(...$totalErrors[key]);
             }
             errors = list;
         }
@@ -137,7 +137,7 @@
                                 </div>
 
                                 <div class="errors-dialog__item-details">
-                                    {#if item.args && Object.keys(item.args).length}
+                                    {#if item.args && Object.keys(item.args).filter(it => it !== 'leafId').length}
                                         {#each Object.keys(item.args) as key}
                                             {#if key !== 'leafId'}
                                                 <div>

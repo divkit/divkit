@@ -1,4 +1,4 @@
-import { derived, get, writable } from 'svelte/store';
+import { derived, get, writable, type Writable } from 'svelte/store';
 import type { DivJson, VariableTrigger } from '@divkitframework/divkit/typings/common';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
@@ -6,7 +6,7 @@ import { parseExpression, walkExpression } from '@divkitframework/divkit/client-
 import type { PaletteItem } from './palette';
 import { parseVariableValue, type JsonVariable, type Variable } from './customVariables';
 import { type JsonTimer, type Timer } from './timers';
-import type { ActionDesc, GetTranslationKey, Source, TankerMeta } from '../../lib';
+import type { ActionDesc, EditorError, FileLimits, GetTranslationKey, Locale, Source, TankerMeta } from '../../lib';
 import type { TreeLeaf } from '../ctx/tree';
 import type { BaseCommand } from './commands/base';
 import { namedTemplates } from './templates';
@@ -24,6 +24,8 @@ import type { ViewerError } from '../utils/errors';
 import { isViewerError, isViewerWarning } from './rendererErrors';
 import { AddLeafCommand } from './commands/addLeaf';
 import { RemoveLeafCommand } from './commands/removeLeaf';
+import { l10nGetter } from './l10n';
+import { calcFileSizeMod, getFileSize } from '../utils/fileSize';
 
 export class State {
     palette = writable<PaletteItem[]>([]);
@@ -82,8 +84,24 @@ export class State {
     simpleComponentsMap: Map<HTMLElement, TreeLeaf> | null = null;
 
     rendererErrors = writable<Record<string, ViewerError[]>>({});
+    fileSizeErrors = writable<Record<string, ViewerError[]>>({});
+    totalErrors = derived([this.rendererErrors, this.fileSizeErrors], ([renderer, fileSize]) => {
+        const result: Record<string, ViewerError[]> = {};
 
-    rendererErrorsOnly = derived(this.rendererErrors, store => {
+        for (const key in renderer) {
+            result[key] = [...renderer[key], ...(fileSize[key] || [])];
+        }
+        for (const key in fileSize) {
+            if (renderer.hasOwnProperty(key)) {
+                continue;
+            }
+            result[key] = [...(renderer[key] || []), ...fileSize[key]];
+        }
+
+        return result;
+    });
+
+    rendererErrorsOnly = derived(this.totalErrors, store => {
         const res: ViewerError[] = [];
 
         Object.keys(store).map(key => {
@@ -92,7 +110,7 @@ export class State {
 
         return res;
     });
-    rendererWarningsOnly = derived(this.rendererErrors, store => {
+    rendererWarningsOnly = derived(this.totalErrors, store => {
         const res: ViewerError[] = [];
 
         Object.keys(store).map(key => {
@@ -133,11 +151,40 @@ export class State {
 
     private getTranslationKey: GetTranslationKey | undefined;
 
+    lang: Writable<Locale> = writable('en');
+    l10n = derived(this.lang, lang => {
+        return (key: string, overrideLang?: string) => {
+            return l10nGetter(overrideLang || lang, key);
+        };
+    });
+    l10nString = derived(this.lang, lang => {
+        return (key: string, overrideLang?: string) => {
+            const val = l10nGetter(overrideLang || lang, key);
+
+            if (typeof val !== 'string') {
+                // todo expose error
+                console.error(`Missing translation for key "${key}"`);
+                return '';
+            }
+
+            return val;
+        };
+    });
+
+    fileLimits: FileLimits | undefined;
+
     constructor({
+        locale,
+        fileLimits,
         getTranslationKey
     }: {
+        locale: Locale;
+        fileLimits: FileLimits | undefined;
         getTranslationKey: GetTranslationKey | undefined;
     }) {
+        this.lang.set(locale);
+        this.fileLimits = fileLimits;
+
         this.getTranslationKey = getTranslationKey;
 
         this.selectedLeaf.subscribe(leaf => {
@@ -377,7 +424,7 @@ export class State {
 
         this.tree.set(this.divToLeaf(json.card.states[0].div));
 
-        this.updateUsages();
+        this.refreshGlobalChecks();
 
         this.awaitMissingTankerKeys(json).then(res => {
             if (res) {
@@ -430,7 +477,7 @@ export class State {
                     ...get(this.tanker),
                     ...store
                 });
-                this.updateUsages();
+                this.refreshGlobalChecks();
 
                 return true;
             }
@@ -787,6 +834,73 @@ export class State {
         return typeof base === 'string' && base || type;
     }
 
+    private refreshGlobalChecks(): void {
+        this.updateUsages();
+
+        const fileSizeErrors: Record<string, ViewerError[]> = {};
+        const promises: Promise<void>[] = [];
+        walk(get(this.tree), leaf => {
+            const evalledJson = leaf.props.evalledJson;
+            if (!evalledJson || evalledJson.type !== 'gif' && evalledJson.type !== 'image' && evalledJson.type !== 'video') {
+                return;
+            }
+
+            const check = (value: unknown, fileType: keyof FileLimits) => {
+                if (!value || typeof value !== 'string') {
+                    return;
+                }
+
+                promises.push(getFileSize(value, fileType).then(currentSize => {
+                    const level = calcFileSizeMod(currentSize, fileType, Infinity, Infinity, this.fileLimits);
+
+                    if (level) {
+                        fileSizeErrors[leaf.id] ||= [];
+                        fileSizeErrors[leaf.id].push({
+                            level,
+                            message: get(this.l10nString)('file.too_big'),
+                            stack: [],
+                            args: {
+                                leafId: leaf.id
+                            }
+                        });
+                    }
+                }));
+            };
+
+            if (evalledJson.type === 'image') {
+                check(evalledJson.image_url, 'image');
+                check(evalledJson.preview, 'preview');
+            } else if (evalledJson.type === 'gif') {
+                check(evalledJson.gif_url, 'image');
+                check(evalledJson.preview, 'preview');
+
+                if (evalledJson.extensions) {
+                    for (const key in evalledJson.extensions) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        const ext: any = evalledJson.extensions[key];
+                        if (ext?.id === 'lottie') {
+                            check(ext.params?.lottie_url, 'lottie');
+                        }
+                    }
+                }
+            } else if (evalledJson.type === 'video') {
+                check(evalledJson.preview, 'preview');
+
+                if (evalledJson.video_sources) {
+                    for (const key in evalledJson.video_sources) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        const source: any = evalledJson.video_sources[key];
+                        check(source.url, 'video');
+                    }
+                }
+            }
+        });
+
+        Promise.all(promises).then(() => {
+            this.fileSizeErrors.set(fileSizeErrors);
+        });
+    }
+
     pushCommand(command: BaseCommand): void {
         const history = get(this.#commands);
         const historyIndex = get(this.#historyIndex);
@@ -806,7 +920,7 @@ export class State {
             this.#historyIndex.set(newHistory.length - 1);
         }
 
-        this.updateUsages();
+        this.refreshGlobalChecks();
         this.tree.set(get(this.tree));
     }
 
@@ -823,7 +937,7 @@ export class State {
 
         this.#historyIndex.set(historyIndex - 1);
 
-        this.updateUsages();
+        this.refreshGlobalChecks();
         this.tree.set(get(this.tree));
     }
 
@@ -840,7 +954,7 @@ export class State {
 
         this.#historyIndex.set(historyIndex + 1);
 
-        this.updateUsages();
+        this.refreshGlobalChecks();
         this.tree.set(get(this.tree));
     }
 
@@ -983,5 +1097,21 @@ export class State {
         if (bestMatch) {
             return bestMatch.leaf;
         }
+    }
+
+    getEditorErrors(): EditorError[] {
+        const res: EditorError[] = [];
+        const totalErrors = get(this.totalErrors);
+
+        for (const key in totalErrors) {
+            res.push(...totalErrors[key].map(it => {
+                return {
+                    message: it.message,
+                    level: it.level || 'error'
+                };
+            }));
+        }
+
+        return res;
     }
 }

@@ -1,12 +1,11 @@
 <script lang="ts">
     import { setContext } from 'svelte';
-    import { derived, get, writable } from 'svelte/store';
+    import { get } from 'svelte/store';
     import SplitView from './lib/components/SplitView.svelte';
     import type { LanguageContext } from './lib/ctx/languageContext';
     import { LANGUAGE_CTX } from './lib/ctx/languageContext';
-    import translations from './auto/lang.json';
     import ContextMenu from './lib/components/ContextMenu.svelte';
-    import type { CardLocale, EditorInstance, EditorOptions, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, Layout, Locale } from './lib';
+    import type { CardLocale, EditorInstance, EditorOptions, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, Layout } from './lib';
     import LayoutColumn from './lib/components/LayoutColumn.svelte';
     import { APP_CTX, type AppContext, type ContextMenuApi, type RendererApi, type ShowErrors } from './lib/ctx/appContext';
     import { editorFabric as editorFabricInternal } from './lib/data/editorWrapper';
@@ -40,7 +39,6 @@
             items: ['component-props:code']
         }
     ];
-    export let locale: Locale = 'en';
 
     export let shadowRoot: ShadowRoot | undefined = undefined;
 
@@ -75,44 +73,12 @@
         layout = newLayout;
     }
 
-    export function setLocale(newLocale: Locale): void {
-        lang.set(newLocale);
-    }
-
-    const { themeStore } = state;
-
-    const l10nGetter = (lang: string, key: string) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const translation = (translations as any)[lang]?.[key];
-
-        if (!translation) {
-            // todo expose error
-            console.error(`Missing translation for key "${key}"`);
-        }
-
-        return translation || '';
-    };
-
-    let lang = writable(locale);
-    const l10n = derived(lang, lang => {
-        return (key: string, overrideLang?: string) => {
-            return l10nGetter(overrideLang || lang, key);
-        };
-    });
-
-    const l10nString = derived(lang, lang => {
-        return (key: string, overrideLang?: string) => {
-            const val = l10nGetter(overrideLang || lang, key);
-
-            if (typeof val !== 'string') {
-                // todo expose error
-                console.error(`Missing translation for key "${key}"`);
-                return '';
-            }
-
-            return val;
-        };
-    });
+    const {
+        themeStore,
+        lang,
+        l10n,
+        l10nString
+    } = state;
 
     let rendererApi: RendererApi = {
         containerProps() {

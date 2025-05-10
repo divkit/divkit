@@ -29,7 +29,7 @@ export function calcFileSizeMod(
     warnLimit: number,
     errorLimit: number,
     fileLimits: FileLimits | undefined
-): string {
+): 'error' | 'warn' | '' {
     if (!currentSize || currentSize < 1) {
         return '';
     }

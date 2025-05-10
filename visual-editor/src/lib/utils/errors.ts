@@ -1,7 +1,7 @@
 export interface ViewerError {
     message: string;
     stack: string[];
-    level?: string;
+    level?: 'error' | 'warn';
     args?: {
         leafId?: string | undefined;
     } & Record<string, unknown>;
