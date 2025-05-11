@@ -39,12 +39,17 @@ final class SubmitActionHandlerTests: XCTestCase {
 
   func test_Submit_ContainerWithoutVariables() {
     variablesStorage.initializeIfNeeded(
+      path: cardId.path,
+      variables: ["some_var": .string("some_value")]
+    )
+    variablesStorage.initializeIfNeeded(
       path: cardId.path + containerId,
       variables: [:]
     )
 
     handler.handleSubmit()
 
+    XCTAssertNotNil(submitter.lastRequest)
     XCTAssertTrue(submitter.lastData?.isEmpty == true)
   }
 
@@ -56,6 +61,7 @@ final class SubmitActionHandlerTests: XCTestCase {
 
     handler.handleSubmit(containerId: "wrong_id")
 
+    XCTAssertNil(submitter.lastRequest)
     XCTAssertNil(submitter.lastData)
   }
 

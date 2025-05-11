@@ -454,6 +454,68 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertNil(storage.getVariableValue(path: cardId.path + "element_id", name: "string_var"))
   }
 
+  func test_getOnlyElementVariables_nonEmptyElementVariables() {
+    let cardVariables: DivVariables = [
+      "some_card_var": .string("value"),
+    ]
+    let elementVariables = variables
+    let elementId = "element_id"
+    storage.set(cardId: cardId, variables: cardVariables)
+    storage.initializeIfNeeded(
+      path: cardId.path + "some_container" + 0 + elementId,
+      variables: elementVariables
+    )
+
+    let result = storage.getOnlyElementVariables(cardId: cardId, elementId: elementId)
+
+    XCTAssertEqual(result, variables)
+  }
+
+  func test_getOnlyElementVariables_noVariablesDeclaredAtPath() {
+    let cardVariables = variables
+    let elementVariables = DivVariables()
+    let elementId = "element_id"
+    storage.set(cardId: cardId, variables: cardVariables)
+    storage.initializeIfNeeded(
+      path: cardId.path + "some_container" + 0 + elementId,
+      variables: elementVariables
+    )
+
+    let result = storage.getOnlyElementVariables(cardId: cardId, elementId: elementId)
+
+    XCTAssertEqual(result, [:])
+  }
+
+  func test_getOnlyElementVariables_multipleElementsWithSameId() {
+    let elementId = "element_id"
+    storage.set(cardId: cardId, variables: variables)
+    storage.initializeIfNeeded(
+      path: cardId.path + "some_container" + 0 + elementId,
+      variables: variables
+    )
+    storage.initializeIfNeeded(
+      path: cardId.path + "other_container" + 0 + elementId,
+      variables: variables
+    )
+
+    let result = storage.getOnlyElementVariables(cardId: cardId, elementId: elementId)
+
+    XCTAssertEqual(result, nil)
+  }
+
+  func test_getOnlyElementVariables_noSuchElement() {
+    let elementId = "non_existing_element_id"
+    storage.set(cardId: cardId, variables: variables)
+    storage.initializeIfNeeded(
+      path: cardId.path + "some_container" + 0 + "other_id",
+      variables: variables
+    )
+
+    let result = storage.getVariableValue(cardId: cardId, name: .init(rawValue: elementId))
+
+    XCTAssertEqual(result, nil)
+  }
+
   private func getVariable<T>(_ name: DivVariableName) -> T? {
     storage.getVariableValue(cardId: cardId, name: name)
   }

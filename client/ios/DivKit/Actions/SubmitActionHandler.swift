@@ -19,20 +19,14 @@ final class SubmitActionHandler {
       return
     }
 
-    let containers = context.variablesStorage.getVariables(
+    guard let containerVariables = context.variablesStorage.getOnlyElementVariables(
       cardId: context.cardId,
       elementId: containerId
-    )
-    guard let container = containers.first else {
-      DivKitLogger.error("Element with id \(containerId) not found")
-      return
-    }
-    guard containers.count == 1 else {
-      DivKitLogger.error("Found multiple elements that respond to id: \(containerId)")
+    ) else {
       return
     }
 
-    let containerData = container.map(
+    let containerData = containerVariables.map(
       key: { $0.rawValue },
       value: { $0.toString() }
     )

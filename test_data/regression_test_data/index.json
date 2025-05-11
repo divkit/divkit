@@ -3786,6 +3786,30 @@
         "Only last tap doesn't affect input focus"
       ],
       "file": "input_capture_focus.json"
+    },
+    {
+      "title": "Submit action test",
+      "case_id": 221,
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivAction",
+        "TypedActions"
+      ],
+      "steps": [
+        "Tap the 'Submit Form' button",
+        "Enter a different URL in the API endpoint field",
+        "Tap the 'Submit Form' button"
+      ],
+      "expected_results": [
+        "Form data is submitted to the specified endpoint",
+        "Status changes to 'Form submitted successfully' on successful submission",
+        "Status changes to 'Form submission failed' on failed submission"
+      ],
+      "file": "submit_action.json"
     }
   ]
 }

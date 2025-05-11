@@ -1,0 +1,271 @@
+{
+  "description": "Submit action test",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "submit_action_test",
+    "variables": [
+      {
+        "type": "string",
+        "name": "submit_status",
+        "value": "Not submitted"
+      },
+      {
+        "type": "string",
+        "name": "request_url",
+        "value": "https://httpbin.org/post"
+      },
+      {
+        "type": "boolean",
+        "name": "progress",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 16,
+            "bottom": 16,
+            "left": 16,
+            "right": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "font_size": 24,
+              "font_weight": "bold",
+              "text": "Submit Form Test",
+              "paddings": {
+                "bottom": 16
+              }
+            },
+            {
+              "type": "text",
+              "font_size": 16,
+              "font_weight": "bold",
+              "text": "API Endpoint URL:",
+              "paddings": {
+                "bottom": 8
+              }
+            },
+            {
+              "type": "input",
+              "font_size": 16,
+              "hint_text": "Enter API URL",
+              "hint_color": "#AAAAAA",
+              "text_color": "#000000",
+              "text_variable": "request_url",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "top": 8,
+                "bottom": 8,
+                "left": 12,
+                "right": 12
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8,
+                "stroke": {
+                  "color": "#CCCCCC",
+                  "width": 1
+                }
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "border": {
+                "corner_radius": 8,
+                "stroke": {
+                  "color": "#EEEEEE",
+                  "width": 1
+                }
+              },
+              "paddings": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "id": "form_container",
+              "variables": [
+                {
+                  "type": "string",
+                  "name": "name",
+                  "value": "John Doe"
+                },
+                {
+                  "type": "string",
+                  "name": "email",
+                  "value": "john.doe@example.com"
+                },
+                {
+                  "type": "dict",
+                  "name": "form_data",
+                  "value": {
+                    "name": "John Doe",
+                    "email": "john.doe@example.com"
+                  }
+                }
+              ],
+              "items": [
+                {
+                  "type": "text",
+                  "font_size": 16,
+                  "font_weight": "bold",
+                  "text": "Name:",
+                  "paddings": {
+                    "bottom": 8
+                  }
+                },
+                {
+                  "type": "text",
+                  "font_size": 16,
+                  "text": "@{name}",
+                  "paddings": {
+                    "bottom": 16
+                  }
+                },
+                {
+                  "type": "text",
+                  "font_size": 16,
+                  "font_weight": "bold",
+                  "text": "Email:",
+                  "paddings": {
+                    "bottom": 8
+                  }
+                },
+                {
+                  "type": "text",
+                  "font_size": 16,
+                  "text": "@{email}",
+                  "paddings": {
+                    "bottom": 16
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "font_size": 16,
+              "font_weight": "bold",
+              "text_color": "#FFFFFF",
+              "text": "Submit Form",
+              "paddings": {
+                "top": 12,
+                "bottom": 12,
+                "left": 24,
+                "right": 24
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#4285F4"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 44
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "visibility": "@{!progress ? 'visible' : 'invisible'}",
+              "actions": [
+                {
+                  "log_id": "set_progress_true",
+                  "url": "div-action://set_variable?name=progress&value=true"
+                },
+                {
+                  "log_id": "set_status_progress",
+                  "url": "div-action://set_variable?name=submit_status&value=progress"
+                },
+                {
+                  "log_id": "submit_form",
+                  "typed": {
+                    "type": "submit",
+                    "container_id": "form_container",
+                    "request": {
+                      "url": "@{request_url}",
+                      "method": "post",
+                      "headers": []
+                    },
+                    "on_success_actions": [
+                      {
+                        "log_id": "submit_success",
+                        "url": "div-action://set_variable?name=submit_status&value=Form%20submitted%20successfully"
+                      },
+                      {
+                        "log_id": "set_progress_false",
+                        "url": "div-action://set_variable?name=progress&value=false"
+                      }
+                    ],
+                    "on_fail_actions": [
+                      {
+                        "log_id": "submit_fail",
+                        "url": "div-action://set_variable?name=submit_status&value=Form%20submission%20failed"
+                      },
+                      {
+                        "log_id": "set_progress_false",
+                        "url": "div-action://set_variable?name=progress&value=false"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "font_size": 16,
+              "text": "Status: @{submit_status}",
+              "paddings": {
+                "top": 16
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

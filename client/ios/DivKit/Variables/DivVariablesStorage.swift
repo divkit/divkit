@@ -43,7 +43,7 @@ public final class DivVariablesStorage {
   }
 
   public init(outerStorage: DivVariableStorage?) {
-    globalStorage = DivVariableStorage(outerStorage: outerStorage)
+    globalStorage = DivVariableStorage(outerStorage: outerStorage, initialPath: nil)
 
     let globalStorageEvents: Signal<ChangeEvent> = globalStorage.changeEvents.compactMap {
       ChangeEvent(.global($0.changedVariables))
@@ -51,11 +51,26 @@ public final class DivVariablesStorage {
     changeEvents = Signal.merge(globalStorageEvents, changeEventsPipe.signal)
   }
 
-  func getVariables(cardId: DivCardID, elementId: String) -> [DivVariables] {
+  func getOnlyElementVariables(cardId: DivCardID, elementId: String) -> DivVariables? {
     lock.withLock {
-      localStorages.filter {
+      let storages = localStorages.filter {
         $0.key.leaf == elementId && $0.key.cardId == cardId
-      }.map(\.value.values)
+      }.map(\.value)
+
+      guard let storage = storages.first else {
+        DivKitLogger.error("Element with id \(elementId) not found")
+        return nil
+      }
+      guard storages.count == 1 else {
+        DivKitLogger.error("Found multiple elements that respond to id: \(elementId)")
+        return nil
+      }
+
+      guard storage.initialPath?.leaf == elementId else {
+        return [:]
+      }
+
+      return storage.values
     }
   }
 
@@ -102,7 +117,7 @@ public final class DivVariablesStorage {
         // optimization that allows to access the local storage for one operation
         localStorages[path] = nearestStorage
       } else {
-        let localStorage = DivVariableStorage(outerStorage: nearestStorage)
+        let localStorage = DivVariableStorage(outerStorage: nearestStorage, initialPath: path)
         localStorage.replaceAll(variables, notifyObservers: false)
         localStorages[path] = localStorage
       }
@@ -120,7 +135,7 @@ public final class DivVariablesStorage {
       if let localStorage = localStorages[path] {
         return localStorage
       }
-      let localStorage = DivVariableStorage(outerStorage: globalStorage)
+      let localStorage = DivVariableStorage(outerStorage: globalStorage, initialPath: path)
       localStorages[path] = localStorage
       return localStorage
     }
