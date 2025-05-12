@@ -9,6 +9,7 @@ import org.junit.Test
 
 private const val TEXT_BEFORE_BREAK = "https://Text_with different+symbols(123)@site.ru"
 internal const val TEXT_WITH_DIFFERENT_SYMBOLS = "$TEXT_BEFORE_BREAK\nsecond_line"
+internal const val SEARCH_KEY_TAPPED = "Search key tapped!"
 
 class DivInputKeyboardTypeTest {
 
@@ -80,6 +81,15 @@ class DivInputKeyboardTypeTest {
         checkType(
             type = "uri",
             expectedText = TEXT_BEFORE_BREAK
+        )
+    }
+
+    @Test
+    fun checkMultiLineTextEnterKeyActions() {
+        checkType(
+            type = "multi_line_text_enter_key_actions",
+            expectedText = SEARCH_KEY_TAPPED,
+            typedText = "\n"
         )
     }
 
