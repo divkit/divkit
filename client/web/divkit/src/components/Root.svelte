@@ -589,7 +589,11 @@
         }
     }
 
-    async function callSubmit(componentContext: ComponentContext | undefined, action: MaybeMissing<ActionSubmit>) {
+    async function callSubmit(
+        componentContext: ComponentContext | undefined,
+        action: MaybeMissing<ActionSubmit>,
+        origAction: MaybeMissing<ActionSubmit>
+    ) {
         const log = (componentContext?.logError || logError);
 
         if (!checkSubmitAction(action)) {
@@ -631,10 +635,10 @@
             Promise.resolve()
                 .then(() => onSubmit(action, vals))
                 .then(() => {
-                    execAnyActions(action.on_success_actions);
+                    execAnyActions(origAction.on_success_actions);
                 })
                 .catch(() => {
-                    execAnyActions(action.on_fail_actions);
+                    execAnyActions(origAction.on_fail_actions);
                 });
 
             return;
@@ -669,7 +673,7 @@
             if (!res.ok) {
                 throw new Error('Response is not ok');
             }
-            execAnyActions(action.on_success_actions);
+            execAnyActions(origAction.on_success_actions);
         }).catch(err => {
             log(wrapError(new Error('Failed to submit'), {
                 additional: {
@@ -677,7 +681,7 @@
                     originalError: err
                 }
             }));
-            execAnyActions(action.on_fail_actions);
+            execAnyActions(origAction.on_fail_actions);
         });
     }
 
@@ -1102,11 +1106,12 @@
     }
 
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
-        execActionInternal(getJsonWithVars(logError, action, undefined, true));
+        execActionInternal(getJsonWithVars(logError, action, undefined, true), action);
     }
 
     async function execActionInternal(
         action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
+        origAction: MaybeMissing<Action | VisibilityAction | DisappearAction>,
         componentContext?: ComponentContext
     ): Promise<void> {
         const scopeId = action.scope_id;
@@ -1275,11 +1280,8 @@
                         animators.delete(animatorDef.id as string);
                     }, (actions, opts) => {
                         const fn = componentContext?.execAnyActions || execAnyActions;
-                        const evalled = componentContext ?
-                            componentContext.getJsonWithVars(actions) :
-                            getJsonWithVars(logError, actions);
 
-                        return fn(evalled, opts);
+                        return fn(actions, opts);
                     });
                     if (animator) {
                         animators.set(animatorDef.id as string, animator);
@@ -1318,7 +1320,7 @@
                     break;
                 }
                 case 'download': {
-                    callDownloadAction(actionTyped.url, actionTyped, componentContext);
+                    callDownloadAction(actionTyped.url, origAction.typed as DownloadCallbacks, componentContext);
                     break;
                 }
                 case 'video': {
@@ -1340,7 +1342,7 @@
                     break;
                 }
                 case 'submit': {
-                    await callSubmit(componentContext, actionTyped);
+                    await callSubmit(componentContext, actionTyped, origAction.typed as MaybeMissing<ActionSubmit>);
                     break;
                 }
                 case 'scroll_to': {
@@ -1429,7 +1431,7 @@
                         callVideoAction(params.get('id'), params.get('action'), componentContext);
                         break;
                     case 'download':
-                        callDownloadAction(params.get('url'), action.download_callbacks, componentContext);
+                        callDownloadAction(params.get('url'), origAction.download_callbacks, componentContext);
                         break;
                     case 'show_tooltip':
                         callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
@@ -1471,10 +1473,19 @@
             return;
         }
 
-        const filtered = actions.filter(filterEnabledActions);
+        const log = opts.componentContext?.logError || logError;
+        const getJson = (val: any) =>
+            opts.componentContext ?
+                opts.componentContext.getJsonWithVars(val, undefined, true) :
+                getJsonWithVars(log, val, undefined, true);
+        const filtered = actions.filter(action => {
+            const isEnabled = getJson(action.is_enabled);
+
+            return isEnabled !== 0 && isEnabled !== false;
+        });
 
         for (let i = 0; i < filtered.length; ++i) {
-            let action = filtered[i];
+            let action = getJson(filtered[i]);
 
             const actionUrl = action.url;
             const actionTyped = action.typed;
@@ -1494,7 +1505,7 @@
                             }
                         }
                     } else if (schema === 'div-action') {
-                        await execActionInternal(action, opts.componentContext);
+                        await execActionInternal(action, filtered[i], opts.componentContext);
                         await tick();
                     } else if (action.log_id) {
                         execCustomAction(action as Action & { url: string });
@@ -1502,7 +1513,7 @@
                     }
                 }
             } else if (actionTyped) {
-                await execActionInternal(action, opts.componentContext);
+                await execActionInternal(action, filtered[i], opts.componentContext);
             } else if (opts.node && Array.isArray(action.menu_items) && action.menu_items.length) {
                 menu = {
                     items: action.menu_items,
@@ -1619,18 +1630,13 @@
                         (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                     ) {
                         prevConditionResult = Boolean(conditionResult.value);
-                        const actions = (trigger.actions as Action[]).map(action =>
-                            componentContext ?
-                                componentContext.getJsonWithVars(action) :
-                                getJsonWithVars(logError, action)
-                        );
 
                         if (componentContext) {
-                            await componentContext.execAnyActions(actions, {
+                            await componentContext.execAnyActions(trigger.actions, {
                                 logType: 'trigger'
                             });
                         } else {
-                            await execAnyActions(actions, {
+                            await execAnyActions(trigger.actions, {
                                 logType: 'trigger'
                             });
                         }

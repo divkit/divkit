@@ -257,28 +257,23 @@
     }
 
     function onEnd(): void {
-        const actions = componentContext.getJsonWithVars(componentContext.json.end_actions);
-        componentContext.execAnyActions(actions);
+        componentContext.execAnyActions(componentContext.json.end_actions);
     }
 
     function onPlaying(): void {
-        const actions = componentContext.getJsonWithVars(componentContext.json.resume_actions);
-        componentContext.execAnyActions(actions);
+        componentContext.execAnyActions(componentContext.json.resume_actions);
     }
 
     function onPause(): void {
-        const actions = componentContext.getJsonWithVars(componentContext.json.pause_actions);
-        componentContext.execAnyActions(actions);
+        componentContext.execAnyActions(componentContext.json.pause_actions);
     }
 
     function onWaiting(): void {
-        const actions = componentContext.getJsonWithVars(componentContext.json.buffering_actions);
-        componentContext.execAnyActions(actions);
+        componentContext.execAnyActions(componentContext.json.buffering_actions);
     }
 
     function onError(): void {
-        const actions = componentContext.getJsonWithVars(componentContext.json.fatal_actions);
-        componentContext.execAnyActions(actions);
+        componentContext.execAnyActions(componentContext.json.fatal_actions);
     }
 
     onMount(() => {

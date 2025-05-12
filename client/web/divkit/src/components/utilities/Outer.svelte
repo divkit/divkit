@@ -261,30 +261,6 @@
     $: jsonAlpha = componentContext.getDerivedFromVars(componentContext.json.alpha);
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonBackground = componentContext.getDerivedFromVars(componentContext.json.background);
-    $: jsonAction = componentContext.getDerivedFromVars(
-        componentContext.json.action, undefined, true
-    );
-    $: jsonActions = componentContext.getDerivedFromVars(
-        componentContext.json.actions, undefined, true
-    );
-    $: jsonDoubleTapActions = componentContext.getDerivedFromVars(
-        componentContext.json.doubletap_actions, undefined, true
-    );
-    $: jsonLongTapActions = componentContext.getDerivedFromVars(
-        componentContext.json.longtap_actions, undefined, true
-    );
-    $: jsonPressStartActions = componentContext.getDerivedFromVars(
-        componentContext.json.press_start_actions, undefined, true
-    );
-    $: jsonPressEndActions = componentContext.getDerivedFromVars(
-        componentContext.json.press_end_actions, undefined, true
-    );
-    $: jsonHoverStartActions = componentContext.getDerivedFromVars(
-        componentContext.json.hover_start_actions, undefined, true
-    );
-    $: jsonHoverEndActions = componentContext.getDerivedFromVars(
-        componentContext.json.hover_end_actions, undefined, true
-    );
     $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
     $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
     $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
@@ -687,15 +663,16 @@
     }
 
     $: {
-        let newActions = $jsonActions || $jsonAction && [$jsonAction] || [];
-        let newDoubleTapActions = $jsonDoubleTapActions || [];
-        let newLongTapActions = $jsonLongTapActions || [];
-        let newFocusActions = $jsonFocus?.on_focus || [];
-        let newBlurActions = $jsonFocus?.on_blur || [];
-        let newPressStartActions = $jsonPressStartActions || [];
-        let newPressEndActions = $jsonPressEndActions || [];
-        let newHoverStartActions = $jsonHoverStartActions || [];
-        let newHoverEndActions = $jsonHoverEndActions || [];
+        const json = componentContext.json;
+        let newActions = json.actions || json.action && [json.action] || [];
+        let newDoubleTapActions = json.doubletap_actions || [];
+        let newLongTapActions = json.longtap_actions || [];
+        let newFocusActions = json.focus?.on_focus || [];
+        let newBlurActions = json.focus?.on_blur || [];
+        let newPressStartActions = json.press_start_actions || [];
+        let newPressEndActions = json.press_end_actions || [];
+        let newHoverStartActions = json.hover_start_actions || [];
+        let newHoverEndActions = json.hover_end_actions || [];
 
         if (componentContext.fakeElement) {
             newActions = [];
@@ -762,15 +739,15 @@
         }
 
         // todo check parent actions with customActions
-        actions = newActions.filter(filterEnabledActions);
-        doubleTapActions = newDoubleTapActions.filter(filterEnabledActions);
-        longTapActions = newLongTapActions.filter(filterEnabledActions);
-        focusActions = newFocusActions.filter(filterEnabledActions);
-        blurActions = newBlurActions.filter(filterEnabledActions);
-        pressStartActions = newPressStartActions.filter(filterEnabledActions);
-        pressEndActions = newPressEndActions.filter(filterEnabledActions);
-        hoverStartActions = newHoverStartActions.filter(filterEnabledActions);
-        hoverEndActions = newHoverEndActions.filter(filterEnabledActions);
+        actions = newActions;
+        doubleTapActions = newDoubleTapActions;
+        longTapActions = newLongTapActions;
+        focusActions = newFocusActions;
+        blurActions = newBlurActions;
+        pressStartActions = newPressStartActions;
+        pressEndActions = newPressEndActions;
+        hoverStartActions = newHoverStartActions;
+        hoverEndActions = newHoverEndActions;
     }
 
     $: {

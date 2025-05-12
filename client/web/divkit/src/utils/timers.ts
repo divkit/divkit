@@ -321,8 +321,7 @@ export class TimersController {
         const actions = timer.definition[type === 'end' ? 'end_actions' : 'tick_actions'];
 
         if (actions) {
-            const actionsWithExpressions = this.applyVars(actions);
-            return this.execAnyActions(actionsWithExpressions, {
+            return this.execAnyActions(actions, {
                 processUrls: false
             });
         }

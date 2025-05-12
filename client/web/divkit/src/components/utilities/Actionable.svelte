@@ -76,38 +76,43 @@
         ariaHidden = customAccessibility?.mode === 'exclude';
     }
 
+    $: processedActions = componentContext.getDerivedFromVars(actions, undefined, true);
+
     $: {
-        if (Array.isArray(actions) && actions?.length) {
-            for (let i = 0; i < actions.length; ++i) {
-                const url = actions[i].url;
+        if (Array.isArray($processedActions) && $processedActions?.length) {
+            for (let i = 0; i < $processedActions.length; ++i) {
+                const url = $processedActions[i].url;
 
                 if (url) {
                     href = url;
-                    target = actions[i].target || undefined;
+                    target = $processedActions[i].target || undefined;
                     break;
                 }
             }
         }
 
         hasJSAction = Boolean(customAction);
-        if ((href || Array.isArray(actions) && actions?.length) && (actionCtx.hasAction() || ariaHidden)) {
+        if (
+            (href || Array.isArray($processedActions) && $processedActions?.length) &&
+            (actionCtx.hasAction() || ariaHidden)
+        ) {
             href = '';
             componentContext.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element or inside accessibility mode=exlucde'), {
                 level: 'warn',
                 additional: {
-                    actions
+                    actions: $processedActions
                 }
             }));
         } else if (href && !isBuiltinSchema(getUrlSchema(href), rootCtx.getBuiltinProtocols())) {
             href = '';
             hasJSAction = true;
-        } else if (!href && Array.isArray(actions) && actions?.length) {
+        } else if (!href && Array.isArray($processedActions) && $processedActions?.length) {
             hasJSAction = true;
-            if (!actions.some(action => action.url || action.typed || action.menu_items)) {
+            if (!$processedActions.some(action => action.url || action.typed || action.menu_items)) {
                 componentContext.logError(wrapError(new Error('The component has a list of actions, but does not have a real action'), {
                     level: 'warn',
                     additional: {
-                        actions
+                        actions: $processedActions
                     }
                 }));
             }
@@ -195,7 +200,7 @@
     }
 
     function hasCustomAction(): boolean {
-        return actions?.some(action => {
+        return $processedActions?.some(action => {
             if (action?.typed) {
                 return true;
             }

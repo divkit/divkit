@@ -461,10 +461,8 @@
 
         const actions = componentContext.json.enter_key_actions;
         if (event.key === 'Enter' && Array.isArray(actions) && actions.length) {
-            const evalledActions = componentContext.getJsonWithVars(actions);
-            const filteredActions = evalledActions.filter(action => action.log_id).filter(filterEnabledActions);
             event.preventDefault();
-            componentContext.execAnyActions(filteredActions);
+            componentContext.execAnyActions(actions);
         }
     }
 

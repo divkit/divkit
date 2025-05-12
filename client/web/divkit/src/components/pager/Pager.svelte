@@ -419,7 +419,7 @@
         }
         prevSelectedItem = currentItem;
 
-        const actions = componentContext.getJsonWithVars(items[currentItem].json?.selected_actions);
+        const actions = items[currentItem].json?.selected_actions;
         if (!actions?.length) {
             return;
         }

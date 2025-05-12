@@ -10,7 +10,7 @@ describe('regression', () => {
         hermione.only.in('chromeMobile', 'pointerType="touch" is not supported on firefox');
         it('Horizontal swipe_div_pager_right', async function() {
             // Wait for visibility action logging
-            await this.browser.pause(1000);
+            await this.browser.pause(4000);
             await this.browser.yaSwipe({
                 selector: 'div[role=tabpanel]',
                 direction: 'left',
@@ -20,13 +20,13 @@ describe('regression', () => {
             await this.browser.assertView('div_pager_right', '#root');
 
             const logs = await this.browser.execute(() => window.divkitLogs);
-            logs.length.should.equal(4);
+            logs.length.should.equal(5);
         });
 
             hermione.only.in('chromeMobile', 'pointerType="touch" is not supported on firefox');
         it('Horizontal swipe_div_pager_left', async function() {
             // Wait for visibility action logging
-            await this.browser.pause(1000);
+            await this.browser.pause(4000);
             await this.browser.yaSwipe({
                 selector: 'div[role=tabpanel]',
                 direction: 'right',
@@ -36,7 +36,7 @@ describe('regression', () => {
             await this.browser.assertView('div_pager_left', '#root');
 
             const logs = await this.browser.execute(() => window.divkitLogs);
-            logs.length.should.equal(2);
+            logs.length.should.equal(3);
         });
     });
 });

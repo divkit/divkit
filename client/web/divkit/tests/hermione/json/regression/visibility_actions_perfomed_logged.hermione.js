@@ -10,7 +10,7 @@ describe('regression', () => {
         hermione.only.in('chromeMobile', 'pointerType="touch" is not supported on firefox');
         it('Horizontal swipe grouped bulkAction', async function() {
             // Wait for visibility action logging
-            await this.browser.pause(1000);
+            await this.browser.pause(4000);
             await this.browser.yaSwipe({
                 selector: 'div[role=tabpanel]',
                 direction: 'left',

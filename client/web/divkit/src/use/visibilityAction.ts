@@ -115,9 +115,8 @@ export function visibilityAction(node: HTMLElement, {
 
     const callAction = (status: VisibilityStatus) => {
         const isVisibility = status.type === 'visibility';
-        const calcedAction = componentContext.getJsonWithVars(status.action);
 
-        componentContext.execAnyActions([calcedAction], {
+        componentContext.execAnyActions([status.action], {
             logType: isVisibility ? 'visible' : 'disappear',
             node,
             processUrls: false

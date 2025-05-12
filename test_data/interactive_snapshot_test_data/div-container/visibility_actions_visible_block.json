@@ -34,7 +34,7 @@
                   {
                     "log_id": "text/visible",
                     "url": "div-action://set_variable?name=message&value=Triggered!",
-                    "visibility_duration": 2000
+                    "visibility_duration": 3000
                   }
                 ]
               }
@@ -49,7 +49,7 @@
       "expected_screenshot": "step0.png"
     },
     {
-      "delay": 2000,
+      "delay": 3000,
       "expected_screenshot": "step1.png"
     }
   ]
