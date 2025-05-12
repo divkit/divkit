@@ -1,0 +1,75 @@
+{
+  "description": "Decl local variable with expression, using card variable.",
+  "div_data": {
+    "card": {
+      "log_id": "decl_expressions",
+      "variables": [
+        {
+          "name": "val",
+          "type": "integer",
+          "value": 3
+        },
+        {
+          "name": "step",
+          "type": "integer",
+          "value": -1
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text",
+            "variables": [{
+              "name": "val",
+              "type": "integer",
+              "value": "@{val * 2}"
+            }],
+            "variable_triggers": [
+              {
+                "condition": "@{step == 0}",
+                "actions": [
+                  {
+                    "log_id": "step 0",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "result",
+                      "value": {
+                        "type": "integer",
+                        "value": "@{val}"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "run_setter",
+          "url": "div-action://set_variable?name=step&value=0"
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 6
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}

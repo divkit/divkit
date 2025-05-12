@@ -94,12 +94,14 @@ function createIntegrationTestCase(testCase, testPath) {
                     result_type: resultType
                 });
 
-                for (let j = 0; j < item.div_actions.length; j++) {
-                    const action = item.div_actions[j];
+                if (item.div_actions) {
+                    for (let j = 0; j < item.div_actions.length; j++) {
+                        const action = item.div_actions[j];
 
-                    await this.browser.execute(action => {
-                        window.divkitRoot.execAction(action);
-                    }, action);
+                        await this.browser.execute(action => {
+                            window.divkitRoot.execAction(action);
+                        }, action);
+                    }
                 }
 
                 for (let j = 0; j < item.expected.length; j++) {

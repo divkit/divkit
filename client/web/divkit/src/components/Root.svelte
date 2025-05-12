@@ -1927,18 +1927,22 @@
                 let localVars: Map<string, Variable> | undefined;
 
                 if (Array.isArray(childProcessedJson.variables)) {
-                    localVars = new Map();
+                    localVars = mergeMaps(
+                        ctx.variables,
+                        mergeMaps(opts.variables, new Map())
+                    );
                     childProcessedJson.variables.forEach(desc => {
-                        const varInstance = constructVariable(desc);
+                        const varInstance = constructVariable(desc, componentContext, localVars);
                         if (varInstance && localVars) {
                             localVars.set(varInstance.getName(), varInstance);
                         }
                     });
+                } else if (opts.variables) {
+                    localVars = mergeMaps(ctx.variables, opts.variables);
+                } else if (ctx.variables) {
+                    localVars = ctx.variables;
                 }
-                componentContext.variables = mergeMaps(
-                    ctx.variables,
-                    mergeMaps(localVars, opts.variables)
-                );
+                componentContext.variables = localVars;
                 if (process.env.DEVTOOL && localVars) {
                     componentContext.selfVariables = new Set([...localVars.keys()]);
                 }
@@ -2250,27 +2254,35 @@
         }
     }
 
-    function constructVariable(variable: MaybeMissing<DivVariable>): Variable | undefined {
+    function constructVariable(
+        variable: MaybeMissing<DivVariable>,
+        componentContext?: ComponentContext,
+        additionalVars?: Map<string, Variable>
+    ): Variable | undefined {
         if (!variable.type || !variable.name || !(variable.type in TYPE_TO_CLASS)) {
             // Skip unknown types (from the future versions maybe)
             return;
         }
 
+        let value = componentContext ?
+            componentContext.getJsonWithVars(variable.value, additionalVars, true) :
+            getJsonWithVars(logError, variable.value, additionalVars, true);
+
         if (
-            variable.type === 'integer' && typeof variable.value === 'number' &&
-            (variable.value > Number.MAX_SAFE_INTEGER || variable.value < Number.MIN_SAFE_INTEGER)
+            variable.type === 'integer' && typeof value === 'number' &&
+            (value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER)
         ) {
             logError(wrapError(new Error('The value of the integer variable could lose accuracy'), {
                 level: 'warn',
                 additional: {
                     name: variable.name,
-                    value: variable.value
+                    value: value
                 }
             }));
         }
 
         try {
-            return createVariable(variable.name, variable.type, variable.value);
+            return createVariable(variable.name, variable.type, value);
         } catch (err: any) {
             logError(wrapError(err, {
                 additional: {
