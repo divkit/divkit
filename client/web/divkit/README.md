@@ -403,6 +403,12 @@ Boolean, optional. `true` by default.
 
 Whether cropping is enabled in the `pager` elements. It can be useful in cases with shadow elements.
 
+#### pagerMouseDragEnabled
+
+Boolean, optional. `true` by default.
+
+Whether dragging `pager` elements with the mouse is enabled or not.
+
 #### videoPlayerProvider
 
 Object, optional.

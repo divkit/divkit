@@ -422,7 +422,8 @@
       "case_id": 144,
       "platforms": [
         "ios",
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "DivPager",
@@ -435,7 +436,8 @@
       "case_id": 161,
       "platforms": [
         "ios",
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "DivPager",
@@ -3663,7 +3665,8 @@
         "DivIndicator"
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "steps": [
         "Swipe forward from 0 to 10 element",

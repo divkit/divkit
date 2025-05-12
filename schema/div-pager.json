@@ -119,7 +119,8 @@
           "$description": "translations.json#/div_pager_infinite_scroll",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         }
       }

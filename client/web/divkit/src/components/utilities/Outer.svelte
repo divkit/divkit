@@ -79,6 +79,7 @@
     import { ENABLED_CTX, type EnabledCtxValue } from '../../context/enabled';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
+    import { componentFakePagerDuplicate } from '../../utils/componentContext';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -675,7 +676,7 @@
         let newHoverStartActions = json.hover_start_actions || [];
         let newHoverEndActions = json.hover_end_actions || [];
 
-        if (componentContext.fakeElement) {
+        if (componentContext.fakeElement && componentContext.fakeElement !== componentFakePagerDuplicate) {
             newActions = [];
             newDoubleTapActions = [];
             newLongTapActions = [];
@@ -1029,14 +1030,17 @@
             });
         }
 
-        const visibilityActions = componentContext.fakeElement ?
-            [] :
+        const isVisibilityActionsEnabled = !componentContext.fakeElement ||
+            componentContext.fakeElement === componentFakePagerDuplicate;
+
+        const visibilityActions = isVisibilityActionsEnabled ?
             (
                 componentContext.json.visibility_actions ||
                 componentContext.json.visibility_action && [componentContext.json.visibility_action]
-            );
+            ) :
+            [];
 
-        const disappearActions = componentContext.fakeElement ? [] : componentContext.json.disappear_actions;
+        const disappearActions = isVisibilityActionsEnabled ? componentContext.json.disappear_actions : [];
 
         let visAction: {
             destroy(): void;
@@ -1168,6 +1172,8 @@
         {captureFocusOnAction}
         on:focus={focusHandler}
         on:blur={blurHandler}
+        on:pointerdown
+        on:wheel
     >
         <!-- eslint-disable-next-line max-len -->
         {#if hasSeparateBg}<OuterBackground {componentContext} direction={$direction} background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}

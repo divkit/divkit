@@ -69,6 +69,7 @@ export interface RootCtxValue {
     direction: Readable<Direction>;
     customComponents: Map<string, CustomComponentDescription> | undefined;
     pagerChildrenClipEnabled: boolean;
+    pagerMouseDragEnabled: boolean;
     videoPlayerProvider?: VideoPlayerProvider | undefined;
 
     // Devtool

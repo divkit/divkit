@@ -1,18 +1,17 @@
-.pager {}
+.pager {
+    pointer-events: auto;
+}
 
 .pager__items {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     display: grid;
-
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    pointer-events: auto;
+    transition: transform .0s ease-out;
 }
 
-.pager__items::-webkit-scrollbar {
-    display: none;
+.pager_animated > .pager__items {
+    transition-duration: .15s;
 }
 
 .pager__item {
@@ -46,15 +45,19 @@
     }
 }
 
+.pager_orientation_horizontal {
+    touch-action: pan-y;
+}
+
+.pager_orientation_vertical {
+    touch-action: pan-x;
+}
+
 .pager_orientation_horizontal > .pager__items {
     justify-content: start;
     grid-auto-flow: column;
     grid-template-rows: 100%;
     height: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scroll-snap-type: mandatory;
-    scroll-snap-type: x mandatory;
 }
 
 .pager_orientation_vertical > .pager__items {
@@ -62,10 +65,7 @@
     grid-auto-flow: row;
     grid-template-columns: 100%;
     width: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    scroll-snap-type: mandatory;
-    scroll-snap-type: y mandatory;
+    touch-action: pan-x;
 }
 
 

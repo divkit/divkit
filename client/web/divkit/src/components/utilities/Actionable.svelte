@@ -28,6 +28,7 @@
     import { wrapError } from '../../utils/wrapError';
     import { getUrlSchema, isBuiltinSchema } from '../../utils/url';
     import type { Coords } from '../../utils/getTouchCoords';
+    import { componentFakePagerDuplicate } from '../../utils/componentContext';
 
     export let componentContext: ComponentContext;
     export let id = '';
@@ -410,10 +411,13 @@
         {role}
         aria-checked={isChecked}
         class="{cls} {rootCss['root__any-actions']} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
+        tabindex={componentContext.fakeElement === componentFakePagerDuplicate ? -1 : null}
         on:click
         on:keydown={onKeydown}
         on:focus
         on:blur
+        on:pointerdown
+        on:wheel
         {...attrs}
     >
         <slot />
@@ -427,10 +431,13 @@
         {role}
         aria-checked={isChecked}
         type="button"
+        tabindex={componentContext.fakeElement === componentFakePagerDuplicate ? -1 : null}
         on:click
         on:keydown={onKeydown}
         on:focus
         on:blur
+        on:pointerdown
+        on:wheel
         {...attrs}
     >
         <slot />
@@ -448,6 +455,8 @@
         on:keydown={onKeydown}
         on:focus
         on:blur
+        on:pointerdown
+        on:wheel
         {...attrs}
     >
         <slot />

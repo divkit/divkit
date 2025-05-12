@@ -1,7 +1,8 @@
 {
   "description": "Pager with infinite scroll",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "templates": {

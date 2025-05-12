@@ -24,6 +24,8 @@ export type PagerItemAlignment = 'start' | 'center' | 'end';
 
 export interface DivPagerData extends DivBaseData {
     type: 'pager';
+    scroll_axis_alignment?: PagerItemAlignment;
+    cross_axis_alignment?: PagerItemAlignment;
     layout_mode: PagerLayoutMode;
     item_spacing?: FixedSize;
     items?: DivBaseData[];
@@ -31,6 +33,6 @@ export interface DivPagerData extends DivBaseData {
     orientation?: Orientation;
     restrict_parent_scroll?: BooleanInt;
     default_item?: number;
-    scroll_axis_alignment?: PagerItemAlignment;
-    cross_axis_alignment?: PagerItemAlignment;
+    // page_transformation
+    infinite_scroll?: BooleanInt;
 }

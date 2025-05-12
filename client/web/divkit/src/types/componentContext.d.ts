@@ -38,7 +38,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     customFunctions?: CustomFunctions;
     isRootState?: boolean;
     isTooltipRoot?: boolean;
-    fakeElement?: boolean;
+    fakeElement?: number;
     parentContext?: ComponentContext;
     id: string;
     animators?: Record<string, MaybeMissing<Animator>>;
@@ -72,10 +72,11 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         path?: string | number | undefined;
         isRootState?: boolean;
         isTooltipRoot?: boolean;
-        fake?: boolean;
+        fake?: number;
         variables?: Map<string, Variable>;
         id?: string;
     }): ComponentContext;
+    dup(fakeReason: number): ComponentContext;
     getVariable(varName: string, type?: VariableType): Variable | undefined;
     getAnimator(name: string): MaybeMissing<Animator> | undefined;
     registerState(stateId: string, setState: StateSetter): () => void;

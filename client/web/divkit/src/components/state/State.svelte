@@ -16,6 +16,7 @@
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';
     import { genClassName } from '../../utils/genClassName';
+    import { componentFakeAnimation } from '../../utils/componentContext';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
@@ -200,7 +201,7 @@
             id: parentComponentContext.id || '',
             json: jsonCopy,
             componentContextCopy: parentComponentContext.produceChildContext(jsonCopy, {
-                fake: true
+                fake: componentFakeAnimation
             }),
             elementBbox: startBbox,
             rootBbox,
@@ -320,7 +321,7 @@
                     id: child.parentComponentContext.id || '',
                     json: jsonCopy,
                     componentContextCopy: child.parentComponentContext.produceChildContext(jsonCopy, {
-                        fake: true
+                        fake: componentFakeAnimation
                     }),
                     rootBbox,
                     beforeBbox: saved.rect,

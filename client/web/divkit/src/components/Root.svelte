@@ -122,6 +122,7 @@
     export let direction: Direction = 'ltr';
     export let store: Store | undefined = undefined;
     export let pagerChildrenClipEnabled = true;
+    export let pagerMouseDragEnabled = true;
     export let weekStartDay = 0;
     export let videoPlayerProvider: VideoPlayerProvider | undefined = undefined;
 
@@ -1895,10 +1896,10 @@
                 return evalExpression(mergeMaps(variables, ctx.variables), ctx.customFunctions, store, expr, opts);
             },
             produceChildContext(div, opts = {}) {
-                const componentContext = produceComponentContext(ctx);
+                const componentContext = produceComponentContext(this);
 
                 let childJson: MaybeMissing<DivBaseData> = div;
-                let childContext: TemplateContext = ctx.templateContext;
+                let childContext: TemplateContext = this.templateContext;
 
                 const {
                     templateContext: childProcessedContext,
@@ -1934,7 +1935,7 @@
 
                 if (Array.isArray(childProcessedJson.variables)) {
                     localVars = mergeMaps(
-                        ctx.variables,
+                        this.variables,
                         mergeMaps(opts.variables, new Map())
                     );
                     childProcessedJson.variables.forEach(desc => {
@@ -1944,9 +1945,9 @@
                         }
                     });
                 } else if (opts.variables) {
-                    localVars = mergeMaps(ctx.variables, opts.variables);
-                } else if (ctx.variables) {
-                    localVars = ctx.variables;
+                    localVars = mergeMaps(this.variables, opts.variables);
+                } else if (this.variables) {
+                    localVars = this.variables;
                 }
                 componentContext.variables = localVars;
                 if (process.env.DEVTOOL && localVars) {
@@ -1955,9 +1956,9 @@
 
                 let localCustomFunctions: CustomFunctions | undefined;
                 if (Array.isArray(childProcessedJson.functions)) {
-                    localCustomFunctions = prepareCustomFunctions(childProcessedJson.functions, ctx);
+                    localCustomFunctions = prepareCustomFunctions(childProcessedJson.functions, this);
                 }
-                componentContext.customFunctions = mergeCustomFunctions(ctx.customFunctions, localCustomFunctions);
+                componentContext.customFunctions = mergeCustomFunctions(this.customFunctions, localCustomFunctions);
 
                 if (Array.isArray(childProcessedJson.animators)) {
                     ctx.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
@@ -1972,13 +1973,19 @@
                 }
 
                 if (opts.fake) {
-                    componentContext.fakeElement = true;
+                    componentContext.fakeElement = opts.fake;
                 }
                 if (opts.isRootState) {
                     componentContext.isRootState = true;
                 }
 
                 return componentContext;
+            },
+            dup(fakeReason: number) {
+                return {
+                    ...ctx,
+                    fakeElement: fakeReason
+                };
             },
             getVariable(varName, type) {
                 const variable = ctx.variables?.get(varName) || variables.get(varName);
@@ -2127,7 +2134,7 @@
             ctx.path = from.path.slice();
 
             if (from.fakeElement) {
-                ctx.fakeElement = true;
+                ctx.fakeElement = from.fakeElement;
             }
         } else {
             ctx.json = {
@@ -2157,6 +2164,7 @@
         isRunning,
         setRunning,
         pagerChildrenClipEnabled,
+        pagerMouseDragEnabled,
         registerInstance,
         unregisterInstance,
         registerParentOf,

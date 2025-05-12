@@ -44,6 +44,7 @@ export function render(opts: {
     store?: Store;
     weekStartDay?: number;
     pagerChildrenClipEnabled?: boolean;
+    pagerMouseDragEnabled?: boolean;
     videoPlayerProvider?: VideoPlayerProviderClient;
 }): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
