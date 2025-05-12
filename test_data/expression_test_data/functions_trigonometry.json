@@ -402,7 +402,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -412,7 +413,8 @@
         "value": 0.0
       },
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -422,7 +424,8 @@
         "value": 0.0
       },
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -432,7 +435,8 @@
         "value": 3.141592653589793
       },
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -442,7 +446,8 @@
         "value": 1.5707963267948966
       },
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -452,7 +457,8 @@
         "value": -1.5707963267948966
       },
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {

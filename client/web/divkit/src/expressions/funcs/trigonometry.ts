@@ -64,6 +64,13 @@ function atan(_ctx: EvalContext, rad: NumberValue): EvalValue {
     };
 }
 
+function atan2(_ctx: EvalContext, y: NumberValue, x: NumberValue): EvalValue {
+    return {
+        type: NUMBER,
+        value: Math.atan2(y.value, x.value)
+    };
+}
+
 function asin(_ctx: EvalContext, rad: NumberValue): EvalValue {
     if (rad.value > 1 || rad.value < -1) {
         throw new Error('Arcsine is undefined for the given value.');
@@ -95,6 +102,7 @@ export function registerTrigonometry(): void {
     registerFunc('tan', [NUMBER], tan);
     registerFunc('cot', [NUMBER], cot);
     registerFunc('atan', [NUMBER], atan);
+    registerFunc('atan2', [NUMBER, NUMBER], atan2);
     registerFunc('asin', [NUMBER], asin);
     registerFunc('acos', [NUMBER], acos);
 }
