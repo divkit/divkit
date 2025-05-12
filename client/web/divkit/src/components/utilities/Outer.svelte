@@ -98,6 +98,7 @@
     export let parentOfSimpleMode: boolean | undefined = undefined;
     export let replaceItems: ((items: (MaybeMissing<DivBaseData> | undefined)[]) => void) | undefined = undefined;
     export let hasInnerFocusable = false;
+    export let alwaysCustomFocus = false;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
@@ -1107,7 +1108,7 @@
             return;
         }
 
-        if (!get(rootCtx.isPointerFocus)) {
+        if (alwaysCustomFocus || !get(rootCtx.isPointerFocus)) {
             hasCustomFocus = true;
         }
 

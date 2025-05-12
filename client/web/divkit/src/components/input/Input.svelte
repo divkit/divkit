@@ -684,6 +684,7 @@
         let:focusHandler
         let:blurHandler
         let:hasCustomFocus
+        alwaysCustomFocus
         cls={genClassName('input', css, mods)}
         style={stl}
         customDescription={true}
