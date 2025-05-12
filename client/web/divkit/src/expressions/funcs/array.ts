@@ -1,7 +1,7 @@
 import { toBigInt } from '../bigint';
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import type { ArrayValue, BooleanValue, ColorValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
-import { checkIntegerOverflow, transformColorValue, typeToString } from '../utils';
+import { checkIntegerOverflow, checkUrl, transformColorValue, typeToString } from '../utils';
 import { registerFunc, registerMethod } from './funcs';
 
 function arrayGetter(jsType: string, runtimeType: string) {
@@ -39,6 +39,9 @@ function arrayGetter(jsType: string, runtimeType: string) {
         if (jsType === 'string' && runtimeType === 'color') {
             val = transformColorValue(val as string);
         }
+        if (jsType === 'string' && runtimeType === 'url') {
+            checkUrl(val);
+        }
 
         return {
             type: runtimeType,
@@ -60,6 +63,8 @@ function optWrapper<ValueType extends EvalValue>(
             let value = fallback.value;
             if (fallbackType === 'color') {
                 value = transformColorValue(value as string);
+            } else if (fallbackType === 'url') {
+                checkUrl(value);
             }
             return {
                 type: fallbackType,

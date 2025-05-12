@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 import type { EvalValue } from './eval';
 import { parseColor } from '../utils/correctColor';
 import { bigIntZero, toBigInt } from './bigint';
+import { checkUrl } from './utils';
 
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 export type VariableValue = string | number | bigint | boolean | null | undefined | object | unknown[];
@@ -177,11 +178,14 @@ export class UrlVariable extends Variable<string, 'url'> {
         if (typeof value !== 'string') {
             throw new Error('Incorrect variable value');
         }
+        checkUrl(value);
 
         return value;
     }
 
     protected fromString(val: string) {
+        checkUrl(val);
+
         return val;
     }
 

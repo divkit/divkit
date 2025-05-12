@@ -1,7 +1,7 @@
 import type { EvalContext, EvalValue, StringValue } from '../eval';
 import { registerFunc } from './funcs';
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
-import { convertJsValueToDivKit } from '../utils';
+import { checkUrl, convertJsValueToDivKit } from '../utils';
 
 export function getStored(evalType: 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'array' | 'dict') {
     return (ctx: EvalContext, name: StringValue, fallback?: EvalValue): EvalValue => {
@@ -33,10 +33,15 @@ export function getStored(evalType: 'string' | 'number' | 'integer' | 'boolean' 
             if (!fallback) {
                 throw new Error('Missing value.');
             }
+            if (evalType === 'url') {
+                checkUrl(fallback.value);
+            }
             return {
                 type: evalType,
                 value: fallback.value
             } as EvalValue;
+        } else if (evalType === 'url') {
+            checkUrl(val);
         }
 
         return convertJsValueToDivKit(ctx, val, evalType);

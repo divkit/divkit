@@ -1,6 +1,6 @@
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import type { BooleanValue, DictValue, EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
-import { convertJsValueToDivKit, transformColorValue } from '../utils';
+import { checkUrl, convertJsValueToDivKit, transformColorValue } from '../utils';
 import { registerFunc, registerMethod } from './funcs';
 
 function getProp(obj: object, path: string[]): unknown {
@@ -45,6 +45,8 @@ function optWrapper<ValueType extends EvalValue>(
             let value = fallback.value;
             if (fallbackType === 'color') {
                 value = transformColorValue(value as string);
+            } else if (fallbackType === 'url') {
+                checkUrl(value);
             }
             return {
                 type: fallbackType,

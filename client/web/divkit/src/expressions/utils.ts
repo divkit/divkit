@@ -95,6 +95,19 @@ export function checkIntegerOverflow(_ctx: EvalContext, val: number | bigint): v
     }
 }
 
+export function checkUrl(val: unknown): void {
+    if (typeof val !== 'string') {
+        throw new Error('Incorrect url value.');
+    }
+
+    try {
+        // eslint-disable-next-line no-new
+        new URL(val);
+    } catch (_err) {
+        throw new Error('Incorrect url value.');
+    }
+}
+
 export function gatherVarsFromAst(ast: Node): string[] {
     const res = new Set<string>();
 
@@ -196,6 +209,9 @@ export function convertJsValueToDivKit(ctx: EvalContext, val: unknown, evalType:
     }
     if (jsType === 'string' && evalType === 'color') {
         val = transformColorValue(val as string);
+    }
+    if (jsType === 'string' && evalType === 'url') {
+        checkUrl(val);
     }
 
     return {

@@ -192,6 +192,8 @@
                         value = 0;
                     } else if (resultType === 'boolean') {
                         value = false;
+                    } else if (resultType === 'url') {
+                        value = 'empty://';
                     } else if (resultType === 'color') {
                         value = '#000';
                     } else if (resultType === 'dict') {
