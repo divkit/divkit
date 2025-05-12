@@ -129,20 +129,20 @@ export class NumberVariable extends Variable<number, 'number'> {
     }
 }
 
-export class BooleanVariable extends Variable<number, 'boolean'> {
+export class BooleanVariable extends Variable<boolean, 'boolean'> {
     protected convertValue(value: unknown) {
         if (value !== 1 && value !== 0 && value !== true && value !== false) {
             throw new Error('Incorrect variable value');
         }
 
-        return Number(value);
+        return Boolean(value);
     }
 
     protected fromString(val: string) {
         if (val === '1' || val === 'true') {
-            return 1;
+            return true;
         } else if (val === '0' || val === 'false') {
-            return 0;
+            return false;
         }
 
         throw new Error('Incorrect variable value');
