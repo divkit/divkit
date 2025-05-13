@@ -62,3 +62,10 @@ internal class PositiveNumberDelegate<T: Number>(
         this.value = if (value.toDouble() <= 0) fallbackValue else value
     }
 }
+
+/**
+ * Like [takeIf], but creates object only if needed. Doesn't work with smart casts.
+ */
+inline fun <T> makeIf(shouldMake: Boolean, constructor: () -> T?): T? {
+    return if (shouldMake) constructor() else null
+}

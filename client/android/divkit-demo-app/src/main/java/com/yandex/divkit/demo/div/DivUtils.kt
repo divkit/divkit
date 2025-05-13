@@ -31,7 +31,6 @@ import com.yandex.div.shine.DivShineExtensionHandler
 import com.yandex.div.shine.DivShineLogger
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.video.ExoDivPlayerFactory
-import com.yandex.div.video.ExoPlayerVideoPreloader
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch

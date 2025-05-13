@@ -2,16 +2,17 @@ package com.yandex.div.core;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
+import com.yandex.div.core.dagger.Names;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.variables.DivVariableController;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
-import com.yandex.div.core.image.DivImageLoaderWrapper;
 import com.yandex.div.core.images.DivImageLoader;
 import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.player.DivPlayerPreloader;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Named;
 
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
@@ -182,6 +185,7 @@ public class DivConfiguration {
 
     @Provides
     @NonNull
+    @Named(Names.UNWRAPPED_IMAGE_LOADER)
     public DivImageLoader getImageLoader() {
         return mImageLoader;
     }
@@ -711,7 +715,7 @@ public class DivConfiguration {
             DivPlayerPreloader divPlayerPreloader =
                     mDivPlayerPreloader == null ? divPlayerFactory.makePreloader() : mDivPlayerPreloader;
             return new DivConfiguration(
-                    new DivImageLoaderWrapper(mImageLoader),
+                    mImageLoader,
                     mActionHandler == null ? new DivActionHandler() : mActionHandler,
                     mDiv2Logger == null ? Div2Logger.STUB : mDiv2Logger,
                     mDivDataChangeListener == null ? DivDataChangeListener.STUB : mDivDataChangeListener,

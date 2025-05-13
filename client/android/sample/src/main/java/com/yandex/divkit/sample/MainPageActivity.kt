@@ -8,9 +8,9 @@ import com.yandex.div.markdown.DivMarkdownExtensionHandler
 import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.div.rive.OkHttpDivRiveNetworkDelegate
 import com.yandex.div.rive.RiveCustomViewAdapter
-import com.yandex.divkit.sample.databinding.ActivityMainPageBinding
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
+import com.yandex.divkit.sample.databinding.ActivityMainPageBinding
 import okhttp3.OkHttpClient
 
 class MainPageActivity : AppCompatActivity() {
