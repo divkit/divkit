@@ -54,7 +54,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
 
     protected open fun visit(data: Div.Container, context: BindingContext, path: DivStatePath): T {
         return defaultVisitCollection(data, context, path) {
-            data.value.buildItems(context.divView,context.expressionResolver).mapItemWithContext(context, path)
+            data.value.buildItems(context.expressionResolver).mapItemWithContext(context, path)
         }
     }
 
@@ -66,13 +66,13 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
 
     protected open fun visit(data: Div.Gallery, context: BindingContext, path: DivStatePath): T {
         return defaultVisitCollection(data, context, path) {
-            data.value.buildItems(context.divView, context.expressionResolver).mapItemWithContext(context, path)
+            data.value.buildItems(context.expressionResolver).mapItemWithContext(context, path)
         }
     }
 
     protected open fun visit(data: Div.Pager, context: BindingContext, path: DivStatePath): T {
         return defaultVisitCollection(data, context, path) {
-            data.value.buildItems(context.divView, context.expressionResolver).mapItemWithContext(context, path)
+            data.value.buildItems(context.expressionResolver).mapItemWithContext(context, path)
         }
     }
 

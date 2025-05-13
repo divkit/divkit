@@ -141,7 +141,7 @@ class TriggersControllerTest {
     fun `actions not triggered after clearBindings`() {
         underTest.onAttachedToWindow(view)
         underTest.ensureTriggersSynced(triggersA)
-        underTest.clearBinding(view)
+        underTest.clearBinding()
         underTest.ensureTriggersSynced(triggersB)
 
         verifyActionTriggered(logIdA, times = 1)
@@ -153,7 +153,7 @@ class TriggersControllerTest {
         underTest.ensureTriggersSynced(triggersB)
 
         underTest.onAttachedToWindow(view)
-        underTest.clearBinding(view)
+        underTest.clearBinding()
         underTest.onAttachedToWindow(view)
 
         verifyActionTriggered(logIdB, times = 1)

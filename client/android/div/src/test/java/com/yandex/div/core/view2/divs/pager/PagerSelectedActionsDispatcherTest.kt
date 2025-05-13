@@ -41,7 +41,7 @@ class PagerSelectedActionsDispatcherTest {
 
     private val underTest = PagerSelectedActionsDispatcher(
         divView,
-        divPager.buildItems(divView, ExpressionResolver.EMPTY),
+        divPager.buildItems(ExpressionResolver.EMPTY),
         divActionBinder
     )
 
@@ -56,7 +56,7 @@ class PagerSelectedActionsDispatcherTest {
 
         val underTest = PagerSelectedActionsDispatcher(
             divView,
-            divPager.buildItems(divView, ExpressionResolver.EMPTY),
+            divPager.buildItems(ExpressionResolver.EMPTY),
             divActionBinder
         )
         underTest.whenAttached()

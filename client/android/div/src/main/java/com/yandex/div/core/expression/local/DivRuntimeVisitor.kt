@@ -190,7 +190,7 @@ internal class DivRuntimeVisitor @Inject constructor(
                 visit(childDiv, divView, childPath, states, parentRuntime)
             } else {
                 divView.runtimeStore?.tree?.invokeRecursively(parentRuntime, childPath) {
-                    node -> node.runtime.clearBinding(divView)
+                    node -> node.runtime.clearBinding()
                 }
             }
         }
@@ -213,7 +213,7 @@ internal class DivRuntimeVisitor @Inject constructor(
                 visit(tab.div, divView, childPath, states, parentRuntime)
             } else {
                 divView.runtimeStore?.tree?.invokeRecursively(parentRuntime, childPath) {
-                    node -> node.runtime.clearBinding(divView)
+                    node -> node.runtime.clearBinding()
                 }
             }
         }

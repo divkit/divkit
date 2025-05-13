@@ -66,13 +66,7 @@ internal class DivGalleryBinder @Inject constructor(
         setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        adapter = DivGalleryAdapter(
-            div.buildItems(bindingContext.divView, resolver),
-            bindingContext,
-            divBinder.get(),
-            viewCreator,
-            path,
-        )
+        adapter = DivGalleryAdapter(div.buildItems(resolver), bindingContext, divBinder.get(), viewCreator, path)
         bindItemBuilder(bindingContext, div)
         resetAnimatorAndRestoreOnLayout()
         updateDecorations(bindingContext, div)
@@ -189,9 +183,7 @@ internal class DivGalleryBinder @Inject constructor(
     private fun DivRecyclerView.bindItemBuilder(context: BindingContext, div: DivGallery) {
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, context.expressionResolver) {
-            (adapter as DivGalleryAdapter?)?.setItems(
-                builder.build(context.divView, context.expressionResolver)
-            )
+            (adapter as DivGalleryAdapter?)?.setItems(builder.build(context.expressionResolver))
         }
     }
 }

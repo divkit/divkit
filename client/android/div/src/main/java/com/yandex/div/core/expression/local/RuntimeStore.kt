@@ -1,7 +1,6 @@
 package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
@@ -9,7 +8,6 @@ import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.util.toLocalFunctions
 import com.yandex.div.core.util.toVariables
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
@@ -99,7 +97,6 @@ internal class RuntimeStore(
     }
 
     internal fun resolveRuntimeWith(
-        divView: DivViewFacade?,
         path: String,
         div: Div?,
         resolver: ExpressionResolver,
@@ -113,18 +110,18 @@ internal class RuntimeStore(
             return null
         }
 
-        runtimeForPath?.let { tree.removeRuntimeAndCleanup(divView, it, path) }
+        runtimeForPath?.let { tree.removeRuntimeAndCleanup(it, path) }
         return getRuntimeOrCreateChild(path, div, existingRuntime, parentResolver)
     }
 
-    internal fun cleanup(divView: DivViewFacade) {
+    internal fun cleanup() {
         warningShown = false
-        allRuntimes.forEach { it.cleanup(divView) }
+        allRuntimes.forEach { it.cleanup() }
     }
 
     internal fun updateSubscriptions() = allRuntimes.forEach { it.updateSubscriptions() }
 
-    internal fun clearBindings(divView: DivViewFacade) = allRuntimes.forEach { it.clearBinding(divView) }
+    internal fun clearBindings() = allRuntimes.forEach { it.clearBinding() }
 
     internal fun getUniquePathsAndRuntimes() = tree.getPathToRuntimes()
 

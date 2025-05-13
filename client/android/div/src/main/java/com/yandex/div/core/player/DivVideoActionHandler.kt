@@ -54,11 +54,9 @@ internal class DivVideoActionHandler @Inject constructor(
 
     private fun findDivVideoWithId(div: DivBase, id: String, resolver: ExpressionResolver): DivVideo? {
         when (div) {
-            is DivVideo -> {
-                return if (div.id == id) div else null
-            }
+            is DivVideo -> return if (div.id == id) div else null
             is DivGallery -> {
-                div.buildItems(divView = null, resolver = resolver).forEach { (item, newResolver) ->
+                div.buildItems(resolver).forEach { (item, newResolver) ->
                     findDivVideoWithId(item.value(), id, newResolver)?.let {
                         return it
                     }
@@ -66,7 +64,7 @@ internal class DivVideoActionHandler @Inject constructor(
                 return null
             }
             is DivContainer -> {
-                div.buildItems(divView = null, resolver = resolver).forEach { (item, newResolver) ->
+                div.buildItems(resolver).forEach { (item, newResolver) ->
                     findDivVideoWithId(item.value(), id, newResolver)?.let {
                         return it
                     }
@@ -82,7 +80,7 @@ internal class DivVideoActionHandler @Inject constructor(
                 return null
             }
             is DivPager -> {
-                div.buildItems(divView = null, resolver = resolver).forEach { (item, newResolver) ->
+                div.buildItems(resolver).forEach { (item, newResolver) ->
                     findDivVideoWithId(item.value(), id, newResolver)?.let {
                         return it
                     }

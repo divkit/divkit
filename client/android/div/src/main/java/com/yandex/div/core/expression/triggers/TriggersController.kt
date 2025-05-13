@@ -43,7 +43,7 @@ internal class TriggersController(
         val activeView = currentView
 
         val activeExecutors = executors.getOrPut(divTriggers) { mutableListOf() }
-        activeView?.let { clearBinding(it) }
+        clearBinding()
 
         divTriggers.forEach { trigger ->
             val rawExpression = trigger.condition.rawValue.toString()
@@ -84,16 +84,16 @@ internal class TriggersController(
         return null
     }
 
-    fun clearBinding(view: DivViewFacade?) {
+    fun clearBinding() {
         currentView = null
-        executors.forEach { (_, value) -> value.forEach { it.onDetach(view) } }
+        executors.forEach { (_, value) -> value.forEach { it.view = null } }
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
         if (currentView == view) return
         currentView = view
         activeTriggers?.let {
-            executors[it]?.forEach { executor -> executor.onAttach(view) }
+            executors[it]?.forEach { executor -> executor.view = view }
         }
     }
 }
@@ -117,25 +117,16 @@ private class TriggerExecutor(
     private var observersDisposable = Disposable.NULL
     private var removingDisposable = Disposable.NULL
     private var bindCompletionDisposable = Disposable.NULL
-    private val attachedViews = mutableSetOf<DivViewFacade>()
 
-    fun onAttach(view: DivViewFacade) {
-        attachedViews.add(view)
-        invalidateObservation()
-    }
-
-    fun onDetach(view: DivViewFacade?) {
-        attachedViews.remove(view)
-        invalidateObservation()
-    }
-
-    private fun invalidateObservation() {
-        if (attachedViews.isEmpty()) {
-            stopObserving()
-        } else {
-            startObserving()
+    var view: DivViewFacade? = null
+        set(value) {
+            field = value
+            if (value == null) {
+                stopObserving()
+            } else {
+                startObserving()
+            }
         }
-    }
 
     private fun stopObserving() {
         modeObserver.close()
@@ -163,10 +154,9 @@ private class TriggerExecutor(
 
     private fun tryTriggerActions() {
         Assert.assertMainThread()
-        attachedViews.forEach { tryTriggerActions(it) }
-    }
 
-    private fun tryTriggerActions(viewFacade: DivViewFacade) {
+        val viewFacade = view ?: return
+
         (viewFacade as? Div2View)?.takeIf { it.inMiddleOfBind }?.let { div2View ->
             tryTriggerActionsAfterBind(div2View)
             return
