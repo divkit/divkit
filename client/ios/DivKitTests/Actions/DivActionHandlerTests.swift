@@ -37,6 +37,14 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertEqual(url("https://some.url"), handledUrl)
   }
 
+  func test_DisabledActionHandler() {
+    handle(
+      divAction(isEnabled: false, url: "https://some.url")
+    )
+
+    XCTAssertNotEqual(url("https://some.url"), handledUrl)
+  }
+
   func test_UrlNotPassedToUrlHandler_VisibilityAction() {
     handle(
       divAction(url: "https://some.url"),

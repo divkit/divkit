@@ -186,6 +186,11 @@ public final class DivActionHandler {
       },
       errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
+
+    guard action.resolveIsEnabled(expressionResolver) else {
+      return
+    }
+
     let path = if let scopeId = action.scopeId {
       idToPath[path.cardId.path + scopeId] ?? path
     } else {
