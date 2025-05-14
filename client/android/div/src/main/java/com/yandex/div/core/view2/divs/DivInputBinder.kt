@@ -397,6 +397,9 @@ internal class DivInputBinder @Inject constructor(
                 cursorPosition = newValue.length
             }
 
+            if (text?.toString() == newValue) {
+                return
+            }
             setText(newValue)
         }
 
