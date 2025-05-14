@@ -283,6 +283,8 @@
 		986F579C2CD68E8400990A2A /* AppLaunchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */; };
 		98AF8DD62CC97CF600DE1B58 /* BlockTooltipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */; };
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
+		9D08688F2DCE3C0900C5B2CC /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */; };
+		9D0868BB2DD10F7E00C5B2CC /* integration_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 9D0868BA2DD10F7E00C5B2CC /* integration_test_data */; };
 		9D09984F2CA30D010098098C /* AccessoryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */; };
 		9D5BFB092CA1DA20005F8EB1 /* CustomFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */; };
 		9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */; };
@@ -648,6 +650,8 @@
 		986F57992CD68E8400990A2A /* TooltipsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipsUITests.swift; sourceTree = "<group>"; };
 		986F579B2CD68E8400990A2A /* AppLaunchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUITests.swift; sourceTree = "<group>"; };
 		98AF8DD52CC97CF600DE1B58 /* BlockTooltipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTooltipTests.swift; sourceTree = "<group>"; };
+		9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
+		9D0868BA2DD10F7E00C5B2CC /* integration_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = integration_test_data; path = ../../../test_data/integration_test_data; sourceTree = "<group>"; };
 		9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProvider.swift; sourceTree = "<group>"; };
 		9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunctionTests.swift; sourceTree = "<group>"; };
 		9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActionHandlerTests.swift; sourceTree = "<group>"; };
@@ -1094,6 +1098,7 @@
 		8C7B1B1B2865BFF10036EF4C /* DivKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				9D0868BA2DD10F7E00C5B2CC /* integration_test_data */,
 				8C01499D287329D700BA5402 /* expression_test_data */,
 				8CE488632B76F64D00BDDAB9 /* parsing_test_data */,
 				8C23F3D229DDB2440069F3F7 /* template_test_data */,
@@ -1119,6 +1124,7 @@
 				8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */,
 				8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */,
 				8CB9911A2B7EB74500577193 /* DivViewTests.swift */,
+				9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */,
 				8CB960E528883B8E00D16E47 /* Platform.swift */,
 				5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */,
 				8C4DC3E72892946F000C0963 /* RuntimeTestCase.swift */,
@@ -1797,6 +1803,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D0868BB2DD10F7E00C5B2CC /* integration_test_data in Resources */,
 				8C01499E287329D700BA5402 /* expression_test_data in Resources */,
 				8C23F3D329DDB2440069F3F7 /* template_test_data in Resources */,
 				8C23F44B29DDBD880069F3F7 /* unit_test_data in Resources */,
@@ -2004,6 +2011,7 @@
 				7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */,
 				8CBE33022BD699CC00CFFDF5 /* DivVariableStorageTests.swift in Sources */,
 				8C90A2122B975B9000BB8CFD /* FunctionTests.swift in Sources */,
+				9D08688F2DCE3C0900C5B2CC /* IntegrationTests.swift in Sources */,
 				8C40BA022ABB3B5C008405AD /* DivActionHandlerTests.swift in Sources */,
 				E945FC46293E1CA80066C3EA /* Utils.swift in Sources */,
 				52907F662A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift in Sources */,

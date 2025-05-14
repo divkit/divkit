@@ -213,7 +213,7 @@ extension String {
 }
 
 extension Date {
-  fileprivate var formatString: String {
+  var formatString: String {
     makeDateFormatter(dateFormat, isUTC: true).string(from: self)
   }
 

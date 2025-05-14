@@ -153,7 +153,7 @@ private struct ExpressionTestCase: Decodable {
   }
 }
 
-private enum ExpectedValue: Decodable {
+enum ExpectedValue: Decodable {
   case string(String)
   case double(Double)
   case integer(Int)

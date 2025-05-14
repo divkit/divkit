@@ -73,6 +73,7 @@
       ],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     }
