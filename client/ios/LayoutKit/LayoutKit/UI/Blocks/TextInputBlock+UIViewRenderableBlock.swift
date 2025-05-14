@@ -226,8 +226,16 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   func setEnterKeyType(_ type: TextInputBlock.EnterKeyType) {
-    singleLineInput.returnKeyType = type.uiType
-    multiLineInput.returnKeyType = type.uiType
+    let uiType = type.uiType
+    if singleLineInput.returnKeyType != uiType {
+      singleLineInput.returnKeyType = uiType
+      singleLineInput.reloadInputViews()
+    }
+
+    if multiLineInput.returnKeyType != uiType {
+      multiLineInput.returnKeyType = uiType
+      multiLineInput.reloadInputViews()
+    }
   }
 
   func setTextAlignmentHorizontal(_ alignment: TextInputBlock.TextAlignmentHorizontal) {
