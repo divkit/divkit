@@ -6,20 +6,18 @@ import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.triggers.TriggersController
+import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
+import com.yandex.div.core.expression.variables.toVariable
 import com.yandex.div.core.util.toLocalFunctions
-import com.yandex.div.core.util.toVariables
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivFunction
 import com.yandex.div2.DivTrigger
 
 private const val ERROR_UNKNOWN_RESOLVER =
@@ -67,18 +65,33 @@ internal class RuntimeStore(
     }
 
     /**
-     * Returns runtime if it have been store before, otherwise creates new runtime using
-     * @param parentRuntime or @param parentResolver.
-     *
-     * NOTE: Always provide parentResolver or parentRuntime.
-     * Otherwise, if runtime wasn't created it will be created using rootRuntime
+     * Returns runtime if it have been stored before, otherwise creates new runtime using
+     * @param parentResolver
      */
     internal fun getOrCreateRuntime(
         path: String,
         div: Div,
-        parentResolver: ExpressionResolver? = null,
-        parentRuntime: ExpressionsRuntime? = null,
-    ) = tree.getNode(path)?.runtime ?: getRuntimeOrCreateChild(path, div, null, parentResolver, parentRuntime)
+        parentResolver: ExpressionResolver,
+    ): ExpressionsRuntime? {
+        path.runtime?.let { return it }
+
+        val parentRuntime = getRuntimeWithOrNull(parentResolver)
+        val runtime = parentRuntime ?: rootRuntime ?: run {
+            reportError(ERROR_ROOT_RUNTIME_NOT_SPECIFIED)
+            return null
+        }
+
+        return getRuntimeOrCreateChild(path, div, runtime, parentRuntime)
+    }
+
+    /**
+     * Returns runtime if it have been stored before, otherwise creates new runtime using
+     * @param parentRuntime
+     */
+    internal fun getOrCreateRuntime(path: String, div: Div, parentRuntime: ExpressionsRuntime) =
+        path.runtime ?: getRuntimeOrCreateChild(path, div, parentRuntime, parentRuntime)
+
+    private val String.runtime get() = tree.getNode(this)?.runtime
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
@@ -103,7 +116,7 @@ internal class RuntimeStore(
         path: String,
         div: Div?,
         resolver: ExpressionResolver,
-        parentResolver: ExpressionResolver?,
+        parentResolver: ExpressionResolver,
     ): ExpressionsRuntime? {
         val runtimeForPath = tree.getNode(path)?.runtime
         if (resolver == runtimeForPath?.expressionResolver) return runtimeForPath
@@ -114,7 +127,7 @@ internal class RuntimeStore(
         }
 
         runtimeForPath?.let { tree.removeRuntimeAndCleanup(divView, it, path) }
-        return getRuntimeOrCreateChild(path, div, existingRuntime, parentResolver)
+        return getRuntimeOrCreateChild(path, div, existingRuntime, getRuntimeWithOrNull(parentResolver))
     }
 
     internal fun cleanup(divView: DivViewFacade) {
@@ -137,15 +150,11 @@ internal class RuntimeStore(
         baseRuntime: ExpressionsRuntime,
         parentRuntime: ExpressionsRuntime?,
         path: String,
-        variables: List<Variable>?,
-        variablesTriggers: List<DivTrigger>?,
-        functions: List<DivFunction>?,
+        div: DivBase,
     ): ExpressionsRuntime {
         val localVariableController = VariableControllerImpl(baseRuntime.variableController)
-        if (!variables.isNullOrEmpty()) {
-            variables.forEach { localVariableController.declare(it) }
-        }
 
+        val functions = div.functions
         var functionProvider = baseRuntime.functionProvider
         if (!functions.isNullOrEmpty()) {
             functionProvider += functions.toLocalFunctions()
@@ -168,50 +177,37 @@ internal class RuntimeStore(
             onCreateCallback = onCreateCallback,
         )
 
-        val triggerController = if (variablesTriggers.isNullOrEmpty()) {
-            null
-        } else {
-            TriggersController(
-                localVariableController,
-                resolver,
-                evaluator,
-                errorCollector,
-                div2Logger,
-                divActionBinder
-            ).apply {
-                ensureTriggersSynced(variablesTriggers)
-            }
+        div.variables?.forEach {
+            localVariableController.declare(it.toVariable(resolver))
         }
+
+        val triggerController = div.variableTriggers.toTriggersController(localVariableController, resolver, evaluator)
 
         return ExpressionsRuntime(resolver, localVariableController, triggerController, functionProvider, this).also {
             putRuntime(it, path, parentRuntime)
         }
     }
 
+    private fun List<DivTrigger>?.toTriggersController(
+        variableController: VariableController,
+        resolver: ExpressionResolver,
+        evaluator: Evaluator,
+    ): TriggersController? {
+        if (isNullOrEmpty()) return null
+        val controller =
+            TriggersController(variableController, resolver, evaluator, errorCollector, div2Logger, divActionBinder)
+        controller.ensureTriggersSynced(this)
+        return controller
+    }
+
     private fun getRuntimeOrCreateChild(
         path: String,
         div: Div?,
-        existingRuntime: ExpressionsRuntime? = null,
-        parentResolver: ExpressionResolver? = null,
-        parentRuntime: ExpressionsRuntime? = null,
-    ): ExpressionsRuntime? {
-        val runtime = existingRuntime
-            ?: parentRuntime
-            ?: parentResolver?.let { getRuntimeWithOrNull(it) }
-            ?: rootRuntime
-            ?: run {
-                reportError(ERROR_ROOT_RUNTIME_NOT_SPECIFIED)
-                return null
-            }
-
-        val parentRuntime = parentRuntime ?: parentResolver?.let { getRuntimeWithOrNull(it) }
-
-        val variables = div?.value()?.variables?.toVariables()
-        val variableTriggers = div?.value()?.variableTriggers
-        val functions = div?.value()?.functions
-
-        if (needLocalRuntime(variables, variableTriggers, functions)) {
-            return createChildRuntime(runtime, parentRuntime, path, variables, variableTriggers, functions)
+        runtime: ExpressionsRuntime,
+        parentRuntime: ExpressionsRuntime?,
+    ): ExpressionsRuntime {
+        if (div != null && div.needLocalRuntime) {
+            return createChildRuntime(runtime, parentRuntime, path, div.value())
         }
 
         tree.storeRuntime(runtime, parentRuntime, path)

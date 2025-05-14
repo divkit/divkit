@@ -13,6 +13,8 @@ import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.internal.Assert
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivVariable
@@ -82,7 +84,7 @@ class RuntimeStoreTest {
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(newResolver))
         Assert.assertEquals(
             runtimeFromCallback,
-            underTest.getOrCreateRuntime(path.fullPath, div)
+            underTest.getOrCreateRuntime(path.fullPath, div, newResolver)
         )
     }
 
@@ -91,7 +93,7 @@ class RuntimeStoreTest {
         setVariable()
         underTest.resolveRuntimeWith(divView, path.fullPath, div, resolver, resolver)
 
-        val runtime = underTest.getOrCreateRuntime(path.fullPath, div)
+        val runtime = underTest.getOrCreateRuntime(path.fullPath, div, resolver)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
         Assert.assertNotNull(runtime)
         Assert.assertEquals(
@@ -105,7 +107,7 @@ class RuntimeStoreTest {
         val runtime = ExpressionsRuntime(resolver, mock(), null, functionProvider, underTest)
         underTest.putRuntime(runtime, PATH, rootRuntime)
 
-        Assert.assertEquals(runtime, underTest.getOrCreateRuntime(path.fullPath, div))
+        Assert.assertEquals(runtime, underTest.getOrCreateRuntime(path.fullPath, div, resolver))
         Assert.assertNotSame(runtime, rootRuntime)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
     }
@@ -148,7 +150,7 @@ class RuntimeStoreTest {
 
     @Test
     fun `getOrCreateRuntime returns root runtime if parent runtime is not found`() {
-        val runtime = underTest.getOrCreateRuntime(path.fullPath, div)
+        val runtime = underTest.getOrCreateRuntime(path.fullPath, div, mock<ExpressionResolver>())
         Assert.assertEquals(rootRuntime, runtime)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
     }
@@ -165,7 +167,7 @@ class RuntimeStoreTest {
         )
         Assert.assertEquals(
             runtimeFromCallback,
-            underTest.getOrCreateRuntime(path.fullPath, div)
+            underTest.getOrCreateRuntime(path.fullPath, div, resolver)
         )
     }
 
@@ -180,7 +182,7 @@ class RuntimeStoreTest {
         )
 
         underTest.resolveRuntimeWith(divView, path.fullPath, div, resolver, resolver)
-        val newRuntime = underTest.getOrCreateRuntime(path.fullPath, div)
+        val newRuntime = underTest.getOrCreateRuntime(path.fullPath, div, resolver)
 
         Assert.assertNotNull(newRuntime)
         Assert.assertEquals(
@@ -194,7 +196,7 @@ class RuntimeStoreTest {
     }
 
     private fun setVariable() {
-        val variables = listOf(DivVariable.Integer(IntegerVariable(CHILD_VARIABLE, 123)))
+        val variables = listOf(DivVariable.Integer(IntegerVariable(CHILD_VARIABLE, Expression.constant(123))))
         whenever(divBase.variables).doReturn(variables)
     }
 }

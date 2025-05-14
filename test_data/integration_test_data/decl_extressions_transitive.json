@@ -39,6 +39,7 @@
         }
       ],
       "platforms": [
+        "android",
         "web"
       ]
     }

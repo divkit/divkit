@@ -20,6 +20,7 @@ import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import java.util.Collections
@@ -45,7 +46,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val result = runtimes.getOrPut(tag.id) { createRuntimeFor(data, tag) }
         val errorCollector = errorCollectors.getOrCreate(tag, data)
         divDataTags.getOrPut(div2View, ::mutableSetOf).add(tag.id)
-        ensureVariablesSynced(result.variableController, data, errorCollector)
+        ensureVariablesSynced(result.variableController, result.expressionResolver, data, errorCollector)
         result.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
         return result
     }
@@ -69,13 +70,14 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
     private fun ensureVariablesSynced(
         v: VariableController,
+        resolver: ExpressionResolver,
         data: DivData,
         errorCollector: ErrorCollector
     ) {
         data.variables?.forEach {
             val existingVariable = v.getMutableVariable(it.name) ?: run {
                 try {
-                    v.declare(it.toVariable())
+                    v.declare(it.toVariable(resolver))
                 } catch (e: VariableDeclarationException) {
                     errorCollector.logError(e)
                 }
@@ -110,17 +112,8 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
     private fun createRuntimeFor(data: DivData, tag: DivDataTag): ExpressionsRuntime {
         val errorCollector = errorCollectors.getOrCreate(tag, data)
-        val variableController = VariableControllerImpl().apply {
-            data.variables?.forEach { divVariable: DivVariable ->
-                try {
-                    declare(divVariable.toVariable())
-                } catch (e: VariableDeclarationException) {
-                    errorCollector.logError(e)
-                }
-            }
-
-            addSource(divVariableController.variableSource)
-        }
+        val variableController = VariableControllerImpl()
+        variableController.addSource(divVariableController.variableSource)
 
         val functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
         val evaluationContext = EvaluationContext(
@@ -154,6 +147,14 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             errorCollector = errorCollector,
             onCreateCallback = callback,
         )
+
+        data.variables?.forEach { divVariable: DivVariable ->
+            try {
+                variableController.declare(divVariable.toVariable(expressionResolver))
+            } catch (e: VariableDeclarationException) {
+                errorCollector.logError(e)
+            }
+        }
 
         val triggersController = TriggersController(
             variableController,

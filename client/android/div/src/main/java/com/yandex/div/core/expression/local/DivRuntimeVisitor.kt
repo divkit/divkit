@@ -122,7 +122,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         div: Div,
         divView: Div2View,
         path: String,
-        parentRuntime: ExpressionsRuntime?
+        parentRuntime: ExpressionsRuntime
     ): ExpressionsRuntime? {
         if (!div.needLocalRuntime) return parentRuntime
 

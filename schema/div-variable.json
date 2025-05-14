@@ -16,7 +16,6 @@
           ]
         },
         "value": {
-          "supports_expressions": false,
           "type": "string",
           "$description": "translations.json#/div_variable_value"
         }
@@ -42,7 +41,6 @@
           ]
         },
         "value": {
-          "supports_expressions": false,
           "long_type": true,
           "type": "integer",
           "$description": "translations.json#/div_variable_value"
@@ -69,7 +67,6 @@
           ]
         },
         "value": {
-          "supports_expressions": false,
           "type": "number",
           "$description": "translations.json#/div_variable_value"
         }
@@ -96,7 +93,6 @@
           ]
         },
         "value": {
-          "supports_expressions": false,
           "$ref": "common.json#/boolean_int",
           "$description": "translations.json#/div_variable_value"
         }
@@ -116,14 +112,12 @@
           "$description": "translations.json#/div_variable_name"
         },
         "type": {
-          "supports_expressions": false,
           "type": "string",
           "enum": [
             "color"
           ]
         },
         "value": {
-          "supports_expressions": false,
           "$ref": "common.json#/color",
           "$description": "translations.json#/div_variable_value"
         }
@@ -149,7 +143,6 @@
           ]
         },
         "value": {
-          "supports_expressions": false,
           "$ref": "common.json#/url",
           "$description": "translations.json#/div_variable_value"
         }
@@ -175,7 +168,6 @@
           ]
         },
         "value": {
-          "supports_expressions": false,
           "type": "dict",
           "$description": "translations.json#/div_variable_value"
         }
@@ -202,7 +194,6 @@
         },
         "value": {
           "type": "array",
-          "supports_expressions": false,
           "$description": "translations.json#/div_variable_value"
         }
       },

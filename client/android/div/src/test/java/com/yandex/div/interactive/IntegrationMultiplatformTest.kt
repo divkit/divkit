@@ -9,6 +9,7 @@ import com.yandex.div.core.expression.ExpressionTestCaseUtils
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_ARRAY
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_DICT
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.createVariable
+import com.yandex.div.core.expression.variables.wrapVariableValue
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
@@ -56,8 +57,8 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
                     )
                 }
                 is IntegrationTestCase.ExpectedResult.Variable -> {
-                    val expectedValue = it.value
-                    val actualValue = variableController.get(it.name)?.getValue()
+                    val expectedValue = it.value.wrapVariableValue()
+                    val actualValue = divView.expressionsRuntime?.variableController?.get(it.name)
                     if (it.type == VALUE_TYPE_DICT || it.type == VALUE_TYPE_ARRAY) {
                         Assert.assertEquals(expectedValue.toString(), actualValue.toString())
                     } else {
