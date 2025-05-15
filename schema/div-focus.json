@@ -36,31 +36,46 @@
           "platforms": [
             "android",
             "ios"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support."
+          }
         },
         "right": {
           "type": "string",
           "platforms": [
             "android"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support."
+          }
         },
         "down": {
           "type": "string",
           "platforms": [
             "android"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support."
+          }
         },
         "left": {
           "type": "string",
           "platforms": [
             "android"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support."
+          }
         },
         "up": {
           "type": "string",
           "platforms": [
             "android"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no direct implementation, no plans for support."
+          }
         }
       }
     }

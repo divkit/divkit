@@ -32,11 +32,7 @@
     },
     "unit": {
       "$ref": "div-size-unit.json",
-      "default_value": "dp",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "default_value": "dp"
     }
   }
 }

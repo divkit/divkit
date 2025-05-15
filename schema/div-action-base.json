@@ -23,7 +23,10 @@
       "platforms": [
         "android",
         "ios"
-      ]
+      ],
+      "unsupported_platforms": {
+        "web": "Controlled by the browser."
+      }
     },
     "payload": {
       "type": "object",

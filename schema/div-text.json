@@ -54,11 +54,7 @@
         "font_size_unit": {
           "$ref": "div-size-unit.json",
           "default_value": "sp",
-          "$description": "translations.json#/div_font_size_unit",
-          "platforms": [
-            "android",
-            "ios"
-          ]
+          "$description": "translations.json#/div_font_size_unit"
         },
         "font_feature_settings": {
           "type": "string",
@@ -285,7 +281,10 @@
       "platforms": [
         "android",
         "ios"
-      ]
+      ],
+      "unsupported_platforms": {
+        "web": "There is no css implementation for this."
+      }
     }
   },
   "allOf": [
@@ -329,7 +328,10 @@
           "platforms": [
             "android",
             "ios"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no css implementation for this."
+          }
         },
         "auto_ellipsize": {
           "$ref": "common.json#/boolean_int",
@@ -441,7 +443,10 @@
           "platforms": [
             "android",
             "ios"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no css implementation for this."
+          }
         },
         "truncate": {
           "type": "string",
@@ -456,7 +461,10 @@
           "platforms": [
             "android",
             "ios"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "There is no css implementation for this."
+          }
         },
         "text_shadow": {
           "$ref": "div-shadow.json",

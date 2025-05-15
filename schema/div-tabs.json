@@ -89,11 +89,7 @@
             "font_size_unit": {
               "$ref": "div-size-unit.json",
               "default_value": "sp",
-              "$description": "translations.json#/div_tabs_tab_title_style_font_size_unit",
-              "platforms": [
-                "android",
-                "ios"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_font_size_unit"
             },
             "paddings": {
               "$ref": "div-edge-insets.json",
