@@ -5,15 +5,18 @@ import VGSL
 public final class MaskedBlock: SizeForwardingBlock {
   public let maskBlock: Block
   public let maskedBlock: Block
+  public let allowsUserInteraction: Bool
 
   public var sizeProvider: Block { maskBlock }
 
   public init(
     maskBlock: Block,
-    maskedBlock: Block
+    maskedBlock: Block,
+    allowsUserInteraction: Bool = false
   ) {
     self.maskBlock = maskBlock
     self.maskedBlock = maskedBlock
+    self.allowsUserInteraction = allowsUserInteraction
   }
 
   public func equals(_ other: Block) -> Bool {
@@ -34,7 +37,8 @@ public final class MaskedBlock: SizeForwardingBlock {
 extension MaskedBlock: Equatable {
   public static func ==(lhs: MaskedBlock, rhs: MaskedBlock) -> Bool {
     lhs.maskedBlock == rhs.maskedBlock &&
-      lhs.maskBlock == rhs.maskBlock
+      lhs.maskBlock == rhs.maskBlock &&
+      lhs.allowsUserInteraction == rhs.allowsUserInteraction
   }
 }
 
@@ -51,7 +55,11 @@ extension MaskedBlock: ElementFocusUpdating {
     guard newMaskBlock !== maskBlock || newMaskedBlock !== maskedBlock else {
       return self
     }
-    return MaskedBlock(maskBlock: newMaskBlock, maskedBlock: newMaskedBlock)
+    return MaskedBlock(
+      maskBlock: newMaskBlock,
+      maskedBlock: newMaskedBlock,
+      allowsUserInteraction: allowsUserInteraction
+    )
   }
 }
 

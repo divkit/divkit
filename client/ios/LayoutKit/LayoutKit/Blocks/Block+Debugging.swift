@@ -488,6 +488,7 @@ extension MaskedBlock: CustomDebugStringConvertible {
     MaskedBlock {
       maskBlock: \(maskBlock.debugDescription.indented())
       maskedBlock: \(maskedBlock.debugDescription.indented())
+      allowsUserInteraction: \(allowsUserInteraction)
     }
     """
   }

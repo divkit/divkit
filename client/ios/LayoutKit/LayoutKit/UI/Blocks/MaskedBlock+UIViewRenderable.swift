@@ -11,7 +11,11 @@ extension MaskedBlock: UIViewRenderable {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
-    let model = MaskedBlockView.Model(maskBlock: maskBlock, maskedBlock: maskedBlock)
+    let model = MaskedBlockView.Model(
+      maskBlock: maskBlock,
+      maskedBlock: maskedBlock,
+      allowsUserInteraction: allowsUserInteraction
+    )
     (view as! MaskedBlockView).configure(
       model: model,
       observer: observer,
@@ -29,10 +33,12 @@ private final class MaskedBlockView: BlockView, VisibleBoundsTrackingContainer {
   struct Model: Equatable {
     let maskBlock: Block
     let maskedBlock: Block
+    let allowsUserInteraction: Bool
 
     static func ==(lhs: Model, rhs: Model) -> Bool {
       lhs.maskBlock == rhs.maskBlock &&
-        lhs.maskedBlock == rhs.maskedBlock
+        lhs.maskedBlock == rhs.maskedBlock &&
+        lhs.allowsUserInteraction == rhs.allowsUserInteraction
     }
   }
 
@@ -40,15 +46,6 @@ private final class MaskedBlockView: BlockView, VisibleBoundsTrackingContainer {
   private var maskedBlockView: BlockView?
 
   private var model: Model!
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-
-    isUserInteractionEnabled = false
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [maskedBlockView, maskBlockView].compactMap { $0 }
@@ -73,6 +70,7 @@ private final class MaskedBlockView: BlockView, VisibleBoundsTrackingContainer {
 
     self.maskBlockView = blockViews[0]
     self.maskedBlockView = blockViews[1]
+    isUserInteractionEnabled = model.allowsUserInteraction
 
     setNeedsLayout()
   }
