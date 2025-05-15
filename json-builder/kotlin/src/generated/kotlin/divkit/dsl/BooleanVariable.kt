@@ -137,5 +137,19 @@ fun BooleanVariable.defer(
     )
 )
 
+/**
+ * @param value Value.
+ */
+@Generated
+fun BooleanVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<Boolean>? = null,
+): BooleanVariable = BooleanVariable(
+    BooleanVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun BooleanVariable.asList() = listOf(this)

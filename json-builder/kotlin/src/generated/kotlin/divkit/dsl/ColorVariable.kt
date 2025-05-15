@@ -137,5 +137,19 @@ fun ColorVariable.defer(
     )
 )
 
+/**
+ * @param value Value.
+ */
+@Generated
+fun ColorVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<Color>? = null,
+): ColorVariable = ColorVariable(
+    ColorVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun ColorVariable.asList() = listOf(this)

@@ -137,5 +137,19 @@ fun NumberVariable.defer(
     )
 )
 
+/**
+ * @param value Value.
+ */
+@Generated
+fun NumberVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<Double>? = null,
+): NumberVariable = NumberVariable(
+    NumberVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun NumberVariable.asList() = listOf(this)

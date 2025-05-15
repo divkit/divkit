@@ -137,5 +137,19 @@ fun IntegerVariable.defer(
     )
 )
 
+/**
+ * @param value Value.
+ */
+@Generated
+fun IntegerVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<Long>? = null,
+): IntegerVariable = IntegerVariable(
+    IntegerVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun IntegerVariable.asList() = listOf(this)

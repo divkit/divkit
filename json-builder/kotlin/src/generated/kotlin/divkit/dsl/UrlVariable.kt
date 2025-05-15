@@ -137,5 +137,19 @@ fun UrlVariable.defer(
     )
 )
 
+/**
+ * @param value Value.
+ */
+@Generated
+fun UrlVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<Url>? = null,
+): UrlVariable = UrlVariable(
+    UrlVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun UrlVariable.asList() = listOf(this)

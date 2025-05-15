@@ -137,5 +137,19 @@ fun StringVariable.defer(
     )
 )
 
+/**
+ * @param value Value.
+ */
+@Generated
+fun StringVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<String>? = null,
+): StringVariable = StringVariable(
+    StringVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun StringVariable.asList() = listOf(this)

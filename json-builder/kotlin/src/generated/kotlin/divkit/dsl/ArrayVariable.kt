@@ -137,5 +137,19 @@ fun ArrayVariable.defer(
     )
 )
 
+/**
+ * @param value Value.
+ */
+@Generated
+fun ArrayVariable.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<List<Any>>? = null,
+): ArrayVariable = ArrayVariable(
+    ArrayVariable.Properties(
+        name = properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun ArrayVariable.asList() = listOf(this)
