@@ -184,6 +184,17 @@
             },
             "web": {
                 "version_added": "30.33.0"
+            },
+            "android": {
+                "version_added": "31.14.0"
+            }
+        }
+    }, {
+        "id": "fn_atan2",
+        "name": "<code>atan2</code> function",
+        "compat": {
+            "android": {
+                "version_added": "31.14.0"
             }
         }
     }, {
@@ -195,6 +206,9 @@
             },
             "web": {
                 "version_added": "31.1.0"
+            },
+            "android": {
+                "version_added": "31.14.0"
             }
         }
     }, {
@@ -220,6 +234,9 @@
             },
             "web": {
                 "version_added": "31.1.0"
+            },
+            "android": {
+                "version_added": "31.14.0"
             }
         }
     }, {
