@@ -16,7 +16,6 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
@@ -136,7 +135,15 @@ internal class DivActionBinder @Inject constructor(
         bindLongTapActions(context, target, longTapActions, actions.isEmpty(), captureFocusOnAction)
         bindDoubleTapActions(context, target, divGestureListener, doubleTapActions, captureFocusOnAction)
         // Order is urgent: tap actions depend on double tap actions
-        bindTapActions(context, target, divGestureListener, actions, shouldIgnoreActionMenuItems, captureFocusOnAction)
+        bindTapActions(
+            context,
+            target,
+            divGestureListener,
+            actions,
+            shouldIgnoreActionMenuItems,
+            captureFocusOnAction,
+            hasNonSingleTapActions = longTapActions.isNotEmpty() || doubleTapActions.isNotEmpty(),
+        )
 
         val animatedTouchListener = target.createAnimatedTouchListener(
             context,
@@ -205,18 +212,8 @@ internal class DivActionBinder @Inject constructor(
         actions: List<DivAction>,
         shouldIgnoreActionMenuItems: Boolean,
         captureFocusOnAction: Expression<Boolean>,
+        hasNonSingleTapActions: Boolean,
     ) {
-        if (actions.isEmpty()) {
-            divGestureListener.onSingleTapListener = null
-            target.setOnClickListener(null)
-            target.isClickable = false
-            return
-        }
-
-        val menuAction = actions.firstOrNull { action ->
-            !action.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
-        }
-
         fun setTapListener(listener: View.OnClickListener) {
             // Single tap-up triggered with significant delay
             // so we'll use it only when double taps actually specified.
@@ -225,6 +222,27 @@ internal class DivActionBinder @Inject constructor(
             } else {
                 target.setOnClickListener(listener)
             }
+        }
+
+        if (actions.isEmpty()) {
+            if (hasNonSingleTapActions) {
+                setTapListener {
+                    it.clearFocusIfNeeded(
+                        captureFocusOnAction,
+                        context.divView.inputFocusTracker,
+                        context.expressionResolver,
+                    )
+                }
+            } else {
+                divGestureListener.onSingleTapListener = null
+                target.setOnClickListener(null)
+                target.isClickable = false
+            }
+            return
+        }
+
+        val menuAction = actions.firstOrNull { action ->
+            !action.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
         }
 
         if (menuAction != null) {
@@ -667,6 +685,16 @@ private fun View.isPenetratingLongClickable(): Boolean {
 // Catch longtap_actions in container child
 private fun View.setPenetratingLongClickable(longClickable: Boolean? = true) {
     setTag(R.id.div_penetrating_longtap_tag, longClickable)
+}
+
+private fun View.clearFocusIfNeeded(
+    captureFocusOnAction: Expression<Boolean>,
+    inputFocusTracker: InputFocusTracker,
+    expressionResolver: ExpressionResolver,
+) {
+    if (captureFocusOnAction.evaluate(expressionResolver)) {
+        clearFocusOnClick(inputFocusTracker)
+    }
 }
 
 private fun View.captureFocusIfNeeded(
