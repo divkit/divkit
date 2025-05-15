@@ -14,8 +14,8 @@ internal class ExpressionsRuntime(
 ) {
     private var unsubscribed = true
 
-    fun clearBinding(view: DivViewFacade) {
-        triggersController?.clearBinding(view)
+    fun clearBinding() {
+        triggersController?.clearBinding()
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
@@ -30,10 +30,10 @@ internal class ExpressionsRuntime(
         }
     }
 
-    internal fun cleanup(divView: DivViewFacade?) {
+    internal fun cleanup() {
         if (!unsubscribed) {
             unsubscribed = true
-            triggersController?.clearBinding(divView)
+            triggersController?.clearBinding()
             variableController.cleanupSubscriptions()
         }
     }

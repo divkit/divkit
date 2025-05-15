@@ -1,7 +1,6 @@
 package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.FunctionProviderDecorator
@@ -58,7 +57,6 @@ class RuntimeStoreTest {
     private val rootVariableController: VariableController = mock<VariableController>()
     private val functionProvider = mock<FunctionProviderDecorator>()
     private val divBase = mock<DivBase>()
-    private val divView = mock<DivViewFacade>()
     private val div = mock<Div> {
         on { value() } doReturn divBase
     }
@@ -79,7 +77,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to created runtime`() {
         val newResolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
-        underTest.resolveRuntimeWith(divView, path.fullPath, div, newResolver, newResolver)
+        underTest.resolveRuntimeWith(path.fullPath, div, newResolver, newResolver)
 
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(newResolver))
         Assert.assertEquals(
@@ -91,7 +89,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith creates runtime with new variables if variables provided`() {
         setVariable()
-        underTest.resolveRuntimeWith(divView, path.fullPath, div, resolver, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)
 
         val runtime = underTest.getOrCreateRuntime(path.fullPath, div, resolver)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
@@ -158,7 +156,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to runtime`() {
         val resolver = ExpressionResolverImpl("", mock(), mock(), evaluator, errorCollector, callback)
-        underTest.resolveRuntimeWith(divView, path.fullPath, div, resolver, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)
 
         Assert.assertNotNull(runtimeFromCallback)
         Assert.assertEquals(
@@ -181,7 +179,7 @@ class RuntimeStoreTest {
             "", mock(), parentVariableController, evaluator, errorCollector, callback
         )
 
-        underTest.resolveRuntimeWith(divView, path.fullPath, div, resolver, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, div, resolver, resolver)
         val newRuntime = underTest.getOrCreateRuntime(path.fullPath, div, resolver)
 
         Assert.assertNotNull(newRuntime)
