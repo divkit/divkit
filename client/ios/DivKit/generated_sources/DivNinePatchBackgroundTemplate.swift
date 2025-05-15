@@ -13,7 +13,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, Sendable {
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
-      imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.init(stringToEncode:)),
+      imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.makeFromNonEncodedString),
       insets: dictionary.getOptionalField("insets", templateToType: templateToType)
     )
   }
@@ -29,7 +29,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivNinePatchBackgroundTemplate?) -> DeserializationResult<DivNinePatchBackground> {
-    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let insetsValue = { parent?.insets?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
@@ -67,7 +67,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, Sendable {
       for (key, __dictValue) in context.templateData {
         _ = {
           if key == "image_url" {
-           imageUrlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: imageUrlValue)
+           imageUrlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: imageUrlValue)
           }
         }()
         _ = {
@@ -77,7 +77,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.imageUrl?.link {
-           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
           }
         }()
         _ = {

@@ -25,10 +25,10 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
       logId: dictionary.getOptionalExpressionField("log_id"),
       logLimit: dictionary.getOptionalExpressionField("log_limit"),
       payload: dictionary.getOptionalField("payload"),
-      referer: dictionary.getOptionalExpressionField("referer", transform: URL.init(stringToEncode:)),
+      referer: dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString),
       scopeId: dictionary.getOptionalField("scope_id"),
       typed: dictionary.getOptionalField("typed", templateToType: templateToType),
-      url: dictionary.getOptionalExpressionField("url", transform: URL.init(stringToEncode:)),
+      url: dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString),
       visibilityPercentage: dictionary.getOptionalExpressionField("visibility_percentage")
     )
   }
@@ -66,10 +66,10 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
     let logIdValue = { parent?.logId?.resolveValue(context: context) ?? .noValue }()
     let logLimitValue = { parent?.logLimit?.resolveOptionalValue(context: context, validator: ResolvedValue.logLimitValidator) ?? .noValue }()
     let payloadValue = { parent?.payload?.resolveOptionalValue(context: context) ?? .noValue }()
-    let refererValue = { parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+    let refererValue = { parent?.referer?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let scopeIdValue = { parent?.scopeId?.resolveOptionalValue(context: context) ?? .noValue }()
     let typedValue = { parent?.typed?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let visibilityPercentageValue = { parent?.visibilityPercentage?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityPercentageValidator) ?? .noValue }()
     var errors = mergeErrors(
       disappearDurationValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_duration", error: $0) },
@@ -160,7 +160,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
         }()
         _ = {
           if key == "referer" {
-           refererValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: refererValue)
+           refererValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: refererValue)
           }
         }()
         _ = {
@@ -175,7 +175,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
         }()
         _ = {
           if key == "url" {
-           urlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: urlValue)
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: urlValue)
           }
         }()
         _ = {
@@ -215,7 +215,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
         }()
         _ = {
          if key == parent?.referer?.link {
-           refererValue = refererValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+           refererValue = refererValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
           }
         }()
         _ = {
@@ -230,7 +230,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
         }()
         _ = {
          if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
           }
         }()
         _ = {

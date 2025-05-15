@@ -28,7 +28,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
       integer: dictionary.getOptionalExpressionField("integer"),
       positiveInteger: dictionary.getOptionalExpressionField("positive_integer"),
       string: dictionary.getOptionalExpressionField("string"),
-      url: dictionary.getOptionalExpressionField("url", transform: URL.init(stringToEncode:))
+      url: dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString)
     )
   }
 
@@ -65,7 +65,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
     let integerValue = { parent?.integer?.resolveOptionalValue(context: context) ?? .noValue }()
     let positiveIntegerValue = { parent?.positiveInteger?.resolveOptionalValue(context: context, validator: ResolvedValue.positiveIntegerValidator) ?? .noValue }()
     let stringValue = { parent?.string?.resolveOptionalValue(context: context) ?? .noValue }()
-    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let errors = mergeErrors(
       booleanValue.errorsOrWarnings?.map { .nestedObjectError(field: "boolean", error: $0) },
       booleanIntValue.errorsOrWarnings?.map { .nestedObjectError(field: "boolean_int", error: $0) },
@@ -151,7 +151,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
         }()
         _ = {
           if key == "url" {
-           urlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: urlValue)
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: urlValue)
           }
         }()
         _ = {
@@ -196,7 +196,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
         }()
         _ = {
          if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
           }
         }()
       }

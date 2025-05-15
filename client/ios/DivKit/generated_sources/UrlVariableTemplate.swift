@@ -14,7 +14,7 @@ public final class UrlVariableTemplate: TemplateValue, Sendable {
     self.init(
       parent: dictionary["type"] as? String,
       name: dictionary.getOptionalField("name"),
-      value: dictionary.getOptionalExpressionField("value", transform: URL.init(stringToEncode:))
+      value: dictionary.getOptionalExpressionField("value", transform: URL.makeFromNonEncodedString)
     )
   }
 
@@ -30,7 +30,7 @@ public final class UrlVariableTemplate: TemplateValue, Sendable {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: UrlVariableTemplate?) -> DeserializationResult<UrlVariable> {
     let nameValue = { parent?.name?.resolveValue(context: context) ?? .noValue }()
-    let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+    let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     var errors = mergeErrors(
       nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -72,7 +72,7 @@ public final class UrlVariableTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "value" {
-           valueValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: valueValue)
+           valueValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: valueValue)
           }
         }()
         _ = {
@@ -82,7 +82,7 @@ public final class UrlVariableTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+           valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
           }
         }()
       }

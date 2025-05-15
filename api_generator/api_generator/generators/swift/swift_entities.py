@@ -796,7 +796,7 @@ class SwiftPropertyType(PropertyType):
     def transform_arg(self) -> str:
         prefix = ', transform: '
         if isinstance(self, Url):
-            return f'{prefix}URL.init(stringToEncode:)'
+            return f'{prefix}URL.makeFromNonEncodedString'
         elif isinstance(self, Color):
             return f'{prefix}Color.color(withHexString:)'
         elif isinstance(self, Object):

@@ -1,7 +1,7 @@
 import Foundation
 
 extension URL {
-  public init?(stringToEncode: String) {
-    self.init(string: stringToEncode.percentEncodedExceptSpecialAndLatin)
+  public static func makeFromNonEncodedString(_ string: String) -> URL? {
+    URL(string: string.percentEncodedExceptSpecialAndLatin)
   }
 }

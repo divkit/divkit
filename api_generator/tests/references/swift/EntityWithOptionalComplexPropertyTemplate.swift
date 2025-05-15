@@ -10,7 +10,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
-        value: dictionary.getOptionalExpressionField("value", transform: URL.init(stringToEncode:))
+        value: dictionary.getOptionalExpressionField("value", transform: URL.makeFromNonEncodedString)
       )
     }
 
@@ -21,7 +21,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: PropertyTemplate?) -> DeserializationResult<EntityWithOptionalComplexProperty.Property> {
-      let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+      let valueValue = { parent?.value?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
       var errors = mergeErrors(
         valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
       )
@@ -51,12 +51,12 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
         for (key, __dictValue) in context.templateData {
           _ = {
             if key == "value" {
-             valueValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: valueValue)
+             valueValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: valueValue)
             }
           }()
           _ = {
            if key == parent?.value?.link {
-             valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+             valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
             }
           }()
         }

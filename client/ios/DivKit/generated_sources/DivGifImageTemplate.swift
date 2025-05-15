@@ -81,7 +81,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
-      gifUrl: dictionary.getOptionalExpressionField("gif_url", transform: URL.init(stringToEncode:)),
+      gifUrl: dictionary.getOptionalExpressionField("gif_url", transform: URL.makeFromNonEncodedString),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       hoverEndActions: dictionary.getOptionalArray("hover_end_actions", templateToType: templateToType),
       hoverStartActions: dictionary.getOptionalArray("hover_start_actions", templateToType: templateToType),
@@ -241,7 +241,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
     let extensionsValue = { parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let focusValue = { parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let gifUrlValue = { parent?.gifUrl?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+    let gifUrlValue = { parent?.gifUrl?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let hoverEndActionsValue = { parent?.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let hoverStartActionsValue = { parent?.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -547,7 +547,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "gif_url" {
-           gifUrlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: gifUrlValue)
+           gifUrlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: gifUrlValue)
           }
         }()
         _ = {
@@ -797,7 +797,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.gifUrl?.link {
-           gifUrlValue = gifUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+           gifUrlValue = gifUrlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
           }
         }()
         _ = {

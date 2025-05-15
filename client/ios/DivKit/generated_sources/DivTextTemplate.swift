@@ -271,7 +271,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
         start: dictionary.getOptionalExpressionField("start"),
         tintColor: dictionary.getOptionalExpressionField("tint_color", transform: Color.color(withHexString:)),
         tintMode: dictionary.getOptionalExpressionField("tint_mode"),
-        url: dictionary.getOptionalExpressionField("url", transform: URL.init(stringToEncode:)),
+        url: dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString),
         width: dictionary.getOptionalField("width", templateToType: templateToType)
       )
     }
@@ -309,7 +309,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       let startValue = { parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue }()
       let tintColorValue = { parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
       let tintModeValue = { parent?.tintMode?.resolveOptionalValue(context: context) ?? .noValue }()
-      let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+      let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
       let widthValue = { parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       var errors = mergeErrors(
         accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
@@ -411,7 +411,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
           }()
           _ = {
             if key == "url" {
-             urlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: urlValue)
+             urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: urlValue)
             }
           }()
           _ = {
@@ -461,7 +461,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
           }()
           _ = {
            if key == parent?.url?.link {
-             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
             }
           }()
           _ = {

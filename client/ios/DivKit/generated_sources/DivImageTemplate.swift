@@ -93,7 +93,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       hoverEndActions: dictionary.getOptionalArray("hover_end_actions", templateToType: templateToType),
       hoverStartActions: dictionary.getOptionalArray("hover_start_actions", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
-      imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.init(stringToEncode:)),
+      imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.makeFromNonEncodedString),
       layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
@@ -268,7 +268,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
     let hoverEndActionsValue = { parent?.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let hoverStartActionsValue = { parent?.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
-    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.init(stringToEncode:)) ?? .noValue }()
+    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let layoutProviderValue = { parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let longtapActionsValue = { parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let marginsValue = { parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -622,7 +622,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
         }()
         _ = {
           if key == "image_url" {
-           imageUrlValue = deserialize(__dictValue, transform: URL.init(stringToEncode:)).merged(with: imageUrlValue)
+           imageUrlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).merged(with: imageUrlValue)
           }
         }()
         _ = {
@@ -897,7 +897,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.imageUrl?.link {
-           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(stringToEncode:)) })
+           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
           }
         }()
         _ = {
