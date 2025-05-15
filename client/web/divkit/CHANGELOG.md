@@ -1,3 +1,17 @@
+## 32.0.0 (May 19, 2025)
+
+* Added support for the `atan2` function.
+* Added support for the `infinite_scroll` property in the `pager`.
+* Added the ability to scroll the `pager` using the mouse. This behavior can be disabled using the `pagerMouseDragEnabled` configuration property.
+* Breaking change. The `input` component will now apply `focus` styles to each focus, regardless of whether it is a keyboard or not.
+* Breaking change. The `url` value should now be a valid URL, as it already was on Android/iOS.
+* Breaking change. The `value` of a `variable` can now take expressions. The result of this expression will be used as the initial value of the variable.
+* Breaking change. The order of evaluation of expressions in actions has been changed so that multiple actions in the same array behave as expected.
+* Breaking change. The scrolling logic and behavior of the `pager` component have been changed.
+* Breaking change: The `boolean` variable now contains a boolean value, rather than the number 0/1. This means that any `subscribe` methods will output a boolean value instead of a number.
+* The incorrect size of the `page` with the "percentage" markup has been fixed.
+
+
 ## 31.14.0 (May 5, 2025)
 
 * Fixed an error with the `integer` variables in the `submit` action (the bigint variable could not be converted to a string).
