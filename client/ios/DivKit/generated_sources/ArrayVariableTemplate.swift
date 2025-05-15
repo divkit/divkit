@@ -8,20 +8,20 @@ public final class ArrayVariableTemplate: TemplateValue, @unchecked Sendable {
   public static let type: String = "array"
   public let parent: String?
   public let name: Field<String>?
-  public let value: Field<[Any]>?
+  public let value: Field<Expression<[Any]>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
       name: dictionary.getOptionalField("name"),
-      value: dictionary.getOptionalField("value")
+      value: dictionary.getOptionalExpressionField("value")
     )
   }
 
   init(
     parent: String?,
     name: Field<String>? = nil,
-    value: Field<[Any]>? = nil
+    value: Field<Expression<[Any]>>? = nil
   ) {
     self.parent = parent
     self.name = name
@@ -59,7 +59,7 @@ public final class ArrayVariableTemplate: TemplateValue, @unchecked Sendable {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var nameValue: DeserializationResult<String> = { parent?.name?.value() ?? .noValue }()
-    var valueValue: DeserializationResult<[Any]> = { parent?.value?.value() ?? .noValue }()
+    var valueValue: DeserializationResult<Expression<[Any]>> = { parent?.value?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable

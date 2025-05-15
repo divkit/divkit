@@ -60,7 +60,7 @@ final class DivSerializationTests: XCTestCase {
   func test_Serialize_DoubleValue() {
     let variable = NumberVariable(
       name: "var",
-      value: 123.45
+      value: .value(123.45)
     )
     let dictionary = variable.toDictionary()
     XCTAssertEqual(123.45, dictionary["value"] as! Double)
@@ -85,7 +85,7 @@ final class DivSerializationTests: XCTestCase {
   func test_Serialize_ArrayValue() {
     let variable = ArrayVariable(
       name: "var",
-      value: [1, "aba", 2.3]
+      value: .value([1, "aba", 2.3])
     )
     let dictionary = variable.toDictionary()
     XCTAssertEqual([1, "aba", 2.3], dictionary["value"] as! [AnyHashable])

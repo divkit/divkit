@@ -351,38 +351,55 @@ private func parseCollectionVar<T>(_ val: String) -> T? {
 }
 
 extension Collection<DivVariable> {
-  public func extractDivVariableValues() -> DivVariables {
+  public func extractDivVariableValues(_ resolver: ExpressionResolver) -> DivVariables {
     var variables = DivVariables()
     forEach { variable in
+      let resolver = resolver.modifying(variableValueProvider: {
+        variables[DivVariableName(rawValue: $0)]?.typedValue()
+      })
       switch variable {
       case let .stringVariable(stringVariable):
         let name = DivVariableName(rawValue: stringVariable.name)
-        if variables.keys.contains(name) { return }
-        variables[name] = .string(stringVariable.value)
+        guard !variables.keys.contains(name), let value = stringVariable.resolveValue(resolver)
+        else { return }
+
+        variables[name] = .string(value)
       case let .numberVariable(numberVariable):
         let name = DivVariableName(rawValue: numberVariable.name)
-        if variables.keys.contains(name) { return }
-        variables[name] = .number(numberVariable.value)
+        guard !variables.keys.contains(name), let value = numberVariable.resolveValue(resolver)
+        else { return }
+
+        variables[name] = .number(value)
       case let .integerVariable(integerVariable):
         let name = DivVariableName(rawValue: integerVariable.name)
-        if variables.keys.contains(name) { return }
-        variables[name] = .integer(integerVariable.value)
+        guard !variables.keys.contains(name), let value = integerVariable.resolveValue(resolver)
+        else { return }
+
+        variables[name] = .integer(value)
       case let .booleanVariable(booleanVariable):
         let name = DivVariableName(rawValue: booleanVariable.name)
-        if variables.keys.contains(name) { return }
-        variables[name] = .bool(booleanVariable.value)
+        guard !variables.keys.contains(name), let value = booleanVariable.resolveValue(resolver)
+        else { return }
+
+        variables[name] = .bool(value)
       case let .colorVariable(colorVariable):
         let name = DivVariableName(rawValue: colorVariable.name)
-        if variables.keys.contains(name) { return }
-        variables[name] = .color(colorVariable.value)
+        guard !variables.keys.contains(name), let value = colorVariable.resolveValue(resolver)
+        else { return }
+
+        variables[name] = .color(value)
       case let .urlVariable(urlVariable):
         let name = DivVariableName(rawValue: urlVariable.name)
-        if variables.keys.contains(name) { return }
-        variables[name] = .url(urlVariable.value)
+        guard !variables.keys.contains(name), let value = urlVariable.resolveValue(resolver)
+        else { return }
+
+        variables[name] = .url(value)
       case let .dictVariable(dictVariable):
         let name = DivVariableName(rawValue: dictVariable.name)
-        if variables.keys.contains(name) { return }
-        if let dictionary = DivDictionary.fromAny(dictVariable.value) {
+        guard !variables.keys.contains(name), let value = dictVariable.resolveValue(resolver)
+        else { return }
+
+        if let dictionary = DivDictionary.fromAny(value) {
           variables[name] = .dict(dictionary)
         } else {
           DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")
@@ -390,8 +407,10 @@ extension Collection<DivVariable> {
         }
       case let .arrayVariable(arrayVariable):
         let name = DivVariableName(rawValue: arrayVariable.name)
-        if variables.keys.contains(name) { return }
-        if let array = DivArray.fromAny(arrayVariable.value) {
+        guard !variables.keys.contains(name), let value = arrayVariable.resolveValue(resolver)
+        else { return }
+
+        if let array = DivArray.fromAny(value) {
           variables[name] = .array(array)
         } else {
           DivKitLogger.error("Incorrect value for array variable \(name): \(arrayVariable.value)")

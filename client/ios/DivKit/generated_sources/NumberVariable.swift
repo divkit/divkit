@@ -7,11 +7,15 @@ import VGSL
 public final class NumberVariable: Sendable {
   public static let type: String = "number"
   public let name: String
-  public let value: Double
+  public let value: Expression<Double>
+
+  public func resolveValue(_ resolver: ExpressionResolver) -> Double? {
+    resolver.resolveNumeric(value)
+  }
 
   init(
     name: String,
-    value: Double
+    value: Expression<Double>
   ) {
     self.name = name
     self.value = value
@@ -37,7 +41,7 @@ extension NumberVariable: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
     result["name"] = name
-    result["value"] = value
+    result["value"] = value.toValidSerializationValue()
     return result
   }
 }

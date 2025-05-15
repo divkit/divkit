@@ -345,7 +345,14 @@ public final class DivKitComponents {
 
   public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {
     updateAggregator.performWithNoUpdates {
-      let divDataVariables = divData.variables?.extractDivVariableValues() ?? [:]
+      let resolver = ExpressionResolver(
+        path: cardId.path,
+        variablesStorage: variablesStorage,
+        functionsStorage: functionsStorage,
+        persistentValuesStorage: persistentValuesStorage,
+        reporter: reporter
+      )
+      let divDataVariables = divData.variables?.extractDivVariableValues(resolver) ?? [:]
       variablesStorage.append(
         variables: divDataVariables,
         for: cardId,

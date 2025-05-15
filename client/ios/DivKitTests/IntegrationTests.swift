@@ -209,7 +209,7 @@ extension DivVariablesStorage {
     case .dict:
       .dict([:])
     }
-    append(variables: [name: defaultValue], for: path.cardId)
+    append(variables: [name: defaultValue], for: path.cardId, replaceExisting: false)
   }
 }
 

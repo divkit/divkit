@@ -296,3 +296,16 @@ public final class ExpressionResolver {
     }
   }
 }
+
+extension ExpressionResolver {
+  func modifying(variableValueProvider: @escaping (String) -> Any?) -> ExpressionResolver {
+    ExpressionResolver(
+      functionsProvider: functionsProvider,
+      customFunctionsStorageProvider: customFunctionsStorageProvider,
+      variableValueProvider: {
+        variableValueProvider($0) ?? self.variableValueProvider($0)
+      },
+      errorTracker: errorTracker
+    )
+  }
+}

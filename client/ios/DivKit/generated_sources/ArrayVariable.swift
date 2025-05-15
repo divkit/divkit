@@ -7,11 +7,15 @@ import VGSL
 public final class ArrayVariable: @unchecked Sendable {
   public static let type: String = "array"
   public let name: String
-  public let value: [Any]
+  public let value: Expression<[Any]>
+
+  public func resolveValue(_ resolver: ExpressionResolver) -> [Any]? {
+    resolver.resolveArray(value)
+  }
 
   init(
     name: String,
-    value: [Any]
+    value: Expression<[Any]>
   ) {
     self.name = name
     self.value = value
@@ -37,7 +41,7 @@ extension ArrayVariable: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
     result["name"] = name
-    result["value"] = value
+    result["value"] = value.toValidSerializationValue()
     return result
   }
 }

@@ -7,11 +7,15 @@ import VGSL
 public final class UrlVariable: Sendable {
   public static let type: String = "url"
   public let name: String
-  public let value: URL
+  public let value: Expression<URL>
+
+  public func resolveValue(_ resolver: ExpressionResolver) -> URL? {
+    resolver.resolveUrl(value)
+  }
 
   init(
     name: String,
-    value: URL
+    value: Expression<URL>
   ) {
     self.name = name
     self.value = value
@@ -37,7 +41,7 @@ extension UrlVariable: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
     result["name"] = name
-    result["value"] = value.absoluteString
+    result["value"] = value.toValidSerializationValue()
     return result
   }
 }

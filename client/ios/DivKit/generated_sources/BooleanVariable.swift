@@ -7,11 +7,15 @@ import VGSL
 public final class BooleanVariable: Sendable {
   public static let type: String = "boolean"
   public let name: String
-  public let value: Bool
+  public let value: Expression<Bool>
+
+  public func resolveValue(_ resolver: ExpressionResolver) -> Bool? {
+    resolver.resolveNumeric(value)
+  }
 
   init(
     name: String,
-    value: Bool
+    value: Expression<Bool>
   ) {
     self.name = name
     self.value = value
@@ -37,7 +41,7 @@ extension BooleanVariable: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
     result["name"] = name
-    result["value"] = value
+    result["value"] = value.toValidSerializationValue()
     return result
   }
 }

@@ -144,7 +144,7 @@ extension DivBase {
 
     context.variablesStorage.initializeIfNeeded(
       path: path,
-      variables: variables?.extractDivVariableValues() ?? [:]
+      variables: variables?.extractDivVariableValues(context.expressionResolver) ?? [:]
     )
 
     context.triggersStorage?.setIfNeeded(

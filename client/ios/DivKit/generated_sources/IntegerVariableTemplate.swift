@@ -8,20 +8,20 @@ public final class IntegerVariableTemplate: TemplateValue, Sendable {
   public static let type: String = "integer"
   public let parent: String?
   public let name: Field<String>?
-  public let value: Field<Int>?
+  public let value: Field<Expression<Int>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
       name: dictionary.getOptionalField("name"),
-      value: dictionary.getOptionalField("value")
+      value: dictionary.getOptionalExpressionField("value")
     )
   }
 
   init(
     parent: String?,
     name: Field<String>? = nil,
-    value: Field<Int>? = nil
+    value: Field<Expression<Int>>? = nil
   ) {
     self.parent = parent
     self.name = name
@@ -59,7 +59,7 @@ public final class IntegerVariableTemplate: TemplateValue, Sendable {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var nameValue: DeserializationResult<String> = { parent?.name?.value() ?? .noValue }()
-    var valueValue: DeserializationResult<Int> = { parent?.value?.value() ?? .noValue }()
+    var valueValue: DeserializationResult<Expression<Int>> = { parent?.value?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable

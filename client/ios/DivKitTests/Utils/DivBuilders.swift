@@ -543,7 +543,7 @@ func point(x: Double, y: Double) -> DivPoint {
 }
 
 func variable(_ name: String, _ value: String) -> DivVariable {
-  .stringVariable(StringVariable(name: name, value: value))
+  .stringVariable(StringVariable(name: name, value: .value(value)))
 }
 
 func solidBackground(_ color: RGBAColor) -> DivBackground {

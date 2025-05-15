@@ -7,11 +7,15 @@ import VGSL
 public final class ColorVariable: Sendable {
   public static let type: String = "color"
   public let name: String
-  public let value: Color
+  public let value: Expression<Color>
+
+  public func resolveValue(_ resolver: ExpressionResolver) -> Color? {
+    resolver.resolveColor(value)
+  }
 
   init(
     name: String,
-    value: Color
+    value: Expression<Color>
   ) {
     self.name = name
     self.value = value
@@ -37,7 +41,7 @@ extension ColorVariable: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
     result["name"] = name
-    result["value"] = value.hexString
+    result["value"] = value.toValidSerializationValue()
     return result
   }
 }

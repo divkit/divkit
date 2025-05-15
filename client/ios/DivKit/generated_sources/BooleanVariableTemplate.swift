@@ -8,20 +8,20 @@ public final class BooleanVariableTemplate: TemplateValue, Sendable {
   public static let type: String = "boolean"
   public let parent: String?
   public let name: Field<String>?
-  public let value: Field<Bool>?
+  public let value: Field<Expression<Bool>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
       name: dictionary.getOptionalField("name"),
-      value: dictionary.getOptionalField("value")
+      value: dictionary.getOptionalExpressionField("value")
     )
   }
 
   init(
     parent: String?,
     name: Field<String>? = nil,
-    value: Field<Bool>? = nil
+    value: Field<Expression<Bool>>? = nil
   ) {
     self.parent = parent
     self.name = name
@@ -59,7 +59,7 @@ public final class BooleanVariableTemplate: TemplateValue, Sendable {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var nameValue: DeserializationResult<String> = { parent?.name?.value() ?? .noValue }()
-    var valueValue: DeserializationResult<Bool> = { parent?.value?.value() ?? .noValue }()
+    var valueValue: DeserializationResult<Expression<Bool>> = { parent?.value?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable

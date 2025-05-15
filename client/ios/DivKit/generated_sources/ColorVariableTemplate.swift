@@ -8,20 +8,20 @@ public final class ColorVariableTemplate: TemplateValue, Sendable {
   public static let type: String = "color"
   public let parent: String?
   public let name: Field<String>?
-  public let value: Field<Color>?
+  public let value: Field<Expression<Color>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
       name: dictionary.getOptionalField("name"),
-      value: dictionary.getOptionalField("value", transform: Color.color(withHexString:))
+      value: dictionary.getOptionalExpressionField("value", transform: Color.color(withHexString:))
     )
   }
 
   init(
     parent: String?,
     name: Field<String>? = nil,
-    value: Field<Color>? = nil
+    value: Field<Expression<Color>>? = nil
   ) {
     self.parent = parent
     self.name = name
@@ -59,7 +59,7 @@ public final class ColorVariableTemplate: TemplateValue, Sendable {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var nameValue: DeserializationResult<String> = { parent?.name?.value() ?? .noValue }()
-    var valueValue: DeserializationResult<Color> = { parent?.value?.value() ?? .noValue }()
+    var valueValue: DeserializationResult<Expression<Color>> = { parent?.value?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable
