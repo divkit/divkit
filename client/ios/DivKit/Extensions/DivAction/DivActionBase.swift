@@ -27,7 +27,7 @@ extension DivActionBase {
     DivActionInfo(
       path: path,
       logId: resolveLogId(expressionResolver) ?? "",
-      url: resolveUrl(expressionResolver),
+      url: resolveUrl(expressionResolver)?.encodeHexSymbol(),
       logUrl: resolveLogUrl(expressionResolver),
       referer: resolveReferer(expressionResolver),
       source: source,
@@ -73,5 +73,15 @@ extension URL {
     return URLByAddingGETParameters(
       ["card_id": cardId].compactMapValues { $0 }
     )
+  }
+
+  fileprivate func encodeHexSymbol() -> URL? {
+    guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+          components.scheme?.lowercased() == "div-action"
+    else {
+      return self
+    }
+
+    return URL(string: absoluteString.replacingOccurrences(of: "#", with: "%23"))
   }
 }

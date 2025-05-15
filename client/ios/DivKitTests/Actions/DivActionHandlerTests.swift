@@ -96,10 +96,10 @@ final class DivActionHandlerTests: XCTestCase {
       variables: ["palette": .dict(["light": ["text_color": "#AAA"]])]
     )
 
-    let newDict = ["light": ["text_color": "%23e0bae3"]]
+    let newDict = ["light": ["text_color": "#e0bae3"]]
     handle(
       divAction(
-        url: "div-action://set_variable?name=palette&value={\"light\":{\"text_color\":\"%23e0bae3\"}}"
+        url: "div-action://set_variable?name=palette&value={\"light\":{\"text_color\":\"#e0bae3\"}}"
       )
     )
 
