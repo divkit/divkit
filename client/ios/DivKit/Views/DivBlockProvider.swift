@@ -28,6 +28,7 @@ final class DivBlockProvider {
 
   private var debugParams = DebugParams()
   private var dataErrors = [DeserializationError]()
+  private var updateInProgress = false
 
   private let measurements = DebugParams.Measurements(
     divDataParsingTime: TimeMeasure(),
@@ -186,6 +187,15 @@ final class DivBlockProvider {
 
     guard needUpdateBlock(reasons: reasons) else {
       return
+    }
+
+    guard !updateInProgress else {
+      return
+    }
+
+    updateInProgress = true
+    defer {
+      updateInProgress = false
     }
 
     let context = divKitComponents.makeContext(
