@@ -168,7 +168,7 @@ picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 
 protobuf = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
 
-rive = { module = "app.rive:rive-android", version = "4.2.1" }
+rive = { module = "app.rive:rive-android", version = "10.1.0" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 

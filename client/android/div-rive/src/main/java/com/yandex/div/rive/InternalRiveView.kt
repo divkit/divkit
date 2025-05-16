@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.MainThread
 import app.rive.runtime.kotlin.RiveAnimationView
-import app.rive.runtime.kotlin.RiveArtboardRenderer
+import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.core.Alignment
 import app.rive.runtime.kotlin.core.Fit
 import app.rive.runtime.kotlin.core.Loop
+import app.rive.runtime.kotlin.core.Rive
+import app.rive.runtime.kotlin.renderers.Renderer
+import app.rive.runtime.kotlin.renderers.RiveArtboardRenderer
 
 /**
  * Wrapper over RiveAnimationView.
@@ -69,7 +72,7 @@ internal class DivRiveContainer @JvmOverloads constructor(
 }
 
 internal class InternalRiveView(context: Context) : RiveAnimationView(context) {
-    override val renderer: RiveArtboardRenderer = InternalArtboardRenderer()
+    override fun createRenderer(): Renderer = InternalArtboardRenderer(controller)
 
     @Deprecated("Deprecated in Java")
     override fun setBackgroundDrawable(background: Drawable?) {}
@@ -93,7 +96,9 @@ internal class InternalRiveView(context: Context) : RiveAnimationView(context) {
         requestLayout()
     }
 
-    internal class InternalArtboardRenderer : RiveArtboardRenderer() {
+    internal class InternalArtboardRenderer(
+        controller: RiveFileController
+    ) : RiveArtboardRenderer(false, Rive.defaultRendererType, controller) {
 
         private var hasAnimation = false
 
