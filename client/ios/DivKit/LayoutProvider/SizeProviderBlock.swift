@@ -1,3 +1,4 @@
+import Foundation
 import LayoutKit
 
 final class SizeProviderBlock: WrapperBlock, LayoutCachingDefaultImpl {
@@ -30,6 +31,19 @@ final class SizeProviderBlock: WrapperBlock, LayoutCachingDefaultImpl {
       return false
     }
     return self == other
+  }
+}
+
+extension SizeProviderBlock {
+  var childMarginSize: CGSize {
+    guard let child = child as? PaddingProvidingBlock else {
+      return .zero
+    }
+
+    return CGSize(
+      width: child.margins(direction: .horizontal),
+      height: child.margins(direction: .vertical)
+    )
   }
 }
 

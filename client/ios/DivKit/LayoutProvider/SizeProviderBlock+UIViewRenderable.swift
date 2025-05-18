@@ -21,7 +21,8 @@ extension SizeProviderBlock {
       block: self,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate
+      renderingDelegate: renderingDelegate,
+      childMarginsSize: childMarginSize
     )
   }
 }
@@ -41,13 +42,17 @@ private final class SizeProviderBlockView: BlockView {
 
   var effectiveBackgroundColor: UIColor? { childView.backgroundColor }
 
+  var childMarginsSize = CGSize.zero
+
   func configure(
     block: SizeProviderBlock,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
+    renderingDelegate: RenderingDelegate?,
+    childMarginsSize: CGSize
   ) {
     self.block = block
+    self.childMarginsSize = childMarginsSize
     childView = block.child.reuse(
       childView,
       observer: observer,
@@ -61,8 +66,8 @@ private final class SizeProviderBlockView: BlockView {
   override func layoutSubviews() {
     super.layoutSubviews()
     childView.frame = bounds
-    block.widthUpdater?(Int(bounds.width))
-    block.heightUpdater?(Int(bounds.height))
+    block.widthUpdater?(Int(bounds.width - childMarginsSize.width))
+    block.heightUpdater?(Int(bounds.height - childMarginsSize.height))
   }
 }
 

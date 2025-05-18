@@ -110,3 +110,14 @@ extension Alignment {
     }
   }
 }
+
+extension ContainerBlock.LayoutDirection {
+  var cast: ScrollDirection {
+    switch self {
+    case .horizontal:
+      return .horizontal
+    case .vertical:
+      return .vertical
+    }
+  }
+}

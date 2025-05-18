@@ -119,7 +119,8 @@ struct ContainerBlockLayout {
       .reduce(into: ResizableBlocksData(0, 0.0, 0.0)) {
         $0.blocksCount += 1
         $0.totalWeight += $1.weightOfResizableBlock(in: layoutDirection)
-        $0.marginsSize += ($1 as? PaddingProviding)?.margins(direction: layoutDirection) ?? 0
+        $0.marginsSize += ($1 as? PaddingProvidingBlock)?
+          .margins(direction: layoutDirection.cast) ?? 0
       }
 
     let sizeOfNonResizableBlocks: CGFloat = switch layoutDirection {
@@ -444,14 +445,14 @@ extension Block {
   fileprivate var horizontalMeasure: ResizableBlockMeasure.Measure {
     isHorizontallyResizable ? .resizable(
       weightOfHorizontallyResizableBlock,
-      reservedSpace: (self as? PaddingProviding)?.margins(direction: .horizontal) ?? 0.0
+      reservedSpace: (self as? PaddingProvidingBlock)?.margins(direction: .horizontal) ?? 0.0
     ) : .nonResizable
   }
 
   fileprivate var verticalMeasure: ResizableBlockMeasure.Measure {
     isVerticallyResizable ? .resizable(
       weightOfVerticallyResizableBlock,
-      reservedSpace: (self as? PaddingProviding)?.margins(direction: .vertical) ?? 0.0
+      reservedSpace: (self as? PaddingProvidingBlock)?.margins(direction: .vertical) ?? 0.0
     ) : .nonResizable
   }
 }
@@ -527,23 +528,3 @@ extension ContainerBlock.Child {
     return ascent - childAscent
   }
 }
-
-fileprivate protocol PaddingProviding {
-  var paddings: EdgeInsets { get }
-  var child: Block { get }
-}
-
-extension PaddingProviding {
-  func margins(direction: ContainerBlock.LayoutDirection) -> CGFloat {
-    guard child is PaddingProviding else { return 0 }
-
-    switch direction {
-    case .horizontal:
-      return paddings.horizontal.sum
-    case .vertical:
-      return paddings.vertical.sum
-    }
-  }
-}
-
-extension DecoratingBlock: PaddingProviding {}

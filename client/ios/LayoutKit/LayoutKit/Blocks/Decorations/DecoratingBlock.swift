@@ -195,6 +195,8 @@ extension DecoratingBlock {
   }
 }
 
+extension DecoratingBlock: PaddingProvidingBlock {}
+
 extension DecoratingBlock {
   var childPath: UIElementPath? {
     switch child {
