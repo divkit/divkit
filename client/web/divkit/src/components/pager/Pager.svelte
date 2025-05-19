@@ -16,6 +16,7 @@
 
     const DUPLICATES_IN_INFINITE = 2;
     const WHEEL_THROTTLE = 400;
+    const MIN_SWIPE_DISTANCE = 8;
 
     function getItemMods(orientation: Orientation, childInfo: {
         width?: MaybeMissing<Size>;
@@ -697,8 +698,6 @@
         const scrollSize = getScrollSize();
         const swipeStartTime = Date.now();
 
-        event.preventDefault();
-
         const onPointerMove = (event: PointerEvent) => {
             const current = isHorizontal ? event.pageX : event.pageY;
             let newTransform = startTransform + current - start;
@@ -735,7 +734,9 @@
             // 512px limit for big screens
             const panelsWrapperWidth = Math.min(512, containerSize);
             const swipeDist = Math.abs(startTransform - transform);
-            if (swipeDist < 8) {
+            if (swipeDist < MIN_SWIPE_DISTANCE) {
+                scrollToVisiblePagerItem(allToVisibleMap[currentItem], true);
+
                 return;
             }
 
