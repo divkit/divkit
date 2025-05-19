@@ -137,7 +137,7 @@
       {
         "name": "filter",
         "type": "string",
-        "value": "\\d"
+        "value": "\\\\d"
       },
       {
         "name": "placeholder",
