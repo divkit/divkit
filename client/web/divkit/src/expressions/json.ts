@@ -15,9 +15,11 @@ import type { CustomFunctions } from './funcs/customFuncs';
 
 class ExpressionBinding {
     private readonly ast: Node;
+    private readonly expr: string;
 
-    constructor(ast: Node) {
+    constructor(ast: Node, expr: string) {
         this.ast = ast;
+        this.expr = expr;
     }
 
     /**
@@ -52,7 +54,8 @@ class ExpressionBinding {
             if (result.type === 'error') {
                 logError(wrapError(new Error('Expression execution error'), {
                     additional: {
-                        message: result.value
+                        message: result.value,
+                        expression: this.expr
                     }
                 }));
                 return undefined;
@@ -89,7 +92,11 @@ class ExpressionBinding {
             }
             return value;
         } catch (err) {
-            logError(wrapError(new Error('Expression execution error')));
+            logError(wrapError(new Error('Expression execution error'), {
+                additional: {
+                    expression: this.expr
+                }
+            }));
             return undefined;
         }
     }
@@ -155,7 +162,7 @@ function prepareVarsObj<T>(
                         const propVars = gatherVarsFromAst(ast);
                         store.vars.push(...propVars);
 
-                        return new ExpressionBinding(ast);
+                        return new ExpressionBinding(ast, jsonProp);
                     } catch (err) {
                         logError(wrapError(new Error('Unable to parse expression'), {
                             additional: {

@@ -2282,6 +2282,11 @@
             componentContext.getJsonWithVars(variable.value, additionalVars, true) :
             getJsonWithVars(logError, variable.value, additionalVars, true);
 
+        if (variable.value && typeof variable.value === 'string' && value === undefined) {
+            // Expression error - already logged inside getJsonWithVars
+            return;
+        }
+
         if (
             variable.type === 'integer' && typeof value === 'number' &&
             (value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER)
