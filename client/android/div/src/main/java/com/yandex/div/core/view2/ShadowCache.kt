@@ -39,12 +39,17 @@ internal object ShadowCache {
 
     private val shadowMap = mutableMapOf<ShadowCacheKey, NinePatch>()
 
-    fun getShadow(context: Context, radii: FloatArray, blur: Float): NinePatch {
-        return shadowMap.getOrPut(ShadowCacheKey(radii, blur)) {
-            createNewShadow(context, radii, blur)
-        }
-    }
+    fun getShadow(context: Context, radii: FloatArray, blur: Float): NinePatch? {
+        val shadowCacheKey = ShadowCacheKey(radii, blur)
 
+        var shadow = shadowMap[shadowCacheKey]
+        if (shadow == null) {
+            shadow = createNewShadow(context, radii, blur)?.also {
+                shadowMap[shadowCacheKey] = it
+            }
+        }
+        return shadow
+    }
     /**
      * Simplified shadow creation stages:
      * 1. Draw shadow rect on first bitmap.
@@ -60,9 +65,11 @@ internal object ShadowCache {
      *
      * Shadow uses only alpha channel, so you must set shadow color with paint on draw
      */
-    private fun createNewShadow(context: Context, radii: FloatArray, blur: Float): NinePatch {
+    private fun createNewShadow(context: Context, radii: FloatArray, blur: Float): NinePatch? {
         val rectWidth = blur + maxOf(radii[1] + radii[2], radii[5] + radii[6])
         val rectHeight = blur + maxOf(radii[0] + radii[7], radii[3] + radii[4])
+
+        if (rectWidth <= 0 || rectHeight <= 0) return null
 
         val coercedBlur = blur.coerceIn(MIN_BLUR, MAX_BLUR)
 
