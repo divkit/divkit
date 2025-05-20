@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { TypedAction } from '@divkitframework/divkit/typings/common';
 import { schema, type Schema } from './schema';
 
 export interface ControlBase {
     type: string;
     required: boolean;
-    name: keyof TypedAction;
+    name: string;
     description?: {
         ru: string;
         en: string;
@@ -23,7 +22,7 @@ export interface SelectControl extends ControlBase {
         text: string;
         value: string;
     }[];
-    subcontrols: {
+    subcontrols?: {
         [value: string]: Control[];
     };
 }
@@ -39,6 +38,11 @@ function resolveObject(root: any, obj: any) {
         if (obj.$ref === 'common.json#/non_empty_string') {
             return {
                 type: 'string'
+            };
+        }
+        if (obj.$ref === 'common.json#/non_negative_integer') {
+            return {
+                type: 'integer'
             };
         }
         if (obj.$ref === 'common.json#/color') {
@@ -65,7 +69,7 @@ function resolveObject(root: any, obj: any) {
                 for (let i = 0; i < val.length; ++i) {
                     val[i] = resolveObject(root, val[i]);
                 }
-            } else {
+            } else if (val?.items?.$ref !== 'div-action.json') {
                 obj[key] = resolveObject(root, val);
             }
         }
@@ -80,12 +84,31 @@ function resolveSchema(schemaPath: string): any {
     return resolveObject(json, json);
 }
 
-function parseControlsInner(obj: Schema): Control[] {
+function parseControlsInner(obj: Schema, prefix = ''): Control[] {
     const controls: Control[] = [];
 
     let required = new Set<string>();
     if (Array.isArray(obj.required)) {
         required = new Set(obj.required);
+    }
+
+    if (Array.isArray(obj.allOf)) {
+        let res: any = {};
+
+        obj.allOf.forEach(prop => {
+            const props = prop.properties ? {
+                ...(res.properties || {}),
+                ...prop.properties
+            } : res.properties;
+
+            res = {
+                ...res,
+                ...prop,
+                properties: props
+            };
+        });
+
+        obj = res;
     }
 
     if (obj.properties) {
@@ -97,7 +120,7 @@ function parseControlsInner(obj: Schema): Control[] {
 
             if (prop.anyOf) {
                 const control: SelectControl = {
-                    name: key as keyof TypedAction,
+                    name: prefix + key + '.type',
                     type: 'select',
                     options: prop.anyOf.map(item => {
                         const type = item.properties?.type?.enum?.[0];
@@ -117,13 +140,18 @@ function parseControlsInner(obj: Schema): Control[] {
                 prop.anyOf.forEach(item => {
                     const type = item.properties?.type?.enum?.[0];
 
-                    if (type) {
+                    if (type && control.subcontrols) {
                         control.subcontrols[type] = parseControlsInner(item);
                     }
                 });
 
                 controls.push(control);
+            } else if (prop?.type === 'object') {
+                controls.push(...parseControlsInner(prop, prefix + key + '.'));
             } else {
+                if (prop.type === 'array') {
+                    continue;
+                }
                 let type: StringControl['type'] = 'string';
                 const propType = prop.type;
 
@@ -135,11 +163,25 @@ function parseControlsInner(obj: Schema): Control[] {
                     type = propType;
                 }
 
-                controls.push({
-                    name: key as keyof TypedAction,
-                    type,
-                    required: required.has(key),
-                });
+                if (Array.isArray(prop.enum) && type === 'string') {
+                    controls.push({
+                        name: prefix + key,
+                        type: 'select',
+                        options: prop.enum.map(item => {
+                            return {
+                                text: item,
+                                value: item
+                            };
+                        }),
+                        required: required.has(key)
+                    });
+                } else {
+                    controls.push({
+                        name: prefix + key,
+                        type,
+                        required: required.has(key),
+                    });
+                }
             }
         }
     }

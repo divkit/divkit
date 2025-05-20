@@ -10,7 +10,8 @@
     equal @left,
     and @left,
     or @left,
-    try @left
+    try @left,
+    conditional @left
 }
 
 @skip { space }
@@ -36,6 +37,7 @@ expression {
     "(" expression ")" |
     Call |
     Method |
+    Conditional |
     UnaryExpression |
     BinaryExpression
 }
@@ -52,6 +54,10 @@ BinaryExpression {
 
 UnaryExpression {
     !unary ("+" | "-") expression
+}
+
+Conditional {
+    expression !conditional "?" expression ":" expression
 }
 
 Method {

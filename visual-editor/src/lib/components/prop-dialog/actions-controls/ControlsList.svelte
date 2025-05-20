@@ -24,7 +24,7 @@
     export let readOnly: boolean | undefined;
 
     $: controls.forEach(control => {
-        if (control.type === 'select') {
+        if (control.type === 'select' && control.subcontrols) {
             value[control.name] = value[control.name] || {};
         }
     });
@@ -42,19 +42,30 @@
             <!-- svelte-ignore a11y-label-has-associated-control -->
             <label class="controls-list__row">
                 <div class="controls-list__label">
-                    {control.name}{#if control.type === 'select'}.type{/if}
+                    {control.name}
                 </div>
 
                 {#if control.type === 'select'}
-                    <Select
-                        bind:value={value[control.name].type}
-                        theme="normal"
-                        size="medium"
-                        items={control.options}
-                        disabled={readOnly}
-                        on:change={() => onTypeChange(control.name)}
-                        on:change
-                    />
+                    {#if control.subcontrols}
+                        <Select
+                            bind:value={value[control.name].type}
+                            theme="normal"
+                            size="medium"
+                            items={control.options}
+                            disabled={readOnly}
+                            on:change={() => onTypeChange(control.name)}
+                            on:change
+                        />
+                    {:else}
+                        <Select
+                            bind:value={value[control.name]}
+                            theme="normal"
+                            size="medium"
+                            items={control.options}
+                            disabled={readOnly}
+                            on:change
+                        />
+                    {/if}
                 {:else if control.type === 'boolean'}
                     <Checkbox
                         disabled={readOnly}
@@ -78,7 +89,7 @@
                 {/if}
             </label>
 
-            {#if control.type === 'select' && control.subcontrols[value[control.name].type]}
+            {#if control.type === 'select' && control.subcontrols?.[value[control.name].type]}
                 <div class="controls-list__sublist">
                     {#key value[control.name].type}
                         <svelte:self

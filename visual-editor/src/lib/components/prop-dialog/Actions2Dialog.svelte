@@ -9,7 +9,15 @@
         array_set_value: 'div-action-array-set-value',
         copy_to_clipboard: 'div-action-copy-to-clipboard',
         show_tooltip: 'div-action-show-tooltip',
-        hide_tooltip: 'div-action-hide-tooltip'
+        hide_tooltip: 'div-action-hide-tooltip',
+        timer: 'div-action-timer',
+        video: 'div-action-video',
+        download: 'div-action-download',
+        set_state: 'div-action-set-state',
+        scroll_by: 'div-action-scroll-by',
+        scroll_to: 'div-action-scroll-to',
+        set_stored_value: 'div-action-set-stored-value',
+        submit: 'div-action-submit'
     };
 </script>
 
@@ -91,6 +99,14 @@
 
     function onSubtypeChange(): void {
         customDesc = subtype.startsWith('custom:') ? $customActions[Number(subtype.split(':')[1])] : undefined;
+        if (customDesc || !subtype.startsWith('typed:')) {
+            for (const key in value) {
+                if (key !== 'url' && key !== 'log_id' && key !== 'log_url') {
+                    delete value[key as keyof typeof value];
+                }
+            }
+        }
+
         if (customDesc) {
             value.url = customActionToUrl(customDesc, []);
             actionArgs = customDesc.args?.map(desc => {
@@ -149,6 +165,30 @@
     }, {
         value: 'typed:hide_tooltip',
         text: $l10n('actions.hide_tooltip')
+    }, {
+        value: 'typed:timer',
+        text: $l10n('actions.timer')
+    }, {
+        value: 'typed:video',
+        text: $l10n('actions.video')
+    }, {
+        value: 'typed:download',
+        text: $l10n('actions.download')
+    }, {
+        value: 'typed:set_state',
+        text: $l10n('actions.set_state')
+    }, {
+        value: 'typed:scroll_by',
+        text: $l10n('actions.scroll_by')
+    }, {
+        value: 'typed:scroll_to',
+        text: $l10n('actions.scroll_to')
+    }, {
+        value: 'typed:set_stored_value',
+        text: $l10n('actions.set_stored_value')
+    }, {
+        value: 'typed:submit',
+        text: $l10n('actions.submit')
     }].concat($customActions.map((actionDesc, i) => {
         return {
             value: `custom:${i}`,

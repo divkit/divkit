@@ -63,6 +63,12 @@ const divThemeExt = EditorView.theme({
         backgroundColor: 'var(--background-primary) !important',
         color: 'var(--text-primary) !important'
     },
+    '& .cm-cursor': {
+        borderLeftColor: 'var(--text-primary) !important'
+    },
+    '& .cm-dropCursor': {
+        borderLeftColor: 'var(--text-primary) !important'
+    },
     '& .cm-gutters': {
         backgroundColor: 'var(--fill-opaque-1) !important'
     },
@@ -70,8 +76,8 @@ const divThemeExt = EditorView.theme({
         fontSize: '20px',
         overflow: 'auto'
     },
-    '& cm-selectionBackground': {
-        backgroundColor: 'var(--fill-transparent-2) !important'
+    '& .cm-selectionBackground': {
+        backgroundColor: 'var(--fill-accent-2) !important'
     }
 });
 

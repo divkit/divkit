@@ -9,7 +9,15 @@
         ActionDictSetValue,
         ActionArraySetValue,
         ActionShowTooltip,
-        ActionHideTooltip
+        ActionHideTooltip,
+        ActionTimer,
+        ActionVideo,
+        ActionDownload,
+        ActionSetState,
+        ActionStore,
+        ActionSubmit,
+        ActionScrollBy,
+        ActionScrollTo
     } from '@divkitframework/divkit/typings/common';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { parseAction } from '../../data/actions';
@@ -66,6 +74,30 @@
             } else if (parsed.type === 'typed:hide_tooltip') {
                 type = $l10n('actions.hide_tooltip');
                 text = (parsed.typedParams as ActionHideTooltip)?.id || '';
+            } else if (parsed.type === 'typed:timer') {
+                type = $l10n('actions.timer');
+                text = (parsed.typedParams as ActionTimer)?.action || '';
+            } else if (parsed.type === 'typed:video') {
+                type = $l10n('actions.video');
+                text = (parsed.typedParams as ActionVideo)?.action || '';
+            } else if (parsed.type === 'typed:download') {
+                type = $l10n('actions.download');
+                text = (parsed.typedParams as ActionDownload)?.url || '';
+            } else if (parsed.type === 'typed:set_state') {
+                type = $l10n('actions.set_state');
+                text = (parsed.typedParams as ActionSetState)?.state_id || '';
+            } else if (parsed.type === 'typed:scroll_by') {
+                type = $l10n('actions.scroll_by');
+                text = (parsed.typedParams as ActionScrollBy)?.id || '';
+            } else if (parsed.type === 'typed:scroll_to') {
+                type = $l10n('actions.scroll_to');
+                text = (parsed.typedParams as ActionScrollTo)?.id || '';
+            } else if (parsed.type === 'typed:set_stored_value') {
+                type = $l10n('actions.set_stored_value');
+                text = (parsed.typedParams as ActionStore)?.name || '';
+            } else if (parsed.type === 'typed:submit') {
+                type = $l10n('actions.submit');
+                text = (parsed.typedParams as ActionSubmit)?.container_id || '';
             } else {
                 type = $l10n('actions-unknown');
                 text = parsed.url || '';
