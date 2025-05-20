@@ -9,11 +9,6 @@
         },
         {
           "properties": {
-            "text_color": {
-              "$ref": "common.json#/color",
-              "default_value": "#FF000000",
-              "$description": "translations.json#/div_text_color"
-            },
             "offset": {
               "$ref": "div-point.json",
               "$description": "translations.json#/div_slider_text_style_offset"

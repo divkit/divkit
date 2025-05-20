@@ -3,6 +3,7 @@ package com.yandex.div.internal.widget.slider.shapes
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import com.yandex.div.core.view2.divs.supportFontVariations
 import com.yandex.div.internal.widget.slider.SliderTextStyle
 
 internal class TextDrawDelegate(private val textStyle: SliderTextStyle) {
@@ -11,9 +12,13 @@ internal class TextDrawDelegate(private val textStyle: SliderTextStyle) {
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textStyle.run {
             textSize = fontSize
+            letterSpacing = spacing
             color = textColor
             typeface = fontWeight
             style = Paint.Style.FILL
+            if (supportFontVariations) {
+                fontVariationSettings = fontVariations
+            }
         }
     }
     var text: String? = null

@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.expression.variables.TwoWayVariableBinder
+import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
@@ -26,7 +27,9 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivSelectBinderTest : DivBinderTest() {
-    private val divTypefaceResolver = mock<DivTypefaceResolver>()
+    private val divTypefaceResolver = mock<DivTypefaceResolver> {
+        on { getTypefaceProvider(anyOrNull()) } doReturn DivTypefaceProvider.DEFAULT
+    }
     private val variableBinder = mock<TwoWayStringVariableBinder> {
         on { bindVariable(any(), any(), any(), any()) } doReturn mock()
     }

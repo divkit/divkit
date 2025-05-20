@@ -36,6 +36,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
+import com.yandex.divkit.demo.font.RobotoFlexTypefaceProvider
 import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
@@ -80,7 +81,8 @@ fun divConfiguration(
         .additionalTypefaceProviders(
             mapOf(
                 "display" to YandexSansDisplayDivTypefaceProvider(activity),
-                "condensed" to YandexSansCondensedTypefaceProvider(activity)
+                "condensed" to YandexSansCondensedTypefaceProvider(activity),
+                "roboto_flex" to RobotoFlexTypefaceProvider(activity),
             )
         )
         .viewPoolReporter(object : ViewPoolProfiler.Reporter {

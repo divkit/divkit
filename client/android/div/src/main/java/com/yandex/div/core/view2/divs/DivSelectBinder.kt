@@ -4,14 +4,12 @@ import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivSelect
@@ -40,10 +38,7 @@ internal class DivSelectBinder @Inject constructor(
         applyOptions(div, bindingContext)
         observeVariable(div, bindingContext, path)
 
-        observeFontSize(div, expressionResolver)
-        observeTypeface(div, expressionResolver)
-        observeTextColor(div, expressionResolver)
-        observeLineHeight(div, expressionResolver)
+        observeBaseTextProperties(div, oldDiv, expressionResolver)
 
         observeHintText(div, expressionResolver)
         observeHintColor(div, expressionResolver)
@@ -121,54 +116,33 @@ internal class DivSelectBinder @Inject constructor(
         addSubscription(subscription)
     }
 
-    private fun DivSelectView.observeFontSize(div: DivSelect, resolver: ExpressionResolver) {
-        val callback = { _: Any ->
-            val fontSize = div.fontSize.evaluate(resolver).toIntSafely()
-
-            applyFontSize(fontSize, div.fontSizeUnit.evaluate(resolver))
-            applyLetterSpacing(div.letterSpacing.evaluate(resolver), fontSize)
-        }
-
-        addSubscription(div.fontSize.observeAndGet(resolver, callback))
-        addSubscription(div.letterSpacing.observe(resolver, callback))
-        addSubscription(div.fontSizeUnit.observe(resolver, callback))
-    }
-
-    private fun DivSelectView.observeTypeface(div: DivSelect, resolver: ExpressionResolver) {
-        applyTypeface(div, resolver)
-        val callback = { _: Any ->  applyTypeface(div, resolver) }
-        div.fontFamily?.observeAndGet(resolver, callback)?.let { addSubscription(it) }
-        addSubscription(div.fontWeight.observe(resolver, callback))
-        addSubscription(div.fontWeightValue?.observe(resolver, callback))
-    }
-
-    private fun DivSelectView.applyTypeface(div: DivSelect, resolver: ExpressionResolver) {
-        typeface = typefaceResolver.getTypeface(
-            div.fontFamily?.evaluate(resolver),
-            div.fontWeight.evaluate(resolver),
-            div.fontWeightValue?.evaluate(resolver)
+    private fun DivSelectView.observeBaseTextProperties(
+        div: DivSelect,
+        oldDiv: DivSelect?,
+        resolver: ExpressionResolver
+    ) {
+        observeBaseTextProperties(
+            div.fontSize,
+            div.fontSizeUnit,
+            div.letterSpacing,
+            div.textColor,
+            div.lineHeight,
+            div.fontFamily,
+            div.fontWeight,
+            div.fontWeightValue,
+            div.fontVariationSettings,
+            oldDiv?.fontSize,
+            oldDiv?.fontSizeUnit,
+            oldDiv?.letterSpacing,
+            oldDiv?.textColor,
+            oldDiv?.lineHeight,
+            oldDiv?.fontFamily,
+            oldDiv?.fontWeight,
+            oldDiv?.fontWeightValue,
+            oldDiv?.fontVariationSettings,
+            typefaceResolver,
+            resolver,
         )
-    }
-
-    private fun DivSelectView.observeTextColor(div: DivSelect, resolver: ExpressionResolver) {
-        addSubscription(div.textColor.observeAndGet(resolver) { textColor ->
-            setTextColor(textColor)
-        })
-    }
-
-    private fun DivSelectView.observeLineHeight(div: DivSelect, resolver: ExpressionResolver) {
-        val lineHeightExpr = div.lineHeight ?: return applyLineHeight(null, div.fontSizeUnit.evaluate(resolver))
-
-        val callback = { _: Any ->
-            val height = lineHeightExpr.evaluate(resolver)
-            val unit = div.fontSizeUnit.evaluate(resolver)
-
-            lineHeight = height.unitToPx(resources.displayMetrics, unit)
-            applyLineHeight(height, unit)
-        }
-
-        addSubscription(lineHeightExpr.observeAndGet(resolver, callback))
-        addSubscription(div.fontSizeUnit.observe(resolver, callback))
     }
 
     private fun DivSelectView.observeHintText(div: DivSelect, resolver: ExpressionResolver) {

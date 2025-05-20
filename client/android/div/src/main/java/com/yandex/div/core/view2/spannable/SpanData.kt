@@ -6,6 +6,7 @@ import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivTextAlignmentVertical
+import org.json.JSONObject
 
 internal data class SpanData(
     val start: Int,
@@ -18,6 +19,7 @@ internal data class SpanData(
     val fontSizeUnit: DivSizeUnit,
     val fontWeight: DivFontWeight?,
     val fontWeightValue: Int?,
+    val fontVariationSettings: JSONObject?,
     val letterSpacing: Double?,
     @Px val lineHeight: Int?,
     val strike: DivLineStyle?,
@@ -41,6 +43,7 @@ internal data class SpanData(
             fontSizeUnit = if (span.fontSizeUnit == DEFAULT_FONT_SIZE_UNIT) fontSizeUnit else span.fontSizeUnit,
             fontWeight = span.fontWeight ?: fontWeight,
             fontWeightValue = span.fontWeightValue ?: fontWeightValue,
+            fontVariationSettings = span.fontVariationSettings ?: fontVariationSettings,
             letterSpacing = span.letterSpacing ?: letterSpacing,
             lineHeight = span.lineHeight ?: lineHeight,
             strike = span.strike ?: strike,
@@ -94,6 +97,7 @@ internal data class SpanData(
                 fontSizeUnit = DEFAULT_FONT_SIZE_UNIT,
                 fontWeight = null,
                 fontWeightValue = null,
+                fontVariationSettings = null,
                 letterSpacing = null,
                 lineHeight = null,
                 strike = null,
@@ -118,6 +122,7 @@ internal data class SpanData(
                 fontSizeUnit = DEFAULT_FONT_SIZE_UNIT,
                 fontWeight = null,
                 fontWeightValue = null,
+                fontVariationSettings = null,
                 letterSpacing = null,
                 lineHeight = lineHeight,
                 strike = null,

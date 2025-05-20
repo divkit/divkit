@@ -2,7 +2,8 @@ package com.yandex.div.core
 
 import android.graphics.Typeface
 import com.yandex.div.core.font.DivTypefaceProvider
-import com.yandex.div.core.view2.divs.getTypefaceValue
+import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.view2.getTypefaceValue
 import com.yandex.div2.DivFontWeight
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -87,7 +88,7 @@ class DivTypefaceProviderTest {
     private fun buildStubTypeface(weight: Int) = Typeface.create(Typeface.DEFAULT, weight, false)
 
     private fun getTypefaceFrom(weight: DivFontWeight? = null, value: Long? = null): Typeface {
-        val typefaceValue = getTypefaceValue(weight, value)
+        val typefaceValue = getTypefaceValue(weight, value?.toIntSafely())
         return testTypefaceProvider.getTypefaceFor(typefaceValue) ?: Typeface.DEFAULT
     }
 }

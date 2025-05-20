@@ -22,7 +22,6 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
-import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.core.view2.spannable.ShadowData
 import com.yandex.div.core.view2.spannable.SpannedTextBuilder
 import com.yandex.div.core.widget.AdaptiveMaxLines
@@ -41,7 +40,6 @@ import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivRadialGradient
@@ -49,7 +47,6 @@ import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivShadow
-import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
@@ -88,6 +85,7 @@ internal class DivTextBinder @Inject constructor(
         bindTypeface(div, oldDiv, expressionResolver)
         bindTextAlignment(div, oldDiv, expressionResolver)
         bindFontSize(div, oldDiv, expressionResolver)
+        bindLetterSpacing(div, oldDiv, expressionResolver)
         bindFontFeatureSettings(div, oldDiv, expressionResolver)
         bindTextColor(div, oldDiv, expressionResolver)
         bindUnderline(div, oldDiv, expressionResolver)
@@ -198,46 +196,11 @@ internal class DivTextBinder @Inject constructor(
 
     //region Font Size
 
-    private fun DivLineHeightTextView.bindFontSize(
-        newDiv: DivText,
-        oldDiv: DivText?,
-        resolver: ExpressionResolver
-    ) {
-        if (newDiv.fontSize.equalsToConstant(oldDiv?.fontSize)
-            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)
-            && newDiv.letterSpacing.equalsToConstant(oldDiv?.letterSpacing)) {
-            return
-        }
+    private fun DivLineHeightTextView.bindFontSize(div: DivText, oldDiv: DivText?, resolver: ExpressionResolver) =
+        observeFontSize(div.fontSize, div.fontSizeUnit, oldDiv?.fontSize, oldDiv?.fontSizeUnit, resolver, this)
 
-        applyFontSize(
-            newDiv.fontSize.evaluate(resolver),
-            newDiv.fontSizeUnit.evaluate(resolver),
-            newDiv.letterSpacing.evaluate(resolver)
-        )
-
-        if (newDiv.fontSize.isConstant()
-            && newDiv.fontSizeUnit.isConstant()
-            && newDiv.letterSpacing.isConstant()) {
-            return
-        }
-
-        val callback = { _: Any ->
-            applyFontSize(
-                newDiv.fontSize.evaluate(resolver),
-                newDiv.fontSizeUnit.evaluate(resolver),
-                newDiv.letterSpacing.evaluate(resolver)
-            )
-        }
-        addSubscription(newDiv.fontSize.observe(resolver, callback))
-        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
-        addSubscription(newDiv.letterSpacing.observe(resolver, callback))
-    }
-
-    private fun TextView.applyFontSize(size: Long, unit: DivSizeUnit, letterSpacing: Double) {
-        val fontSize = size.toIntSafely()
-        applyFontSize(fontSize, unit)
-        applyLetterSpacing(letterSpacing, fontSize)
-    }
+    private fun DivLineHeightTextView.bindLetterSpacing(div: DivText, oldDiv: DivText?, resolver: ExpressionResolver) =
+        observeLetterSpacing(div.letterSpacing, div.fontSize, oldDiv?.letterSpacing, oldDiv?.fontSize, resolver, this)
 
     //endregion
 
@@ -277,39 +240,18 @@ internal class DivTextBinder @Inject constructor(
         oldDiv: DivText?,
         resolver: ExpressionResolver,
     ) {
-        if (newDiv.fontFamily.equalsToConstant(oldDiv?.fontFamily)
-            && newDiv.fontWeight.equalsToConstant(oldDiv?.fontWeight)) {
-            return
-        }
-
-        applyTypeface(
-            newDiv.fontFamily?.evaluate(resolver),
-            newDiv.fontWeight.evaluate(resolver),
-            newDiv.fontWeightValue?.evaluate(resolver),
+        observeTypeface(
+            newDiv.fontFamily,
+            newDiv.fontWeight,
+            newDiv.fontWeightValue,
+            newDiv.fontVariationSettings,
+            oldDiv?.fontFamily,
+            oldDiv?.fontWeight,
+            oldDiv?.fontWeightValue,
+            oldDiv?.fontVariationSettings,
+            typefaceResolver,
+            resolver,
         )
-
-        if (newDiv.fontFamily.isConstantOrNull() && newDiv.fontWeight.isConstant() && newDiv.fontWeightValue.isConstantOrNull()) {
-            return
-        }
-
-        val callback = { _: Any ->
-             applyTypeface(
-                newDiv.fontFamily?.evaluate(resolver),
-                newDiv.fontWeight.evaluate(resolver),
-                newDiv.fontWeightValue?.evaluate(resolver)
-            )
-        }
-        addSubscription(newDiv.fontFamily?.observe(resolver, callback))
-        addSubscription(newDiv.fontWeight.observe(resolver, callback))
-        addSubscription(newDiv.fontWeightValue?.observe(resolver, callback))
-    }
-
-    private fun TextView.applyTypeface(
-        fontFamily: String?,
-        fontWeight: DivFontWeight,
-        fontWeightValue: Long?
-    ) {
-        typeface = typefaceResolver.getTypeface(fontFamily, fontWeight, fontWeightValue)
     }
 
     //endregion
@@ -682,16 +624,27 @@ internal class DivTextBinder @Inject constructor(
             addSubscription(range.start.observe(resolver, callback))
             addSubscription(range.end?.observe(resolver, callback))
             addSubscription(range.alignmentVertical?.observe(resolver, callback))
+            addSubscription(range.baselineOffset.observe(resolver, callback))
             addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
+            addSubscription(range.fontFamily?.observe(resolver, callback))
             addSubscription(range.fontWeight?.observe(resolver, callback))
             addSubscription(range.fontWeightValue?.observe(resolver, callback))
+            addSubscription(range.fontFeatureSettings?.observe(resolver, callback))
             addSubscription(range.letterSpacing?.observe(resolver, callback))
             addSubscription(range.lineHeight?.observe(resolver, callback))
             addSubscription(range.strike?.observe(resolver, callback))
             addSubscription(range.textColor?.observe(resolver, callback))
             addSubscription(range.topOffset?.observe(resolver, callback))
             addSubscription(range.underline?.observe(resolver, callback))
+            when (val background = range.background?.value()) {
+                is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
+            }
+            addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
+            addSubscription(range.border?.stroke?.width?.observe(resolver, callback))
+            if (supportFontVariations) {
+                addSubscription(range.fontVariationSettings?.observe(resolver, callback))
+            }
         }
         newDiv.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))
@@ -831,10 +784,14 @@ internal class DivTextBinder @Inject constructor(
         ellipsis.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
             addSubscription(range.end?.observe(resolver, callback))
+            addSubscription(range.alignmentVertical?.observe(resolver, callback))
+            addSubscription(range.baselineOffset.observe(resolver, callback))
             addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
+            addSubscription(range.fontFamily?.observe(resolver, callback))
             addSubscription(range.fontWeight?.observe(resolver, callback))
             addSubscription(range.fontWeightValue?.observe(resolver, callback))
+            addSubscription(range.fontFeatureSettings?.observe(resolver, callback))
             addSubscription(range.letterSpacing?.observe(resolver, callback))
             addSubscription(range.lineHeight?.observe(resolver, callback))
             addSubscription(range.strike?.observe(resolver, callback))
@@ -846,6 +803,9 @@ internal class DivTextBinder @Inject constructor(
             }
             addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
             addSubscription(range.border?.stroke?.width?.observe(resolver, callback))
+            if (supportFontVariations) {
+                addSubscription(range.fontVariationSettings?.observe(resolver, callback))
+            }
         }
         ellipsis.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))

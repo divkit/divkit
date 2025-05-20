@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.spannable
 import android.content.Context
 import android.graphics.Paint
 import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.BitmapDrawable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -14,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.text.getSpans
 import androidx.core.view.ViewCompat
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
@@ -26,13 +26,16 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.dpToPxF
-import com.yandex.div.core.view2.divs.getTypefaceValue
+import com.yandex.div.core.view2.divs.getFontVariations
+import com.yandex.div.core.view2.divs.supportFontVariations
 import com.yandex.div.core.view2.divs.toPorterDuffMode
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.toTextVerticalAlignment
 import com.yandex.div.core.view2.divs.unitToPx
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.hasBackgroundSpan
+import com.yandex.div.core.view2.getTypeface
+import com.yandex.div.core.view2.getTypefaceValue
 import com.yandex.div.internal.spannable.LetterSpacingSpan
 import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
@@ -92,25 +95,6 @@ internal class SpannedTextBuilder @Inject constructor(
             divText.actions,
             textConsumer
         )
-    }
-
-    fun buildText(
-        bindingContext: BindingContext,
-        textView: TextView,
-        divText: DivText,
-        ranges: List<DivText.Range>?,
-        images: List<DivText.Image>?,
-        actions: List<DivAction>?,
-        textConsumer: TextConsumer? = null
-    ): Spanned {
-        return buildText(bindingContext,
-            textView,
-            divText,
-            divText.text.evaluate(bindingContext.expressionResolver),
-            ranges,
-            images,
-            actions,
-            textConsumer)
     }
 
     fun buildEllipsis(
@@ -395,6 +379,7 @@ internal class SpannedTextBuilder @Inject constructor(
             }
         }
 
+        val typefaceProvider = typefaceResolver.getTypefaceProvider(span.fontFamily ?: textData.fontFamily)
         if (span.fontFamily != null || span.fontWeight != null || span.fontWeightValue != null) {
             val fontWeightValue = if (span.fontWeight != null || span.fontWeightValue != null) {
                 getTypefaceValue(span.fontWeight, span.fontWeightValue)
@@ -402,12 +387,17 @@ internal class SpannedTextBuilder @Inject constructor(
                 getTypefaceValue(textData.fontWeight, textData.fontWeightValue)
             }
             spannedText.setSpan(
-                TypefaceSpan(
-                    typeface = typefaceResolver.getTypeface(
-                        span.fontFamily ?: textData.fontFamily,
-                        fontWeightValue
-                    )
-                ),
+                TypefaceSpan(getTypeface(fontWeightValue, typefaceProvider)),
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        if (supportFontVariations && typefaceProvider.isVariable &&
+            (span.fontWeight != null || span.fontWeightValue != null || span.fontVariationSettings != null)) {
+            spannedText.setSpan(
+                FontVariationSpan(getFontVariations(span.fontWeight, span.fontWeightValue, span.fontVariationSettings)),
                 start,
                 end,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -589,6 +579,7 @@ internal class SpannedTextBuilder @Inject constructor(
             fontSizeUnit = fontSizeUnit,
             fontWeight = range.fontWeight?.evaluate(resolver),
             fontWeightValue = range.fontWeightValue?.evaluate(resolver)?.toIntSafely(),
+            fontVariationSettings = range.fontVariationSettings?.evaluate(resolver),
             letterSpacing = range.letterSpacing?.evaluate(resolver)?.div(fontSizeValue ?: textFontSizeValue),
             lineHeight = range.lineHeight?.evaluate(resolver)?.unitToPx(displayMetrics, fontSizeUnit),
             strike = range.strike?.evaluate(resolver),
@@ -640,7 +631,7 @@ internal class SpannedTextBuilder @Inject constructor(
             val tintColor = image.tintColor?.evaluate(resolver)
             val tintMode = image.tintMode.evaluate(resolver).toPorterDuffMode()
 
-            val imageDrawable = BitmapDrawable(resources, cachedBitmap.bitmap)
+            val imageDrawable = cachedBitmap.bitmap.toDrawable(resources)
             if (tintColor != null) {
                 imageDrawable.colorFilter = PorterDuffColorFilter(tintColor, tintMode)
             }

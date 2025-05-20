@@ -38,7 +38,6 @@ import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_ENTE
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -82,11 +81,8 @@ internal class DivInputBinder @Inject constructor(
 
         observeBackground(bindingContext, div, oldDiv, expressionResolver)
 
-        observeFontSize(div, expressionResolver)
-        observeTypeface(div, expressionResolver)
-        observeTextColor(div, expressionResolver)
+        observeBaseTextProperties(div, oldDiv, expressionResolver)
         observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
-        observeLineHeight(div, expressionResolver)
         observeMaxVisibleLines(div, expressionResolver)
         observeMaxLength(div, expressionResolver)
 
@@ -172,51 +168,29 @@ internal class DivInputBinder @Inject constructor(
         baseBinder.bindBackground(bindingContext, this, newDiv, oldDiv, expressionSubscriber, background)
     }
 
-    private fun DivInputView.observeFontSize(div: DivInput, resolver: ExpressionResolver) {
-        val callback = { _: Any -> applyFontSize(div, resolver) }
-        addSubscription(div.fontSize.observeAndGet(resolver, callback))
-        addSubscription(div.letterSpacing.observe(resolver, callback))
-        addSubscription(div.fontSizeUnit.observe(resolver, callback))
-    }
-
-    private fun DivInputView.applyFontSize(div: DivInput, resolver: ExpressionResolver) {
-        val fontSize = div.fontSize.evaluate(resolver).toIntSafely()
-        applyFontSize(fontSize, div.fontSizeUnit.evaluate(resolver))
-        applyLetterSpacing(div.letterSpacing.evaluate(resolver), fontSize)
-    }
-
-    private fun DivInputView.observeTypeface(div: DivInput, resolver: ExpressionResolver) {
-        applyTypeface(div, resolver)
-        val callback = { _: Any ->  applyTypeface(div, resolver) }
-        div.fontFamily?.observeAndGet(resolver, callback)?.let { addSubscription(it) }
-        addSubscription(div.fontWeight.observe(resolver, callback))
-        addSubscription(div.fontWeightValue?.observe(resolver, callback))
-    }
-
-    private fun DivInputView.applyTypeface(div: DivInput, resolver: ExpressionResolver) {
-        typeface = typefaceResolver.getTypeface(
-            div.fontFamily?.evaluate(resolver),
-            div.fontWeight.evaluate(resolver),
-            div.fontWeightValue?.evaluate(resolver)
+    private fun DivInputView.observeBaseTextProperties(div: DivInput, oldDiv: DivInput?, resolver: ExpressionResolver) {
+        observeBaseTextProperties(
+            div.fontSize,
+            div.fontSizeUnit,
+            div.letterSpacing,
+            div.textColor,
+            div.lineHeight,
+            div.fontFamily,
+            div.fontWeight,
+            div.fontWeightValue,
+            div.fontVariationSettings,
+            oldDiv?.fontSize,
+            oldDiv?.fontSizeUnit,
+            oldDiv?.letterSpacing,
+            oldDiv?.textColor,
+            oldDiv?.lineHeight,
+            oldDiv?.fontFamily,
+            oldDiv?.fontWeight,
+            oldDiv?.fontWeightValue,
+            oldDiv?.fontVariationSettings,
+            typefaceResolver,
+            resolver,
         )
-    }
-
-    private fun DivInputView.observeTextColor(div: DivInput, resolver: ExpressionResolver) {
-        val callback = { _: Any -> setTextColor(div.textColor.evaluate(resolver)) }
-        addSubscription(div.textColor.observeAndGet(resolver, callback))
-    }
-
-    private fun DivInputView.observeLineHeight(div: DivInput, resolver: ExpressionResolver) {
-        val fontSizeUnit = div.fontSizeUnit.evaluate(resolver)
-        val lineHeightExpr = div.lineHeight ?: run {
-            applyLineHeight(null, fontSizeUnit)
-            return
-        }
-
-        val callback = { _: Any ->
-            applyLineHeight(lineHeightExpr.evaluate(resolver), fontSizeUnit)
-        }
-        addSubscription(lineHeightExpr.observeAndGet(resolver, callback))
     }
 
     private fun DivInputView.observeMaxVisibleLines(div: DivInput, resolver: ExpressionResolver) {

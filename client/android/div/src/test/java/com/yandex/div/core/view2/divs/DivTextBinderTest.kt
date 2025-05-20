@@ -1,8 +1,8 @@
 package com.yandex.div.core.view2.divs
 
-import android.graphics.Typeface
 import android.os.Build
 import android.text.Layout
+import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.spannable.SpannedTextBuilder
@@ -12,7 +12,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -27,7 +27,7 @@ class DivTextBinderTest : DivBinderTest() {
 
     @Before
     fun setUp() {
-        whenever(typefaceResolver.getTypeface(any(), any(), any())).thenReturn(Typeface.DEFAULT)
+        whenever(typefaceResolver.getTypefaceProvider(anyOrNull())).thenReturn(DivTypefaceProvider.DEFAULT)
         whenever(divView.resources).thenReturn(context.resources)
     }
 

@@ -68,7 +68,9 @@
         "font_variation_settings": {
           "type": "dict",
           "$description": "translations.json#/div_font_variation_settings",
-          "platforms": []
+          "platforms": [
+            "android"
+          ]
         },
         "letter_spacing": {
           "type": "number",
@@ -343,16 +345,6 @@
             "flutter"
           ]
         },
-        "letter_spacing": {
-          "type": "number",
-          "default_value": "0",
-          "$description": "translations.json#/div_text_letter_spacing",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
-        },
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
           "default_value": "start",
@@ -362,11 +354,6 @@
           "$ref": "div-alignment-vertical.json",
           "default_value": "top",
           "$description": "translations.json#/div_text_text_alignment_vertical"
-        },
-        "text_color": {
-          "$ref": "common.json#/color",
-          "default_value": "#FF000000",
-          "$description": "translations.json#/div_text_text_color"
         },
         "focused_text_color": {
           "$ref": "common.json#/color",

@@ -53,6 +53,11 @@
           "name": "hint_color",
           "type": "color",
           "value": "#AAAAAA"
+        },
+        {
+          "name": "font_variations",
+          "type": "dict",
+          "value": {}
         }
       ],
       "states": [
@@ -101,6 +106,7 @@
             "font_size_unit": "@{font_size_unit}",
             "font_family": "@{font_family}",
             "font_weight": "@{font_weight}",
+            "font_variation_settings": "@{font_variations}",
             "text_color": "@{text_color}",
             "letter_spacing": "@{letter_spacing}",
             "hint_text": "@{hint_text}",
@@ -169,6 +175,27 @@
     {
       "div_actions": [
         {
+          "log_id": "font_variations",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "font_variations",
+            "value": {
+              "type": "dict",
+              "value": {
+                "slnt": -7
+              }
+            }
+          }
+        },
+        {
+          "url": "div-action://set_variable?name=font_family&value=roboto_flex",
+          "log_id": "font_family"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
           "url": "div-action://set_variable?name=value_variable&value=show_hint",
           "log_id": "show_hint"
         }
@@ -203,6 +230,17 @@
         {
           "url": "div-action://set_variable?name=font_family&value=text",
           "log_id": "restore: font_family"
+        },
+        {
+          "log_id": "restore: font_variations",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "font_variations",
+            "value": {
+              "type": "dict",
+              "value": {}
+            }
+          }
         },
         {
           "url": "div-action://set_variable?name=text_color&value=%23444444",

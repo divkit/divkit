@@ -12,6 +12,13 @@ import com.yandex.div.core.annotations.PublicApi;
 @PublicApi
 public interface DivTypefaceProvider {
 
+    interface Weight {
+        int LIGHT = 300;
+        int REGULAR = 400;
+        int MEDIUM = 500;
+        int BOLD = 700;
+    }
+
     DivTypefaceProvider DEFAULT = new DivTypefaceProvider() {
         @Nullable
         @Override
@@ -86,5 +93,9 @@ public interface DivTypefaceProvider {
         } else {
             return getBold();
         }
+    }
+
+    default boolean isVariable() {
+        return false;
     }
 }

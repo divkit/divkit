@@ -28,12 +28,12 @@ import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.DivBaseBinder
-import com.yandex.div.core.view2.divs.applyFontSize
-import com.yandex.div.core.view2.divs.applyLetterSpacing
-import com.yandex.div.core.view2.divs.applyLineHeight
 import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.applyPaddings
 import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.core.view2.divs.observeFontSize
+import com.yandex.div.core.view2.divs.observeLetterSpacing
+import com.yandex.div.core.view2.divs.observeLineHeight
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
@@ -444,20 +444,35 @@ private fun DivEdgeInsets.observe(resolver: ExpressionResolver, subscriber: Expr
     observer.invoke(null)
 }
 
-internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
-    val applyStyle = { _: Any? ->
-        val fontSize = style.fontSize.evaluate(resolver).toIntSafely()
-        applyFontSize(fontSize, style.fontSizeUnit.evaluate(resolver))
-        applyLetterSpacing(style.letterSpacing.evaluate(resolver), fontSize)
-        applyLineHeight(style.lineHeight?.evaluate(resolver), style.fontSizeUnit.evaluate(resolver))
-    }
-    subscriber.addSubscription(style.fontSize.observe(resolver, applyStyle))
-    subscriber.addSubscription(style.fontSizeUnit.observe(resolver, applyStyle))
-    style.lineHeight?.observe(resolver, applyStyle)?.let {
-        subscriber.addSubscription(it)
-    }
-
-    applyStyle(null)
+internal fun TabView.observeStyle(
+    style: DivTabs.TabTitleStyle,
+    resolver: ExpressionResolver,
+    subscriber: ExpressionSubscriber
+) {
+    observeFontSize(
+        style.fontSize,
+        style.fontSizeUnit,
+        oldFontSize = null,
+        oldFontSizeUnit = null,
+        resolver,
+        subscriber
+    )
+    observeLetterSpacing(
+        style.letterSpacing,
+        style.fontSize,
+        oldLetterSpacing = null,
+        oldFontSize = null,
+        resolver,
+        subscriber
+    )
+    observeLineHeight(
+        style.lineHeight,
+        style.fontSizeUnit,
+        oldLineHeight = null,
+        oldFontSizeUnit = null,
+        resolver,
+        subscriber
+    )
 
     val paddings = style.paddings
     val metrics = resources.displayMetrics

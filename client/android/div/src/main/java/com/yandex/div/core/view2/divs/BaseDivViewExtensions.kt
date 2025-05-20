@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.DisplayMetrics
@@ -16,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.graphics.scale
 import androidx.core.graphics.withSave
@@ -26,7 +24,6 @@ import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.expression.suppressExpressionErrors
-import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
@@ -44,8 +41,6 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.view2.spannable.TextVerticalAlignment
 import com.yandex.div.core.widget.AspectView
-import com.yandex.div.core.widget.FixedLineHeightView
-import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -83,7 +78,6 @@ import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFixedSize
-import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivImageScale
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivIndicatorItemPlacement
@@ -598,27 +592,12 @@ internal fun View.createAnimatedTouchListener(
     }
 }
 
-internal fun TextView.applyFontSize(fontSize: Int, unit: DivSizeUnit) {
-    setTextSize(unit.toAndroidUnit(), fontSize.toFloat())
-}
-
 internal fun DivSizeUnit.toAndroidUnit(): Int {
     return when (this) {
         DivSizeUnit.DP -> TypedValue.COMPLEX_UNIT_DIP
         DivSizeUnit.SP -> TypedValue.COMPLEX_UNIT_SP
         DivSizeUnit.PX -> TypedValue.COMPLEX_UNIT_PX
     }
-}
-
-internal fun <T> T.applyLineHeight(
-    lineHeight: Long?,
-    unit: DivSizeUnit
-) where T : TextView, T : FixedLineHeightView {
-    fixedLineHeight = lineHeight?.unitToPx(resources.displayMetrics, unit) ?: UNDEFINED_LINE_HEIGHT
-}
-
-internal fun TextView.applyLetterSpacing(letterSpacing: Double, fontSize: Int) {
-    this.letterSpacing = letterSpacing.toFloat() / fontSize
 }
 
 internal fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
@@ -721,24 +700,6 @@ internal fun ViewGroup.trackVisibilityActions(
             }
         }
     }
-}
-
-internal fun getTypefaceValue(fontWeight: DivFontWeight?, fontWeightValue: Int?): Int {
-    return fontWeightValue ?: when (fontWeight) {
-        DivFontWeight.LIGHT -> 300
-        DivFontWeight.REGULAR -> 400
-        DivFontWeight.MEDIUM -> 500
-        DivFontWeight.BOLD -> 700
-        else -> 400
-    }
-}
-
-internal fun getTypefaceValue(fontWeight: DivFontWeight?, fontWeightValue: Long?): Int {
-    return getTypefaceValue(fontWeight, fontWeightValue?.toIntSafely())
-}
-
-internal fun getTypeface(fontWeight: Int, typefaceProvider: DivTypefaceProvider): Typeface {
-    return typefaceProvider.getTypefaceFor(fontWeight) ?: Typeface.DEFAULT
 }
 
 internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Float {

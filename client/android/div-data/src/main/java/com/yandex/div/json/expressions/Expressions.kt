@@ -1,5 +1,8 @@
 package com.yandex.div.json.expressions
 
+import org.json.JSONArray
+import org.json.JSONObject
+
 fun <T : Any> Expression<T>.isConstant(): Boolean {
     return this is Expression.ConstantExpression<T>
 }
@@ -21,9 +24,15 @@ fun <T : Any> Expression<T>?.equalsToConstant(other: Expression<T>?): Boolean {
         return true
     }
 
-    return this != null && this.isConstant()
-        && other != null && other.isConstant()
-        && this.rawValue == other.rawValue
+    if (this == null || !this.isConstant() || other == null || !other.isConstant()) {
+        return false
+    }
+
+    return if (rawValue is JSONObject || rawValue is JSONArray) {
+        this.rawValue.toString() == other.rawValue.toString()
+    } else {
+        this.rawValue == other.rawValue
+    }
 }
 
 fun <T : Any> ExpressionList<T>?.equalsToConstant(other: ExpressionList<T>?): Boolean {

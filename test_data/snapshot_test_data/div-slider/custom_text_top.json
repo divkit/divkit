@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Slider with text above the thumbs.",
   "platforms": [
     "android",
     "ios",
@@ -66,6 +66,10 @@
             "font_size": 16,
             "text_color": "#00ff00",
             "font_weight": "bold",
+            "font_family": "roboto_flex",
+            "font_variation_settings": {
+              "slnt": -7
+            },
             "offset": {
               "y": {
                 "value": -35
@@ -79,6 +83,10 @@
             "font_size": 16,
             "text_color": "#00ff00",
             "font_weight": "bold",
+            "font_family": "roboto_flex",
+            "font_variation_settings": {
+              "slnt": -7
+            },
             "offset": {
               "y": {
                 "value": -35

@@ -10,6 +10,16 @@
       "default_value": "sp",
       "$description": "translations.json#/div_font_size_unit"
     },
+    "letter_spacing": {
+      "type": "number",
+      "default_value": "0",
+      "$description": "translations.json#/div_text_letter_spacing",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
     "font_family": {
       "type": "string",
       "$description": "translations.json#/div_font_family",
@@ -36,7 +46,14 @@
     "font_variation_settings": {
       "type": "dict",
       "$description": "translations.json#/div_font_variation_settings",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
+    },
+    "text_color": {
+      "$ref": "common.json#/color",
+      "default_value": "#FF000000",
+      "$description": "translations.json#/div_text_color"
     }
   }
 }

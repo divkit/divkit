@@ -6,8 +6,10 @@ import androidx.annotation.Px
 
 data class SliderTextStyle(
     @Px val fontSize: Float,
+    val spacing: Float,
     val fontWeight: Typeface,
     @Px val offsetX: Float,
     @Px val offsetY: Float,
     @ColorInt val textColor: Int,
+    val fontVariations: String?,
 )

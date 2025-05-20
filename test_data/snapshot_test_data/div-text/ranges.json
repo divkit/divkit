@@ -31,7 +31,7 @@
                 "type": "wrap_content",
                 "constrained": true
               },
-              "text": "Default; red 18 pt light with spacing 0.5; blue 8 pt bold with spacing 1.5.",
+              "text": "Default; red 18 pt light with spacing 0.5; blue 8 pt bold with spacing 1.5; Roboto Flex with weight value 620 and slant -7.",
               "font_size": 12,
               "ranges": [
                 {
@@ -49,6 +49,15 @@
                   "font_weight": "bold",
                   "letter_spacing": 1.5,
                   "text_color": "#00F"
+                },
+                {
+                  "start": 75,
+                  "end": 123,
+                  "font_family": "roboto_flex",
+                  "font_weight_value": 620,
+                  "font_variation_settings": {
+                    "slnt": -7
+                  }
                 }
               ]
             },

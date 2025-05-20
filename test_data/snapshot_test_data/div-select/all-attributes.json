@@ -124,7 +124,11 @@
         }
       },
       "font_size": 20,
+      "font_family": "roboto_flex",
       "font_weight": "medium",
+      "font_variation_settings": {
+        "slnt": -7
+      },
       "text_color": "#444444",
       "hint_text": "initial_hint",
       "hint_color": "#AAAAAA",
