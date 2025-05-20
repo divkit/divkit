@@ -357,6 +357,7 @@
             }
 
             const video = document.createElement('video');
+            video.setAttribute('crossorigin', 'anonymous');
             for (const item of generateFromVideo) {
                 if (
                     item.url && typeof item.url === 'string' &&
