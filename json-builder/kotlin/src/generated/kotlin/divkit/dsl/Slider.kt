@@ -415,6 +415,7 @@ data class Slider internal constructor(
                 fontVariationSettings = additive.fontVariationSettings ?: properties.fontVariationSettings,
                 fontWeight = additive.fontWeight ?: properties.fontWeight,
                 fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
+                letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
                 offset = additive.offset ?: properties.offset,
                 textColor = additive.textColor ?: properties.textColor,
             )
@@ -449,6 +450,11 @@ data class Slider internal constructor(
              */
             val fontWeightValue: Property<Int>?,
             /**
+             * Spacing between characters.
+             * Default value: `0`.
+             */
+            val letterSpacing: Property<Double>?,
+            /**
              * Shift relative to the center.
              */
             val offset: Property<Point>?,
@@ -467,6 +473,7 @@ data class Slider internal constructor(
                 result.tryPutProperty("font_variation_settings", fontVariationSettings)
                 result.tryPutProperty("font_weight", fontWeight)
                 result.tryPutProperty("font_weight_value", fontWeightValue)
+                result.tryPutProperty("letter_spacing", letterSpacing)
                 result.tryPutProperty("offset", offset)
                 result.tryPutProperty("text_color", textColor)
                 return result
@@ -1845,6 +1852,7 @@ fun Slider.Range.asList() = listOf(this)
  * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1857,6 +1865,7 @@ fun DivScope.sliderTextStyle(
     fontVariationSettings: Map<String, Any>? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    letterSpacing: Double? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1867,6 +1876,7 @@ fun DivScope.sliderTextStyle(
         fontVariationSettings = valueOrNull(fontVariationSettings),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        letterSpacing = valueOrNull(letterSpacing),
         offset = valueOrNull(offset),
         textColor = valueOrNull(textColor),
     )
@@ -1879,6 +1889,7 @@ fun DivScope.sliderTextStyle(
  * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1891,6 +1902,7 @@ fun DivScope.sliderTextStyleProps(
     fontVariationSettings: Map<String, Any>? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    letterSpacing: Double? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ) = Slider.TextStyle.Properties(
@@ -1900,6 +1912,7 @@ fun DivScope.sliderTextStyleProps(
     fontVariationSettings = valueOrNull(fontVariationSettings),
     fontWeight = valueOrNull(fontWeight),
     fontWeightValue = valueOrNull(fontWeightValue),
+    letterSpacing = valueOrNull(letterSpacing),
     offset = valueOrNull(offset),
     textColor = valueOrNull(textColor),
 )
@@ -1911,6 +1924,7 @@ fun DivScope.sliderTextStyleProps(
  * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1923,6 +1937,7 @@ fun TemplateScope.sliderTextStyleRefs(
     fontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    letterSpacing: ReferenceProperty<Double>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ) = Slider.TextStyle.Properties(
@@ -1932,6 +1947,7 @@ fun TemplateScope.sliderTextStyleRefs(
     fontVariationSettings = fontVariationSettings,
     fontWeight = fontWeight,
     fontWeightValue = fontWeightValue,
+    letterSpacing = letterSpacing,
     offset = offset,
     textColor = textColor,
 )
@@ -1943,6 +1959,7 @@ fun TemplateScope.sliderTextStyleRefs(
  * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1955,6 +1972,7 @@ fun Slider.TextStyle.override(
     fontVariationSettings: Map<String, Any>? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    letterSpacing: Double? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1965,6 +1983,7 @@ fun Slider.TextStyle.override(
         fontVariationSettings = valueOrNull(fontVariationSettings) ?: properties.fontVariationSettings,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
+        letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         offset = valueOrNull(offset) ?: properties.offset,
         textColor = valueOrNull(textColor) ?: properties.textColor,
     )
@@ -1977,6 +1996,7 @@ fun Slider.TextStyle.override(
  * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1989,6 +2009,7 @@ fun Slider.TextStyle.defer(
     fontVariationSettings: ReferenceProperty<Map<String, Any>>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    letterSpacing: ReferenceProperty<Double>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1999,6 +2020,7 @@ fun Slider.TextStyle.defer(
         fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
         offset = offset ?: properties.offset,
         textColor = textColor ?: properties.textColor,
     )
@@ -2010,6 +2032,7 @@ fun Slider.TextStyle.defer(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
  * @param textColor Text color.
  */
 @Generated
@@ -2020,6 +2043,7 @@ fun Slider.TextStyle.evaluate(
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
     fontWeightValue: ExpressionProperty<Int>? = null,
+    letterSpacing: ExpressionProperty<Double>? = null,
     textColor: ExpressionProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
@@ -2029,6 +2053,7 @@ fun Slider.TextStyle.evaluate(
         fontVariationSettings = properties.fontVariationSettings,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
         offset = properties.offset,
         textColor = textColor ?: properties.textColor,
     )

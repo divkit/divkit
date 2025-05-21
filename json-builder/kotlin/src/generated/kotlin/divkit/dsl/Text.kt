@@ -326,7 +326,7 @@ data class Text internal constructor(
          */
         val textAlignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Text color. Not used if the `text_gradient` parameter is set.
+         * Text color.
          * Default value: `#FF000000`.
          */
         val textColor: Property<Color>?,
@@ -914,7 +914,7 @@ data class Text internal constructor(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
@@ -1131,7 +1131,7 @@ fun DivScope.text(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
@@ -1346,7 +1346,7 @@ fun DivScope.textProps(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
@@ -1561,7 +1561,7 @@ fun TemplateScope.textRefs(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
@@ -1778,7 +1778,7 @@ fun Text.override(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
@@ -1968,7 +1968,7 @@ fun Text.defer(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Location of text cropping marker.
  * @param underline Underline.
@@ -2132,7 +2132,7 @@ fun Text.evaluate(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
@@ -2350,7 +2350,7 @@ fun Component<Text>.override(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
@@ -2541,7 +2541,7 @@ fun Component<Text>.defer(
  * @param strike Strikethrough.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
- * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param textColor Text color.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Location of text cropping marker.
  * @param underline Underline.
