@@ -96,7 +96,10 @@
           "platforms": [
             "android",
             "web"
-          ]
+          ],
+          "unsupported_platforms": {
+            "ios": "There is no direct implementation, breaks the current behaviour, no plans for support."
+          }
         },
         "default_item": {
           "$ref": "common.json#/non_negative_integer",

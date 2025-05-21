@@ -54,6 +54,10 @@
           "platforms": [
             "web"
           ],
+          "unsupported_platforms": {
+            "ios": "Web specific property",
+            "android": "Web specific property"
+          },
           "code_generation_disabled_swift": true
         }
       },

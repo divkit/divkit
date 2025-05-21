@@ -3,6 +3,7 @@
   "$description": "translations.json#/div_cloud_background",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "properties": {

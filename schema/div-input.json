@@ -95,7 +95,11 @@
           "$description": "translations.json#/div_input_native_interface",
           "platforms": [
             "android"
-          ]
+          ],
+          "unsupported_platforms": {
+            "ios": "Android specific property",
+            "web": "Android specific property"
+          }
         },
         "autocapitalization": {
           "type": "string",

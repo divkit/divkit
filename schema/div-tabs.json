@@ -240,7 +240,10 @@
           "platforms": [
             "android",
             "web"
-          ]
+          ],
+          "unsupported_platforms": {
+            "ios": "There is no direct implementation, breaks the current behaviour, no plans for support."
+          }
         }
       }
     }
