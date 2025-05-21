@@ -118,9 +118,13 @@
             "ios": {
                 "version_added": "30.25.0"
             },
-            "android": {
-                "version_added": "30.28.0"
-            },
+            "android": [{
+                "version_added": "30.28.0",
+                "partial_implementation": true,
+                "notes": "It only works with in single-line inputs"
+            }, {
+                "version_added": "32.0.0"
+            }],
             "web": {
                 "version_added": "30.28.0"
             }

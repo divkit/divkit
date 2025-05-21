@@ -44,6 +44,9 @@
             },
             "ios": {
                 "version_added": "28.11.0"
+            },
+            "web": {
+                "version_added": "32.0.0"
             }
         }
     }, {

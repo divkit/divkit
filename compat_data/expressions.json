@@ -195,6 +195,9 @@
         "compat": {
             "android": {
                 "version_added": "31.14.0"
+            },
+            "web": {
+                "version_added": "32.0.0"
             }
         }
     }, {
