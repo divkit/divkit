@@ -1,3 +1,15 @@
+## 32.1.0
+
+# Android Client:
+* Crash by using blur = 0 и corner_radius = 0 fixed.
+* Supported `font_variation_settings` property in `text` and text ranges, `input`, `select` and `slider` thumbs text.
+
+# iOS Client:
+* Fix scrolling `div-pager` with `infinite_scroll` and `set_next_item` action on last item selected.
+* Size provider size now does not take into account margins of child views.
+* Supported `wrap_content` for images.
+
+
 ## 32.0.0
 
 # Android Client:
