@@ -68,8 +68,7 @@ private func runTest(
     }
 
     testCase.expected.forEach {
-      switch $0 {
-      case let .variable(variableName, variable):
+      if case let .variable(variableName, variable) = $0 {
         XCTAssertEqual(
           variable.divVariableValue,
           divkitComponents.variablesStorage.getVariableValue(
@@ -77,18 +76,24 @@ private func runTest(
             name: DivVariableName(rawValue: variableName)
           )
         )
-      case let .error(message):
-        XCTAssertEqual(message, reporter.errorMessage)
       }
     }
+
+    let expectedErrors = testCase.expected.compactMap {
+      if case let .error(message) = $0 {
+        return message
+      }
+      return nil
+    }
+    XCTAssertEqual(expectedErrors, reporter.errorMessages)
   }
 }
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
-  private(set) var errorMessage: String?
+  private(set) var errorMessages = [String]()
 
   func reportError(cardId _: DivCardID, error: DivError) {
-    errorMessage = error.message
+    errorMessages.append(error.message)
   }
 }
 

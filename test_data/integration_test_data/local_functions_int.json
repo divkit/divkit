@@ -140,6 +140,23 @@
         "android",
         "web"
       ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "check method",
+          "url": "div-action://set_variable?name=step&value=2"
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Failed to evaluate [increment(2)]. Unknown method name: increment. Expression: div-action://set_variable?name=integer_var&value=@{array_var.increment(2)}"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

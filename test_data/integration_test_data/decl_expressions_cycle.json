@@ -1,5 +1,5 @@
 {
-  "description": "Decl variable with expression, using previously declared variable.",
+  "description": "Decl two variables with cicular expressions.",
   "div_data": {
     "card": {
       "log_id": "decl_expressions",
@@ -29,6 +29,10 @@
   "cases": [
     {
       "expected": [
+        {
+          "type": "error",
+          "value": "Variable 'val2' is missing. Expression: @{val2 + 2}"
+        },
         {
           "type": "error",
           "value": "Variable 'val' is missing. Expression: @{val + 1}"

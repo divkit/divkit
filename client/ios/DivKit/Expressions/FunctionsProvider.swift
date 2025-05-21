@@ -75,6 +75,7 @@ private struct CustomFunctionEvaluator: Function {
 
   func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
     let name = symbol.name
+    var customFunctionError: Error?
     if let customFunctionsStorage = context.customFunctionsStorageProvider(name) {
       var storage: DivFunctionsStorage? = customFunctionsStorage
 
@@ -87,6 +88,15 @@ private struct CustomFunctionEvaluator: Function {
           ).invoke(args, context: context)
         } catch {
           if error is NoMatchingSignatureError {
+            if functions.count == 1, let function = functions.first {
+              customFunctionError = ExpressionError(
+                "Failed to evaluate [\(symbol.formatExpression(args))]. Exactly \(function.signature.arguments.count) argument(s) expected."
+              )
+            } else {
+              customFunctionError = ExpressionError(
+                "Failed to evaluate [\(symbol.formatExpression(args))]. Function has no matching overload for given argument types: \(args.map { formatTypeForError($0) }.joined(separator: ", "))."
+              )
+            }
             storage = storage?.outerStorage
           } else {
             throw error
@@ -99,7 +109,11 @@ private struct CustomFunctionEvaluator: Function {
       }
     }
 
-    return try fallbackEvaluator.invoke(args, context: context)
+    do {
+      return try fallbackEvaluator.invoke(args, context: context)
+    } catch {
+      throw customFunctionError ?? error
+    }
   }
 }
 
