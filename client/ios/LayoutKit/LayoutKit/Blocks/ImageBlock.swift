@@ -16,6 +16,7 @@ public final class ImageBlock: ImageBaseBlock {
   public let blurUsingMetal: Bool?
   public let tintUsingMetal: Bool?
   public let path: UIElementPath?
+  public let state: ImageBaseBlockState
 
   public init(
     imageHolder: ImageHolder,
@@ -45,6 +46,11 @@ public final class ImageBlock: ImageBaseBlock {
     self.blurUsingMetal = blurUsingMetal
     self.tintUsingMetal = tintUsingMetal
     self.path = path
+    self.state = ImageBaseBlockState(
+      widthTrait: widthTrait,
+      height: height,
+      imageHolder: imageHolder
+    )
   }
 
   public convenience init(
@@ -128,8 +134,8 @@ public func ==(lhs: ImageBlock, rhs: ImageBlock) -> Bool {
     lhs.accessibilityElement == rhs.accessibilityElement &&
     lhs.appearanceAnimation == rhs.appearanceAnimation &&
     lhs.filter == rhs.filter &&
-    lhs.path == rhs.path
+    lhs.path == rhs.path &&
+    lhs.state == rhs.state
 }
 
 extension ImageBlock: LayoutCachingDefaultImpl {}
-extension ImageBlock: ElementStateUpdatingDefaultImpl {}

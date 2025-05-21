@@ -78,7 +78,10 @@ enum BlockTestsModels {
 
   enum Image {
     static let imageSize = CGSize(width: 80, height: 60)
-    static let image = VGSL.Image.imageWithSolidColor(.black, size: imageSize)!
+    static let image = VGSL.Image.imageOfSize(imageSize, opaque: true, scale: 1) { ctx in
+      ctx.setFillColor(Color.black.cgColor)
+      ctx.fill(CGRect(origin: .zero, size: imageSize))
+    }!
   }
 
   enum SwitchableContainer {

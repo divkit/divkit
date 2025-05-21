@@ -14,17 +14,17 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    try checkLayoutTraits(context: context)
-
     let expressionResolver = context.expressionResolver
     let highPriority = resolveHighPriorityPreviewShow(expressionResolver)
+    let widthTrait = resolveContentWidthTrait(context)
+    let height = resolveHeight(context)
     return ImageBlock(
       imageHolder: context.imageHolderFactory.make(
         resolveImageUrl(expressionResolver),
         resolvePlaceholder(expressionResolver, highPriority: highPriority)
       ),
-      widthTrait: resolveContentWidthTrait(context),
-      height: resolveHeight(context),
+      widthTrait: widthTrait,
+      height: height,
       contentMode: resolveContentMode(context),
       tintColor: resolveTintColor(expressionResolver),
       tintMode: resolveTintMode(expressionResolver).tintMode,

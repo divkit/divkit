@@ -9,6 +9,7 @@ public final class AnimatableImageBlock: ImageBaseBlock {
   public let contentMode: ImageContentMode
   public let accessibilityElement: AccessibilityElement?
   public let path: UIElementPath?
+  public let state: ImageBaseBlockState
 
   public init(
     imageHolder: ImageHolder,
@@ -24,6 +25,11 @@ public final class AnimatableImageBlock: ImageBaseBlock {
     self.contentMode = contentMode
     self.accessibilityElement = accessibilityElement
     self.path = path
+    self.state = ImageBaseBlockState(
+      widthTrait: widthTrait,
+      height: height,
+      imageHolder: imageHolder
+    )
   }
 
   public func equals(_ other: Block) -> Bool {
@@ -41,8 +47,8 @@ public func ==(lhs: AnimatableImageBlock, rhs: AnimatableImageBlock) -> Bool {
     lhs.height == rhs.height &&
     lhs.contentMode == rhs.contentMode &&
     lhs.accessibilityElement == rhs.accessibilityElement &&
-    lhs.path == rhs.path
+    lhs.path == rhs.path &&
+    lhs.state == rhs.state
 }
 
 extension AnimatableImageBlock: LayoutCachingDefaultImpl {}
-extension AnimatableImageBlock: ElementStateUpdatingDefaultImpl {}

@@ -20,7 +20,8 @@ final class DivGifImageExtensionsTests: XCTestCase {
           imageHolder: FakeImageHolder(),
           widthTrait: .fixed(100),
           height: .trait(.fixed(200)),
-          contentMode: ImageContentMode(scale: .aspectFill)
+          contentMode: ImageContentMode(scale: .aspectFill),
+          path: defaultPath
         ),
         accessibilityElement: accessibility(traits: .image)
       ),
@@ -46,7 +47,8 @@ final class DivGifImageExtensionsTests: XCTestCase {
           imageHolder: FakeImageHolder(),
           widthTrait: .fixed(100),
           height: .trait(.fixed(200)),
-          contentMode: ImageContentMode(scale: .aspectFill)
+          contentMode: ImageContentMode(scale: .aspectFill),
+          path: defaultPath
         ),
         accessibilityElement: accessibility(
           traits: .image,
@@ -59,30 +61,57 @@ final class DivGifImageExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_WhenWidthIsWrapContent_ThrowsError() {
-    XCTAssertThrowsError(
-      try divData(divGifImage(
+  func test_WhenWidthIsWrapContent_UsesIntrinsicContentSize() {
+    let block = makeBlock(
+      divGifImage(
         gifUrl: "https://image.url",
-        id: "test_id",
+        height: fixedSize(100),
         width: wrapContentSize()
-      )).makeBlock(context: .default),
-      DivBlockModelingError(
-        "DivGifImage has wrap_content width",
-        path: .root + "0" + "test_id"
       )
     )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: AnimatableImageBlock(
+          imageHolder: FakeImageHolder(),
+          widthTrait: .intrinsic,
+          height: .trait(.fixed(100)),
+          contentMode: ImageContentMode(scale: .aspectFill),
+          path: defaultPath
+        ),
+        accessibilityElement: accessibility(traits: .image)
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
   }
 
-  func test_WhenHeightIsWrapContent_ThrowsError() throws {
-    XCTAssertThrowsError(
-      try divData(divGifImage(
+  func test_WhenHeightIsWrapContent_UsesIntrinsicContentSize() {
+    let block = makeBlock(
+      divGifImage(
         gifUrl: "https://image.url",
-        height: wrapContentSize()
-      )).makeBlock(context: .default),
-      DivBlockModelingError(
-        "DivGifImage without aspect has wrap_content height",
-        path: .root + "0" + "gif"
+        height: wrapContentSize(),
+        width: fixedSize(100)
       )
     )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: AnimatableImageBlock(
+          imageHolder: FakeImageHolder(),
+          widthTrait: .fixed(100),
+          height: .trait(.intrinsic),
+          contentMode: ImageContentMode(scale: .aspectFill),
+          path: defaultPath
+        ),
+        accessibilityElement: accessibility(traits: .image)
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
   }
 }
+
+private let defaultPath = UIElementPath("test_card_id") + "0" + "gif"

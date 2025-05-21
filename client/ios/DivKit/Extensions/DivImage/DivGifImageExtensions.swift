@@ -14,18 +14,20 @@ extension DivGifImage: DivBlockModeling, DivImageProtocol {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    try checkLayoutTraits(context: context)
-
     let expressionResolver = context.expressionResolver
     let imageHolder = context.imageHolderFactory.make(
       resolveGifUrl(expressionResolver),
       resolvePlaceholder(expressionResolver)
     )
+    let widthTrait = resolveContentWidthTrait(context)
+    let height = resolveHeight(context)
+
     return AnimatableImageBlock(
       imageHolder: imageHolder,
-      widthTrait: resolveContentWidthTrait(context),
-      height: resolveHeight(context),
-      contentMode: resolveContentMode(context)
+      widthTrait: widthTrait,
+      height: height,
+      contentMode: resolveContentMode(context),
+      path: context.path
     )
   }
 }

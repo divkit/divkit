@@ -2,6 +2,7 @@
   "description": "Image with wrap_content width and aspect ratio equal to 2 (height = width / 2)",
   "platforms": [
     "android",
+    "ios",
     "flutter",
     "web"
   ],

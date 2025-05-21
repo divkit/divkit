@@ -28,23 +28,6 @@ extension DivImageProtocol {
     }
   }
 
-  func checkLayoutTraits(context: DivBlockModelingContext) throws {
-    if case .intrinsic = resolveContentWidthTrait(context) {
-      throw DivBlockModelingError(
-        "\(typeName) has wrap_content width",
-        path: context.path
-      )
-    }
-
-    if case let .trait(heightTrait) = resolveHeight(context),
-       case .intrinsic = heightTrait {
-      throw DivBlockModelingError(
-        "\(typeName) without aspect has wrap_content height",
-        path: context.path
-      )
-    }
-  }
-
   private var typeName: String {
     guard let typeName = String(describing: self).split(separator: ".").last else {
       return "DivImage"

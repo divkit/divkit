@@ -7,13 +7,13 @@ extension AnimatableImageBlock {
 
   public func configureBlockView(
     _ view: BlockView,
-    observer _: ElementStateObserver?,
+    observer: ElementStateObserver?,
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {
     let animatableImageView = view as! AnimatableImageContainer
-    if animatableImageView.imageHolder !== imageHolder {
-      animatableImageView.imageHolder = imageHolder
+    animatableImageView.setImageHolder(imageHolder) { [weak self] in
+      self?.updateStateIfNeeded(observer: observer)
     }
     animatableImageView.imageContentMode = contentMode
     animatableImageView.isUserInteractionEnabled = false
@@ -28,29 +28,14 @@ extension AnimatableImageBlock {
 private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
   var imageRequest: Cancellable?
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+
   private var backgroundModel: ImageViewBackgroundModel? {
     didSet {
       backgroundModel.applyTo(self, oldValue: oldValue)
     }
   }
 
-  public var imageHolder: ImageHolder? {
-    didSet {
-      imageRequest?.cancel()
-      self.imageView.image = nil
-      backgroundModel = imageHolder?.placeholder.flatMap(ImageViewBackgroundModel.init)
-
-      let newValue = imageHolder
-      imageRequest = imageHolder?.requestImageWithCompletion { [weak self] image in
-        guard let self,
-              newValue === self.imageHolder else {
-          return
-        }
-        self.imageView.image = image
-        self.backgroundModel = nil
-      }
-    }
-  }
+  private var imageHolder: ImageHolder?
 
   var imageContentMode = ImageContentMode.default {
     didSet {
@@ -73,6 +58,27 @@ private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleB
   @available(*, unavailable)
   required init(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  public func setImageHolder(_ imageHolder: ImageHolder, completion: @escaping () -> Void) {
+    guard imageHolder !== self.imageHolder else { return }
+    self.imageHolder = imageHolder
+
+    imageRequest?.cancel()
+    self.imageView.image = nil
+    backgroundModel = imageHolder.placeholder.flatMap(ImageViewBackgroundModel.init)
+
+    let newValue = imageHolder
+    imageRequest = imageHolder.requestImageWithCompletion { [weak self] image in
+      guard let self,
+            newValue === self.imageHolder else {
+        return
+      }
+      self.imageView.image = image
+      self.backgroundModel = nil
+
+      completion()
+    }
   }
 }
 

@@ -3,8 +3,13 @@ import Foundation
 import VGSL
 
 public protocol ImageBaseBlock: BlockWithWidthTrait {
+  var path: UIElementPath? { get }
+  var widthTrait: LayoutTrait { get }
   var height: ImageBlockHeight { get }
   var imageHolder: ImageHolder { get }
+  var state: ImageBaseBlockState { get }
+
+  func makeCopy() -> Self
 }
 
 public enum ImageBlockHeight: Equatable {
@@ -12,14 +17,30 @@ public enum ImageBlockHeight: Equatable {
   case ratio(Double)
 }
 
+public struct ImageBaseBlockState: ElementState, Equatable {
+  public let intrinsicContentSize: CGSize?
+  public init(widthTrait: LayoutTrait, height: ImageBlockHeight, imageHolder: ImageHolder) {
+    let hasIntrinsicSize = widthTrait == .intrinsic || height == .trait(.intrinsic)
+    self.intrinsicContentSize = hasIntrinsicSize ? imageHolder.currentImageSize : nil
+  }
+}
+
 extension ImageBaseBlock {
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(_, minSize, maxSize):
-      let width = imageHolder.placeholder!.size.width
-      return clamp(width, min: minSize, max: maxSize)
+    case let .intrinsic(_, minWidth, maxWidth):
+      let intrinsicWidth: CGFloat
+      switch height {
+      case let .trait(.fixed(height)):
+        let aspectRatio = imageHolder.currentImageSize.aspectRatio ?? 0
+        intrinsicWidth = aspectRatio * height
+      case .trait(.intrinsic), .trait(.weighted), .ratio:
+        intrinsicWidth = imageHolder.currentImageSize.width
+      }
+
+      return clamp(intrinsicWidth, min: minWidth, max: maxWidth)
     case .weighted:
       return 0
     }
@@ -29,9 +50,20 @@ extension ImageBaseBlock {
     switch height {
     case let .trait(.fixed(value)):
       return value
-    case .trait(let .intrinsic(_, minSize, maxSize)):
-      let height = imageHolder.placeholder!.size.height
-      return clamp(height, min: minSize, max: maxSize)
+    case .trait(let .intrinsic(_, minHeight, maxHeight)):
+      let intrinsicHeight: CGFloat
+      switch widthTrait {
+      case let .fixed(width):
+        if let aspectRatio = imageHolder.currentImageSize.aspectRatio {
+          intrinsicHeight = width / aspectRatio
+        } else {
+          intrinsicHeight = 0
+        }
+      case .intrinsic, .weighted:
+        intrinsicHeight = imageHolder.currentImageSize.height
+      }
+
+      return clamp(intrinsicHeight, min: minHeight, max: maxHeight)
     case .trait(.weighted):
       return 0
     case let .ratio(ratio):
@@ -65,6 +97,25 @@ extension ImageBaseBlock {
     return intrinsicContentHeight(forWidth: width)
   }
 
+  func updateStateIfNeeded(observer: ElementStateObserver?) {
+    guard let observer, let path else { return }
+    let updatedState = ImageBaseBlockState(
+      widthTrait: widthTrait,
+      height: height,
+      imageHolder: imageHolder
+    )
+    guard updatedState != state else { return }
+    observer.elementStateChanged(updatedState, forPath: path)
+  }
+
+  public func updated(withStates states: BlocksState) throws -> Self {
+    guard let path, let newState: ImageBaseBlockState = states.getState(at: path),
+          newState != self.state else {
+      return self
+    }
+    return self.makeCopy()
+  }
+
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
     guard case let .trait(.weighted(value)) = height else {
       assertionFailure("cannot get weightOfVerticallyResizableBlock for non resizable block")
@@ -78,13 +129,27 @@ extension ImageBaseBlock {
   }
 }
 
+extension ImageHolder {
+  fileprivate var currentImageSize: CGSize {
+    if let image {
+      image.size
+    } else if let placeholder {
+      placeholder.size
+    } else {
+      .zero
+    }
+  }
+}
+
 extension ImagePlaceholder {
   fileprivate var size: CGSize {
     switch self {
     case let .image(image):
       return image.size
-    case .color, .view, .imageData:
-      assertionFailure("cannot get size of color, view or imageData")
+    case .color:
+      return .zero
+    case .view, .imageData:
+      assertionFailure("cannot get size of view or imageData")
       return .zero
     }
   }
