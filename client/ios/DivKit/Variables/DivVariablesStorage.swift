@@ -351,74 +351,93 @@ private func parseCollectionVar<T>(_ val: String) -> T? {
 }
 
 extension Collection<DivVariable> {
-  public func extractDivVariableValues(_ resolver: ExpressionResolver) -> DivVariables {
+  public func extractDivVariableValues(
+    _ resolver: ExpressionResolver? = nil
+  ) -> DivVariables {
     var variables = DivVariables()
     forEach { variable in
-      let resolver = resolver.modifying(variableValueProvider: {
+      let resolver = resolver?.modifying(variableValueProvider: {
         variables[DivVariableName(rawValue: $0)]?.typedValue()
       })
+      let name = DivVariableName(rawValue: variable.name)
       switch variable {
       case let .stringVariable(stringVariable):
-        let name = DivVariableName(rawValue: stringVariable.name)
-        guard !variables.keys.contains(name), let value = stringVariable.resolveValue(resolver)
-        else { return }
-
-        variables[name] = .string(value)
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = stringVariable.resolveValue(resolver) {
+          variables[name] = .string(value)
+        } else if let value = stringVariable.value.rawValue {
+          variables[name] = .string(value)
+        }
       case let .numberVariable(numberVariable):
-        let name = DivVariableName(rawValue: numberVariable.name)
-        guard !variables.keys.contains(name), let value = numberVariable.resolveValue(resolver)
-        else { return }
-
-        variables[name] = .number(value)
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = numberVariable.resolveValue(resolver) {
+          variables[name] = .number(value)
+        } else if let value = numberVariable.value.rawValue {
+          variables[name] = .number(value)
+        }
       case let .integerVariable(integerVariable):
-        let name = DivVariableName(rawValue: integerVariable.name)
-        guard !variables.keys.contains(name), let value = integerVariable.resolveValue(resolver)
-        else { return }
-
-        variables[name] = .integer(value)
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = integerVariable.resolveValue(resolver) {
+          variables[name] = .integer(value)
+        } else if let value = integerVariable.value.rawValue {
+          variables[name] = .integer(value)
+        }
       case let .booleanVariable(booleanVariable):
-        let name = DivVariableName(rawValue: booleanVariable.name)
-        guard !variables.keys.contains(name), let value = booleanVariable.resolveValue(resolver)
-        else { return }
-
-        variables[name] = .bool(value)
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = booleanVariable.resolveValue(resolver) {
+          variables[name] = .bool(value)
+        } else if let value = booleanVariable.value.rawValue {
+          variables[name] = .bool(value)
+        }
       case let .colorVariable(colorVariable):
-        let name = DivVariableName(rawValue: colorVariable.name)
-        guard !variables.keys.contains(name), let value = colorVariable.resolveValue(resolver)
-        else { return }
-
-        variables[name] = .color(value)
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = colorVariable.resolveValue(resolver) {
+          variables[name] = .color(value)
+        } else if let value = colorVariable.value.rawValue {
+          variables[name] = .color(value)
+        }
       case let .urlVariable(urlVariable):
-        let name = DivVariableName(rawValue: urlVariable.name)
-        guard !variables.keys.contains(name), let value = urlVariable.resolveValue(resolver)
-        else { return }
-
-        variables[name] = .url(value)
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = urlVariable.resolveValue(resolver) {
+          variables[name] = .url(value)
+        } else if let value = urlVariable.value.rawValue {
+          variables[name] = .url(value)
+        }
       case let .dictVariable(dictVariable):
-        let name = DivVariableName(rawValue: dictVariable.name)
-        guard !variables.keys.contains(name), let value = dictVariable.resolveValue(resolver)
-        else { return }
-
-        if let dictionary = DivDictionary.fromAny(value) {
-          variables[name] = .dict(dictionary)
-        } else {
-          DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")
-          variables[name] = .dict([:])
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = dictVariable.resolveValue(resolver) {
+          variables[name] = .dict(makeDivDict(name: name.rawValue, value: value))
+        } else if let value = dictVariable.value.rawValue {
+          variables[name] = .dict(makeDivDict(name: name.rawValue, value: value))
         }
       case let .arrayVariable(arrayVariable):
-        let name = DivVariableName(rawValue: arrayVariable.name)
-        guard !variables.keys.contains(name), let value = arrayVariable.resolveValue(resolver)
-        else { return }
-
-        if let array = DivArray.fromAny(value) {
-          variables[name] = .array(array)
-        } else {
-          DivKitLogger.error("Incorrect value for array variable \(name): \(arrayVariable.value)")
-          variables[name] = .array([])
+        guard !variables.keys.contains(name) else { return }
+        if let resolver, let value = arrayVariable.resolveValue(resolver) {
+          variables[name] = .array(makeDivArray(name: name.rawValue, value: value))
+        } else if let value = arrayVariable.value.rawValue {
+          variables[name] = .array(makeDivArray(name: name.rawValue, value: value))
         }
       }
     }
     return variables
+  }
+}
+
+private func makeDivDict(name: String, value: [String: Any]) -> DivDictionary {
+  if let dictionary = DivDictionary.fromAny(value) {
+    return dictionary
+  } else {
+    DivKitLogger.error("Incorrect value for dict variable \(name): \(value)")
+    return [:]
+  }
+}
+
+private func makeDivArray(name: String, value: [Any]) -> DivArray {
+  if let array = DivArray.fromAny(value) {
+    return array
+  } else {
+    DivKitLogger.error("Incorrect value for array variable \(name): \(value)")
+    return []
   }
 }
 
@@ -438,5 +457,29 @@ extension Dictionary where Key == String {
 extension [String: Color] {
   public func mapToDivVariables() -> DivVariables {
     mapToDivVariables(valueTransform: DivVariableValue.color)
+  }
+}
+
+extension DivVariable {
+  fileprivate var name: String {
+    switch self {
+    case let .integerVariable(variable): variable.name
+    case let .numberVariable(variable): variable.name
+    case let .booleanVariable(variable): variable.name
+    case let .stringVariable(variable): variable.name
+    case let .urlVariable(variable): variable.name
+    case let .colorVariable(variable): variable.name
+    case let .arrayVariable(variable): variable.name
+    case let .dictVariable(variable): variable.name
+    }
+  }
+}
+
+extension Expression {
+  fileprivate var rawValue: T? {
+    switch self {
+    case let .value(value): ExpressionValueConverter.cast(value)
+    case .link: nil
+    }
   }
 }
