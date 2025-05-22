@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 import {
     describe,
     expect,
@@ -42,7 +43,45 @@ function runCase(item: any) {
     const vars = new Map();
     if (item.variables) {
         for (const variable of item.variables) {
-            vars.set(variable.name, createVariable(variable.name, variable.type, variable.value));
+            let value;
+
+            if (typeof variable.value === 'string') {
+                let ast;
+                try {
+                    ast = parse(variable.value, {
+                        startRule: 'JsonStringContents'
+                    });
+                } catch (err) {
+                    if (item.expected.type === 'error') {
+                        if (item.expected.value) {
+                            expect(err instanceof Error ? err.message : String(err)).toEqual(item.expected.value);
+                        }
+                        return;
+                    }
+
+                    expect('error').toEqual(item.expected.type);
+                    return;
+                }
+                const res = evalExpression(vars, undefined, undefined, ast, {
+                    weekStartDay: item.platform_specific?.web?.weekStartDay || 0
+                }).result;
+                if (res.type === 'error') {
+                    if (item.expected.type === 'error') {
+                        if (item.expected.value) {
+                            expect(res.value).toEqual(item.expected.value);
+                        }
+                        return;
+                    }
+
+                    expect(res.type).toEqual(item.expected.type);
+                } else {
+                    value = res.value;
+                }
+            } else {
+                value = variable.value;
+            }
+
+            vars.set(variable.name, createVariable(variable.name, variable.type, value));
         }
     }
     let ast;
