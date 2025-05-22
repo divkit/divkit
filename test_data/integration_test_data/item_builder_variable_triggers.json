@@ -83,7 +83,6 @@
         }
       ],
       "platforms": [
-        "android",
         "ios",
         "web"
       ]
