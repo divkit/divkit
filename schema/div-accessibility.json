@@ -53,6 +53,7 @@
       "$ref": "common.json#/boolean_int",
       "$description": "translations.json#/div_accessibility_is_checked",
       "platforms": [
+        "ios",
         "web"
       ]
     },

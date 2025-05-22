@@ -29,7 +29,7 @@ extension DivAccessibility {
       strings: AccessibilityElement.Strings(
         label: label,
         hint: resolveHint(expressionResolver),
-        value: resolveStateDescription(expressionResolver),
+        value: resolveValue(expressionResolver),
         identifier: id
       ),
       startsMediaSession: resolveMuteAfterAction(expressionResolver),
@@ -47,13 +47,25 @@ extension DivAccessibility {
       return .image
     case .text:
       return .staticText
-    case .checkbox, .editText, .radio, .select, .tabBar:
+    case .checkbox:
+      return .switchButton
+    case .editText, .radio, .select, .tabBar:
       DivKitLogger.warning("Unsupported accessibility type")
       return AccessibilityElement.Traits.none
     case .none, .list:
       return AccessibilityElement.Traits.none
     case .auto:
       return nil
+    }
+  }
+
+  private func resolveValue(_ resolver: ExpressionResolver) -> String? {
+    switch type {
+    case .checkbox:
+      // voice over sounds this as "checked" / "unchecked" for switchButton trait
+      return resolveIsChecked(resolver) == true ? "1" : "0"
+    default:
+      return resolveStateDescription(resolver)
     }
   }
 }
