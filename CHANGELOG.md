@@ -2,6 +2,7 @@
 
 # Android Client:
 * Crash by using blur = 0 и corner_radius = 0 fixed.
+* Fixed an issue when triggers may not work in for multiple div views.
 * Supported `font_variation_settings` property in `text` and text ranges, `input`, `select` and `slider` thumbs text.
 
 # iOS Client:
