@@ -1,7 +1,9 @@
 package com.yandex.div.core.expression.local
 
+import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.variables.VariableAndConstantController
+import com.yandex.div.core.view2.Div2View
 
 internal class RuntimeTree {
     private val runtimesToNodes = mutableMapOf<ExpressionsRuntime, RuntimeNode>()
@@ -43,13 +45,15 @@ internal class RuntimeTree {
         }
     }
 
-    fun removeRuntimeAndCleanup(runtime: ExpressionsRuntime, path: String) {
+    fun removeRuntimeAndCleanup(divView: DivViewFacade?, runtime: ExpressionsRuntime, path: String) {
         invokeRecursively(runtime, path) {
             runtimesToNodes.remove(it.runtime)
             pathToNodes.remove(it.path)
 
             // we should not cleanup LocalVariableController because it will just cleanup it's delegate
-            if (it.runtime.variableController !is VariableAndConstantController) it.runtime.cleanup()
+            if (it.runtime.variableController !is VariableAndConstantController) {
+                it.runtime.cleanup(divView)
+            }
         }
     }
 

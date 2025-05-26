@@ -47,6 +47,7 @@ internal abstract class DivCollectionViewHolder(
 
         if (parentContext.expressionResolver != bindingContext.expressionResolver) {
             bindingContext.runtimeStore?.resolveRuntimeWith(
+                bindingContext.divView,
                 childPath.fullPath,
                 div,
                 resolver,

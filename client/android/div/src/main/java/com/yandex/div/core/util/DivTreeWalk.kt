@@ -173,10 +173,10 @@ private fun Div.getItems(resolver: ExpressionResolver): List<DivItemBuilderResul
         is Div.Select -> emptyList()
         is Div.Video -> emptyList()
         is Div.Switch -> emptyList()
-        is Div.Container -> value.buildItems(resolver)
+        is Div.Container -> value.buildItems(divView = null, resolver = resolver)
         is Div.Grid -> value.itemsToDivItemBuilderResult(resolver)
-        is Div.Gallery -> value.buildItems(resolver)
-        is Div.Pager -> value.buildItems(resolver)
+        is Div.Gallery -> value.buildItems(divView = null, resolver = resolver)
+        is Div.Pager -> value.buildItems(divView = null, resolver = resolver)
         is Div.Tabs -> value.itemsToDivItemBuilderResult(resolver)
         is Div.State -> value.statesToDivItemBuilderResult(resolver)
     }
