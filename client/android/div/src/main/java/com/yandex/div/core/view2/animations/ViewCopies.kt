@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.animations
 
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.View.MeasureSpec
@@ -15,7 +14,9 @@ import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
+import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivImageView
+import androidx.core.graphics.createBitmap
 
 @MainThread
 internal fun createOrGetVisualCopy(
@@ -55,28 +56,31 @@ internal fun createOrGetVisualCopy(
 }
 
 private fun ImageView.setScreenshotFromView(view: View) {
-    val bitmapDrawable = (view as? ImageView)?.drawable as? BitmapDrawable
-
-    bitmapDrawable?.bitmap?.let {
-        return setImageBitmap(it)
-    }
-
-    val drawAndSet = {
-        if (view.width > 0 && view.height > 0) {
-            val bitmap =
-                Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888).applyCanvas {
-                    translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
-                    view.draw(this)
-                }
-
-            setImageBitmap(bitmap)
+    if (view !is DivBorderSupports) {
+        val bitmapDrawable = (view as? ImageView)?.drawable as? BitmapDrawable
+        bitmapDrawable?.bitmap?.let {
+            return setImageBitmap(it)
         }
     }
 
     if (view.isActuallyLaidOut) {
-        drawAndSet()
+        drawAndSet(view)
     } else {
-        view.doOnActualLayout { drawAndSet() }
+        view.doOnActualLayout { drawAndSet(view) }
+    }
+}
+
+private fun ImageView.drawAndSet(view: View){
+    if (view.width <= 0 || view.height <= 0) return
+    val bitmap = createBitmap(view.width, view.height).applyCanvas {
+        translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
+        view.draw(this)
+    }
+
+    setImageBitmap(bitmap)
+    (view as? DivBorderSupports)?.getDivBorderDrawer()?.let {
+        clipToOutline = view.clipToOutline
+        outlineProvider = view.outlineProvider
     }
 }
 
