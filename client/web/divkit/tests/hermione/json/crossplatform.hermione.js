@@ -104,6 +104,33 @@ function createIntegrationTestCase(testCase, testPath) {
                     }
                 }
 
+                const expectErrors = item.expected.filter(it => it.type === 'error');
+                const errors = await this.browser.execute(() => {
+                    if (!window.errors) {
+                        return [];
+                    }
+
+                    return window.errors.map(it => {
+                        return {
+                            message: it.message,
+                            additionalMessage: it.additional ? it.additional.message : undefined,
+                            expression: it.additional ? it.additional.expression : undefined
+                        };
+                    });
+                });
+                errors.length.should.equal(expectErrors.length);
+
+                for (let j = 0; j < expectErrors.length; ++j) {
+                    let expected = expectErrors[j];
+                    let str = errors[j].additionalMessage;
+
+                    if (errors[j].expression) {
+                        str += ' Expression: ' + errors[j].expression.replace(/\\/g, '\\\\');
+                    }
+
+                    str.should.equal(expected.value);
+                }
+
                 for (let j = 0; j < item.expected.length; j++) {
                     const expected = item.expected[j];
 
@@ -128,21 +155,7 @@ function createIntegrationTestCase(testCase, testPath) {
                         result.type.should.equal(expected.value.type);
                         result.value.should.deep.equal(expected.value.value);
                     } else if (expected.type === 'error') {
-                        const errors = await this.browser.execute(() => {
-                            if (!window.errors) {
-                                return [];
-                            }
-
-                            return window.errors.map(it => {
-                                return {
-                                    message: it.message,
-                                    additionalMessage: it.additional ? it.additional.message : undefined
-                                };
-                            });
-                        });
-
-                        errors.length.should.equal(1);
-                        errors[0].additionalMessage.should.equal(expected.value);
+                        continue;
                     } else {
                         throw new Error('Unsupported expected type ' + expected.type);
                     }

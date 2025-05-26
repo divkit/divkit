@@ -137,9 +137,11 @@
         }
       ],
       "platforms": [
-        "android",
-        "web"
-      ]
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "outdated error message"
+      }
     },
     {
       "div_actions": [
@@ -155,7 +157,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
