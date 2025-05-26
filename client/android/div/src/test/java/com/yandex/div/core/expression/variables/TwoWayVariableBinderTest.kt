@@ -1,23 +1,16 @@
 package com.yandex.div.core.expression.variables
 
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionResolverImpl
-import com.yandex.div.core.expression.ExpressionsRuntime
-import com.yandex.div.core.expression.ExpressionsRuntimeProvider
-import com.yandex.div.core.expression.FunctionProviderDecorator
-import com.yandex.div.core.expression.local.RuntimeStore
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
-import com.yandex.div.evaluable.EvaluationContext
-import com.yandex.div.evaluable.Evaluator
 import com.yandex.div2.DivData
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
@@ -34,30 +27,32 @@ private const val ANOTHER_VALUE = "another_value"
 @RunWith(RobolectricTestRunner::class)
 class TwoWayVariableBinderTest {
 
-    private val errorCollector = mock<ErrorCollector>()
-    private val errorCollectors = mock<ErrorCollectors> {
-        on { getOrCreate(any(), any()) } doReturn errorCollector
-    }
     private val variable = Variable.StringVariable(VARIABLE_NAME, INITIAL_VALUE)
-    private val variableController = VariableControllerImpl().apply {
-        declare(variable)
+    private val variableUpdateCaptor = argumentCaptor<(Variable?) -> Unit>()
+    private val invokeOnSubscriptionCaptor = argumentCaptor<Boolean>()
+    private val variableController = mock<VariableController> {
+        on { getMutableVariable(VARIABLE_NAME) } doReturn variable
+        on {
+            subscribeToVariableChange(
+                any(),
+                anyOrNull(),
+                invokeOnSubscriptionCaptor.capture(),
+                variableUpdateCaptor.capture()
+            )
+        } doAnswer {
+            if (invokeOnSubscriptionCaptor.firstValue) {
+                variableUpdateCaptor.firstValue.invoke(variable)
+            }
+            Disposable.NULL
+        }
     }
-    private val path = DivStatePath(0)
-    private val store = RuntimeStore(mock(), mock(), mock(), mock())
-    private val evaluationContext = EvaluationContext(mock(), mock(), mock<FunctionProviderDecorator>(), mock())
-    private val evaluator = mock<Evaluator> {
-        on { evaluationContext } doReturn evaluationContext
-    }
-    private val expressionResolver = ExpressionResolverImpl("", mock(), mock(), evaluator, mock(), mock())
-    private val expressionsRuntime = ExpressionsRuntime(expressionResolver, variableController, mock(), mock(), store)
-    private val expressionsRuntimeProvider = mock<ExpressionsRuntimeProvider> {
-        on { getOrCreate(any(), any(), any()) } doReturn expressionsRuntime
+    private val expressionResolver = mock<ExpressionResolverImpl> {
+        on { variableController } doReturn variableController
     }
 
     private val divView = mock<Div2View> {
         on { dataTag } doReturn mock()
         on { divData } doReturn DivData(logId = "test", states = emptyList())
-        on { runtimeStore } doReturn store
     }
     private val updateCaptor = argumentCaptor<(String) -> Unit>()
     private val callbacks = mock<TwoWayStringVariableBinder.Callbacks> {
@@ -65,10 +60,8 @@ class TwoWayVariableBinderTest {
     }
 
     init {
-        store.rootRuntime = expressionsRuntime
-        val bindingContext = BindingContext.createEmpty(divView).getFor(expressionResolver, store)
-        TwoWayStringVariableBinder(errorCollectors, expressionsRuntimeProvider)
-            .bindVariable(bindingContext, VARIABLE_NAME, callbacks, path)
+        val bindingContext = BindingContext.createEmpty(divView).getFor(expressionResolver)
+        TwoWayStringVariableBinder(mock()).bindVariable(bindingContext, VARIABLE_NAME, callbacks, mock())
     }
 
     @Test
@@ -78,7 +71,7 @@ class TwoWayVariableBinderTest {
 
     @Test
     fun `invoke callback on variable change`() {
-        variable.set(NEW_VALUE)
+        updateVariable()
         verify(callbacks).onVariableChanged(NEW_VALUE)
     }
 
@@ -91,13 +84,13 @@ class TwoWayVariableBinderTest {
     @Test
     fun `not invoke callback on variable change after view state change with same value`() {
         updateCaptor.firstValue.invoke(NEW_VALUE)
-        variable.set(NEW_VALUE)
+        updateVariable()
         verify(callbacks, never()).onVariableChanged(NEW_VALUE)
     }
 
     @Test
     fun `not set variable value on view state change after variable change with same value`() {
-        variable.set(NEW_VALUE)
+        updateVariable()
         val variableObserver = mock<(Variable) -> Unit>()
         variable.addObserver(variableObserver)
 
@@ -109,14 +102,19 @@ class TwoWayVariableBinderTest {
     @Test
     fun `invoke callback on variable change after view state change with another value`() {
         updateCaptor.firstValue.invoke(NEW_VALUE)
-        variable.set(ANOTHER_VALUE)
+        updateVariable(ANOTHER_VALUE)
         verify(callbacks).onVariableChanged(ANOTHER_VALUE)
     }
 
     @Test
     fun `set variable value on view state change after variable change with another value`() {
-        variable.set(NEW_VALUE)
+        updateVariable()
         updateCaptor.firstValue.invoke(ANOTHER_VALUE)
         assertEquals(ANOTHER_VALUE, variable.getValue())
+    }
+
+    private fun updateVariable(value: String = NEW_VALUE) {
+        variable.set(value)
+        variableUpdateCaptor.firstValue.invoke(variable)
     }
 }

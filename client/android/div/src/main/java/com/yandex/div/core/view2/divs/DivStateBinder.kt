@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationSet
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.isNotEmpty
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
@@ -15,6 +16,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
+import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
@@ -152,7 +154,7 @@ internal class DivStateBinder @Inject constructor(
         val newStateDiv = newState.div
         val newStateDivValue = newStateDiv?.value()
 
-        val outgoing = if (childCount > 0) getChildAt(0) else null
+        val outgoing = if (isNotEmpty()) getChildAt(0) else null
         val incoming: View?
         val reusableIncomingView = newStateDiv?.let {
             divView.currentRebindReusableList?.getUniqueViewForDiv(newStateDiv)
@@ -271,9 +273,7 @@ internal class DivStateBinder @Inject constructor(
     }
 
     private fun getValueFromVariable(context: BindingContext, variableName: String): String? {
-        val variableController = context.runtimeStore?.getRuntimeWithOrNull(context.expressionResolver)?.variableController
-            ?: context.divView.expressionsRuntime?.variableController ?: return null
-
+        val variableController = context.expressionResolver.variableController ?: return null
         return variableController.getMutableVariable(variableName)?.getValue()?.toString()
     }
 

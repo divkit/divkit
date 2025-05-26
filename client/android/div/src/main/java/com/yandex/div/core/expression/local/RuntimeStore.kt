@@ -5,6 +5,7 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.FunctionProviderDecorator
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
@@ -46,8 +47,8 @@ internal class RuntimeStore(
         }
 
     private val onCreateCallback by lazy {
-        ExpressionResolverImpl.OnCreateCallback { resolver, variableController, functionProvider ->
-            ExpressionsRuntime(resolver, variableController, null, functionProvider, this).also {
+        ExpressionResolverImpl.OnCreateCallback { resolver ->
+            ExpressionsRuntime(resolver, null).also {
                 /**
                  * we cannot provide path here, otherwise descendants of ExpressionResolver will
                  * receive the same callback and override runtime for provided path.
@@ -155,7 +156,8 @@ internal class RuntimeStore(
         val localVariableController = VariableControllerImpl(baseRuntime.variableController)
 
         val functions = div.functions
-        var functionProvider = baseRuntime.functionProvider
+        var functionProvider =
+            baseRuntime.expressionResolver.evaluator.evaluationContext.functionProvider as FunctionProviderDecorator
         if (!functions.isNullOrEmpty()) {
             functionProvider += functions.toLocalFunctions()
         }
@@ -183,7 +185,7 @@ internal class RuntimeStore(
 
         val triggerController = div.variableTriggers.toTriggersController(localVariableController, resolver, evaluator)
 
-        return ExpressionsRuntime(resolver, localVariableController, triggerController, functionProvider, this).also {
+        return ExpressionsRuntime(resolver, triggerController).also {
             putRuntime(it, path, parentRuntime)
         }
     }

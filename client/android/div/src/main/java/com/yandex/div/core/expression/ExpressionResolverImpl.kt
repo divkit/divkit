@@ -30,10 +30,10 @@ internal class ExpressionResolverImpl(
     /**
      * Unique path by which resolver could be found at [RuntimeStore].
      */
-    internal val path: String,
-    internal val runtimeStore: RuntimeStore,
-    private val variableController: VariableController,
-    private val evaluator: Evaluator,
+    val path: String,
+    val runtimeStore: RuntimeStore,
+    val variableController: VariableController,
+    val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
     private val onCreateCallback: OnCreateCallback,
 ) : ExpressionResolver {
@@ -46,11 +46,7 @@ internal class ExpressionResolverImpl(
     var suppressMissingVariableException: Boolean = false
 
     init {
-        onCreateCallback.onCreate(
-            this,
-            variableController,
-            evaluator.evaluationContext.functionProvider as FunctionProviderDecorator
-        )
+        onCreateCallback.onCreate(this)
     }
 
     override fun <R, T : Any> get(
@@ -289,10 +285,6 @@ internal class ExpressionResolverImpl(
      * as a new ExpressionRuntime we are using OnCreateCallback.
      */
     internal fun interface OnCreateCallback {
-        fun onCreate(
-            resolver: ExpressionResolverImpl,
-            variableController: VariableController,
-            functionProvider: FunctionProviderDecorator
-        )
+        fun onCreate(resolver: ExpressionResolverImpl)
     }
 }

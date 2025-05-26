@@ -86,7 +86,7 @@ class ExpressionResolverImplTest {
         externalVariables,
         Evaluator(evaluationContext),
         mock()
-    ) { _, _, _ -> }
+    ) { _ -> }
 
     private val withFuncGetCallback = { callback: () -> Unit ->
         ExpressionResolverImpl(
@@ -112,7 +112,7 @@ class ExpressionResolverImplTest {
                 )
             ),
             mock()
-        ) { _, _, _ -> }
+        ) { _ -> }
     }
 
     @Before

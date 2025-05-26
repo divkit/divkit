@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -16,8 +16,7 @@ import javax.inject.Inject
 @Mockable
 internal class TwoWayStringVariableBinder @Inject constructor(
     errorCollectors: ErrorCollectors,
-    expressionsRuntimeProvider: ExpressionsRuntimeProvider
-) : TwoWayVariableBinder<String>(errorCollectors, expressionsRuntimeProvider) {
+) : TwoWayVariableBinder<String>(errorCollectors) {
 
     interface Callbacks : TwoWayVariableBinder.Callbacks<String>
 
@@ -28,8 +27,7 @@ internal class TwoWayStringVariableBinder @Inject constructor(
 @Mockable
 internal class TwoWayIntegerVariableBinder @Inject constructor(
     errorCollectors: ErrorCollectors,
-    expressionsRuntimeProvider: ExpressionsRuntimeProvider
-) : TwoWayVariableBinder<Long>(errorCollectors, expressionsRuntimeProvider) {
+) : TwoWayVariableBinder<Long>(errorCollectors) {
 
     interface Callbacks : TwoWayVariableBinder.Callbacks<Long>
 
@@ -40,8 +38,7 @@ internal class TwoWayIntegerVariableBinder @Inject constructor(
 @Mockable
 internal class TwoWayBooleanVariableBinder @Inject constructor(
     errorCollectors: ErrorCollectors,
-    expressionsRuntimeProvider: ExpressionsRuntimeProvider
-) : TwoWayVariableBinder<Boolean>(errorCollectors, expressionsRuntimeProvider) {
+) : TwoWayVariableBinder<Boolean>(errorCollectors) {
 
     interface Callbacks : TwoWayVariableBinder.Callbacks<Boolean>
 
@@ -49,10 +46,7 @@ internal class TwoWayBooleanVariableBinder @Inject constructor(
 }
 
 @Mockable
-internal abstract class TwoWayVariableBinder<T>(
-    private val errorCollectors: ErrorCollectors,
-    private val expressionsRuntimeProvider: ExpressionsRuntimeProvider
-) {
+internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: ErrorCollectors) {
 
     @Mockable
     interface Callbacks<T> {
@@ -72,9 +66,7 @@ internal abstract class TwoWayVariableBinder<T>(
 
         var pendingValue: T? = null
         val tag = divView.dataTag
-        val variableController = bindingContext.runtimeStore?.let { runtimeStore ->
-            runtimeStore.getRuntimeWithOrNull(bindingContext.expressionResolver)?.variableController
-        } ?: expressionsRuntimeProvider.getOrCreate(tag, data, divView).variableController
+        val variableController = bindingContext.expressionResolver.variableController ?: return Disposable.NULL
 
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener

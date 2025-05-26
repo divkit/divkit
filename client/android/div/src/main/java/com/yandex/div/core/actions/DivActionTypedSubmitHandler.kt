@@ -2,12 +2,15 @@ package com.yandex.div.core.actions
 
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivRequestExecutor
+import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.expression.name
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.evaluable.MissingVariableException
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.DivTreeVisitor
+import com.yandex.div.internal.core.toItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
@@ -30,7 +33,7 @@ class DivActionTypedSubmitHandler @Inject constructor(
         val submitAction = (action as? DivActionTyped.Submit)?.value ?: return false
 
         val containerId = submitAction.containerId.evaluate(resolver)
-        val (containerDiv, context, path) = ContainerFinder(containerId).findContainer(view) ?: return false
+        val container = ContainerFinder(containerId).findContainer(view) ?: return false
 
         val headers = submitAction.request.headers?.map {
             DivRequestExecutor.Header(it.name.evaluate(resolver), it.value.evaluate(resolver))
@@ -40,7 +43,7 @@ class DivActionTypedSubmitHandler @Inject constructor(
             submitAction.request.url.evaluate(resolver),
             submitAction.request.method.evaluate(resolver).toString(),
             headers,
-            createBody(containerDiv, context, path, view),
+            createBody(container, view),
         )
 
         val callback = createCallback(submitAction.onSuccessActions, submitAction.onFailActions, view, resolver)
@@ -49,12 +52,11 @@ class DivActionTypedSubmitHandler @Inject constructor(
         return true
     }
 
-    private fun createBody(div: Div, context: BindingContext, path: DivStatePath, view: Div2View): String {
-        val variables = div.value().variables
+    private fun createBody(container: DivItemBuilderResult, view: Div2View): String {
+        val variables = container.div.value().variables
         if (variables.isNullOrEmpty()) return ""
 
-        val variableController = context.runtimeStore
-            ?.getOrCreateRuntime(path.fullPath, div, context.expressionResolver)?.variableController ?: return ""
+        val variableController = container.expressionResolver.variableController ?: return ""
 
         val body = JSONObject()
         variables.forEach {
@@ -93,9 +95,9 @@ class DivActionTypedSubmitHandler @Inject constructor(
 
     private class ContainerFinder(private val id: String) : DivTreeVisitor<Unit>() {
 
-        private val containers = mutableListOf<Triple<Div, BindingContext, DivStatePath>>()
+        private val containers = mutableListOf<DivItemBuilderResult>()
 
-        fun findContainer(view: Div2View): Triple<Div, BindingContext, DivStatePath>? {
+        fun findContainer(view: Div2View): DivItemBuilderResult? {
             val data = view.divData ?: return null
             data.states.forEach { state ->
                 visit(state.div, view.bindingContext, DivStatePath.fromState(state))
@@ -120,7 +122,7 @@ class DivActionTypedSubmitHandler @Inject constructor(
 
         override fun defaultVisit(data: Div, context: BindingContext, path: DivStatePath) {
             if (data.value().id == id) {
-                containers.add(Triple(data, context, path))
+                containers.add(data.toItemBuilderResult(context.expressionResolver))
             }
         }
     }

@@ -10,6 +10,7 @@ import com.yandex.div.core.actions.colorIntValue
 import com.yandex.div.core.actions.doubleValue
 import com.yandex.div.core.actions.logError
 import com.yandex.div.core.actions.longValue
+import com.yandex.div.core.expression.local.variableController
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.isAlternated
 import com.yandex.div.core.util.isReversed
@@ -50,7 +51,7 @@ internal object DivVariableAnimatorBuilder {
         startAction: DivActionAnimatorStart,
         resolver: ExpressionResolver
     ): Animator? {
-        return when (val variable = findVariable<Variable>(divView, animator.variableName, resolver)) {
+        return when (val variable = findVariable<Variable>(animator.variableName, resolver)) {
             is Variable.IntegerVariable -> buildIntegerAnimator(divView, animator, startAction, resolver, variable)
             is Variable.DoubleVariable -> buildDoubleAnimator(divView, animator, startAction, resolver, variable)
 
@@ -103,7 +104,7 @@ internal object DivVariableAnimatorBuilder {
         startAction: DivActionAnimatorStart,
         resolver: ExpressionResolver
     ): Animator? {
-        val variable = findVariable<Variable.ColorVariable>(divView, animator.variableName, resolver)
+        val variable = findVariable<Variable.ColorVariable>(animator.variableName, resolver)
         if (variable == null) {
             divView.logError(MissingVariableException("Unable to find color variable with name '${animator.variableName}'"))
             return null
@@ -152,12 +153,6 @@ internal object DivVariableAnimatorBuilder {
         return this
     }
 
-    private inline  fun <reified T : Variable> findVariable(
-        divView: Div2View,
-        name: String,
-        resolver: ExpressionResolver,
-    ): T? {
-        val runtime = divView.runtimeStore?.getRuntimeWithOrNull(resolver) ?: divView.expressionsRuntime
-        return runtime?.variableController?.getMutableVariable(name) as? T
-    }
+    private inline  fun <reified T : Variable> findVariable(name: String, resolver: ExpressionResolver) =
+        resolver.variableController?.getMutableVariable(name) as? T
 }

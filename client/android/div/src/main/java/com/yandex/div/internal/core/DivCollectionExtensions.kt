@@ -2,7 +2,7 @@ package com.yandex.div.internal.core
 
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.expression.variables.ConstantsProvider
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.forEach
@@ -85,7 +85,7 @@ private fun DivCollectionItemBuilder.getItemResolver(
     index: Int,
     resolver: ExpressionResolver,
 ): ExpressionResolver? {
-    val resolverImpl = resolver as? ExpressionResolverImpl ?: return resolver
+    val resolverImpl = resolver.asImpl ?: return resolver
     val validElement = resolverImpl.validateItemBuilderDataElement(dataElement, index) ?: return null
     val localDataProvider = ConstantsProvider(mapOf(
         dataElementName to validElement,

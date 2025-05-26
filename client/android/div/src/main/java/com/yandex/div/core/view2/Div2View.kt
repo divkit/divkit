@@ -225,7 +225,7 @@ class Div2View private constructor(
             runtimeStore?.clearBindings(this)
         }
         runtimeStore = expressionsRuntime?.runtimeStore
-        bindingContext = bindingContext.getFor(expressionResolver, runtimeStore)
+        bindingContext = bindingContext.getFor(expressionResolver)
     }
 
     private fun attachVariableTriggers(data: DivData) {

@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.toDivItemBuilderResult
@@ -131,7 +131,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
         }
 
         private fun DivItemBuilderResult.suppressMissingVariableException(suppress: Boolean) {
-            (expressionResolver as? ExpressionResolverImpl)?.suppressMissingVariableException = suppress
+            expressionResolver.asImpl?.suppressMissingVariableException = suppress
         }
     }
 

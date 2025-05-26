@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
@@ -160,7 +161,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         div: DivState,
         divView: Div2View,
         states: MutableList<String>,
-        parentRuntime: ExpressionsRuntime,
+        resolver: ExpressionResolverImpl,
     ): String? {
         val statePath = states.joinToString("/")
         val cardId = divView.divTag.id
@@ -168,9 +169,9 @@ internal class DivRuntimeVisitor @Inject constructor(
         return temporaryStateCache.getState(cardId, statePath)
             ?: divStateCache.getState(cardId, statePath)
             ?: div.stateIdVariable?.let {
-                parentRuntime.variableController.getMutableVariable(it)?.getValue().toString()
+                resolver.variableController.getMutableVariable(it)?.getValue().toString()
             }
-            ?: parentRuntime.let { div.defaultStateId?.evaluate(it.expressionResolver) }
+            ?: div.defaultStateId?.evaluate(resolver)
             ?: div.states.firstOrNull()?.stateId
     }
 
@@ -182,7 +183,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         parentRuntime: ExpressionsRuntime,
     ) {
         states.add(div.getId())
-        val activeStateId = getActiveStateId(div, divView, states, parentRuntime)
+        val activeStateId = getActiveStateId(div, divView, states, parentRuntime.expressionResolver)
         div.states.forEach {
             val childDiv = it.div ?: return@forEach
             val childPath = path.appendChild(it.stateId)
