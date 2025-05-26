@@ -19,6 +19,7 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
+import java.util.WeakHashMap
 
 @Mockable
 internal class TriggersController(
@@ -43,7 +44,7 @@ internal class TriggersController(
         val activeView = currentView
 
         val activeExecutors = executors.getOrPut(divTriggers) { mutableListOf() }
-        clearBinding()
+        activeView?.let { clearBinding(it) }
 
         divTriggers.forEach { trigger ->
             val rawExpression = trigger.condition.rawValue.toString()
@@ -84,16 +85,16 @@ internal class TriggersController(
         return null
     }
 
-    fun clearBinding() {
+    fun clearBinding(view: DivViewFacade?) {
         currentView = null
-        executors.forEach { (_, value) -> value.forEach { it.view = null } }
+        executors.forEach { (_, value) -> value.forEach { it.onDetach(view) } }
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
         if (currentView == view) return
         currentView = view
         activeTriggers?.let {
-            executors[it]?.forEach { executor -> executor.view = view }
+            executors[it]?.forEach { executor -> executor.onAttach(view) }
         }
     }
 }
@@ -113,20 +114,29 @@ private class TriggerExecutor(
     private val changeTrigger = { _: Variable -> tryTriggerActions() }
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
     private var currentMode = DivTrigger.Mode.ON_CONDITION
-    private var wasConditionSatisfied = false
+    private var wasConditionSatisfied = WeakHashMap<DivViewFacade, Boolean>()
     private var observersDisposable = Disposable.NULL
     private var removingDisposable = Disposable.NULL
     private var bindCompletionDisposable = Disposable.NULL
+    private val attachedViews = mutableSetOf<DivViewFacade>()
 
-    var view: DivViewFacade? = null
-        set(value) {
-            field = value
-            if (value == null) {
-                stopObserving()
-            } else {
-                startObserving()
-            }
+    fun onAttach(view: DivViewFacade) {
+        attachedViews.add(view)
+        invalidateObservation()
+    }
+
+    fun onDetach(view: DivViewFacade?) {
+        attachedViews.remove(view)
+        invalidateObservation()
+    }
+
+    private fun invalidateObservation() {
+        if (attachedViews.isEmpty()) {
+            stopObserving()
+        } else {
+            startObserving()
         }
+    }
 
     private fun stopObserving() {
         modeObserver.close()
@@ -154,15 +164,16 @@ private class TriggerExecutor(
 
     private fun tryTriggerActions() {
         Assert.assertMainThread()
+        attachedViews.forEach { tryTriggerActions(it) }
+    }
 
-        val viewFacade = view ?: return
-
+    private fun tryTriggerActions(viewFacade: DivViewFacade) {
         (viewFacade as? Div2View)?.takeIf { it.inMiddleOfBind }?.let { div2View ->
             tryTriggerActionsAfterBind(div2View)
             return
         }
 
-        if (!conditionSatisfied()) {
+        if (!conditionSatisfied(viewFacade)) {
             return
         }
 
@@ -190,7 +201,7 @@ private class TriggerExecutor(
         div2View.addPersistentDivDataObserver(observer)
     }
 
-    private fun conditionSatisfied(): Boolean {
+    private fun conditionSatisfied(viewFacade: DivViewFacade): Boolean {
         val nowSatisfied: Boolean = try {
             evaluator.eval(condition)
         } catch (e: Exception) {
@@ -206,8 +217,8 @@ private class TriggerExecutor(
             return false
         }
 
-        val wasSatisfied = wasConditionSatisfied
-        wasConditionSatisfied = nowSatisfied
+        val wasSatisfied = wasConditionSatisfied[viewFacade] ?: false
+        wasConditionSatisfied[viewFacade] = nowSatisfied
 
         if (!nowSatisfied) {
             return false

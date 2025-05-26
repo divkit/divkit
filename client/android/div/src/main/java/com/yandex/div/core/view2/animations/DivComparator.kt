@@ -107,7 +107,7 @@ internal object DivComparator {
 
     private fun extractChildren(div: Div, resolver: ExpressionResolver): List<DivItemBuilderResult> {
         return when (div) {
-            is Div.Container -> div.value.buildItems(resolver)
+            is Div.Container -> div.value.buildItems(divView = null, resolver = resolver)
             is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver)
             is Div.Image -> emptyList()
             is Div.GifImage -> emptyList()

@@ -21,7 +21,6 @@ import androidx.core.graphics.withSave
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
-import androidx.core.view.isVisible
 import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.state.DivPathUtils.getId
@@ -905,7 +904,7 @@ internal val View.bindingContext get() = (this as? DivHolderView<*>)?.bindingCon
 internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: ExpressionResolver, callback: (Any) -> Unit) {
     builder.data.observe(resolver, callback)
 
-    val itemResolver = builder.getItemResolver(resolver)
+    val itemResolver = builder.getItemResolver(divView = null, resolver = resolver)
     builder.prototypes.forEach {
         it.selector.observe(itemResolver, callback)
     }
