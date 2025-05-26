@@ -1961,15 +1961,16 @@
                 componentContext.customFunctions = mergeCustomFunctions(this.customFunctions, localCustomFunctions);
 
                 if (Array.isArray(childProcessedJson.animators)) {
-                    ctx.animators = childProcessedJson.animators.reduce<Record<string, MaybeMissing<Animator>>>(
-                        (acc, item) => {
-                            if (item.id) {
-                                acc[item.id] = item;
-                            }
-                            return acc;
-                        },
-                        {}
-                    );
+                    componentContext.animators = childProcessedJson.animators
+                        .reduce<Record<string, MaybeMissing<Animator>>>(
+                            (acc, item) => {
+                                if (item.id) {
+                                    acc[item.id] = item;
+                                }
+                                return acc;
+                            },
+                            {}
+                        );
                 }
 
                 if (opts.fake) {
