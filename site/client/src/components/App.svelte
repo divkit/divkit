@@ -1,7 +1,7 @@
 <script lang="ts">
     import Header from './Header.svelte';
     import Main from './Main.svelte';
-    import { setContext } from 'svelte';
+    import { onMount, setContext } from 'svelte';
     import { derived, get, writable } from 'svelte/store';
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import translations from '../auto/lang.json';
@@ -13,6 +13,7 @@
     import ErrorPage from './ErrorPage.svelte';
     import type langObj from '../auto/lang.json';
     import { getLs, setLs } from '../utils/localStorage';
+    import { initCounter } from '../data/metrika';
 
     const LS_LANG_KEY = 'playground:lang';
 
@@ -46,6 +47,10 @@
         languagesList() {
             return ['ru', 'en'];
         }
+    });
+
+    onMount(() => {
+        initCounter();
     });
 </script>
 
