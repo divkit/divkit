@@ -44,7 +44,8 @@
         "telegramError": "Что-то не работает или у вас есть предложения?",
         "featureSupport": "Поддержка платформ",
         "featureSupportSmall": "Поддержка",
-        "search": "Поиск..."
+        "search": "Поиск...",
+        "docs": "Документация"
     },
     "en": {
         "name": "Eng",
@@ -91,6 +92,7 @@
         "telegramError": "Is something not working or do you have any suggestions?",
         "featureSupport": "Platforms support",
         "featureSupportSmall": "Support",
-        "search": "Search..."
+        "search": "Search...",
+        "docs": "Documentation"
     }
 }

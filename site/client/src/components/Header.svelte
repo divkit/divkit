@@ -33,6 +33,11 @@
         <div class="header__right">
             <ul class="header__links">
                 <li class="header__item">
+                    <a class="header__link" href={$lang === 'ru' ? 'https://divkit.tech/docs/ru/' : 'https://divkit.tech/docs/en/'} target="_blank" rel="noopener noreferrer">
+                        {$l10n('docs')}
+                    </a>
+                </li>
+                <li class="header__item">
                     <a class="header__link" href="https://github.com/divkit/divkit" target="_blank" rel="noopener noreferrer">
                         <div class="header__icon header__icon_github"></div>
                         <span class="header__text">GitHub</span>
@@ -110,6 +115,7 @@
         width: 160px;
         height: 41px;
         flex: 0 0 auto;
+        margin-right: 20px;
         background: no-repeat 50% 50% url(../assets/logo.svg);
     }
 
