@@ -13,5 +13,13 @@
                 "version_added": "30.7.0"
             }
         }
+    }, {
+        "id": "select_font_variation_settings",
+        "name": "Select <code>font_variation_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "32.1.0"
+            }
+        }
     }]
 }

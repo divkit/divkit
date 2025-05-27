@@ -46,6 +46,14 @@
             }
         }
     }, {
+        "id": "text_font_variation_settings",
+        "name": "Text <code>font_variation_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "32.1.0"
+            }
+        }
+    }, {
         "id": "text_font_weight_value",
         "name": "Text <code>font_weight_value</code> property",
         "compat": {

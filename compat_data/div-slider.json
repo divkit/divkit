@@ -38,5 +38,13 @@
                 "version_added": "31.7.0"
             }
         }
+    }, {
+        "id": "slider_font_variation_settings",
+        "name": "Slider <code>font_variation_settings</code> property in <code>thumb_text_style</code> and <code>thumb_secondary_text_style</code>",
+        "compat": {
+            "android": {
+                "version_added": "32.1.0"
+            }
+        }
     }]
 }

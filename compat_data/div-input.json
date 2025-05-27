@@ -143,5 +143,13 @@
                 "version_added": "31.7.0"
             }
         }
+    }, {
+        "id": "input_font_variation_settings",
+        "name": "Input <code>font_variation_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "32.1.0"
+            }
+        }
     }]
 }
