@@ -8,7 +8,7 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.RuntimeStoreProvider
 import com.yandex.div.internal.Log
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @DivScope
 @Mockable
 internal class ReleaseManager @Inject constructor(
-    private val runtimeProvider: ExpressionsRuntimeProvider,
+    private val runtimeStoreProvider: RuntimeStoreProvider,
 ) {
     private val divToRelease = hashMapOf<LifecycleOwner, MutableSet<Div2View>>()
     private val monitor = Any()
@@ -29,7 +29,7 @@ internal class ReleaseManager @Inject constructor(
                 Lifecycle.Event.ON_DESTROY -> {
                     divToRelease[source]?.forEach {
                         it.cleanup()
-                        runtimeProvider.cleanupRuntime(it)
+                        runtimeStoreProvider.cleanupRuntime(it)
                     }
                     divToRelease.remove(source)
                 }

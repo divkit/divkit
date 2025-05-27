@@ -11,7 +11,6 @@ import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.getChildPathUnit
-import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.state.DivStateCache
 import com.yandex.div2.Div
@@ -124,20 +123,12 @@ internal class DivRuntimeVisitor @Inject constructor(
         divView: Div2View,
         path: String,
         parentRuntime: ExpressionsRuntime
-    ): ExpressionsRuntime? {
+    ): ExpressionsRuntime {
         if (!div.needLocalRuntime) return parentRuntime
 
-        divView.runtimeStore?.getOrCreateRuntime(
-            path = path,
-            div = div,
-            parentRuntime = parentRuntime,
-        )?.let {
+        return parentRuntime.runtimeStore.getOrCreateRuntime(path, div, parentRuntime.expressionResolver).also {
             it.onAttachedToWindow(divView)
-            return it
         }
-
-        Assert.fail("ExpressionRuntimeVisitor cannot create runtime for path = $path")
-        return null
     }
 
     private fun visitContainer(
@@ -148,12 +139,10 @@ internal class DivRuntimeVisitor @Inject constructor(
         states: MutableList<String>,
         parentRuntime: ExpressionsRuntime,
     ) {
-        defaultVisit(div, divView, path, parentRuntime).also { runtime ->
-            if (runtime == null) return@also
+        val runtime = defaultVisit(div, divView, path, parentRuntime)
 
-            items?.forEachIndexed { index, div ->
-                visit(div, divView, path.appendChild(div.value().getChildPathUnit(index)), states, runtime)
-            }
+        items?.forEachIndexed { index, item ->
+            visit(item, divView, path.appendChild(item.value().getChildPathUnit(index)), states, runtime)
         }
     }
 

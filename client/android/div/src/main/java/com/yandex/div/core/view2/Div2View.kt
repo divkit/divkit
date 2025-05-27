@@ -139,10 +139,11 @@ class Div2View private constructor(
         get() = viewComponent.releaseViewVisitor
     internal val mediaReleaseViewVisitor: MediaReleaseViewVisitor
         get() = viewComponent.mediaReleaseViewVisitor
-    internal var expressionsRuntime: ExpressionsRuntime? = null
-    private var oldExpressionsRuntime: ExpressionsRuntime? = null
+    internal val expressionsRuntime: ExpressionsRuntime?
+        get() = runtimeStore?.rootRuntime
+    private var oldRuntimeStore: RuntimeStore? = null
     internal val oldExpressionResolver: ExpressionResolver
-        get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
+        get() = oldRuntimeStore?.rootRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
     internal var runtimeStore: RuntimeStore? = null
     internal var inMiddleOfBind = false
 
@@ -211,20 +212,19 @@ class Div2View private constructor(
     var divData: DivData? = null
         internal set(value) {
             field = value
-            updateExpressionsRuntime()
+            updateRuntimeStore()
             updateTimers()
             bindingProvider.update(dataTag, field)
         }
 
-    private fun updateExpressionsRuntime(data: DivData? = divData, tag: DivDataTag = dataTag) {
+    private fun updateRuntimeStore(data: DivData? = divData, tag: DivDataTag = dataTag) {
         data ?: return
-        oldExpressionsRuntime = expressionsRuntime
-        expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
-        expressionsRuntime?.runtimeStore?.updateSubscriptions()
-        if (oldExpressionsRuntime != expressionsRuntime) {
-            runtimeStore?.clearBindings(this)
+        oldRuntimeStore = runtimeStore
+        runtimeStore = div2Component.runtimeStoreProvider.getOrCreate(tag, data, this)
+        runtimeStore?.updateSubscriptions()
+        if (oldRuntimeStore != runtimeStore) {
+            oldRuntimeStore?.clearBindings(this)
         }
-        runtimeStore = expressionsRuntime?.runtimeStore
         bindingContext = bindingContext.getFor(expressionResolver)
     }
 
@@ -319,7 +319,7 @@ class Div2View private constructor(
         histogramReporter.onRenderStarted()
 
         val oldData = divData ?: oldDivData
-        updateExpressionsRuntime(data, tag)
+        updateRuntimeStore(data, tag)
         dataTag = tag
 
         data.states.forEach {
@@ -355,7 +355,7 @@ class Div2View private constructor(
         div2Component.divBinder.attachIndicators()
 
         sendCreationHistograms()
-        oldExpressionsRuntime = expressionsRuntime
+        oldRuntimeStore = runtimeStore
         notifyBindEnded()
         return result
     }
@@ -381,7 +381,7 @@ class Div2View private constructor(
         histogramReporter.onRenderStarted()
 
         val oldData = divData
-        updateExpressionsRuntime(data, tag)
+        updateRuntimeStore(data, tag)
         val isDataReplaceable = DivComparator.isDivDataReplaceable(
             oldData,
             data,
@@ -415,7 +415,7 @@ class Div2View private constructor(
         }
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
-        oldExpressionsRuntime = expressionsRuntime
+        oldRuntimeStore = runtimeStore
         notifyBindEnded()
         return result
     }
@@ -672,7 +672,7 @@ class Div2View private constructor(
             newData,
             stateId,
             expressionResolver,
-            div2Component.expressionsRuntimeProvider.getOrCreate(tag, newData, this).expressionResolver
+            div2Component.runtimeStoreProvider.getOrCreate(tag, newData, this).rootRuntime.expressionResolver
         )
         if (canBeReplaced) {
             releaseChildren(this)

@@ -134,7 +134,7 @@ class Div2Context @MainThread private constructor(
 
     fun reset(@ResetFlag flags: Int = RESET_NONE, tags: List<DivDataTag> = emptyList()) {
         if (flags and RESET_EXPRESSION_RUNTIMES != 0) {
-            div2Component.expressionsRuntimeProvider.reset(tags)
+            div2Component.runtimeStoreProvider.reset(tags)
         }
         if (flags and RESET_ERROR_COLLECTORS != 0) {
             div2Component.errorCollectors.reset(tags)
