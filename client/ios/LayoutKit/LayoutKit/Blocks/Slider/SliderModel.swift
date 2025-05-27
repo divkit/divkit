@@ -99,6 +99,7 @@ public struct SliderModel: Equatable {
   public let ranges: [RangeModel]
   public let layoutDirection: UserInterfaceLayoutDirection
   public let path: UIElementPath?
+  public let isEnabled: Bool
 
   public var valueRange: Int {
     maxValue - minValue
@@ -151,7 +152,8 @@ public struct SliderModel: Equatable {
     marksConfiguration: MarksConfiguration,
     ranges: [RangeModel],
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    isEnabled: Bool = true
   ) {
     self.firstThumb = firstThumb
     self.secondThumb = secondThumb
@@ -161,6 +163,7 @@ public struct SliderModel: Equatable {
     self.ranges = ranges
     self.layoutDirection = layoutDirection
     self.path = path
+    self.isEnabled = isEnabled
   }
 
   static var empty: Self {
@@ -171,7 +174,8 @@ public struct SliderModel: Equatable {
       maxValue: 0,
       marksConfiguration: .empty,
       ranges: [],
-      layoutDirection: .leftToRight
+      layoutDirection: .leftToRight,
+      isEnabled: true
     )
   }
 
@@ -182,6 +186,7 @@ public struct SliderModel: Equatable {
       lhs.minValue == rhs.minValue &&
       lhs.marksConfiguration == rhs.marksConfiguration &&
       lhs.ranges == rhs.ranges &&
-      lhs.path == rhs.path
+      lhs.path == rhs.path &&
+      lhs.isEnabled == rhs.isEnabled
   }
 }

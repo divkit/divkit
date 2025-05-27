@@ -133,6 +133,7 @@
           "$description": "translations.json#/div_slider_is_enabled",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         }

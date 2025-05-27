@@ -81,6 +81,8 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       secondThumbProgress = CGFloat(clampedSecondThumbValue)
     }
 
+    isUserInteractionEnabled = sliderModel.isEnabled
+
     setNeedsLayout()
   }
 

@@ -9,6 +9,7 @@
       "$description": "translations.json#/div_circle_shape",
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     }
