@@ -8,6 +8,7 @@
     import '../../artifacts/client.css';
     import ViewportSelect from './ViewportSelect.svelte';
     import PlatformSelect from './PlatformSelect.svelte';
+    import DirectionSelect from './DirectionSelect.svelte';
     import {
         components,
         highlightElem,
@@ -35,6 +36,7 @@
     $: splitted = viewport.split('x');
     $: width = splitted[0] || 0;
     $: height = splitted[1] || 0;
+    let direction: 'ltr' | 'rtl' = 'ltr';
 
     let componentsCount = 0;
     let renderTime = 0;
@@ -101,7 +103,7 @@
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function rerender(json: any, platform: 'desktop' | 'touch' | 'auto'): void {
+    function rerender(json: any, platform: 'desktop' | 'touch' | 'auto', direction: 'ltr' | 'rtl'): void {
         if (!rootPreview) {
             return;
         }
@@ -119,6 +121,7 @@
             json,
             id: 'test',
             platform,
+            direction,
             extensions: new Map<string, DivExtensionClass>([
                 ['size_provider', SizeProvider],
                 ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
@@ -169,7 +172,7 @@
         });
     }
 
-    $: rerender($jsonStore, platform);
+    $: rerender($jsonStore, platform, direction);
 
     function updateHovered(): void {
         if (!prevCoords) {
@@ -214,7 +217,7 @@
     }
 
     onMount(() => {
-        rerender($jsonStore, platform);
+        rerender($jsonStore, platform, direction);
     });
 
     onDestroy(() => {
@@ -243,6 +246,7 @@
     <div class="web-viewer__select">
         <ViewportSelect bind:value={viewport} />
         <PlatformSelect bind:value={platform} />
+        <DirectionSelect bind:value={direction} />
 <!--        <VersionButton />-->
     </div>
 
