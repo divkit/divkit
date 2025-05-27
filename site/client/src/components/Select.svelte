@@ -92,7 +92,7 @@
 
     .select__popup {
         position: absolute;
-        z-index: 1;
+        z-index: 10;
         top: 100%;
         left: 0;
         padding: 10px 10px;
