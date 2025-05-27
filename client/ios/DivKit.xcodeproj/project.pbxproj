@@ -25,7 +25,7 @@
 		43BF1CCD2B9FD7B500198EAF /* SnapshotTestKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D1288ACCE400BEA1FA /* SnapshotTestKit.swift */; };
 		43BF1CD02B9FD7B500198EAF /* SnapshotTestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D6288ACCE400BEA1FA /* SnapshotTestRunner.swift */; };
 		43BF1CD32B9FD7B500198EAF /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D5288ACCE400BEA1FA /* ReferenceSet.swift */; };
-		43BF1CD52B9FD7B500198EAF /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */; };
+		43BF1CD52B9FD7B500198EAF /* SnapshotFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0E7380288AE9BB009BEB3C /* SnapshotFontProvider.swift */; };
 		43C1F9F12BA0ED2000134AD2 /* JsonFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C1F9F02BA0ED2000134AD2 /* JsonFile.swift */; };
 		43C1F9F32BA20B2500134AD2 /* DivKitSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C1F9F22BA20B2500134AD2 /* DivKitSnapshotTests.swift */; };
 		43D05A9C2BA336CD003290AD /* TestingFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D05A9B2BA336CD003290AD /* TestingFiles.swift */; };
@@ -289,6 +289,8 @@
 		9D09984F2CA30D010098098C /* AccessoryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */; };
 		9D5BFB092CA1DA20005F8EB1 /* CustomFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */; };
 		9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */; };
+		9DEA2C752DDCC63400A074B5 /* RobotoFlex-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DEA2C742DDCC63400A074B5 /* RobotoFlex-Regular.ttf */; };
+		9DEA2C772DDCC63D00A074B5 /* RobotoFlex-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DEA2C762DDCC63D00A074B5 /* RobotoFlex-Regular.ttf */; };
 		9F89F0D92CEF4C9A00460B76 /* ShineExtensionParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */; };
 		9F89F0DB2CEF5AAC00460B76 /* ShimmerStyleTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */; };
 		9FE7D2FE2CF751E300BAF071 /* VGSL in Frameworks */ = {isa = PBXBuildFile; productRef = 9FE7D2FD2CF751E300BAF071 /* VGSL */; };
@@ -433,7 +435,7 @@
 		8C0C0766288FE8F30052C4A9 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8C0DC7112865CA1100286F6B /* DivKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivKitTests.swift; sourceTree = "<group>"; };
 		8C0E7372288AE563009BEB3C /* snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = snapshot_test_data; path = ../../../test_data/snapshot_test_data; sourceTree = "<group>"; };
-		8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
+		8C0E7380288AE9BB009BEB3C /* SnapshotFontProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotFontProvider.swift; sourceTree = "<group>"; };
 		8C0E7391288AEF18009BEB3C /* YSText-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Medium.ttf"; sourceTree = "<group>"; };
 		8C0E7392288AEF18009BEB3C /* YSText-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Light.ttf"; sourceTree = "<group>"; };
 		8C0E7393288AEF18009BEB3C /* YSText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Regular.ttf"; sourceTree = "<group>"; };
@@ -657,6 +659,8 @@
 		9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProvider.swift; sourceTree = "<group>"; };
 		9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunctionTests.swift; sourceTree = "<group>"; };
 		9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActionHandlerTests.swift; sourceTree = "<group>"; };
+		9DEA2C742DDCC63400A074B5 /* RobotoFlex-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoFlex-Regular.ttf"; sourceTree = "<group>"; };
+		9DEA2C762DDCC63D00A074B5 /* RobotoFlex-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoFlex-Regular.ttf"; sourceTree = "<group>"; };
 		9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShineExtensionParamsTests.swift; sourceTree = "<group>"; };
 		9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerStyleTester.swift; sourceTree = "<group>"; };
 		9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivBlockModelingContext.swift; sourceTree = "<group>"; };
@@ -819,6 +823,7 @@
 				8C0E7392288AEF18009BEB3C /* YSText-Light.ttf */,
 				8C0E7391288AEF18009BEB3C /* YSText-Medium.ttf */,
 				8C0E7393288AEF18009BEB3C /* YSText-Regular.ttf */,
+				9DEA2C742DDCC63400A074B5 /* RobotoFlex-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -1203,6 +1208,7 @@
 				8C7EE1CC28B777AE008A48E6 /* YSText-Light.ttf */,
 				8C7EE1CD28B777AE008A48E6 /* YSText-Medium.ttf */,
 				8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */,
+				9DEA2C762DDCC63D00A074B5 /* RobotoFlex-Regular.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -1230,7 +1236,7 @@
 				8C9284D5288ACCE400BEA1FA /* ReferenceSet.swift */,
 				8C9284D6288ACCE400BEA1FA /* SnapshotTestRunner.swift */,
 				43D05A9B2BA336CD003290AD /* TestingFiles.swift */,
-				8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */,
+				8C0E7380288AE9BB009BEB3C /* SnapshotFontProvider.swift */,
 				8C035199288EC5AB0016A747 /* Images.xcassets */,
 			);
 			path = DivKitSnapshotTests;
@@ -1786,6 +1792,7 @@
 			files = (
 				8C54D9C728C0DBD60080826C /* regression_test_data in Resources */,
 				8C4504DE28B3AB58005712FD /* samples in Resources */,
+				9DEA2C772DDCC63D00A074B5 /* RobotoFlex-Regular.ttf in Resources */,
 				8C440A0A2864C55400EF4175 /* AppIcon.xcassets in Resources */,
 				8C440A082864C55400EF4175 /* Assets.xcassets in Resources */,
 				8C7EE1CF28B777AE008A48E6 /* YSText-Bold.ttf in Resources */,
@@ -1830,6 +1837,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C928503288ADEEA00BEA1FA /* Assets.xcassets in Resources */,
+				9DEA2C752DDCC63400A074B5 /* RobotoFlex-Regular.ttf in Resources */,
 				8C0C0767288FE8F30052C4A9 /* Main.storyboard in Resources */,
 				8C0E7398288AEF18009BEB3C /* YSText-Bold.ttf in Resources */,
 				8C0E7396288AEF18009BEB3C /* YSText-Light.ttf in Resources */,
@@ -2122,7 +2130,7 @@
 				43BF1CCD2B9FD7B500198EAF /* SnapshotTestKit.swift in Sources */,
 				43BF1CD02B9FD7B500198EAF /* SnapshotTestRunner.swift in Sources */,
 				43BF1CD32B9FD7B500198EAF /* ReferenceSet.swift in Sources */,
-				43BF1CD52B9FD7B500198EAF /* YSFontProvider.swift in Sources */,
+				43BF1CD52B9FD7B500198EAF /* SnapshotFontProvider.swift in Sources */,
 				43D05A9C2BA336CD003290AD /* TestingFiles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2502,6 +2510,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = DivKitPlayground/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -2525,6 +2534,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = DivKitPlayground/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

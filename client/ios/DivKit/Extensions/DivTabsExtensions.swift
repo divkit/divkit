@@ -107,6 +107,7 @@ extension DivTabs.TabTitleStyle {
   private func makeTypo(
     fontProvider: DivFontProvider,
     fontWeight: DivFontWeight,
+    fontVariationSettings: [String: NSNumber]?,
     expressionResolver: ExpressionResolver
   ) -> Typo {
     let font = fontProvider.font(
@@ -114,7 +115,7 @@ extension DivTabs.TabTitleStyle {
       weight: fontWeight,
       size: resolveFontSizeUnit(expressionResolver)
         .makeScaledValue(resolveFontSize(expressionResolver))
-    )
+    ).withVariationSettings(axisTagToValue: fontVariationSettings)
     return Typo(font: font)
       .with(height: resolveLineHeight(expressionResolver))
       .kerned(CGFloat(resolveLetterSpacing(expressionResolver)))
@@ -131,11 +132,15 @@ extension DivTabs.TabTitleStyle {
       typo: makeTypo(
         fontProvider: fontProvider,
         fontWeight: resolveActiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        fontVariationSettings: resolveActiveFontVariationSettings(expressionResolver)?
+          .mapValues { $0 as? NSNumber }.filteringNilValues(),
         expressionResolver: expressionResolver
       ),
       inactiveTypo: makeTypo(
         fontProvider: fontProvider,
         fontWeight: resolveInactiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        fontVariationSettings: resolveInactiveFontVariationSettings(expressionResolver)?
+          .mapValues { $0 as? NSNumber }.filteringNilValues(),
         expressionResolver: expressionResolver
       ),
       paddings: paddings.resolve(context),

@@ -5,8 +5,11 @@ final class YSFontProvider: DivFontProvider {
   static let mediumFontName = "YSText-Medium"
   static let regularFontName = "YSText-Regular"
 
-  func font(family _: String, weight: DivFontWeight, size: CGFloat) -> UIFont {
-    UIFont(name: weight.fontName, size: size)!
+  func font(family: String, weight: DivFontWeight, size: CGFloat) -> UIFont {
+    if family == robotoFlexFont {
+      return UIFont(name: "RobotoFlex-Regular", size: size)!
+    }
+    return UIFont(name: weight.fontName, size: size)!
   }
 }
 
@@ -24,3 +27,5 @@ extension DivFontWeight {
     }
   }
 }
+
+private let robotoFlexFont = "roboto_flex"

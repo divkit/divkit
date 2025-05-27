@@ -1,6 +1,7 @@
 {
   "description": "Text with font variations",
   "platforms": [
+    "ios",
     "android"
   ],
   "templates": {

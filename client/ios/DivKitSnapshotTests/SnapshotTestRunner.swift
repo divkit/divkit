@@ -31,7 +31,7 @@ final class SnapshotTestRunner {
 
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
-      fontProvider: YSFontProvider(),
+      fontProvider: SnapshotFontProvider(),
       imageHolderFactory: TestImageHolderFactory(),
       layoutDirection: getLayoutDirection(jsonDict)
     )

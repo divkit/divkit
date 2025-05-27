@@ -2,16 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>REFERENCE_SNAPSHOTS_PATH</key>
+	<string>$(PROJECT_DIR)/Tests/reference_snapshots/</string>
+	<key>RESULT_SNAPSHOTS_PATH</key>
+	<string>$(PROJECT_DIR)/Tests/results/</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>YSText-Bold.ttf</string>
 		<string>YSText-Light.ttf</string>
 		<string>YSText-Medium.ttf</string>
 		<string>YSText-Regular.ttf</string>
+		<string>RobotoFlex-Regular.ttf</string>
 	</array>
-	<key>REFERENCE_SNAPSHOTS_PATH</key>
-	<string>$(PROJECT_DIR)/Tests/reference_snapshots/</string>
-	<key>RESULT_SNAPSHOTS_PATH</key>
-	<string>$(PROJECT_DIR)/Tests/results/</string>
 </dict>
 </plist>

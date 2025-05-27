@@ -69,6 +69,7 @@
           "type": "dict",
           "$description": "translations.json#/div_font_variation_settings",
           "platforms": [
+            "ios",
             "android"
           ]
         },

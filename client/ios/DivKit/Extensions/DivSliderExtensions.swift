@@ -257,7 +257,9 @@ extension DivSlider.TextStyle {
         ?? resolveFontWeight(expressionResolver).toInt(),
       size: resolveFontSize(expressionResolver),
       unit: resolveFontSizeUnit(expressionResolver),
-      featureSettings: nil
+      featureSettings: nil,
+      variationSettings: resolveFontVariationSettings(expressionResolver)?
+        .mapValues { $0 as? NSNumber }.filteringNilValues()
     )
     let typo = Typo(font: context.font(fontParams))
       .with(color: resolveTextColor(expressionResolver))

@@ -193,6 +193,8 @@ extension DivText: DivBlockModeling {
       return
     }
 
+    let rangeVariationSettings = range.resolveFontVariationSettings(expressionResolver)?
+      .mapValues { $0 as? NSNumber }.filteringNilValues()
     let rangeFontParams = FontParams(
       family: range.resolveFontFamily(expressionResolver) ?? fontParams.family,
       weight: range.resolveFontWeightValue(expressionResolver)
@@ -201,7 +203,8 @@ extension DivText: DivBlockModeling {
       size: range.resolveFontSize(expressionResolver) ?? fontParams.size,
       unit: range.resolveFontSizeUnit(expressionResolver),
       featureSettings: range.resolveFontFeatureSettings(expressionResolver)
-        ?? fontParams.featureSettings
+        ?? fontParams.featureSettings,
+      variationSettings: rangeVariationSettings ?? fontParams.variationSettings
     )
     let fontTypo = rangeFontParams == fontParams
       ? nil
