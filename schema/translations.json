@@ -1372,8 +1372,8 @@
     "ru": "Элемент для ввода текста."
   },
   "div_input_autocapitalization": {
-    "en": "Text auto-capitalization type. <li>By default: `auto` - default behavior of the platform;</li><li>`none' - automatic capitalization is not applied;</li><li>`words` - capitalization of each word;</li><li>`sentences` - capitalization at the beginning of a sentence;</li><li>`all_characters' - capitalization of each character.</li>",
-    "ru": "Тип автоматической капитализации текста. <li>По умолчанию: `auto` - дефолтное поведение платформы;</li><li>`none` - автоматическая капитализация не применяется;</li><li>`words` - капитализация каждого слова;</li><li>`sentences` - капитализация в начале предложения;</li><li>`all_characters` - капитализация каждого символа.</li>"
+    "en": "Text auto-capitalization type.",
+    "ru": "Тип автоматической капитализации текста."
   },
   "div_input_enter_key_actions": {
     "en": "Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.",
