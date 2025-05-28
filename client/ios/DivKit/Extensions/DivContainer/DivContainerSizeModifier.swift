@@ -42,6 +42,7 @@ struct DivContainerSizeModifier: DivSizeModifier {
     }
 
     let isWrapContentHeight = container.getTransformedHeight(context).isIntrinsic
+      && container.aspect == nil
     switch orientation {
     case .vertical:
       if isWrapContentHeight, items.hasVerticallyMatchParent {
