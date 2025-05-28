@@ -14,6 +14,177 @@
         }
 
         monacoPromose = import('monaco-editor').then(monaco => {
+            const origSetTokensProvider = monaco.languages.setTokensProvider;
+            const origSetLanguageConfiguration = monaco.languages.setLanguageConfiguration;
+
+            monaco.languages.setLanguageConfiguration = (id, config) => {
+                if (id === 'json') {
+                    config.brackets = [
+                        ['{', '}'],
+                        ['[', ']'],
+                        ['@{', '}'],
+                        ['(', ')']
+                    ];
+                }
+
+                return origSetLanguageConfiguration.call(monaco.languages, id, config);
+            };
+
+            monaco.languages.setTokensProvider = (languageId, provider) => {
+                const res = origSetTokensProvider.call(monaco.languages, languageId, provider);
+                if (languageId === 'json') {
+                    monaco.languages.setMonarchTokensProvider('json', {
+                        defaultToken: 'invalid',
+                        tokenPostfix: '.json',
+
+                        keywords: [
+                            'true', 'false',
+                        ],
+
+                        divkitKeywords: [
+                            'true', 'false',
+                        ],
+
+                        operators: [
+                            ':',
+                        ],
+
+                        symbols: /[=><!~?:&|+\-*/^%]+/,
+                        escapes: /\\(?:[abfnrtv"']|u[0-9A-Fa-f]{4}|\\\\\\|\\@\{)/,
+                        digits: /\d+(_+\d+)*/,
+
+                        tokenizer: {
+                            root: [
+                                [/\{/, 'delimiter.bracket', '@obj'],
+                                [/\[/, 'delimiter.bracket', '@obj'],
+                                { include: 'common' }
+                            ],
+
+                            obj: [
+                                [/\}/, 'delimiter.bracket', '@pop'],
+                                [/\]/, 'delimiter.bracket', '@pop'],
+                                [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+                                [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+                                [/"/, 'string.key', '@string_double_key'],
+                                [/:/, 'delimiter', '@obj_value'],
+                                { include: 'common' }
+                            ],
+
+                            string_double_key: [
+                                [/[^\\"]+/, 'string.key'],
+                                [/@escapes/, 'string.escape'],
+                                [/\\./, 'string.escape.invalid'],
+                                [/"/, 'string.key', '@pop']
+                            ],
+
+                            obj_value: [
+                                [/[{]/, 'delimiter.bracket', '@obj'],
+                                [/[,]/, 'delimiter', '@obj'],
+                                { include: 'common' }
+                            ],
+
+                            common: [
+                                // identifiers and keywords
+                                [/[a-z_$][\w$]*/, {
+                                    cases: {
+                                        '@keywords': 'keyword',
+                                        '@default': 'invalid'
+                                    }
+                                }],
+
+                                // whitespace
+                                { include: '@whitespace' },
+
+                                [/@symbols/, {
+                                    cases: {
+                                        '@operators': 'delimiter',
+                                        '@default': ''
+                                    }
+                                }],
+
+                                // numbers
+                                [/(@digits)[eE]([-+]?(@digits))?/, 'number.float'],
+                                [/(@digits)\.(@digits)([eE][-+]?(@digits))?/, 'number.float'],
+                                [/(@digits)/, 'number'],
+
+                                [/[,]/, 'delimiter'],
+
+                                // strings
+                                [/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+                                [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+                                [/"/, 'string.value', '@string_double_value'],
+                            ],
+
+                            whitespace: [
+                                [/[ \t\r\n]+/, ''],
+                            ],
+
+                            string_double_value: [
+                                [/@\{/, { token: 'delimiter.bracket', next: '@bracketCounting' }],
+                                [/[^\\"]/, 'string.value'],
+                                [/@escapes/, 'string.escape'],
+                                [/\\./, 'string.escape.invalid'],
+                                [/"/, 'string.value', '@pop']
+                            ],
+
+                            bracketCounting: [
+                                [/\{/, 'delimiter.bracket', '@bracketCounting'],
+                                [/\}/, 'delimiter.bracket', '@pop'],
+                                { include: 'divkit' }
+                            ],
+
+                            divkit: [
+                                [/[-?:!|&=><+%/*,]/, 'delimiter.divkit'],
+                                [/\(/, 'delimiter.bracket', '@divkit'],
+                                [/\)/, 'delimiter.bracket', '@pop'],
+
+                                [/(@digits)[eE]([-+]?(@digits))?/, 'number.divkit'],
+                                [/(@digits)\.(@digits)([eE][-+]?(@digits))?/, 'number.divkit'],
+                                [/(@digits)(?:\.)?/, 'number.divkit'],
+
+                                [/[a-z_$][\w._$]*/, {
+                                    cases: {
+                                        '@divkitKeywords': 'keyword.divkit',
+                                        '@default': 'identifier.divkit'
+                                    }
+                                }],
+
+                                [/"/, 'string.invalid'],  // non-teminated string
+                                [/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
+                                [/'/, 'string.value', '@divkit_string'],
+
+                                { include: '@whitespace' }
+                            ],
+
+                            divkit_string: [
+                                [/@\{/, { token: 'delimiter.bracket', next: '@bracketCounting' }],
+                                [/[^\\']/, 'string.divkit'],
+                                [/@escapes/, 'string.escape'],
+                                [/\\./, 'string.escape.invalid'],
+                                [/'/, 'string.divkit', '@pop']
+                            ],
+                        },
+                    });
+                }
+                return res;
+            };
+
+            monaco.editor.defineTheme('playground-theme', {
+                base: 'vs',
+                inherit: true,
+                rules: [
+                    {
+                        token: 'string.escape',
+                        foreground: '896e18',
+                    },
+                    {
+                        token: 'string.escape.invalid',
+                        foreground: 'f44747',
+                    },
+                ],
+                colors: {},
+            });
+
             const jsonModelUri = monaco.Uri.parse('a://b/divview.json');
             const tsModelUri = monaco.Uri.parse('file:///main.tsx');
 
@@ -213,7 +384,7 @@
         });
 
         const opts: monaco.editor.IStandaloneEditorConstructionOptions = {
-            theme: 'vs',
+            theme: 'playground-theme',
             minimap: {
                 enabled: false
             },
