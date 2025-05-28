@@ -1,3 +1,18 @@
+## 32.2.0
+
+# Android Client:
+* Transition animation fix so it clips rounted corners of an image.
+
+# iOS Client:
+* Fixed incorrect height resolution for containers with aspect.
+* Supported `div-slider` properties.
+* Supported `font_variation_settings` in `div-text`, `div-input`, `div-slider`, `div-select` and `div-tabs`.
+* Supported `is_checked` property for `div-accessibility`.
+
+# Web Client:
+* Fixed a bug with an `animator` that could be accessed from a sibling component (the `animator` should be found only from the element itself or a child).
+
+
 ## 32.1.0
 
 # Android Client:

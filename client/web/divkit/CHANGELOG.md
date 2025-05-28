@@ -1,3 +1,8 @@
+## 32.2.0 (June 2, 2025)
+
+* Fixed a bug with an `animator` that could be accessed from a sibling component (the `animator` should be found only from the element itself or a child).
+
+
 ## 32.0.0 (May 19, 2025)
 
 * Breaking change. The `input` component will now apply `focus` styles to each focus, regardless of whether it is a keyboard or not.
