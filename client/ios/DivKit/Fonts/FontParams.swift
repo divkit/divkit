@@ -37,6 +37,10 @@ extension FontParamsProvider {
   public func resolveFontFeatureSettings(_: ExpressionResolver) -> String? {
     nil
   }
+
+  public func resolveFontVariationSettings(_: ExpressionResolver) -> [String: Any]? {
+    nil
+  }
 }
 
 extension DivBlockModelingContext {
