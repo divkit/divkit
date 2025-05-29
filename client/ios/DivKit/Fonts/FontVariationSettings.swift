@@ -1,7 +1,9 @@
-import UIKit
+import CoreText
+import Foundation
+import VGSLUI
 
-extension UIFont {
-  func withVariationSettings(axisTagToValue: [String: NSNumber]?) -> UIFont {
+extension Font {
+  func withVariationSettings(axisTagToValue: [String: NSNumber]?) -> Font {
     guard let axisTagToValue else { return self }
     let ctfont = CTFontCreateWithName(fontName as CFString, pointSize, nil)
     guard let fontAxesRaw = CTFontCopyVariationAxes(ctfont) as? [Any] else { return self }
@@ -33,9 +35,23 @@ extension UIFont {
     )
 
     let descriptor = fontDescriptor.addingAttributes([
-      kCTFontVariationAttribute as UIFontDescriptor.AttributeName: axisIdToValueFull,
+      kCTFontVariationAttribute as FontDescriptor.AttributeName: axisIdToValueFull,
     ])
 
-    return UIFont(descriptor: descriptor, size: pointSize)
+    return makeFont(descriptor: descriptor, size: pointSize)
   }
 }
+
+#if os(iOS) || os(tvOS)
+import UIKit
+typealias FontDescriptor = UIFontDescriptor
+private func makeFont(descriptor: FontDescriptor, size: CGFloat) -> Font {
+  Font(descriptor: descriptor, size: size)
+}
+#else
+import AppKit
+typealias FontDescriptor = NSFontDescriptor
+private func makeFont(descriptor: FontDescriptor, size: CGFloat) -> Font {
+  Font(descriptor: descriptor, size: size)!
+}
+#endif
