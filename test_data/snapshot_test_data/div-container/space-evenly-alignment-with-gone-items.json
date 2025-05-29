@@ -19,6 +19,32 @@
               "items": [
                 {
                   "type": "text",
+                  "text": "GONE ELEMENT",
+                  "font_size": 13,
+                  "max_lines": 2,
+                  "text_color": "#302E33",
+                  "line_height": 16,
+                  "text_alignment_horizontal": "center",
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 82
+              },
+              "orientation": "vertical",
+              "visibility": "gone",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "text",
                   "text": "Item 1",
                   "font_size": 13,
                   "max_lines": 2,
@@ -44,6 +70,32 @@
               "items": [
                 {
                   "type": "text",
+                  "text": "GONE ELEMENT",
+                  "font_size": 13,
+                  "max_lines": 2,
+                  "text_color": "#302E33",
+                  "line_height": 16,
+                  "text_alignment_horizontal": "center",
+                  "border": {
+                    "stroke": {
+                      "color": "#000000"
+                    }
+                  }
+                }
+              ],
+              "width": {
+                "type": "fixed",
+                "value": 82
+              },
+              "orientation": "vertical",
+              "visibility": "gone",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "text",
                   "text": "Item 2",
                   "font_size": 13,
                   "max_lines": 2,
@@ -61,6 +113,7 @@
                 "type": "fixed",
                 "value": 82
               },
+              "visibility": "visible",
               "orientation": "vertical",
               "content_alignment_horizontal": "center"
             },
@@ -69,7 +122,7 @@
               "items": [
                 {
                   "type": "text",
-                  "text": "Элемент 3",
+                  "text": "GONE ELEMENT",
                   "font_size": 13,
                   "max_lines": 2,
                   "text_color": "#302E33",
@@ -86,8 +139,8 @@
                 "type": "fixed",
                 "value": 82
               },
-              "visibility": "gone",
               "orientation": "vertical",
+              "visibility": "gone",
               "content_alignment_horizontal": "center"
             }
           ],

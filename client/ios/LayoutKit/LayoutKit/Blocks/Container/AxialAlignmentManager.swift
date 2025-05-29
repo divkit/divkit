@@ -86,9 +86,15 @@ extension [CGRect] {
         assertionFailure("spaceBetween, spaceAround и spaceEvenly alignment must be array shift")
         return []
       }
-      return zip(self, offsets.map { $0.toCGPoint(with: layoutDirection) }).compactMap {
-        let frame = $0.offset(by: $1).roundedToScreenScale
-        return frame.isValidAndFinite ? frame : nil
+      var offsetIterator = offsets.map { $0.toCGPoint(with: layoutDirection) }.makeIterator()
+
+      return compactMap { currentFrame in
+        guard !currentFrame.isEmpty, let offset = offsetIterator.next() else {
+          return currentFrame
+        }
+
+        let shiftedFrame = currentFrame.offset(by: offset).roundedToScreenScale
+        return shiftedFrame.isValidAndFinite ? shiftedFrame : nil
       }
     }
   }
