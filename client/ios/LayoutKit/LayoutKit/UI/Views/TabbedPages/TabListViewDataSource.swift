@@ -3,9 +3,16 @@ import VGSL
 
 final class TabListViewDataSource: NSObject, UICollectionViewDataSource {
   private let tabs: [TabTitleViewModel]
+  private let tabTitleDelimiterImageLoader: TabTitleDelimiterImageLoader?
 
-  init(tabs: [TabTitleViewModel]) {
+  init(
+    tabs: [TabTitleViewModel],
+    tabTitleDelimiterImageHolder: ImageHolder?
+  ) {
     self.tabs = tabs
+    self.tabTitleDelimiterImageLoader = tabTitleDelimiterImageHolder.map {
+      TabTitleDelimiterImageLoader(imageHolder: $0)
+    }
   }
 
   func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
@@ -22,6 +29,28 @@ final class TabListViewDataSource: NSObject, UICollectionViewDataSource {
     ) as! TabListItemCell
     cell.model = tabs[indexPath.item]
     return cell
+  }
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    viewForSupplementaryElementOfKind kind: String,
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
+    guard let tabTitleDelimiterImageLoader,
+          kind == TabsCollectionViewFlowLayout.delimiterKind,
+          let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: TabDelimiterReusableView.reuseID,
+            for: indexPath
+          ) as? TabDelimiterReusableView else {
+      return UICollectionReusableView()
+    }
+
+    tabTitleDelimiterImageLoader.loadImage { image in
+      view.configure(with: image)
+    }
+
+    return view
   }
 }
 

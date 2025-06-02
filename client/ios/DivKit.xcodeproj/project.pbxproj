@@ -232,6 +232,7 @@
 		8C97EA3A2A5C169E00EC0C3E /* TabListSelectionDataSourceImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C97EA362A5C169E00EC0C3E /* TabListSelectionDataSourceImplTests.swift */; };
 		8C97EA3B2A5C169E00EC0C3E /* Array+UIViewRenderableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C97EA382A5C169E00EC0C3E /* Array+UIViewRenderableTests.swift */; };
 		8C97EA3C2A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */; };
+		8C97EA3D2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C97EA3C2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift */; };
 		8C9898422A4C59DF00FDC858 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */; };
 		8CA1B7A62B289BA3003734C2 /* ExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */; };
 		8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA382DE287C5CF000C99F4F /* DivKitExtensions */; };
@@ -602,6 +603,7 @@
 		8C97EA362A5C169E00EC0C3E /* TabListSelectionDataSourceImplTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabListSelectionDataSourceImplTests.swift; sourceTree = "<group>"; };
 		8C97EA382A5C169E00EC0C3E /* Array+UIViewRenderableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+UIViewRenderableTests.swift"; sourceTree = "<group>"; };
 		8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
+		8C97EA3C2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTitleDelimiterImageLoaderTests.swift; sourceTree = "<group>"; };
 		8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
 		8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionTests.swift; sourceTree = "<group>"; };
 		8CA22DD02B519C7300CCB48E /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
@@ -1278,6 +1280,7 @@
 			isa = PBXGroup;
 			children = (
 				8C97EA362A5C169E00EC0C3E /* TabListSelectionDataSourceImplTests.swift */,
+				8C97EA3C2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift */,
 			);
 			path = TabbedPages;
 			sourceTree = "<group>";
@@ -2155,6 +2158,7 @@
 				8CF3294D2875D5C8003F799A /* GalleryViewLayoutTests.swift in Sources */,
 				8C97EA2F2A5C167900EC0C3E /* TabInterimItemExtensionsTests.swift in Sources */,
 				8C97EA3A2A5C169E00EC0C3E /* TabListSelectionDataSourceImplTests.swift in Sources */,
+				8C97EA3D2A5C169F00EC0C3E /* TabTitleDelimiterImageLoaderTests.swift in Sources */,
 				899568B72AF399C9002E1503 /* InfiniteScrollTests.swift in Sources */,
 				8C8354542C296710004EF2AE /* UIElementPathTests.swift in Sources */,
 				8CF329502875D5C8003F799A /* GalleryViewMetricsTests.swift in Sources */,

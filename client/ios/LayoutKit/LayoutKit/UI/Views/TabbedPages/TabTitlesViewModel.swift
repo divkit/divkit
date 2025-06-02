@@ -12,4 +12,9 @@ struct TabTitlesViewModel {
   let itemSpacing: CGFloat?
   var selection: CGFloat
   var offset: CGFloat?
+  let tabTitleDelimiter: TabTitleDelimiterStyle?
+
+  var totalSpacing: CGFloat {
+    (itemSpacing ?? 0) + (tabTitleDelimiter?.width ?? 0)
+  }
 }

@@ -4,7 +4,7 @@ import VGSL
 final class TabListView: UIView {
   private let collectionView: UICollectionView
   private let delegate: TabListViewDelegate
-  private let collectionViewLayout = GenericCollectionViewFlowLayout.make()
+  private let collectionViewLayout = TabsCollectionViewFlowLayout()
 
   private var selectedItemBackground: UIView!
   var isMovingToSelectedItem = false
@@ -17,9 +17,12 @@ final class TabListView: UIView {
 
   var model: TabTitlesViewModel! {
     didSet {
-      if oldValue?.items != model.items {
+      if oldValue?.items != model.items || oldValue?.tabTitleDelimiter != model.tabTitleDelimiter {
         lastLayout = nil
-        dataSource = TabListViewDataSource(tabs: model.items)
+        dataSource = TabListViewDataSource(
+          tabs: model.items,
+          tabTitleDelimiterImageHolder: model.tabTitleDelimiter?.imageHolder
+        )
         delegate.tabs = model.items
       }
       if oldValue?.layoutDirection != model.layoutDirection {
@@ -27,8 +30,9 @@ final class TabListView: UIView {
           .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
         delegate.layoutDirection = model.layoutDirection
       }
+      collectionViewLayout.tabTitleDelimiter = model.tabTitleDelimiter
       collectionViewLayout.sectionInset = model.listPaddings
-      collectionViewLayout.minimumLineSpacing = model.itemSpacing ?? 0
+      collectionViewLayout.minimumLineSpacing = model.totalSpacing
       selectedItemBackground.backgroundColor = model.selectedBackgroundColor.systemColor
       setNeedsLayout()
     }
@@ -209,23 +213,14 @@ private struct AnimationInfo {
   }
 }
 
-final class GenericCollectionViewFlowLayout: UICollectionViewFlowLayout {
-  fileprivate static func make() -> GenericCollectionViewFlowLayout {
-    let flowLayout = GenericCollectionViewFlowLayout()
-    flowLayout.scrollDirection = .horizontal
-    flowLayout.minimumLineSpacing = 0
-    flowLayout.minimumInteritemSpacing = 0
-    return flowLayout
-  }
-
-  override var flipsHorizontallyInOppositeLayoutDirection: Bool {
-    true
-  }
-}
-
 private func makeCollectionView(layout: UICollectionViewLayout) -> UICollectionView {
   let collectionView = ExclusiveTouchCollectionView(frame: .zero, collectionViewLayout: layout)
   collectionView.register(TabListItemCell.self, forCellWithReuseIdentifier: TabListItemCell.reuseID)
+  collectionView.register(
+    TabDelimiterReusableView.self,
+    forSupplementaryViewOfKind: TabsCollectionViewFlowLayout.delimiterKind,
+    withReuseIdentifier: TabDelimiterReusableView.reuseID
+  )
   collectionView.showsHorizontalScrollIndicator = false
   collectionView.backgroundColor = .clear
   collectionView.scrollsToTop = false

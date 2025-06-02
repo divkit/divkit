@@ -12,6 +12,7 @@ public final class TabListViewModel: Equatable {
   public let titleStyle: TabTitleStyle
   public let layoutDirection: UserInterfaceLayoutDirection
   public let listPaddings: EdgeInsets
+  public let delimiterStyle: TabTitleDelimiterStyle?
 
   lazy var tabs: [TabTitleViewModel] = tabTitles.map { item in
     let string = item.text.with(typo: titleStyle.typo)
@@ -31,12 +32,14 @@ public final class TabListViewModel: Equatable {
     tabTitles: [UILink],
     titleStyle: TabTitleStyle = TabTitleStyle(),
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
-    listPaddings: EdgeInsets = defaultListPaddings
+    listPaddings: EdgeInsets = defaultListPaddings,
+    delimiterStyle: TabTitleDelimiterStyle?
   ) {
     self.tabTitles = tabTitles
     self.titleStyle = titleStyle
     self.layoutDirection = layoutDirection
     self.listPaddings = listPaddings
+    self.delimiterStyle = delimiterStyle
   }
 
   public convenience init(
@@ -45,7 +48,8 @@ public final class TabListViewModel: Equatable {
     staticAttributes: Typo = TabTitleStyle.defaultTypo,
     baseColor: Color = TabTitleStyle.defaultBaseTextColor,
     selectedColor: Color = TabTitleStyle.defaultActiveTextColor,
-    selectedBackgroundColor: Color = TabTitleStyle.defaultActiveBackgroundColor
+    selectedBackgroundColor: Color = TabTitleStyle.defaultActiveBackgroundColor,
+    delimiterStyle: TabTitleDelimiterStyle?
   ) {
     let tabTitles = tabTitleLinks
     let titleStyle = TabTitleStyle(
@@ -55,14 +59,21 @@ public final class TabListViewModel: Equatable {
       activeBackgroundColor: selectedBackgroundColor
     )
 
-    self.init(tabTitles: tabTitles, titleStyle: titleStyle, listPaddings: insets)
+    self.init(
+      tabTitles: tabTitles,
+      titleStyle: titleStyle,
+      listPaddings: insets,
+      delimiterStyle: delimiterStyle
+    )
   }
 
   public static func ==(lhs: TabListViewModel, rhs: TabListViewModel) -> Bool {
     lhs === rhs || (
       lhs.tabTitles == rhs.tabTitles &&
         lhs.titleStyle == rhs.titleStyle &&
-        lhs.listPaddings == rhs.listPaddings
+        lhs.layoutDirection == rhs.layoutDirection &&
+        lhs.listPaddings == rhs.listPaddings &&
+        lhs.delimiterStyle == rhs.delimiterStyle
     )
   }
 }
@@ -73,7 +84,9 @@ extension TabListViewModel: CustomDebugStringConvertible {
     return """
     { titles: \(titlesDescriptions),
       titleStyle: \(titleStyle),
-      listPaddings: \(listPaddings)
+      layoutDirection: \(layoutDirection),
+      listPaddings: \(listPaddings),
+      delimiterStyle: \(String(describing: delimiterStyle))
     }
     """
   }

@@ -2,6 +2,7 @@
   "description": "Tabs with delimiters (starts) between titles.",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

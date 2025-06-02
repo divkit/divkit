@@ -193,6 +193,7 @@
           "$description": "translations.json#/div_tabs_tab_title_delimiter_delimiter_style",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },

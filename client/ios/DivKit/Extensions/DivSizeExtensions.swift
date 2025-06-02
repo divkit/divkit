@@ -7,8 +7,7 @@ extension DivSize {
     switch self {
     case let .divFixedSize(size):
       return .fixed(
-        size.resolveUnit(expressionResolver)
-          .makeScaledValue(size.resolveValue(expressionResolver) ?? 0)
+        size.resolveScaledValue(expressionResolver)
       )
     case let .divMatchParentSize(size):
       let weight = LayoutTrait.Weight(
@@ -44,6 +43,17 @@ extension DivSize {
     case .divWrapContentSize:
       true
     }
+  }
+}
+
+extension DivFixedSize {
+  func resolveScaledValue(
+    _ expressionResolver: ExpressionResolver,
+    defaultValue: Int = 0
+  ) -> CGFloat {
+    let unit = resolveUnit(expressionResolver)
+    let value = resolveValue(expressionResolver) ?? defaultValue
+    return unit.makeScaledValue(value)
   }
 }
 

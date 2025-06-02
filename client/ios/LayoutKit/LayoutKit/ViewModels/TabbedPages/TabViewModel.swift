@@ -5,11 +5,13 @@ public final class TabViewModel: Equatable {
   public let listModel: TabListViewModel
   public let contentsModel: TabContentsViewModel
   public let separatorStyle: TabSeparatorStyle?
+  public let tabTitleDelimiter: TabTitleDelimiterStyle?
 
   public init(
     listModel: TabListViewModel,
     contentsModel: TabContentsViewModel,
-    separatorStyle: TabSeparatorStyle? = nil
+    separatorStyle: TabSeparatorStyle? = nil,
+    tabTitleDelimiter: TabTitleDelimiterStyle? = nil
   ) throws {
     if contentsModel.pages.count != listModel.tabTitles.count {
       throw BlockError(
@@ -21,13 +23,15 @@ public final class TabViewModel: Equatable {
     self.listModel = listModel
     self.contentsModel = contentsModel
     self.separatorStyle = separatorStyle
+    self.tabTitleDelimiter = tabTitleDelimiter
   }
 
   public static func ==(lhs: TabViewModel, rhs: TabViewModel) -> Bool {
     lhs === rhs || (
       lhs.listModel == rhs.listModel &&
         lhs.contentsModel == rhs.contentsModel &&
-        lhs.separatorStyle == rhs.separatorStyle
+        lhs.separatorStyle == rhs.separatorStyle &&
+        lhs.tabTitleDelimiter == rhs.tabTitleDelimiter
     )
   }
 }
@@ -37,7 +41,8 @@ extension TabViewModel: CustomDebugStringConvertible {
     """
     { listModel: \(listModel.debugDescription),
       contentsModel: \(contentsModel.debugDescription),
-      separatorStyle: \(dbgStr(separatorStyle)) }
+      separatorStyle: \(dbgStr(separatorStyle)),
+      tabTitleDelimiter: \(dbgStr(tabTitleDelimiter)) }
     """
   }
 }

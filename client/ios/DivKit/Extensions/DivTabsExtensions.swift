@@ -40,7 +40,8 @@ extension DivTabs: DivBlockModeling {
       tabTitles: tabs.map(\.title),
       titleStyle: titleStyle.resolve(context),
       layoutDirection: context.layoutDirection,
-      listPaddings: titlePaddings.resolve(context)
+      listPaddings: titlePaddings.resolve(context),
+      delimiterStyle: resolveTabTitleDelimiter(context)
     )
 
     let expressionResolver = context.expressionResolver
@@ -58,7 +59,8 @@ extension DivTabs: DivBlockModeling {
       model: TabViewModel(
         listModel: listModel,
         contentsModel: contentsModel,
-        separatorStyle: resolveSeparatorStyle(context)
+        separatorStyle: resolveSeparatorStyle(context),
+        tabTitleDelimiter: resolveTabTitleDelimiter(context)
       ),
       state: makeState(context: context, tabs: tabs),
       widthTrait: resolveContentWidthTrait(context),
@@ -75,6 +77,21 @@ extension DivTabs: DivBlockModeling {
         color: resolveSeparatorColor(expressionResolver),
         insets: separatorPaddings.resolve(context)
       ) : nil
+  }
+
+  private func resolveTabTitleDelimiter(
+    _ context: DivBlockModelingContext
+  ) -> TabTitleDelimiterStyle? {
+    guard let delimiter = tabTitleDelimiter else { return nil }
+
+    let expressionResolver = context.expressionResolver
+    guard let imageURL = delimiter.resolveImageUrl(expressionResolver) else { return nil }
+    let imageHolder = context.imageHolderFactory.make(imageURL)
+    return TabTitleDelimiterStyle(
+      imageHolder: imageHolder,
+      width: delimiter.width.resolveScaledValue(expressionResolver, defaultValue: 12),
+      height: delimiter.height.resolveScaledValue(expressionResolver, defaultValue: 12)
+    )
   }
 
   private func makeState(

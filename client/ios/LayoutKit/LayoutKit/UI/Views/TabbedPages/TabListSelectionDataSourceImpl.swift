@@ -53,7 +53,8 @@ final class TabListSelectionDataSourceImpl: TabListSelectionDataSource {
       cornerRadius: listModel.titleStyle.cornerRadius,
       itemSpacing: listModel.titleStyle.itemSpacing,
       selection: selection,
-      offset: nil
+      offset: nil,
+      tabTitleDelimiter: listModel.delimiterStyle
     )
   }
 }

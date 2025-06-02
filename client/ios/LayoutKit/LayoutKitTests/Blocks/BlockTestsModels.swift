@@ -61,7 +61,8 @@ enum BlockTestsModels {
       try TabsBlock(
         model: TabViewModel(
           listModel: TabListViewModel(
-            tabTitleLinks: titles.enumerated().map { UILink(text: $1, path: path + "title.\($0)") }
+            tabTitleLinks: titles.enumerated().map { UILink(text: $1, path: path + "title.\($0)") },
+            delimiterStyle: nil
           ),
           contentsModel: try! TabContentsViewModel(
             pages: blocks.enumerated().map { $1.makeTabPage(with: path + "page.\($0)") },

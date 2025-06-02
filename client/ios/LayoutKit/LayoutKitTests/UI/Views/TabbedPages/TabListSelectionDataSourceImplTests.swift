@@ -12,7 +12,8 @@ final class TabListSelectionDataSourceImplTests: XCTestCase {
       staticAttributes: staticAttributes,
       baseColor: baseColor,
       selectedColor: selectedColor,
-      selectedBackgroundColor: selectedBackgroundColor
+      selectedBackgroundColor: selectedBackgroundColor,
+      delimiterStyle: nil
     )
     tabListSelectionDataSource = TabListSelectionDataSourceImpl(listModel: listModel)
   }
