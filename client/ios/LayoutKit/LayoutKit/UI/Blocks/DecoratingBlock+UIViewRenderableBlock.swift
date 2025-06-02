@@ -37,6 +37,10 @@ extension DecoratingBlock {
       actionAnimation: actionAnimation,
       doubleTapActions: doubleTapActions,
       longTapActions: longTapActions,
+      pressStartActions: pressStartActions,
+      pressEndActions: pressEndActions,
+      hoverStartActions: hoverStartActions,
+      hoverEndActions: hoverEndActions,
       analyticsURL: analyticsURL,
       boundary: boundary,
       border: border,
@@ -113,6 +117,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let actionAnimation: ActionAnimation?
     let doubleTapActions: NonEmptyArray<UserInterfaceAction>?
     let longTapActions: LongTapActions?
+    let pressStartActions: NonEmptyArray<UserInterfaceAction>?
+    let pressEndActions: NonEmptyArray<UserInterfaceAction>?
+    let hoverStartActions: NonEmptyArray<UserInterfaceAction>?
+    let hoverEndActions: NonEmptyArray<UserInterfaceAction>?
     let analyticsURL: URL?
     let boundary: BoundaryTrait
     let border: BlockBorder?
@@ -142,6 +150,22 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
     var shouldHandleDoubleTap: Bool {
       doubleTapActions != nil
+    }
+
+    var shouldHandlePress: Bool {
+      pressStartActions != nil || pressEndActions != nil
+    }
+
+    var shouldHandleHover: Bool {
+      hoverStartActions != nil || hoverEndActions != nil
+    }
+
+    var shouldHandleAnyAction: Bool {
+      shouldHandleTap ||
+        shouldHandleLongTap ||
+        shouldHandleDoubleTap ||
+        shouldHandlePress ||
+        shouldHandleHover
     }
   }
 
@@ -180,6 +204,13 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     didSet {
       oldValue.flatMap(removeGestureRecognizer(_:))
       longPressRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
+
+  private var hoverRecognizer: UIHoverGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      hoverRecognizer.flatMap(addGestureRecognizer(_:))
     }
   }
 
@@ -239,10 +270,11 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   }
 
   private func configureRecognizers() {
-    guard model.shouldHandleTap else {
+    guard model.shouldHandleAnyAction else {
       tapRecognizer?.isEnabled = false
       doubleTapRecognizer?.isEnabled = false
       longPressRecognizer?.isEnabled = false
+      hoverRecognizer?.isEnabled = false
       return
     }
 
@@ -265,9 +297,17 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       )
     }
 
+    if model.shouldHandleHover, hoverRecognizer == nil {
+      hoverRecognizer = UIHoverGestureRecognizer(
+        target: self,
+        action: #selector(handleHover)
+      )
+    }
+
     tapRecognizer?.isEnabled = model.shouldHandleTap
     doubleTapRecognizer?.isEnabled = model.shouldHandleDoubleTap
     longPressRecognizer?.isEnabled = model.shouldHandleLongTap
+    hoverRecognizer?.isEnabled = model.shouldHandleHover
   }
 
   private func checkTouchableArea() {
@@ -315,7 +355,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
     let result = super.hitTest(point, with: event)
     if result === self {
-      return model.shouldHandleTap ? self : nil
+      return model.shouldHandleAnyAction ? self : nil
     } else {
       return result
     }
@@ -363,6 +403,16 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   override func didMoveToWindow() {
     updateVoiceOverFocus()
+  }
+
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesBegan(touches, with: event)
+    model.pressStartActions?.asArray().perform(sendingFrom: self)
+  }
+
+  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesEnded(touches, with: event)
+    model.pressEndActions?.asArray().perform(sendingFrom: self)
   }
 
   func configure(
@@ -546,6 +596,17 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private func captureFocusIfNeeded() {
     if model.captureFocusOnAction {
       observer?.clearFocus()
+    }
+  }
+
+  @objc private func handleHover(recognizer: UIHoverGestureRecognizer) {
+    switch recognizer.state {
+    case .began:
+      model.hoverStartActions?.asArray().perform(sendingFrom: self)
+    case .ended, .cancelled, .failed:
+      model.hoverEndActions?.asArray().perform(sendingFrom: self)
+    default:
+      break
     }
   }
 

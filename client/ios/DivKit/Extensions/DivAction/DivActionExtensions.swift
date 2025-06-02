@@ -63,4 +63,8 @@ extension [DivAction] {
   public func uiActions(context: DivBlockModelingContext) -> [UserInterfaceAction] {
     compactMap { $0.uiAction(context: context) }
   }
+
+  func nonEmptyUIActions(context: DivBlockModelingContext) -> NonEmptyArray<UserInterfaceAction>? {
+    NonEmptyArray(uiActions(context: context))
+  }
 }

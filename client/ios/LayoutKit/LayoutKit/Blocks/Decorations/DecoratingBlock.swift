@@ -16,6 +16,10 @@ final class DecoratingBlock: WrapperBlock {
   let actionAnimation: ActionAnimation?
   let doubleTapActions: NonEmptyArray<UserInterfaceAction>?
   let longTapActions: LongTapActions?
+  let pressStartActions: NonEmptyArray<UserInterfaceAction>?
+  let pressEndActions: NonEmptyArray<UserInterfaceAction>?
+  let hoverStartActions: NonEmptyArray<UserInterfaceAction>?
+  let hoverEndActions: NonEmptyArray<UserInterfaceAction>?
   let analyticsURL: URL?
   let boundary: BoundaryTrait
   let border: BlockBorder?
@@ -39,6 +43,10 @@ final class DecoratingBlock: WrapperBlock {
     actionAnimation: ActionAnimation? = nil,
     doubleTapActions: NonEmptyArray<UserInterfaceAction>? = nil,
     longTapActions: LongTapActions? = nil,
+    pressStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
+    pressEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
+    hoverStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
+    hoverEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
     analyticsURL: URL? = nil,
     boundary: BoundaryTrait = DecoratingBlock.defaultBoundary,
     border: BlockBorder? = nil,
@@ -61,6 +69,10 @@ final class DecoratingBlock: WrapperBlock {
     self.actionAnimation = actionAnimation
     self.doubleTapActions = doubleTapActions
     self.longTapActions = longTapActions
+    self.pressStartActions = pressStartActions
+    self.pressEndActions = pressEndActions
+    self.hoverStartActions = hoverStartActions
+    self.hoverEndActions = hoverEndActions
     self.analyticsURL = analyticsURL
     self.boundary = boundary
     self.border = border
@@ -118,6 +130,10 @@ final class DecoratingBlock: WrapperBlock {
       && actions == other.actions
       && longTapActions == other.longTapActions
       && doubleTapActions == other.doubleTapActions
+      && pressStartActions == other.pressStartActions
+      && pressEndActions == other.pressEndActions
+      && hoverStartActions == other.hoverStartActions
+      && hoverEndActions == other.hoverEndActions
       && actionAnimation == other.actionAnimation
       && analyticsURL == other.analyticsURL
       && boundary == other.boundary
@@ -154,6 +170,10 @@ extension DecoratingBlock {
     actionAnimation: ActionAnimation? = nil,
     doubleTapActions: NonEmptyArray<UserInterfaceAction>? = nil,
     longTapActions: LongTapActions? = nil,
+    pressStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
+    pressEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
+    hoverStartActions: NonEmptyArray<UserInterfaceAction>? = nil,
+    hoverEndActions: NonEmptyArray<UserInterfaceAction>? = nil,
     analyticsURL: URL?? = nil,
     boundary: BoundaryTrait? = nil,
     border: BlockBorder?? = nil,
@@ -177,6 +197,10 @@ extension DecoratingBlock {
       actionAnimation: actionAnimation ?? self.actionAnimation,
       doubleTapActions: doubleTapActions ?? self.doubleTapActions,
       longTapActions: longTapActions ?? self.longTapActions,
+      pressStartActions: pressStartActions ?? self.pressStartActions,
+      pressEndActions: pressEndActions ?? self.pressEndActions,
+      hoverStartActions: hoverStartActions ?? self.hoverStartActions,
+      hoverEndActions: hoverEndActions ?? self.hoverEndActions,
       analyticsURL: analyticsURL ?? self.analyticsURL,
       boundary: boundary ?? self.boundary,
       border: border ?? self.border,

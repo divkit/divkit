@@ -135,6 +135,7 @@
       ],
       "platforms": [
         "android",
+        "ios",
         "web"
       ],
       "file": "actions/hover-and-press.json"

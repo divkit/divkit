@@ -43,7 +43,8 @@
       "$description": "translations.json#/div_actionable_press_start_actions",
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     },
     "press_end_actions": {
@@ -54,7 +55,8 @@
       "$description": "translations.json#/div_actionable_press_end_actions",
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     },
     "hover_start_actions": {
@@ -65,7 +67,8 @@
       "$description": "translations.json#/div_actionable_hover_start_actions",
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     },
     "hover_end_actions": {
@@ -76,7 +79,8 @@
       "$description": "translations.json#/div_actionable_hover_end_actions",
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     },
     "action_animation": {
