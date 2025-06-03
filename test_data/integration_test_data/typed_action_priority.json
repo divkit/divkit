@@ -1,0 +1,61 @@
+{
+    "description": "typed part of the action should be more important, than the url.",
+    "div_data": {
+      "card": {
+        "log_id": "a",
+        "variables": [{
+            "name": "val",
+            "type": "string",
+            "value": ""
+        }],
+        "variable_triggers": [{
+            "condition": "@{val == 'run'}",
+            "actions": [{
+                "log_id": "a",
+                "url": "unknown://",
+                "typed": {
+                    "type": "set_variable",
+                    "variable_name": "val",
+                    "value": {
+                        "type": "string",
+                        "value": "triggered"
+                    }
+                }
+            }]
+        }],
+        "states": [{
+            "state_id": 0,
+            "div": {
+                "type": "text",
+                "text": "Hello @{val}",
+                "font_size": 32
+            }
+        }]
+    }
+    },
+    "cases": [
+      {
+        "div_actions": [
+          {
+            "log_id": "run trigger",
+            "url": "div-action://set_variable?name=val&value=run"
+          }
+        ],
+        "expected": [
+          {
+            "type": "variable",
+            "variable_name": "val",
+            "value": {
+              "type": "string",
+              "value": "triggered"
+            }
+          }
+        ],
+        "platforms": [
+          "android",
+          "ios",
+          "web"
+        ]
+      }
+    ]
+  }

@@ -1490,7 +1490,9 @@
 
             const actionUrl = action.url;
             const actionTyped = action.typed;
-            if (actionUrl) {
+            if (actionTyped) {
+                await execActionInternal(action, filtered[i], opts.componentContext);
+            } else if (actionUrl) {
                 const schema = getUrlSchema(actionUrl);
                 if (schema) {
                     if (isBuiltinSchema(schema, builtinSet)) {
@@ -1513,8 +1515,6 @@
                         await tick();
                     }
                 }
-            } else if (actionTyped) {
-                await execActionInternal(action, filtered[i], opts.componentContext);
             } else if (opts.node && Array.isArray(action.menu_items) && action.menu_items.length) {
                 menu = {
                     items: action.menu_items,
