@@ -2521,7 +2521,9 @@
         "DivInput"
       ],
       "expected_results": [
-        "Entered text must be filtered by a regular expression from another input field"
+        "Entered text must be filtered by a regular expression from corresponding field",
+        "The first input cannot be empty after entering at least 1 character",
+        "The second input can be emptied"
       ],
       "file": "regex_input_filter.json"
     },

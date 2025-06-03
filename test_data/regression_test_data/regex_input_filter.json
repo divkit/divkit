@@ -69,6 +69,16 @@
     "log_id": "ui_test_card",
     "variables": [
       {
+        "name": "non_empty_input",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "non_empty_regex",
+        "type": "string",
+        "value": "[a-zA-Z0-9]+"
+      },
+      {
         "name": "input",
         "type": "string",
         "value": ""
@@ -76,7 +86,7 @@
       {
         "name": "regex",
         "type": "string",
-        "value": "[a-zA-Z0-9]+"
+        "value": "[a-zA-Z0-9]*"
       }
     ],
     "states": [
@@ -97,7 +107,44 @@
           "items": [
             {
               "type": "pretty_text",
-              "text": "Input with filter:"
+              "text": "Input with text at least 1 character long:"
+            },
+            {
+              "id": "non_empty_input",
+              "type": "pretty_input",
+              "variable": "non_empty_input",
+              "filters": [
+                {
+                  "type": "regex",
+                  "pattern": "@{non_empty_regex}"
+                }
+              ],
+              "hint": "value"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Regex filter:"
+            },
+            {
+              "id": "non_empty_regex_input",
+              "type": "pretty_input",
+              "variable": "non_empty_regex",
+              "hint": "non empty regex"
+            },
+            {
+              "type": "pretty_text",
+              "text": "Variable value: @{non_empty_input}"
+            },
+            {
+              "type": "separator",
+              "margins": {
+                "top": 10,
+                "bottom": 10
+              }
+            },
+            {
+              "type": "pretty_text",
+              "text": "Possibly empty input:"
             },
             {
               "id": "input",
