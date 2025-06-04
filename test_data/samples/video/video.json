@@ -188,7 +188,11 @@
                   "type": "control_button",
                   "image_url": "https://yastatic.net/s3/home/divkit/rewind_button.png",
                   "margins": {
-                    "right": 20
+                    "end": 20
+                  },
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
                   },
                   "actions": [
                     {
@@ -201,7 +205,7 @@
                   "type": "control_button",
                   "image_url": "https://yastatic.net/s3/home/divkit/play_button.png",
                   "margins": {
-                    "right": 15
+                    "end": 15
                   },
                   "paddings": {
                     "top": 3,
