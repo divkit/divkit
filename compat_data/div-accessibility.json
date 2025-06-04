@@ -25,6 +25,9 @@
         "compat": {
             "web": {
                 "version_added": "30.30.0"
+            },
+            "ios": {
+                "version_added": "32.2.0"
             }
         }
     }, {

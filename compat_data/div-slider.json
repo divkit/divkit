@@ -22,6 +22,9 @@
             },
             "web": {
                 "version_added": "30.33.0"
+            },
+            "ios": {
+                "version_added": "32.2.0"
             }
         }
     }, {
@@ -44,6 +47,23 @@
         "compat": {
             "android": {
                 "version_added": "32.1.0"
+            },
+            "ios": {
+                "version_added": "32.2.0"
+            }
+        }
+    }, {
+        "id": "slider_shape_circle",
+        "name": "<code>circle</code> shape for a slider",
+        "compat": {
+            "android": {
+                "version_added": "13.0.0"
+            },
+            "web": {
+                "version_added": "13.0.0"
+            },
+            "ios": {
+                "version_added": "32.2.0"
             }
         }
     }]
