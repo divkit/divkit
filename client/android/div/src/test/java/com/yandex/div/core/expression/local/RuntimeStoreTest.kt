@@ -24,13 +24,15 @@ class RuntimeStoreTest {
     private val rootRuntime = mock<ExpressionsRuntime> {
         on { expressionResolver } doReturn rootResolver
     }
-    private val resolver = mock<ExpressionResolverImpl>()
+    private val resolver = mock<ExpressionResolverImpl> {
+        on { variableController } doReturn mock()
+    }
     private val childRuntime = mock<ExpressionsRuntime> {
         on { expressionResolver } doReturn resolver
     }
     private val runtimeProvider = mock<ExpressionsRuntimeProvider> {
-        on { createRootRuntime(any(), any(), any(), any()) } doReturn rootRuntime
-        on { createChildRuntime(any(), any(), any(), any(), any()) } doReturn childRuntime
+        on { createRootRuntime(any(), any(), any()) } doReturn rootRuntime
+        on { createChildRuntime(any(), any(), any(), any()) } doReturn childRuntime
     }
     private val underTest = RuntimeStore(mock(), runtimeProvider, mock())
 

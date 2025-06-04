@@ -124,8 +124,6 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: String,
         parentRuntime: ExpressionsRuntime
     ): ExpressionsRuntime {
-        if (!div.needLocalRuntime) return parentRuntime
-
         return parentRuntime.runtimeStore.getOrCreateRuntime(path, div, parentRuntime.expressionResolver).also {
             it.onAttachedToWindow(divView)
         }

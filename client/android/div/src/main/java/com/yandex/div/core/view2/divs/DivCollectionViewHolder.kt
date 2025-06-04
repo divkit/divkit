@@ -45,15 +45,13 @@ internal abstract class DivCollectionViewHolder(
         val id = div.value().getChildPathUnit(index)
         val childPath = childrenPaths.getOrPut(id) { path.appendDiv(id) }
 
-        if (parentContext.expressionResolver != bindingContext.expressionResolver) {
-            bindingContext.runtimeStore?.resolveRuntimeWith(
-                bindingContext.divView,
-                childPath.fullPath,
-                div,
-                resolver,
-                parentContext.expressionResolver,
-            )
-        }
+        bindingContext.runtimeStore?.resolveRuntimeWith(
+            bindingContext.divView,
+            childPath.fullPath,
+            div,
+            resolver,
+            parentContext.expressionResolver,
+        )
 
         divBinder.bind(bindingContext, divView, div, childPath)
         bindingContext.runtimeStore?.showWarningIfNeeded(div.value())

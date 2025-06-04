@@ -11,8 +11,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 
-private const val ERROR_UNKNOWN_RESOLVER =
-    "ExpressionResolverImpl didn't call RuntimeStore#putRuntime on create."
+internal const val ERROR_PARENT_RUNTIME_NOT_STORED = "Parent runtime for path '%s' is not stored."
 private const val WARNING_LOCAL_USING_LOCAL_VARIABLES =
     "You are using local variables. Please ensure that all elements that use local variables " +
     "and all of their parents recursively have an 'id' attribute."
@@ -23,23 +22,13 @@ internal class RuntimeStore(
     private val errorCollector: ErrorCollector,
 ) {
     private var warningShown = false
-    private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime?>()
+    private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime>()
+    private val pathToRuntime = mutableMapOf<String, ExpressionsRuntime>()
     private val allRuntimes = ObserverList<ExpressionsRuntime>()
     internal val tree = RuntimeTree()
+    private val itemBuilderResolvers = mutableMapOf<String, ExpressionResolver>()
 
-    private val onCreateCallback by lazy {
-        ExpressionResolverImpl.OnCreateCallback { resolver ->
-            ExpressionsRuntime(resolver, null).also {
-                /**
-                 * we cannot provide path here, otherwise descendants of ExpressionResolver will
-                 * receive the same callback and override runtime for provided path.
-                 */
-                putRuntime(runtime = it)
-            }
-        }
-    }
-
-    val rootRuntime = runtimeProvider.createRootRuntime(data, errorCollector, this, onCreateCallback).also {
+    val rootRuntime = runtimeProvider.createRootRuntime(data, errorCollector, this).also {
         putRuntime(it, "", null)
     }
 
@@ -59,30 +48,35 @@ internal class RuntimeStore(
         div: Div,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime {
-        path.runtime?.let { return it }
+        pathToRuntime[path]?.let { return it }
 
-        val parentRuntime = getRuntimeWithOrNull(parentResolver)
-        val runtime = parentRuntime ?: rootRuntime
+        if (parentResolver !is ExpressionResolverImpl) return rootRuntime
 
-        return getRuntimeOrCreateChild(path, div, runtime, parentRuntime)
+        val parentRuntime = getRuntimeWithOrNull(parentResolver) ?: run {
+            reportParentRuntimeError(path)
+            return rootRuntime
+        }
+
+        if (!div.needLocalRuntime) {
+            pathToRuntime[path] = parentRuntime
+            return parentRuntime
+        }
+
+        return runtimeProvider.createChildRuntime(path, div.value(), parentResolver, errorCollector).also {
+            putRuntime(it, path, parentRuntime)
+        }
     }
-
-    private val String.runtime get() = tree.getNode(this)?.runtime
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
-
-    private fun putRuntime(runtime: ExpressionsRuntime) {
-        resolverToRuntime[runtime.expressionResolver] = runtime
-        allRuntimes.addObserver(runtime)
-    }
 
     internal fun putRuntime(
         runtime: ExpressionsRuntime,
         path: String,
         parentRuntime: ExpressionsRuntime?,
     ) {
-        putRuntime(runtime)
-
+        pathToRuntime[path] = runtime
+        resolverToRuntime[runtime.expressionResolver] = runtime
+        allRuntimes.addObserver(runtime)
         tree.storeRuntime(runtime, parentRuntime, path)
         runtime.updateSubscriptions()
     }
@@ -90,20 +84,41 @@ internal class RuntimeStore(
     internal fun resolveRuntimeWith(
         divView: DivViewFacade?,
         path: String,
-        div: Div?,
+        div: Div,
         resolver: ExpressionResolver,
         parentResolver: ExpressionResolver,
     ): ExpressionsRuntime? {
-        val runtimeForPath = tree.getNode(path)?.runtime
-        if (resolver == runtimeForPath?.expressionResolver) return runtimeForPath
-
-        val existingRuntime = getRuntimeWithOrNull(resolver) ?: run {
-            reportUnknownResolverError()
-            return null
+        val runtimeForPath = pathToRuntime[path]
+        if (runtimeForPath?.let { resolver == it.expressionResolver || div.needLocalRuntime } == true) {
+            return runtimeForPath
         }
 
         runtimeForPath?.let { tree.removeRuntimeAndCleanup(divView, it, path) }
-        return getRuntimeOrCreateChild(path, div, existingRuntime, getRuntimeWithOrNull(parentResolver))
+
+        if (resolver !is ExpressionResolverImpl) return null
+
+        val parentRuntime = getRuntimeWithOrNull(parentResolver) ?: run {
+            reportParentRuntimeError(path)
+            return null
+        }
+
+        return when {
+            div.needLocalRuntime -> {
+                runtimeProvider.createChildRuntime(path, div.value(), resolver, errorCollector).also {
+                    putRuntime(it, path, parentRuntime)
+                }
+            }
+            resolver != parentResolver -> {
+                ExpressionsRuntime(resolver, null).also {
+                    putRuntime(it, path, parentRuntime)
+                }
+            }
+            else -> {
+                parentRuntime.also {
+                    pathToRuntime[path] = parentRuntime
+                }
+            }
+        }
     }
 
     internal fun cleanup(divView: DivViewFacade) {
@@ -117,29 +132,24 @@ internal class RuntimeStore(
 
     internal fun getUniquePathsAndRuntimes() = tree.getPathToRuntimes()
 
-    private fun reportUnknownResolverError() {
-        KAssert.fail { ERROR_UNKNOWN_RESOLVER }
-        errorCollector.logError(AssertionError(ERROR_UNKNOWN_RESOLVER))
+    private fun reportParentRuntimeError(path: String) {
+        val message = String.format(ERROR_PARENT_RUNTIME_NOT_STORED, path)
+        KAssert.fail { message }
+        errorCollector.logError(AssertionError(message))
     }
 
-    private fun getRuntimeOrCreateChild(
+    fun getOrPutItemBuilderResolver(
         path: String,
-        div: Div?,
-        runtime: ExpressionsRuntime,
-        parentRuntime: ExpressionsRuntime?,
-    ): ExpressionsRuntime {
-        if (div != null && div.needLocalRuntime) {
-            return runtimeProvider.createChildRuntime(
-                path,
-                div.value(),
-                runtime.expressionResolver,
-                errorCollector,
-                onCreateCallback
-            ).also { putRuntime(it, path, parentRuntime) }
+        parentResolver: ExpressionResolver,
+        createResolver: () -> ExpressionResolver
+    ): ExpressionResolver {
+        return itemBuilderResolvers.getOrPut(path) {
+            val resolver = createResolver()
+            getRuntimeWithOrNull(parentResolver)?.let { resolverToRuntime[resolver] = it }
+            resolver
         }
-
-        tree.storeRuntime(runtime, parentRuntime, path)
-        runtime.updateSubscriptions()
-        return runtime
     }
+
+    private val Div.needLocalRuntime get() =
+        !value().run { variables.isNullOrEmpty() && variableTriggers.isNullOrEmpty() && functions.isNullOrEmpty() }
 }

@@ -79,7 +79,7 @@ class DivStateTest {
     @Test
     fun state1IsEnabled_inGallery_onStart() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithGallery()
             assert { checkState(1, enabled = true) }
         }
     }
@@ -87,7 +87,7 @@ class DivStateTest {
     @Test
     fun state2IsDisabled_inGallery_onStart() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithGallery()
             assert { checkState(2, enabled = false) }
         }
     }
@@ -95,7 +95,7 @@ class DivStateTest {
     @Test
     fun state1IsDisabled_inGallery_afterClickOnState1() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithGallery()
             clickOnState(1)
             assert { checkState(1, enabled = false) }
         }
@@ -104,7 +104,7 @@ class DivStateTest {
     @Test
     fun state2IsDisabled_inGallery_afterClickOnState1() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithGallery()
             clickOnState(1)
             assert { checkState(2, enabled = false) }
         }
@@ -113,7 +113,7 @@ class DivStateTest {
     @Test
     fun state1IsEnabled_inGallery_afterClickOnState2() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithGallery()
             clickOnState(2)
             assert { checkState(1, enabled = true) }
         }
@@ -122,7 +122,7 @@ class DivStateTest {
     @Test
     fun state2IsEnabled_inGallery_afterClickOnState2() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithGallery()
             clickOnState(2)
             assert { checkState(2, enabled = true) }
         }
@@ -131,7 +131,7 @@ class DivStateTest {
     @Test
     fun state1IsEnabled_inGallery_after2ClicksOnState1() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithGallery()
             clickOnState(1)
             clickOnState(1)
             assert { checkState(1, enabled = true) }
@@ -141,7 +141,7 @@ class DivStateTest {
     @Test
     fun state1IsEnabled_inPager_onStart() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithPager()
             assert { checkState(1, enabled = true) }
         }
     }
@@ -149,7 +149,7 @@ class DivStateTest {
     @Test
     fun state2IsDisabled_inPager_onStart() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithPager()
             assert { checkState(2, enabled = false) }
         }
     }
@@ -157,7 +157,7 @@ class DivStateTest {
     @Test
     fun state1IsDisabled_inPager_afterClickOnState1() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithPager()
             clickOnState(1)
             assert { checkState(1, enabled = false) }
         }
@@ -166,7 +166,7 @@ class DivStateTest {
     @Test
     fun state2IsDisabled_inPager_afterClickOnState1() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithPager()
             clickOnState(1)
             assert { checkState(2, enabled = false) }
         }
@@ -175,7 +175,7 @@ class DivStateTest {
     @Test
     fun state1IsEnabled_inPager_afterClickOnState2() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithPager()
             clickOnState(2)
             assert { checkState(1, enabled = true) }
         }
@@ -184,7 +184,7 @@ class DivStateTest {
     @Test
     fun state2IsEnabled_inPager_afterClickOnState2() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithPager()
             clickOnState(2)
             assert { checkState(2, enabled = true) }
         }
@@ -193,7 +193,7 @@ class DivStateTest {
     @Test
     fun state1IsEnabled_inPager_after2ClicksOnState1() {
         divState {
-            activityTestRule.buildContainerWithContainer()
+            activityTestRule.buildContainerWithPager()
             clickOnState(1)
             clickOnState(1)
             assert { checkState(1, enabled = true) }

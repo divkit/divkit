@@ -4,7 +4,6 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.expression.variables.ConstantsProvider
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -87,24 +86,13 @@ private fun DivCollectionItemBuilder.getItemResolver(
 ): ExpressionResolver? {
     val resolverImpl = resolver.asImpl ?: return resolver
     val validElement = resolverImpl.validateItemBuilderDataElement(dataElement, index) ?: return null
-    val localDataProvider = ConstantsProvider(mapOf(
-        dataElementName to validElement,
-        INDEX_VARIABLE_NAME to index.toLong()
-    ))
-
-    val itemResolver = resolverImpl.withConstants(
-        pathSegment = "${dataElement}:$index", localDataProvider)
-    val runtime = resolverImpl.runtimeStore.resolveRuntimeWith(
-        divView,
-        itemResolver.path,
-        div = null,
-        resolver = itemResolver,
-        parentResolver = resolverImpl,
-    )
-    return runtime?.expressionResolver ?: run {
-        Assert.fail(
-            "Failed to acquire ExpressionResolver from store! This may lead to leaks and errors!")
-        itemResolver
+    val pathSegment = "$dataElement:$index"
+    return resolverImpl.runtimeStore.getOrPutItemBuilderResolver(resolverImpl.path + "/" + pathSegment, resolver) {
+        val localDataProvider = ConstantsProvider(mapOf(
+            dataElementName to validElement,
+            INDEX_VARIABLE_NAME to index.toLong()
+        ))
+        resolverImpl.withConstants(pathSegment, localDataProvider)
     }
 }
 

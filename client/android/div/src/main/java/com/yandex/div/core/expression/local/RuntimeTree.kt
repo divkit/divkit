@@ -3,15 +3,10 @@ package com.yandex.div.core.expression.local
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.variables.VariableAndConstantController
-import com.yandex.div.core.view2.Div2View
 
 internal class RuntimeTree {
     private val runtimesToNodes = mutableMapOf<ExpressionsRuntime, RuntimeNode>()
     private val pathToNodes = mutableMapOf<String, RuntimeNode>()
-
-    fun getNode(runtime: ExpressionsRuntime) = runtimesToNodes[runtime]
-
-    fun getNode(path: String) = pathToNodes[path]
 
     fun storeRuntime(
         runtime: ExpressionsRuntime,

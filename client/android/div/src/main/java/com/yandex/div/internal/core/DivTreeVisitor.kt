@@ -1,6 +1,6 @@
 package com.yandex.div.internal.core
 
-import com.yandex.div.core.expression.local.needLocalRuntime
+import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
@@ -54,7 +54,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
 
     protected open fun visit(data: Div.Container, context: BindingContext, path: DivStatePath): T {
         return defaultVisitCollection(data, context, path) {
-            data.value.buildItems(context.divView,context.expressionResolver).mapItemWithContext(context, path)
+            data.value.buildItems(context.divView, context.expressionResolver).mapItemWithContext(context, path)
         }
     }
 
@@ -138,11 +138,17 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         parentPath: DivStatePath
     ): List<Triple<Div, BindingContext, DivStatePath>> {
         return mapIndexed { index: Int, item: DivItemBuilderResult ->
-            Triple(
-                item.div,
-                context.getFor(item.expressionResolver),
-                item.div.value().resolvePath(index, parentPath)
+            val div = item.div
+            val path = div.value().resolvePath(index, parentPath)
+            val itemResolver = item.expressionResolver
+            val runtime = itemResolver.asImpl?.runtimeStore?.resolveRuntimeWith(
+                context.divView,
+                path.fullPath,
+                div,
+                itemResolver,
+                context.expressionResolver
             )
+            Triple(div, context.getFor(runtime?.expressionResolver ?: itemResolver), path)
         }
     }
 
@@ -157,8 +163,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
 }
 
 internal fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {
-    if (!div.needLocalRuntime) return this
-    val resolver = runtimeStore?.getOrCreateRuntime(path.fullPath, div, expressionResolver)?.expressionResolver
-        ?: expressionResolver
-    return getFor(resolver)
+    val parentResolver = expressionResolver.asImpl ?: return this
+    val runtime = parentResolver.runtimeStore.getOrCreateRuntime(path.fullPath, div, parentResolver)
+    return getFor(runtime.expressionResolver)
 }

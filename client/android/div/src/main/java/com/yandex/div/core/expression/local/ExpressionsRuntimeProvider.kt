@@ -39,7 +39,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         data: DivData,
         errorCollector: ErrorCollector,
         runtimeStore: RuntimeStore,
-        onCreateCallback: ExpressionResolverImpl.OnCreateCallback,
     ): ExpressionsRuntime {
         val variableController = VariableControllerImpl()
         variableController.addSource(divVariableController.variableSource)
@@ -63,7 +62,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             variableController,
             evaluator,
             errorCollector,
-            onCreateCallback
         )
 
         data.variables?.forEach {
@@ -81,7 +79,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         div: DivBase,
         parentResolver: ExpressionResolverImpl,
         errorCollector: ErrorCollector,
-        onCreateCallback: ExpressionResolverImpl.OnCreateCallback,
     ): ExpressionsRuntime {
         val localVariableController = VariableControllerImpl(parentResolver.variableController)
 
@@ -105,7 +102,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             localVariableController,
             evaluator,
             errorCollector,
-            onCreateCallback,
         )
 
         div.variables?.forEach {

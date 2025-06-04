@@ -261,27 +261,19 @@ internal class DivContainerBinder @Inject constructor(
         val oldDiv = (this as? DivHolderView<*>)?.div
         val path = div.value().resolvePath(index, parentPath)
 
-        val parentResolver = parentContext.expressionResolver
-        if (parentResolver != resolver) {
-            parentContext.runtimeStore?.resolveRuntimeWith(
-                parentContext.divView,
-                path.fullPath,
-                div,
-                resolver,
-                parentResolver
-            )
-        }
+        val divView = parentContext.divView
+        val childRuntime = parentContext.runtimeStore
+            ?.resolveRuntimeWith(divView, path.fullPath, div, resolver, parentContext.expressionResolver)
 
         divBinder.get().bind(parentContext.getFor(resolver), this, div, path)
 
-        val divView = parentContext.divView
         bindChildAlignment(
             parentDiv,
             oldParentDiv,
             div.value(),
             oldDiv?.value(),
-            parentResolver,
-            resolver,
+            parentContext.expressionResolver,
+            childRuntime?.expressionResolver ?: resolver,
             expressionSubscriber,
             divView
         )
