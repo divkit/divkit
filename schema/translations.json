@@ -2736,8 +2736,8 @@
     "ru": "Переменная — URL в виде строки."
   },
   "div_variable_value": {
-    "en": "Value. Supports expressions for variable initialization.",
-    "ru": "Значение. Поддерживает выражения для инициализации переменных."
+    "en": "Value.",
+    "ru": "Значение."
   },
   "div_video": {
     "en": "Video.",
