@@ -47,7 +47,7 @@ data class ArrayVariable internal constructor(
          */
         val name: Property<String>?,
         /**
-         * Value.
+         * Value. Supports expressions for variable initialization.
          */
         val value: Property<List<Any>>?,
     ) {
@@ -63,7 +63,7 @@ data class ArrayVariable internal constructor(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.arrayVariable(
@@ -79,7 +79,7 @@ fun DivScope.arrayVariable(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.arrayVariableProps(
@@ -93,7 +93,7 @@ fun DivScope.arrayVariableProps(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun TemplateScope.arrayVariableRefs(
@@ -107,7 +107,7 @@ fun TemplateScope.arrayVariableRefs(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun ArrayVariable.override(
@@ -123,7 +123,7 @@ fun ArrayVariable.override(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun ArrayVariable.defer(
@@ -138,7 +138,7 @@ fun ArrayVariable.defer(
 )
 
 /**
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun ArrayVariable.evaluate(

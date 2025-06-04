@@ -47,7 +47,7 @@ data class DictVariable internal constructor(
          */
         val name: Property<String>?,
         /**
-         * Value.
+         * Value. Supports expressions for variable initialization.
          */
         val value: Property<Map<String, Any>>?,
     ) {
@@ -63,7 +63,7 @@ data class DictVariable internal constructor(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.dictVariable(
@@ -79,7 +79,7 @@ fun DivScope.dictVariable(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.dictVariableProps(
@@ -93,7 +93,7 @@ fun DivScope.dictVariableProps(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun TemplateScope.dictVariableRefs(
@@ -107,7 +107,7 @@ fun TemplateScope.dictVariableRefs(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DictVariable.override(
@@ -123,7 +123,7 @@ fun DictVariable.override(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DictVariable.defer(

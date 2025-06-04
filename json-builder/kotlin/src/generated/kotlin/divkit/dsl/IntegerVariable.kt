@@ -47,7 +47,7 @@ data class IntegerVariable internal constructor(
          */
         val name: Property<String>?,
         /**
-         * Value.
+         * Value. Supports expressions for variable initialization.
          */
         val value: Property<Long>?,
     ) {
@@ -63,7 +63,7 @@ data class IntegerVariable internal constructor(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.integerVariable(
@@ -79,7 +79,7 @@ fun DivScope.integerVariable(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.integerVariableProps(
@@ -93,7 +93,7 @@ fun DivScope.integerVariableProps(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun TemplateScope.integerVariableRefs(
@@ -107,7 +107,7 @@ fun TemplateScope.integerVariableRefs(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun IntegerVariable.override(
@@ -123,7 +123,7 @@ fun IntegerVariable.override(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun IntegerVariable.defer(
@@ -138,7 +138,7 @@ fun IntegerVariable.defer(
 )
 
 /**
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun IntegerVariable.evaluate(

@@ -47,7 +47,7 @@ data class StringVariable internal constructor(
          */
         val name: Property<String>?,
         /**
-         * Value.
+         * Value. Supports expressions for variable initialization.
          */
         val value: Property<String>?,
     ) {
@@ -63,7 +63,7 @@ data class StringVariable internal constructor(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.stringVariable(
@@ -79,7 +79,7 @@ fun DivScope.stringVariable(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.stringVariableProps(
@@ -93,7 +93,7 @@ fun DivScope.stringVariableProps(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun TemplateScope.stringVariableRefs(
@@ -107,7 +107,7 @@ fun TemplateScope.stringVariableRefs(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun StringVariable.override(
@@ -123,7 +123,7 @@ fun StringVariable.override(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun StringVariable.defer(
@@ -138,7 +138,7 @@ fun StringVariable.defer(
 )
 
 /**
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun StringVariable.evaluate(

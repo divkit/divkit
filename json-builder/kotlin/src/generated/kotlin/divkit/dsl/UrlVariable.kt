@@ -47,7 +47,7 @@ data class UrlVariable internal constructor(
          */
         val name: Property<String>?,
         /**
-         * Value.
+         * Value. Supports expressions for variable initialization.
          */
         val value: Property<Url>?,
     ) {
@@ -63,7 +63,7 @@ data class UrlVariable internal constructor(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.urlVariable(
@@ -79,7 +79,7 @@ fun DivScope.urlVariable(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun DivScope.urlVariableProps(
@@ -93,7 +93,7 @@ fun DivScope.urlVariableProps(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun TemplateScope.urlVariableRefs(
@@ -107,7 +107,7 @@ fun TemplateScope.urlVariableRefs(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun UrlVariable.override(
@@ -123,7 +123,7 @@ fun UrlVariable.override(
 
 /**
  * @param name Variable name.
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun UrlVariable.defer(
@@ -138,7 +138,7 @@ fun UrlVariable.defer(
 )
 
 /**
- * @param value Value.
+ * @param value Value. Supports expressions for variable initialization.
  */
 @Generated
 fun UrlVariable.evaluate(
