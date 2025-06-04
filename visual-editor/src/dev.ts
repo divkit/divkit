@@ -42,8 +42,27 @@ const editor = window.editor = DivProEditor.init({
     renderTo: document.getElementById('app') as HTMLElement,
     locale: detectLocale(),
     rootConfigurable: true,
-    warnFileLimit: 100000,
-    errorFileLimit: 1000000,
+    fileLimits: {
+        image: {
+            warn: 1000,
+            error: 1000000
+        },
+        lottie: {
+            warn: 1000,
+            error: 1000000
+        },
+        video: {
+            warn: 1000,
+            error: 1000000
+        },
+        preview: {
+            warn: 1000,
+            error: 1000000
+        },
+        upload: {
+            error: 1000000
+        }
+    },
     customFontFaces: [{
         value: 'monospace',
         text: {

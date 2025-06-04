@@ -12,6 +12,10 @@ export function getFileSize(value: string, fileType: string): Promise<number> {
         return Promise.resolve(String(value || '').length);
     }
 
+    if (value === 'empty://') {
+        return Promise.resolve(0);
+    }
+
     const res = fetch(value)
         .then(res => res.blob())
         .then(blob => {

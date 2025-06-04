@@ -199,6 +199,8 @@ export class State {
                 this.highlightLoc.set(null);
                 this.selectedRanges.set(null);
             }
+
+            this.refreshGlobalChecks();
         });
 
         this.tree.subscribe(root => {
@@ -920,8 +922,8 @@ export class State {
             this.#historyIndex.set(newHistory.length - 1);
         }
 
-        this.refreshGlobalChecks();
         this.tree.set(get(this.tree));
+        this.refreshGlobalChecks();
     }
 
     undo(): void {
@@ -937,8 +939,8 @@ export class State {
 
         this.#historyIndex.set(historyIndex - 1);
 
-        this.refreshGlobalChecks();
         this.tree.set(get(this.tree));
+        this.refreshGlobalChecks();
     }
 
     redo(): void {
@@ -954,8 +956,8 @@ export class State {
 
         this.#historyIndex.set(historyIndex + 1);
 
-        this.refreshGlobalChecks();
         this.tree.set(get(this.tree));
+        this.refreshGlobalChecks();
     }
 
     pasteLeaf(source: TreeLeaf, into: TreeLeaf, insertIndex?: number): void {
