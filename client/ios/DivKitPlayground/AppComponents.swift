@@ -2,6 +2,7 @@ import DivKit
 import Foundation
 @_spi(Legacy) import DivKitExtensions
 import DivKitMarkdownExtension
+import DivKitSVG
 import LayoutKit
 import VGSL
 
@@ -41,6 +42,7 @@ enum AppComponents {
       ],
       flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
       fontProvider: fontProvider,
+      imageHolderFactory: SVGImageHolderFactory(requestPerformer: requestPerformer),
       layoutDirection: layoutDirection,
       patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),
       reporter: reporter,
