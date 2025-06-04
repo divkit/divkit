@@ -217,9 +217,9 @@ private func makeCollectionView(layout: UICollectionViewLayout) -> UICollectionV
   let collectionView = ExclusiveTouchCollectionView(frame: .zero, collectionViewLayout: layout)
   collectionView.register(TabListItemCell.self, forCellWithReuseIdentifier: TabListItemCell.reuseID)
   collectionView.register(
-    TabDelimiterReusableView.self,
+    TabTitleDelimiterReusableView.self,
     forSupplementaryViewOfKind: TabsCollectionViewFlowLayout.delimiterKind,
-    withReuseIdentifier: TabDelimiterReusableView.reuseID
+    withReuseIdentifier: TabTitleDelimiterReusableView.reuseID
   )
   collectionView.showsHorizontalScrollIndicator = false
   collectionView.backgroundColor = .clear

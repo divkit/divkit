@@ -1,7 +1,7 @@
 import UIKit
 
-final class TabDelimiterReusableView: UICollectionReusableView {
-  static let reuseID = "TabDelimiterReusableView"
+final class TabTitleDelimiterReusableView: UICollectionReusableView {
+  static let reuseID = "TabTitleDelimiterReusableView"
   private let delimiterImageView = UIImageView()
 
   override init(frame: CGRect) {

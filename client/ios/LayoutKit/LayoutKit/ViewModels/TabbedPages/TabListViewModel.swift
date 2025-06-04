@@ -33,7 +33,7 @@ public final class TabListViewModel: Equatable {
     titleStyle: TabTitleStyle = TabTitleStyle(),
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     listPaddings: EdgeInsets = defaultListPaddings,
-    delimiterStyle: TabTitleDelimiterStyle?
+    delimiterStyle: TabTitleDelimiterStyle? = nil
   ) {
     self.tabTitles = tabTitles
     self.titleStyle = titleStyle
@@ -49,7 +49,7 @@ public final class TabListViewModel: Equatable {
     baseColor: Color = TabTitleStyle.defaultBaseTextColor,
     selectedColor: Color = TabTitleStyle.defaultActiveTextColor,
     selectedBackgroundColor: Color = TabTitleStyle.defaultActiveBackgroundColor,
-    delimiterStyle: TabTitleDelimiterStyle?
+    delimiterStyle: TabTitleDelimiterStyle? = nil
   ) {
     let tabTitles = tabTitleLinks
     let titleStyle = TabTitleStyle(

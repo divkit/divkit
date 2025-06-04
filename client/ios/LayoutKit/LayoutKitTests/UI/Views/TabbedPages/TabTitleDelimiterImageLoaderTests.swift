@@ -3,13 +3,13 @@ import VGSL
 import XCTest
 
 final class TabTitleDelimiterImageLoaderTests: XCTestCase {
-  private var imageLoader: TabDelimiterImageLoader!
+  private var imageLoader: TabTitleDelimiterImageLoader!
   private var mockImageHolder: MockImageHolder!
 
   override func setUp() {
     super.setUp()
     mockImageHolder = MockImageHolder()
-    imageLoader = TabDelimiterImageLoader(imageHolder: mockImageHolder)
+    imageLoader = TabTitleDelimiterImageLoader(imageHolder: mockImageHolder)
   }
 
   override func tearDown() {

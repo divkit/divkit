@@ -40,9 +40,9 @@ final class TabListViewDataSource: NSObject, UICollectionViewDataSource {
           kind == TabsCollectionViewFlowLayout.delimiterKind,
           let view = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
-            withReuseIdentifier: TabDelimiterReusableView.reuseID,
+            withReuseIdentifier: TabTitleDelimiterReusableView.reuseID,
             for: indexPath
-          ) as? TabDelimiterReusableView else {
+          ) as? TabTitleDelimiterReusableView else {
       return UICollectionReusableView()
     }
 
