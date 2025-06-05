@@ -22,4 +22,7 @@ value class Color internal constructor(
     }
 }
 
-fun DivScope.color(argb: String): Color = Color(argb)
+@Deprecated(message = "Use method `color(argb: String)` without DivScope", replaceWith = ReplaceWith("color"))
+fun DivScope.color(argb: String): Color = divkit.dsl.color(argb)
+
+fun color(argb: String): Color = Color(argb)
