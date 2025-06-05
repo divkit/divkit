@@ -79,6 +79,7 @@ subprojects {
 
     configurations.configureEach {
         exclude group: "com.intellij", module: "annotations"
+        exclude group: "io.appmetrica.analytics", module: "analytics-local-socket"
     }
 
     afterEvaluate {
