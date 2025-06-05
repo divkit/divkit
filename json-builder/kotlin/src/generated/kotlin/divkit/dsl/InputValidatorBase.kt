@@ -156,6 +156,25 @@ fun InputValidatorBase.defer(
 /**
  * @param allowEmpty Determines whether the empty field value is valid.
  * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
+ */
+@Generated
+fun InputValidatorBase.modify(
+    `use named arguments`: Guard = Guard.instance,
+    allowEmpty: Property<Boolean>? = null,
+    labelId: Property<String>? = null,
+    variable: Property<String>? = null,
+): InputValidatorBase = InputValidatorBase(
+    InputValidatorBase.Properties(
+        allowEmpty = allowEmpty ?: properties.allowEmpty,
+        labelId = labelId ?: properties.labelId,
+        variable = variable ?: properties.variable,
+    )
+)
+
+/**
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
  */
 @Generated
 fun InputValidatorBase.evaluate(

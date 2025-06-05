@@ -220,6 +220,31 @@ fun ActionScrollBy.defer(
  * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
  */
 @Generated
+fun ActionScrollBy.modify(
+    `use named arguments`: Guard = Guard.instance,
+    animated: Property<Boolean>? = null,
+    id: Property<String>? = null,
+    itemCount: Property<Int>? = null,
+    offset: Property<Int>? = null,
+    overflow: Property<ActionScrollBy.Overflow>? = null,
+): ActionScrollBy = ActionScrollBy(
+    ActionScrollBy.Properties(
+        animated = animated ?: properties.animated,
+        id = id ?: properties.id,
+        itemCount = itemCount ?: properties.itemCount,
+        offset = offset ?: properties.offset,
+        overflow = overflow ?: properties.overflow,
+    )
+)
+
+/**
+ * @param animated Enables scrolling animation.
+ * @param id ID of the element where the action should be performed.
+ * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
+ * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
+ * @param overflow Defines navigation behavior at boundary elements:<li>`clamp`: Stop navigation at the boundary element (default)</li><li>`ring`: Navigate to the start or end, depending on the current element.</li>
+ */
+@Generated
 fun ActionScrollBy.evaluate(
     `use named arguments`: Guard = Guard.instance,
     animated: ExpressionProperty<Boolean>? = null,

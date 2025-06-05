@@ -331,6 +331,49 @@ fun NumberAnimator.defer(
 )
 
 /**
+ * @param cancelActions Actions performed when the animation is canceled. For example, when a command with the 'animator_stop' type is received.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
+ * @param duration Animation duration in milliseconds.
+ * @param endActions Actions when the animation is completed.
+ * @param endValue The value the variable will have when the animation ends.
+ * @param id Animator ID.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
+ * @param variableName Name of the variable being animated.
+ */
+@Generated
+fun NumberAnimator.modify(
+    `use named arguments`: Guard = Guard.instance,
+    cancelActions: Property<List<Action>>? = null,
+    direction: Property<AnimationDirection>? = null,
+    duration: Property<Long>? = null,
+    endActions: Property<List<Action>>? = null,
+    endValue: Property<Double>? = null,
+    id: Property<String>? = null,
+    interpolator: Property<AnimationInterpolator>? = null,
+    repeatCount: Property<Count>? = null,
+    startDelay: Property<Int>? = null,
+    startValue: Property<Double>? = null,
+    variableName: Property<String>? = null,
+): NumberAnimator = NumberAnimator(
+    NumberAnimator.Properties(
+        cancelActions = cancelActions ?: properties.cancelActions,
+        direction = direction ?: properties.direction,
+        duration = duration ?: properties.duration,
+        endActions = endActions ?: properties.endActions,
+        endValue = endValue ?: properties.endValue,
+        id = id ?: properties.id,
+        interpolator = interpolator ?: properties.interpolator,
+        repeatCount = repeatCount ?: properties.repeatCount,
+        startDelay = startDelay ?: properties.startDelay,
+        startValue = startValue ?: properties.startValue,
+        variableName = variableName ?: properties.variableName,
+    )
+)
+
+/**
  * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
  * @param endValue The value the variable will have when the animation ends.

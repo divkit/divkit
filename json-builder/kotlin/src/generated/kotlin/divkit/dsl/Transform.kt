@@ -157,6 +157,25 @@ fun Transform.defer(
 )
 
 /**
+ * @param pivotX X coordinate of the rotation axis.
+ * @param pivotY Y coordinate of the rotation axis.
+ * @param rotation Degrees of the element rotation. Positive values used for clockwise rotation.
+ */
+@Generated
+fun Transform.modify(
+    `use named arguments`: Guard = Guard.instance,
+    pivotX: Property<Pivot>? = null,
+    pivotY: Property<Pivot>? = null,
+    rotation: Property<Double>? = null,
+): Transform = Transform(
+    Transform.Properties(
+        pivotX = pivotX ?: properties.pivotX,
+        pivotY = pivotY ?: properties.pivotY,
+        rotation = rotation ?: properties.rotation,
+    )
+)
+
+/**
  * @param rotation Degrees of the element rotation. Positive values used for clockwise rotation.
  */
 @Generated

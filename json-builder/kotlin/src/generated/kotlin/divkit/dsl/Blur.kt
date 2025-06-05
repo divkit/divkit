@@ -120,6 +120,19 @@ fun Blur.defer(
  * @param radius Blur radius. Defines how many pixels blend into each other. Specified in: `dp`.
  */
 @Generated
+fun Blur.modify(
+    `use named arguments`: Guard = Guard.instance,
+    radius: Property<Int>? = null,
+): Blur = Blur(
+    Blur.Properties(
+        radius = radius ?: properties.radius,
+    )
+)
+
+/**
+ * @param radius Blur radius. Defines how many pixels blend into each other. Specified in: `dp`.
+ */
+@Generated
 fun Blur.evaluate(
     `use named arguments`: Guard = Guard.instance,
     radius: ExpressionProperty<Int>? = null,

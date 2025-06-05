@@ -101,6 +101,16 @@ fun WithStringArrayProperty.defer(
 )
 
 @Generated
+fun WithStringArrayProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    array: Property<List<ArrayElement<String>>>? = null,
+): WithStringArrayProperty = WithStringArrayProperty(
+    WithStringArrayProperty.Properties(
+        array = array ?: properties.array,
+    )
+)
+
+@Generated
 fun Component<WithStringArrayProperty>.override(
     `use named arguments`: Guard = Guard.instance,
     array: List<ArrayElement<String>>? = null,
@@ -115,6 +125,17 @@ fun Component<WithStringArrayProperty>.override(
 fun Component<WithStringArrayProperty>.defer(
     `use named arguments`: Guard = Guard.instance,
     array: ReferenceProperty<List<ArrayElement<String>>>? = null,
+): Component<WithStringArrayProperty> = Component(
+    template = template,
+    properties = WithStringArrayProperty.Properties(
+        array = array,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithStringArrayProperty>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    array: Property<List<ArrayElement<String>>>? = null,
 ): Component<WithStringArrayProperty> = Component(
     template = template,
     properties = WithStringArrayProperty.Properties(

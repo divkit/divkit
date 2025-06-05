@@ -97,6 +97,16 @@ fun ContentUrl.defer(
 )
 
 @Generated
+fun ContentUrl.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Url>? = null,
+): ContentUrl = ContentUrl(
+    ContentUrl.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun ContentUrl.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Url>? = null,

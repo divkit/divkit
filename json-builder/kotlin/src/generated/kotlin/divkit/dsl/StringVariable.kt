@@ -138,6 +138,22 @@ fun StringVariable.defer(
 )
 
 /**
+ * @param name Variable name.
+ * @param value Value. Supports expressions for variable initialization.
+ */
+@Generated
+fun StringVariable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    name: Property<String>? = null,
+    value: Property<String>? = null,
+): StringVariable = StringVariable(
+    StringVariable.Properties(
+        name = name ?: properties.name,
+        value = value ?: properties.value,
+    )
+)
+
+/**
  * @param value Value. Supports expressions for variable initialization.
  */
 @Generated

@@ -112,6 +112,18 @@ fun ActionSetVariable.defer(
 )
 
 @Generated
+fun ActionSetVariable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<TypedValue>? = null,
+    variableName: Property<String>? = null,
+): ActionSetVariable = ActionSetVariable(
+    ActionSetVariable.Properties(
+        value = value ?: properties.value,
+        variableName = variableName ?: properties.variableName,
+    )
+)
+
+@Generated
 fun ActionSetVariable.evaluate(
     `use named arguments`: Guard = Guard.instance,
     variableName: ExpressionProperty<String>? = null,

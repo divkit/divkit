@@ -125,6 +125,20 @@ fun ActionArrayInsertValue.defer(
 )
 
 @Generated
+fun ActionArrayInsertValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    index: Property<Int>? = null,
+    value: Property<TypedValue>? = null,
+    variableName: Property<String>? = null,
+): ActionArrayInsertValue = ActionArrayInsertValue(
+    ActionArrayInsertValue.Properties(
+        index = index ?: properties.index,
+        value = value ?: properties.value,
+        variableName = variableName ?: properties.variableName,
+    )
+)
+
+@Generated
 fun ActionArrayInsertValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     index: ExpressionProperty<Int>? = null,

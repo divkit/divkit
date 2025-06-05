@@ -138,6 +138,22 @@ fun ArrayVariable.defer(
 )
 
 /**
+ * @param name Variable name.
+ * @param value Value. Supports expressions for variable initialization.
+ */
+@Generated
+fun ArrayVariable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    name: Property<String>? = null,
+    value: Property<List<Any>>? = null,
+): ArrayVariable = ArrayVariable(
+    ArrayVariable.Properties(
+        name = name ?: properties.name,
+        value = value ?: properties.value,
+    )
+)
+
+/**
  * @param value Value. Supports expressions for variable initialization.
  */
 @Generated

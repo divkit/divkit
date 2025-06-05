@@ -222,6 +222,34 @@ fun Timer.defer(
 
 /**
  * @param duration Timer duration in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).
+ * @param endActions Actions performed when the timer ends: when the timer has counted to the `duration` value or the `div-action://timer?action=stop&id=<id>` command has been received.
+ * @param id Timer ID. Must be unique. Used when calling actions for the selected timer, for example: start, stop.
+ * @param tickActions Actions that are performed on each count of the timer.
+ * @param tickInterval Duration of time intervals in milliseconds between counts. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.
+ * @param valueVariable Name of the variable where the current timer value is stored. Updated on each count or when the timer commands are called (start, stop, and so on), except the cancel command.
+ */
+@Generated
+fun Timer.modify(
+    `use named arguments`: Guard = Guard.instance,
+    duration: Property<Long>? = null,
+    endActions: Property<List<Action>>? = null,
+    id: Property<String>? = null,
+    tickActions: Property<List<Action>>? = null,
+    tickInterval: Property<Long>? = null,
+    valueVariable: Property<String>? = null,
+): Timer = Timer(
+    Timer.Properties(
+        duration = duration ?: properties.duration,
+        endActions = endActions ?: properties.endActions,
+        id = id ?: properties.id,
+        tickActions = tickActions ?: properties.tickActions,
+        tickInterval = tickInterval ?: properties.tickInterval,
+        valueVariable = valueVariable ?: properties.valueVariable,
+    )
+)
+
+/**
+ * @param duration Timer duration in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).
  * @param tickInterval Duration of time intervals in milliseconds between counts. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.
  */
 @Generated

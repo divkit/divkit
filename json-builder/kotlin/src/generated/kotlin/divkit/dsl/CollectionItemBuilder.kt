@@ -205,6 +205,25 @@ fun CollectionItemBuilder.defer(
 
 /**
  * @param data Data that will be used to create collection elements.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
+ * @param prototypes Array of `div` elements from which the collection elements will be created.
+ */
+@Generated
+fun CollectionItemBuilder.modify(
+    `use named arguments`: Guard = Guard.instance,
+    data: Property<List<Any>>? = null,
+    dataElementName: Property<String>? = null,
+    prototypes: Property<List<CollectionItemBuilder.Prototype>>? = null,
+): CollectionItemBuilder = CollectionItemBuilder(
+    CollectionItemBuilder.Properties(
+        data = data ?: properties.data,
+        dataElementName = dataElementName ?: properties.dataElementName,
+        prototypes = prototypes ?: properties.prototypes,
+    )
+)
+
+/**
+ * @param data Data that will be used to create collection elements.
  */
 @Generated
 fun CollectionItemBuilder.evaluate(
@@ -304,6 +323,25 @@ fun CollectionItemBuilder.Prototype.defer(
     div: ReferenceProperty<Div>? = null,
     id: ReferenceProperty<String>? = null,
     selector: ReferenceProperty<Boolean>? = null,
+): CollectionItemBuilder.Prototype = CollectionItemBuilder.Prototype(
+    CollectionItemBuilder.Prototype.Properties(
+        div = div ?: properties.div,
+        id = id ?: properties.id,
+        selector = selector ?: properties.selector,
+    )
+)
+
+/**
+ * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param id `id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.
+ * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
+ */
+@Generated
+fun CollectionItemBuilder.Prototype.modify(
+    `use named arguments`: Guard = Guard.instance,
+    div: Property<Div>? = null,
+    id: Property<String>? = null,
+    selector: Property<Boolean>? = null,
 ): CollectionItemBuilder.Prototype = CollectionItemBuilder.Prototype(
     CollectionItemBuilder.Prototype.Properties(
         div = div ?: properties.div,

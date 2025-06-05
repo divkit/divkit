@@ -184,6 +184,28 @@ fun Shadow.defer(
  * @param alpha Shadow transparency.
  * @param blur Blur intensity.
  * @param color Shadow color.
+ * @param offset Shadow offset.
+ */
+@Generated
+fun Shadow.modify(
+    `use named arguments`: Guard = Guard.instance,
+    alpha: Property<Double>? = null,
+    blur: Property<Int>? = null,
+    color: Property<Color>? = null,
+    offset: Property<Point>? = null,
+): Shadow = Shadow(
+    Shadow.Properties(
+        alpha = alpha ?: properties.alpha,
+        blur = blur ?: properties.blur,
+        color = color ?: properties.color,
+        offset = offset ?: properties.offset,
+    )
+)
+
+/**
+ * @param alpha Shadow transparency.
+ * @param blur Blur intensity.
+ * @param color Shadow color.
  */
 @Generated
 fun Shadow.evaluate(

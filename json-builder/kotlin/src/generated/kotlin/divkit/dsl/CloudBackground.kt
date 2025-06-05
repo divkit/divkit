@@ -161,6 +161,25 @@ fun CloudBackground.defer(
 /**
  * @param color Fill color.
  * @param cornerRadius Corner rounding radius.
+ * @param paddings Margins between the row border and background border.
+ */
+@Generated
+fun CloudBackground.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+    cornerRadius: Property<Int>? = null,
+    paddings: Property<EdgeInsets>? = null,
+): CloudBackground = CloudBackground(
+    CloudBackground.Properties(
+        color = color ?: properties.color,
+        cornerRadius = cornerRadius ?: properties.cornerRadius,
+        paddings = paddings ?: properties.paddings,
+    )
+)
+
+/**
+ * @param color Fill color.
+ * @param cornerRadius Corner rounding radius.
  */
 @Generated
 fun CloudBackground.evaluate(

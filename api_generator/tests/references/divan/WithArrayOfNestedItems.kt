@@ -136,6 +136,16 @@ fun WithArrayOfNestedItems.defer(
 )
 
 @Generated
+fun WithArrayOfNestedItems.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<WithArrayOfNestedItems.Item>>? = null,
+): WithArrayOfNestedItems = WithArrayOfNestedItems(
+    WithArrayOfNestedItems.Properties(
+        items = items ?: properties.items,
+    )
+)
+
+@Generated
 fun Component<WithArrayOfNestedItems>.override(
     `use named arguments`: Guard = Guard.instance,
     items: List<WithArrayOfNestedItems.Item>? = null,
@@ -150,6 +160,17 @@ fun Component<WithArrayOfNestedItems>.override(
 fun Component<WithArrayOfNestedItems>.defer(
     `use named arguments`: Guard = Guard.instance,
     items: ReferenceProperty<List<WithArrayOfNestedItems.Item>>? = null,
+): Component<WithArrayOfNestedItems> = Component(
+    template = template,
+    properties = WithArrayOfNestedItems.Properties(
+        items = items,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithArrayOfNestedItems>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<WithArrayOfNestedItems.Item>>? = null,
 ): Component<WithArrayOfNestedItems> = Component(
     template = template,
     properties = WithArrayOfNestedItems.Properties(
@@ -215,6 +236,18 @@ fun WithArrayOfNestedItems.Item.defer(
     `use named arguments`: Guard = Guard.instance,
     entity: ReferenceProperty<Entity>? = null,
     property: ReferenceProperty<String>? = null,
+): WithArrayOfNestedItems.Item = WithArrayOfNestedItems.Item(
+    WithArrayOfNestedItems.Item.Properties(
+        entity = entity ?: properties.entity,
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
+fun WithArrayOfNestedItems.Item.modify(
+    `use named arguments`: Guard = Guard.instance,
+    entity: Property<Entity>? = null,
+    property: Property<String>? = null,
 ): WithArrayOfNestedItems.Item = WithArrayOfNestedItems.Item(
     WithArrayOfNestedItems.Item.Properties(
         entity = entity ?: properties.entity,

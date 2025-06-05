@@ -120,6 +120,19 @@ fun OffsetDestination.defer(
  * @param value Position measured in `dp`.
  */
 @Generated
+fun OffsetDestination.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Int>? = null,
+): OffsetDestination = OffsetDestination(
+    OffsetDestination.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param value Position measured in `dp`.
+ */
+@Generated
 fun OffsetDestination.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Int>? = null,

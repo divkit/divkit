@@ -101,6 +101,16 @@ fun WithArrayOfExpressions.defer(
 )
 
 @Generated
+fun WithArrayOfExpressions.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<ArrayElement<String>>>? = null,
+): WithArrayOfExpressions = WithArrayOfExpressions(
+    WithArrayOfExpressions.Properties(
+        items = items ?: properties.items,
+    )
+)
+
+@Generated
 fun Component<WithArrayOfExpressions>.override(
     `use named arguments`: Guard = Guard.instance,
     items: List<ArrayElement<String>>? = null,
@@ -115,6 +125,17 @@ fun Component<WithArrayOfExpressions>.override(
 fun Component<WithArrayOfExpressions>.defer(
     `use named arguments`: Guard = Guard.instance,
     items: ReferenceProperty<List<ArrayElement<String>>>? = null,
+): Component<WithArrayOfExpressions> = Component(
+    template = template,
+    properties = WithArrayOfExpressions.Properties(
+        items = items,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithArrayOfExpressions>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<ArrayElement<String>>>? = null,
 ): Component<WithArrayOfExpressions> = Component(
     template = template,
     properties = WithArrayOfExpressions.Properties(

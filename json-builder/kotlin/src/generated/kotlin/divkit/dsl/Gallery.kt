@@ -1042,6 +1042,145 @@ fun Gallery.defer(
 )
 
 /**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnCount Number of columns for block layout.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
+ * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
+ * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between elements.
+ * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param orientation Gallery orientation.
+ * @param paddings Internal margins from the element stroke.
+ * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Gallery.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnCount: Property<Int>? = null,
+    columnSpan: Property<Int>? = null,
+    crossContentAlignment: Property<Gallery.CrossContentAlignment>? = null,
+    crossSpacing: Property<Int>? = null,
+    defaultItem: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    itemBuilder: Property<CollectionItemBuilder>? = null,
+    itemSpacing: Property<Int>? = null,
+    items: Property<List<Div>>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    orientation: Property<Gallery.Orientation>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    restrictParentScroll: Property<Boolean>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    scrollMode: Property<Gallery.ScrollMode>? = null,
+    scrollbar: Property<Gallery.Scrollbar>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Gallery = Gallery(
+    Gallery.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        columnCount = columnCount ?: properties.columnCount,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        crossContentAlignment = crossContentAlignment ?: properties.crossContentAlignment,
+        crossSpacing = crossSpacing ?: properties.crossSpacing,
+        defaultItem = defaultItem ?: properties.defaultItem,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        id = id ?: properties.id,
+        itemBuilder = itemBuilder ?: properties.itemBuilder,
+        itemSpacing = itemSpacing ?: properties.itemSpacing,
+        items = items ?: properties.items,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        margins = margins ?: properties.margins,
+        orientation = orientation ?: properties.orientation,
+        paddings = paddings ?: properties.paddings,
+        restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        scrollMode = scrollMode ?: properties.scrollMode,
+        scrollbar = scrollbar ?: properties.scrollbar,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -1489,6 +1628,146 @@ fun Component<Gallery>.evaluate(
         visibilityAction = null,
         visibilityActions = null,
         width = null,
+    ).mergeWith(properties)
+)
+
+/**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnCount Number of columns for block layout.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
+ * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
+ * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemSpacing Spacing between elements.
+ * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param orientation Gallery orientation.
+ * @param paddings Internal margins from the element stroke.
+ * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Gallery>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnCount: Property<Int>? = null,
+    columnSpan: Property<Int>? = null,
+    crossContentAlignment: Property<Gallery.CrossContentAlignment>? = null,
+    crossSpacing: Property<Int>? = null,
+    defaultItem: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    itemBuilder: Property<CollectionItemBuilder>? = null,
+    itemSpacing: Property<Int>? = null,
+    items: Property<List<Div>>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    orientation: Property<Gallery.Orientation>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    restrictParentScroll: Property<Boolean>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    scrollMode: Property<Gallery.ScrollMode>? = null,
+    scrollbar: Property<Gallery.Scrollbar>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Gallery> = Component(
+    template = template,
+    properties = Gallery.Properties(
+        accessibility = accessibility,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        background = background,
+        border = border,
+        columnCount = columnCount,
+        columnSpan = columnSpan,
+        crossContentAlignment = crossContentAlignment,
+        crossSpacing = crossSpacing,
+        defaultItem = defaultItem,
+        disappearActions = disappearActions,
+        extensions = extensions,
+        focus = focus,
+        functions = functions,
+        height = height,
+        id = id,
+        itemBuilder = itemBuilder,
+        itemSpacing = itemSpacing,
+        items = items,
+        layoutProvider = layoutProvider,
+        margins = margins,
+        orientation = orientation,
+        paddings = paddings,
+        restrictParentScroll = restrictParentScroll,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        scrollMode = scrollMode,
+        scrollbar = scrollbar,
+        selectedActions = selectedActions,
+        tooltips = tooltips,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
     ).mergeWith(properties)
 )
 

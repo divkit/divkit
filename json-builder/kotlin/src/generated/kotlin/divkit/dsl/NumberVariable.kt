@@ -138,6 +138,22 @@ fun NumberVariable.defer(
 )
 
 /**
+ * @param name Variable name.
+ * @param value Value. Supports expressions for variable initialization.
+ */
+@Generated
+fun NumberVariable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    name: Property<String>? = null,
+    value: Property<Double>? = null,
+): NumberVariable = NumberVariable(
+    NumberVariable.Properties(
+        name = name ?: properties.name,
+        value = value ?: properties.value,
+    )
+)
+
+/**
  * @param value Value. Supports expressions for variable initialization.
  */
 @Generated

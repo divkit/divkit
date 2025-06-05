@@ -186,6 +186,28 @@ fun AbsoluteEdgeInsets.defer(
  * @param top Top margin.
  */
 @Generated
+fun AbsoluteEdgeInsets.modify(
+    `use named arguments`: Guard = Guard.instance,
+    bottom: Property<Int>? = null,
+    left: Property<Int>? = null,
+    right: Property<Int>? = null,
+    top: Property<Int>? = null,
+): AbsoluteEdgeInsets = AbsoluteEdgeInsets(
+    AbsoluteEdgeInsets.Properties(
+        bottom = bottom ?: properties.bottom,
+        left = left ?: properties.left,
+        right = right ?: properties.right,
+        top = top ?: properties.top,
+    )
+)
+
+/**
+ * @param bottom Bottom margin.
+ * @param left Left margin.
+ * @param right Right margin.
+ * @param top Top margin.
+ */
+@Generated
 fun AbsoluteEdgeInsets.evaluate(
     `use named arguments`: Guard = Guard.instance,
     bottom: ExpressionProperty<Int>? = null,

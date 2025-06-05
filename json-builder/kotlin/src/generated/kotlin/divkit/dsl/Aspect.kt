@@ -118,6 +118,19 @@ fun Aspect.defer(
  * @param ratio `height = width / ratio`.
  */
 @Generated
+fun Aspect.modify(
+    `use named arguments`: Guard = Guard.instance,
+    ratio: Property<Double>? = null,
+): Aspect = Aspect(
+    Aspect.Properties(
+        ratio = ratio ?: properties.ratio,
+    )
+)
+
+/**
+ * @param ratio `height = width / ratio`.
+ */
+@Generated
 fun Aspect.evaluate(
     `use named arguments`: Guard = Guard.instance,
     ratio: ExpressionProperty<Double>? = null,

@@ -97,6 +97,16 @@ fun ContentText.defer(
 )
 
 @Generated
+fun ContentText.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<String>? = null,
+): ContentText = ContentText(
+    ContentText.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun ContentText.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<String>? = null,

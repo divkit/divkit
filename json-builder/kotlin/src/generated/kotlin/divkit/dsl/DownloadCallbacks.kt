@@ -133,5 +133,21 @@ fun DownloadCallbacks.defer(
     )
 )
 
+/**
+ * @param onFailActions Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
+ * @param onSuccessActions Actions in case of successful loading.
+ */
+@Generated
+fun DownloadCallbacks.modify(
+    `use named arguments`: Guard = Guard.instance,
+    onFailActions: Property<List<Action>>? = null,
+    onSuccessActions: Property<List<Action>>? = null,
+): DownloadCallbacks = DownloadCallbacks(
+    DownloadCallbacks.Properties(
+        onFailActions = onFailActions ?: properties.onFailActions,
+        onSuccessActions = onSuccessActions ?: properties.onSuccessActions,
+    )
+)
+
 @Generated
 fun DownloadCallbacks.asList() = listOf(this)

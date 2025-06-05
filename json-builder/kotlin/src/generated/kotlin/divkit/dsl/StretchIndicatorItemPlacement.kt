@@ -140,6 +140,22 @@ fun StretchIndicatorItemPlacement.defer(
 )
 
 /**
+ * @param itemSpacing Spacing between indicator centers.
+ * @param maxVisibleItems Maximum number of visible indicators.
+ */
+@Generated
+fun StretchIndicatorItemPlacement.modify(
+    `use named arguments`: Guard = Guard.instance,
+    itemSpacing: Property<FixedSize>? = null,
+    maxVisibleItems: Property<Int>? = null,
+): StretchIndicatorItemPlacement = StretchIndicatorItemPlacement(
+    StretchIndicatorItemPlacement.Properties(
+        itemSpacing = itemSpacing ?: properties.itemSpacing,
+        maxVisibleItems = maxVisibleItems ?: properties.maxVisibleItems,
+    )
+)
+
+/**
  * @param maxVisibleItems Maximum number of visible indicators.
  */
 @Generated

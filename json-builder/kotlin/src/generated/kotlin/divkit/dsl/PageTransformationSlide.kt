@@ -213,6 +213,31 @@ fun PageTransformationSlide.defer(
  * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
  */
 @Generated
+fun PageTransformationSlide.modify(
+    `use named arguments`: Guard = Guard.instance,
+    interpolator: Property<AnimationInterpolator>? = null,
+    nextPageAlpha: Property<Double>? = null,
+    nextPageScale: Property<Double>? = null,
+    previousPageAlpha: Property<Double>? = null,
+    previousPageScale: Property<Double>? = null,
+): PageTransformationSlide = PageTransformationSlide(
+    PageTransformationSlide.Properties(
+        interpolator = interpolator ?: properties.interpolator,
+        nextPageAlpha = nextPageAlpha ?: properties.nextPageAlpha,
+        nextPageScale = nextPageScale ?: properties.nextPageScale,
+        previousPageAlpha = previousPageAlpha ?: properties.previousPageAlpha,
+        previousPageScale = previousPageScale ?: properties.previousPageScale,
+    )
+)
+
+/**
+ * @param interpolator Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>
+ * @param nextPageAlpha Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param nextPageScale Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageAlpha Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ * @param previousPageScale Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
+ */
+@Generated
 fun PageTransformationSlide.evaluate(
     `use named arguments`: Guard = Guard.instance,
     interpolator: ExpressionProperty<AnimationInterpolator>? = null,

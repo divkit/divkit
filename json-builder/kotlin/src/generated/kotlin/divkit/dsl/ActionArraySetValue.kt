@@ -125,6 +125,20 @@ fun ActionArraySetValue.defer(
 )
 
 @Generated
+fun ActionArraySetValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    index: Property<Int>? = null,
+    value: Property<TypedValue>? = null,
+    variableName: Property<String>? = null,
+): ActionArraySetValue = ActionArraySetValue(
+    ActionArraySetValue.Properties(
+        index = index ?: properties.index,
+        value = value ?: properties.value,
+        variableName = variableName ?: properties.variableName,
+    )
+)
+
+@Generated
 fun ActionArraySetValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     index: ExpressionProperty<Int>? = null,

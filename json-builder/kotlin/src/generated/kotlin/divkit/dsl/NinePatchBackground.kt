@@ -139,6 +139,22 @@ fun NinePatchBackground.defer(
 
 /**
  * @param imageUrl Image URL.
+ * @param insets Margins that break the image into parts using the same rules as the CSS `border-image-slice` property (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice).
+ */
+@Generated
+fun NinePatchBackground.modify(
+    `use named arguments`: Guard = Guard.instance,
+    imageUrl: Property<Url>? = null,
+    insets: Property<AbsoluteEdgeInsets>? = null,
+): NinePatchBackground = NinePatchBackground(
+    NinePatchBackground.Properties(
+        imageUrl = imageUrl ?: properties.imageUrl,
+        insets = insets ?: properties.insets,
+    )
+)
+
+/**
+ * @param imageUrl Image URL.
  */
 @Generated
 fun NinePatchBackground.evaluate(

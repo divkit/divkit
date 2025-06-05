@@ -135,6 +135,22 @@ fun TextRangeBorder.defer(
 
 /**
  * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
+ * @param stroke Stroke style.
+ */
+@Generated
+fun TextRangeBorder.modify(
+    `use named arguments`: Guard = Guard.instance,
+    cornerRadius: Property<Int>? = null,
+    stroke: Property<Stroke>? = null,
+): TextRangeBorder = TextRangeBorder(
+    TextRangeBorder.Properties(
+        cornerRadius = cornerRadius ?: properties.cornerRadius,
+        stroke = stroke ?: properties.stroke,
+    )
+)
+
+/**
+ * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
  */
 @Generated
 fun TextRangeBorder.evaluate(

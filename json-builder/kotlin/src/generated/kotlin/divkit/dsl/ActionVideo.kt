@@ -150,6 +150,22 @@ fun ActionVideo.defer(
  * @param id Video ID.
  */
 @Generated
+fun ActionVideo.modify(
+    `use named arguments`: Guard = Guard.instance,
+    action: Property<ActionVideo.Action>? = null,
+    id: Property<String>? = null,
+): ActionVideo = ActionVideo(
+    ActionVideo.Properties(
+        action = action ?: properties.action,
+        id = id ?: properties.id,
+    )
+)
+
+/**
+ * @param action Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
+ * @param id Video ID.
+ */
+@Generated
 fun ActionVideo.evaluate(
     `use named arguments`: Guard = Guard.instance,
     action: ExpressionProperty<ActionVideo.Action>? = null,

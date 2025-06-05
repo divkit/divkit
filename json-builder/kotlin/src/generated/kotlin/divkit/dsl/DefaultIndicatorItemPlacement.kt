@@ -117,5 +117,18 @@ fun DefaultIndicatorItemPlacement.defer(
     )
 )
 
+/**
+ * @param spaceBetweenCenters Spacing between indicator centers.
+ */
+@Generated
+fun DefaultIndicatorItemPlacement.modify(
+    `use named arguments`: Guard = Guard.instance,
+    spaceBetweenCenters: Property<FixedSize>? = null,
+): DefaultIndicatorItemPlacement = DefaultIndicatorItemPlacement(
+    DefaultIndicatorItemPlacement.Properties(
+        spaceBetweenCenters = spaceBetweenCenters ?: properties.spaceBetweenCenters,
+    )
+)
+
 @Generated
 fun DefaultIndicatorItemPlacement.asList() = listOf(this)

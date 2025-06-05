@@ -233,6 +233,28 @@ fun FixedLengthInputMask.defer(
 /**
  * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
  * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
+ * @param patternElements Template decoding is a description of the characters that will be replaced with user input.
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
+ */
+@Generated
+fun FixedLengthInputMask.modify(
+    `use named arguments`: Guard = Guard.instance,
+    alwaysVisible: Property<Boolean>? = null,
+    pattern: Property<String>? = null,
+    patternElements: Property<List<FixedLengthInputMask.PatternElement>>? = null,
+    rawTextVariable: Property<String>? = null,
+): FixedLengthInputMask = FixedLengthInputMask(
+    FixedLengthInputMask.Properties(
+        alwaysVisible = alwaysVisible ?: properties.alwaysVisible,
+        pattern = pattern ?: properties.pattern,
+        patternElements = patternElements ?: properties.patternElements,
+        rawTextVariable = rawTextVariable ?: properties.rawTextVariable,
+    )
+)
+
+/**
+ * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
+ * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
  */
 @Generated
 fun FixedLengthInputMask.evaluate(
@@ -334,6 +356,25 @@ fun FixedLengthInputMask.PatternElement.defer(
     key: ReferenceProperty<String>? = null,
     placeholder: ReferenceProperty<String>? = null,
     regex: ReferenceProperty<String>? = null,
+): FixedLengthInputMask.PatternElement = FixedLengthInputMask.PatternElement(
+    FixedLengthInputMask.PatternElement.Properties(
+        key = key ?: properties.key,
+        placeholder = placeholder ?: properties.placeholder,
+        regex = regex ?: properties.regex,
+    )
+)
+
+/**
+ * @param key A character in the template that will be replaced with a user-defined character.
+ * @param placeholder The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
+ * @param regex Regular expression for validating character inputs. For example, when a mask is digit-only.
+ */
+@Generated
+fun FixedLengthInputMask.PatternElement.modify(
+    `use named arguments`: Guard = Guard.instance,
+    key: Property<String>? = null,
+    placeholder: Property<String>? = null,
+    regex: Property<String>? = null,
 ): FixedLengthInputMask.PatternElement = FixedLengthInputMask.PatternElement(
     FixedLengthInputMask.PatternElement.Properties(
         key = key ?: properties.key,

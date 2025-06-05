@@ -205,6 +205,31 @@ fun RoundedRectangleShape.defer(
 
 /**
  * @param backgroundColor Fill color.
+ * @param cornerRadius Corner rounding radius.
+ * @param itemHeight Height.
+ * @param itemWidth Width.
+ * @param stroke Stroke style.
+ */
+@Generated
+fun RoundedRectangleShape.modify(
+    `use named arguments`: Guard = Guard.instance,
+    backgroundColor: Property<Color>? = null,
+    cornerRadius: Property<FixedSize>? = null,
+    itemHeight: Property<FixedSize>? = null,
+    itemWidth: Property<FixedSize>? = null,
+    stroke: Property<Stroke>? = null,
+): RoundedRectangleShape = RoundedRectangleShape(
+    RoundedRectangleShape.Properties(
+        backgroundColor = backgroundColor ?: properties.backgroundColor,
+        cornerRadius = cornerRadius ?: properties.cornerRadius,
+        itemHeight = itemHeight ?: properties.itemHeight,
+        itemWidth = itemWidth ?: properties.itemWidth,
+        stroke = stroke ?: properties.stroke,
+    )
+)
+
+/**
+ * @param backgroundColor Fill color.
  */
 @Generated
 fun RoundedRectangleShape.evaluate(

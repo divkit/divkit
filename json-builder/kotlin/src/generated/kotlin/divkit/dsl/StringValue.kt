@@ -97,6 +97,16 @@ fun StringValue.defer(
 )
 
 @Generated
+fun StringValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<String>? = null,
+): StringValue = StringValue(
+    StringValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun StringValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<String>? = null,

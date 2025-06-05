@@ -116,5 +116,18 @@ fun ChangeSetTransition.defer(
     )
 )
 
+/**
+ * @param items List of animations.
+ */
+@Generated
+fun ChangeSetTransition.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<ChangeTransition>>? = null,
+): ChangeSetTransition = ChangeSetTransition(
+    ChangeSetTransition.Properties(
+        items = items ?: properties.items,
+    )
+)
+
 @Generated
 fun ChangeSetTransition.asList() = listOf(this)

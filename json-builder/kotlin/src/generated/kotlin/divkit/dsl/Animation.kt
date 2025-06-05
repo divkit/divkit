@@ -277,6 +277,40 @@ fun Animation.defer(
  * @param duration Animation duration in milliseconds.
  * @param endValue Final value of an animation.
  * @param interpolator Animation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
+ * @param items Animation elements.
+ * @param name Animation type.
+ * @param repeat Number of animation repetitions.
+ * @param startDelay Delay in milliseconds before animation starts.
+ * @param startValue Starting value of an animation.
+ */
+@Generated
+fun Animation.modify(
+    `use named arguments`: Guard = Guard.instance,
+    duration: Property<Int>? = null,
+    endValue: Property<Double>? = null,
+    interpolator: Property<AnimationInterpolator>? = null,
+    items: Property<List<Animation>>? = null,
+    name: Property<Animation.Name>? = null,
+    repeat: Property<Count>? = null,
+    startDelay: Property<Int>? = null,
+    startValue: Property<Double>? = null,
+): Animation = Animation(
+    Animation.Properties(
+        duration = duration ?: properties.duration,
+        endValue = endValue ?: properties.endValue,
+        interpolator = interpolator ?: properties.interpolator,
+        items = items ?: properties.items,
+        name = name ?: properties.name,
+        repeat = repeat ?: properties.repeat,
+        startDelay = startDelay ?: properties.startDelay,
+        startValue = startValue ?: properties.startValue,
+    )
+)
+
+/**
+ * @param duration Animation duration in milliseconds.
+ * @param endValue Final value of an animation.
+ * @param interpolator Animation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
  * @param name Animation type.
  * @param startDelay Delay in milliseconds before animation starts.
  * @param startValue Starting value of an animation.

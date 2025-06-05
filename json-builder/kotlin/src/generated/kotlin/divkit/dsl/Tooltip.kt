@@ -336,6 +336,49 @@ fun Tooltip.defer(
 )
 
 /**
+ * @param animationIn Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
+ * @param animationOut Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
+ * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
+ * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
+ * @param div An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
+ * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
+ * @param id Tooltip ID. It is used to avoid re-showing. It must be unique for all element tooltips.
+ * @param mode Tooltip modes.
+ * @param offset Shift relative to an anchor point.
+ * @param position The position of a tooltip relative to an element it belongs to.
+ * @param tapOutsideActions Specifies actions triggered by tapping outside the tooltip.
+ */
+@Generated
+fun Tooltip.modify(
+    `use named arguments`: Guard = Guard.instance,
+    animationIn: Property<Animation>? = null,
+    animationOut: Property<Animation>? = null,
+    backgroundAccessibilityDescription: Property<String>? = null,
+    closeByTapOutside: Property<Boolean>? = null,
+    div: Property<Div>? = null,
+    duration: Property<Int>? = null,
+    id: Property<String>? = null,
+    mode: Property<TooltipMode>? = null,
+    offset: Property<Point>? = null,
+    position: Property<Tooltip.Position>? = null,
+    tapOutsideActions: Property<List<Action>>? = null,
+): Tooltip = Tooltip(
+    Tooltip.Properties(
+        animationIn = animationIn ?: properties.animationIn,
+        animationOut = animationOut ?: properties.animationOut,
+        backgroundAccessibilityDescription = backgroundAccessibilityDescription ?: properties.backgroundAccessibilityDescription,
+        closeByTapOutside = closeByTapOutside ?: properties.closeByTapOutside,
+        div = div ?: properties.div,
+        duration = duration ?: properties.duration,
+        id = id ?: properties.id,
+        mode = mode ?: properties.mode,
+        offset = offset ?: properties.offset,
+        position = position ?: properties.position,
+        tapOutsideActions = tapOutsideActions ?: properties.tapOutsideActions,
+    )
+)
+
+/**
  * @param backgroundAccessibilityDescription Description for accessibility of the tap action on the background of the tooltip.
  * @param closeByTapOutside Allows dismissing tooltip by tapping outside of it.
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.

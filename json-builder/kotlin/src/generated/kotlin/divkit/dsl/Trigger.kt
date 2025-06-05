@@ -166,6 +166,25 @@ fun Trigger.defer(
 )
 
 /**
+ * @param actions Action when a trigger is activated.
+ * @param condition Condition for activating a trigger. For example, `liked && subscribed`.
+ * @param mode Trigger activation mode:<li>`on_condition` — a trigger is activated when the condition changes from `false` to `true`;</li><li>`on_variable` — a trigger is activated when the condition is met and the variable value changes.</li>
+ */
+@Generated
+fun Trigger.modify(
+    `use named arguments`: Guard = Guard.instance,
+    actions: Property<List<Action>>? = null,
+    condition: Property<Boolean>? = null,
+    mode: Property<Trigger.Mode>? = null,
+): Trigger = Trigger(
+    Trigger.Properties(
+        actions = actions ?: properties.actions,
+        condition = condition ?: properties.condition,
+        mode = mode ?: properties.mode,
+    )
+)
+
+/**
  * @param condition Condition for activating a trigger. For example, `liked && subscribed`.
  * @param mode Trigger activation mode:<li>`on_condition` — a trigger is activated when the condition changes from `false` to `true`;</li><li>`on_variable` — a trigger is activated when the condition is met and the variable value changes.</li>
  */

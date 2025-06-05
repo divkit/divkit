@@ -111,12 +111,14 @@ class DivanGenerator(Generator):
                     add_declaration(ent.params_comment_block(), ent.references_factory_method_declaration)
                     add_declaration(ent.params_comment_block(), ent.override_method_declaration)
                     add_declaration(ent.params_comment_block(), ent.defer_method_declaration)
+                    add_declaration(ent.params_comment_block(), ent.modify_method_declaration)
                     add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_method_declaration)
 
                     if self.supertype_entities.intersection(ent.supertypes_list):
                         add_declaration(ent.params_comment_block(), ent.override_component_method_declaration)
                         add_declaration(ent.params_comment_block(), ent.defer_component_method_declaration)
                         add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration)
+                        add_declaration(ent.params_comment_block(), ent.modify_component_method_declaration)
                         add_declaration(Text(), ent.operator_plus_component_declaration)
 
                 add_declaration(Text(), ent.as_list_method_declaration)

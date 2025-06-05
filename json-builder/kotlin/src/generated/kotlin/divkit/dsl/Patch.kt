@@ -219,6 +219,28 @@ fun Patch.defer(
 )
 
 /**
+ * @param changes Element changes.
+ * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
+ */
+@Generated
+fun Patch.modify(
+    `use named arguments`: Guard = Guard.instance,
+    changes: Property<List<Patch.Change>>? = null,
+    mode: Property<Patch.Mode>? = null,
+    onAppliedActions: Property<List<Action>>? = null,
+    onFailedActions: Property<List<Action>>? = null,
+): Patch = Patch(
+    Patch.Properties(
+        changes = changes ?: properties.changes,
+        mode = mode ?: properties.mode,
+        onAppliedActions = onAppliedActions ?: properties.onAppliedActions,
+        onFailedActions = onFailedActions ?: properties.onFailedActions,
+    )
+)
+
+/**
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
  */
 @Generated
@@ -306,6 +328,22 @@ fun Patch.Change.defer(
     `use named arguments`: Guard = Guard.instance,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Div>>? = null,
+): Patch.Change = Patch.Change(
+    Patch.Change.Properties(
+        id = id ?: properties.id,
+        items = items ?: properties.items,
+    )
+)
+
+/**
+ * @param id ID of an element to be replaced or removed.
+ * @param items Elements to be inserted. If the parameter isn't specified, the element will be removed.
+ */
+@Generated
+fun Patch.Change.modify(
+    `use named arguments`: Guard = Guard.instance,
+    id: Property<String>? = null,
+    items: Property<List<Div>>? = null,
 ): Patch.Change = Patch.Change(
     Patch.Change.Properties(
         id = id ?: properties.id,

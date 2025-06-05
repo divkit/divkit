@@ -2262,6 +2262,173 @@ fun Container.defer(
 
 /**
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Container.modify(
+    `use named arguments`: Guard = Guard.instance,
+    orientation: Property<Container.Orientation>? = null,
+    accessibility: Property<Accessibility>? = null,
+    action: Property<Action>? = null,
+    actionAnimation: Property<Animation>? = null,
+    actions: Property<List<Action>>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    aspect: Property<Aspect>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    captureFocusOnAction: Property<Boolean>? = null,
+    clipToBounds: Property<Boolean>? = null,
+    columnSpan: Property<Int>? = null,
+    contentAlignmentHorizontal: Property<ContentAlignmentHorizontal>? = null,
+    contentAlignmentVertical: Property<ContentAlignmentVertical>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    doubletapActions: Property<List<Action>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    hoverEndActions: Property<List<Action>>? = null,
+    hoverStartActions: Property<List<Action>>? = null,
+    id: Property<String>? = null,
+    itemBuilder: Property<CollectionItemBuilder>? = null,
+    items: Property<List<Div>>? = null,
+    layoutMode: Property<Container.LayoutMode>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    lineSeparator: Property<Container.Separator>? = null,
+    longtapActions: Property<List<Action>>? = null,
+    margins: Property<EdgeInsets>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    separator: Property<Container.Separator>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Container = Container(
+    Container.Properties(
+        orientation = orientation ?: properties.orientation,
+        accessibility = accessibility ?: properties.accessibility,
+        action = action ?: properties.action,
+        actionAnimation = actionAnimation ?: properties.actionAnimation,
+        actions = actions ?: properties.actions,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        aspect = aspect ?: properties.aspect,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        doubletapActions = doubletapActions ?: properties.doubletapActions,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
+        id = id ?: properties.id,
+        itemBuilder = itemBuilder ?: properties.itemBuilder,
+        items = items ?: properties.items,
+        layoutMode = layoutMode ?: properties.layoutMode,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        lineSeparator = lineSeparator ?: properties.lineSeparator,
+        longtapActions = longtapActions ?: properties.longtapActions,
+        margins = margins ?: properties.margins,
+        paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        separator = separator ?: properties.separator,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -2773,6 +2940,174 @@ fun Component<Container>.evaluate(
     ).mergeWith(properties)
 )
 
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Container>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    orientation: Property<Container.Orientation>? = null,
+    accessibility: Property<Accessibility>? = null,
+    action: Property<Action>? = null,
+    actionAnimation: Property<Animation>? = null,
+    actions: Property<List<Action>>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    aspect: Property<Aspect>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    captureFocusOnAction: Property<Boolean>? = null,
+    clipToBounds: Property<Boolean>? = null,
+    columnSpan: Property<Int>? = null,
+    contentAlignmentHorizontal: Property<ContentAlignmentHorizontal>? = null,
+    contentAlignmentVertical: Property<ContentAlignmentVertical>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    doubletapActions: Property<List<Action>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    hoverEndActions: Property<List<Action>>? = null,
+    hoverStartActions: Property<List<Action>>? = null,
+    id: Property<String>? = null,
+    itemBuilder: Property<CollectionItemBuilder>? = null,
+    items: Property<List<Div>>? = null,
+    layoutMode: Property<Container.LayoutMode>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    lineSeparator: Property<Container.Separator>? = null,
+    longtapActions: Property<List<Action>>? = null,
+    margins: Property<EdgeInsets>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    separator: Property<Container.Separator>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Container> = Component(
+    template = template,
+    properties = Container.Properties(
+        orientation = orientation,
+        accessibility = accessibility,
+        action = action,
+        actionAnimation = actionAnimation,
+        actions = actions,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        aspect = aspect,
+        background = background,
+        border = border,
+        captureFocusOnAction = captureFocusOnAction,
+        clipToBounds = clipToBounds,
+        columnSpan = columnSpan,
+        contentAlignmentHorizontal = contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical,
+        disappearActions = disappearActions,
+        doubletapActions = doubletapActions,
+        extensions = extensions,
+        focus = focus,
+        functions = functions,
+        height = height,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
+        id = id,
+        itemBuilder = itemBuilder,
+        items = items,
+        layoutMode = layoutMode,
+        layoutProvider = layoutProvider,
+        lineSeparator = lineSeparator,
+        longtapActions = longtapActions,
+        margins = margins,
+        paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        selectedActions = selectedActions,
+        separator = separator,
+        tooltips = tooltips,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
+    ).mergeWith(properties)
+)
+
 @Generated
 operator fun Component<Container>.plus(additive: Container.Properties): Component<Container> = Component(
     template = template,
@@ -2899,6 +3234,31 @@ fun Container.Separator.defer(
     showAtStart: ReferenceProperty<Boolean>? = null,
     showBetween: ReferenceProperty<Boolean>? = null,
     style: ReferenceProperty<Drawable>? = null,
+): Container.Separator = Container.Separator(
+    Container.Separator.Properties(
+        margins = margins ?: properties.margins,
+        showAtEnd = showAtEnd ?: properties.showAtEnd,
+        showAtStart = showAtStart ?: properties.showAtStart,
+        showBetween = showBetween ?: properties.showBetween,
+        style = style ?: properties.style,
+    )
+)
+
+/**
+ * @param margins External margins from the element stroke.
+ * @param showAtEnd Enables displaying the separator after the last item.
+ * @param showAtStart Enables displaying the separator before the first item.
+ * @param showBetween Enables displaying the separator between items.
+ * @param style Separator style.
+ */
+@Generated
+fun Container.Separator.modify(
+    `use named arguments`: Guard = Guard.instance,
+    margins: Property<EdgeInsets>? = null,
+    showAtEnd: Property<Boolean>? = null,
+    showAtStart: Property<Boolean>? = null,
+    showBetween: Property<Boolean>? = null,
+    style: Property<Drawable>? = null,
 ): Container.Separator = Container.Separator(
     Container.Separator.Properties(
         margins = margins ?: properties.margins,

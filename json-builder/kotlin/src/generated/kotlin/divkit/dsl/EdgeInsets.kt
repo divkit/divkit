@@ -246,6 +246,36 @@ fun EdgeInsets.defer(
  * @param top Top margin.
  */
 @Generated
+fun EdgeInsets.modify(
+    `use named arguments`: Guard = Guard.instance,
+    bottom: Property<Int>? = null,
+    end: Property<Int>? = null,
+    left: Property<Int>? = null,
+    right: Property<Int>? = null,
+    start: Property<Int>? = null,
+    top: Property<Int>? = null,
+    unit: Property<SizeUnit>? = null,
+): EdgeInsets = EdgeInsets(
+    EdgeInsets.Properties(
+        bottom = bottom ?: properties.bottom,
+        end = end ?: properties.end,
+        left = left ?: properties.left,
+        right = right ?: properties.right,
+        start = start ?: properties.start,
+        top = top ?: properties.top,
+        unit = unit ?: properties.unit,
+    )
+)
+
+/**
+ * @param bottom Bottom margin.
+ * @param end End margin. Margin position depends on the interface orientation. Has higher priority than the left and right margins.
+ * @param left Left margin.
+ * @param right Right margin.
+ * @param start Start margin. Margin position depends on the interface orientation. Has higher priority than the left and right margins.
+ * @param top Top margin.
+ */
+@Generated
 fun EdgeInsets.evaluate(
     `use named arguments`: Guard = Guard.instance,
     bottom: ExpressionProperty<Int>? = null,

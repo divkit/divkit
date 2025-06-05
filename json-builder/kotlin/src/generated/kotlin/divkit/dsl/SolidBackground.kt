@@ -119,6 +119,19 @@ fun SolidBackground.defer(
  * @param color Color.
  */
 @Generated
+fun SolidBackground.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+): SolidBackground = SolidBackground(
+    SolidBackground.Properties(
+        color = color ?: properties.color,
+    )
+)
+
+/**
+ * @param color Color.
+ */
+@Generated
 fun SolidBackground.evaluate(
     `use named arguments`: Guard = Guard.instance,
     color: ExpressionProperty<Color>? = null,

@@ -138,6 +138,22 @@ fun ColorVariable.defer(
 )
 
 /**
+ * @param name Variable name.
+ * @param value Value. Supports expressions for variable initialization.
+ */
+@Generated
+fun ColorVariable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    name: Property<String>? = null,
+    value: Property<Color>? = null,
+): ColorVariable = ColorVariable(
+    ColorVariable.Properties(
+        name = name ?: properties.name,
+        value = value ?: properties.value,
+    )
+)
+
+/**
  * @param value Value. Supports expressions for variable initialization.
  */
 @Generated

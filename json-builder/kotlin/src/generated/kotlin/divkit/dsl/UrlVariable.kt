@@ -138,6 +138,22 @@ fun UrlVariable.defer(
 )
 
 /**
+ * @param name Variable name.
+ * @param value Value. Supports expressions for variable initialization.
+ */
+@Generated
+fun UrlVariable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    name: Property<String>? = null,
+    value: Property<Url>? = null,
+): UrlVariable = UrlVariable(
+    UrlVariable.Properties(
+        name = name ?: properties.name,
+        value = value ?: properties.value,
+    )
+)
+
+/**
  * @param value Value. Supports expressions for variable initialization.
  */
 @Generated

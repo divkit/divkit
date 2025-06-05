@@ -137,5 +137,21 @@ fun DictVariable.defer(
     )
 )
 
+/**
+ * @param name Variable name.
+ * @param value Value. Supports expressions for variable initialization.
+ */
+@Generated
+fun DictVariable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    name: Property<String>? = null,
+    value: Property<Map<String, Any>>? = null,
+): DictVariable = DictVariable(
+    DictVariable.Properties(
+        name = name ?: properties.name,
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun DictVariable.asList() = listOf(this)

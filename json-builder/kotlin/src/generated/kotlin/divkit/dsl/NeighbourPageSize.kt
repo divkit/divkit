@@ -116,5 +116,18 @@ fun NeighbourPageSize.defer(
     )
 )
 
+/**
+ * @param neighbourPageWidth Width of the visible part of a neighbouring page.
+ */
+@Generated
+fun NeighbourPageSize.modify(
+    `use named arguments`: Guard = Guard.instance,
+    neighbourPageWidth: Property<FixedSize>? = null,
+): NeighbourPageSize = NeighbourPageSize(
+    NeighbourPageSize.Properties(
+        neighbourPageWidth = neighbourPageWidth ?: properties.neighbourPageWidth,
+    )
+)
+
 @Generated
 fun NeighbourPageSize.asList() = listOf(this)

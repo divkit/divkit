@@ -120,6 +120,19 @@ fun PivotPercentage.defer(
  * @param value Coordinate value as a percentage.
  */
 @Generated
+fun PivotPercentage.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Double>? = null,
+): PivotPercentage = PivotPercentage(
+    PivotPercentage.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param value Coordinate value as a percentage.
+ */
+@Generated
 fun PivotPercentage.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Double>? = null,

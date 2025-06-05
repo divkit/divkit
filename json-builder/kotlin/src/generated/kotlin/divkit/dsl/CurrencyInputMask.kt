@@ -139,6 +139,22 @@ fun CurrencyInputMask.defer(
 
 /**
  * @param locale Language tag that the currency format should match, as per [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag). If the language is not set, it is defined automatically.
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
+ */
+@Generated
+fun CurrencyInputMask.modify(
+    `use named arguments`: Guard = Guard.instance,
+    locale: Property<String>? = null,
+    rawTextVariable: Property<String>? = null,
+): CurrencyInputMask = CurrencyInputMask(
+    CurrencyInputMask.Properties(
+        locale = locale ?: properties.locale,
+        rawTextVariable = rawTextVariable ?: properties.rawTextVariable,
+    )
+)
+
+/**
+ * @param locale Language tag that the currency format should match, as per [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag). If the language is not set, it is defined automatically.
  */
 @Generated
 fun CurrencyInputMask.evaluate(

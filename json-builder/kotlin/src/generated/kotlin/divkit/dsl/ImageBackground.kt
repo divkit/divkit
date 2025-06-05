@@ -251,6 +251,37 @@ fun ImageBackground.defer(
  * @param alpha Image transparency.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param filters Image filters.
+ * @param imageUrl Image URL.
+ * @param preloadRequired Background image must be loaded before the display.
+ * @param scale Image scaling.
+ */
+@Generated
+fun ImageBackground.modify(
+    `use named arguments`: Guard = Guard.instance,
+    alpha: Property<Double>? = null,
+    contentAlignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: Property<AlignmentVertical>? = null,
+    filters: Property<List<Filter>>? = null,
+    imageUrl: Property<Url>? = null,
+    preloadRequired: Property<Boolean>? = null,
+    scale: Property<ImageScale>? = null,
+): ImageBackground = ImageBackground(
+    ImageBackground.Properties(
+        alpha = alpha ?: properties.alpha,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        filters = filters ?: properties.filters,
+        imageUrl = imageUrl ?: properties.imageUrl,
+        preloadRequired = preloadRequired ?: properties.preloadRequired,
+        scale = scale ?: properties.scale,
+    )
+)
+
+/**
+ * @param alpha Image transparency.
+ * @param contentAlignmentHorizontal Horizontal image alignment.
+ * @param contentAlignmentVertical Vertical image alignment.
  * @param imageUrl Image URL.
  * @param preloadRequired Background image must be loaded before the display.
  * @param scale Image scaling.

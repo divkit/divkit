@@ -143,6 +143,22 @@ fun FixedSize.defer(
  * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  */
 @Generated
+fun FixedSize.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Int>? = null,
+    unit: Property<SizeUnit>? = null,
+): FixedSize = FixedSize(
+    FixedSize.Properties(
+        value = value ?: properties.value,
+        unit = unit ?: properties.unit,
+    )
+)
+
+/**
+ * @param value Element size.
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ */
+@Generated
 fun FixedSize.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Int>? = null,

@@ -120,6 +120,19 @@ fun RadialGradientRelativeCenter.defer(
  * @param value Coordinate value in the range "0...1".
  */
 @Generated
+fun RadialGradientRelativeCenter.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Double>? = null,
+): RadialGradientRelativeCenter = RadialGradientRelativeCenter(
+    RadialGradientRelativeCenter.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param value Coordinate value in the range "0...1".
+ */
+@Generated
 fun RadialGradientRelativeCenter.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Double>? = null,

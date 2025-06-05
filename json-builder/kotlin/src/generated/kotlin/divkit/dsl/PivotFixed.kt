@@ -141,6 +141,22 @@ fun PivotFixed.defer(
  * @param value Coordinate value.
  */
 @Generated
+fun PivotFixed.modify(
+    `use named arguments`: Guard = Guard.instance,
+    unit: Property<SizeUnit>? = null,
+    value: Property<Int>? = null,
+): PivotFixed = PivotFixed(
+    PivotFixed.Properties(
+        unit = unit ?: properties.unit,
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param value Coordinate value.
+ */
+@Generated
 fun PivotFixed.evaluate(
     `use named arguments`: Guard = Guard.instance,
     unit: ExpressionProperty<SizeUnit>? = null,

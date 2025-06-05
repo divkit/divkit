@@ -116,5 +116,18 @@ fun PageSize.defer(
     )
 )
 
+/**
+ * @param pageWidth Page width as a percentage of the parent element width.
+ */
+@Generated
+fun PageSize.modify(
+    `use named arguments`: Guard = Guard.instance,
+    pageWidth: Property<PercentageSize>? = null,
+): PageSize = PageSize(
+    PageSize.Properties(
+        pageWidth = pageWidth ?: properties.pageWidth,
+    )
+)
+
 @Generated
 fun PageSize.asList() = listOf(this)

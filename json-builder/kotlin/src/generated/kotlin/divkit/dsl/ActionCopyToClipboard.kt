@@ -99,4 +99,14 @@ fun ActionCopyToClipboard.defer(
 )
 
 @Generated
+fun ActionCopyToClipboard.modify(
+    `use named arguments`: Guard = Guard.instance,
+    content: Property<ActionCopyToClipboardContent>? = null,
+): ActionCopyToClipboard = ActionCopyToClipboard(
+    ActionCopyToClipboard.Properties(
+        content = content ?: properties.content,
+    )
+)
+
+@Generated
 fun ActionCopyToClipboard.asList() = listOf(this)

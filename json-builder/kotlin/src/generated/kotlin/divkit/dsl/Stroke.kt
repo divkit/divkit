@@ -176,6 +176,27 @@ fun Stroke.defer(
 
 /**
  * @param color Stroke color.
+ * @param style Stroke style. Supported for border stroke only.
+ * @param width Stroke width.
+ */
+@Generated
+fun Stroke.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+    style: Property<StrokeStyle>? = null,
+    unit: Property<SizeUnit>? = null,
+    width: Property<Double>? = null,
+): Stroke = Stroke(
+    Stroke.Properties(
+        color = color ?: properties.color,
+        style = style ?: properties.style,
+        unit = unit ?: properties.unit,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param color Stroke color.
  * @param width Stroke width.
  */
 @Generated

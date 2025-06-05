@@ -1086,6 +1086,150 @@ fun Select.defer(
 )
 
 /**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
+ * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Select.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    fontFamily: Property<String>? = null,
+    fontSize: Property<Int>? = null,
+    fontSizeUnit: Property<SizeUnit>? = null,
+    fontVariationSettings: Property<Map<String, Any>>? = null,
+    fontWeight: Property<FontWeight>? = null,
+    fontWeightValue: Property<Int>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    hintColor: Property<Color>? = null,
+    hintText: Property<String>? = null,
+    id: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    letterSpacing: Property<Double>? = null,
+    lineHeight: Property<Int>? = null,
+    margins: Property<EdgeInsets>? = null,
+    options: Property<List<Select.Option>>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    textColor: Property<Color>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    valueVariable: Property<String>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Select = Select(
+    Select.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        fontFamily = fontFamily ?: properties.fontFamily,
+        fontSize = fontSize ?: properties.fontSize,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
+        fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        hintColor = hintColor ?: properties.hintColor,
+        hintText = hintText ?: properties.hintText,
+        id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
+        lineHeight = lineHeight ?: properties.lineHeight,
+        margins = margins ?: properties.margins,
+        options = options ?: properties.options,
+        paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        textColor = textColor ?: properties.textColor,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        valueVariable = valueVariable ?: properties.valueVariable,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -1554,6 +1698,151 @@ fun Component<Select>.evaluate(
     ).mergeWith(properties)
 )
 
+/**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
+ * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Select>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    fontFamily: Property<String>? = null,
+    fontSize: Property<Int>? = null,
+    fontSizeUnit: Property<SizeUnit>? = null,
+    fontVariationSettings: Property<Map<String, Any>>? = null,
+    fontWeight: Property<FontWeight>? = null,
+    fontWeightValue: Property<Int>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    hintColor: Property<Color>? = null,
+    hintText: Property<String>? = null,
+    id: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    letterSpacing: Property<Double>? = null,
+    lineHeight: Property<Int>? = null,
+    margins: Property<EdgeInsets>? = null,
+    options: Property<List<Select.Option>>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    textColor: Property<Color>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    valueVariable: Property<String>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Select> = Component(
+    template = template,
+    properties = Select.Properties(
+        accessibility = accessibility,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        background = background,
+        border = border,
+        columnSpan = columnSpan,
+        disappearActions = disappearActions,
+        extensions = extensions,
+        focus = focus,
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        fontSizeUnit = fontSizeUnit,
+        fontVariationSettings = fontVariationSettings,
+        fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
+        functions = functions,
+        height = height,
+        hintColor = hintColor,
+        hintText = hintText,
+        id = id,
+        layoutProvider = layoutProvider,
+        letterSpacing = letterSpacing,
+        lineHeight = lineHeight,
+        margins = margins,
+        options = options,
+        paddings = paddings,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        selectedActions = selectedActions,
+        textColor = textColor,
+        tooltips = tooltips,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        valueVariable = valueVariable,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
+    ).mergeWith(properties)
+)
+
 @Generated
 operator fun Component<Select>.plus(additive: Select.Properties): Component<Select> = Component(
     template = template,
@@ -1632,6 +1921,22 @@ fun Select.Option.defer(
     `use named arguments`: Guard = Guard.instance,
     text: ReferenceProperty<String>? = null,
     value: ReferenceProperty<String>? = null,
+): Select.Option = Select.Option(
+    Select.Option.Properties(
+        text = text ?: properties.text,
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param text Text description of the option displayed in the list. If not set, `value` is used instead.
+ * @param value Value matching the option.
+ */
+@Generated
+fun Select.Option.modify(
+    `use named arguments`: Guard = Guard.instance,
+    text: Property<String>? = null,
+    value: Property<String>? = null,
 ): Select.Option = Select.Option(
     Select.Option.Properties(
         text = text ?: properties.text,

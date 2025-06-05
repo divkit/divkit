@@ -120,6 +120,19 @@ fun FixedCount.defer(
  * @param value Number of repetitions.
  */
 @Generated
+fun FixedCount.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Int>? = null,
+): FixedCount = FixedCount(
+    FixedCount.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param value Number of repetitions.
+ */
+@Generated
 fun FixedCount.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Int>? = null,

@@ -125,6 +125,20 @@ fun ActionDictSetValue.defer(
 )
 
 @Generated
+fun ActionDictSetValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    key: Property<String>? = null,
+    value: Property<TypedValue>? = null,
+    variableName: Property<String>? = null,
+): ActionDictSetValue = ActionDictSetValue(
+    ActionDictSetValue.Properties(
+        key = key ?: properties.key,
+        value = value ?: properties.value,
+        variableName = variableName ?: properties.variableName,
+    )
+)
+
+@Generated
 fun ActionDictSetValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     key: ExpressionProperty<String>? = null,

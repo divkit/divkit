@@ -143,6 +143,22 @@ fun ActionSetState.defer(
  * @param temporary Indicates a state change:<li>`true` — the change is temporary and will switch to the original one (default value) when the element is recreated</li><li>`false` — the change is permanent</li>
  */
 @Generated
+fun ActionSetState.modify(
+    `use named arguments`: Guard = Guard.instance,
+    stateId: Property<String>? = null,
+    temporary: Property<Boolean>? = null,
+): ActionSetState = ActionSetState(
+    ActionSetState.Properties(
+        stateId = stateId ?: properties.stateId,
+        temporary = temporary ?: properties.temporary,
+    )
+)
+
+/**
+ * @param stateId The path of the state inside `state` that needs to be activated. Set in the format `div_data_state_id/id/state_id'. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of:<li>`div_data_state_id` — the numeric value of the `state_id` of the `state` object in `data`</li><li>'id` — the `id` value of the `state` object</li><li>`state_id` — the `state_id` value of the `state` object in `state`</li>
+ * @param temporary Indicates a state change:<li>`true` — the change is temporary and will switch to the original one (default value) when the element is recreated</li><li>`false` — the change is permanent</li>
+ */
+@Generated
 fun ActionSetState.evaluate(
     `use named arguments`: Guard = Guard.instance,
     stateId: ExpressionProperty<String>? = null,

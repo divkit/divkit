@@ -240,6 +240,31 @@ fun Focus.defer(
     )
 )
 
+/**
+ * @param background Background of an element when it is in focus. It can contain multiple layers.
+ * @param border Border of an element when it's in focus.
+ * @param nextFocusIds IDs of elements that will be next to get focus.
+ * @param onBlur Actions when an element loses focus.
+ * @param onFocus Actions when an element gets focus.
+ */
+@Generated
+fun Focus.modify(
+    `use named arguments`: Guard = Guard.instance,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    nextFocusIds: Property<Focus.NextFocusIds>? = null,
+    onBlur: Property<List<Action>>? = null,
+    onFocus: Property<List<Action>>? = null,
+): Focus = Focus(
+    Focus.Properties(
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        nextFocusIds = nextFocusIds ?: properties.nextFocusIds,
+        onBlur = onBlur ?: properties.onBlur,
+        onFocus = onFocus ?: properties.onFocus,
+    )
+)
+
 @Generated
 fun Focus.asList() = listOf(this)
 
@@ -319,6 +344,24 @@ fun Focus.NextFocusIds.defer(
     left: ReferenceProperty<String>? = null,
     right: ReferenceProperty<String>? = null,
     up: ReferenceProperty<String>? = null,
+): Focus.NextFocusIds = Focus.NextFocusIds(
+    Focus.NextFocusIds.Properties(
+        down = down ?: properties.down,
+        forward = forward ?: properties.forward,
+        left = left ?: properties.left,
+        right = right ?: properties.right,
+        up = up ?: properties.up,
+    )
+)
+
+@Generated
+fun Focus.NextFocusIds.modify(
+    `use named arguments`: Guard = Guard.instance,
+    down: Property<String>? = null,
+    forward: Property<String>? = null,
+    left: Property<String>? = null,
+    right: Property<String>? = null,
+    up: Property<String>? = null,
 ): Focus.NextFocusIds = Focus.NextFocusIds(
     Focus.NextFocusIds.Properties(
         down = down ?: properties.down,

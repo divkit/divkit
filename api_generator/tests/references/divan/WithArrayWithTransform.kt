@@ -101,6 +101,16 @@ fun WithArrayWithTransform.defer(
 )
 
 @Generated
+fun WithArrayWithTransform.modify(
+    `use named arguments`: Guard = Guard.instance,
+    array: Property<List<ArrayElement<Color>>>? = null,
+): WithArrayWithTransform = WithArrayWithTransform(
+    WithArrayWithTransform.Properties(
+        array = array ?: properties.array,
+    )
+)
+
+@Generated
 fun Component<WithArrayWithTransform>.override(
     `use named arguments`: Guard = Guard.instance,
     array: List<ArrayElement<Color>>? = null,
@@ -115,6 +125,17 @@ fun Component<WithArrayWithTransform>.override(
 fun Component<WithArrayWithTransform>.defer(
     `use named arguments`: Guard = Guard.instance,
     array: ReferenceProperty<List<ArrayElement<Color>>>? = null,
+): Component<WithArrayWithTransform> = Component(
+    template = template,
+    properties = WithArrayWithTransform.Properties(
+        array = array,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithArrayWithTransform>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    array: Property<List<ArrayElement<Color>>>? = null,
 ): Component<WithArrayWithTransform> = Component(
     template = template,
     properties = WithArrayWithTransform.Properties(

@@ -1235,6 +1235,157 @@ fun Slider.defer(
 )
 
 /**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param maxValue Maximum value. It must be greater than the minimum value.
+ * @param minValue Minimum value.
+ * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param secondaryValueAccessibility Accessibility settings for the second pointer.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param thumbSecondaryStyle Style of the second pointer.
+ * @param thumbSecondaryTextStyle Text style in the second pointer.
+ * @param thumbSecondaryValueVariable Name of the variable to store the second pointer's current value.
+ * @param thumbStyle Style of the first pointer.
+ * @param thumbTextStyle Text style in the first pointer.
+ * @param thumbValueVariable Name of the variable to store the pointer's current value.
+ * @param tickMarkActiveStyle Style of active serifs.
+ * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Slider.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    isEnabled: Property<Boolean>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    maxValue: Property<Int>? = null,
+    minValue: Property<Int>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    ranges: Property<List<Slider.Range>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    secondaryValueAccessibility: Property<Accessibility>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    thumbSecondaryStyle: Property<Drawable>? = null,
+    thumbSecondaryTextStyle: Property<Slider.TextStyle>? = null,
+    thumbSecondaryValueVariable: Property<String>? = null,
+    thumbStyle: Property<Drawable>? = null,
+    thumbTextStyle: Property<Slider.TextStyle>? = null,
+    thumbValueVariable: Property<String>? = null,
+    tickMarkActiveStyle: Property<Drawable>? = null,
+    tickMarkInactiveStyle: Property<Drawable>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    trackActiveStyle: Property<Drawable>? = null,
+    trackInactiveStyle: Property<Drawable>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Slider = Slider(
+    Slider.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        id = id ?: properties.id,
+        isEnabled = isEnabled ?: properties.isEnabled,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        margins = margins ?: properties.margins,
+        maxValue = maxValue ?: properties.maxValue,
+        minValue = minValue ?: properties.minValue,
+        paddings = paddings ?: properties.paddings,
+        ranges = ranges ?: properties.ranges,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        secondaryValueAccessibility = secondaryValueAccessibility ?: properties.secondaryValueAccessibility,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        thumbSecondaryStyle = thumbSecondaryStyle ?: properties.thumbSecondaryStyle,
+        thumbSecondaryTextStyle = thumbSecondaryTextStyle ?: properties.thumbSecondaryTextStyle,
+        thumbSecondaryValueVariable = thumbSecondaryValueVariable ?: properties.thumbSecondaryValueVariable,
+        thumbStyle = thumbStyle ?: properties.thumbStyle,
+        thumbTextStyle = thumbTextStyle ?: properties.thumbTextStyle,
+        thumbValueVariable = thumbValueVariable ?: properties.thumbValueVariable,
+        tickMarkActiveStyle = tickMarkActiveStyle ?: properties.tickMarkActiveStyle,
+        tickMarkInactiveStyle = tickMarkInactiveStyle ?: properties.tickMarkInactiveStyle,
+        tooltips = tooltips ?: properties.tooltips,
+        trackActiveStyle = trackActiveStyle ?: properties.trackActiveStyle,
+        trackInactiveStyle = trackInactiveStyle ?: properties.trackInactiveStyle,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -1693,6 +1844,158 @@ fun Component<Slider>.evaluate(
     ).mergeWith(properties)
 )
 
+/**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables toggling values by clicking or swiping.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param maxValue Maximum value. It must be greater than the minimum value.
+ * @param minValue Minimum value.
+ * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param secondaryValueAccessibility Accessibility settings for the second pointer.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param thumbSecondaryStyle Style of the second pointer.
+ * @param thumbSecondaryTextStyle Text style in the second pointer.
+ * @param thumbSecondaryValueVariable Name of the variable to store the second pointer's current value.
+ * @param thumbStyle Style of the first pointer.
+ * @param thumbTextStyle Text style in the first pointer.
+ * @param thumbValueVariable Name of the variable to store the pointer's current value.
+ * @param tickMarkActiveStyle Style of active serifs.
+ * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Slider>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    isEnabled: Property<Boolean>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    maxValue: Property<Int>? = null,
+    minValue: Property<Int>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    ranges: Property<List<Slider.Range>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    secondaryValueAccessibility: Property<Accessibility>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    thumbSecondaryStyle: Property<Drawable>? = null,
+    thumbSecondaryTextStyle: Property<Slider.TextStyle>? = null,
+    thumbSecondaryValueVariable: Property<String>? = null,
+    thumbStyle: Property<Drawable>? = null,
+    thumbTextStyle: Property<Slider.TextStyle>? = null,
+    thumbValueVariable: Property<String>? = null,
+    tickMarkActiveStyle: Property<Drawable>? = null,
+    tickMarkInactiveStyle: Property<Drawable>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    trackActiveStyle: Property<Drawable>? = null,
+    trackInactiveStyle: Property<Drawable>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Slider> = Component(
+    template = template,
+    properties = Slider.Properties(
+        accessibility = accessibility,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        background = background,
+        border = border,
+        columnSpan = columnSpan,
+        disappearActions = disappearActions,
+        extensions = extensions,
+        focus = focus,
+        functions = functions,
+        height = height,
+        id = id,
+        isEnabled = isEnabled,
+        layoutProvider = layoutProvider,
+        margins = margins,
+        maxValue = maxValue,
+        minValue = minValue,
+        paddings = paddings,
+        ranges = ranges,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        secondaryValueAccessibility = secondaryValueAccessibility,
+        selectedActions = selectedActions,
+        thumbSecondaryStyle = thumbSecondaryStyle,
+        thumbSecondaryTextStyle = thumbSecondaryTextStyle,
+        thumbSecondaryValueVariable = thumbSecondaryValueVariable,
+        thumbStyle = thumbStyle,
+        thumbTextStyle = thumbTextStyle,
+        thumbValueVariable = thumbValueVariable,
+        tickMarkActiveStyle = tickMarkActiveStyle,
+        tickMarkInactiveStyle = tickMarkInactiveStyle,
+        tooltips = tooltips,
+        trackActiveStyle = trackActiveStyle,
+        trackInactiveStyle = trackInactiveStyle,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
+    ).mergeWith(properties)
+)
+
 @Generated
 operator fun Component<Slider>.plus(additive: Slider.Properties): Component<Slider> = Component(
     template = template,
@@ -1813,6 +2116,31 @@ fun Slider.Range.defer(
     start: ReferenceProperty<Int>? = null,
     trackActiveStyle: ReferenceProperty<Drawable>? = null,
     trackInactiveStyle: ReferenceProperty<Drawable>? = null,
+): Slider.Range = Slider.Range(
+    Slider.Range.Properties(
+        end = end ?: properties.end,
+        margins = margins ?: properties.margins,
+        start = start ?: properties.start,
+        trackActiveStyle = trackActiveStyle ?: properties.trackActiveStyle,
+        trackInactiveStyle = trackInactiveStyle ?: properties.trackInactiveStyle,
+    )
+)
+
+/**
+ * @param end End of section.
+ * @param margins Section margins. Only uses horizontal margins.
+ * @param start Start of section.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ */
+@Generated
+fun Slider.Range.modify(
+    `use named arguments`: Guard = Guard.instance,
+    end: Property<Int>? = null,
+    margins: Property<EdgeInsets>? = null,
+    start: Property<Int>? = null,
+    trackActiveStyle: Property<Drawable>? = null,
+    trackInactiveStyle: Property<Drawable>? = null,
 ): Slider.Range = Slider.Range(
     Slider.Range.Properties(
         end = end ?: properties.end,
@@ -2012,6 +2340,43 @@ fun Slider.TextStyle.defer(
     letterSpacing: ReferenceProperty<Double>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
+): Slider.TextStyle = Slider.TextStyle(
+    Slider.TextStyle.Properties(
+        fontFamily = fontFamily ?: properties.fontFamily,
+        fontSize = fontSize ?: properties.fontSize,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
+        fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
+        offset = offset ?: properties.offset,
+        textColor = textColor ?: properties.textColor,
+    )
+)
+
+/**
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
+ * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
+ * @param offset Shift relative to the center.
+ * @param textColor Text color.
+ */
+@Generated
+fun Slider.TextStyle.modify(
+    `use named arguments`: Guard = Guard.instance,
+    fontFamily: Property<String>? = null,
+    fontSize: Property<Int>? = null,
+    fontSizeUnit: Property<SizeUnit>? = null,
+    fontVariationSettings: Property<Map<String, Any>>? = null,
+    fontWeight: Property<FontWeight>? = null,
+    fontWeightValue: Property<Int>? = null,
+    letterSpacing: Property<Double>? = null,
+    offset: Property<Point>? = null,
+    textColor: Property<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
         fontFamily = fontFamily ?: properties.fontFamily,

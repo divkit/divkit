@@ -209,6 +209,31 @@ fun TextRangeMaskParticles.defer(
  * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
  * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
  * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ * @param particleSize The size of a single particle on the mask.
+ */
+@Generated
+fun TextRangeMaskParticles.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+    density: Property<Double>? = null,
+    isAnimated: Property<Boolean>? = null,
+    isEnabled: Property<Boolean>? = null,
+    particleSize: Property<FixedSize>? = null,
+): TextRangeMaskParticles = TextRangeMaskParticles(
+    TextRangeMaskParticles.Properties(
+        color = color ?: properties.color,
+        density = density ?: properties.density,
+        isAnimated = isAnimated ?: properties.isAnimated,
+        isEnabled = isEnabled ?: properties.isEnabled,
+        particleSize = particleSize ?: properties.particleSize,
+    )
+)
+
+/**
+ * @param color The color of particles on the mask.
+ * @param density The density of particles on the mask. Interpreted as the probability of a particle to appear in a given point on the mask.
+ * @param isAnimated Enables animation for particles on the mask. The animation looks like a smooth movement of particles across the mask, same as in Telegram.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
 fun TextRangeMaskParticles.evaluate(

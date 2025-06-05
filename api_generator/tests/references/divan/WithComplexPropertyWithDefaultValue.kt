@@ -136,6 +136,16 @@ fun WithComplexPropertyWithDefaultValue.defer(
 )
 
 @Generated
+fun WithComplexPropertyWithDefaultValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithComplexPropertyWithDefaultValue.Property>? = null,
+): WithComplexPropertyWithDefaultValue = WithComplexPropertyWithDefaultValue(
+    WithComplexPropertyWithDefaultValue.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun Component<WithComplexPropertyWithDefaultValue>.override(
     `use named arguments`: Guard = Guard.instance,
     property: WithComplexPropertyWithDefaultValue.Property? = null,
@@ -150,6 +160,17 @@ fun Component<WithComplexPropertyWithDefaultValue>.override(
 fun Component<WithComplexPropertyWithDefaultValue>.defer(
     `use named arguments`: Guard = Guard.instance,
     property: ReferenceProperty<WithComplexPropertyWithDefaultValue.Property>? = null,
+): Component<WithComplexPropertyWithDefaultValue> = Component(
+    template = template,
+    properties = WithComplexPropertyWithDefaultValue.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithComplexPropertyWithDefaultValue>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithComplexPropertyWithDefaultValue.Property>? = null,
 ): Component<WithComplexPropertyWithDefaultValue> = Component(
     template = template,
     properties = WithComplexPropertyWithDefaultValue.Properties(
@@ -206,6 +227,16 @@ fun WithComplexPropertyWithDefaultValue.Property.override(
 fun WithComplexPropertyWithDefaultValue.Property.defer(
     `use named arguments`: Guard = Guard.instance,
     value: ReferenceProperty<String>? = null,
+): WithComplexPropertyWithDefaultValue.Property = WithComplexPropertyWithDefaultValue.Property(
+    WithComplexPropertyWithDefaultValue.Property.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
+fun WithComplexPropertyWithDefaultValue.Property.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<String>? = null,
 ): WithComplexPropertyWithDefaultValue.Property = WithComplexPropertyWithDefaultValue.Property(
     WithComplexPropertyWithDefaultValue.Property.Properties(
         value = value ?: properties.value,

@@ -133,6 +133,16 @@ fun WithComplexProperty.defer(
 )
 
 @Generated
+fun WithComplexProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithComplexProperty.Property>? = null,
+): WithComplexProperty = WithComplexProperty(
+    WithComplexProperty.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun Component<WithComplexProperty>.override(
     `use named arguments`: Guard = Guard.instance,
     property: WithComplexProperty.Property? = null,
@@ -147,6 +157,17 @@ fun Component<WithComplexProperty>.override(
 fun Component<WithComplexProperty>.defer(
     `use named arguments`: Guard = Guard.instance,
     property: ReferenceProperty<WithComplexProperty.Property>? = null,
+): Component<WithComplexProperty> = Component(
+    template = template,
+    properties = WithComplexProperty.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithComplexProperty>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithComplexProperty.Property>? = null,
 ): Component<WithComplexProperty> = Component(
     template = template,
     properties = WithComplexProperty.Properties(
@@ -203,6 +224,16 @@ fun WithComplexProperty.Property.override(
 fun WithComplexProperty.Property.defer(
     `use named arguments`: Guard = Guard.instance,
     value: ReferenceProperty<Url>? = null,
+): WithComplexProperty.Property = WithComplexProperty.Property(
+    WithComplexProperty.Property.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
+fun WithComplexProperty.Property.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Url>? = null,
 ): WithComplexProperty.Property = WithComplexProperty.Property(
     WithComplexProperty.Property.Properties(
         value = value ?: properties.value,

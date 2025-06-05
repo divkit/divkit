@@ -1945,6 +1945,223 @@ fun Text.defer(
 
 /**
  * @param text Text.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autoEllipsize Automatic text cropping to fit the container size.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param focusedTextColor Text color when focusing on the element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
+ * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param images Images embedded in text.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
+ * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
+ * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
+ * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectable Ability to select and copy text.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param strike Strikethrough.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
+ * @param textColor Text color.
+ * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param truncate Location of text cropping marker.
+ * @param underline Underline.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Text.modify(
+    `use named arguments`: Guard = Guard.instance,
+    text: Property<String>? = null,
+    accessibility: Property<Accessibility>? = null,
+    action: Property<Action>? = null,
+    actionAnimation: Property<Animation>? = null,
+    actions: Property<List<Action>>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    autoEllipsize: Property<Boolean>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    captureFocusOnAction: Property<Boolean>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    doubletapActions: Property<List<Action>>? = null,
+    ellipsis: Property<Text.Ellipsis>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    focusedTextColor: Property<Color>? = null,
+    fontFamily: Property<String>? = null,
+    fontFeatureSettings: Property<String>? = null,
+    fontSize: Property<Int>? = null,
+    fontSizeUnit: Property<SizeUnit>? = null,
+    fontVariationSettings: Property<Map<String, Any>>? = null,
+    fontWeight: Property<FontWeight>? = null,
+    fontWeightValue: Property<Int>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    hoverEndActions: Property<List<Action>>? = null,
+    hoverStartActions: Property<List<Action>>? = null,
+    id: Property<String>? = null,
+    images: Property<List<Text.Image>>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    letterSpacing: Property<Double>? = null,
+    lineHeight: Property<Int>? = null,
+    longtapActions: Property<List<Action>>? = null,
+    margins: Property<EdgeInsets>? = null,
+    maxLines: Property<Int>? = null,
+    minHiddenLines: Property<Int>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
+    ranges: Property<List<Text.Range>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectable: Property<Boolean>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    strike: Property<LineStyle>? = null,
+    textAlignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    textAlignmentVertical: Property<AlignmentVertical>? = null,
+    textColor: Property<Color>? = null,
+    textGradient: Property<TextGradient>? = null,
+    textShadow: Property<Shadow>? = null,
+    tightenWidth: Property<Boolean>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    truncate: Property<Text.Truncate>? = null,
+    underline: Property<LineStyle>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Text = Text(
+    Text.Properties(
+        text = text ?: properties.text,
+        accessibility = accessibility ?: properties.accessibility,
+        action = action ?: properties.action,
+        actionAnimation = actionAnimation ?: properties.actionAnimation,
+        actions = actions ?: properties.actions,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        doubletapActions = doubletapActions ?: properties.doubletapActions,
+        ellipsis = ellipsis ?: properties.ellipsis,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        focusedTextColor = focusedTextColor ?: properties.focusedTextColor,
+        fontFamily = fontFamily ?: properties.fontFamily,
+        fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
+        fontSize = fontSize ?: properties.fontSize,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
+        fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
+        id = id ?: properties.id,
+        images = images ?: properties.images,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
+        lineHeight = lineHeight ?: properties.lineHeight,
+        longtapActions = longtapActions ?: properties.longtapActions,
+        margins = margins ?: properties.margins,
+        maxLines = maxLines ?: properties.maxLines,
+        minHiddenLines = minHiddenLines ?: properties.minHiddenLines,
+        paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
+        ranges = ranges ?: properties.ranges,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectable = selectable ?: properties.selectable,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        strike = strike ?: properties.strike,
+        textAlignmentHorizontal = textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
+        textColor = textColor ?: properties.textColor,
+        textGradient = textGradient ?: properties.textGradient,
+        textShadow = textShadow ?: properties.textShadow,
+        tightenWidth = tightenWidth ?: properties.tightenWidth,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        truncate = truncate ?: properties.truncate,
+        underline = underline ?: properties.underline,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param text Text.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -2654,6 +2871,224 @@ fun Component<Text>.evaluate(
     ).mergeWith(properties)
 )
 
+/**
+ * @param text Text.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autoEllipsize Automatic text cropping to fit the container size.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param focusedTextColor Text color when focusing on the element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
+ * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param images Images embedded in text.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
+ * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
+ * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
+ * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectable Ability to select and copy text.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param strike Strikethrough.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
+ * @param textColor Text color.
+ * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param truncate Location of text cropping marker.
+ * @param underline Underline.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Text>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    text: Property<String>? = null,
+    accessibility: Property<Accessibility>? = null,
+    action: Property<Action>? = null,
+    actionAnimation: Property<Animation>? = null,
+    actions: Property<List<Action>>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    autoEllipsize: Property<Boolean>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    captureFocusOnAction: Property<Boolean>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    doubletapActions: Property<List<Action>>? = null,
+    ellipsis: Property<Text.Ellipsis>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    focusedTextColor: Property<Color>? = null,
+    fontFamily: Property<String>? = null,
+    fontFeatureSettings: Property<String>? = null,
+    fontSize: Property<Int>? = null,
+    fontSizeUnit: Property<SizeUnit>? = null,
+    fontVariationSettings: Property<Map<String, Any>>? = null,
+    fontWeight: Property<FontWeight>? = null,
+    fontWeightValue: Property<Int>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    hoverEndActions: Property<List<Action>>? = null,
+    hoverStartActions: Property<List<Action>>? = null,
+    id: Property<String>? = null,
+    images: Property<List<Text.Image>>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    letterSpacing: Property<Double>? = null,
+    lineHeight: Property<Int>? = null,
+    longtapActions: Property<List<Action>>? = null,
+    margins: Property<EdgeInsets>? = null,
+    maxLines: Property<Int>? = null,
+    minHiddenLines: Property<Int>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
+    ranges: Property<List<Text.Range>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectable: Property<Boolean>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    strike: Property<LineStyle>? = null,
+    textAlignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    textAlignmentVertical: Property<AlignmentVertical>? = null,
+    textColor: Property<Color>? = null,
+    textGradient: Property<TextGradient>? = null,
+    textShadow: Property<Shadow>? = null,
+    tightenWidth: Property<Boolean>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    truncate: Property<Text.Truncate>? = null,
+    underline: Property<LineStyle>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Text> = Component(
+    template = template,
+    properties = Text.Properties(
+        text = text,
+        accessibility = accessibility,
+        action = action,
+        actionAnimation = actionAnimation,
+        actions = actions,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        autoEllipsize = autoEllipsize,
+        background = background,
+        border = border,
+        captureFocusOnAction = captureFocusOnAction,
+        columnSpan = columnSpan,
+        disappearActions = disappearActions,
+        doubletapActions = doubletapActions,
+        ellipsis = ellipsis,
+        extensions = extensions,
+        focus = focus,
+        focusedTextColor = focusedTextColor,
+        fontFamily = fontFamily,
+        fontFeatureSettings = fontFeatureSettings,
+        fontSize = fontSize,
+        fontSizeUnit = fontSizeUnit,
+        fontVariationSettings = fontVariationSettings,
+        fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
+        functions = functions,
+        height = height,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
+        id = id,
+        images = images,
+        layoutProvider = layoutProvider,
+        letterSpacing = letterSpacing,
+        lineHeight = lineHeight,
+        longtapActions = longtapActions,
+        margins = margins,
+        maxLines = maxLines,
+        minHiddenLines = minHiddenLines,
+        paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
+        ranges = ranges,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        selectable = selectable,
+        selectedActions = selectedActions,
+        strike = strike,
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical,
+        textColor = textColor,
+        textGradient = textGradient,
+        textShadow = textShadow,
+        tightenWidth = tightenWidth,
+        tooltips = tooltips,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        truncate = truncate,
+        underline = underline,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
+    ).mergeWith(properties)
+)
+
 @Generated
 operator fun Component<Text>.plus(additive: Text.Properties): Component<Text> = Component(
     template = template,
@@ -2760,6 +3195,28 @@ fun Text.Ellipsis.defer(
     images: ReferenceProperty<List<Text.Image>>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
     text: ReferenceProperty<String>? = null,
+): Text.Ellipsis = Text.Ellipsis(
+    Text.Ellipsis.Properties(
+        actions = actions ?: properties.actions,
+        images = images ?: properties.images,
+        ranges = ranges ?: properties.ranges,
+        text = text ?: properties.text,
+    )
+)
+
+/**
+ * @param actions Actions when clicking on a crop marker.
+ * @param images Images embedded in a crop marker.
+ * @param ranges Character ranges inside a crop marker with different text styles.
+ * @param text Marker text.
+ */
+@Generated
+fun Text.Ellipsis.modify(
+    `use named arguments`: Guard = Guard.instance,
+    actions: Property<List<Action>>? = null,
+    images: Property<List<Text.Image>>? = null,
+    ranges: Property<List<Text.Range>>? = null,
+    text: Property<String>? = null,
 ): Text.Ellipsis = Text.Ellipsis(
     Text.Ellipsis.Properties(
         actions = actions ?: properties.actions,
@@ -2974,6 +3431,47 @@ fun Text.Image.defer(
     tintMode: ReferenceProperty<BlendMode>? = null,
     url: ReferenceProperty<Url>? = null,
     width: ReferenceProperty<FixedSize>? = null,
+): Text.Image = Text.Image(
+    Text.Image.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        height = height ?: properties.height,
+        indexingDirection = indexingDirection ?: properties.indexingDirection,
+        preloadRequired = preloadRequired ?: properties.preloadRequired,
+        start = start ?: properties.start,
+        tintColor = tintColor ?: properties.tintColor,
+        tintMode = tintMode ?: properties.tintMode,
+        url = url ?: properties.url,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param alignmentVertical Vertical image alignment within the row.
+ * @param height Image height.
+ * @param indexingDirection Defines the direction in the `start` parameter:
+– `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
+– `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
+ * @param preloadRequired Background image must be loaded before the display.
+ * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
+ * @param tintColor New color of a contour image.
+ * @param tintMode Blend mode of the color specified in `tint_color`.
+ * @param url Image URL.
+ * @param width Image width.
+ */
+@Generated
+fun Text.Image.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Text.Image.Accessibility>? = null,
+    alignmentVertical: Property<TextAlignmentVertical>? = null,
+    height: Property<FixedSize>? = null,
+    indexingDirection: Property<Text.Image.IndexingDirection>? = null,
+    preloadRequired: Property<Boolean>? = null,
+    start: Property<Int>? = null,
+    tintColor: Property<Color>? = null,
+    tintMode: Property<BlendMode>? = null,
+    url: Property<Url>? = null,
+    width: Property<FixedSize>? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         accessibility = accessibility ?: properties.accessibility,
@@ -3377,6 +3875,82 @@ fun Text.Range.defer(
     textShadow: ReferenceProperty<Shadow>? = null,
     topOffset: ReferenceProperty<Int>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+): Text.Range = Text.Range(
+    Text.Range.Properties(
+        actions = actions ?: properties.actions,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        background = background ?: properties.background,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
+        border = border ?: properties.border,
+        end = end ?: properties.end,
+        fontFamily = fontFamily ?: properties.fontFamily,
+        fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
+        fontSize = fontSize ?: properties.fontSize,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontVariationSettings = fontVariationSettings ?: properties.fontVariationSettings,
+        fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
+        lineHeight = lineHeight ?: properties.lineHeight,
+        mask = mask ?: properties.mask,
+        start = start ?: properties.start,
+        strike = strike ?: properties.strike,
+        textColor = textColor ?: properties.textColor,
+        textShadow = textShadow ?: properties.textShadow,
+        topOffset = topOffset ?: properties.topOffset,
+        underline = underline ?: properties.underline,
+    )
+)
+
+/**
+ * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text alignment within the row. Ignored when a baseline offset is specified.
+ * @param background Character range background.
+ * @param baselineOffset Vertical baseline offset in a character range. If set, vertical alignment is ignored.
+ * @param border Character range border.
+ * @param end Ordinal number of the last character to be included in the range. If the property is omitted, the range ends at the last character of the text.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
+ * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
+ * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
+ * @param strike Strikethrough.
+ * @param textColor Text color.
+ * @param textShadow Parameters of the shadow applied to the character range.
+ * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
+ * @param underline Underline.
+ */
+@Generated
+fun Text.Range.modify(
+    `use named arguments`: Guard = Guard.instance,
+    actions: Property<List<Action>>? = null,
+    alignmentVertical: Property<TextAlignmentVertical>? = null,
+    background: Property<TextRangeBackground>? = null,
+    baselineOffset: Property<Double>? = null,
+    border: Property<TextRangeBorder>? = null,
+    end: Property<Int>? = null,
+    fontFamily: Property<String>? = null,
+    fontFeatureSettings: Property<String>? = null,
+    fontSize: Property<Int>? = null,
+    fontSizeUnit: Property<SizeUnit>? = null,
+    fontVariationSettings: Property<Map<String, Any>>? = null,
+    fontWeight: Property<FontWeight>? = null,
+    fontWeightValue: Property<Int>? = null,
+    letterSpacing: Property<Double>? = null,
+    lineHeight: Property<Int>? = null,
+    mask: Property<TextRangeMask>? = null,
+    start: Property<Int>? = null,
+    strike: Property<LineStyle>? = null,
+    textColor: Property<Color>? = null,
+    textShadow: Property<Shadow>? = null,
+    topOffset: Property<Int>? = null,
+    underline: Property<LineStyle>? = null,
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = actions ?: properties.actions,

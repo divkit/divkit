@@ -246,6 +246,31 @@ fun RadialGradient.defer(
     )
 )
 
+/**
+ * @param centerX Shift of the central point of the gradient relative to the left edge along the X axis.
+ * @param centerY Shift of the central point of the gradient relative to the top edge along the Y axis.
+ * @param colorMap Colors and positions of gradient points. When using this parameter, the `colors` parameter is ignored.
+ * @param colors Colors. Gradient points are located at an equal distance from each other.
+ * @param radius Radius of the gradient transition.
+ */
+@Generated
+fun RadialGradient.modify(
+    `use named arguments`: Guard = Guard.instance,
+    centerX: Property<RadialGradientCenter>? = null,
+    centerY: Property<RadialGradientCenter>? = null,
+    colorMap: Property<List<RadialGradient.ColorPoint>>? = null,
+    colors: Property<List<ArrayElement<Color>>>? = null,
+    radius: Property<RadialGradientRadius>? = null,
+): RadialGradient = RadialGradient(
+    RadialGradient.Properties(
+        centerX = centerX ?: properties.centerX,
+        centerY = centerY ?: properties.centerY,
+        colorMap = colorMap ?: properties.colorMap,
+        colors = colors ?: properties.colors,
+        radius = radius ?: properties.radius,
+    )
+)
+
 @Generated
 fun RadialGradient.asList() = listOf(this)
 
@@ -318,6 +343,22 @@ fun RadialGradient.ColorPoint.defer(
     `use named arguments`: Guard = Guard.instance,
     color: ReferenceProperty<Color>? = null,
     position: ReferenceProperty<Double>? = null,
+): RadialGradient.ColorPoint = RadialGradient.ColorPoint(
+    RadialGradient.ColorPoint.Properties(
+        color = color ?: properties.color,
+        position = position ?: properties.position,
+    )
+)
+
+/**
+ * @param color Gradient color corresponding to gradient point.
+ * @param position The position of the gradient point.
+ */
+@Generated
+fun RadialGradient.ColorPoint.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+    position: Property<Double>? = null,
 ): RadialGradient.ColorPoint = RadialGradient.ColorPoint(
     RadialGradient.ColorPoint.Properties(
         color = color ?: properties.color,

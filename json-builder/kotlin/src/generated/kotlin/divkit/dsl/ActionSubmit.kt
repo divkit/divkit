@@ -274,6 +274,28 @@ fun ActionSubmit.defer(
 
 /**
  * @param containerId ID of the container with the variables to be sent.
+ * @param onFailActions Actions when sending data is unsuccessful.
+ * @param onSuccessActions Actions when sending data is successful.
+ * @param request HTTP request parameters for configuring the sending of data.
+ */
+@Generated
+fun ActionSubmit.modify(
+    `use named arguments`: Guard = Guard.instance,
+    containerId: Property<String>? = null,
+    onFailActions: Property<List<Action>>? = null,
+    onSuccessActions: Property<List<Action>>? = null,
+    request: Property<ActionSubmit.Request>? = null,
+): ActionSubmit = ActionSubmit(
+    ActionSubmit.Properties(
+        containerId = containerId ?: properties.containerId,
+        onFailActions = onFailActions ?: properties.onFailActions,
+        onSuccessActions = onSuccessActions ?: properties.onSuccessActions,
+        request = request ?: properties.request,
+    )
+)
+
+/**
+ * @param containerId ID of the container with the variables to be sent.
  */
 @Generated
 fun ActionSubmit.evaluate(
@@ -374,6 +396,25 @@ fun ActionSubmit.Request.defer(
     headers: ReferenceProperty<List<ActionSubmit.Request.Header>>? = null,
     method: ReferenceProperty<ActionSubmit.Request.Method>? = null,
     url: ReferenceProperty<Url>? = null,
+): ActionSubmit.Request = ActionSubmit.Request(
+    ActionSubmit.Request.Properties(
+        headers = headers ?: properties.headers,
+        method = method ?: properties.method,
+        url = url ?: properties.url,
+    )
+)
+
+/**
+ * @param headers HTTP request headers. Please note that DivKit does not clean duplicate headers, which can lead to errors in request processing. Keep this in mind when assembling actions with complex JSON-builders.
+ * @param method HTTP request method.
+ * @param url Link for sending data from the container.
+ */
+@Generated
+fun ActionSubmit.Request.modify(
+    `use named arguments`: Guard = Guard.instance,
+    headers: Property<List<ActionSubmit.Request.Header>>? = null,
+    method: Property<ActionSubmit.Request.Method>? = null,
+    url: Property<Url>? = null,
 ): ActionSubmit.Request = ActionSubmit.Request(
     ActionSubmit.Request.Properties(
         headers = headers ?: properties.headers,

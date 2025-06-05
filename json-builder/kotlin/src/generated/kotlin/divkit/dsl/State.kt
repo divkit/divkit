@@ -964,6 +964,130 @@ fun State.defer(
 )
 
 /**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
+ * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionAnimationSelector It determines which events trigger transition animations.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun State.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    clipToBounds: Property<Boolean>? = null,
+    columnSpan: Property<Int>? = null,
+    defaultStateId: Property<String>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    divId: Property<String>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    stateIdVariable: Property<String>? = null,
+    states: Property<List<State.Item>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionAnimationSelector: Property<TransitionSelector>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): State = State(
+    State.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        defaultStateId = defaultStateId ?: properties.defaultStateId,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        divId = divId ?: properties.divId,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        margins = margins ?: properties.margins,
+        paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        stateIdVariable = stateIdVariable ?: properties.stateIdVariable,
+        states = states ?: properties.states,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -1350,6 +1474,131 @@ fun Component<State>.evaluate(
     ).mergeWith(properties)
 )
 
+/**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param clipToBounds Enables the bounding of child elements by the parent's borders.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
+ * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionAnimationSelector It determines which events trigger transition animations.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<State>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    clipToBounds: Property<Boolean>? = null,
+    columnSpan: Property<Int>? = null,
+    defaultStateId: Property<String>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    divId: Property<String>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    stateIdVariable: Property<String>? = null,
+    states: Property<List<State.Item>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionAnimationSelector: Property<TransitionSelector>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<State> = Component(
+    template = template,
+    properties = State.Properties(
+        accessibility = accessibility,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        background = background,
+        border = border,
+        clipToBounds = clipToBounds,
+        columnSpan = columnSpan,
+        defaultStateId = defaultStateId,
+        disappearActions = disappearActions,
+        divId = divId,
+        extensions = extensions,
+        focus = focus,
+        functions = functions,
+        height = height,
+        id = id,
+        layoutProvider = layoutProvider,
+        margins = margins,
+        paddings = paddings,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        selectedActions = selectedActions,
+        stateIdVariable = stateIdVariable,
+        states = states,
+        tooltips = tooltips,
+        transform = transform,
+        transitionAnimationSelector = transitionAnimationSelector,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
+    ).mergeWith(properties)
+)
+
 @Generated
 operator fun Component<State>.plus(additive: State.Properties): Component<State> = Component(
     template = template,
@@ -1470,6 +1719,31 @@ fun State.Item.defer(
     div: ReferenceProperty<Div>? = null,
     stateId: ReferenceProperty<String>? = null,
     swipeOutActions: ReferenceProperty<List<Action>>? = null,
+): State.Item = State.Item(
+    State.Item.Properties(
+        animationIn = animationIn ?: properties.animationIn,
+        animationOut = animationOut ?: properties.animationOut,
+        div = div ?: properties.div,
+        stateId = stateId ?: properties.stateId,
+        swipeOutActions = swipeOutActions ?: properties.swipeOutActions,
+    )
+)
+
+/**
+ * @param animationIn State appearance animation. Use `transition_in` instead.
+ * @param animationOut State disappearance animation. Use `transition_out` instead.
+ * @param div Contents. If the parameter is missing, the state won't be displayed.
+ * @param stateId State ID. It must be unique at one hierarchy level.
+ * @param swipeOutActions Actions when swiping the state horizontally.
+ */
+@Generated
+fun State.Item.modify(
+    `use named arguments`: Guard = Guard.instance,
+    animationIn: Property<Animation>? = null,
+    animationOut: Property<Animation>? = null,
+    div: Property<Div>? = null,
+    stateId: Property<String>? = null,
+    swipeOutActions: Property<List<Action>>? = null,
 ): State.Item = State.Item(
     State.Item.Properties(
         animationIn = animationIn ?: properties.animationIn,

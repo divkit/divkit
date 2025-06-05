@@ -848,6 +848,123 @@ fun Switch.defer(
 )
 
 /**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in `Div2Context` on Android is used.
+ * @param paddings Internal margins from the element stroke.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Switch.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    isEnabled: Property<Boolean>? = null,
+    isOnVariable: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    onColor: Property<Color>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Switch = Switch(
+    Switch.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        id = id ?: properties.id,
+        isEnabled = isEnabled ?: properties.isEnabled,
+        isOnVariable = isOnVariable ?: properties.isOnVariable,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        margins = margins ?: properties.margins,
+        onColor = onColor ?: properties.onColor,
+        paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -1211,6 +1328,124 @@ fun Component<Switch>.evaluate(
         visibilityAction = null,
         visibilityActions = null,
         width = null,
+    ).mergeWith(properties)
+)
+
+/**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Enables or disables the element's toggle functionality.
+ * @param isOnVariable Name of the Boolean variable assigned to the toggle.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param onColor Color of the toggle in the enabled state. If the color is omitted:
+: iOS standard system color is used
+: the color specified in `Div2Context` on Android is used.
+ * @param paddings Internal margins from the element stroke.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Switch>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    isEnabled: Property<Boolean>? = null,
+    isOnVariable: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    onColor: Property<Color>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Switch> = Component(
+    template = template,
+    properties = Switch.Properties(
+        accessibility = accessibility,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        background = background,
+        border = border,
+        columnSpan = columnSpan,
+        disappearActions = disappearActions,
+        extensions = extensions,
+        focus = focus,
+        functions = functions,
+        height = height,
+        id = id,
+        isEnabled = isEnabled,
+        isOnVariable = isOnVariable,
+        layoutProvider = layoutProvider,
+        margins = margins,
+        onColor = onColor,
+        paddings = paddings,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        selectedActions = selectedActions,
+        tooltips = tooltips,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
     ).mergeWith(properties)
 )
 

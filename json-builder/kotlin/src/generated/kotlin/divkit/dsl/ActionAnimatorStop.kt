@@ -116,5 +116,18 @@ fun ActionAnimatorStop.defer(
     )
 )
 
+/**
+ * @param animatorId ID of the animator to be stopped.
+ */
+@Generated
+fun ActionAnimatorStop.modify(
+    `use named arguments`: Guard = Guard.instance,
+    animatorId: Property<String>? = null,
+): ActionAnimatorStop = ActionAnimatorStop(
+    ActionAnimatorStop.Properties(
+        animatorId = animatorId ?: properties.animatorId,
+    )
+)
+
 @Generated
 fun ActionAnimatorStop.asList() = listOf(this)

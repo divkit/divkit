@@ -199,6 +199,25 @@ fun WrapContentSize.defer(
 
 /**
  * @param constrained The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.
+ * @param maxSize Maximum size of an element.
+ * @param minSize Minimum size of an element.
+ */
+@Generated
+fun WrapContentSize.modify(
+    `use named arguments`: Guard = Guard.instance,
+    constrained: Property<Boolean>? = null,
+    maxSize: Property<WrapContentSize.ConstraintSize>? = null,
+    minSize: Property<WrapContentSize.ConstraintSize>? = null,
+): WrapContentSize = WrapContentSize(
+    WrapContentSize.Properties(
+        constrained = constrained ?: properties.constrained,
+        maxSize = maxSize ?: properties.maxSize,
+        minSize = minSize ?: properties.minSize,
+    )
+)
+
+/**
+ * @param constrained The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.
  */
 @Generated
 fun WrapContentSize.evaluate(
@@ -279,6 +298,21 @@ fun WrapContentSize.ConstraintSize.defer(
     `use named arguments`: Guard = Guard.instance,
     unit: ReferenceProperty<SizeUnit>? = null,
     value: ReferenceProperty<Int>? = null,
+): WrapContentSize.ConstraintSize = WrapContentSize.ConstraintSize(
+    WrapContentSize.ConstraintSize.Properties(
+        unit = unit ?: properties.unit,
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param unit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ */
+@Generated
+fun WrapContentSize.ConstraintSize.modify(
+    `use named arguments`: Guard = Guard.instance,
+    unit: Property<SizeUnit>? = null,
+    value: Property<Int>? = null,
 ): WrapContentSize.ConstraintSize = WrapContentSize.ConstraintSize(
     WrapContentSize.ConstraintSize.Properties(
         unit = unit ?: properties.unit,

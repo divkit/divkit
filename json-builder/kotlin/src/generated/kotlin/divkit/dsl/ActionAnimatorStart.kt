@@ -264,6 +264,40 @@ fun ActionAnimatorStart.defer(
 )
 
 /**
+ * @param animatorId ID of the animator launched.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
+ * @param duration Animation duration in milliseconds.
+ * @param endValue Overrides the value that will be set after the animation finishes.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue Overrides the value that will be set before the animation begins.
+ */
+@Generated
+fun ActionAnimatorStart.modify(
+    `use named arguments`: Guard = Guard.instance,
+    animatorId: Property<String>? = null,
+    direction: Property<AnimationDirection>? = null,
+    duration: Property<Long>? = null,
+    endValue: Property<TypedValue>? = null,
+    interpolator: Property<AnimationInterpolator>? = null,
+    repeatCount: Property<Count>? = null,
+    startDelay: Property<Int>? = null,
+    startValue: Property<TypedValue>? = null,
+): ActionAnimatorStart = ActionAnimatorStart(
+    ActionAnimatorStart.Properties(
+        animatorId = animatorId ?: properties.animatorId,
+        direction = direction ?: properties.direction,
+        duration = duration ?: properties.duration,
+        endValue = endValue ?: properties.endValue,
+        interpolator = interpolator ?: properties.interpolator,
+        repeatCount = repeatCount ?: properties.repeatCount,
+        startDelay = startDelay ?: properties.startDelay,
+        startValue = startValue ?: properties.startValue,
+    )
+)
+
+/**
  * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
  * @param interpolator Animated value interpolation function.

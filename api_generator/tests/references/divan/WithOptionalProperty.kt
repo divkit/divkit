@@ -101,6 +101,16 @@ fun WithOptionalProperty.defer(
 )
 
 @Generated
+fun WithOptionalProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<String>? = null,
+): WithOptionalProperty = WithOptionalProperty(
+    WithOptionalProperty.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun WithOptionalProperty.evaluate(
     `use named arguments`: Guard = Guard.instance,
     property: ExpressionProperty<String>? = null,
@@ -136,6 +146,17 @@ fun Component<WithOptionalProperty>.defer(
 fun Component<WithOptionalProperty>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     property: ExpressionProperty<String>? = null,
+): Component<WithOptionalProperty> = Component(
+    template = template,
+    properties = WithOptionalProperty.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithOptionalProperty>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<String>? = null,
 ): Component<WithOptionalProperty> = Component(
     template = template,
     properties = WithOptionalProperty.Properties(

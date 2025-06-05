@@ -97,6 +97,16 @@ fun UrlValue.defer(
 )
 
 @Generated
+fun UrlValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Url>? = null,
+): UrlValue = UrlValue(
+    UrlValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun UrlValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Url>? = null,

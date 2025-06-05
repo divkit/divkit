@@ -135,5 +135,21 @@ fun Point.defer(
     )
 )
 
+/**
+ * @param x `X` coordinate.
+ * @param y `Y` coordinate.
+ */
+@Generated
+fun Point.modify(
+    `use named arguments`: Guard = Guard.instance,
+    x: Property<Dimension>? = null,
+    y: Property<Dimension>? = null,
+): Point = Point(
+    Point.Properties(
+        x = x ?: properties.x,
+        y = y ?: properties.y,
+    )
+)
+
 @Generated
 fun Point.asList() = listOf(this)

@@ -161,6 +161,25 @@ fun CircleShape.defer(
 
 /**
  * @param backgroundColor Fill color.
+ * @param radius Radius.
+ * @param stroke Stroke style.
+ */
+@Generated
+fun CircleShape.modify(
+    `use named arguments`: Guard = Guard.instance,
+    backgroundColor: Property<Color>? = null,
+    radius: Property<FixedSize>? = null,
+    stroke: Property<Stroke>? = null,
+): CircleShape = CircleShape(
+    CircleShape.Properties(
+        backgroundColor = backgroundColor ?: properties.backgroundColor,
+        radius = radius ?: properties.radius,
+        stroke = stroke ?: properties.stroke,
+    )
+)
+
+/**
+ * @param backgroundColor Fill color.
  */
 @Generated
 fun CircleShape.evaluate(

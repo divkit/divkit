@@ -135,5 +135,21 @@ fun FunctionArgument.defer(
     )
 )
 
+/**
+ * @param name Function argument name.
+ * @param type Function argument type.
+ */
+@Generated
+fun FunctionArgument.modify(
+    `use named arguments`: Guard = Guard.instance,
+    name: Property<String>? = null,
+    type: Property<EvaluableType>? = null,
+): FunctionArgument = FunctionArgument(
+    FunctionArgument.Properties(
+        name = name ?: properties.name,
+        type = type ?: properties.type,
+    )
+)
+
 @Generated
 fun FunctionArgument.asList() = listOf(this)

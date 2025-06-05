@@ -101,6 +101,16 @@ fun WithRequiredProperty.defer(
 )
 
 @Generated
+fun WithRequiredProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<String>? = null,
+): WithRequiredProperty = WithRequiredProperty(
+    WithRequiredProperty.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun WithRequiredProperty.evaluate(
     `use named arguments`: Guard = Guard.instance,
     property: ExpressionProperty<String>? = null,
@@ -136,6 +146,17 @@ fun Component<WithRequiredProperty>.defer(
 fun Component<WithRequiredProperty>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     property: ExpressionProperty<String>? = null,
+): Component<WithRequiredProperty> = Component(
+    template = template,
+    properties = WithRequiredProperty.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithRequiredProperty>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<String>? = null,
 ): Component<WithRequiredProperty> = Component(
     template = template,
     properties = WithRequiredProperty.Properties(

@@ -196,6 +196,23 @@ fun WithPropertyWithDefaultValue.defer(
     )
 )
 
+/**
+ * @param nested non_optional is used to suppress auto-generation of default value for object with all-optional fields.
+ */
+@Generated
+fun WithPropertyWithDefaultValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    int: Property<Int>? = null,
+    nested: Property<WithPropertyWithDefaultValue.Nested>? = null,
+    url: Property<Url>? = null,
+): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
+    WithPropertyWithDefaultValue.Properties(
+        int = int ?: properties.int,
+        nested = nested ?: properties.nested,
+        url = url ?: properties.url,
+    )
+)
+
 @Generated
 fun WithPropertyWithDefaultValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
@@ -255,6 +272,24 @@ fun Component<WithPropertyWithDefaultValue>.evaluate(
     properties = WithPropertyWithDefaultValue.Properties(
         int = int,
         nested = null,
+        url = url,
+    ).mergeWith(properties)
+)
+
+/**
+ * @param nested non_optional is used to suppress auto-generation of default value for object with all-optional fields.
+ */
+@Generated
+fun Component<WithPropertyWithDefaultValue>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    int: Property<Int>? = null,
+    nested: Property<WithPropertyWithDefaultValue.Nested>? = null,
+    url: Property<Url>? = null,
+): Component<WithPropertyWithDefaultValue> = Component(
+    template = template,
+    properties = WithPropertyWithDefaultValue.Properties(
+        int = int,
+        nested = nested,
         url = url,
     ).mergeWith(properties)
 )
@@ -326,6 +361,20 @@ fun WithPropertyWithDefaultValue.Nested.defer(
     int: ReferenceProperty<Int>? = null,
     nonOptional: ReferenceProperty<String>? = null,
     url: ReferenceProperty<Url>? = null,
+): WithPropertyWithDefaultValue.Nested = WithPropertyWithDefaultValue.Nested(
+    WithPropertyWithDefaultValue.Nested.Properties(
+        int = int ?: properties.int,
+        nonOptional = nonOptional ?: properties.nonOptional,
+        url = url ?: properties.url,
+    )
+)
+
+@Generated
+fun WithPropertyWithDefaultValue.Nested.modify(
+    `use named arguments`: Guard = Guard.instance,
+    int: Property<Int>? = null,
+    nonOptional: Property<String>? = null,
+    url: Property<Url>? = null,
 ): WithPropertyWithDefaultValue.Nested = WithPropertyWithDefaultValue.Nested(
     WithPropertyWithDefaultValue.Nested.Properties(
         int = int ?: properties.int,

@@ -99,6 +99,16 @@ fun ActionFocusElement.defer(
 )
 
 @Generated
+fun ActionFocusElement.modify(
+    `use named arguments`: Guard = Guard.instance,
+    elementId: Property<String>? = null,
+): ActionFocusElement = ActionFocusElement(
+    ActionFocusElement.Properties(
+        elementId = elementId ?: properties.elementId,
+    )
+)
+
+@Generated
 fun ActionFocusElement.evaluate(
     `use named arguments`: Guard = Guard.instance,
     elementId: ExpressionProperty<String>? = null,

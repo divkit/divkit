@@ -142,6 +142,22 @@ fun ActionShowTooltip.defer(
  * @param multiple Sets whether the tooltip can be shown again after it’s closed.
  */
 @Generated
+fun ActionShowTooltip.modify(
+    `use named arguments`: Guard = Guard.instance,
+    id: Property<String>? = null,
+    multiple: Property<Boolean>? = null,
+): ActionShowTooltip = ActionShowTooltip(
+    ActionShowTooltip.Properties(
+        id = id ?: properties.id,
+        multiple = multiple ?: properties.multiple,
+    )
+)
+
+/**
+ * @param id Tooltip ID.
+ * @param multiple Sets whether the tooltip can be shown again after it’s closed.
+ */
+@Generated
 fun ActionShowTooltip.evaluate(
     `use named arguments`: Guard = Guard.instance,
     id: ExpressionProperty<String>? = null,

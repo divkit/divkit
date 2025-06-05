@@ -116,5 +116,18 @@ fun AppearanceSetTransition.defer(
     )
 )
 
+/**
+ * @param items An array of animations.
+ */
+@Generated
+fun AppearanceSetTransition.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<AppearanceTransition>>? = null,
+): AppearanceSetTransition = AppearanceSetTransition(
+    AppearanceSetTransition.Properties(
+        items = items ?: properties.items,
+    )
+)
+
 @Generated
 fun AppearanceSetTransition.asList() = listOf(this)

@@ -321,6 +321,48 @@ fun VisibilityAction.defer(
 )
 
 /**
+ * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
+ * @param logId Logging ID.
+ * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
+ * @param payload Additional parameters, passed to the host application.
+ * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
+ * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
+ */
+@Generated
+fun VisibilityAction.modify(
+    `use named arguments`: Guard = Guard.instance,
+    downloadCallbacks: Property<DownloadCallbacks>? = null,
+    isEnabled: Property<Boolean>? = null,
+    logId: Property<String>? = null,
+    logLimit: Property<Int>? = null,
+    payload: Property<Map<String, Any>>? = null,
+    referer: Property<Url>? = null,
+    scopeId: Property<String>? = null,
+    typed: Property<ActionTyped>? = null,
+    url: Property<Url>? = null,
+    visibilityDuration: Property<Int>? = null,
+    visibilityPercentage: Property<Int>? = null,
+): VisibilityAction = VisibilityAction(
+    VisibilityAction.Properties(
+        downloadCallbacks = downloadCallbacks ?: properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
+        logId = logId ?: properties.logId,
+        logLimit = logLimit ?: properties.logLimit,
+        payload = payload ?: properties.payload,
+        referer = referer ?: properties.referer,
+        scopeId = scopeId ?: properties.scopeId,
+        typed = typed ?: properties.typed,
+        url = url ?: properties.url,
+        visibilityDuration = visibilityDuration ?: properties.visibilityDuration,
+        visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,
+    )
+)
+
+/**
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.

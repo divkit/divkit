@@ -272,6 +272,37 @@ fun Data.defer(
 )
 
 /**
+ * @param logId Logging ID.
+ * @param states A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
+ * @param functions User functions.
+ * @param timers List of timers.
+ * @param transitionAnimationSelector Events that trigger transition animations.
+ * @param variableTriggers Triggers for changing variables.
+ * @param variables Declaration of variables that can be used in an element.
+ */
+@Generated
+fun Data.modify(
+    `use named arguments`: Guard = Guard.instance,
+    logId: Property<String>? = null,
+    states: Property<List<Data.State>>? = null,
+    functions: Property<List<Function>>? = null,
+    timers: Property<List<Timer>>? = null,
+    transitionAnimationSelector: Property<TransitionSelector>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+): Data = Data(
+    Data.Properties(
+        logId = logId ?: properties.logId,
+        states = states ?: properties.states,
+        functions = functions ?: properties.functions,
+        timers = timers ?: properties.timers,
+        transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+    )
+)
+
+/**
  * @param transitionAnimationSelector Events that trigger transition animations.
  */
 @Generated
@@ -361,6 +392,22 @@ fun Data.State.defer(
     `use named arguments`: Guard = Guard.instance,
     stateId: ReferenceProperty<Int>? = null,
     div: ReferenceProperty<Div>? = null,
+): Data.State = Data.State(
+    Data.State.Properties(
+        stateId = stateId ?: properties.stateId,
+        div = div ?: properties.div,
+    )
+)
+
+/**
+ * @param stateId State ID.
+ * @param div Contents.
+ */
+@Generated
+fun Data.State.modify(
+    `use named arguments`: Guard = Guard.instance,
+    stateId: Property<Int>? = null,
+    div: Property<Div>? = null,
 ): Data.State = Data.State(
     Data.State.Properties(
         stateId = stateId ?: properties.stateId,

@@ -97,6 +97,16 @@ fun ColorValue.defer(
 )
 
 @Generated
+fun ColorValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Color>? = null,
+): ColorValue = ColorValue(
+    ColorValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun ColorValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Color>? = null,

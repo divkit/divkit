@@ -161,6 +161,25 @@ fun ActionSetStoredValue.defer(
 /**
  * @param lifetime Duration of storage in seconds.
  * @param name Name of the saved variable.
+ * @param value Saved value.
+ */
+@Generated
+fun ActionSetStoredValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    lifetime: Property<Int>? = null,
+    name: Property<String>? = null,
+    value: Property<TypedValue>? = null,
+): ActionSetStoredValue = ActionSetStoredValue(
+    ActionSetStoredValue.Properties(
+        lifetime = lifetime ?: properties.lifetime,
+        name = name ?: properties.name,
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param lifetime Duration of storage in seconds.
+ * @param name Name of the saved variable.
  */
 @Generated
 fun ActionSetStoredValue.evaluate(

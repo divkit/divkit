@@ -162,6 +162,25 @@ fun ShapeDrawable.defer(
 
 /**
  * @param color Fill color.
+ * @param shape Shape.
+ * @param stroke Stroke style.
+ */
+@Generated
+fun ShapeDrawable.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+    shape: Property<Shape>? = null,
+    stroke: Property<Stroke>? = null,
+): ShapeDrawable = ShapeDrawable(
+    ShapeDrawable.Properties(
+        color = color ?: properties.color,
+        shape = shape ?: properties.shape,
+        stroke = stroke ?: properties.stroke,
+    )
+)
+
+/**
+ * @param color Fill color.
  */
 @Generated
 fun ShapeDrawable.evaluate(

@@ -143,6 +143,22 @@ fun RadialGradientFixedCenter.defer(
  * @param value Coordinate value.
  */
 @Generated
+fun RadialGradientFixedCenter.modify(
+    `use named arguments`: Guard = Guard.instance,
+    unit: Property<SizeUnit>? = null,
+    value: Property<Int>? = null,
+): RadialGradientFixedCenter = RadialGradientFixedCenter(
+    RadialGradientFixedCenter.Properties(
+        unit = unit ?: properties.unit,
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param value Coordinate value.
+ */
+@Generated
 fun RadialGradientFixedCenter.evaluate(
     `use named arguments`: Guard = Guard.instance,
     unit: ExpressionProperty<SizeUnit>? = null,

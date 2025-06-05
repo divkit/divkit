@@ -309,6 +309,15 @@ class DivanEntity(Entity):
             signature_declaration += property_declaration
         return signature_declaration, has_params_except_guard
 
+    def modify_properties_signature(self) -> Text:
+        signature_declaration = Text(GUARD_INSTANCE_PARAM)
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_type = cast(DivanPropertyType, property.property_type)
+            type_name_declaration = property_type.declaration(prefixed=True, remove_prefix=self.remove_prefix)
+            property_declaration = f'{property.name_declaration}: Property<{type_name_declaration}>? = null,'
+            signature_declaration += property_declaration
+        return signature_declaration
+
     def properties_class_declaration(self, translations: Dict[str, str]) -> Text:
         declaration = Text()
         declaration += 'data class Properties internal constructor('
@@ -516,6 +525,39 @@ class DivanEntity(Entity):
             property_name = property.name_declaration
             value = property_name if property.is_evaluatable_property else 'null'
             declaration += utils.indented(f'{property_name} = {value},', level=2, indent_width=4)
+        declaration += utils.indented(').mergeWith(properties)', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
+    def modify_method_declaration(self) -> Text:
+        name = full_name(self, self.remove_prefix)
+        declaration = Text(f'fun {name}.modify(')
+        declaration += self.modify_properties_signature().indented(level=1, indent_width=4)
+        declaration += f'): {name} = {name}('
+        declaration += utils.indented(f'{name}.Properties(', level=1, indent_width=4)
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            declaration += utils.indented(
+                f'{property_name} = {property_name} ?: properties.{property_name},',
+                level=2,
+                indent_width=4
+            )
+        declaration += utils.indented(')', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
+    def modify_component_method_declaration(self) -> Text:
+        name = full_name(self, self.remove_prefix)
+        declaration = Text(f'fun Component<{name}>.modify(')
+        declaration += self.modify_properties_signature().indented(level=1, indent_width=4)
+        declaration += f'): Component<{name}> = Component('
+        declaration += utils.indented('template = template,', level=1, indent_width=4)
+        declaration += utils.indented(f'properties = {name}.Properties(', level=1, indent_width=4)
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            declaration += utils.indented(f'{property_name} = {property_name},', level=2, indent_width=4)
         declaration += utils.indented(').mergeWith(properties)', level=1, indent_width=4)
         declaration += ')'
         return declaration

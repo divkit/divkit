@@ -190,6 +190,28 @@ fun FadeTransition.defer(
  * @param startDelay Delay in milliseconds before animation starts.
  */
 @Generated
+fun FadeTransition.modify(
+    `use named arguments`: Guard = Guard.instance,
+    alpha: Property<Double>? = null,
+    duration: Property<Int>? = null,
+    interpolator: Property<AnimationInterpolator>? = null,
+    startDelay: Property<Int>? = null,
+): FadeTransition = FadeTransition(
+    FadeTransition.Properties(
+        alpha = alpha ?: properties.alpha,
+        duration = duration ?: properties.duration,
+        interpolator = interpolator ?: properties.interpolator,
+        startDelay = startDelay ?: properties.startDelay,
+    )
+)
+
+/**
+ * @param alpha Value of the alpha channel which the element starts appearing from or at which it finishes disappearing.
+ * @param duration Animation duration in milliseconds.
+ * @param interpolator Transition speed nature.
+ * @param startDelay Delay in milliseconds before animation starts.
+ */
+@Generated
 fun FadeTransition.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alpha: ExpressionProperty<Double>? = null,

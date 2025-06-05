@@ -120,6 +120,19 @@ fun IndexDestination.defer(
  * @param value Container element index.
  */
 @Generated
+fun IndexDestination.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Int>? = null,
+): IndexDestination = IndexDestination(
+    IndexDestination.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param value Container element index.
+ */
+@Generated
 fun IndexDestination.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Int>? = null,

@@ -120,6 +120,19 @@ fun InputFilterRegex.defer(
  * @param pattern Regular expression (pattern) that the entered value must match.
  */
 @Generated
+fun InputFilterRegex.modify(
+    `use named arguments`: Guard = Guard.instance,
+    pattern: Property<String>? = null,
+): InputFilterRegex = InputFilterRegex(
+    InputFilterRegex.Properties(
+        pattern = pattern ?: properties.pattern,
+    )
+)
+
+/**
+ * @param pattern Regular expression (pattern) that the entered value must match.
+ */
+@Generated
 fun InputFilterRegex.evaluate(
     `use named arguments`: Guard = Guard.instance,
     pattern: ExpressionProperty<String>? = null,

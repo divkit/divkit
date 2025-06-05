@@ -177,5 +177,27 @@ fun Function.defer(
     )
 )
 
+/**
+ * @param arguments Function argument.
+ * @param body Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
+ * @param name Function name.
+ * @param returnType Return value type.
+ */
+@Generated
+fun Function.modify(
+    `use named arguments`: Guard = Guard.instance,
+    arguments: Property<List<FunctionArgument>>? = null,
+    body: Property<String>? = null,
+    name: Property<String>? = null,
+    returnType: Property<EvaluableType>? = null,
+): Function = Function(
+    Function.Properties(
+        arguments = arguments ?: properties.arguments,
+        body = body ?: properties.body,
+        name = name ?: properties.name,
+        returnType = returnType ?: properties.returnType,
+    )
+)
+
 @Generated
 fun Function.asList() = listOf(this)

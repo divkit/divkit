@@ -1280,6 +1280,145 @@ fun Tabs.defer(
 )
 
 /**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param hasSeparator A separating line between tabs and contents.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param selectedTab Ordinal number of the tab that will be opened by default.
+ * @param separatorColor Separator color.
+ * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
+ * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
+ * @param tabTitleStyle Design style of tab titles.
+ * @param titlePaddings Indents in the tab name.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Tabs.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    dynamicHeight: Property<Boolean>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    hasSeparator: Property<Boolean>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    items: Property<List<Tabs.Item>>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    restrictParentScroll: Property<Boolean>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    selectedTab: Property<Int>? = null,
+    separatorColor: Property<Color>? = null,
+    separatorPaddings: Property<EdgeInsets>? = null,
+    switchTabsByContentSwipeEnabled: Property<Boolean>? = null,
+    tabTitleDelimiter: Property<Tabs.TabTitleDelimiter>? = null,
+    tabTitleStyle: Property<Tabs.TabTitleStyle>? = null,
+    titlePaddings: Property<EdgeInsets>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Tabs = Tabs(
+    Tabs.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        dynamicHeight = dynamicHeight ?: properties.dynamicHeight,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
+        hasSeparator = hasSeparator ?: properties.hasSeparator,
+        height = height ?: properties.height,
+        id = id ?: properties.id,
+        items = items ?: properties.items,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        margins = margins ?: properties.margins,
+        paddings = paddings ?: properties.paddings,
+        restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        selectedTab = selectedTab ?: properties.selectedTab,
+        separatorColor = separatorColor ?: properties.separatorColor,
+        separatorPaddings = separatorPaddings ?: properties.separatorPaddings,
+        switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = tabTitleDelimiter ?: properties.tabTitleDelimiter,
+        tabTitleStyle = tabTitleStyle ?: properties.tabTitleStyle,
+        titlePaddings = titlePaddings ?: properties.titlePaddings,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -1718,6 +1857,146 @@ fun Component<Tabs>.evaluate(
     ).mergeWith(properties)
 )
 
+/**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param hasSeparator A separating line between tabs and contents.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param selectedTab Ordinal number of the tab that will be opened by default.
+ * @param separatorColor Separator color.
+ * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
+ * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Design style of separators between tab titles.
+ * @param tabTitleStyle Design style of tab titles.
+ * @param titlePaddings Indents in the tab name.
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Tabs>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    dynamicHeight: Property<Boolean>? = null,
+    extensions: Property<List<Extension>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    hasSeparator: Property<Boolean>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    items: Property<List<Tabs.Item>>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    restrictParentScroll: Property<Boolean>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    selectedTab: Property<Int>? = null,
+    separatorColor: Property<Color>? = null,
+    separatorPaddings: Property<EdgeInsets>? = null,
+    switchTabsByContentSwipeEnabled: Property<Boolean>? = null,
+    tabTitleDelimiter: Property<Tabs.TabTitleDelimiter>? = null,
+    tabTitleStyle: Property<Tabs.TabTitleStyle>? = null,
+    titlePaddings: Property<EdgeInsets>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Tabs> = Component(
+    template = template,
+    properties = Tabs.Properties(
+        accessibility = accessibility,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        background = background,
+        border = border,
+        columnSpan = columnSpan,
+        disappearActions = disappearActions,
+        dynamicHeight = dynamicHeight,
+        extensions = extensions,
+        focus = focus,
+        functions = functions,
+        hasSeparator = hasSeparator,
+        height = height,
+        id = id,
+        items = items,
+        layoutProvider = layoutProvider,
+        margins = margins,
+        paddings = paddings,
+        restrictParentScroll = restrictParentScroll,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        selectedActions = selectedActions,
+        selectedTab = selectedTab,
+        separatorColor = separatorColor,
+        separatorPaddings = separatorPaddings,
+        switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = tabTitleDelimiter,
+        tabTitleStyle = tabTitleStyle,
+        titlePaddings = titlePaddings,
+        tooltips = tooltips,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
+    ).mergeWith(properties)
+)
+
 @Generated
 operator fun Component<Tabs>.plus(additive: Tabs.Properties): Component<Tabs> = Component(
     template = template,
@@ -1810,6 +2089,25 @@ fun Tabs.Item.defer(
     div: ReferenceProperty<Div>? = null,
     title: ReferenceProperty<String>? = null,
     titleClickAction: ReferenceProperty<Action>? = null,
+): Tabs.Item = Tabs.Item(
+    Tabs.Item.Properties(
+        div = div ?: properties.div,
+        title = title ?: properties.title,
+        titleClickAction = titleClickAction ?: properties.titleClickAction,
+    )
+)
+
+/**
+ * @param div Tab contents.
+ * @param title Tab title.
+ * @param titleClickAction Action when clicking on the active tab title.
+ */
+@Generated
+fun Tabs.Item.modify(
+    `use named arguments`: Guard = Guard.instance,
+    div: Property<Div>? = null,
+    title: Property<String>? = null,
+    titleClickAction: Property<Action>? = null,
 ): Tabs.Item = Tabs.Item(
     Tabs.Item.Properties(
         div = div ?: properties.div,
@@ -1919,6 +2217,25 @@ fun Tabs.TabTitleDelimiter.defer(
     height: ReferenceProperty<FixedSize>? = null,
     imageUrl: ReferenceProperty<Url>? = null,
     width: ReferenceProperty<FixedSize>? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = height ?: properties.height,
+        imageUrl = imageUrl ?: properties.imageUrl,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun Tabs.TabTitleDelimiter.modify(
+    `use named arguments`: Guard = Guard.instance,
+    height: Property<FixedSize>? = null,
+    imageUrl: Property<Url>? = null,
+    width: Property<FixedSize>? = null,
 ): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
     Tabs.TabTitleDelimiter.Properties(
         height = height ?: properties.height,
@@ -2266,6 +2583,76 @@ fun Tabs.TabTitleStyle.defer(
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+): Tabs.TabTitleStyle = Tabs.TabTitleStyle(
+    Tabs.TabTitleStyle.Properties(
+        activeBackgroundColor = activeBackgroundColor ?: properties.activeBackgroundColor,
+        activeFontVariationSettings = activeFontVariationSettings ?: properties.activeFontVariationSettings,
+        activeFontWeight = activeFontWeight ?: properties.activeFontWeight,
+        activeTextColor = activeTextColor ?: properties.activeTextColor,
+        animationDuration = animationDuration ?: properties.animationDuration,
+        animationType = animationType ?: properties.animationType,
+        cornerRadius = cornerRadius ?: properties.cornerRadius,
+        cornersRadius = cornersRadius ?: properties.cornersRadius,
+        fontFamily = fontFamily ?: properties.fontFamily,
+        fontSize = fontSize ?: properties.fontSize,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
+        inactiveBackgroundColor = inactiveBackgroundColor ?: properties.inactiveBackgroundColor,
+        inactiveFontVariationSettings = inactiveFontVariationSettings ?: properties.inactiveFontVariationSettings,
+        inactiveFontWeight = inactiveFontWeight ?: properties.inactiveFontWeight,
+        inactiveTextColor = inactiveTextColor ?: properties.inactiveTextColor,
+        itemSpacing = itemSpacing ?: properties.itemSpacing,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
+        lineHeight = lineHeight ?: properties.lineHeight,
+        paddings = paddings ?: properties.paddings,
+    )
+)
+
+/**
+ * @param activeBackgroundColor Background color of the active tab title.
+ * @param activeFontVariationSettings List of TrueType/OpenType font features of the active tab title.
+ * @param activeFontWeight Active tab title style.
+ * @param activeTextColor Color of the active tab title text.
+ * @param animationDuration Duration of active title change animation.
+ * @param animationType Active title change animation.
+ * @param cornerRadius Title corner rounding radius. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.
+ * @param cornersRadius Rounding radii of corners of multiple titles. Empty values are replaced by `corner_radius`.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Title font size.
+ * @param fontSizeUnit Units of title font size measurement.
+ * @param fontWeight Style. Use `active_font_weight` and `inactive_font_weight` instead.
+ * @param inactiveBackgroundColor Background color of the inactive tab title.
+ * @param inactiveFontVariationSettings List of TrueType/OpenType font features of the inactive tab title.
+ * @param inactiveFontWeight Inactive tab title style.
+ * @param inactiveTextColor Color of the inactive tab title text.
+ * @param itemSpacing Spacing between neighbouring tab titles.
+ * @param letterSpacing Spacing between title characters.
+ * @param lineHeight Line spacing of the text.
+ * @param paddings Indents around the tab title.
+ */
+@Generated
+fun Tabs.TabTitleStyle.modify(
+    `use named arguments`: Guard = Guard.instance,
+    activeBackgroundColor: Property<Color>? = null,
+    activeFontVariationSettings: Property<Map<String, Any>>? = null,
+    activeFontWeight: Property<FontWeight>? = null,
+    activeTextColor: Property<Color>? = null,
+    animationDuration: Property<Int>? = null,
+    animationType: Property<Tabs.TabTitleStyle.AnimationType>? = null,
+    cornerRadius: Property<Int>? = null,
+    cornersRadius: Property<CornersRadius>? = null,
+    fontFamily: Property<String>? = null,
+    fontSize: Property<Int>? = null,
+    fontSizeUnit: Property<SizeUnit>? = null,
+    fontWeight: Property<FontWeight>? = null,
+    inactiveBackgroundColor: Property<Color>? = null,
+    inactiveFontVariationSettings: Property<Map<String, Any>>? = null,
+    inactiveFontWeight: Property<FontWeight>? = null,
+    inactiveTextColor: Property<Color>? = null,
+    itemSpacing: Property<Int>? = null,
+    letterSpacing: Property<Double>? = null,
+    lineHeight: Property<Int>? = null,
+    paddings: Property<EdgeInsets>? = null,
 ): Tabs.TabTitleStyle = Tabs.TabTitleStyle(
     Tabs.TabTitleStyle.Properties(
         activeBackgroundColor = activeBackgroundColor ?: properties.activeBackgroundColor,

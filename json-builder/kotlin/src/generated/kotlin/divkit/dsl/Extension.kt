@@ -135,5 +135,21 @@ fun Extension.defer(
     )
 )
 
+/**
+ * @param id Extension ID.
+ * @param params Additional extension parameters.
+ */
+@Generated
+fun Extension.modify(
+    `use named arguments`: Guard = Guard.instance,
+    id: Property<String>? = null,
+    params: Property<Map<String, Any>>? = null,
+): Extension = Extension(
+    Extension.Properties(
+        id = id ?: properties.id,
+        params = params ?: properties.params,
+    )
+)
+
 @Generated
 fun Extension.asList() = listOf(this)

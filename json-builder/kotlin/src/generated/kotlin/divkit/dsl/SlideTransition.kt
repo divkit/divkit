@@ -213,6 +213,31 @@ fun SlideTransition.defer(
 )
 
 /**
+ * @param distance A fixed value of an offset which the element starts appearing from or at which it finishes disappearing. If no value is specified, the distance to the selected edge of a parent element is used.
+ * @param duration Animation duration in milliseconds.
+ * @param edge Edge of a parent element for one of the action types:<li>where the element will move from when appearing;</li><li>where the element will move to when disappearing.</li>
+ * @param interpolator Transition speed nature.
+ * @param startDelay Delay in milliseconds before animation starts.
+ */
+@Generated
+fun SlideTransition.modify(
+    `use named arguments`: Guard = Guard.instance,
+    distance: Property<Dimension>? = null,
+    duration: Property<Int>? = null,
+    edge: Property<SlideTransition.Edge>? = null,
+    interpolator: Property<AnimationInterpolator>? = null,
+    startDelay: Property<Int>? = null,
+): SlideTransition = SlideTransition(
+    SlideTransition.Properties(
+        distance = distance ?: properties.distance,
+        duration = duration ?: properties.duration,
+        edge = edge ?: properties.edge,
+        interpolator = interpolator ?: properties.interpolator,
+        startDelay = startDelay ?: properties.startDelay,
+    )
+)
+
+/**
  * @param duration Animation duration in milliseconds.
  * @param edge Edge of a parent element for one of the action types:<li>where the element will move from when appearing;</li><li>where the element will move to when disappearing.</li>
  * @param interpolator Transition speed nature.

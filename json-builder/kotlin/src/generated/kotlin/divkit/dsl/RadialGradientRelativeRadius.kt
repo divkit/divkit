@@ -128,6 +128,19 @@ fun RadialGradientRelativeRadius.defer(
  * @param value Type of the relative radius of the gradient transition.
  */
 @Generated
+fun RadialGradientRelativeRadius.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<RadialGradientRelativeRadius.Value>? = null,
+): RadialGradientRelativeRadius = RadialGradientRelativeRadius(
+    RadialGradientRelativeRadius.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param value Type of the relative radius of the gradient transition.
+ */
+@Generated
 fun RadialGradientRelativeRadius.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<RadialGradientRelativeRadius.Value>? = null,

@@ -199,6 +199,31 @@ fun Border.defer(
 
 /**
  * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
+ * @param cornersRadius Multiple radii of element and stroke corner rounding.
+ * @param hasShadow Adding shadow.
+ * @param shadow Parameters of the shadow applied to the element stroke.
+ * @param stroke Stroke style.
+ */
+@Generated
+fun Border.modify(
+    `use named arguments`: Guard = Guard.instance,
+    cornerRadius: Property<Int>? = null,
+    cornersRadius: Property<CornersRadius>? = null,
+    hasShadow: Property<Boolean>? = null,
+    shadow: Property<Shadow>? = null,
+    stroke: Property<Stroke>? = null,
+): Border = Border(
+    Border.Properties(
+        cornerRadius = cornerRadius ?: properties.cornerRadius,
+        cornersRadius = cornersRadius ?: properties.cornersRadius,
+        hasShadow = hasShadow ?: properties.hasShadow,
+        shadow = shadow ?: properties.shadow,
+        stroke = stroke ?: properties.stroke,
+    )
+)
+
+/**
+ * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
  * @param hasShadow Adding shadow.
  */
 @Generated

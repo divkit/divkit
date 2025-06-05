@@ -97,6 +97,16 @@ fun BooleanValue.defer(
 )
 
 @Generated
+fun BooleanValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Boolean>? = null,
+): BooleanValue = BooleanValue(
+    BooleanValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun BooleanValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Boolean>? = null,

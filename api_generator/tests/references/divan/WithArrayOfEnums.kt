@@ -107,6 +107,16 @@ fun WithArrayOfEnums.defer(
 )
 
 @Generated
+fun WithArrayOfEnums.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<ArrayElement<WithArrayOfEnums.Item>>>? = null,
+): WithArrayOfEnums = WithArrayOfEnums(
+    WithArrayOfEnums.Properties(
+        items = items ?: properties.items,
+    )
+)
+
+@Generated
 fun Component<WithArrayOfEnums>.override(
     `use named arguments`: Guard = Guard.instance,
     items: List<ArrayElement<WithArrayOfEnums.Item>>? = null,
@@ -121,6 +131,17 @@ fun Component<WithArrayOfEnums>.override(
 fun Component<WithArrayOfEnums>.defer(
     `use named arguments`: Guard = Guard.instance,
     items: ReferenceProperty<List<ArrayElement<WithArrayOfEnums.Item>>>? = null,
+): Component<WithArrayOfEnums> = Component(
+    template = template,
+    properties = WithArrayOfEnums.Properties(
+        items = items,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithArrayOfEnums>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    items: Property<List<ArrayElement<WithArrayOfEnums.Item>>>? = null,
 ): Component<WithArrayOfEnums> = Component(
     template = template,
     properties = WithArrayOfEnums.Properties(

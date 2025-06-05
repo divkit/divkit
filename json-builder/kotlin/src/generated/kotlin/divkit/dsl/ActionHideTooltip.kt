@@ -120,6 +120,19 @@ fun ActionHideTooltip.defer(
  * @param id Tooltip ID.
  */
 @Generated
+fun ActionHideTooltip.modify(
+    `use named arguments`: Guard = Guard.instance,
+    id: Property<String>? = null,
+): ActionHideTooltip = ActionHideTooltip(
+    ActionHideTooltip.Properties(
+        id = id ?: properties.id,
+    )
+)
+
+/**
+ * @param id Tooltip ID.
+ */
+@Generated
 fun ActionHideTooltip.evaluate(
     `use named arguments`: Guard = Guard.instance,
     id: ExpressionProperty<String>? = null,

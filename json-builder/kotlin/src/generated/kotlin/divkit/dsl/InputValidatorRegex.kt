@@ -184,6 +184,28 @@ fun InputValidatorRegex.defer(
  * @param allowEmpty Determines whether the empty field value is valid.
  * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
  * @param pattern A regular expression (pattern) that the field value must match.
+ * @param variable The name of the variable that stores the calculation results.
+ */
+@Generated
+fun InputValidatorRegex.modify(
+    `use named arguments`: Guard = Guard.instance,
+    allowEmpty: Property<Boolean>? = null,
+    labelId: Property<String>? = null,
+    pattern: Property<String>? = null,
+    variable: Property<String>? = null,
+): InputValidatorRegex = InputValidatorRegex(
+    InputValidatorRegex.Properties(
+        allowEmpty = allowEmpty ?: properties.allowEmpty,
+        labelId = labelId ?: properties.labelId,
+        pattern = pattern ?: properties.pattern,
+        variable = variable ?: properties.variable,
+    )
+)
+
+/**
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param pattern A regular expression (pattern) that the field value must match.
  */
 @Generated
 fun InputValidatorRegex.evaluate(

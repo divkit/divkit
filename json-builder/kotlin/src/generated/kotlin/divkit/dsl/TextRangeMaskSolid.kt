@@ -143,6 +143,22 @@ fun TextRangeMaskSolid.defer(
  * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
+fun TextRangeMaskSolid.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+    isEnabled: Property<Boolean>? = null,
+): TextRangeMaskSolid = TextRangeMaskSolid(
+    TextRangeMaskSolid.Properties(
+        color = color ?: properties.color,
+        isEnabled = isEnabled ?: properties.isEnabled,
+    )
+)
+
+/**
+ * @param color Color.
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ */
+@Generated
 fun TextRangeMaskSolid.evaluate(
     `use named arguments`: Guard = Guard.instance,
     color: ExpressionProperty<Color>? = null,

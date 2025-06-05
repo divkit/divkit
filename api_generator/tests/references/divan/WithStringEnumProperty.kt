@@ -107,6 +107,16 @@ fun WithStringEnumProperty.defer(
 )
 
 @Generated
+fun WithStringEnumProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithStringEnumProperty.Property>? = null,
+): WithStringEnumProperty = WithStringEnumProperty(
+    WithStringEnumProperty.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun WithStringEnumProperty.evaluate(
     `use named arguments`: Guard = Guard.instance,
     property: ExpressionProperty<WithStringEnumProperty.Property>? = null,
@@ -142,6 +152,17 @@ fun Component<WithStringEnumProperty>.defer(
 fun Component<WithStringEnumProperty>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     property: ExpressionProperty<WithStringEnumProperty.Property>? = null,
+): Component<WithStringEnumProperty> = Component(
+    template = template,
+    properties = WithStringEnumProperty.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithStringEnumProperty>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithStringEnumProperty.Property>? = null,
 ): Component<WithStringEnumProperty> = Component(
     template = template,
     properties = WithStringEnumProperty.Properties(

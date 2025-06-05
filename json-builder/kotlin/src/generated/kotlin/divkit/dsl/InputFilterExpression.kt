@@ -120,6 +120,19 @@ fun InputFilterExpression.defer(
  * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
  */
 @Generated
+fun InputFilterExpression.modify(
+    `use named arguments`: Guard = Guard.instance,
+    condition: Property<Boolean>? = null,
+): InputFilterExpression = InputFilterExpression(
+    InputFilterExpression.Properties(
+        condition = condition ?: properties.condition,
+    )
+)
+
+/**
+ * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
+ */
+@Generated
 fun InputFilterExpression.evaluate(
     `use named arguments`: Guard = Guard.instance,
     condition: ExpressionProperty<Boolean>? = null,

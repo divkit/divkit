@@ -120,6 +120,19 @@ fun MatchParentSize.defer(
  * @param weight Weight when distributing free space between elements with the size type `match_parent` inside an element. If the weight isn't specified, the elements will divide the place equally.
  */
 @Generated
+fun MatchParentSize.modify(
+    `use named arguments`: Guard = Guard.instance,
+    weight: Property<Double>? = null,
+): MatchParentSize = MatchParentSize(
+    MatchParentSize.Properties(
+        weight = weight ?: properties.weight,
+    )
+)
+
+/**
+ * @param weight Weight when distributing free space between elements with the size type `match_parent` inside an element. If the weight isn't specified, the elements will divide the place equally.
+ */
+@Generated
 fun MatchParentSize.evaluate(
     `use named arguments`: Guard = Guard.instance,
     weight: ExpressionProperty<Double>? = null,

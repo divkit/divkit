@@ -225,6 +225,28 @@ fun VideoSource.defer(
 /**
  * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
  * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
+ * @param resolution Media file resolution.
+ * @param url Link to the media file available for playback or download.
+ */
+@Generated
+fun VideoSource.modify(
+    `use named arguments`: Guard = Guard.instance,
+    bitrate: Property<Int>? = null,
+    mimeType: Property<String>? = null,
+    resolution: Property<VideoSource.Resolution>? = null,
+    url: Property<Url>? = null,
+): VideoSource = VideoSource(
+    VideoSource.Properties(
+        bitrate = bitrate ?: properties.bitrate,
+        mimeType = mimeType ?: properties.mimeType,
+        resolution = resolution ?: properties.resolution,
+        url = url ?: properties.url,
+    )
+)
+
+/**
+ * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
+ * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
  * @param url Link to the media file available for playback or download.
  */
 @Generated
@@ -314,6 +336,22 @@ fun VideoSource.Resolution.defer(
     `use named arguments`: Guard = Guard.instance,
     height: ReferenceProperty<Int>? = null,
     width: ReferenceProperty<Int>? = null,
+): VideoSource.Resolution = VideoSource.Resolution(
+    VideoSource.Resolution.Properties(
+        height = height ?: properties.height,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param height Media file frame height.
+ * @param width Media file frame width.
+ */
+@Generated
+fun VideoSource.Resolution.modify(
+    `use named arguments`: Guard = Guard.instance,
+    height: Property<Int>? = null,
+    width: Property<Int>? = null,
 ): VideoSource.Resolution = VideoSource.Resolution(
     VideoSource.Resolution.Properties(
         height = height ?: properties.height,

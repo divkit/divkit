@@ -184,6 +184,28 @@ fun InputValidatorExpression.defer(
  * @param allowEmpty Determines whether the empty field value is valid.
  * @param condition [Calculated expression](../../expressions) used as a value validity condition.
  * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
+ */
+@Generated
+fun InputValidatorExpression.modify(
+    `use named arguments`: Guard = Guard.instance,
+    allowEmpty: Property<Boolean>? = null,
+    condition: Property<Boolean>? = null,
+    labelId: Property<String>? = null,
+    variable: Property<String>? = null,
+): InputValidatorExpression = InputValidatorExpression(
+    InputValidatorExpression.Properties(
+        allowEmpty = allowEmpty ?: properties.allowEmpty,
+        condition = condition ?: properties.condition,
+        labelId = labelId ?: properties.labelId,
+        variable = variable ?: properties.variable,
+    )
+)
+
+/**
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param condition [Calculated expression](../../expressions) used as a value validity condition.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
  */
 @Generated
 fun InputValidatorExpression.evaluate(

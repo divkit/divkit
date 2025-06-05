@@ -134,6 +134,21 @@ fun Dimension.defer(
  * @param value Value.
  */
 @Generated
+fun Dimension.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Double>? = null,
+    unit: Property<SizeUnit>? = null,
+): Dimension = Dimension(
+    Dimension.Properties(
+        value = value ?: properties.value,
+        unit = unit ?: properties.unit,
+    )
+)
+
+/**
+ * @param value Value.
+ */
+@Generated
 fun Dimension.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Double>? = null,

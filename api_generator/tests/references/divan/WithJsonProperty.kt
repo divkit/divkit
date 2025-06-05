@@ -104,4 +104,14 @@ fun WithJsonProperty.defer(
 )
 
 @Generated
+fun WithJsonProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    jsonProperty: Property<Map<String, Any>>? = null,
+): WithJsonProperty = WithJsonProperty(
+    WithJsonProperty.Properties(
+        jsonProperty = jsonProperty ?: properties.jsonProperty,
+    )
+)
+
+@Generated
 fun WithJsonProperty.asList() = listOf(this)

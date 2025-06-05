@@ -373,6 +373,48 @@ fun Action.defer(
 )
 
 /**
+ * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
+ * @param logId Logging ID.
+ * @param logUrl URL for logging.
+ * @param menuItems Context menu.
+ * @param payload Additional parameters, passed to the host application.
+ * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element within which the specified action will be performed.
+ * @param target The tab in which the URL must be opened.
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ */
+@Generated
+fun Action.modify(
+    `use named arguments`: Guard = Guard.instance,
+    downloadCallbacks: Property<DownloadCallbacks>? = null,
+    isEnabled: Property<Boolean>? = null,
+    logId: Property<String>? = null,
+    logUrl: Property<Url>? = null,
+    menuItems: Property<List<Action.MenuItem>>? = null,
+    payload: Property<Map<String, Any>>? = null,
+    referer: Property<Url>? = null,
+    scopeId: Property<String>? = null,
+    target: Property<Action.Target>? = null,
+    typed: Property<ActionTyped>? = null,
+    url: Property<Url>? = null,
+): Action = Action(
+    Action.Properties(
+        downloadCallbacks = downloadCallbacks ?: properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
+        logId = logId ?: properties.logId,
+        logUrl = logUrl ?: properties.logUrl,
+        menuItems = menuItems ?: properties.menuItems,
+        payload = payload ?: properties.payload,
+        referer = referer ?: properties.referer,
+        scopeId = scopeId ?: properties.scopeId,
+        target = target ?: properties.target,
+        typed = typed ?: properties.typed,
+        url = url ?: properties.url,
+    )
+)
+
+/**
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
@@ -491,6 +533,25 @@ fun Action.MenuItem.defer(
     action: ReferenceProperty<Action>? = null,
     actions: ReferenceProperty<List<Action>>? = null,
     text: ReferenceProperty<String>? = null,
+): Action.MenuItem = Action.MenuItem(
+    Action.MenuItem.Properties(
+        action = action ?: properties.action,
+        actions = actions ?: properties.actions,
+        text = text ?: properties.text,
+    )
+)
+
+/**
+ * @param action One action when clicking on a menu item. Not used if the `actions` parameter is set.
+ * @param actions Multiple actions when clicking on a menu item.
+ * @param text Menu item title.
+ */
+@Generated
+fun Action.MenuItem.modify(
+    `use named arguments`: Guard = Guard.instance,
+    action: Property<Action>? = null,
+    actions: Property<List<Action>>? = null,
+    text: Property<String>? = null,
 ): Action.MenuItem = Action.MenuItem(
     Action.MenuItem.Properties(
         action = action ?: properties.action,

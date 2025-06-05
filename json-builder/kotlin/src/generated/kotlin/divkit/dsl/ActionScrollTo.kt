@@ -161,6 +161,25 @@ fun ActionScrollTo.defer(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
+ * @param id ID of the element where the action should be performed.
+ */
+@Generated
+fun ActionScrollTo.modify(
+    `use named arguments`: Guard = Guard.instance,
+    animated: Property<Boolean>? = null,
+    destination: Property<ActionScrollDestination>? = null,
+    id: Property<String>? = null,
+): ActionScrollTo = ActionScrollTo(
+    ActionScrollTo.Properties(
+        animated = animated ?: properties.animated,
+        destination = destination ?: properties.destination,
+        id = id ?: properties.id,
+    )
+)
+
+/**
+ * @param animated Enables scrolling animation.
  * @param id ID of the element where the action should be performed.
  */
 @Generated

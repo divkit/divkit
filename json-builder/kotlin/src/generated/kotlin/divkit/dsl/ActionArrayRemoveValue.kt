@@ -112,6 +112,18 @@ fun ActionArrayRemoveValue.defer(
 )
 
 @Generated
+fun ActionArrayRemoveValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    index: Property<Int>? = null,
+    variableName: Property<String>? = null,
+): ActionArrayRemoveValue = ActionArrayRemoveValue(
+    ActionArrayRemoveValue.Properties(
+        index = index ?: properties.index,
+        variableName = variableName ?: properties.variableName,
+    )
+)
+
+@Generated
 fun ActionArrayRemoveValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     index: ExpressionProperty<Int>? = null,

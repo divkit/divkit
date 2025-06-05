@@ -101,6 +101,16 @@ fun WithRawArray.defer(
 )
 
 @Generated
+fun WithRawArray.modify(
+    `use named arguments`: Guard = Guard.instance,
+    array: Property<List<Any>>? = null,
+): WithRawArray = WithRawArray(
+    WithRawArray.Properties(
+        array = array ?: properties.array,
+    )
+)
+
+@Generated
 fun WithRawArray.evaluate(
     `use named arguments`: Guard = Guard.instance,
     array: ExpressionProperty<List<Any>>? = null,
@@ -136,6 +146,17 @@ fun Component<WithRawArray>.defer(
 fun Component<WithRawArray>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     array: ExpressionProperty<List<Any>>? = null,
+): Component<WithRawArray> = Component(
+    template = template,
+    properties = WithRawArray.Properties(
+        array = array,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithRawArray>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    array: Property<List<Any>>? = null,
 ): Component<WithRawArray> = Component(
     template = template,
     properties = WithRawArray.Properties(

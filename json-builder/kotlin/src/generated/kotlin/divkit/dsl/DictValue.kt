@@ -97,4 +97,14 @@ fun DictValue.defer(
 )
 
 @Generated
+fun DictValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Map<String, Any>>? = null,
+): DictValue = DictValue(
+    DictValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun DictValue.asList() = listOf(this)

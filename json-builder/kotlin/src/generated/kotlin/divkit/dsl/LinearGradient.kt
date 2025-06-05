@@ -204,6 +204,25 @@ fun LinearGradient.defer(
 
 /**
  * @param angle Angle of gradient direction.
+ * @param colorMap Colors and positions of gradient points. When using this parameter, the `colors` parameter is ignored.
+ * @param colors Colors. Gradient points are located at an equal distance from each other.
+ */
+@Generated
+fun LinearGradient.modify(
+    `use named arguments`: Guard = Guard.instance,
+    angle: Property<Int>? = null,
+    colorMap: Property<List<LinearGradient.ColorPoint>>? = null,
+    colors: Property<List<ArrayElement<Color>>>? = null,
+): LinearGradient = LinearGradient(
+    LinearGradient.Properties(
+        angle = angle ?: properties.angle,
+        colorMap = colorMap ?: properties.colorMap,
+        colors = colors ?: properties.colors,
+    )
+)
+
+/**
+ * @param angle Angle of gradient direction.
  */
 @Generated
 fun LinearGradient.evaluate(
@@ -289,6 +308,22 @@ fun LinearGradient.ColorPoint.defer(
     `use named arguments`: Guard = Guard.instance,
     color: ReferenceProperty<Color>? = null,
     position: ReferenceProperty<Double>? = null,
+): LinearGradient.ColorPoint = LinearGradient.ColorPoint(
+    LinearGradient.ColorPoint.Properties(
+        color = color ?: properties.color,
+        position = position ?: properties.position,
+    )
+)
+
+/**
+ * @param color Gradient color corresponding to gradient point.
+ * @param position The position of the gradient point.
+ */
+@Generated
+fun LinearGradient.ColorPoint.modify(
+    `use named arguments`: Guard = Guard.instance,
+    color: Property<Color>? = null,
+    position: Property<Double>? = null,
 ): LinearGradient.ColorPoint = LinearGradient.ColorPoint(
     LinearGradient.ColorPoint.Properties(
         color = color ?: properties.color,

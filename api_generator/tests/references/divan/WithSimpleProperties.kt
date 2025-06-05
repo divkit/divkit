@@ -288,6 +288,42 @@ fun WithSimpleProperties.defer(
  * @param booleanInt Boolean value in numeric format.
  * @param color Color.
  * @param double Floating point number.
+ * @param id ID. Can't contain expressions.
+ * @param integer Integer.
+ * @param positiveInteger Positive integer.
+ * @param string String.
+ */
+@Generated
+fun WithSimpleProperties.modify(
+    `use named arguments`: Guard = Guard.instance,
+    boolean: Property<Boolean>? = null,
+    booleanInt: Property<Boolean>? = null,
+    color: Property<Color>? = null,
+    double: Property<Double>? = null,
+    id: Property<Int>? = null,
+    integer: Property<Long>? = null,
+    positiveInteger: Property<Int>? = null,
+    string: Property<String>? = null,
+    url: Property<Url>? = null,
+): WithSimpleProperties = WithSimpleProperties(
+    WithSimpleProperties.Properties(
+        boolean = boolean ?: properties.boolean,
+        booleanInt = booleanInt ?: properties.booleanInt,
+        color = color ?: properties.color,
+        double = double ?: properties.double,
+        id = id ?: properties.id,
+        integer = integer ?: properties.integer,
+        positiveInteger = positiveInteger ?: properties.positiveInteger,
+        string = string ?: properties.string,
+        url = url ?: properties.url,
+    )
+)
+
+/**
+ * @param boolean Boolean property.
+ * @param booleanInt Boolean value in numeric format.
+ * @param color Color.
+ * @param double Floating point number.
  * @param integer Integer.
  * @param positiveInteger Positive integer.
  * @param string String.
@@ -419,6 +455,43 @@ fun Component<WithSimpleProperties>.evaluate(
         color = color,
         double = double,
         id = null,
+        integer = integer,
+        positiveInteger = positiveInteger,
+        string = string,
+        url = url,
+    ).mergeWith(properties)
+)
+
+/**
+ * @param boolean Boolean property.
+ * @param booleanInt Boolean value in numeric format.
+ * @param color Color.
+ * @param double Floating point number.
+ * @param id ID. Can't contain expressions.
+ * @param integer Integer.
+ * @param positiveInteger Positive integer.
+ * @param string String.
+ */
+@Generated
+fun Component<WithSimpleProperties>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    boolean: Property<Boolean>? = null,
+    booleanInt: Property<Boolean>? = null,
+    color: Property<Color>? = null,
+    double: Property<Double>? = null,
+    id: Property<Int>? = null,
+    integer: Property<Long>? = null,
+    positiveInteger: Property<Int>? = null,
+    string: Property<String>? = null,
+    url: Property<Url>? = null,
+): Component<WithSimpleProperties> = Component(
+    template = template,
+    properties = WithSimpleProperties.Properties(
+        boolean = boolean,
+        booleanInt = booleanInt,
+        color = color,
+        double = double,
+        id = id,
         integer = integer,
         positiveInteger = positiveInteger,
         string = string,

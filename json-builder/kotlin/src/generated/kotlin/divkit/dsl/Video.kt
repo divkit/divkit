@@ -1084,6 +1084,156 @@ fun Video.defer(
 )
 
 /**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param muted This option mutes video.
+ * @param paddings Internal margins from the element stroke.
+ * @param pauseActions Actions performed when playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired Enables video preloading.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Video.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    aspect: Property<Aspect>? = null,
+    autostart: Property<Boolean>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    bufferingActions: Property<List<Action>>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    elapsedTimeVariable: Property<String>? = null,
+    endActions: Property<List<Action>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    fatalActions: Property<List<Action>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    muted: Property<Boolean>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    pauseActions: Property<List<Action>>? = null,
+    playerSettingsPayload: Property<Map<String, Any>>? = null,
+    preloadRequired: Property<Boolean>? = null,
+    preview: Property<String>? = null,
+    repeatable: Property<Boolean>? = null,
+    resumeActions: Property<List<Action>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    scale: Property<VideoScale>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    videoSources: Property<List<VideoSource>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Video = Video(
+    Video.Properties(
+        accessibility = accessibility ?: properties.accessibility,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
+        aspect = aspect ?: properties.aspect,
+        autostart = autostart ?: properties.autostart,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        bufferingActions = bufferingActions ?: properties.bufferingActions,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
+        elapsedTimeVariable = elapsedTimeVariable ?: properties.elapsedTimeVariable,
+        endActions = endActions ?: properties.endActions,
+        extensions = extensions ?: properties.extensions,
+        fatalActions = fatalActions ?: properties.fatalActions,
+        focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
+        height = height ?: properties.height,
+        id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
+        margins = margins ?: properties.margins,
+        muted = muted ?: properties.muted,
+        paddings = paddings ?: properties.paddings,
+        pauseActions = pauseActions ?: properties.pauseActions,
+        playerSettingsPayload = playerSettingsPayload ?: properties.playerSettingsPayload,
+        preloadRequired = preloadRequired ?: properties.preloadRequired,
+        preview = preview ?: properties.preview,
+        repeatable = repeatable ?: properties.repeatable,
+        resumeActions = resumeActions ?: properties.resumeActions,
+        reuseId = reuseId ?: properties.reuseId,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        scale = scale ?: properties.scale,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
+        variables = variables ?: properties.variables,
+        videoSources = videoSources ?: properties.videoSources,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
@@ -1549,6 +1699,157 @@ fun Component<Video>.evaluate(
         visibilityAction = null,
         visibilityActions = null,
         width = null,
+    ).mergeWith(properties)
+)
+
+/**
+ * @param accessibility Accessibility settings.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions User functions.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides data on the actual size of the element.
+ * @param margins External margins from the element stroke.
+ * @param muted This option mutes video.
+ * @param paddings Internal margins from the element stroke.
+ * @param pauseActions Actions performed when playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired Enables video preloading.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Video>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Property<Accessibility>? = null,
+    alignmentHorizontal: Property<AlignmentHorizontal>? = null,
+    alignmentVertical: Property<AlignmentVertical>? = null,
+    alpha: Property<Double>? = null,
+    animators: Property<List<Animator>>? = null,
+    aspect: Property<Aspect>? = null,
+    autostart: Property<Boolean>? = null,
+    background: Property<List<Background>>? = null,
+    border: Property<Border>? = null,
+    bufferingActions: Property<List<Action>>? = null,
+    columnSpan: Property<Int>? = null,
+    disappearActions: Property<List<DisappearAction>>? = null,
+    elapsedTimeVariable: Property<String>? = null,
+    endActions: Property<List<Action>>? = null,
+    extensions: Property<List<Extension>>? = null,
+    fatalActions: Property<List<Action>>? = null,
+    focus: Property<Focus>? = null,
+    functions: Property<List<Function>>? = null,
+    height: Property<Size>? = null,
+    id: Property<String>? = null,
+    layoutProvider: Property<LayoutProvider>? = null,
+    margins: Property<EdgeInsets>? = null,
+    muted: Property<Boolean>? = null,
+    paddings: Property<EdgeInsets>? = null,
+    pauseActions: Property<List<Action>>? = null,
+    playerSettingsPayload: Property<Map<String, Any>>? = null,
+    preloadRequired: Property<Boolean>? = null,
+    preview: Property<String>? = null,
+    repeatable: Property<Boolean>? = null,
+    resumeActions: Property<List<Action>>? = null,
+    reuseId: Property<String>? = null,
+    rowSpan: Property<Int>? = null,
+    scale: Property<VideoScale>? = null,
+    selectedActions: Property<List<Action>>? = null,
+    tooltips: Property<List<Tooltip>>? = null,
+    transform: Property<Transform>? = null,
+    transitionChange: Property<ChangeTransition>? = null,
+    transitionIn: Property<AppearanceTransition>? = null,
+    transitionOut: Property<AppearanceTransition>? = null,
+    transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: Property<List<Trigger>>? = null,
+    variables: Property<List<Variable>>? = null,
+    videoSources: Property<List<VideoSource>>? = null,
+    visibility: Property<Visibility>? = null,
+    visibilityAction: Property<VisibilityAction>? = null,
+    visibilityActions: Property<List<VisibilityAction>>? = null,
+    width: Property<Size>? = null,
+): Component<Video> = Component(
+    template = template,
+    properties = Video.Properties(
+        accessibility = accessibility,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
+        alpha = alpha,
+        animators = animators,
+        aspect = aspect,
+        autostart = autostart,
+        background = background,
+        border = border,
+        bufferingActions = bufferingActions,
+        columnSpan = columnSpan,
+        disappearActions = disappearActions,
+        elapsedTimeVariable = elapsedTimeVariable,
+        endActions = endActions,
+        extensions = extensions,
+        fatalActions = fatalActions,
+        focus = focus,
+        functions = functions,
+        height = height,
+        id = id,
+        layoutProvider = layoutProvider,
+        margins = margins,
+        muted = muted,
+        paddings = paddings,
+        pauseActions = pauseActions,
+        playerSettingsPayload = playerSettingsPayload,
+        preloadRequired = preloadRequired,
+        preview = preview,
+        repeatable = repeatable,
+        resumeActions = resumeActions,
+        reuseId = reuseId,
+        rowSpan = rowSpan,
+        scale = scale,
+        selectedActions = selectedActions,
+        tooltips = tooltips,
+        transform = transform,
+        transitionChange = transitionChange,
+        transitionIn = transitionIn,
+        transitionOut = transitionOut,
+        transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
+        variables = variables,
+        videoSources = videoSources,
+        visibility = visibility,
+        visibilityAction = visibilityAction,
+        visibilityActions = visibilityActions,
+        width = width,
     ).mergeWith(properties)
 )
 

@@ -104,6 +104,16 @@ fun WithEntityProperty.defer(
 )
 
 @Generated
+fun WithEntityProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    entity: Property<Entity>? = null,
+): WithEntityProperty = WithEntityProperty(
+    WithEntityProperty.Properties(
+        entity = entity ?: properties.entity,
+    )
+)
+
+@Generated
 fun Component<WithEntityProperty>.override(
     `use named arguments`: Guard = Guard.instance,
     entity: Entity? = null,
@@ -118,6 +128,17 @@ fun Component<WithEntityProperty>.override(
 fun Component<WithEntityProperty>.defer(
     `use named arguments`: Guard = Guard.instance,
     entity: ReferenceProperty<Entity>? = null,
+): Component<WithEntityProperty> = Component(
+    template = template,
+    properties = WithEntityProperty.Properties(
+        entity = entity,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithEntityProperty>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    entity: Property<Entity>? = null,
 ): Component<WithEntityProperty> = Component(
     template = template,
     properties = WithEntityProperty.Properties(

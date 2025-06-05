@@ -115,6 +115,19 @@ fun TextRangeMaskBase.defer(
  * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
  */
 @Generated
+fun TextRangeMaskBase.modify(
+    `use named arguments`: Guard = Guard.instance,
+    isEnabled: Property<Boolean>? = null,
+): TextRangeMaskBase = TextRangeMaskBase(
+    TextRangeMaskBase.Properties(
+        isEnabled = isEnabled ?: properties.isEnabled,
+    )
+)
+
+/**
+ * @param isEnabled Controls the mask state. If set to `true`, the mask will hide the specified part of text. Otherwise, the text will be shown.
+ */
+@Generated
 fun TextRangeMaskBase.evaluate(
     `use named arguments`: Guard = Guard.instance,
     isEnabled: ExpressionProperty<Boolean>? = null,

@@ -120,6 +120,19 @@ fun PercentageSize.defer(
  * @param value Element size value.
  */
 @Generated
+fun PercentageSize.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Double>? = null,
+): PercentageSize = PercentageSize(
+    PercentageSize.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param value Element size value.
+ */
+@Generated
 fun PercentageSize.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Double>? = null,

@@ -150,6 +150,22 @@ fun ActionTimer.defer(
  * @param id Timer ID.
  */
 @Generated
+fun ActionTimer.modify(
+    `use named arguments`: Guard = Guard.instance,
+    action: Property<ActionTimer.Action>? = null,
+    id: Property<String>? = null,
+): ActionTimer = ActionTimer(
+    ActionTimer.Properties(
+        action = action ?: properties.action,
+        id = id ?: properties.id,
+    )
+)
+
+/**
+ * @param action Timer actions:<li>`start` — starts the timer from a stopped state</li><li>`stop`— stops the timer and performs the `onEnd` action</li><li>`pause` — pauses the timer, saves the current time</li><li>`resume` — restarts the timer after a pause</li><li>`cancel` — interrupts the timer, resets the time</li><li>`reset` — cancels the timer, then starts it again</li>
+ * @param id Timer ID.
+ */
+@Generated
 fun ActionTimer.evaluate(
     `use named arguments`: Guard = Guard.instance,
     action: ExpressionProperty<ActionTimer.Action>? = null,

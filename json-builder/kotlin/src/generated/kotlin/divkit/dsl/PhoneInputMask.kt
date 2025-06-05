@@ -116,5 +116,18 @@ fun PhoneInputMask.defer(
     )
 )
 
+/**
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
+ */
+@Generated
+fun PhoneInputMask.modify(
+    `use named arguments`: Guard = Guard.instance,
+    rawTextVariable: Property<String>? = null,
+): PhoneInputMask = PhoneInputMask(
+    PhoneInputMask.Properties(
+        rawTextVariable = rawTextVariable ?: properties.rawTextVariable,
+    )
+)
+
 @Generated
 fun PhoneInputMask.asList() = listOf(this)

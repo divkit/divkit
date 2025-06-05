@@ -133,6 +133,16 @@ fun WithOptionalComplexProperty.defer(
 )
 
 @Generated
+fun WithOptionalComplexProperty.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithOptionalComplexProperty.Property>? = null,
+): WithOptionalComplexProperty = WithOptionalComplexProperty(
+    WithOptionalComplexProperty.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun Component<WithOptionalComplexProperty>.override(
     `use named arguments`: Guard = Guard.instance,
     property: WithOptionalComplexProperty.Property? = null,
@@ -147,6 +157,17 @@ fun Component<WithOptionalComplexProperty>.override(
 fun Component<WithOptionalComplexProperty>.defer(
     `use named arguments`: Guard = Guard.instance,
     property: ReferenceProperty<WithOptionalComplexProperty.Property>? = null,
+): Component<WithOptionalComplexProperty> = Component(
+    template = template,
+    properties = WithOptionalComplexProperty.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
+fun Component<WithOptionalComplexProperty>.modify(
+    `use named arguments`: Guard = Guard.instance,
+    property: Property<WithOptionalComplexProperty.Property>? = null,
 ): Component<WithOptionalComplexProperty> = Component(
     template = template,
     properties = WithOptionalComplexProperty.Properties(
@@ -203,6 +224,16 @@ fun WithOptionalComplexProperty.Property.override(
 fun WithOptionalComplexProperty.Property.defer(
     `use named arguments`: Guard = Guard.instance,
     value: ReferenceProperty<Url>? = null,
+): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
+    WithOptionalComplexProperty.Property.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
+fun WithOptionalComplexProperty.Property.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Url>? = null,
 ): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
     WithOptionalComplexProperty.Property.Properties(
         value = value ?: properties.value,

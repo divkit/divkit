@@ -159,6 +159,25 @@ fun ActionDownload.defer(
 )
 
 /**
+ * @param onFailActions Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
+ * @param onSuccessActions Actions in case of successful loading.
+ * @param url Link for receiving changes.
+ */
+@Generated
+fun ActionDownload.modify(
+    `use named arguments`: Guard = Guard.instance,
+    onFailActions: Property<List<Action>>? = null,
+    onSuccessActions: Property<List<Action>>? = null,
+    url: Property<Url>? = null,
+): ActionDownload = ActionDownload(
+    ActionDownload.Properties(
+        onFailActions = onFailActions ?: properties.onFailActions,
+        onSuccessActions = onSuccessActions ?: properties.onSuccessActions,
+        url = url ?: properties.url,
+    )
+)
+
+/**
  * @param url Link for receiving changes.
  */
 @Generated

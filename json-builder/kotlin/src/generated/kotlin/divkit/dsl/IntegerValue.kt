@@ -97,6 +97,16 @@ fun IntegerValue.defer(
 )
 
 @Generated
+fun IntegerValue.modify(
+    `use named arguments`: Guard = Guard.instance,
+    value: Property<Int>? = null,
+): IntegerValue = IntegerValue(
+    IntegerValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun IntegerValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Int>? = null,

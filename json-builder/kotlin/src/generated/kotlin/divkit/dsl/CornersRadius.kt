@@ -182,6 +182,28 @@ fun CornersRadius.defer(
  * @param topRight Rounding radius of an upper right corner. If not specified, then `corner_radius` is used.
  */
 @Generated
+fun CornersRadius.modify(
+    `use named arguments`: Guard = Guard.instance,
+    bottomLeft: Property<Int>? = null,
+    bottomRight: Property<Int>? = null,
+    topLeft: Property<Int>? = null,
+    topRight: Property<Int>? = null,
+): CornersRadius = CornersRadius(
+    CornersRadius.Properties(
+        bottomLeft = bottomLeft ?: properties.bottomLeft,
+        bottomRight = bottomRight ?: properties.bottomRight,
+        topLeft = topLeft ?: properties.topLeft,
+        topRight = topRight ?: properties.topRight,
+    )
+)
+
+/**
+ * @param bottomLeft Rounding radius of a lower left corner. If not specified, then `corner_radius` is used.
+ * @param bottomRight Rounding radius of a lower right corner. If not specified, then `corner_radius` is used.
+ * @param topLeft Rounding radius of an upper left corner. If not specified, then `corner_radius` is used.
+ * @param topRight Rounding radius of an upper right corner. If not specified, then `corner_radius` is used.
+ */
+@Generated
 fun CornersRadius.evaluate(
     `use named arguments`: Guard = Guard.instance,
     bottomLeft: ExpressionProperty<Int>? = null,
