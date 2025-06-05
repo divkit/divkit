@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.KeyListener
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.KeyEvent
@@ -163,5 +164,20 @@ internal class DivInputView @JvmOverloads constructor(
                 return super.commitText(text, newCursorPosition)
             }
         }
+    }
+
+    override fun setInputType(type: Int) {
+        if (inputType == type) {
+            return
+        }
+
+        super.setInputType(type)
+    }
+
+    override fun setKeyListener(keyListener: KeyListener?) {
+        if (this.keyListener == keyListener) {
+            return
+        }
+        super.setKeyListener(keyListener)
     }
 }
