@@ -1,3 +1,8 @@
+## 32.3.0 (June 9, 2025)
+
+* Fixed a issue with incorrect priority of `url` over `typed` in `actions` in rare cases.
+
+
 ## 32.2.0 (June 2, 2025)
 
 * Fixed a bug with an `animator` that could be accessed from a sibling component (the `animator` should be found only from the element itself or a child).

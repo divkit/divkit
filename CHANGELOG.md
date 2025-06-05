@@ -1,3 +1,19 @@
+## 32.3.0
+
+# Android Client:
+* Fixed variables observing in elements built by `item-builder`.
+
+# iOS Client:
+* Adding the target `DivKitSVG` to support SVG images.
+* Fix space-evenly with gone items.
+* Report warning "Touchable view is too small" only when both view's dimensions are non-zero.
+* Support `tab_title_delimiter` for `div_tabs`.
+* Supported hover and press actions.
+
+# Web Client:
+* Fixed a issue with incorrect priority of `url` over `typed` in `actions` in rare cases.
+
+
 ## 32.2.0
 
 # Android Client:
