@@ -34,6 +34,10 @@ extension UIViewRenderable {
         renderingDelegate?.reportViewDidLayout(path: path)
       }
     )
+    #if DEBUG
+    view.debugID = self.path?.leaf
+    #endif
+
     let configure = {
       configureBlockView(
         view,
