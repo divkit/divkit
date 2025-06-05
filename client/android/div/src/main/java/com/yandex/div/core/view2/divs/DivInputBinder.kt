@@ -90,12 +90,13 @@ internal class DivInputBinder @Inject constructor(
         observeHintColor(div, expressionResolver)
         observeHighlightColor(div, expressionResolver)
 
-        observeKeyboardTypeAndCapitalization(div, expressionResolver)
         observeEnterTypeAndActions(div, bindingContext, expressionResolver)
         observeSelectAllOnFocus(div, expressionResolver)
         observeIsEnabled(div, expressionResolver)
 
         observeText(div, bindingContext, path)
+
+        observeKeyboardTypeAndCapitalization(div, expressionResolver)
 
         focusTracker = bindingContext.divView.inputFocusTracker
         focusTracker?.requestFocusIfNeeded(this)
@@ -228,6 +229,9 @@ internal class DivInputBinder @Inject constructor(
         addSubscription(highlightColorExpr.observeAndGet(resolver, callback))
     }
 
+    /**
+     * Conflicts with setting `keyListener`, so must be called after the `observerText` -> `observeMask` method.
+     */
     private fun DivInputView.observeKeyboardTypeAndCapitalization(div: DivInput, resolver: ExpressionResolver) {
         val callback = { _: Any ->
             val type = div.keyboardType.evaluate(resolver)
