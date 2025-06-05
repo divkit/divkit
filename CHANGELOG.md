@@ -2,6 +2,7 @@
 
 # Android Client:
 * Fixed variables observing in elements built by `item-builder`.
+* Prevent keyboard from resetting state after rebind.
 
 # iOS Client:
 * Adding the target `DivKitSVG` to support SVG images.
