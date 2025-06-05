@@ -92,7 +92,7 @@ internal class SpannedTextBuilder @Inject constructor(
             divText.text.evaluate(bindingContext.expressionResolver),
             divText.ranges,
             divText.images,
-            divText.actions,
+            null,
             textConsumer
         )
     }
