@@ -205,6 +205,18 @@ class DemoDiv2Logger(
         }
     }
 
+    override fun logImeEnter(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        inputView: View,
+        action: DivAction
+    ) {
+        log {
+            val actionLogId = action.logId.evaluate(divView.expressionResolver)
+            "logImeEnter(cardId = ${divView.logId}, id = $actionLogId)"
+        }
+    }
+
     private inline fun log(message : () -> String) {
         KLog.d(TAG, message)
         capturedLogActions.add(message.invoke())
