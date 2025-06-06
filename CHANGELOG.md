@@ -1,6 +1,8 @@
 ## 32.3.0
 
 # Android Client:
+* Fixed input actions not working for single line inputs.
+* Fixed that the keyboard type would sometimes not change.
 * Fixed triggers in elements built by item-builder.
 * Fixed variables observing in elements built by `item-builder`.
 * Prevent keyboard from resetting state after rebind.
