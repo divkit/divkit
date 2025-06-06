@@ -58,9 +58,11 @@ internal interface DivGalleryItemHelper {
         isRelayoutingChildren: Boolean = false
     ) {
         val orientation = getLayoutManagerOrientation()
+        val actualContentWidth = view.measuredWidth - view.paddingLeft - view.paddingRight
+        val actualContentHeight = view.measuredHeight - view.paddingTop - view.paddingBottom
         val shouldRelayout = when (orientation) {
-            RecyclerView.VERTICAL -> view.measuredWidth == 0 || child.measuredWidth == 0
-            RecyclerView.HORIZONTAL -> view.measuredHeight == 0 || child.measuredHeight == 0
+            RecyclerView.VERTICAL -> view.measuredWidth == 0 || actualContentWidth == 0 || child.measuredWidth == 0
+            RecyclerView.HORIZONTAL -> view.measuredHeight == 0 || actualContentHeight == 0 || child.measuredHeight == 0
             else -> false
         }
 
@@ -83,7 +85,7 @@ internal interface DivGalleryItemHelper {
                 asCrossContentAlignment()
             }
             calculateOffset(
-                view.measuredWidth - view.paddingLeft - view.paddingRight,
+                actualContentWidth,
                 right - left,
                 alignment
             )
@@ -96,7 +98,7 @@ internal interface DivGalleryItemHelper {
                 asCrossContentAlignment()
             }
             calculateOffset(
-                view.measuredHeight - view.paddingTop - view.paddingBottom,
+                actualContentHeight,
                 bottom - top,
                 alignment
             )
