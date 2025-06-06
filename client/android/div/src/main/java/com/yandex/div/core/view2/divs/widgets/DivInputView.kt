@@ -104,6 +104,7 @@ internal class DivInputView @JvmOverloads constructor(
     }
 
     override fun setOnEditorActionListener(l: OnEditorActionListener?) {
+        super.setOnEditorActionListener(l)
         editorActionListener = l
     }
 

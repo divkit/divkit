@@ -1918,7 +1918,7 @@
       "file": "action_animation/nested_change_bounds.json"
     },
     {
-      "title": "Text input",
+      "title": "Text input (multiline)",
       "case_id": 78,
       "tags": [
         "DivInput"
@@ -1928,9 +1928,11 @@
         "Change text"
       ],
       "expected_results": [
-        "Text under the input should be equal to text in input and change on input changes."
+        "Text under the input should be equal to text in input and change on input changes.",
+        "In the 'With actions' section, after pressing Enter, the text should change to 'Enter key tapped!'",
+        "Keyboard is hidden"
       ],
-      "file": "input.json"
+      "file": "input_multiline.json"
     },
     {
       "title": "Text input (single line)",
@@ -1944,9 +1946,11 @@
       ],
       "expected_results": [
         "Text under the input should be equal to text in input and change on input changes.",
-        "Max lines = 1. Line break is unavailable."
+        "Max lines = 1. Line break is unavailable.",
+        "In the 'With actions' section, after pressing Enter, the text should change to 'Done key tapped!'",
+        "Keyboard is hidden"
       ],
-      "file": "single_line_input.json"
+      "file": "input_single_line.json"
     },
     {
       "title": "Text input max_length",
@@ -1964,7 +1968,7 @@
       "file": "input_max_length.json"
     },
     {
-      "title": "Text input (enter key)",
+      "title": "Text input (search input)",
       "case_id": 170,
       "platforms": [
         "ios",
@@ -1981,10 +1985,10 @@
       ],
       "expected_results": [
         "Enter key on keyboard has \"search\" type",
-        "Keyboard is hidden",
-        "Text is changed to \"Search key tapped!\""
+        "In the 'With actions' section, after pressing Enter, the text should change to 'Search key tapped!'",
+        "Keyboard is hidden"
       ],
-      "file": "enter_key_input.json"
+      "file": "input_search.json"
     },
     {
       "title": "Select",
