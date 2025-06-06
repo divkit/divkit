@@ -658,7 +658,14 @@ extension TextInputBlockView: UITextViewDelegate {
     shouldChangeTextIn _: NSRange,
     replacementText text: String
   ) -> Bool {
+    defer {
+      multiLineInput.isPasting = false
+    }
     guard let range = Range(multiLineInput.selectedRange, in: currentText) else {
+      return false
+    }
+    if text == "\n", !enterKeyActions.isEmpty, !multiLineInput.isPasting {
+      enterKeyActions.perform(sendingFrom: self)
       return false
     }
     return inputViewReplaceTextIn(view: self, range: range, text: text)
@@ -890,9 +897,16 @@ private class PatchedUITextField: UITextField {
 }
 
 private class PatchedUITextView: UITextView {
+  var isPasting: Bool = false
+
   override func cut(_ sender: Any?) {
     copy(sender)
     super.cut(sender)
+  }
+
+  override func paste(_ sender: Any?) {
+    isPasting = true
+    super.paste(sender)
   }
 }
 
