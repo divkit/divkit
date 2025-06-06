@@ -25,7 +25,8 @@ extension TextBlock {
       additionalTextInsets: block.additionalTextInsets,
       canSelect: block.canSelect,
       autoEllipsize: block.autoEllipsize,
-      path: block.path
+      path: block.path,
+      isFocused: block.isFocused
     )
   }
 }

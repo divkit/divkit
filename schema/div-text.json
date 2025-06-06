@@ -361,6 +361,7 @@
           "$description": "translations.json#/div_text_focused_text_color",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },

@@ -42,7 +42,14 @@ extension DivText: DivBlockModeling {
       typo = typo.kerned(kern)
     }
 
-    let resolvedColor: Color = resolveTextColor(expressionResolver)
+    let isFocused = context.blockStateStorage.isFocused(path: context.path)
+
+    let resolvedColor = if isFocused,
+                           let focusedTextColor = resolveFocusedTextColor(expressionResolver) {
+      focusedTextColor
+    } else {
+      resolveTextColor(expressionResolver)
+    }
 
     if resolvedColor != .black {
       typo = typo.with(color: resolvedColor)
@@ -138,7 +145,8 @@ extension DivText: DivBlockModeling {
       tightenWidth: resolveTightenWidth(expressionResolver),
       autoEllipsize: resolveAutoEllipsize(expressionResolver)
         ?? context.flagsInfo.defaultTextAutoEllipsize,
-      path: context.path
+      path: context.path,
+      isFocused: isFocused
     )
   }
 

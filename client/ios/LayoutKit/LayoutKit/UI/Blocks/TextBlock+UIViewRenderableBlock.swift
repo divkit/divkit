@@ -32,7 +32,8 @@ extension TextBlock {
       truncationToken: truncationToken,
       canSelect: canSelect,
       additionalTextInsets: additionalTextInsets,
-      intrinsicHeight: intrinsicHeight
+      intrinsicHeight: intrinsicHeight,
+      isFocused: isFocused
     )
   }
 
@@ -137,6 +138,7 @@ private final class TextBlockView: UIView {
     let canSelect: Bool
     let additionalTextInsets: EdgeInsets
     let intrinsicHeight: GetIntrinsicTextHeight?
+    let isFocused: Bool
   }
 
   private var selectedRange: Range<Int>? {

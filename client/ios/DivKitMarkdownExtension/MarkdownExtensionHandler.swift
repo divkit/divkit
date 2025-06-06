@@ -23,7 +23,9 @@ public final class MarkdownExtensionHandler: DivExtensionHandler {
       widthTrait: block.widthTrait,
       heightTrait: block.heightTrait,
       text: string,
-      accessibilityElement: nil
+      accessibilityElement: nil,
+      path: block.path,
+      isFocused: block.isFocused
     )
   }
 }

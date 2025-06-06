@@ -42,6 +42,7 @@ public final class TextBlock: BlockWithTraits {
   public let truncationImages: [InlineImage]
   public let autoEllipsize: Bool
   public let path: UIElementPath?
+  public let isFocused: Bool
 
   let attachments: [TextAttachment]
   let truncationAttachments: [TextAttachment]
@@ -65,7 +66,8 @@ public final class TextBlock: BlockWithTraits {
     canSelect: Bool = false,
     tightenWidth: Bool = false,
     autoEllipsize: Bool = true,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    isFocused: Bool = false
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -90,6 +92,7 @@ public final class TextBlock: BlockWithTraits {
     self.additionalTextInsets = additionalTextInsets ?? .zero
     self.autoEllipsize = autoEllipsize
     self.path = path
+    self.isFocused = isFocused
   }
 
   public convenience init(
@@ -107,7 +110,8 @@ public final class TextBlock: BlockWithTraits {
     canSelect: Bool = false,
     tightenWidth: Bool = false,
     autoEllipsize: Bool = true,
-    path: UIElementPath? = nil
+    path: UIElementPath? = nil,
+    isFocused: Bool = false
   ) {
     self.init(
       widthTrait: widthTrait,
@@ -125,7 +129,8 @@ public final class TextBlock: BlockWithTraits {
       canSelect: canSelect,
       tightenWidth: tightenWidth,
       autoEllipsize: autoEllipsize,
-      path: path
+      path: path,
+      isFocused: isFocused
     )
   }
 
@@ -226,7 +231,7 @@ extension TextBlock.InlineImage {
 
 extension TextBlock: LayoutCachingDefaultImpl {}
 extension TextBlock: ElementStateUpdatingDefaultImpl {
-  public func updated(path: UIElementPath, isFocused _: Bool) throws -> TextBlock {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> TextBlock {
     if path != self.path {
       return self
     }
@@ -246,7 +251,8 @@ extension TextBlock: ElementStateUpdatingDefaultImpl {
       additionalTextInsets: additionalTextInsets,
       canSelect: canSelect,
       tightenWidth: tightenWidth,
-      path: path
+      path: path,
+      isFocused: isFocused
     )
   }
 }
