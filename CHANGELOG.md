@@ -1,6 +1,7 @@
 ## 32.3.0
 
 # Android Client:
+* Fixed triggers in elements built by item-builder.
 * Fixed variables observing in elements built by `item-builder`.
 * Prevent keyboard from resetting state after rebind.
 
