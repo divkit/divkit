@@ -95,6 +95,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
