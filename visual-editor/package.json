@@ -22,7 +22,7 @@
     "dev": "npm run build:grammar && vite",
     "build": "vite build",
     "build:grammar": "lezer-generator src/lib/grammar/div.grammar -o src/lib/grammar/div.js",
-    "build-lib": "vite build --config vite-lib.config.ts && terser dist/divkit-editor.js -o dist/divkit-editor.js && terser dist/editor.js -o dist/editor.js && terser dist/lottieApi.js -o dist/lottieApi.js",
+    "build-lib": "npm run build:grammar && vite build --config vite-lib.config.ts && terser dist/divkit-editor.js -o dist/divkit-editor.js && terser dist/editor.js -o dist/editor.js && terser dist/lottieApi.js -o dist/lottieApi.js",
     "build-typings": "rollup --config rollup-typings.config.ts --configPlugin typescript",
     "preview": "vite preview",
     "check:ts": "npm run build:grammar && tsc --noEmit",
