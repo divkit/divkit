@@ -13,7 +13,8 @@
         "The purple rectangle should appear animatedly",
         "The purple rectangle should disappear animatedly"
       ],
-      "file": "animations/transition-animations-with-delay.json"
+      "file": "animations/transition-animations-with-delay.json",
+      "case_id": 471
     },
     {
       "title": "Copy to clipboard",
