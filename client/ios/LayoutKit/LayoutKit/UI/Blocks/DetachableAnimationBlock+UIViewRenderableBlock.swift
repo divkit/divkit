@@ -179,9 +179,11 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
       return
     }
 
+    childView.isHidden = true
     let minDelay = animationIn.sortedChronologically().first?.delay ?? 0
 
     let item = DispatchWorkItem { [weak self] in
+      childView.isHidden = false
       childView.setInitialParamsAndAnimate(
         animations: animationIn.withDelay(-minDelay),
         completion: { [weak self] in

@@ -1,6 +1,21 @@
 {
   "tests": [
     {
+      "title": "Transition animations with delay",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Tap \"Test Button\"",
+        "Tap \"Test Button\" again"
+      ],
+      "expected_results": [
+        "The purple rectangle should appear animatedly",
+        "The purple rectangle should disappear animatedly"
+      ],
+      "file": "animations/transition-animations-with-delay.json"
+    },
+    {
       "title": "Copy to clipboard",
       "case_id": 13,
       "tags": [
