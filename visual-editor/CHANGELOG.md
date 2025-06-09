@@ -1,3 +1,12 @@
+## 0.4.8
+
+* Updated DivKit 31.2.0 -> 31.13.0
+* New expressions dialog
+* Redesigned the blank image and lottie template (you need to edit the basic json, now empty `empty://` works instead of the url)
+* Errors about file size are now visible in the component tree and a new API has been added to return them.
+* Added new types of actions
+* Fixed preview generation for cross-domain videos
+
 ## 0.4.7
 
 * Added the `high_priority_image_show` flag to the interface
