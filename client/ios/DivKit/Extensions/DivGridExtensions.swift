@@ -51,7 +51,10 @@ extension DivGrid: DivBlockModeling {
     return try GridBlock(
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
-      contentAlignment: resolveContentAlignment(expressionResolver),
+      contentAlignment: resolveContentAlignment(
+        expressionResolver,
+        isRTLLayout: context.layoutDirection == .rightToLeft
+      ),
       items: items,
       columnCount: resolveColumnCount(expressionResolver) ?? 0,
       path: path
@@ -59,10 +62,11 @@ extension DivGrid: DivBlockModeling {
   }
 
   private func resolveContentAlignment(
-    _ expressionResolver: ExpressionResolver
+    _ expressionResolver: ExpressionResolver,
+    isRTLLayout: Bool
   ) -> BlockAlignment2D {
     BlockAlignment2D(
-      horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment,
+      horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment(isRTLLayout: isRTLLayout),
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
   }

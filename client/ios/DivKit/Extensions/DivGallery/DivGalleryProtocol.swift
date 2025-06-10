@@ -34,7 +34,7 @@ extension DivGalleryProtocol {
           crossAlignment: (
             direction.isHorizontal
               ? div.value.resolveAlignmentVertical(expressionResolver)?.alignment
-              : div.value.resolveAlignmentHorizontal(expressionResolver)?.alignment
+            : div.value.resolveAlignmentHorizontal(expressionResolver)?.alignment(isRTLLayout: context.layoutDirection == .rightToLeft)
           ) ?? defaultCrossAlignment,
           content: block
         )
