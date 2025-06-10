@@ -372,7 +372,7 @@
     };
 
     function checkFilters(val: string): boolean {
-        if (!Array.isArray($jsonFilters) || !val) {
+        if (!Array.isArray($jsonFilters)) {
             return true;
         }
 
