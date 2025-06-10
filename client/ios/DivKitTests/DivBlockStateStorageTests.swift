@@ -1,9 +1,11 @@
 @testable import DivKit
 import LayoutKit
+import VGSL
 import XCTest
 
 final class DivBlockStateStorageTests: XCTestCase {
   private var storage: DivBlockStateStorage!
+  private let disposePool = AutodisposePool()
 
   override func setUp() {
     super.setUp()
@@ -76,6 +78,38 @@ final class DivBlockStateStorageTests: XCTestCase {
     storage.reset(cardId: "card_id")
     XCTAssertNil(storage.getStateUntyped("id", cardId: "card_id"))
     XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
+  func test_PreventUpdatePipeWhenSettingSameState() {
+    var updatesCounter = 0
+    storage.stateUpdates.addObserver { _ in
+      updatesCounter += 1
+    }.dispose(in: disposePool)
+
+    storage
+      .setState(id: "id", cardId: "card_id", state: state1) // Should update, new state for new ID
+    storage.setState(id: "id", cardId: "card_id", state: state1) // Shouldn't update, same by ID
+    storage
+      .setState(
+        path: path(cardId: "card_id", path: "0/div_state/state1/id"),
+        state: state1
+      ) // Shouldn't update, same by path
+
+    storage.setState(id: "id", cardId: "card_id2", state: state1) // Should update, new ID
+
+    storage
+      .setState(
+        path: path(cardId: "card_id", path: "0/div_state/state1/id2"),
+        state: state1
+      ) // Should update, new ID
+
+    storage
+      .setState(
+        path: path(cardId: "card_id", path: "0/div_state/state1/id"),
+        state: state2
+      ) // Should update, new state for existing ID
+
+    XCTAssertEqual(updatesCounter, 4)
   }
 
   func test_SetFocused_StoresLast() {
