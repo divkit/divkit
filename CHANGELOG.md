@@ -1,3 +1,9 @@
+## 31.14.1
+
+# Android Client:
+* Fixed `items` position in `gallery` after state changed.
+
+
 ## 31.14.0
 
 # Android Client:
