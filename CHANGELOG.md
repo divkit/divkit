@@ -1,3 +1,24 @@
+## 32.4.0
+
+# Android Client:
+* Fixed `items` position in `gallery` after state changed.
+* Fixed multiple actions handling on `text` with `ranges` or `images`.
+
+# iOS Client:
+* Fixed alignment in galleries with Right-To-Left orientation.
+* Fixed freezing of videos when scrolling in the gallery.
+* Fixed transition-in animations with delay.
+* Support div-text focused_text_color.
+* Сalling `enter_key_actions` for a multiline input.
+
+# Web Client:
+* Fixed incorrect logic, due to which the `filters` property of the `input` component did not work with an empty value.
+
+# Kotlin JSON Builder:
+* Added ability to create Color outside DivScope.
+* Added modify method for entities in Kotlin DSL.
+
+
 ## 32.3.0
 
 # Android Client:
