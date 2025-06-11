@@ -81,6 +81,12 @@
 * Added template constructor with name builder based on template card.
 
 
+## 31.14.1
+
+# Android Client:
+* Fixed `items` position in `gallery` after state changed.
+
+
 ## 31.14.0
 
 # Android Client:
