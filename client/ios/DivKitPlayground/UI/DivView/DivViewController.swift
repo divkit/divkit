@@ -7,7 +7,8 @@ import UIKit
 open class DivViewController: UIViewController {
   private let divKitComponents: DivKitComponents
   private let debugParams: DebugParams
-  private let divView: DivView
+  private var divView: DivView?
+  
   private let scrollView = VisibilityTrackingScrollView()
   private var cancellables = Set<AnyCancellable>()
 
@@ -19,18 +20,15 @@ open class DivViewController: UIViewController {
     debugParams: DebugParams
   ) {
     self.divKitComponents = divKitComponents
-    self.divView = DivView(divKitComponents: divKitComponents)
     self.debugParams = debugParams
 
     super.init(nibName: nil, bundle: nil)
 
-    view.addSubview(divView)
-
     jsonPublisher
-      .sink { [weak self] in
-        guard !$0.isEmpty else { return }
-        self?.divKitComponents.reset(cardId: cardId)
-        self?.setData($0)
+      .filter { !$0.isEmpty }
+      .sink { [weak self] value in
+        self?.divView = self?.createDivView()
+        self?.setData(value)
       }
       .store(in: &cancellables)
   }
@@ -43,8 +41,6 @@ open class DivViewController: UIViewController {
   public override func loadView() {
     scrollView.backgroundColor = .white
     view = scrollView
-    scrollView.divView = divView
-    divView.setParentScrollView(scrollView)
   }
 
   public override func viewDidLoad() {
@@ -54,8 +50,6 @@ open class DivViewController: UIViewController {
       $0.id != pinchToZoomExtensionHandler.id
     }
     divKitComponents.extensionHandlers.append(pinchToZoomExtensionHandler)
-
-    setTestIdentifier()
   }
 
   public override func viewDidDisappear(_ animated: Bool) {
@@ -65,11 +59,21 @@ open class DivViewController: UIViewController {
 
   open func onViewUpdated() {}
 
+  private func createDivView() -> DivView {
+    let divView = DivView(divKitComponents: divKitComponents)
+    scrollView.divView = divView
+
+    divView.setParentScrollView(scrollView)
+    divView.accessibilityIdentifier = identifier
+        
+    return divView
+  }
+
   private func setData(
     _ data: [String: Any]
   ) {
     Task {
-      await divView.setSource(
+      await divView?.setSource(
         DivViewSource(
           kind: .json(data),
           cardId: cardId
@@ -78,9 +82,5 @@ open class DivViewController: UIViewController {
         shouldResetPreviousCardData: true
       )
     }
-  }
-
-  private func setTestIdentifier() {
-    divView.accessibilityIdentifier = identifier
   }
 }

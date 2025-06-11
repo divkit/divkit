@@ -1196,10 +1196,6 @@
         "Animations",
         "lottie"
       ],
-      "steps": [
-        "Spinner animation will continue 5 times and then stop",
-        "Press RESTART"
-      ],
       "expected_results": [
         "Spinner animation will continue 5 times and then stop"
       ],
@@ -1215,10 +1211,6 @@
       "tags": [
         "Animations",
         "lottie"
-      ],
-      "steps": [
-        "Spinner changes spin direction 3 times and stops",
-        "Press RESTART"
       ],
       "expected_results": [
         "Spinner changes spin direction 3 times and stops"
