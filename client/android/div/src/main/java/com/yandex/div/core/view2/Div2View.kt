@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -186,12 +188,16 @@ class Div2View private constructor(
         )
     }
 
-    private val gestureDetector = GestureDetector(this.context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapUp(e: MotionEvent): Boolean {
-            clearFocusOnClick(inputFocusTracker)
-            return true
-        }
-    })
+    private val gestureDetector = GestureDetector(
+        this.context,
+        object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                clearFocusOnClick(inputFocusTracker)
+                return true
+            }
+        },
+        Handler(Looper.getMainLooper())
+)
 
     internal val inputFocusTracker = viewComponent.inputFocusTracker
 

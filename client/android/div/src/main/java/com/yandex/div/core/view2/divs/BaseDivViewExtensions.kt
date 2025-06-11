@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.GestureDetector
@@ -579,7 +581,7 @@ internal fun View.createAnimatedTouchListener(
     // Avoid creating GestureDetector if unnecessary cause it's expensive.
     val gestureDetector = divGestureListener
         ?.takeUnless { it.onSingleTapListener == null && it.onDoubleTapListener == null }
-        ?.let { GestureDetector(context.divView.context, divGestureListener) }
+        ?.let { GestureDetector(context.divView.context, divGestureListener, Handler(Looper.getMainLooper())) }
 
     return if (animations != null || gestureDetector != null) {
         { v, event ->
