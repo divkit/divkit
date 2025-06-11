@@ -1,3 +1,8 @@
+## 32.3.1
+
+# iOS Client:
+* Add DivKitSVG package.
+
 ## 32.3.0
 
 # Android Client:
