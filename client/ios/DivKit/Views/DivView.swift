@@ -3,7 +3,7 @@ import UIKit
 import VGSL
 
 /// ``DivView`` is a view that allows you to draw the layout for `DivKit`.
-/// She is able to handle actions, switch states correctly, as well as update the layout if
+/// It is able to handle actions, switch states correctly, as well as update the layout if
 /// necessary.
 ///
 /// ## Example

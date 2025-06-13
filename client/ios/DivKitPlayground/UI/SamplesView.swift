@@ -26,10 +26,10 @@ struct SampleView: View {
   let model: SampleModel
 
   var body: some View {
-    DivViewSwiftUIAdapter(
-      cardId: model.cardId,
-      jsonData: model.jsonData ?? Data(),
-      divKitComponents: model.divKitComponents
+    DivHostingView(
+      divkitComponents: model.divKitComponents,
+      source: DivViewSource(kind: .data(model.jsonData ?? Data()), cardId: model.cardId),
+      shouldResetPreviousCardData: true
     )
   }
 }

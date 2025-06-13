@@ -11,7 +11,6 @@
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
 		0C276A862DDC949700247E75 /* ImageBaseBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */; };
 		0CE4BDE52C4FAE9F0048BEF8 /* GenericViewBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */; };
-		431276EE2A72B8F2000CC821 /* DivView+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */; };
 		431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
 		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
@@ -384,7 +383,6 @@
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
 		0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBaseBlockTests.swift; sourceTree = "<group>"; };
 		0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericViewBlockTests.swift; sourceTree = "<group>"; };
-		431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DivView+SwiftUI.swift"; sourceTree = "<group>"; };
 		431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionURLHandlerTests.swift; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
 		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
@@ -875,7 +873,6 @@
 		8C1A378328B5143200A047C8 /* DivView */ = {
 			isa = PBXGroup;
 			children = (
-				431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */,
 				8C1A378628B5143200A047C8 /* DivViewController.swift */,
 				4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */,
 				8C1A378728B5143200A047C8 /* DivViewProvider.swift */,
@@ -1948,7 +1945,6 @@
 				4391F7C32A77DB9B006D8818 /* DivViewController+SwiftUI.swift in Sources */,
 				8C2BFA5628C10F2200A16E9B /* RegressionTestView.swift in Sources */,
 				8C1A377A28B4E3E700A047C8 /* WebPreviewViewController.swift in Sources */,
-				431276EE2A72B8F2000CC821 /* DivView+SwiftUI.swift in Sources */,
 				8C1A377D28B4E3E700A047C8 /* JSONPayload.swift in Sources */,
 				76FD0508294208F80002A1F9 /* RiveContainerView.swift in Sources */,
 				8C1A375028B4189E00A047C8 /* MetadataCaptureSession.swift in Sources */,
