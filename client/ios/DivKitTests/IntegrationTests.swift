@@ -23,14 +23,15 @@ final class IntegrationTests: XCTestCase {
 }
 
 private func makeTestCases() -> [(String, IntegrationTestData)] {
-  Bundle(for: DivKitTests.self)
-    .urls(forResourcesWithExtension: "json", subdirectory: "integration_test_data")!
-    .map { url in
-      let fileName = url.lastPathComponent
-      let testData = try! JSONDecoder()
-        .decode(IntegrationTestData.self, from: Data(contentsOf: url))
-      return ("\(fileName): \(testData.description)", testData)
-    }
+  getFiles(
+    "integration_test_data",
+    forBundle: Bundle(for: IntegrationTests.self)
+  ).map { url in
+    let fileName = url.lastPathComponent
+    let testData = try! JSONDecoder()
+      .decode(IntegrationTestData.self, from: Data(contentsOf: url))
+    return ("\(fileName): \(testData.description)", testData)
+  }
 }
 
 private func createDivView(_ divData: DivData, components: DivKitComponents) async {

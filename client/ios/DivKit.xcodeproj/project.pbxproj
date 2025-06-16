@@ -287,6 +287,7 @@
 		9D08688F2DCE3C0900C5B2CC /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */; };
 		9D0868BB2DD10F7E00C5B2CC /* integration_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 9D0868BA2DD10F7E00C5B2CC /* integration_test_data */; };
 		9D09984F2CA30D010098098C /* AccessoryViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */; };
+		9D5AE8362DFC680500D58B81 /* FilesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5AE8352DFC680300D58B81 /* FilesProvider.swift */; };
 		9D5BFB092CA1DA20005F8EB1 /* CustomFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */; };
 		9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */; };
 		9DEA2C752DDCC63400A074B5 /* RobotoFlex-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DEA2C742DDCC63400A074B5 /* RobotoFlex-Regular.ttf */; };
@@ -658,6 +659,7 @@
 		9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
 		9D0868BA2DD10F7E00C5B2CC /* integration_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = integration_test_data; path = ../../../test_data/integration_test_data; sourceTree = "<group>"; };
 		9D09984E2CA30D010098098C /* AccessoryViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryViewProvider.swift; sourceTree = "<group>"; };
+		9D5AE8352DFC680300D58B81 /* FilesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesProvider.swift; sourceTree = "<group>"; };
 		9D5BFB082CA1DA20005F8EB1 /* CustomFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunctionTests.swift; sourceTree = "<group>"; };
 		9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitActionHandlerTests.swift; sourceTree = "<group>"; };
 		9DEA2C742DDCC63400A074B5 /* RobotoFlex-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoFlex-Regular.ttf"; sourceTree = "<group>"; };
@@ -1418,6 +1420,7 @@
 		8CF8BBE62B3265E000569777 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				9D5AE8352DFC680300D58B81 /* FilesProvider.swift */,
 				8CF8BBE42B322E3100569777 /* Assert.swift */,
 				8CF8BBE72B32660500569777 /* BlockModelingUtils.swift */,
 				8CF8BBE92B32682700569777 /* DivBuilders.swift */,
@@ -2074,6 +2077,7 @@
 				8C0DC7122865CA1100286F6B /* DivKitTests.swift in Sources */,
 				8C1233AB2C32F08600F534DC /* DivFontProviderTests.swift in Sources */,
 				8C7B1BF62865C01C0036EF4C /* DivTextExtensionsTests.swift in Sources */,
+				9D5AE8362DFC680500D58B81 /* FilesProvider.swift in Sources */,
 				8C23F41A29DDB3810069F3F7 /* EntityWithArrayTemplate.swift in Sources */,
 				8C84C2232D0870F400A574AC /* ScrollActionHandlerTests.swift in Sources */,
 				8C23F41929DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift in Sources */,

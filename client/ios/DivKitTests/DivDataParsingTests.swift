@@ -25,23 +25,11 @@ private func runTest(_ data: TestData) {
   )
 }
 
-private func getFiles(_ path: String) -> [URL] {
-  let bundle = Bundle(for: DivDataParsingTests.self)
-  var files: [URL] = []
-  try! FileManager.default
-    .contentsOfDirectory(atPath: bundle.path(forResource: path, ofType: nil)!)
-    .forEach {
-      if $0.hasSuffix(".json") {
-        files.append(bundle.url(forResource: $0, withExtension: nil, subdirectory: path)!)
-      } else {
-        files.append(contentsOf: getFiles("\(path)/\($0)"))
-      }
-    }
-  return files
-}
-
 private func makeTestCases() -> [(String, TestData)] {
-  try! getFiles("parsing_test_data").map { url in
+  try! getFiles(
+    "parsing_test_data",
+    forBundle: Bundle(for: DivDataParsingTests.self)
+  ).map { url in
     let testName = url.pathComponents
       .trimmingPrefix { $0 != "parsing_test_data" }
       .dropFirst()

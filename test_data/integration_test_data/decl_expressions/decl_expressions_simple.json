@@ -1,0 +1,43 @@
+{
+  "description": "Decl variable with expression.",
+  "div_data": {
+    "card": {
+      "log_id": "decl_expressions",
+      "variables": [
+        {
+          "name": "val",
+          "type": "integer",
+          "value": "@{1 + 2}"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "text"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "val",
+          "value": {
+            "type": "integer",
+            "value": 3
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}
