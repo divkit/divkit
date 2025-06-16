@@ -22,6 +22,9 @@
             },
             "android": {
                 "version_added": "30.0.0"
+            },
+            "ios": {
+                "version_added": "32.3.1"
             }
         }
     }]

@@ -25,14 +25,17 @@
             }
         }
     }, {
-        "id": "tabs_title_delimiters",
-        "name": "Tabs <code>tabs_title_delimiters</code> property",
+        "id": "tabs_title_delimiter",
+        "name": "Tabs <code>tabs_title_delimiter</code> property",
         "compat": {
             "android": {
                 "version_added": "30.3.0"
             },
             "web": {
                 "version_added": "30.24.0"
+            },
+            "ios": {
+                "version_added": "32.3.0"
             }
         }
     }, {
