@@ -36,7 +36,6 @@ internal class DivVideoView @JvmOverloads constructor(
             playerView.detach()
             lastPlayer?.release()
         }
-        releaseBorderDrawer()
     }
 
     fun getPlayerView(): DivPlayerView? {

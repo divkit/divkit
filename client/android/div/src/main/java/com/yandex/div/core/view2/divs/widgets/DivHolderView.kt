@@ -13,6 +13,13 @@ internal interface DivHolderView<T: Div> : DivBorderSupports,
 
     var div: T?
     var bindingContext: BindingContext?
+
+    override fun release() {
+        super.release()
+        div = null
+        bindingContext = null
+        releaseBorderDrawer()
+    }
 }
 
 internal class DivHolderViewMixin<T: Div> : DivHolderView<T>,
@@ -24,11 +31,4 @@ internal class DivHolderViewMixin<T: Div> : DivHolderView<T>,
     override var bindingContext: BindingContext? = null
 
     override val subscriptions = mutableListOf<Disposable>()
-
-    override fun release() {
-        super.release()
-        div = null
-        bindingContext = null
-        releaseBorderDrawer()
-    }
 }

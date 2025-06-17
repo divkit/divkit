@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import com.yandex.div.R
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import com.yandex.div.core.view2.drawable.ScaleDrawable
 import com.yandex.div.internal.widget.AspectImageView
@@ -24,7 +25,7 @@ open class LoadableImageView(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AspectImageView(context, attrs, defStyleAttr), LoadableImage, DivExtendableView {
+) : AspectImageView(context, attrs, defStyleAttr), LoadableImage, DivExtendableView, Releasable {
 
     @Deprecated("Use imageTransform instead")
     internal var currentBitmapWithoutFilters: Bitmap? = null
@@ -183,6 +184,15 @@ open class LoadableImageView(
 
     fun setImageChangeCallback(callback: (() -> Unit)? = null) {
         imageChangeCallback = callback
+    }
+
+    override fun release() {
+        currentBitmapWithoutFilters = null
+        externalImage = null
+        sourceDrawable = null
+        resetImageLoaded()
+        getLoadingTask()?.cancel(true)
+        cleanLoadingTask()
     }
 
     interface ImageTransformer {

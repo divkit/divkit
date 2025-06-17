@@ -38,4 +38,10 @@ internal open class DivImageView @JvmOverloads constructor(
     override fun draw(canvas: Canvas) {
         drawBorderClipped(canvas) { super.draw(it) }
     }
+
+    override fun release() {
+        super<LoadableImageView>.release()
+        super<DivHolderView>.release()
+        imageUrl = null
+    }
 }

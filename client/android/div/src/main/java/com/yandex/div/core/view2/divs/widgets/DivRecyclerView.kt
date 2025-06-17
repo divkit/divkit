@@ -211,7 +211,6 @@ internal class DivRecyclerView @JvmOverloads constructor(
 
     override fun release() {
         super.release()
-        releaseBorderDrawer()
         val currentAdapter = adapter
         if (currentAdapter is Releasable) {
             currentAdapter.release()
