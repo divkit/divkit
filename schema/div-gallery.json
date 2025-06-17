@@ -121,7 +121,8 @@
           "$description": "translations.json#/div_scrollbar",
           "platforms": [
             "web",
-            "android"
+            "android",
+            "ios"
           ]
         }
       }

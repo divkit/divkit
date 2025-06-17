@@ -42,6 +42,7 @@ public final class DivSlider: DivBase, Sendable {
     public let fontVariationSettings: Expression<[String: Any]>?
     public let fontWeight: Expression<DivFontWeight> // default value: regular
     public let fontWeightValue: Expression<Int>? // constraint: number > 0
+    public let letterSpacing: Expression<Double> // default value: 0
     public let offset: DivPoint?
     public let textColor: Expression<Color> // default value: #FF000000
 
@@ -69,6 +70,10 @@ public final class DivSlider: DivBase, Sendable {
       resolver.resolveNumeric(fontWeightValue)
     }
 
+    public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {
+      resolver.resolveNumeric(letterSpacing) ?? 0
+    }
+
     public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
       resolver.resolveColor(textColor) ?? Color.colorWithARGBHexCode(0xFF000000)
     }
@@ -86,6 +91,7 @@ public final class DivSlider: DivBase, Sendable {
       fontVariationSettings: Expression<[String: Any]>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
       fontWeightValue: Expression<Int>? = nil,
+      letterSpacing: Expression<Double>? = nil,
       offset: DivPoint? = nil,
       textColor: Expression<Color>? = nil
     ) {
@@ -95,6 +101,7 @@ public final class DivSlider: DivBase, Sendable {
       self.fontVariationSettings = fontVariationSettings
       self.fontWeight = fontWeight ?? .value(.regular)
       self.fontWeightValue = fontWeightValue
+      self.letterSpacing = letterSpacing ?? .value(0)
       self.offset = offset
       self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     }
@@ -488,11 +495,12 @@ extension DivSlider.TextStyle: Equatable {
     guard
       lhs.fontWeight == rhs.fontWeight,
       lhs.fontWeightValue == rhs.fontWeightValue,
-      lhs.offset == rhs.offset
+      lhs.letterSpacing == rhs.letterSpacing
     else {
       return false
     }
     guard
+      lhs.offset == rhs.offset,
       lhs.textColor == rhs.textColor
     else {
       return false
@@ -544,6 +552,7 @@ extension DivSlider.TextStyle: Serializable {
     result["font_variation_settings"] = fontVariationSettings?.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
+    result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["offset"] = offset?.toDictionary()
     result["text_color"] = textColor.toValidSerializationValue()
     return result

@@ -47,7 +47,8 @@
             "android"
           ],
           "unsupported_platforms": {
-            "web": "There is no direct implementation, no plans for support."
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
           }
         },
         "down": {
@@ -56,7 +57,8 @@
             "android"
           ],
           "unsupported_platforms": {
-            "web": "There is no direct implementation, no plans for support."
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
           }
         },
         "left": {
@@ -65,7 +67,8 @@
             "android"
           ],
           "unsupported_platforms": {
-            "web": "There is no direct implementation, no plans for support."
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
           }
         },
         "up": {
@@ -74,7 +77,8 @@
             "android"
           ],
           "unsupported_platforms": {
-            "web": "There is no direct implementation, no plans for support."
+            "web": "There is no direct implementation, no plans for support.",
+            "ios": "There is no direct implementation, no plans for support."
           }
         }
       }

@@ -125,7 +125,10 @@
           "$description": "translations.json#/div_slider_secondary_value_accessibility",
           "platforms": [
             "web"
-          ]
+          ],
+          "unsupported_platforms": {
+            "ios": "There is no direct implementation, no plans for support."
+          }
         },
         "is_enabled": {
           "$ref": "common.json#/boolean_int",

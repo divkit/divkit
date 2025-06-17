@@ -171,6 +171,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
     public let fontVariationSettings: Field<Expression<[String: Any]>>?
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
     public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
+    public let letterSpacing: Field<Expression<Double>>? // default value: 0
     public let offset: Field<DivPointTemplate>?
     public let textColor: Field<Expression<Color>>? // default value: #FF000000
 
@@ -182,6 +183,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         fontVariationSettings: dictionary.getOptionalExpressionField("font_variation_settings"),
         fontWeight: dictionary.getOptionalExpressionField("font_weight"),
         fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
+        letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
         offset: dictionary.getOptionalField("offset", templateToType: templateToType),
         textColor: dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:))
       )
@@ -194,6 +196,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       fontVariationSettings: Field<Expression<[String: Any]>>? = nil,
       fontWeight: Field<Expression<DivFontWeight>>? = nil,
       fontWeightValue: Field<Expression<Int>>? = nil,
+      letterSpacing: Field<Expression<Double>>? = nil,
       offset: Field<DivPointTemplate>? = nil,
       textColor: Field<Expression<Color>>? = nil
     ) {
@@ -203,6 +206,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       self.fontVariationSettings = fontVariationSettings
       self.fontWeight = fontWeight
       self.fontWeightValue = fontWeightValue
+      self.letterSpacing = letterSpacing
       self.offset = offset
       self.textColor = textColor
     }
@@ -214,6 +218,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       let fontVariationSettingsValue = { parent?.fontVariationSettings?.resolveOptionalValue(context: context) ?? .noValue }()
       let fontWeightValue = { parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue }()
       let fontWeightValueValue = { parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue }()
+      let letterSpacingValue = { parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue }()
       let offsetValue = { parent?.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let textColorValue = { parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
       let errors = mergeErrors(
@@ -223,6 +228,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         fontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_variation_settings", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
         fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
+        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
         offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) }
       )
@@ -233,6 +239,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         fontVariationSettings: { fontVariationSettingsValue.value }(),
         fontWeight: { fontWeightValue.value }(),
         fontWeightValue: { fontWeightValueValue.value }(),
+        letterSpacing: { letterSpacingValue.value }(),
         offset: { offsetValue.value }(),
         textColor: { textColorValue.value }()
       )
@@ -249,6 +256,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
       var fontVariationSettingsValue: DeserializationResult<Expression<[String: Any]>> = { parent?.fontVariationSettings?.value() ?? .noValue }()
       var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = { parent?.fontWeight?.value() ?? .noValue }()
       var fontWeightValueValue: DeserializationResult<Expression<Int>> = { parent?.fontWeightValue?.value() ?? .noValue }()
+      var letterSpacingValue: DeserializationResult<Expression<Double>> = { parent?.letterSpacing?.value() ?? .noValue }()
       var offsetValue: DeserializationResult<DivPoint> = .noValue
       var textColorValue: DeserializationResult<Expression<Color>> = { parent?.textColor?.value() ?? .noValue }()
       _ = {
@@ -284,6 +292,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
           _ = {
             if key == "font_weight_value" {
              fontWeightValueValue = deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator).merged(with: fontWeightValueValue)
+            }
+          }()
+          _ = {
+            if key == "letter_spacing" {
+             letterSpacingValue = deserialize(__dictValue).merged(with: letterSpacingValue)
             }
           }()
           _ = {
@@ -327,6 +340,11 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
+           if key == parent?.letterSpacing?.link {
+             letterSpacingValue = letterSpacingValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
            if key == parent?.offset?.link {
              offsetValue = offsetValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self) })
             }
@@ -348,6 +366,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         fontVariationSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_variation_settings", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
         fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
+        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
         offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) }
       )
@@ -358,6 +377,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         fontVariationSettings: { fontVariationSettingsValue.value }(),
         fontWeight: { fontWeightValue.value }(),
         fontWeightValue: { fontWeightValueValue.value }(),
+        letterSpacing: { letterSpacingValue.value }(),
         offset: { offsetValue.value }(),
         textColor: { textColorValue.value }()
       )
@@ -378,6 +398,7 @@ public final class DivSliderTemplate: TemplateValue, Sendable {
         fontVariationSettings: merged.fontVariationSettings,
         fontWeight: merged.fontWeight,
         fontWeightValue: merged.fontWeightValue,
+        letterSpacing: merged.letterSpacing,
         offset: merged.offset?.tryResolveParent(templates: templates),
         textColor: merged.textColor
       )

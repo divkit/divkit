@@ -216,7 +216,10 @@
           "platforms": [
             "android",
             "web"
-          ]
+          ],
+          "unsupported_platforms": {
+            "ios": "There is no direct implementation, no plans for support."
+          }
         },
         "alignment_vertical": {
           "$ref": "div-text-alignment-vertical.json",
