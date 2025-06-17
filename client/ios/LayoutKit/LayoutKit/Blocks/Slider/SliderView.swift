@@ -207,8 +207,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       thumbAnimator?.stopAnimation(true)
       animateActiveThumb(
         to: currentValue.rounded(.toNearestOrAwayFromZero),
-        from: currentValue,
-        completion: { updateProgress($0) }
+        from: currentValue
       )
       layoutIfNeeded()
     @unknown default: break
@@ -217,8 +216,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
 
   private func animateActiveThumb(
     to newValue: Double,
-    from oldValue: Double,
-    completion: @escaping (Double) -> Void
+    from oldValue: Double
   ) {
     thumbAnimator = .runningPropertyAnimator(
       withDuration: animationDuration * 2 * abs(newValue - oldValue),
@@ -250,16 +248,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
           )
         }
       },
-      completion: { position in
-        switch position {
-        case .end:
-          completion(newValue)
-        case .current, .start:
-          break
-        @unknown default:
-          break
-        }
-      }
+      completion: nil
     )
   }
 
