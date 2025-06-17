@@ -15,8 +15,17 @@ import com.yandex.div.json.ParsingException
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.TransactionTooLargeException
+import android.widget.Toast
+import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.internal.Assert
 
 private const val SHOW_LIMIT = 25
+private const val MIN_SIZE_FOR_DETAILS_DP = 150
 
 @DivViewScope
 internal class ErrorVisualMonitor @Inject constructor(
@@ -184,6 +193,51 @@ internal class ErrorModel(
         return div2View::logError
     }
 
+    fun onCounterClick(rootWidth: Int, rootHeight: Int) {
+        val minSizePx = MIN_SIZE_FOR_DETAILS_DP.dpToPx(div2View.context.resources.displayMetrics)
+        if (rootWidth < minSizePx || rootHeight < minSizePx) {
+            copyReportToClipboard()
+        } else {
+            showDetails()
+        }
+    }
+    
+    fun copyReportToClipboard() {
+        val fullReport = generateReport()
+        pasteToClipBoard(fullReport).onFailure {
+            if (it.causedByTransactionTooLargeException()) {
+                pasteToClipBoard(generateReport(dumpCardContent = false))
+            }
+        }
+    }
+
+    private fun pasteToClipBoard(s: String): Result<Unit> {
+        val context = div2View.context
+        val clipboardManager =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+                ?: run {
+                    Assert.fail("Failed to access clipboard manager!")
+                    return Result.success(Unit)
+                }
+
+        try {
+            clipboardManager.setPrimaryClip(
+                ClipData(
+                    "Error report",
+                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
+                    ClipData.Item(s)
+                )
+            )
+        } catch (e: Exception) {
+            return Result.failure(RuntimeException("Failed paste report to clipboard!", e))
+        }
+
+        Toast.makeText(context, "Errors, DivData and Variables are dumped to clipboard!",
+            Toast.LENGTH_LONG).show()
+
+        return Result.success(Unit)
+    }
+
     private fun dumpCardWithContextVariables() = JSONObject().apply {
         // Let's dump in format that is suitable for playground apps.
         put("templates", JSONObject())
@@ -219,3 +273,8 @@ private val Throwable.fullStackMessage: String
         }
         return result.toString()
     }
+
+private fun Throwable.causedByTransactionTooLargeException(): Boolean {
+    return this is TransactionTooLargeException ||
+            this.cause?.causedByTransactionTooLargeException() == true
+}

@@ -1,24 +1,18 @@
 package com.yandex.div.core.view2.errors
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipDescription
-import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
-import android.os.TransactionTooLargeException
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.divs.dpToPx
-import com.yandex.div.internal.Assert
 import com.yandex.div.internal.widget.FrameContainerLayout
 
 internal class ErrorView(
@@ -78,12 +72,7 @@ internal class ErrorView(
             },
             onCopyAction = {
                 viewModel?.let {
-                    val fullReport = errorModel.generateReport()
-                    pasteToClipBoard(fullReport).onFailure {
-                        if (it.causedByTransactionTooLargeException()) {
-                            pasteToClipBoard(errorModel.generateReport(dumpCardContent = false))
-                        }
-                    }
+                    errorModel.copyReportToClipboard()
                 }
             }
         )
@@ -96,31 +85,7 @@ internal class ErrorView(
         detailsView = view
     }
 
-    private fun pasteToClipBoard(s: String): Result<Unit> {
-        val clipboardManager =
-            root.context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
-                ?: run {
-                    Assert.fail("Failed to access clipboard manager!")
-                    return Result.success(Unit)
-                }
 
-        try {
-            clipboardManager.setPrimaryClip(
-                ClipData(
-                    "Error report",
-                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                    ClipData.Item(s)
-                )
-            )
-        } catch (e: Exception) {
-            return Result.failure(RuntimeException("Failed paste report to clipboard!", e))
-        }
-
-        Toast.makeText(root.context, "Errors, DivData and Variables are dumped to clipboard!",
-            Toast.LENGTH_LONG).show()
-
-        return Result.success(Unit)
-    }
 
     private fun tryAddCounterView() {
         if (counterView != null) {
@@ -133,7 +98,7 @@ internal class ErrorView(
             setTextColor(Color.BLACK)
             gravity = Gravity.CENTER
             elevation = resources.getDimension(R.dimen.div_shadow_elevation)
-            setOnClickListener { errorModel.showDetails() }
+            setOnClickListener { errorModel.onCounterClick(root.width, root.height) }
         }
 
         val metrics = root.context.resources.displayMetrics
@@ -260,7 +225,3 @@ private class DetailsViewGroup(
 
 }
 
-private fun Throwable.causedByTransactionTooLargeException(): Boolean {
-    return this is TransactionTooLargeException ||
-            this.cause?.causedByTransactionTooLargeException() == true
-}
