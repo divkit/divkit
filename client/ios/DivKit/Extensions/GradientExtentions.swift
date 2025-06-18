@@ -14,7 +14,7 @@ extension Gradient.Linear {
       startColor: start.color,
       intermediatePoints: sortedPoints,
       endColor: end.color,
-      direction: .init(angle: angle)
+      direction: .angle(Double(angle))
     )
   }
 
@@ -29,26 +29,8 @@ extension Gradient.Linear {
       startColor: start,
       intermediateColors: intermediateColors,
       endColor: end,
-      direction: .init(angle: angle)
+      direction: .angle(Double(angle))
     )
-  }
-}
-
-extension Gradient.Linear.Direction {
-  init(angle: Int) {
-    let alpha = Double(angle) / 180.0 * .pi
-    let toRaw = CGPoint(x: cos(alpha), y: sin(alpha))
-    let scale = (abs(toRaw.x) + abs(toRaw.y)) / 2
-    let toNormalized = toRaw * scale
-    let to = RelativePoint(
-      x: toNormalized.x + 0.5,
-      y: 1 - (toNormalized.y + 0.5)
-    ) // 1 - a is to flip geometry
-    let from = RelativePoint(
-      x: -toNormalized.x + 0.5,
-      y: 1 - (-toNormalized.y + 0.5)
-    )
-    self.init(from: from, to: to)
   }
 }
 
