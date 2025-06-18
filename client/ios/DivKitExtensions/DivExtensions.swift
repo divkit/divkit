@@ -1,6 +1,7 @@
 import DivKit
 import Foundation
 
+// TODO: Remove this func on next major release, clients should preload image urls with `DivDataResourcesPreloader`
 extension Div {
   public func makeImageURLs(with expressionResolver: ExpressionResolver) -> [URL] {
     var urls: [URL] = value.background?.compactMap {

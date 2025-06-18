@@ -32,7 +32,8 @@
       "default_value": "false",
       "$description": "translations.json#/div_image_background_preload_required",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     "filters": {

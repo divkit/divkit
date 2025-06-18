@@ -9,7 +9,12 @@
 /* Begin PBXBuildFile section */
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
+		0C03FD082DF2E9BA002746DA /* DivDataResourcesPreloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1B9FDF2DDE1D6B00F69371 /* DivDataResourcesPreloaderTests.swift */; };
+		0C1B9FE12DDE28BF00F69371 /* DivBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8BBE92B32682700569777 /* DivBuilders.swift */; };
+		0C1B9FE22DDE290A00F69371 /* BlockModelingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8BBE72B32660500569777 /* BlockModelingUtils.swift */; };
 		0C276A862DDC949700247E75 /* ImageBaseBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */; };
+		0C9BB87F2DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */; };
+		0C9BB8802DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */; };
 		0CE4BDE52C4FAE9F0048BEF8 /* GenericViewBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */; };
 		431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
@@ -382,7 +387,9 @@
 
 /* Begin PBXFileReference section */
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
+		0C1B9FDF2DDE1D6B00F69371 /* DivDataResourcesPreloaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivDataResourcesPreloaderTests.swift; sourceTree = "<group>"; };
 		0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBaseBlockTests.swift; sourceTree = "<group>"; };
+		0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivExtensionHandler.swift; sourceTree = "<group>"; };
 		0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericViewBlockTests.swift; sourceTree = "<group>"; };
 		431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionURLHandlerTests.swift; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
@@ -777,6 +784,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C9BB87D2DF02E1D001C4E72 /* ResourcesPreloader */ = {
+			isa = PBXGroup;
+			children = (
+				0C1B9FDF2DDE1D6B00F69371 /* DivDataResourcesPreloaderTests.swift */,
+				0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */,
+			);
+			path = ResourcesPreloader;
+			sourceTree = "<group>";
+		};
 		43BF1CDC2BA063B400198EAF /* FilesPreprocessing */ = {
 			isa = PBXGroup;
 			children = (
@@ -1108,6 +1124,7 @@
 		8C7B1B1B2865BFF10036EF4C /* DivKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				0C9BB87D2DF02E1D001C4E72 /* ResourcesPreloader */,
 				9D0868BA2DD10F7E00C5B2CC /* integration_test_data */,
 				8C01499D287329D700BA5402 /* expression_test_data */,
 				8CE488632B76F64D00BDDAB9 /* parsing_test_data */,
@@ -1422,8 +1439,6 @@
 			children = (
 				9D5AE8352DFC680300D58B81 /* FilesProvider.swift */,
 				8CF8BBE42B322E3100569777 /* Assert.swift */,
-				8CF8BBE72B32660500569777 /* BlockModelingUtils.swift */,
-				8CF8BBE92B32682700569777 /* DivBuilders.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1440,6 +1455,8 @@
 		9FE7D2D12CF74BDE00BAF071 /* DivKitTestsSupport */ = {
 			isa = PBXGroup;
 			children = (
+				8CF8BBE72B32660500569777 /* BlockModelingUtils.swift */,
+				8CF8BBE92B32682700569777 /* DivBuilders.swift */,
 				9FE7D31B2CF7535700BAF071 /* FakeImageHolder.swift */,
 				9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */,
 			);
@@ -1908,6 +1925,7 @@
 			files = (
 				52DED05329F734B900D64519 /* ShimmerImagePreviewStyleTests.swift in Sources */,
 				9F89F0DB2CEF5AAC00460B76 /* ShimmerStyleTester.swift in Sources */,
+				0C9BB87F2DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */,
 				9F89F0D92CEF4C9A00460B76 /* ShineExtensionParamsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2029,10 +2047,12 @@
 				8C22BBBA2B037BA20076BAEB /* WithoutDefaultTemplate.swift in Sources */,
 				7EE2ED6E2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift in Sources */,
 				8CC357F92BFE24B4001C2CFE /* FontFeatureSettingsParserTests.swift in Sources */,
+				0C03FD082DF2E9BA002746DA /* DivDataResourcesPreloaderTests.swift in Sources */,
 				8C23F43129DDB3810069F3F7 /* EntityWithStringArrayProperty.swift in Sources */,
 				5219194D297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift in Sources */,
 				8C22BBB82B037BA20076BAEB /* EnumWithDefaultTypeTemplate.swift in Sources */,
 				7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */,
+				0C9BB8802DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */,
 				8CBE33022BD699CC00CFFDF5 /* DivVariableStorageTests.swift in Sources */,
 				8C90A2122B975B9000BB8CFD /* FunctionTests.swift in Sources */,
 				9D08688F2DCE3C0900C5B2CC /* IntegrationTests.swift in Sources */,
@@ -2215,6 +2235,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C1B9FE22DDE290A00F69371 /* BlockModelingUtils.swift in Sources */,
+				0C1B9FE12DDE28BF00F69371 /* DivBuilders.swift in Sources */,
 				9FE7D3262CF753A400BAF071 /* FakeImageHolder.swift in Sources */,
 				9FE7D3252CF7539E00BAF071 /* MockDivBlockModelingContext.swift in Sources */,
 			);

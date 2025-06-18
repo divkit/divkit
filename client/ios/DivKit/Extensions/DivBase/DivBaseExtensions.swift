@@ -130,23 +130,28 @@ extension DivBase {
 
     return blockActions
   }
+  
+  func setupContextWithVariablesAndFunctions( 
+    context: DivBlockModelingContext
+  ) {
+    context.functionsStorage?.setIfNeeded(
+      path: context.path,
+      functions: functions ?? []
+    )
+
+    context.variablesStorage.initializeIfNeeded(
+      path: context.path,
+      variables: variables?.extractDivVariableValues(context.expressionResolver) ?? [:]
+    )
+  }
 
   private func setupContext(
     context: DivBlockModelingContext,
     identity: String
   ) {
+    setupContextWithVariablesAndFunctions(context: context)
+
     let path = context.path
-
-    context.functionsStorage?.setIfNeeded(
-      path: path,
-      functions: functions ?? []
-    )
-
-    context.variablesStorage.initializeIfNeeded(
-      path: path,
-      variables: variables?.extractDivVariableValues(context.expressionResolver) ?? [:]
-    )
-
     context.triggersStorage?.setIfNeeded(
       path: path,
       triggers: variableTriggers ?? []

@@ -35,6 +35,14 @@ public final class ImageThemeExtensionHandler: DivExtensionHandler {
     }
   }
 
+  public func getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver) -> [URL] {
+    guard let div = div as? DivImage else { return [] }
+    return [
+      div.resolveImageUrl(expressionResolver),
+      div.resolveDarkThemeImageURL(expressionResolver),
+    ].compactMap { $0 }
+  }
+
   private func makeDarkImageBlock(
     initialBlock: ImageBlock,
     divImage: DivImage,

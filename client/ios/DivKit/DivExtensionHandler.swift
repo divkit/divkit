@@ -54,6 +54,8 @@ public protocol DivExtensionHandler: AccessibilityContaining {
     div: DivBase,
     context: DivBlockModelingContext
   ) -> Block
+
+  func getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver) -> [URL]
 }
 
 extension DivExtensionHandler {
@@ -76,6 +78,10 @@ extension DivExtensionHandler {
     context _: DivBlockModelingContext
   ) -> Block {
     block
+  }
+
+  public func getPreloadURLs(div _: DivBase, expressionResolver _: ExpressionResolver) -> [URL] {
+    []
   }
 
   public func getExtensionParams(_ div: DivBase) -> [String: Any] {

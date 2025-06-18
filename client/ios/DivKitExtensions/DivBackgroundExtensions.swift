@@ -12,4 +12,13 @@ extension DivBackground {
       nil
     }
   }
+
+  func resolvePreloadRequired(_ expressionResolver: ExpressionResolver) -> Bool {
+    switch self {
+    case let .divImageBackground(imageBackground):
+      imageBackground.resolvePreloadRequired(expressionResolver)
+    case .divNinePatchBackground, .divLinearGradient, .divRadialGradient, .divSolidBackground:
+      false
+    }
+  }
 }

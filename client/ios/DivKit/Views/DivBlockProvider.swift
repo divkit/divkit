@@ -173,6 +173,15 @@ final class DivBlockProvider {
       self.divData = nil
       return
     }
+    
+    if let resourcesPreloader = divKitComponents.resourcesPreloader {
+      resourcesPreloader.downloadResources(
+        for: divData,
+        filter: .onlyRequired,
+        context: makeCurrentContext(),
+        completion: { _ in }
+      )
+    }
     if !id.isTooltip {
       divKitComponents.setCardData(divData: divData, cardId: cardId)
     }
@@ -198,13 +207,7 @@ final class DivBlockProvider {
       updateInProgress = false
     }
 
-    let context = divKitComponents.makeContext(
-      cardId: cardId,
-      additionalId: id.additionalId,
-      cachedImageHolders: block.getImageHolders(),
-      debugParams: debugParams,
-      parentScrollView: parentScrollView
-    )
+    let context = makeCurrentContext()
 
     reasons.compactMap { $0.patch(for: self.cardId) }.forEach { patch in
       divData = divData.applyPatchWithActions(
@@ -267,6 +270,16 @@ final class DivBlockProvider {
       }
     }
     return false
+  }
+
+  private func makeCurrentContext() -> DivBlockModelingContext {
+    divKitComponents.makeContext(
+      cardId: cardId,
+      additionalId: id.additionalId,
+      cachedImageHolders: block.getImageHolders(),
+      debugParams: debugParams,
+      parentScrollView: parentScrollView
+    )
   }
 
   func update(withStates blockStates: BlocksState) {

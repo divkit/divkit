@@ -46,6 +46,7 @@ enum AppComponents {
       layoutDirection: layoutDirection,
       patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),
       reporter: reporter,
+      resourcesPreloader: makeResourcesPreloader(requestPerformer: requestPerformer),
       playerFactory: playerFactory,
       urlHandler: urlHandler,
       variablesStorage: variablesStorage
@@ -77,6 +78,29 @@ private func makeCachingPlayerFactory(requester: URLResourceRequesting) -> Playe
     waitForCacheWrite: true
   )
   return DefaultPlayerFactory(itemsProvider: requester)
+}
+
+private func makeResourcesPreloader(
+  requestPerformer: URLRequestPerforming?
+) -> DivDataResourcesPreloader? {
+  guard let requestPerformer = requestPerformer else {
+    return nil
+  }
+  
+  let cacheQueue = OperationQueue.serialQueue(
+    name: "divkit.resources-preloader.cache-queue",
+    qos: .utility
+  )
+  let diskCache = CacheFactory.makeLRUDiskCache(
+    name: "DivKitPreloadResourcesCache",
+    ioQueue: cacheQueue,
+    maxCapacity: 100 * 1024 * 1024, // 100 MB
+    fileManager: FileManager(),
+    reportError: { _ in }
+  )
+  let networkRequester = NetworkURLResourceRequester(performer: requestPerformer)
+  let cachedRequester = CachedURLResourceRequester(cache: diskCache, cachemissRequester: networkRequester)
+  return DivDataResourcesPreloader(resourceRequester: cachedRequester)
 }
 
 extension FileManager: @retroactive @unchecked Sendable {}

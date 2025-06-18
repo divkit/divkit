@@ -61,6 +61,10 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     )
   }
 
+  public func getPreloadURLs(div: DivBase) -> [URL] {
+    [Self.getPreloadURL(div: div)].compactMap { $0 }
+  }
+
   static func getPreloadURL(div: DivBase) -> URL? {
     let extensionData = div.extensions?.first { $0.id == "lottie" }
     guard let paramsDict = extensionData?.params,

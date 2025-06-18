@@ -30,6 +30,7 @@ public final class DivKitComponents {
   public let variablesStorage: DivVariablesStorage
   @_spi(Internal)
   public let visibilityCounter = DivVisibilityCounter()
+  public let resourcesPreloader: DivDataResourcesPreloader?
 
   public var updateCardSignal: Signal<[DivCardUpdateReason]> {
     updateCardPipe.signal
@@ -99,6 +100,7 @@ public final class DivKitComponents {
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     reporter: DivReporter? = nil,
+    resourcesPreloader: DivDataResourcesPreloader? = nil,
     showTooltip: DivActionHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     submitter: DivSubmitter? = nil,
@@ -120,7 +122,7 @@ public final class DivKitComponents {
     self.stateManagement = stateManagement
     self.urlHandler = urlHandler
     self.variablesStorage = variablesStorage
-
+    self.resourcesPreloader = resourcesPreloader
     let updateCardPipe = SignalPipe<[DivCardUpdateReason]>()
     self.updateCardPipe = updateCardPipe
 
