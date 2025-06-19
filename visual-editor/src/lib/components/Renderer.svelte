@@ -734,7 +734,7 @@
                 const img = node.querySelector<HTMLImageElement>('img');
 
                 if (img) {
-                    const url = evalJson({url: json.type === 'gif' ? json.gif_url : json.image_url}).url;
+                    const url = evalJson({ url: json.type === 'gif' ? json.gif_url : json.image_url }).url;
                     if (url === EMPTY_IMAGE) {
                         if (json.preview) {
                             img.src = DIVKIT_EMPY_IMAGE;
