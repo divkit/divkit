@@ -1,3 +1,9 @@
+## 32.4.1
+
+# iOS Client:
+* Adding DivKitSVG podspec.
+
+
 ## 32.4.0
 
 # Android Client:
