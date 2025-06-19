@@ -1,3 +1,9 @@
+## 32.4.1
+
+# iOS Client:
+* Adding DivKitSVG podspec.
+
+
 ## 32.4.0
 
 # Android Client:
@@ -17,6 +23,12 @@
 # Kotlin JSON Builder:
 * Added ability to create Color outside DivScope.
 * Added modify method for entities in Kotlin DSL.
+
+
+## 32.3.1
+
+# iOS Client:
+* Add DivKitSVG package.
 
 
 ## 32.3.0
