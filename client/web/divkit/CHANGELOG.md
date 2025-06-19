@@ -1,3 +1,8 @@
+## 32.4.0 (June 16, 2025)
+
+* Fixed incorrect logic, due to which the `filters` property of the `input` component did not work with an empty value.
+
+
 ## 32.3.0 (June 9, 2025)
 
 * Fixed a issue with incorrect priority of `url` over `typed` in `actions` in rare cases.
