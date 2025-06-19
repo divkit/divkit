@@ -41,7 +41,7 @@
     import type { TankerMeta } from '../../lib';
     import { getRotationFromMatrix } from '../utils/getRotationFromMatrix';
     import { rectAngleIntersection } from '../utils/rectAngleIntersection';
-    import { CHESS_EMPTY_IMAGE, DIVKIT_EMPY_IMAGE } from '../data/doc';
+    import { CHESS_EMPTY_IMAGE, DIVKIT_EMPY_IMAGE, EMPTY_IMAGE } from '../data/doc';
 
     export let viewport: string;
     export let theme: 'light' | 'dark';
@@ -733,8 +733,15 @@
             if (node && (json?.type === 'gif' || json?.type === 'image')) {
                 const img = node.querySelector<HTMLImageElement>('img');
 
-                if (img && img.src === DIVKIT_EMPY_IMAGE) {
-                    img.src = CHESS_EMPTY_IMAGE;
+                if (img) {
+                    const url = evalJson({url: json.type === 'gif' ? json.gif_url : json.image_url}).url;
+                    if (url === EMPTY_IMAGE) {
+                        if (json.preview) {
+                            img.src = DIVKIT_EMPY_IMAGE;
+                        } else {
+                            img.src = CHESS_EMPTY_IMAGE;
+                        }
+                    }
                 }
             }
 
