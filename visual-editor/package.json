@@ -1,6 +1,6 @@
 {
   "name": "@divkitframework/visual-editor",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "description": "Visual editor for DivKit",
   "keywords": [
     "server-driven-ui",

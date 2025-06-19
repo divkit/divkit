@@ -1,3 +1,7 @@
+## 0.4.9
+
+* Fixed a bug where images were drawn with a cell background, even when they had a preview set.
+
 ## 0.4.8
 
 * Updated DivKit 31.2.0 -> 31.13.0
