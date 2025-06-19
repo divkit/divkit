@@ -4,29 +4,23 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.downloader.PersistentDivDataObserver
+import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.evaluable.Evaluator
-import com.yandex.div.json.JsonTemplate
-import com.yandex.div.json.ParsingEnvironment
-import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.json.templates.TemplateProvider
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
-import org.json.JSONObject
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
@@ -38,19 +32,16 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class TriggersControllerTest {
     private val variableController = mock<VariableController> {
-        on { subscribeToVariablesChange(any(), any(), any()) } doReturn Disposable.NULL
         on { subscribeToVariablesUndeclared(any(), any()) } doReturn Disposable.NULL
     }
-    private val expressionResolver = mock<ExpressionResolver>()
-    private val divActionBinder = mock<DivActionBinder>()
-    private val evaluator = mock<Evaluator> {
-        on { eval<Boolean>(any()) } doReturn true
+    private val expressionResolver = mock<ExpressionResolverImpl> {
+        on { variableController } doReturn variableController
     }
+    private val divActionBinder = mock<DivActionBinder>()
     private val errorCollector = mock<ErrorCollector>()
     private val logger = mock<Div2Logger>()
     private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val view = mock<Div2View> {
-        on { expressionResolver } doReturn mock()
         on { addPersistentDivDataObserver(any()) } doAnswer {
             persistentDivDataObservers.addObserver(it.getArgument(0))
             Unit
@@ -61,23 +52,21 @@ class TriggersControllerTest {
         }
     }
 
-    private val env = object : ParsingEnvironment {
-        override val templates: TemplateProvider<JsonTemplate<*>> = TemplateProvider.empty()
-        override val logger = ParsingErrorLogger { throw it }
+    private val condition = mock<Expression.MutableExpression<*, Boolean>> {
+        on { getVariablesName(any()) } doReturn listOf("varA")
+        on { evaluate(any()) } doReturn true
+        on { observe(any(), any()) } doReturn Disposable.NULL
     }
-
-    private val logIdA = "log_id_A"
-    private val divTriggerA = createDivTrigger(logIdA)
+    private val actionsA = listOf(mock<DivAction>())
+    private val divTriggerA = DivTrigger(actionsA, condition)
     private val triggersA = listOf(divTriggerA)
 
-    private val logIdB = "log_id_B"
-    private val divTriggerB = createDivTrigger(logIdB)
+    private val actionsB = listOf(mock<DivAction>())
+    private val divTriggerB = DivTrigger(actionsB, condition)
     private val triggersB = listOf(divTriggerB)
 
     private val underTest = TriggersController(
-        variableController,
         expressionResolver,
-        evaluator,
         errorCollector,
         logger,
         divActionBinder
@@ -89,8 +78,8 @@ class TriggersControllerTest {
         underTest.ensureTriggersSynced(triggersA)
         underTest.ensureTriggersSynced(triggersB)
 
-        verifyActionTriggered(logIdA)
-        verifyActionTriggered(logIdB)
+        verifyActionTriggered(actionsA)
+        verifyActionTriggered(actionsB)
     }
 
     @Test
@@ -99,7 +88,7 @@ class TriggersControllerTest {
         underTest.ensureTriggersSynced(triggersA)
         underTest.ensureTriggersSynced(triggersA)
 
-        verifyActionTriggered(logIdA)
+        verifyActionTriggered(actionsA)
     }
 
     @Test
@@ -120,7 +109,7 @@ class TriggersControllerTest {
         underTest.ensureTriggersSynced(triggersA)
         notifyBindEnded()
 
-        verifyActionTriggered(logIdA, times = 1)
+        verifyActionTriggered(actionsA, times = 1)
     }
 
     @Test
@@ -134,7 +123,7 @@ class TriggersControllerTest {
         notifyBindStarted()
         notifyBindEnded()
 
-        verifyActionTriggered(logIdA, times = 1)
+        verifyActionTriggered(actionsA, times = 1)
     }
 
     @Test
@@ -144,8 +133,8 @@ class TriggersControllerTest {
         underTest.clearBinding(view)
         underTest.ensureTriggersSynced(triggersB)
 
-        verifyActionTriggered(logIdA, times = 1)
-        verifyActionTriggered(logIdB, times = 0)
+        verifyActionTriggered(actionsA, times = 1)
+        verifyActionTriggered(actionsB, times = 0)
     }
 
     @Test
@@ -156,30 +145,11 @@ class TriggersControllerTest {
         underTest.clearBinding(view)
         underTest.onAttachedToWindow(view)
 
-        verifyActionTriggered(logIdB, times = 1)
+        verifyActionTriggered(actionsB, times = 1)
     }
 
-    private fun verifyActionTriggered(logId: String, times: Int = 1) {
-        val actions = argumentCaptor<List<DivAction>>()
-        verify(divActionBinder, atLeastOnce()).handleActions(any(), any(), actions.capture(), any(), anyOrNull())
-
-        val actionsWithLogId = actions.allValues.flatten().filter { it.logId.rawValue == logId }
-        Assert.assertEquals(times, actionsWithLogId.size)
-    }
-
-    private fun createDivTrigger(actionLogId: String): DivTrigger {
-        val rawJson = """
-            {
-                "condition": "@{varA > 0}",
-                "actions": [
-                    {
-                        "url": "div-action://set_variable?name=var_b&value=true",
-                        "log_id": "$actionLogId"
-                    }
-                ]
-            }
-        """.trimIndent()
-        return DivTrigger(env, JSONObject(rawJson))
+    private fun verifyActionTriggered(actions: List<DivAction>, times: Int = 1) {
+        verify(divActionBinder, times(times)).handleActions(any(), any(), eq(actions), any(), anyOrNull())
     }
 
     private fun notifyBindStarted() {

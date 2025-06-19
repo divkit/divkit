@@ -1,10 +1,15 @@
 package com.yandex.div.json.expressions
 
+import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.plusAssign
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.internal.LiteralsEscaper
 import com.yandex.div.internal.parser.Converter
+import com.yandex.div.internal.parser.JsonParsers.alwaysValid
+import com.yandex.div.internal.parser.JsonParsers.doNotConvert
+import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.json.ParsingErrorLogger
@@ -135,21 +140,45 @@ abstract class Expression<T : Any> {
         override fun evaluate(resolver: ExpressionResolver): T = tryResolveOrUseLast(resolver)
 
         override fun observe(resolver: ExpressionResolver, callback: (T) -> Unit): Disposable {
-            val variablesName = try {
-                getVariablesName()
-            } catch (e: Exception) {
-                logError(resolveFailed(expressionKey, rawExpression, e), resolver)
-                return Disposable.NULL
-            }
-            if (variablesName.isEmpty())
+            val variableNames = getVariables(resolver)
+            val dynamicVariables = evaluable?.dynamicVariables
+            if (variableNames.isEmpty() && dynamicVariables.isNullOrEmpty())
                 return Disposable.NULL
 
-            return resolver.subscribeToExpression(rawExpression, variablesName) {
-                callback(evaluate(resolver))
+            val callbackWithValue = { callback(evaluate(resolver)) }
+            val variablesSubscription = resolver.subscribeToExpression(rawExpression, variableNames, callbackWithValue)
+
+            if (dynamicVariables.isNullOrEmpty()) return variablesSubscription
+
+            val disposable = CompositeDisposable()
+            disposable += variablesSubscription
+
+            disposable += dynamicVariables.observe(resolver, callbackWithValue)
+            dynamicVariables.forEach { dynamicVar ->
+                val dynamicVarCallback = { disposable += dynamicVar.observe(resolver, callbackWithValue) }
+                disposable +=
+                    resolver.subscribeToExpression(dynamicVar.toString(), dynamicVar.variables, dynamicVarCallback)
+                disposable += dynamicVar.dynamicVariables.observe(resolver, dynamicVarCallback)
             }
+
+            return disposable
         }
 
-        fun getVariablesName(): List<String> = getEvaluable().variables
+        @JvmOverloads
+        fun getVariablesName(resolver: ExpressionResolver = ExpressionResolver.EMPTY): List<String> {
+            val variableNames = getVariables(resolver)
+            val dynamicVariableNames = evaluable?.dynamicVariables?.mapNotNull { it.resolveVariableName(resolver) }
+            return if (dynamicVariableNames.isNullOrEmpty()) variableNames else variableNames + dynamicVariableNames
+        }
+
+        private fun getVariables(resolver: ExpressionResolver): List<String> {
+            return try {
+                getEvaluable().variables
+            } catch (e: Exception) {
+                logError(resolveFailed(expressionKey, rawExpression, e), resolver)
+                emptyList()
+            }
+        }
 
         private fun tryResolveOrUseLast(resolver: ExpressionResolver): T {
             try {
@@ -215,6 +244,29 @@ abstract class Expression<T : Any> {
             } catch (e: EvaluableException) {
                 throw resolveFailed(expressionKey, rawExpression, e)
             }
+        }
+
+        private fun List<Evaluable>.observe(resolver: ExpressionResolver, callback: () -> Unit): Disposable {
+            val variables = mapNotNull { it.resolveVariableName(resolver) }
+            if (variables.isEmpty()) return Disposable.NULL
+            return resolver.subscribeToExpression(rawExpression, variables, callback)
+        }
+
+        private fun Evaluable.observe(resolver: ExpressionResolver, callback: () -> Unit): Disposable {
+            val name = resolveVariableName(resolver) ?: return Disposable.NULL
+            return resolver.subscribeToExpression(rawExpression, listOf(name), callback)
+        }
+
+        private fun Evaluable.resolveVariableName(resolver: ExpressionResolver): String? {
+            return resolver.get(
+                expressionKey,
+                toString(),
+                this,
+                doNotConvert(),
+                alwaysValid(),
+                TYPE_HELPER_STRING,
+                logger
+            )
         }
     }
 

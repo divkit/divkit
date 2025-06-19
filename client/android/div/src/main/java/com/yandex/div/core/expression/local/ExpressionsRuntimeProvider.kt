@@ -9,7 +9,6 @@ import com.yandex.div.core.expression.FunctionProviderDecorator
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.declare
 import com.yandex.div.core.util.toLocalFunctions
@@ -20,7 +19,6 @@ import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.WarningSender
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
@@ -69,7 +67,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         }
 
         val triggersController = data.variableTriggers
-            .toTriggersController(variableController, resolver, evaluator, errorCollector)
+            .toTriggersController(resolver, errorCollector)
 
         return ExpressionsRuntime(resolver, triggersController)
     }
@@ -108,21 +106,17 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             localVariableController.declare(it, childResolver, errorCollector)
         }
 
-        val triggerController =
-            div.variableTriggers.toTriggersController(localVariableController, childResolver, evaluator, errorCollector)
+        val triggerController = div.variableTriggers.toTriggersController(childResolver, errorCollector)
 
         return ExpressionsRuntime(childResolver, triggerController)
     }
 
     private fun List<DivTrigger>?.toTriggersController(
-        variableController: VariableController,
-        resolver: ExpressionResolver,
-        evaluator: Evaluator,
+        resolver: ExpressionResolverImpl,
         errorCollector: ErrorCollector,
     ): TriggersController? {
         if (isNullOrEmpty()) return null
-        val controller =
-            TriggersController(variableController, resolver, evaluator, errorCollector, logger, divActionBinder)
+        val controller = TriggersController(resolver, errorCollector, logger, divActionBinder)
         controller.ensureTriggersSynced(this)
         return controller
     }

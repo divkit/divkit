@@ -218,11 +218,9 @@ internal class ExpressionResolverImpl(
     internal fun subscribeOnVariables() {
         variableController.setOnAnyVariableChangeCallback(owner = this) { v ->
             val capturedExpressions = varToExpressions[v.name]?.toList()
-            capturedExpressions?.forEach { expr: String ->
-                evaluationsCache.remove(expr)
-                expressionObservers[expr]?.forEach {
-                    it.invoke()
-                }
+            capturedExpressions?.forEach { evaluationsCache.remove(it) }
+            capturedExpressions?.forEach { expr ->
+                expressionObservers[expr]?.forEach { it.invoke() }
             }
         }
     }

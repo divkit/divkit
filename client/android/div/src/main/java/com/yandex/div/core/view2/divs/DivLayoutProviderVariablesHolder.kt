@@ -38,7 +38,7 @@ internal class DivLayoutProviderVariablesHolder : DivTreeVisitor<Unit>(), Expres
         val size = value() as? DivFixedSize ?: return
         val sizeExpr = size.value as? Expression.MutableExpression<*, Long> ?: return
         addSubscription(sizeExpr.observe(resolver) {
-            changedVariables.addAll(sizeExpr.getVariablesName())
+            changedVariables.addAll(sizeExpr.getVariablesName(resolver))
         })
     }
 }

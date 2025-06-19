@@ -6,26 +6,20 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.downloader.PersistentDivDataObserver
-import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.data.Variable
-import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
-import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
 import java.util.WeakHashMap
 
 @Mockable
 internal class TriggersController(
-    private val variableController: VariableController,
-    private val expressionResolver: ExpressionResolver,
-    private val evaluator: Evaluator,
+    private val expressionResolver: ExpressionResolverImpl,
     private val errorCollector: ErrorCollector,
     private val logger: Div2Logger,
     private val divActionBinder: DivActionBinder
@@ -47,14 +41,17 @@ internal class TriggersController(
         activeView?.let { clearBinding(it) }
 
         divTriggers.forEach { trigger ->
-            val rawExpression = trigger.condition.rawValue.toString()
-            val evaluable = try {
-                Evaluable.lazy(rawExpression)
-            } catch (e: EvaluableException) {
+            val expression = trigger.condition as? Expression.MutableExpression<*, Boolean> ?: run {
+                errorCollector.logError(
+                    IllegalStateException(
+                        "Invalid condition: '${trigger.condition}'",
+                        RuntimeException("Condition is not mutable!")
+                    )
+                )
                 return@forEach
             }
 
-            findErrors(evaluable.variables)?.let {
+            findErrors(expression.getVariablesName(expressionResolver))?.let {
                 errorCollector.logError(
                     IllegalStateException("Invalid condition: '${trigger.condition}'", it)
                 )
@@ -62,13 +59,10 @@ internal class TriggersController(
             }
 
             activeExecutors.add(TriggerExecutor(
-                rawExpression,
-                evaluable,
-                evaluator,
+                expression,
                 trigger.actions,
                 trigger.mode,
                 expressionResolver,
-                variableController,
                 errorCollector,
                 logger,
                 divActionBinder
@@ -100,18 +94,15 @@ internal class TriggersController(
 }
 
 private class TriggerExecutor(
-    private val rawExpression: String,
-    private val condition: Evaluable,
-    private val evaluator: Evaluator,
+    private val expression: Expression.MutableExpression<*, Boolean>,
     private val actions: List<DivAction>,
     private val mode: Expression<DivTrigger.Mode>,
-    private val resolver: ExpressionResolver,
-    private val variableController: VariableController,
+    private val resolver: ExpressionResolverImpl,
     private val errorCollector: ErrorCollector,
     private val logger: Div2Logger,
     private val divActionBinder: DivActionBinder
 ) {
-    private val changeTrigger = { _: Variable -> tryTriggerActions() }
+    private val changeTrigger = { _: Boolean -> tryTriggerActions() }
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
     private var currentMode = DivTrigger.Mode.ON_CONDITION
     private var wasConditionSatisfied = WeakHashMap<DivViewFacade, Boolean>()
@@ -147,15 +138,10 @@ private class TriggerExecutor(
 
     private fun startObserving() {
         modeObserver.close()
-        observersDisposable = variableController.subscribeToVariablesChange(
-            condition.variables,
-            invokeOnSubscription = false,
-            changeTrigger
-        )
+        observersDisposable = expression.observe(resolver, changeTrigger)
 
-        removingDisposable = variableController.subscribeToVariablesUndeclared(condition.variables) {
-            stopObserving()
-        }
+        removingDisposable = resolver.variableController
+            .subscribeToVariablesUndeclared(expression.getVariablesName(resolver)) { stopObserving() }
 
         modeObserver = mode.observeAndGet(resolver) { currentMode = it }
 
@@ -203,13 +189,13 @@ private class TriggerExecutor(
 
     private fun conditionSatisfied(viewFacade: DivViewFacade): Boolean {
         val nowSatisfied: Boolean = try {
-            evaluator.eval(condition)
+            expression.evaluate(resolver)
         } catch (e: Exception) {
             val exception = when (e) {
                 is ClassCastException -> RuntimeException(
-                    "Condition evaluated in non-boolean result! (expression: '$rawExpression')", e)
+                    "Condition evaluated in non-boolean result! (expression: '${expression.rawValue}')", e)
                 is EvaluableException -> RuntimeException(
-                    "Condition evaluation failed! (expression: '$rawExpression')", e)
+                    "Condition evaluation failed! (expression: '${expression.rawValue}')", e)
                 else -> throw e
             }
 
@@ -224,7 +210,7 @@ private class TriggerExecutor(
             return false
         }
 
-        if (currentMode == DivTrigger.Mode.ON_CONDITION && wasSatisfied && nowSatisfied) {
+        if (currentMode == DivTrigger.Mode.ON_CONDITION && wasSatisfied) {
             return false
         }
 

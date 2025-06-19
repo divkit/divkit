@@ -1,5 +1,13 @@
 package com.yandex.div.evaluable
 
+import com.yandex.div.evaluable.function.GetBooleanValue
+import com.yandex.div.evaluable.function.GetColorValue
+import com.yandex.div.evaluable.function.GetColorValueString
+import com.yandex.div.evaluable.function.GetIntegerValue
+import com.yandex.div.evaluable.function.GetNumberValue
+import com.yandex.div.evaluable.function.GetStringValue
+import com.yandex.div.evaluable.function.GetUrlValueWithStringFallback
+import com.yandex.div.evaluable.function.GetUrlValueWithUrlFallback
 import com.yandex.div.evaluable.internal.Parser
 import com.yandex.div.evaluable.internal.Token
 import com.yandex.div.evaluable.internal.Tokenizer
@@ -7,6 +15,7 @@ import com.yandex.div.evaluable.internal.Tokenizer
 abstract class Evaluable(val rawExpr: String) {
 
     abstract val variables: List<String>
+    abstract val dynamicVariables: List<Evaluable>
 
     /**
      * Value of this field is valid only after calling the eval method.
@@ -41,15 +50,20 @@ abstract class Evaluable(val rawExpr: String) {
             } else {
                 tokens.filterIsInstance<Token.Operand.Variable>().map { it.name }
             }
+        override val dynamicVariables: List<Evaluable>
+            get() = initExpression().let { expression.dynamicVariables }
         override fun evalImpl(evaluator: Evaluator): Any {
-            if (!this::expression.isInitialized) {
-                expression = Parser.parse(tokens, rawExpr)
-            }
+            initExpression()
             val res = expression.eval(evaluator)
             updateIsCacheable(expression.isCacheable)
             return res
         }
         override fun toString(): String = expr
+        private fun initExpression() {
+            if (!this::expression.isInitialized) {
+                expression = Parser.parse(tokens, rawExpr)
+            }
+        }
     }
 
     internal data class Unary(
@@ -58,6 +72,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = expression.variables
+        override val dynamicVariables: List<Evaluable> = expression.dynamicVariables
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalUnary(this)
         override fun toString(): String = "$token$expression"
     }
@@ -69,6 +84,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = left.variables + right.variables
+        override val dynamicVariables: List<Evaluable> = left.dynamicVariables + right.dynamicVariables
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalBinary(this)
         override fun toString(): String = "($left $token $right)"
     }
@@ -81,7 +97,9 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = firstExpression.variables +
-                secondExpression.variables + thirdExpression.variables
+            secondExpression.variables + thirdExpression.variables
+        override val dynamicVariables: List<Evaluable> = firstExpression.dynamicVariables +
+            secondExpression.dynamicVariables + thirdExpression.dynamicVariables
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalTernary(this)
         override fun toString(): String {
             val opIf = Token.Operator.TernaryIf
@@ -97,6 +115,8 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = tryExpression.variables + fallbackExpression.variables
+        override val dynamicVariables: List<Evaluable> =
+            tryExpression.dynamicVariables + fallbackExpression.dynamicVariables
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalTry(this)
         override fun toString() = "($tryExpression $token $fallbackExpression)"
     }
@@ -108,6 +128,8 @@ abstract class Evaluable(val rawExpr: String) {
     ) : Evaluable(rawExpression) {
         override val variables: List<String> =
             arguments.map { it.variables }.reduceOrNull { acc, vars -> acc + vars } ?: emptyList()
+        override val dynamicVariables: List<Evaluable> =
+            arguments.map { it.dynamicVariables }.reduceOrNull { acc, vars -> acc + vars } ?: emptyList()
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalMethodCall(this)
         override fun toString(): String {
             val argsString = if (arguments.size > 1) {
@@ -124,10 +146,17 @@ abstract class Evaluable(val rawExpr: String) {
     ) : Evaluable(rawExpression) {
         override val variables: List<String> =
             arguments.map { it.variables }.reduceOrNull { acc, vars -> acc + vars } ?: emptyList()
+        override val dynamicVariables: List<Evaluable> = findDynamicVariables()
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalFunctionCall(this)
         override fun toString(): String {
             val argsString = arguments.joinToString(separator = Token.Function.ArgumentDelimiter.toString())
             return "${token.name}($argsString)"
+        }
+        private fun findDynamicVariables(): List<Evaluable> {
+            val names = if (token.name in functionsWithVariableName) arguments else emptyList()
+            return arguments.map { it.dynamicVariables }
+                .plus(listOf(names))
+                .reduceOrNull { acc, vars -> acc + vars } ?: emptyList()
         }
     }
 
@@ -136,6 +165,8 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = arguments.map { it.variables }.reduce { acc, vars -> acc + vars }
+        override val dynamicVariables: List<Evaluable> =
+            arguments.map { it.dynamicVariables }.reduce { acc, vars -> acc + vars }
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalStringTemplate(this)
         override fun toString(): String = arguments.joinToString(separator = "")
     }
@@ -145,6 +176,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = listOf(token.name)
+        override val dynamicVariables: List<Evaluable> = emptyList()
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalVariable(this)
         override fun toString(): String = token.name
     }
@@ -154,6 +186,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = emptyList()
+        override val dynamicVariables: List<Evaluable> = emptyList()
         override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalValue(this)
         override fun toString(): String = when (token) {
             is Token.Operand.Literal.Str -> "'${token.value}'"
@@ -172,5 +205,16 @@ abstract class Evaluable(val rawExpr: String) {
         fun lazy(expr: String) : Evaluable {
             return Lazy(expr)
         }
+
+        internal val functionsWithVariableName = setOf(
+            GetIntegerValue.name,
+            GetNumberValue.name,
+            GetStringValue.name,
+            GetColorValue.name,
+            GetColorValueString.name,
+            GetUrlValueWithUrlFallback.name,
+            GetUrlValueWithStringFallback.name,
+            GetBooleanValue.name,
+        )
     }
 }
