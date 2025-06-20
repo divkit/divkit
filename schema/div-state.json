@@ -63,6 +63,13 @@
       "$ref": "div-base.json"
     },
     {
+      "$ref": "div-actionable.json",
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
       "properties": {
         "type": {
           "type": "string",

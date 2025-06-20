@@ -21,7 +21,7 @@
               "state_id": "unchecked",
               "div": {
                 "type": "text",
-                "font_size": 20,
+                "font_size": 45,
                 "text": "☐ Approved"
               }
             },
@@ -29,7 +29,7 @@
               "state_id": "checked",
               "div": {
                 "type": "text",
-                "font_size": 20,
+                "font_size": 45,
                 "text": "☑ Approved"
               }
             }

@@ -774,6 +774,7 @@
       "title": "Checkbox with accessibility",
       "case_id": 194,
       "platforms": [
+        "ios",
         "web"
       ],
       "tags": [
