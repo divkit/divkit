@@ -1,3 +1,18 @@
+## 32.5.0
+
+# Android Client:
+* Fixed GestireDetector creation on background thread.
+* Fixed memory leak for LoadableImageView after release call.
+* Instantly copy error report to clipboard when no space for details.
+* Supported subscriptions to `get<Type>Value` functions.
+
+# iOS Client:
+* Added `DivHostingView` adapter for `SwiftUI`.
+* Fixed gradient angle with different width and height.
+* Fixed slider thump shaking at breakpoints when moving manually.
+* Support `preload_required` property for resources divs.
+
+
 ## 32.4.1
 
 # iOS Client:
