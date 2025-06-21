@@ -15,7 +15,10 @@
 		0C276A862DDC949700247E75 /* ImageBaseBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */; };
 		0C9BB87F2DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */; };
 		0C9BB8802DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */; };
+		0CE1B3552E04197A00677706 /* LottieExtensionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */; };
 		0CE4BDE52C4FAE9F0048BEF8 /* GenericViewBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */; };
+		0CE65E942E041BBE005EBB5A /* MockURLResourceRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */; };
+		0CE65E952E041BBE005EBB5A /* MockURLResourceRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */; };
 		431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
 		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
@@ -279,8 +282,6 @@
 		8CF329702875D64B003F799A /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF3296F2875D64B003F799A /* LayoutKit */; };
 		8CF32B7E2875E12F003F799A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF32B7D2875E12F003F799A /* Utils.swift */; };
 		8CF8BBE52B322E3100569777 /* Assert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8BBE42B322E3100569777 /* Assert.swift */; };
-		8CF8BBE82B32660500569777 /* BlockModelingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8BBE72B32660500569777 /* BlockModelingUtils.swift */; };
-		8CF8BBEA2B32682700569777 /* DivBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8BBE92B32682700569777 /* DivBuilders.swift */; };
 		8CF91B042D0AE4ED0082FDC1 /* MockDivActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */; };
 		8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD4C9D2B2C5B780092814C /* Theme.swift */; };
 		982A7F142C9C08F30081DE74 /* PagerViewLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982A7F132C9C08F30081DE74 /* PagerViewLayoutTests.swift */; };
@@ -390,7 +391,9 @@
 		0C1B9FDF2DDE1D6B00F69371 /* DivDataResourcesPreloaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivDataResourcesPreloaderTests.swift; sourceTree = "<group>"; };
 		0C276A852DDC949700247E75 /* ImageBaseBlockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBaseBlockTests.swift; sourceTree = "<group>"; };
 		0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDivExtensionHandler.swift; sourceTree = "<group>"; };
+		0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieExtensionHandlerTests.swift; sourceTree = "<group>"; };
 		0CE4BDE42C4FAE9F0048BEF8 /* GenericViewBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericViewBlockTests.swift; sourceTree = "<group>"; };
+		0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLResourceRequester.swift; sourceTree = "<group>"; };
 		431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionURLHandlerTests.swift; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
 		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
@@ -807,6 +810,7 @@
 				52DED03C29F6E3D500D64519 /* ShimmerImagePreviewStyleTests.swift */,
 				9F89F0D82CEF4C8D00460B76 /* ShineExtensionParamsTests.swift */,
 				9F89F0DA2CEF5AA600460B76 /* ShimmerStyleTester.swift */,
+				0CE1B3542E04197A00677706 /* LottieExtensionHandlerTests.swift */,
 			);
 			path = DivKitExtensionsTests;
 			sourceTree = "<group>";
@@ -1459,6 +1463,7 @@
 				8CF8BBE92B32682700569777 /* DivBuilders.swift */,
 				9FE7D31B2CF7535700BAF071 /* FakeImageHolder.swift */,
 				9FE7D2D22CF74C2F00BAF071 /* MockDivBlockModelingContext.swift */,
+				0CE65E932E041BBE005EBB5A /* MockURLResourceRequester.swift */,
 			);
 			path = DivKitTestsSupport;
 			sourceTree = "<group>";
@@ -1923,6 +1928,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CE1B3552E04197A00677706 /* LottieExtensionHandlerTests.swift in Sources */,
 				52DED05329F734B900D64519 /* ShimmerImagePreviewStyleTests.swift in Sources */,
 				9F89F0DB2CEF5AAC00460B76 /* ShimmerStyleTester.swift in Sources */,
 				0C9BB87F2DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */,
@@ -2061,7 +2067,6 @@
 				52907F662A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift in Sources */,
 				8C23F41729DDB3810069F3F7 /* EntityWithArrayOfExpressionsTemplate.swift in Sources */,
 				8C23F41D29DDB3810069F3F7 /* EntityWithComplexProperty.swift in Sources */,
-				8CF8BBEA2B32682700569777 /* DivBuilders.swift in Sources */,
 				8CB960E628883B8E00D16E47 /* Platform.swift in Sources */,
 				8C23F41829DDB3810069F3F7 /* EntityWithArrayOfNestedItems.swift in Sources */,
 				8C23F43729DDB3810069F3F7 /* EntityWithoutProperties.swift in Sources */,
@@ -2102,7 +2107,6 @@
 				8C84C2232D0870F400A574AC /* ScrollActionHandlerTests.swift in Sources */,
 				8C23F41929DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift in Sources */,
 				8C23F41B29DDB3810069F3F7 /* EntityWithArrayWithTransform.swift in Sources */,
-				8CF8BBE82B32660500569777 /* BlockModelingUtils.swift in Sources */,
 				8C23F42A29DDB3810069F3F7 /* EntityWithPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C23F42929DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift in Sources */,
 				8C23F44229DDB3810069F3F7 /* OptionalComplexPropertyTests.swift in Sources */,
@@ -2129,6 +2133,7 @@
 				8C23F42129DDB3810069F3F7 /* EntityWithEntityProperty.swift in Sources */,
 				8C23F41129DDB3810069F3F7 /* Entity.swift in Sources */,
 				8CBE33002BD699CC00CFFDF5 /* DivTriggersStorageTests.swift in Sources */,
+				0CE65E952E041BBE005EBB5A /* MockURLResourceRequester.swift in Sources */,
 				8C23F43929DDB3810069F3F7 /* ArrayOfEnums.swift in Sources */,
 				8C23F3C729DDB2120069F3F7 /* TemplateToTypeTests.swift in Sources */,
 				8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */,
@@ -2235,6 +2240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CE65E942E041BBE005EBB5A /* MockURLResourceRequester.swift in Sources */,
 				0C1B9FE22DDE290A00F69371 /* BlockModelingUtils.swift in Sources */,
 				0C1B9FE12DDE28BF00F69371 /* DivBuilders.swift in Sources */,
 				9FE7D3262CF753A400BAF071 /* FakeImageHolder.swift in Sources */,

@@ -1,4 +1,5 @@
 @_spi(Internal) @testable @preconcurrency import DivKit
+import DivKitTestsSupport
 import LayoutKit
 import VGSL
 import XCTest

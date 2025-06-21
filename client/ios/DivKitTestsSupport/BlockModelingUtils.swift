@@ -1,10 +1,10 @@
 @testable import DivKit
-import Foundation
 @testable import LayoutKit
+import Foundation
 import VGSL
 import XCTest
 
-func makeBlock(
+public func makeBlock(
   _ div: Div,
   context: DivBlockModelingContext = DivBlockModelingContext(),
   ignoreErrors: Bool = false,
@@ -17,13 +17,13 @@ func makeBlock(
   return block
 }
 
-func separatorBlock() -> Block {
+public func separatorBlock() -> Block {
   SeparatorBlock(
     color: color("#14000000")
   )
 }
 
-func textBlock(
+public func textBlock(
   widthTrait: LayoutTrait = .resizable,
   text: String,
   path: UIElementPath
@@ -38,10 +38,10 @@ func textBlock(
 }
 
 extension AccessibilityElement {
-  static let `default` = accessibility(traits: .none, label: nil)
+  public static let `default` = accessibility(traits: .none, label: nil)
 }
 
-func accessibility(
+public func accessibility(
   traits: AccessibilityElement.Traits = .none,
   label: String? = nil,
   identifier: String? = nil,
@@ -58,7 +58,7 @@ func accessibility(
 }
 
 extension ActionAnimation {
-  static let `default` = ActionAnimation(
+  public static let `default` = ActionAnimation(
     touchDown: [TransitioningAnimation(
       kind: .fade,
       start: 1.0,
@@ -79,11 +79,11 @@ extension ActionAnimation {
 }
 
 extension UIElementPath {
-  static let root = DivBlockModelingContext.testCardId.path
+  public static let root = DivBlockModelingContext.testCardId.path
 }
 
 extension DivAction {
-  func uiAction(
+  public func uiAction(
     pathSuffix: String
   ) -> UserInterfaceAction? {
     let pathComponents = pathSuffix.split(separator: "/")
@@ -95,7 +95,7 @@ extension DivAction {
   }
 }
 
-func uiAction(
+public func uiAction(
   logId: String,
   path: UIElementPath = .root,
   url: String
@@ -114,7 +114,7 @@ func uiAction(
   )
 }
 
-func divActionPayload(
+public func divActionPayload(
   _ json: JSONDictionary,
   path: UIElementPath = .root,
   url: String? = nil
@@ -131,14 +131,14 @@ func divActionPayload(
 }
 
 extension Block {
-  func unwrap<T>() throws -> T {
+  public func unwrap<T>() throws -> T {
     let wrapperBlock = try XCTUnwrap(self as? WrapperBlock)
     return try XCTUnwrap(wrapperBlock.child as? T)
   }
 }
 
 extension String {
-  func withTypo(size: CGFloat = 12, weight: DivFontWeight = .regular) -> NSAttributedString {
+  public func withTypo(size: CGFloat = 12, weight: DivFontWeight = .regular) -> NSAttributedString {
     let typo = Typo(
       font: DivBlockModelingContext.default.fontProvider.font(weight: weight, size: size)
     )
@@ -146,14 +146,14 @@ extension String {
   }
 }
 
-func color(_ color: String) -> Color {
+public func color(_ color: String) -> Color {
   Color.color(withHexString: color)!
 }
 
-func url(_ string: String) -> URL {
+public func url(_ string: String) -> URL {
   URL(string: string)!
 }
 
-func expression<T>(_ expression: String) -> DivKit.Expression<T> {
+public func expression<T>(_ expression: String) -> DivKit.Expression<T> {
   .link(ExpressionLink<T>(rawValue: expression)!)
 }

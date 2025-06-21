@@ -1,6 +1,5 @@
 @testable import DivKit
-@testable import DivKitExtensions
-@testable import DivKitTestsSupport
+import DivKitTestsSupport
 import VGSL
 import XCTest
 
@@ -378,48 +377,6 @@ final class DivDataResourcesPreloaderTests: XCTestCase {
     )
     
     return divData(container)
-  }
-}
-
-private final class MockURLResourceRequester: URLResourceRequesting {
-  var requestedURLs: [URL] = []
-  var shouldSucceed = true
-  var customBehavior: ((URL) -> Bool)?
-
-  @MainActor
-  func getDataWithSource(
-    from url: URL,
-    completion: @escaping CompletionHandlerWithSource
-  ) -> Cancellable? {
-    requestedURLs.append(url)
-
-    if let customBehavior {
-      if customBehavior(url) {
-        completion(.success(URLRequestResult(data: Data(), source: .network)))
-      } else {
-        completion(.failure(NSError(domain: "test", code: 0)))
-      }
-    } else {
-      if shouldSucceed {
-        completion(.success(URLRequestResult(data: Data(), source: .network)))
-      } else {
-        completion(.failure(NSError(domain: "test", code: 0)))
-      }
-    }
-
-    return CancellableImpl {}
-  }
-}
-
-private struct CancellableImpl: Cancellable {
-  private let closure: @Sendable () -> Void
-
-  init(_ closure: @escaping @Sendable () -> Void = {}) {
-    self.closure = closure
-  }
-
-  func cancel() {
-    closure()
   }
 }
 

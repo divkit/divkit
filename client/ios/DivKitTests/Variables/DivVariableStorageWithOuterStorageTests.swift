@@ -1,4 +1,5 @@
 import DivKit
+import DivKitTestsSupport
 import VGSL
 import XCTest
 
