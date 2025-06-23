@@ -48,30 +48,32 @@ export function inOutAnimation(node: HTMLElement, {
             }[] = flattenList.map(it => {
                 const delay = Number(it.start_delay) || DEFAULT_DELAY;
                 const duration = Number(it.duration) || DEFAULT_DURATION;
-                const relative = Math.max(0, Math.min(1, (tMs - delay) / duration));
+                const relative = direction === 'in' ?
+                    Math.max(0, Math.min(1, (tMs - delay) / duration)) :
+                    Math.max(0, Math.min(1, (tMs - (maxDuration - duration) + delay) / duration));
 
                 const easing = getEasing(it.interpolator || 'ease_in_out') || cubicInOut;
                 const eased = easing(relative);
 
                 if (it.name === 'fade') {
-                    const startValue = direction === 'in' ? it.start_value ?? 0 : 0;
-                    const endValue = direction === 'in' ? 1 : it.end_value ?? 1;
+                    const startValue = direction === 'in' ? it.start_value ?? 0 : it.end_value ?? 0;
+                    const endValue = direction === 'in' ? it.end_value ?? 1 : it.start_value ?? 1;
 
                     return {
                         active: eased > 0 && eased < 1,
                         opacity: (1 - eased) * startValue + eased * endValue
                     };
                 } else if (it.name === 'translate') {
-                    const startValue = -(direction === 'in' ? it.start_value ?? 10 : 10);
-                    const endValue = -(direction === 'in' ? 0 : it.end_value ?? 0);
+                    const startValue = -(direction === 'in' ? it.start_value ?? 10 : it.end_value ?? 10);
+                    const endValue = -(direction === 'in' ? it.end_value ?? 0 : it.start_value ?? 0);
 
                     return {
                         active: eased > 0 && eased < 1,
                         translate: `translateY(${(1 - eased) * startValue + eased * endValue}${(direction === 'in' && it.start_value !== undefined || direction === 'out' && it.end_value !== undefined) ? '%' : 'px'})`
                     };
                 } else if (it.name === 'scale') {
-                    const startValue = direction === 'in' ? it.start_value ?? 0 : 0;
-                    const endValue = direction === 'in' ? 1 : it.end_value ?? 1;
+                    const startValue = direction === 'in' ? it.start_value ?? 0 : it.end_value ?? 0;
+                    const endValue = direction === 'in' ? it.end_value ?? 1 : it.start_value ?? 1;
 
                     return {
                         active: eased > 0 && eased < 1,
