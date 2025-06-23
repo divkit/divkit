@@ -2,6 +2,7 @@ package com.yandex.div.internal.widget
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
 import androidx.core.view.allViews
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 
@@ -72,6 +73,9 @@ internal fun View.isInTransientHierarchy(): Boolean {
         return true
     }
 
-    val parent = parent as? ViewGroup
-    return parent?.isInTransientHierarchy() ?: false
+    return parent is ViewGroup && parent.isInTransientHierarchy()
+}
+
+internal fun ViewParent.isInTransientHierarchy(): Boolean {
+    return this is TransientView && (this as View).isInTransientHierarchy()
 }

@@ -1169,19 +1169,24 @@
       "title": "Disappear transition of div with shadow",
       "case_id": 171,
       "platforms": [
-        "android",
-        "ios",
-        "web"
+        "android"
       ],
+      "unsupported_platforms": {
+        "ios": "Android-specific test",
+        "web": "Android-specific test"
+      },
       "tags": [
         "Animations"
       ],
       "steps": [
-        "Click on 'Show button'",
-        "Click on 'Hide Button'"
+        "Click on 'Outline shadow'.",
+        "Click on 'Custom shadow'.",
+        "Click on 'Inner custom shadow'."
       ],
       "expected_results": [
-        "Floating button do not draw shadow during disappear animation"
+        "Shadow of the 'Outline shadow' button should dissapear before animation start.",
+        "Shadow of the 'Custom shadow' button should dissapear before animation start.",
+        "Shadow should disappear along with the 'Inner custom shadow' button."
       ],
       "file": "animations/transition/transition_out_of_div_with_shadow.json"
     },

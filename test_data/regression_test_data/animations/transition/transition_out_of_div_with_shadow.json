@@ -1,11 +1,104 @@
 {
+  "templates": {
+    "button": {
+      "type": "text",
+      "orientation": "overlap",
+      "height": {
+        "type": "fixed",
+        "value": 56
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 12,
+        "has_shadow": true,
+        "$shadow": "shadow"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_color": "#073642"
+    },
+    "floating_button": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "fixed",
+        "value": 64
+      },
+      "height": {
+        "type": "fixed",
+        "value": 64
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FDF6E3"
+        }
+      ],
+      "border": {
+        "corner_radius": 32,
+        "has_shadow": true,
+        "shadow": {
+          "offset": {
+            "x": {
+              "value": 0
+            },
+            "y": {
+              "value": 2
+            }
+          },
+          "alpha": 0.2,
+          "blur": 12,
+          "color": "#073642"
+        }
+      },
+      "items": [
+        {
+          "type": "image",
+          "height": {
+            "type": "fixed",
+            "value": 32
+          },
+          "width": {
+            "type": "fixed",
+            "value": 32
+          },
+          "tint_color": "#073642",
+          "image_url": "https://avatars.mds.yandex.net/get-bunker/998550/f61f515d49626bd0d4d93e0ab938c293de8274f8/orig",
+          "appearance_animation": {
+            "type": "fade",
+            "duration": 200,
+            "alpha": 0.0
+          }
+        }
+      ]
+    }
+  },
   "card": {
-    "log_id": "92b24f9a-eddb-43a9-aaf0-dc3e03d64b20",
+    "log_id": "transient_div_with_shadow",
     "variables": [
       {
         "type": "boolean",
-        "name": "button_is_visible",
-        "value": false
+        "name": "button_1_is_visible",
+        "value": true
+      },
+      {
+        "type": "boolean",
+        "name": "button_2_is_visible",
+        "value": true
+      },
+      {
+        "type": "boolean",
+        "name": "button_3_is_visible",
+        "value": true
       }
     ],
     "states": [
@@ -19,136 +112,159 @@
           "height": {
             "type": "match_parent"
           },
-          "orientation": "overlap",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
           "items": [
             {
-              "type": "text",
-              "width": {
-                "type": "fixed",
-                "value": 160
+              "type": "button",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
               },
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
-              "paddings": {
-                "left": 8,
-                "top": 8,
-                "right": 8,
-                "bottom": 8
-              },
-              "alignment_horizontal": "center",
-              "alignment_vertical": "center",
-              "background": [
-                {
-                  "type": "solid",
-                  "color": "#FDF6E3"
-                }
-              ],
-              "border": {
-                "corner_radius": 12
-              },
-              "font_size": 18,
-              "font_weight": "medium",
-              "text_alignment_horizontal": "center",
-              "text_alignment_vertical": "center",
-              "text_color": "#073642",
-              "text": "@{button_is_visible ? 'Hide button' : 'Show button'}",
+              "background_color": "#2AA198",
+              "text": "Reset",
               "actions": [
                 {
-                  "log_id": "5403c967-9e0f-49a2-9784-7cfa4a7da3bc",
-                  "url": "div-action://set_variable?name=button_is_visible&value=@{!button_is_visible}"
+                  "log_id": "reset_button_1",
+                  "url": "div-action://set_variable?name=button_1_is_visible&value=true"
+                },
+                {
+                  "log_id": "reset_button_2",
+                  "url": "div-action://set_variable?name=button_2_is_visible&value=true"
+                },
+                {
+                  "log_id": "reset_button_3",
+                  "url": "div-action://set_variable?name=button_3_is_visible&value=true"
                 }
               ]
             },
             {
-              "type": "container",
-              "orientation": "overlap",
-              "width": {
-                "type": "fixed",
-                "value": 64
-              },
-              "height": {
-                "type": "fixed",
-                "value": 64
-              },
+              "type": "button",
               "margins": {
-                "bottom": 120
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
               },
-              "alignment_horizontal": "center",
-              "alignment_vertical": "bottom",
-              "content_alignment_horizontal": "center",
-              "content_alignment_vertical": "center",
-              "background": [
+              "background_color": "#FDF6E3",
+              "text": "Outline shadow",
+              "actions": [
                 {
-                  "type": "solid",
-                  "color": "#FDF6E3"
+                  "log_id": "toggle_button_1_visibility",
+                  "url": "div-action://set_variable?name=button_1_is_visible&value=@{!button_1_is_visible}"
                 }
               ],
-              "border": {
-                "corner_radius": 32,
-                "has_shadow": true
+              "visibility": "@{button_1_is_visible ? 'visible' : 'invisible'}",
+              "transition_in": {
+                "type": "scale",
+                "duration": 200,
+                "scale": 0.25,
+                "interpolator": "ease_in"
+              },
+              "transition_out": {
+                "type": "scale",
+                "duration": 400,
+                "scale": 0.25,
+                "interpolator": "ease_out"
+              }
+            },
+            {
+              "type": "button",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background_color": "#FDF6E3",
+              "shadow": {
+                "offset": {
+                  "x": {
+                    "value": 0
+                  },
+                  "y": {
+                    "value": 4
+                  }
+                },
+                "alpha": 0.25,
+                "blur": 12,
+                "color": "#073642"
+              },
+              "text": "Custom shadow",
+              "actions": [
+                {
+                  "log_id": "toggle_button_2_visibility",
+                  "url": "div-action://set_variable?name=button_2_is_visible&value=@{!button_2_is_visible}"
+                }
+              ],
+              "visibility": "@{button_2_is_visible ? 'visible' : 'invisible'}",
+              "transition_in": {
+                "type": "scale",
+                "duration": 200,
+                "scale": 0.25,
+                "interpolator": "ease_in"
+              },
+              "transition_out": {
+                "type": "scale",
+                "duration": 400,
+                "scale": 0.25,
+                "interpolator": "ease_out"
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
               },
               "items": [
                 {
-                  "type": "image",
-                  "height": {
-                    "type": "fixed",
-                    "value": 32
+                  "type": "button",
+                  "background_color": "#FDF6E3",
+                  "shadow": {
+                    "offset": {
+                      "x": {
+                        "value": 0
+                      },
+                      "y": {
+                        "value": 4
+                      }
+                    },
+                    "alpha": 0.25,
+                    "blur": 12,
+                    "color": "#073642"
                   },
-                  "width": {
-                    "type": "fixed",
-                    "value": 32
-                  },
-                  "tint_color": "#073642",
-                  "image_url": "https://avatars.mds.yandex.net/get-bunker/998550/f61f515d49626bd0d4d93e0ab938c293de8274f8/orig",
-                  "appearance_animation": {
-                    "type": "fade",
-                    "duration": 200,
-                    "alpha": 0.0
-                  }
+                  "text": "Inner custom shadow",
+                  "actions": [
+                    {
+                      "log_id": "toggle_button_3_visibility",
+                      "url": "div-action://set_variable?name=button_3_is_visible&value=@{!button_3_is_visible}"
+                    }
+                  ]
                 }
               ],
-              "visibility": "@{button_is_visible ? 'visible' : 'gone'}",
+              "visibility": "@{button_3_is_visible ? 'visible' : 'invisible'}",
               "transition_in": {
-                "type": "set",
-                "items": [
-                  {
-                    "type": "scale",
-                    "duration": 200,
-                    "scale": 0.25,
-                    "pivot_y": 0.25,
-                    "interpolator": "ease_in"
-                  },
-                  {
-                    "type": "slide",
-                    "duration": 100,
-                    "edge": "bottom",
-                    "distance": {
-                      "value": 20
-                    }
-                  }
-                ]
+                "type": "scale",
+                "duration": 200,
+                "scale": 0.25,
+                "interpolator": "ease_in"
               },
               "transition_out": {
-                "type": "set",
-                "items": [
-                  {
-                    "type": "scale",
-                    "duration": 200,
-                    "scale": 0.25,
-                    "pivot_y": 0.25,
-                    "interpolator": "ease_out"
-                  },
-                  {
-                    "type": "slide",
-                    "duration": 100,
-                    "edge": "bottom",
-                    "distance": {
-                      "value": 20
-                    }
-                  }
-                ]
+                "type": "scale",
+                "duration": 400,
+                "scale": 0.25,
+                "interpolator": "ease_out"
               }
             }
           ]

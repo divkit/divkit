@@ -232,7 +232,7 @@ internal class DivBorderDrawer(
     }
 
     fun drawShadow(canvas: Canvas) {
-        if (view.isInTransientHierarchy() || !hasCustomShadow) {
+        if ((view.isInTransientHierarchy() && !view.parent.isInTransientHierarchy())|| !hasCustomShadow) {
             return
         }
 
