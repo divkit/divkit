@@ -336,6 +336,16 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setFilters(_ filters: [TextInputFilter]?) {
     self.filters = filters
+    if filters != nil {
+      setSmartInsertDeleteType(.no)
+    } else {
+      setSmartInsertDeleteType(.default)
+    }
+  }
+  
+  func setSmartInsertDeleteType(_ type: UITextSmartInsertDeleteType) {
+    singleLineInput.smartInsertDeleteType = type
+    multiLineInput.smartInsertDeleteType = type
   }
 
   func setHint(_ value: NSAttributedString) {
@@ -623,15 +633,23 @@ extension TextInputBlockView {
       return false
     }
 
-    if let filters, text != "" {
-      return filters.allSatisfy { filter in
-        filter(currentText + text)
+    let updatedRange: Range<String.Index>
+    if text == "", range.isEmpty, range.lowerBound > currentText.startIndex {
+      updatedRange = currentText.index(before: range.lowerBound)..<range.lowerBound
+    } else {
+      updatedRange = range
+    }
+
+    let updatedText = currentText.replacingCharactersInRange(updatedRange, withString: text).result
+
+    if let filters {
+      return filters.allSatisfy {
+        $0(updatedText)
       }
     }
 
     if let maxLength, text != "" {
-      let updatedText = currentText.replacingCharactersInRange(range, withString: text)
-      return updatedText.result.count <= maxLength
+      return updatedText.count <= maxLength
     }
 
     return true
@@ -690,14 +708,7 @@ extension TextInputBlockView: UITextFieldDelegate {
     shouldChangeCharactersIn range: NSRange,
     replacementString string: String
   ) -> Bool {
-    let nsRange: NSRange
-    if let selectedRange = textField.selectedTextRange {
-      let location = textField.offset(from: textField.beginningOfDocument, to: selectedRange.start)
-      let length = textField.offset(from: selectedRange.start, to: selectedRange.end)
-      nsRange = NSRange(location: location, length: length)
-    } else {
-      nsRange = range
-    }
+    let nsRange = textField.selectedNSRange ?? range
 
     guard let range = Range(nsRange, in: currentText) else {
       return false
@@ -877,6 +888,19 @@ extension TextInputBlock.EnterKeyType {
   }
 }
 
+extension UITextField {
+  var selectedNSRange: NSRange? {
+    guard let selectedRange = self.selectedTextRange else {
+      return nil
+    }
+    
+    let beginning = self.beginningOfDocument
+    let startPosition = self.offset(from: beginning, to: selectedRange.start)
+    let endPosition = self.offset(from: beginning, to: selectedRange.end)
+    return NSRange(location: startPosition, length: endPosition - startPosition)
+  }
+}
+
 private class PatchedUITextField: UITextField {
   var paddings: EdgeInsets = .zero
 
@@ -894,6 +918,20 @@ private class PatchedUITextField: UITextField {
     let rect = super.editingRect(forBounds: bounds)
     return rect.inset(by: paddings)
   }
+
+  override func paste(_ sender: Any?) {
+    guard let string = UIPasteboard.general.string else {
+      return
+    }
+    
+    guard let range = self.selectedNSRange else {
+      return
+    }
+    
+    if (self.delegate as? TextInputBlockView)?.textField(self, shouldChangeCharactersIn: range, replacementString: string) == true {
+      super.paste(sender)
+    }
+  }
 }
 
 private class PatchedUITextView: UITextView {
@@ -905,8 +943,14 @@ private class PatchedUITextView: UITextView {
   }
 
   override func paste(_ sender: Any?) {
-    isPasting = true
-    super.paste(sender)
+    guard let string = UIPasteboard.general.string else {
+      return
+    }
+    
+    if (self.delegate as? TextInputBlockView)?.textView(self, shouldChangeTextIn: self.selectedRange, replacementText: string) == true {
+      isPasting = true
+      super.paste(sender)
+    }
   }
 }
 
