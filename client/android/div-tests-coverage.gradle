@@ -27,7 +27,7 @@ ext.readLinesFromFile = { filepath, skipSymbol ->
 
 if (!tasks.names.contains('jacocoTestReport')) {
     tasks.register('jacocoTestReport', JacocoReport) {
-        final classesDir = project.layout.buildDirectory.get().dir("intermediates/javac").dir(testVariant)
+        final classesDir = project.layout.buildDirectory.get().dir("intermediates/javac").dir(testVariant) as Directory
 
         if (classesDir.asFile.exists()) {
             classDirectories.from {
@@ -35,7 +35,7 @@ if (!tasks.names.contains('jacocoTestReport')) {
             }
 
             doFirst {
-                classesDir.eachFileRecurse { file ->
+                classesDir.asFileTree.visit { file ->
                     if (file.name.contains('$$')) {
                         file.renameTo(file.path.replace('$$', '$'))
                     }
