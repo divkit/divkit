@@ -1,5 +1,6 @@
 @testable import DivKit
 @testable import LayoutKit
+import DivKitTestsSupport
 import Testing
 import UIKit
 import VGSL

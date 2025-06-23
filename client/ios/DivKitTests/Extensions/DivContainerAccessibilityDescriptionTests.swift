@@ -1,4 +1,5 @@
 @testable import DivKit
+import DivKitTestsSupport
 import XCTest
 
 final class DivContainerAccessibilityDescriptionTests: XCTestCase {

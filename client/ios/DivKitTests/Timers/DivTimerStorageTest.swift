@@ -1,4 +1,5 @@
 @testable @_spi(Internal) import DivKit
+import DivKitTestsSupport
 import Foundation
 import Testing
 

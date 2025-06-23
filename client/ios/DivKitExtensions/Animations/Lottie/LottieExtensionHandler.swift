@@ -61,7 +61,7 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     )
   }
 
-  public func getPreloadURLs(div: DivBase) -> [URL] {
+  public func getPreloadURLs(div: DivBase, expressionResolver _: ExpressionResolver) -> [URL] {
     [Self.getPreloadURL(div: div)].compactMap { $0 }
   }
 
@@ -129,6 +129,8 @@ private struct LottieExtensionParams {
     if let repeatCount = params["repeat_count"] {
       if let repeatCountFloat = repeatCount as? Float {
         self.repeatCount = repeatCountFloat
+      } else if let repeatCountInt = repeatCount as? Int {
+        self.repeatCount = Float(repeatCountInt)
       } else {
         DivKitLogger.error("Not valid repeat_count")
         return nil

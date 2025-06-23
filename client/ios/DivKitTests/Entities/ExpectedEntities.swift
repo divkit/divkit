@@ -1,3 +1,4 @@
+import DivKitTestsSupport
 import Foundation
 import VGSL
 

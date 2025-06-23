@@ -4,7 +4,7 @@ import Foundation
 import LayoutKit
 import VGSL
 
-func divAction(
+public func divAction(
   isEnabled: Bool = true,
   logId: String = "test",
   payload: [String: Any]? = nil,
@@ -30,7 +30,7 @@ func divAction(
   )
 }
 
-func divData(
+public func divData(
   logId: String = DivBlockModelingContext.testCardId.rawValue,
   states: [DivData.State]
 ) -> DivData {
@@ -45,7 +45,7 @@ func divData(
   )
 }
 
-func divData(
+public func divData(
   _ div: Div,
   logId: String = UIElementPath.root.description,
   stateId: Int = 0
@@ -56,7 +56,7 @@ func divData(
   )
 }
 
-func divGifImage(
+public func divGifImage(
   accessibility: DivAccessibility? = nil,
   gifUrl: String,
   height: DivSize? = nil,
@@ -72,7 +72,7 @@ func divGifImage(
   ))
 }
 
-func divInput(
+public func divInput(
   accessibility: DivAccessibility? = nil,
   keyboardType: DivInput.KeyboardType? = nil,
   textVariable: String
@@ -84,7 +84,7 @@ func divInput(
   ))
 }
 
-func divImage(
+public func divImage(
   accessibility: DivAccessibility? = nil,
   height: DivSize? = nil,
   id: String? = nil,
@@ -116,7 +116,7 @@ func divImage(
   ))
 }
 
-func divText(
+public func divText(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
   disappearActions: [DivDisappearAction]? = nil,
@@ -160,7 +160,7 @@ func divText(
   ))
 }
 
-func divSeparator(
+public func divSeparator(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
   alpha: CGFloat? = nil,
@@ -194,7 +194,7 @@ func divSeparator(
   ))
 }
 
-func divContainer(
+public func divContainer(
   id: String? = nil,
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
@@ -262,7 +262,7 @@ func divContainer(
   ))
 }
 
-func divGallery(
+public func divGallery(
   items: [Div],
   id: String? = nil
 ) -> Div {
@@ -313,7 +313,7 @@ func divGallery(
   ))
 }
 
-func divGrid(
+public func divGrid(
   columnCount: Int,
   items: [Div]
 ) -> Div {
@@ -367,7 +367,7 @@ func divGrid(
   ))
 }
 
-func divPager(
+public func divPager(
   items: [Div],
   layoutMode: DivPagerLayoutMode
 ) -> Div {
@@ -418,7 +418,7 @@ func divPager(
   ))
 }
 
-func divState(
+public func divState(
   divId: String?,
   id: String? = nil,
   defaultStateId: Expression<String>? = nil,
@@ -466,7 +466,7 @@ func divState(
   ))
 }
 
-func divStateState(
+public func divStateState(
   div: Div?,
   stateId: String
 ) -> DivState.State {
@@ -479,7 +479,7 @@ func divStateState(
   )
 }
 
-func divTabs(
+public func divTabs(
   items: [DivTabs.Item]
 ) -> Div {
   .divTabs(DivTabs(
@@ -529,7 +529,7 @@ func divTabs(
   ))
 }
 
-func divTabsItem(
+public func divTabsItem(
   div: Div,
   title: String
 ) -> DivTabs.Item {
@@ -540,35 +540,35 @@ func divTabsItem(
   )
 }
 
-func fixedSize(_ value: Int) -> DivSize {
+public func fixedSize(_ value: Int) -> DivSize {
   .divFixedSize(DivFixedSize(value: .value(value)))
 }
 
-func matchParentSize() -> DivSize {
+public func matchParentSize() -> DivSize {
   .divMatchParentSize(DivMatchParentSize())
 }
 
-func wrapContentSize() -> DivSize {
+public func wrapContentSize() -> DivSize {
   .divWrapContentSize(DivWrapContentSize())
 }
 
-func point(x: Double, y: Double) -> DivPoint {
+public func point(x: Double, y: Double) -> DivPoint {
   DivPoint(
     x: DivDimension(value: .value(x)),
     y: DivDimension(value: .value(y))
   )
 }
 
-func variable(_ name: String, _ value: String) -> DivVariable {
+public func variable(_ name: String, _ value: String) -> DivVariable {
   .stringVariable(StringVariable(name: name, value: .value(value)))
 }
 
 
-func solidBackground(_ color: RGBAColor) -> DivBackground {
+public func solidBackground(_ color: RGBAColor) -> DivBackground {
   .divSolidBackground(DivSolidBackground(color: .value(color)))
 }
 
-func divVideo(
+public func divVideo(
   id: String? = nil,
   videoSources: [DivVideoSource],
   preloadRequired: Bool? = nil,
@@ -587,7 +587,7 @@ func divVideo(
   ))
 }
 
-func divVideoSource(
+public func divVideoSource(
   mimeType: String,
   url: String? = nil,
   urlExpression: String? = nil
@@ -604,7 +604,7 @@ func divVideoSource(
   )
 }
 
-func divTextImage(
+public func divTextImage(
   start: Int = 0,
   url: String,
   preloadRequired: Bool? = nil
@@ -617,7 +617,7 @@ func divTextImage(
   )
 }
 
-func divImageBackground(
+public func divImageBackground(
   imageUrl: String,
   preloadRequired: Bool? = nil
 ) -> DivBackground {
