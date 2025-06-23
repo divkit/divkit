@@ -178,5 +178,19 @@
                 "version_added": "31.8.0"
             }
         }
+    }, {
+        "id": "text_focused_text_color",
+        "name": "Text <code>focused_text_color</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "32.4.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "27.2.0"
+            }
+        }
     }]
 }
