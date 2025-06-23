@@ -121,10 +121,10 @@ internal object DivPathUtils {
                     ?: value.states.findRecursively(divId, resolver) { it.div }
             }
             is Div.Tabs -> value.items.findRecursively(divId, resolver) { it.div }
-            is Div.Container -> value.buildItems(divView = null, resolver = resolver).findRecursively(divId)
+            is Div.Container -> value.buildItems(resolver).findRecursively(divId)
             is Div.Grid -> value.nonNullItems.findRecursively(divId, resolver)
-            is Div.Gallery -> value.buildItems(divView = null, resolver = resolver).findRecursively(divId)
-            is Div.Pager -> value.buildItems(divView = null, resolver = resolver).findRecursively(divId)
+            is Div.Gallery -> value.buildItems(resolver).findRecursively(divId)
+            is Div.Pager -> value.buildItems(resolver).findRecursively(divId)
             is Div.Custom -> value.items?.findRecursively(divId, resolver)
             is Div.Text -> null
             is Div.Image -> null

@@ -145,7 +145,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         states: MutableList<String>,
         runtime: ExpressionsRuntime,
     ) {
-        build(divView, runtime.expressionResolver).forEachIndexed { index, item ->
+        build(runtime.expressionResolver).forEachIndexed { index, item ->
             val childPath = path.appendChild(item.div, index)
             val childRuntime = runtime.runtimeStore.resolveRuntimeWith(
                 divView,

@@ -906,7 +906,7 @@ internal val View.bindingContext get() = (this as? DivHolderView<*>)?.bindingCon
 internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: ExpressionResolver, callback: (Any) -> Unit) {
     builder.data.observe(resolver, callback)
 
-    val itemResolver = builder.getItemResolver(divView = null, resolver = resolver)
+    val itemResolver = builder.getItemResolver(resolver)
     builder.prototypes.forEach {
         it.selector.observe(itemResolver, callback)
     }

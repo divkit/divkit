@@ -132,7 +132,7 @@ internal class DivContainerBinder @Inject constructor(
     ) {
         val divView = context.divView
         val resolver = context.expressionResolver
-        val items = div.buildItems(context.divView, resolver)
+        val items = div.buildItems(resolver)
 
         var oldItems = (this as DivCollectionHolder).items
         when {
@@ -166,7 +166,7 @@ internal class DivContainerBinder @Inject constructor(
     ) {
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, context.expressionResolver) {
-            val newItems = builder.build(context.divView, context.expressionResolver)
+            val newItems = builder.build(context.expressionResolver)
             val oldItems = (this as DivCollectionHolder).items ?: emptyList()
             replaceWithReuse(context.divView, oldItems, newItems)
             applyItems(context, div, div, newItems, oldItems, path, errorCollector)
@@ -646,7 +646,7 @@ internal class DivContainerBinder @Inject constructor(
         @Suppress("UNCHECKED_CAST")
         (view as DivHolderView<Div.Container>).div = div
         val binder = divBinder.get()
-        div.value.buildItems(bindingContext.divView, bindingContext.expressionResolver).forEachIndexed { index, item ->
+        div.value.buildItems(bindingContext.expressionResolver).forEachIndexed { index, item ->
             val childView = view.getChildAt(index)
             val context = childView.bindingContext ?: bindingContext
             binder.setDataWithoutBinding(context, childView, item.div)

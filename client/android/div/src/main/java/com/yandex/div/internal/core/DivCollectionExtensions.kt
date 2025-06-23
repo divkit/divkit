@@ -1,6 +1,5 @@
 package com.yandex.div.internal.core
 
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.local.asImpl
 import com.yandex.div.core.expression.variables.ConstantsProvider
@@ -20,66 +19,48 @@ import com.yandex.div2.DivTabs
 private const val INDEX_VARIABLE_NAME = "index"
 
 @InternalApi
-fun DivContainer.buildItems(
-    divView: DivViewFacade?,
-    resolver: ExpressionResolver,
-): List<DivItemBuilderResult> =
-    buildItems(divView, items, itemBuilder, resolver)
+fun DivContainer.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver)
 
 @InternalApi
-fun DivGallery.buildItems(
-    divView: DivViewFacade?,
-    resolver: ExpressionResolver,
-): List<DivItemBuilderResult> =
-    buildItems(divView, items, itemBuilder, resolver)
+fun DivGallery.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver)
 
 @InternalApi
-fun DivPager.buildItems(
-    divView: DivViewFacade?,
-    resolver: ExpressionResolver,
-): List<DivItemBuilderResult> =
-    buildItems(divView, items, itemBuilder, resolver)
+fun DivPager.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver)
 
 private fun buildItems(
-    divView: DivViewFacade?,
     items: List<Div>?,
     itemBuilder: DivCollectionItemBuilder?,
-    resolver: ExpressionResolver,
+    resolver: ExpressionResolver
 ): List<DivItemBuilderResult> {
-    return itemBuilder?.build(divView, resolver)
+    return itemBuilder?.build(resolver)
         ?: items?.toDivItemBuilderResult(resolver)
         ?: emptyList()
 }
 
-internal fun DivCollectionItemBuilder.build(
-    divView: DivViewFacade?,
-    resolver: ExpressionResolver,
-): List<DivItemBuilderResult> =
-    data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(divView, obj, i, resolver) }
+internal fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> =
+    data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(obj, i, resolver) }
 
 private fun DivCollectionItemBuilder.buildItem(
-    divView: DivViewFacade?,
     data: Any,
     index: Int,
     resolver: ExpressionResolver,
 ): DivItemBuilderResult? {
-    val newResolver = getItemResolver(divView, data, index, resolver) ?: return null
+    val newResolver = getItemResolver(data, index, resolver) ?: return null
     val prototype = prototypes.find { it.selector.evaluate(newResolver) } ?: return null
     return prototype.div.copy(prototype.id?.evaluate(newResolver)).toItemBuilderResult(newResolver)
 }
 
-internal fun DivCollectionItemBuilder.getItemResolver(
-    divView: DivViewFacade?,
-    resolver: ExpressionResolver,
-): ExpressionResolver {
+internal fun DivCollectionItemBuilder.getItemResolver(resolver: ExpressionResolver): ExpressionResolver {
     data.evaluate(resolver).forEach<Any> { i, obj ->
-        getItemResolver(divView, obj, i, resolver)?.let { return it }
+        getItemResolver(obj, i, resolver)?.let { return it }
     }
     return resolver
 }
 
 private fun DivCollectionItemBuilder.getItemResolver(
-    divView: DivViewFacade?,
     dataElement: Any,
     index: Int,
     resolver: ExpressionResolver,

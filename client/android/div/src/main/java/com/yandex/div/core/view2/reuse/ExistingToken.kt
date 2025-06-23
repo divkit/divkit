@@ -52,7 +52,7 @@ internal class ExistingToken(
     }
 
     private fun DivContainer.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
-        return simpleItemsToExistingTokenList(buildItems(divView = null, resolver = resolver), parentToken)
+        return simpleItemsToExistingTokenList(buildItems(resolver), parentToken)
     }
 
     private fun DivCustom.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
@@ -92,7 +92,7 @@ internal class ExistingToken(
         val adapter = (pager.adapter as? DivPagerAdapter) ?: return emptyList()
         val activeHashes = adapter.itemsToShow.map { it.div.hash() }
 
-        buildItems(divView = null, resolver = resolver).forEachIndexed { index, newItem ->
+        buildItems(resolver).forEachIndexed { index, newItem ->
             if (newItem.div.hash() in activeHashes) {
                 val childViewIndex = activeHashes.indexOf(newItem.div.hash())
                 val targetView = view.getPageView(childViewIndex) ?: return@forEachIndexed
@@ -117,7 +117,7 @@ internal class ExistingToken(
         val adapter = ((view as? DivRecyclerView)?.adapter as? DivGalleryAdapter) ?: return emptyList()
         val activeHashes = adapter.visibleItems.map { it.div.hash() }
 
-        buildItems(divView = null, resolver = resolver).forEachIndexed { index, newItem ->
+        buildItems(resolver).forEachIndexed { index, newItem ->
             if (newItem.div.hash() in activeHashes) {
                 val targetView = view.getItemView(index) ?: return@forEachIndexed
                 val token = ExistingToken(

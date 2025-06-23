@@ -85,7 +85,7 @@ internal class DivPagerBinder @Inject constructor(
         val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
         setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
         val adapter = DivPagerAdapter(
-            div.buildItems(bindingContext.divView, resolver),
+            div.buildItems(resolver),
             bindingContext,
             divBinder.get(),
             pageTranslations,
@@ -326,9 +326,7 @@ internal class DivPagerBinder @Inject constructor(
     private fun DivPagerView.bindItemBuilder(context: BindingContext, div: DivPager) {
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, context.expressionResolver) {
-            (viewPager.adapter as DivPagerAdapter?)?.setItems(
-                builder.build(context.divView, context.expressionResolver)
-            )
+            (viewPager.adapter as DivPagerAdapter?)?.setItems(builder.build(context.expressionResolver))
             pagerOnItemsCountChange?.onItemsUpdated()
             getRecyclerView()?.scrollToPosition(currentItem)
             viewPager.doOnNextLayout { viewPager.requestTransform() }
