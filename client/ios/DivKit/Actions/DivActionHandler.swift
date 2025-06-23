@@ -245,6 +245,8 @@ public final class DivActionHandler {
       submitActionHandler.handle(action, context: context)
     case let .divActionTimer(action):
       timerActionHandler.handle(action, context: context)
+    case .divActionUpdateStructure(_):
+      break
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
     case .none:

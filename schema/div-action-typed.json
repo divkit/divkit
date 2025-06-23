@@ -58,6 +58,9 @@
       "$ref": "div-action-timer.json"
     },
     {
+      "$ref": "div-action-update-structure.json"
+    },
+    {
       "$ref": "div-action-video.json"
     }
   ]

@@ -307,6 +307,22 @@
     "en": "Tooltip ID.",
     "ru": "Идентификатор тултипа."
   },
+  "div_action_update_structure": {
+    "en": "Set values ​​in a variable of type array or dictionary with different nesting.",
+    "ru": "Устанавливает значение в переменной типа массив или словарь с разной вложенностью."
+  },
+  "div_action_update_structure_path": {
+    "en": "Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.",
+    "ru": "Путь внутри массива/словаря, куда необходимо установить значение. Формат пути: <li>Каждый элемент пути отделяется символом `/`.</li><li>Элементы пути могут быть двух типов: индекс элемента в массиве, начиная с 0 или ключи словаря в виде произвольных строк</li><li>Путь читается слева направо, каждый элемент определяет переход к следующему уровню вложенности.</li> Пример пути: `key/0/inner_key/1`."
+  },
+  "div_action_update_structure_value": {
+    "en": "Value set into dictionary/array.",
+    "ru": "Значение устанавливаемое в словарь/массив."
+  },
+  "div_action_update_structure_variable_name": {
+    "en": "Variable name of array or dictionary type.",
+    "ru": "Имя переменной типа массив или словарь."
+  },
   "div_action_video": {
     "en": "Manages video playback.",
     "ru": "Управляет воспроизведением видео."

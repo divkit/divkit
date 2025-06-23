@@ -25,6 +25,7 @@ public enum DivActionTyped: Sendable {
   case divActionShowTooltip(DivActionShowTooltip)
   case divActionSubmit(DivActionSubmit)
   case divActionTimer(DivActionTimer)
+  case divActionUpdateStructure(DivActionUpdateStructure)
   case divActionVideo(DivActionVideo)
 
   public var value: Serializable {
@@ -66,6 +67,8 @@ public enum DivActionTyped: Sendable {
     case let .divActionSubmit(value):
       return value
     case let .divActionTimer(value):
+      return value
+    case let .divActionUpdateStructure(value):
       return value
     case let .divActionVideo(value):
       return value
@@ -114,6 +117,8 @@ extension DivActionTyped: Equatable {
     case let (.divActionSubmit(l), .divActionSubmit(r)):
       return l == r
     case let (.divActionTimer(l), .divActionTimer(r)):
+      return l == r
+    case let (.divActionUpdateStructure(l), .divActionUpdateStructure(r)):
       return l == r
     case let (.divActionVideo(l), .divActionVideo(r)):
       return l == r

@@ -25,6 +25,7 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
   case divActionShowTooltipTemplate(DivActionShowTooltipTemplate)
   case divActionSubmitTemplate(DivActionSubmitTemplate)
   case divActionTimerTemplate(DivActionTimerTemplate)
+  case divActionUpdateStructureTemplate(DivActionUpdateStructureTemplate)
   case divActionVideoTemplate(DivActionVideoTemplate)
 
   public var value: Any {
@@ -66,6 +67,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
     case let .divActionSubmitTemplate(value):
       return value
     case let .divActionTimerTemplate(value):
+      return value
+    case let .divActionUpdateStructureTemplate(value):
       return value
     case let .divActionVideoTemplate(value):
       return value
@@ -112,6 +115,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       return .divActionSubmitTemplate(try value.resolveParent(templates: templates))
     case let .divActionTimerTemplate(value):
       return .divActionTimerTemplate(try value.resolveParent(templates: templates))
+    case let .divActionUpdateStructureTemplate(value):
+      return .divActionUpdateStructureTemplate(try value.resolveParent(templates: templates))
     case let .divActionVideoTemplate(value):
       return .divActionVideoTemplate(try value.resolveParent(templates: templates))
     }
@@ -338,6 +343,17 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
         } else { return nil }
       }()
       result = result ?? {
+        if case let .divActionUpdateStructureTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionUpdateStructure(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionUpdateStructure(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
         if case let .divActionVideoTemplate(value) = parent {
           let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
           switch result {
@@ -530,6 +546,15 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == DivActionUpdateStructure.type {
+      let result = { DivActionUpdateStructureTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.divActionUpdateStructure(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionUpdateStructure(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     result = result ?? { if type == DivActionVideo.type {
       let result = { DivActionVideoTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
@@ -587,6 +612,8 @@ extension DivActionTypedTemplate {
       self = .divActionSubmitTemplate(try DivActionSubmitTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionTimerTemplate.type:
       self = .divActionTimerTemplate(try DivActionTimerTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionUpdateStructureTemplate.type:
+      self = .divActionUpdateStructureTemplate(try DivActionUpdateStructureTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionVideoTemplate.type:
       self = .divActionVideoTemplate(try DivActionVideoTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
