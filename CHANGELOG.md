@@ -1,6 +1,7 @@
 ## 32.5.0
 
 # Android Client:
+* Allowed to draw shadows defined by `shadow` within transient div hierarchy.
 * Fixed GestireDetector creation on background thread.
 * Fixed memory leak for LoadableImageView after release call.
 * Instantly copy error report to clipboard when no space for details.
