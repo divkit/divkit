@@ -1,6 +1,6 @@
 /* eslint-disable max-depth */
 import type { Node } from './ast';
-import type { VariableValue } from './variable';
+import type { Variable, VariableValue } from './variable';
 import type { Store } from '../../typings/store';
 import { uniq } from '../utils/uniq';
 import { parse } from './expressions';
@@ -27,7 +27,7 @@ class ExpressionBinding {
      * @param variables
      * @param logError
      */
-    apply(
+    apply<T>(
         {
             variables,
             customFunctions,
@@ -43,9 +43,14 @@ class ExpressionBinding {
             weekStartDay: number;
             keepComplex?: boolean;
         }
-    ): VariableValue | string | undefined {
+    ): {
+        result: T;
+        usedVars?: Set<Variable>;
+    } {
+        let res: ReturnType<typeof evalExpression> | undefined;
+
         try {
-            const res = evalExpression(variables, customFunctions, store, this.ast, {
+            res = evalExpression(variables, customFunctions, store, this.ast, {
                 weekStartDay
             });
             res.warnings.forEach(logError);
@@ -58,46 +63,76 @@ class ExpressionBinding {
                         expression: this.expr
                     }
                 }));
-                return undefined;
+                return {
+                    result: undefined as T,
+                    usedVars: res.usedVars
+                };
             }
 
             const value = result.value;
             if (value instanceof Date) {
-                return dateToString(value);
+                return {
+                    result: dateToString(value) as T,
+                    usedVars: res.usedVars
+                };
             }
             if (result.type === 'boolean') {
-                return Boolean(value);
+                return {
+                    result: Boolean(value) as T,
+                    usedVars: res.usedVars
+                };
             }
             if (result.type === 'color') {
                 const parsed = parseColor(String(value));
                 if (parsed) {
-                    return stringifyColor(parsed);
+                    return {
+                        result: stringifyColor(parsed) as T,
+                        usedVars: res.usedVars
+                    };
                 }
                 logError(wrapError(new Error('Expression execution error')));
             }
             if (result.type === 'integer') {
                 if ((value as number) > MAX_INT32 || (value as number) < MIN_INT32) {
                     logError(wrapError(new Error('Expression result is out of 32-bit int range')));
-                    return undefined;
+                    return {
+                        result: undefined as T,
+                        usedVars: res.usedVars
+                    };
                 }
-                return Number(value);
+                return {
+                    result: Number(value) as T,
+                    usedVars: res.usedVars
+                };
             }
             if (!keepComplex && (result.type === 'array' || result.type === 'dict')) {
                 try {
-                    return JSON.stringify(value);
+                    return {
+                        result: JSON.stringify(value) as T,
+                        usedVars: res.usedVars
+                    };
                 } catch (err) {
                     logError(wrapError(new Error(`Failed to stringify ${result.type}`)));
-                    return `<${result.type}>`;
+                    return {
+                        result: `<${result.type}>` as T,
+                        usedVars: res.usedVars
+                    };
                 }
             }
-            return value;
+            return {
+                result: value as T,
+                usedVars: res.usedVars
+            };
         } catch (err) {
             logError(wrapError(new Error('Expression execution error'), {
                 additional: {
                     expression: this.expr
                 }
             }));
-            return undefined;
+            return {
+                result: undefined as T,
+                usedVars: res?.usedVars
+            };
         }
     }
 }
@@ -202,8 +237,8 @@ function prepareVarsObj<T>(
     return jsonProp;
 }
 
-function applyVars(
-    jsonProp: unknown,
+function applyVars<T>(
+    jsonProp: T,
     opts: {
         variables: VariablesMap;
         customFunctions: CustomFunctions | undefined;
@@ -212,29 +247,69 @@ function applyVars(
         weekStartDay: number;
         keepComplex?: boolean;
     }
-): unknown {
+): {
+    result: MaybeMissing<T>;
+    usedVars?: Set<Variable>;
+} {
     if (jsonProp) {
         if (
             (process.env.ENABLE_EXPRESSIONS || process.env.ENABLE_EXPRESSIONS === undefined) &&
             jsonProp instanceof ExpressionBinding
         ) {
-            return jsonProp.apply(opts);
+            return jsonProp.apply<T>(opts);
         } else if (
             (!process.env.ENABLE_EXPRESSIONS && process.env.ENABLE_EXPRESSIONS !== undefined) &&
             jsonProp instanceof VariableBinding
         ) {
-            return jsonProp.apply(opts.variables);
+            return {
+                result: jsonProp.apply(opts.variables) as T
+            };
         } else if (Array.isArray(jsonProp)) {
-            return jsonProp.map(it => applyVars(it, opts));
+            let usedVars: Set<Variable> | undefined;
+            const arr = jsonProp.map(it => {
+                const subres = applyVars(it, opts);
+
+                if (subres.usedVars) {
+                    if (!usedVars) {
+                        usedVars = new Set();
+                    }
+                    for (const instance of subres.usedVars) {
+                        usedVars.add(instance);
+                    }
+                }
+
+                return subres.result;
+            });
+
+            return {
+                result: arr as MaybeMissing<T>,
+                usedVars
+            };
         } else if (typeof jsonProp === 'object') {
             const res: Record<string, unknown> = {};
+            let usedVars: Set<Variable> | undefined;
             for (const key in jsonProp) {
-                res[key] = applyVars(jsonProp[key as keyof typeof jsonProp], opts);
+                const subres = applyVars(jsonProp[key as keyof typeof jsonProp], opts);
+                res[key] = subres.result;
+
+                if (subres.usedVars) {
+                    if (!usedVars) {
+                        usedVars = new Set();
+                    }
+                    for (const instance of subres.usedVars) {
+                        usedVars.add(instance);
+                    }
+                }
             }
-            return res;
+            return {
+                result: res as MaybeMissing<T>,
+                usedVars
+            };
         }
     }
-    return jsonProp;
+    return {
+        result: jsonProp
+    };
 }
 
 export interface PreparedExpression<T> {
@@ -244,11 +319,18 @@ export interface PreparedExpression<T> {
         variables: VariablesMap,
         customFunctions?: CustomFunctions,
         keepComplex?: boolean
-    ) => MaybeMissing<T>;
+    ) => {
+        result: MaybeMissing<T>;
+        usedVars?: Set<Variable>;
+    };
 }
 
-export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | undefined, weekStartDay: number):
-    PreparedExpression<T> {
+export function prepareVars<T>(
+    jsonProp: T,
+    logError: LogError,
+    store: Store | undefined,
+    weekStartDay: number
+): PreparedExpression<T> {
     const result: {
         vars: string[];
         hasExpression: boolean;
@@ -264,14 +346,14 @@ export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | u
         vars,
         hasExpression: result.hasExpression,
         applyVars(variables, customFunctions, keepComplex) {
-            return applyVars(root, {
+            return applyVars<T>(root as T, {
                 variables,
                 customFunctions,
                 logError,
                 store,
                 weekStartDay,
                 keepComplex
-            }) as MaybeMissing<T>;
+            });
         }
     };
 }

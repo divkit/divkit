@@ -25,7 +25,7 @@ import {
 } from './utils';
 import { BOOLEAN, DATETIME, INTEGER, NUMBER, STRING } from './const';
 import { register } from './funcs';
-import { Variable as VariableInstance, variableToValue } from './variable';
+import { Variable as VariableInstance, variableToValue, type VariableType } from './variable';
 import { toBigInt } from './bigint';
 import type { Store } from '../../typings/store';
 import type { CustomFunctions } from './funcs/customFuncs';
@@ -102,6 +102,7 @@ export interface EvalContext {
     warnings: WrappedError[];
     store?: Store;
     weekStartDay: number;
+    storeUsedVars?: Set<VariableInstance<any, VariableType, any>>;
 }
 
 register();
@@ -608,6 +609,7 @@ export function evalExpression(
 ): {
     result: EvalResult;
     warnings: WrappedError[];
+    usedVars?: Set<VariableInstance<any, VariableType, any>>;
 } {
     try {
         const ctx: EvalContext = {
@@ -622,7 +624,8 @@ export function evalExpression(
 
         return {
             result,
-            warnings: ctx.warnings
+            warnings: ctx.warnings,
+            usedVars: ctx.storeUsedVars
         };
     } catch (err: any) {
         return {

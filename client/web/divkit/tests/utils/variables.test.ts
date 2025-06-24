@@ -22,7 +22,7 @@ describe('correctPositiveNumber', () => {
             prop: 123
         }, logError, undefined, 0);
         expect(prepared.vars).toStrictEqual([]);
-        expect(prepared.applyVars(new Map())).toStrictEqual({
+        expect(prepared.applyVars(new Map()).result).toStrictEqual({
             prop: 123
         });
     });
@@ -35,7 +35,7 @@ describe('correctPositiveNumber', () => {
         const map = new Map();
         const variable = new IntegerVariable('var', 123);
         map.set('var', variable);
-        const res = prepared.applyVars(map);
+        const res = prepared.applyVars(map).result;
         expect(res).toStrictEqual({
             prop: 123
         });
@@ -47,7 +47,7 @@ describe('correctPositiveNumber', () => {
         }, noError, undefined, 0);
         expect(prepared.vars).toStrictEqual(['var']);
         const map = new Map();
-        expect(prepared.applyVars(map)).toStrictEqual({
+        expect(prepared.applyVars(map).result).toStrictEqual({
             prop: undefined
         });
     });
@@ -64,7 +64,7 @@ describe('correctPositiveNumber', () => {
         const map = new Map();
         const variable = new IntegerVariable('var', 123);
         map.set('var', variable);
-        expect(prepared.applyVars(map)).toStrictEqual({
+        expect(prepared.applyVars(map).result).toStrictEqual({
             prop: [
                 123,
                 'smth',
@@ -81,7 +81,7 @@ describe('correctPositiveNumber', () => {
         const map = new Map();
         const variable = new IntegerVariable('var', 123);
         map.set('var', variable);
-        expect(prepared.applyVars(map)).toStrictEqual({
+        expect(prepared.applyVars(map).result).toStrictEqual({
             prop: 'Hello, 123'
         });
     });
@@ -96,7 +96,7 @@ describe('correctPositiveNumber', () => {
         const variable2 = new IntegerVariable('var2', 456);
         map.set('var', variable);
         map.set('var2', variable2);
-        expect(prepared.applyVars(map)).toStrictEqual({
+        expect(prepared.applyVars(map).result).toStrictEqual({
             prop: 'Hello, 123. Good bye, 456'
         });
     });

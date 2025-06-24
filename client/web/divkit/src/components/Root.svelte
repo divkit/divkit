@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { type Readable, type Writable, writable } from 'svelte/store';
+    import { type Readable, type Unsubscriber, type Writable, writable } from 'svelte/store';
 
     let isPointerFocus = writable(true);
     let rootInstancesCount = 0;
@@ -78,8 +78,6 @@
         prepareVars
     } from '../expressions/json';
     import { evalExpression } from '../expressions/eval';
-    import { parse } from '../expressions/expressions';
-    import { gatherVarsFromAst } from '../expressions/utils';
     import { Truthy } from '../utils/truthy';
     import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, type VariableType } from '../expressions/variable';
     import {
@@ -287,9 +285,17 @@
     function getDerivedFromVars<T>(
         logError: LogError,
         jsonProp: T,
-        additionalVars?: Map<string, Variable>,
-        keepComplex = false,
-        customFunctions: CustomFunctions | undefined = undefined
+        {
+            additionalVars,
+            keepComplex = false,
+            customFunctions,
+            emptyVarsError
+        }: {
+            additionalVars?: Map<string, Variable>;
+            keepComplex?: boolean;
+            customFunctions?: CustomFunctions;
+            emptyVarsError?: () => void
+        } = {}
     ): Readable<MaybeMissing<T>> {
         if (!jsonProp) {
             return constStore(jsonProp);
@@ -297,18 +303,75 @@
 
         const vars = mergeMaps(variables, additionalVars);
 
-        const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
+        const prepared = prepareVars(jsonProp as T, logError, store, weekStartDay);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
-                return constStore(prepared.applyVars(vars, customFunctions));
+                const res = prepared.applyVars(vars, customFunctions);
+
+                if (!res.usedVars?.size) {
+                    if (emptyVarsError) {
+                        emptyVarsError();
+                    }
+                    return constStore(res.result);
+                }
+            } else {
+                if (emptyVarsError) {
+                    emptyVarsError();
+                }
+                return constStore(jsonProp);
             }
-            return constStore(jsonProp);
         }
+
         const stores = prepared.vars.map(name => {
             return vars.get(name) || awaitVariableChanges(name);
         }).filter(Truthy);
 
-        return derived(stores, () => prepared.applyVars(vars, customFunctions, keepComplex));
+        const unitedStore = writable<MaybeMissing<T>>();
+        const usedVars = new Map<Variable, Unsubscriber>();
+        let unsubscribeDerived: (() => void) | undefined;
+        const unsubscribe = () => {
+            unsubscribeDerived?.();
+            for (const [_instance, unsubscribe] of usedVars) {
+                unsubscribe();
+            }
+        };
+
+        const evalExpr = () => {
+            const res = prepared.applyVars(vars, customFunctions, keepComplex);
+
+            for (const [instance, unsubscribe] of usedVars) {
+                if (!res.usedVars?.has(instance)) {
+                    unsubscribe();
+                    usedVars.delete(instance);
+                }
+            }
+            if (res.usedVars) {
+                for (const instance of res.usedVars) {
+                    if (!usedVars.has(instance)) {
+                        let isFirst = true;
+                        usedVars.set(instance, instance.subscribe(() => {
+                            if (!isFirst) {
+                                unitedStore.set(evalExpr());
+                            }
+                            isFirst = false;
+                        }));
+                    }
+                }
+            }
+
+            return res.result;
+        };
+
+        unsubscribeDerived = derived(stores, evalExpr).subscribe(derivedResult => {
+            unitedStore.set(derivedResult);
+        });
+
+        return {
+            subscribe(fn) {
+                unitedStore.subscribe(fn);
+                return unsubscribe;
+            }
+        };
     }
 
     function getJsonWithVars<T>(
@@ -326,7 +389,7 @@
 
         const vars = mergeMaps(variables, additionalVars);
 
-        return prepared.applyVars(vars, customFunctions, keepComplex);
+        return prepared.applyVars(vars, customFunctions, keepComplex).result;
     }
 
     function preparePrototypeVariables(
@@ -1582,78 +1645,50 @@
                 return;
             }
 
-            try {
-                const ast = parse(trigger.condition, {
-                    startRule: 'JsonStringContents'
-                });
-                const exprVars = gatherVarsFromAst(ast);
-                if (!exprVars.length) {
+            // Use condition inside object, so store will be updated every time
+            const derived = getDerivedFromVars(log, {
+                condition: trigger.condition
+            }, {
+                additionalVars: componentContext?.variables,
+                customFunctions: componentContext?.customFunctions,
+                emptyVarsError: () => {
                     log(wrapError(new Error('variable_trigger must have variables in the condition'), {
                         additional: {
                             condition: trigger.condition
                         }
                     }));
+                }
+            });
+
+            const unsubscribe = derived.subscribe(async conditionResult => {
+                if (conditionResult.condition === undefined) {
+                    // Error, already logged
                     return;
                 }
 
-                const stores = exprVars.map(name =>
-                    componentContext?.getVariable(name) ||
-                        variables.get(name) ||
-                        awaitVariableChanges(name)
-                );
+                if (
+                    // if condition is truthy
+                    conditionResult.condition &&
+                    // and trigger mode matches
+                    (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
+                ) {
+                    prevConditionResult = Boolean(conditionResult.condition);
 
-                const unsubscribe = derived(stores, () => {
-                    const res = componentContext ?
-                        componentContext.evalExpression(store, ast, {
-                            weekStartDay
-                        }) :
-                        evalExpression(variables, undefined, store, ast, {
-                            weekStartDay
+                    if (componentContext) {
+                        await componentContext.execAnyActions(trigger.actions, {
+                            logType: 'trigger'
                         });
-
-                    res.warnings.forEach(logError);
-
-                    return res.result;
-                }).subscribe(async conditionResult => {
-                    if (conditionResult.type === 'error') {
-                        log(wrapError(new Error('variable_trigger condition execution error'), {
-                            additional: {
-                                message: conditionResult.value
-                            }
-                        }));
-                        return;
-                    }
-
-                    if (
-                        // if condition is truthy
-                        conditionResult.value &&
-                        // and trigger mode matches
-                        (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
-                    ) {
-                        prevConditionResult = Boolean(conditionResult.value);
-
-                        if (componentContext) {
-                            await componentContext.execAnyActions(trigger.actions, {
-                                logType: 'trigger'
-                            });
-                        } else {
-                            await execAnyActions(trigger.actions, {
-                                logType: 'trigger'
-                            });
-                        }
                     } else {
-                        prevConditionResult = Boolean(conditionResult.value);
+                        await execAnyActions(trigger.actions, {
+                            logType: 'trigger'
+                        });
                     }
-                });
+                } else {
+                    prevConditionResult = Boolean(conditionResult.condition);
+                }
+            });
 
-                list.push(unsubscribe);
-            } catch (err) {
-                log(wrapError(new Error('Unable to parse variable_trigger'), {
-                    additional: {
-                        condition: trigger.condition
-                    }
-                }));
-            }
+            list.push(unsubscribe);
         });
 
         return () => {
@@ -1878,9 +1913,11 @@
                 return getDerivedFromVars(
                     ctx.logError,
                     jsonProp,
-                    mergeMaps(ctx.variables, additionalVars),
-                    keepComplex,
-                    ctx.customFunctions
+                    {
+                        additionalVars: mergeMaps(ctx.variables, additionalVars),
+                        keepComplex,
+                        customFunctions: ctx.customFunctions
+                    }
                 );
             },
             getJsonWithVars(jsonProp, additionalVars, keepComplex = false) {

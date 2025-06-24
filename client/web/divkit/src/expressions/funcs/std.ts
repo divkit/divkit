@@ -152,6 +152,11 @@ function getValueForced(
 
     if (variable && variable.getType() === type) {
         value = variable.getValue();
+
+        if (!ctx.storeUsedVars) {
+            ctx.storeUsedVars = new Set();
+        }
+        ctx.storeUsedVars.add(variable);
     } else {
         value = fallback.value;
     }

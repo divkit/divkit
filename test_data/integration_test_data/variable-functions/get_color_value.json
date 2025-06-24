@@ -68,7 +68,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -89,7 +90,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -117,7 +119,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -133,7 +136,7 @@
             "variable_name": "var_2",
             "value": {
               "type": "color",
-              "value": "#BBBBBB"
+              "value": "#FFBBBBBB"
             }
           }
         }
@@ -149,7 +152,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -165,7 +169,7 @@
             "variable_name": "var_1",
             "value": {
               "type": "color",
-              "value": "#999999"
+              "value": "#FF999999"
             }
           }
         }
@@ -181,7 +185,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -193,7 +198,7 @@
             "variable_name": "var_2",
             "value": {
               "type": "color",
-              "value": "#BBBBBB"
+              "value": "#FFBBBBBB"
             }
           }
         },
@@ -213,7 +218,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     }
   ]

@@ -67,6 +67,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     ): MaybeMissing<T>;
     evalExpression(store: Store | undefined, expr: Node, opts?: {
         weekStartDay?: number;
+        storeUsedVars?: Set<string>;
     }): ReturnType<typeof evalExpression>;
     produceChildContext(div: MaybeMissing<DivBaseData>, opts?: {
         path?: string | number | undefined;
