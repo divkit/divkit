@@ -1,4 +1,5 @@
 import DivKit
+import DivKitTestsSupport
 import XCTest
 
 final class DivDataParsingTests: XCTestCase {

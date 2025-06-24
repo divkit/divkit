@@ -245,9 +245,9 @@ extension Block {
     for extensionHandler in extensionHandlers {
       switch order {
       case .beforeBaseProperties:
-        newBlock = extensionHandler.applyBeforeBaseProperties(to: self, div: div, context: context)
+        newBlock = extensionHandler.applyBeforeBaseProperties(to: newBlock, div: div, context: context)
       case .afterBaseProperties:
-        newBlock = extensionHandler.applyAfterBaseProperties(to: self, div: div, context: context)
+        newBlock = extensionHandler.applyAfterBaseProperties(to: newBlock, div: div, context: context)
       }
     }
     return newBlock

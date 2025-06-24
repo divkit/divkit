@@ -3834,6 +3834,30 @@
         "Status changes to 'Form submission failed' on failed submission"
       ],
       "file": "submit_action.json"
+    },
+    {
+      "title": "Input Properties Extension",
+      "case_id": 222,
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Input Properties Extension is supported only on iOS",
+        "android": "Input Properties Extension is supported only on iOS"
+      },
+      "tags": [
+        "extensions",
+        "DivInput"
+      ],
+      "steps": [
+        "Toggle the switches to enable or disable spell checking, automatic return key and autocorrection",
+        "Close and reopen the keyboard by tapping outside the text input and then selecting it again"
+      ],
+      "expected_results": [
+        "Spell checking: Misspelled words should appear highlighted if enabled",
+        "Return key: The return key is only enabled when text is not empty, if the option is on"
+      ],
+      "file": "input_properties_extension.json"
     }
   ]
 }

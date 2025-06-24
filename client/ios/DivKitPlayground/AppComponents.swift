@@ -39,6 +39,7 @@ enum AppComponents {
         MarkdownExtensionHandler(),
         ShineExtensionHandler(),
         InputAutocorrectionExtensionHandler(),
+        InputPropertiesExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
       fontProvider: fontProvider,

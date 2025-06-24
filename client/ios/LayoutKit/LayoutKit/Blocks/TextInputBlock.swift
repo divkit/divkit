@@ -91,6 +91,8 @@ public final class TextInputBlock: BlockWithTraits {
   public let maxLength: Int?
   public let autocorrection: Bool
   public let isSecure: Bool
+  public let enablesReturnKeyAutomatically: Bool
+  public let spellChecking: Bool?
 
   let shouldClearFocus: Variable<Bool>
 
@@ -126,7 +128,9 @@ public final class TextInputBlock: BlockWithTraits {
     maxLength: Int? = nil,
     shouldClearFocus: Variable<Bool> = .constant(true),
     autocorrection: Bool = false,
-    isSecure: Bool = false
+    isSecure: Bool = false,
+    enablesReturnKeyAutomatically: Bool = false,
+    spellChecking: Bool? = nil
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -160,6 +164,8 @@ public final class TextInputBlock: BlockWithTraits {
     self.shouldClearFocus = shouldClearFocus
     self.autocorrection = autocorrection
     self.isSecure = isSecure
+    self.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
+    self.spellChecking = spellChecking
   }
 
   public var intrinsicContentWidth: CGFloat {
@@ -242,6 +248,8 @@ extension TextInputBlock {
       && lhs.widthTrait == rhs.widthTrait
       && lhs.autocorrection == rhs.autocorrection
       && lhs.isSecure == rhs.isSecure
+      && lhs.enablesReturnKeyAutomatically == rhs.enablesReturnKeyAutomatically
+      && lhs.spellChecking == rhs.spellChecking
   }
 }
 
@@ -285,7 +293,9 @@ extension TextInputBlock: ElementFocusUpdating {
       isEnabled: isEnabled,
       maxLength: maxLength,
       autocorrection: autocorrection,
-      isSecure: isSecure
+      isSecure: isSecure,
+      enablesReturnKeyAutomatically: enablesReturnKeyAutomatically,
+      spellChecking: spellChecking
     )
   }
 }
@@ -323,7 +333,9 @@ extension TextInputBlock {
     maxLength: Int? = nil,
     shouldClearFocus: Variable<Bool>? = nil,
     autocorrection: Bool? = nil,
-    isSecure: Bool? = nil
+    isSecure: Bool? = nil,
+    enablesReturnKeyAutomatically: Bool? = nil,
+    spellChecking: Bool? = nil
   ) -> TextInputBlock {
     TextInputBlock(
       widthTrait: widthTrait ?? self.widthTrait,
@@ -357,7 +369,10 @@ extension TextInputBlock {
       maxLength: maxLength ?? self.maxLength,
       shouldClearFocus: shouldClearFocus ?? self.shouldClearFocus,
       autocorrection: autocorrection ?? self.autocorrection,
-      isSecure: isSecure ?? self.isSecure
+      isSecure: isSecure ?? self.isSecure,
+      enablesReturnKeyAutomatically: enablesReturnKeyAutomatically ?? self
+        .enablesReturnKeyAutomatically,
+      spellChecking: spellChecking ?? self.spellChecking
     )
   }
 }

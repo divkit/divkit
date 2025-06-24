@@ -74,11 +74,13 @@ public func divGifImage(
 
 public func divInput(
   accessibility: DivAccessibility? = nil,
+  extensions: [DivExtension]? = nil,
   keyboardType: DivInput.KeyboardType? = nil,
   textVariable: String
 ) -> Div {
   .divInput(DivInput(
     accessibility: accessibility,
+    extensions: extensions,
     keyboardType: keyboardType.map { .value($0) },
     textVariable: textVariable
   ))

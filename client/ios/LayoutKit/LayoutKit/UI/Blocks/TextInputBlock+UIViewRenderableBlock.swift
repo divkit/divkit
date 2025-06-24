@@ -18,6 +18,8 @@ extension TextInputBlock {
     inputView.setInputAccessoryView(accessoryView)
     inputView.setAutocorrection(autocorrection)
     inputView.setSecure(isSecure)
+    inputView.setEnablesReturnKeyAutomatically(enablesReturnKeyAutomatically)
+    inputView.setSpellChecking(spellChecking)
     inputView.setAutocapitalizationType(autocapitalizationType)
     inputView.setEnterKeyType(enterKeyType)
     inputView.setValidators(validators)
@@ -128,7 +130,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   override func layoutSubviews() {
     super.layoutSubviews()
     layoutReporter?.willLayoutSubviews()
-
     multiLineInput.frame = bounds
     multiLineInput.textContainerInset = paddings
     updateScrollOnMultilineChange()
@@ -218,6 +219,21 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   func setSecure(_ isSecure: Bool) {
     multiLineInput.isSecureTextEntry = isSecure
     singleLineInput.isSecureTextEntry = isSecure
+  }
+
+  func setEnablesReturnKeyAutomatically(_ enablesReturnKeyAutomatically: Bool) {
+    multiLineInput.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
+    singleLineInput.enablesReturnKeyAutomatically = enablesReturnKeyAutomatically
+  }
+
+  func setSpellChecking(_ spellChecking: Bool?) {
+    if let spellChecking {
+      multiLineInput.spellCheckingType = spellChecking ? .yes : .no
+      singleLineInput.spellCheckingType = spellChecking ? .yes : .no
+    } else {
+      multiLineInput.spellCheckingType = .default
+      singleLineInput.spellCheckingType = .default
+    }
   }
 
   func setAutocapitalizationType(_ type: TextInputBlock.AutocapitalizationType) {
