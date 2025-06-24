@@ -64,6 +64,10 @@ final class ScrollPageIndicatorLayer: CALayer {
   override func draw(in ctx: CGContext) {
     ctx.clip(to: params.visibleRect)
 
+    guard numberOfPages > 1 else {
+      return
+    }
+
     let animator = IndicatorStateAnimator(
       configuration: configuration,
       boundsWidth: bounds.size.width,
