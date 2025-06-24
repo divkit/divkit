@@ -141,7 +141,7 @@ abstract class Expression<T : Any> {
 
         override fun observe(resolver: ExpressionResolver, callback: (T) -> Unit): Disposable {
             val variableNames = getVariables(resolver)
-            val dynamicVariables = evaluable?.dynamicVariables
+            val dynamicVariables = getDynamicVariables()
             if (variableNames.isEmpty() && dynamicVariables.isNullOrEmpty())
                 return Disposable.NULL
 
@@ -167,7 +167,7 @@ abstract class Expression<T : Any> {
         @JvmOverloads
         fun getVariablesName(resolver: ExpressionResolver = ExpressionResolver.EMPTY): List<String> {
             val variableNames = getVariables(resolver)
-            val dynamicVariableNames = evaluable?.dynamicVariables?.mapNotNull { it.resolveVariableName(resolver) }
+            val dynamicVariableNames = getDynamicVariables()?.mapNotNull { it.resolveVariableName(resolver) }
             return if (dynamicVariableNames.isNullOrEmpty()) variableNames else variableNames + dynamicVariableNames
         }
 
@@ -179,6 +179,8 @@ abstract class Expression<T : Any> {
                 emptyList()
             }
         }
+
+        private fun getDynamicVariables() = runCatching { evaluable?.dynamicVariables }.getOrNull()
 
         private fun tryResolveOrUseLast(resolver: ExpressionResolver): T {
             try {
