@@ -157,6 +157,17 @@
             }
         }
     }, {
+        "id": "text_image_preload_required",
+        "name": "<code>preload_required</code> property for the image of a <code>text</code>",
+        "compat": {
+            "web": {
+                "version_added": "29.6.0"
+            },
+            "ios": {
+                "version_added": "32.5.0"
+            }
+        }
+    }, {
         "id": "text_range_baseline_offset",
         "name": "<code>baseline_offset</code> property for the range of a <code>text</code>",
         "compat": {

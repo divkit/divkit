@@ -27,5 +27,19 @@
                 "version_added": "32.3.1"
             }
         }
+    }, {
+        "id": "image_preload_required",
+        "name": "<code>preload_required</code> property for the image",
+        "compat": {
+            "web": {
+                "version_added": "29.6.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "32.5.0"
+            }
+        }
     }]
 }
