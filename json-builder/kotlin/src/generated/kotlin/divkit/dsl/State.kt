@@ -37,25 +37,35 @@ data class State internal constructor(
     operator fun plus(additive: Properties): State = State(
         Properties(
             accessibility = additive.accessibility ?: properties.accessibility,
+            action = additive.action ?: properties.action,
+            actionAnimation = additive.actionAnimation ?: properties.actionAnimation,
+            actions = additive.actions ?: properties.actions,
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
             animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            captureFocusOnAction = additive.captureFocusOnAction ?: properties.captureFocusOnAction,
             clipToBounds = additive.clipToBounds ?: properties.clipToBounds,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             defaultStateId = additive.defaultStateId ?: properties.defaultStateId,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
             divId = additive.divId ?: properties.divId,
+            doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
             functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
+            hoverEndActions = additive.hoverEndActions ?: properties.hoverEndActions,
+            hoverStartActions = additive.hoverStartActions ?: properties.hoverStartActions,
             id = additive.id ?: properties.id,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
+            longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
+            pressEndActions = additive.pressEndActions ?: properties.pressEndActions,
+            pressStartActions = additive.pressStartActions ?: properties.pressStartActions,
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -83,6 +93,19 @@ data class State internal constructor(
          */
         val accessibility: Property<Accessibility>?,
         /**
+         * One action when clicking on an element. Not used if the `actions` parameter is set.
+         */
+        val action: Property<Action>?,
+        /**
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+         * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
+         */
+        val actionAnimation: Property<Animation>?,
+        /**
+         * Multiple actions when clicking on an element.
+         */
+        val actions: Property<List<Action>>?,
+        /**
          * Horizontal alignment of an element inside the parent element.
          */
         val alignmentHorizontal: Property<AlignmentHorizontal>?,
@@ -108,6 +131,11 @@ data class State internal constructor(
          */
         val border: Property<Border>?,
         /**
+         * If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
+         * Default value: `true`.
+         */
+        val captureFocusOnAction: Property<Boolean>?,
+        /**
          * Enables the bounding of child elements by the parent's borders.
          * Default value: `true`.
          */
@@ -130,6 +158,10 @@ data class State internal constructor(
         @Deprecated("Marked as deprecated in the JSON schema ")
         val divId: Property<String>?,
         /**
+         * Action when double-clicking on an element.
+         */
+        val doubletapActions: Property<List<Action>>?,
+        /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
          */
         val extensions: Property<List<Extension>>?,
@@ -147,6 +179,14 @@ data class State internal constructor(
          */
         val height: Property<Size>?,
         /**
+         * Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+         */
+        val hoverEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+         */
+        val hoverStartActions: Property<List<Action>>?,
+        /**
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
@@ -155,6 +195,10 @@ data class State internal constructor(
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
+         * Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+         */
+        val longtapActions: Property<List<Action>>?,
+        /**
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
@@ -162,6 +206,14 @@ data class State internal constructor(
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
+        /**
+         * Actions performed after clicking/tapping an element.
+         */
+        val pressEndActions: Property<List<Action>>?,
+        /**
+         * Actions performed at the start of a click/tap on an element.
+         */
+        val pressStartActions: Property<List<Action>>?,
         /**
          * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
@@ -243,25 +295,35 @@ data class State internal constructor(
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("accessibility", accessibility)
+            result.tryPutProperty("action", action)
+            result.tryPutProperty("action_animation", actionAnimation)
+            result.tryPutProperty("actions", actions)
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
             result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("capture_focus_on_action", captureFocusOnAction)
             result.tryPutProperty("clip_to_bounds", clipToBounds)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("default_state_id", defaultStateId)
             result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("div_id", divId)
+            result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
+            result.tryPutProperty("hover_end_actions", hoverEndActions)
+            result.tryPutProperty("hover_start_actions", hoverStartActions)
             result.tryPutProperty("id", id)
             result.tryPutProperty("layout_provider", layoutProvider)
+            result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("press_end_actions", pressEndActions)
+            result.tryPutProperty("press_start_actions", pressStartActions)
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -349,25 +411,35 @@ data class State internal constructor(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -391,25 +463,35 @@ data class State internal constructor(
 fun DivScope.state(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
+    doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
+    longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -431,25 +513,35 @@ fun DivScope.state(
 ): State = State(
     State.Properties(
         accessibility = valueOrNull(accessibility),
+        action = valueOrNull(action),
+        actionAnimation = valueOrNull(actionAnimation),
+        actions = valueOrNull(actions),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
         animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
         disappearActions = valueOrNull(disappearActions),
         divId = valueOrNull(divId),
+        doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
+        longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
@@ -473,25 +565,35 @@ fun DivScope.state(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -515,25 +617,35 @@ fun DivScope.state(
 fun DivScope.stateProps(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
+    doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
+    longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -554,25 +666,35 @@ fun DivScope.stateProps(
     width: Size? = null,
 ) = State.Properties(
     accessibility = valueOrNull(accessibility),
+    action = valueOrNull(action),
+    actionAnimation = valueOrNull(actionAnimation),
+    actions = valueOrNull(actions),
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
     animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    captureFocusOnAction = valueOrNull(captureFocusOnAction),
     clipToBounds = valueOrNull(clipToBounds),
     columnSpan = valueOrNull(columnSpan),
     defaultStateId = valueOrNull(defaultStateId),
     disappearActions = valueOrNull(disappearActions),
     divId = valueOrNull(divId),
+    doubletapActions = valueOrNull(doubletapActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
     functions = valueOrNull(functions),
     height = valueOrNull(height),
+    hoverEndActions = valueOrNull(hoverEndActions),
+    hoverStartActions = valueOrNull(hoverStartActions),
     id = valueOrNull(id),
     layoutProvider = valueOrNull(layoutProvider),
+    longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
+    pressEndActions = valueOrNull(pressEndActions),
+    pressStartActions = valueOrNull(pressStartActions),
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
@@ -595,25 +717,35 @@ fun DivScope.stateProps(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -637,25 +769,35 @@ fun DivScope.stateProps(
 fun TemplateScope.stateRefs(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
+    action: ReferenceProperty<Action>? = null,
+    actionAnimation: ReferenceProperty<Animation>? = null,
+    actions: ReferenceProperty<List<Action>>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
+    doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
+    longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -676,25 +818,35 @@ fun TemplateScope.stateRefs(
     width: ReferenceProperty<Size>? = null,
 ) = State.Properties(
     accessibility = accessibility,
+    action = action,
+    actionAnimation = actionAnimation,
+    actions = actions,
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
     animators = animators,
     background = background,
     border = border,
+    captureFocusOnAction = captureFocusOnAction,
     clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     defaultStateId = defaultStateId,
     disappearActions = disappearActions,
     divId = divId,
+    doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
     functions = functions,
     height = height,
+    hoverEndActions = hoverEndActions,
+    hoverStartActions = hoverStartActions,
     id = id,
     layoutProvider = layoutProvider,
+    longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
+    pressEndActions = pressEndActions,
+    pressStartActions = pressStartActions,
     reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
@@ -717,25 +869,35 @@ fun TemplateScope.stateRefs(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -759,25 +921,35 @@ fun TemplateScope.stateRefs(
 fun State.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
+    doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
+    longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -799,25 +971,35 @@ fun State.override(
 ): State = State(
     State.Properties(
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
+        action = valueOrNull(action) ?: properties.action,
+        actionAnimation = valueOrNull(actionAnimation) ?: properties.actionAnimation,
+        actions = valueOrNull(actions) ?: properties.actions,
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
         animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        captureFocusOnAction = valueOrNull(captureFocusOnAction) ?: properties.captureFocusOnAction,
         clipToBounds = valueOrNull(clipToBounds) ?: properties.clipToBounds,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         defaultStateId = valueOrNull(defaultStateId) ?: properties.defaultStateId,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         divId = valueOrNull(divId) ?: properties.divId,
+        doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
         functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
+        hoverEndActions = valueOrNull(hoverEndActions) ?: properties.hoverEndActions,
+        hoverStartActions = valueOrNull(hoverStartActions) ?: properties.hoverStartActions,
         id = valueOrNull(id) ?: properties.id,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
+        longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        pressEndActions = valueOrNull(pressEndActions) ?: properties.pressEndActions,
+        pressStartActions = valueOrNull(pressStartActions) ?: properties.pressStartActions,
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -841,25 +1023,35 @@ fun State.override(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -883,25 +1075,35 @@ fun State.override(
 fun State.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
+    action: ReferenceProperty<Action>? = null,
+    actionAnimation: ReferenceProperty<Animation>? = null,
+    actions: ReferenceProperty<List<Action>>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
+    doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
+    longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -923,25 +1125,35 @@ fun State.defer(
 ): State = State(
     State.Properties(
         accessibility = accessibility ?: properties.accessibility,
+        action = action ?: properties.action,
+        actionAnimation = actionAnimation ?: properties.actionAnimation,
+        actions = actions ?: properties.actions,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
         disappearActions = disappearActions ?: properties.disappearActions,
         divId = divId ?: properties.divId,
+        doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
+        longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -965,25 +1177,35 @@ fun State.defer(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1007,25 +1229,35 @@ fun State.defer(
 fun State.modify(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Property<Accessibility>? = null,
+    action: Property<Action>? = null,
+    actionAnimation: Property<Animation>? = null,
+    actions: Property<List<Action>>? = null,
     alignmentHorizontal: Property<AlignmentHorizontal>? = null,
     alignmentVertical: Property<AlignmentVertical>? = null,
     alpha: Property<Double>? = null,
     animators: Property<List<Animator>>? = null,
     background: Property<List<Background>>? = null,
     border: Property<Border>? = null,
+    captureFocusOnAction: Property<Boolean>? = null,
     clipToBounds: Property<Boolean>? = null,
     columnSpan: Property<Int>? = null,
     defaultStateId: Property<String>? = null,
     disappearActions: Property<List<DisappearAction>>? = null,
     divId: Property<String>? = null,
+    doubletapActions: Property<List<Action>>? = null,
     extensions: Property<List<Extension>>? = null,
     focus: Property<Focus>? = null,
     functions: Property<List<Function>>? = null,
     height: Property<Size>? = null,
+    hoverEndActions: Property<List<Action>>? = null,
+    hoverStartActions: Property<List<Action>>? = null,
     id: Property<String>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
+    longtapActions: Property<List<Action>>? = null,
     margins: Property<EdgeInsets>? = null,
     paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
@@ -1047,25 +1279,35 @@ fun State.modify(
 ): State = State(
     State.Properties(
         accessibility = accessibility ?: properties.accessibility,
+        action = action ?: properties.action,
+        actionAnimation = actionAnimation ?: properties.actionAnimation,
+        actions = actions ?: properties.actions,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
         disappearActions = disappearActions ?: properties.disappearActions,
         divId = divId ?: properties.divId,
+        doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
+        hoverEndActions = hoverEndActions ?: properties.hoverEndActions,
+        hoverStartActions = hoverStartActions ?: properties.hoverStartActions,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
+        longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
+        pressEndActions = pressEndActions ?: properties.pressEndActions,
+        pressStartActions = pressStartActions ?: properties.pressStartActions,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1091,6 +1333,7 @@ fun State.modify(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
@@ -1105,6 +1348,7 @@ fun State.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
@@ -1115,25 +1359,35 @@ fun State.evaluate(
 ): State = State(
     State.Properties(
         accessibility = properties.accessibility,
+        action = properties.action,
+        actionAnimation = properties.actionAnimation,
+        actions = properties.actions,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         animators = properties.animators,
         background = properties.background,
         border = properties.border,
+        captureFocusOnAction = captureFocusOnAction ?: properties.captureFocusOnAction,
         clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
         disappearActions = properties.disappearActions,
         divId = properties.divId,
+        doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
         functions = properties.functions,
         height = properties.height,
+        hoverEndActions = properties.hoverEndActions,
+        hoverStartActions = properties.hoverStartActions,
         id = properties.id,
         layoutProvider = properties.layoutProvider,
+        longtapActions = properties.longtapActions,
         margins = properties.margins,
         paddings = properties.paddings,
+        pressEndActions = properties.pressEndActions,
+        pressStartActions = properties.pressStartActions,
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
@@ -1157,25 +1411,35 @@ fun State.evaluate(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1199,25 +1463,35 @@ fun State.evaluate(
 fun Component<State>.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    captureFocusOnAction: Boolean? = null,
     clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
     disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
+    doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hoverEndActions: List<Action>? = null,
+    hoverStartActions: List<Action>? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
+    longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    pressEndActions: List<Action>? = null,
+    pressStartActions: List<Action>? = null,
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -1240,25 +1514,35 @@ fun Component<State>.override(
     template = template,
     properties = State.Properties(
         accessibility = valueOrNull(accessibility),
+        action = valueOrNull(action),
+        actionAnimation = valueOrNull(actionAnimation),
+        actions = valueOrNull(actions),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
         animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        captureFocusOnAction = valueOrNull(captureFocusOnAction),
         clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
         disappearActions = valueOrNull(disappearActions),
         divId = valueOrNull(divId),
+        doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hoverEndActions = valueOrNull(hoverEndActions),
+        hoverStartActions = valueOrNull(hoverStartActions),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
+        longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        pressEndActions = valueOrNull(pressEndActions),
+        pressStartActions = valueOrNull(pressStartActions),
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
@@ -1282,25 +1566,35 @@ fun Component<State>.override(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1324,25 +1618,35 @@ fun Component<State>.override(
 fun Component<State>.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
+    action: ReferenceProperty<Action>? = null,
+    actionAnimation: ReferenceProperty<Animation>? = null,
+    actions: ReferenceProperty<List<Action>>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    captureFocusOnAction: ReferenceProperty<Boolean>? = null,
     clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
+    doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hoverEndActions: ReferenceProperty<List<Action>>? = null,
+    hoverStartActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
+    longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pressEndActions: ReferenceProperty<List<Action>>? = null,
+    pressStartActions: ReferenceProperty<List<Action>>? = null,
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1365,25 +1669,35 @@ fun Component<State>.defer(
     template = template,
     properties = State.Properties(
         accessibility = accessibility,
+        action = action,
+        actionAnimation = actionAnimation,
+        actions = actions,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
         animators = animators,
         background = background,
         border = border,
+        captureFocusOnAction = captureFocusOnAction,
         clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
         disappearActions = disappearActions,
         divId = divId,
+        doubletapActions = doubletapActions,
         extensions = extensions,
         focus = focus,
         functions = functions,
         height = height,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
         id = id,
         layoutProvider = layoutProvider,
+        longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
@@ -1409,6 +1723,7 @@ fun Component<State>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
@@ -1423,6 +1738,7 @@ fun Component<State>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    captureFocusOnAction: ExpressionProperty<Boolean>? = null,
     clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
@@ -1434,25 +1750,35 @@ fun Component<State>.evaluate(
     template = template,
     properties = State.Properties(
         accessibility = null,
+        action = null,
+        actionAnimation = null,
+        actions = null,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
         animators = null,
         background = null,
         border = null,
+        captureFocusOnAction = captureFocusOnAction,
         clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
         disappearActions = null,
         divId = null,
+        doubletapActions = null,
         extensions = null,
         focus = null,
         functions = null,
         height = null,
+        hoverEndActions = null,
+        hoverStartActions = null,
         id = null,
         layoutProvider = null,
+        longtapActions = null,
         margins = null,
         paddings = null,
+        pressEndActions = null,
+        pressStartActions = null,
         reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
@@ -1476,25 +1802,35 @@ fun Component<State>.evaluate(
 
 /**
  * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param captureFocusOnAction If the value is:<li>`true` - when the element action is activated, the focus will be moved to that element. That means that the accessibility focus will be moved and the virtual keyboard will be hidden, unless the target element implies its presence (e.g. `input`).</li><li>`false` - when you click on an element, the focus will remain on the currently focused element.</li>
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
+ * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hoverEndActions Actions performed after hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
+ * @param hoverStartActions Actions performed when hovering over an element. Available on platforms that support pointing devices (such as a mouse or stylus).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides data on the actual size of the element.
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param pressEndActions Actions performed after clicking/tapping an element.
+ * @param pressStartActions Actions performed at the start of a click/tap on an element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1518,25 +1854,35 @@ fun Component<State>.evaluate(
 fun Component<State>.modify(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Property<Accessibility>? = null,
+    action: Property<Action>? = null,
+    actionAnimation: Property<Animation>? = null,
+    actions: Property<List<Action>>? = null,
     alignmentHorizontal: Property<AlignmentHorizontal>? = null,
     alignmentVertical: Property<AlignmentVertical>? = null,
     alpha: Property<Double>? = null,
     animators: Property<List<Animator>>? = null,
     background: Property<List<Background>>? = null,
     border: Property<Border>? = null,
+    captureFocusOnAction: Property<Boolean>? = null,
     clipToBounds: Property<Boolean>? = null,
     columnSpan: Property<Int>? = null,
     defaultStateId: Property<String>? = null,
     disappearActions: Property<List<DisappearAction>>? = null,
     divId: Property<String>? = null,
+    doubletapActions: Property<List<Action>>? = null,
     extensions: Property<List<Extension>>? = null,
     focus: Property<Focus>? = null,
     functions: Property<List<Function>>? = null,
     height: Property<Size>? = null,
+    hoverEndActions: Property<List<Action>>? = null,
+    hoverStartActions: Property<List<Action>>? = null,
     id: Property<String>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
+    longtapActions: Property<List<Action>>? = null,
     margins: Property<EdgeInsets>? = null,
     paddings: Property<EdgeInsets>? = null,
+    pressEndActions: Property<List<Action>>? = null,
+    pressStartActions: Property<List<Action>>? = null,
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
@@ -1559,25 +1905,35 @@ fun Component<State>.modify(
     template = template,
     properties = State.Properties(
         accessibility = accessibility,
+        action = action,
+        actionAnimation = actionAnimation,
+        actions = actions,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
         animators = animators,
         background = background,
         border = border,
+        captureFocusOnAction = captureFocusOnAction,
         clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
         disappearActions = disappearActions,
         divId = divId,
+        doubletapActions = doubletapActions,
         extensions = extensions,
         focus = focus,
         functions = functions,
         height = height,
+        hoverEndActions = hoverEndActions,
+        hoverStartActions = hoverStartActions,
         id = id,
         layoutProvider = layoutProvider,
+        longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
+        pressEndActions = pressEndActions,
+        pressStartActions = pressStartActions,
         reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
