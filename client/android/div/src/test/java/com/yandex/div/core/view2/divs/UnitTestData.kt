@@ -12,6 +12,7 @@ import java.io.File
 class UnitTestData(
     private val dir: String,
     private val fileName: String,
+    private val testDataDir: String = "unit_test_data"
 ) {
 
     val data: DivData
@@ -21,7 +22,7 @@ class UnitTestData(
     val div: Div
         get() {
             if (_div == null) {
-                val path = "${BuildConfig.DIV2_JSON_PATH}/unit_test_data/$dir/$fileName"
+                val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
                 val jsonString = File(path).readText(Charsets.UTF_8)
                 val json = JSONObject(jsonString)
                 val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)
@@ -32,7 +33,7 @@ class UnitTestData(
 
     val dataWithTemplates: DivData
         get() {
-            val path = "${BuildConfig.DIV2_JSON_PATH}/unit_test_data/$dir/$fileName"
+            val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
             val jsonString = File(path).readText(Charsets.UTF_8)
             val json = JSONObject(jsonString)
             val templates = json.getJSONObject("templates")
@@ -46,7 +47,7 @@ class UnitTestData(
 
     val patchWithTemplates: DivPatch
         get() {
-            val path = "${BuildConfig.DIV2_JSON_PATH}/unit_test_data/$dir/$fileName"
+            val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
             val jsonString = File(path).readText(Charsets.UTF_8)
             val json = JSONObject(jsonString)
             val templates = json.getJSONObject("templates")

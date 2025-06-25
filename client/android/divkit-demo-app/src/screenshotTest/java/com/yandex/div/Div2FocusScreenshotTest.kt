@@ -31,11 +31,11 @@ class Div2FocusScreenshotTest(case: String, escapedCase: String) {
 
     @Test
     @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = "not_focused")
-    fun divScreenshotTopFocused() = Unit
+    fun divScreenshotNotFocused() = Unit
 
     @Test
     @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = "focused")
-    fun divScreenshotBottomFocused() {
+    fun divScreenshotFocused() {
         divFocus { clickOnTopInput() }
     }
 

@@ -111,4 +111,6 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
         }
         return maxValue
     }
+
+    override fun getAccessibilityClassName() = "androidx.viewpager.widget.ViewPager"
 }

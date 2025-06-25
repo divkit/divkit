@@ -74,8 +74,6 @@ internal class DivInputBinder @Inject constructor(
         path: DivStatePath
     ) {
         val expressionResolver = bindingContext.expressionResolver
-        isFocusable = true
-        isFocusableInTouchMode = true
         textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
         accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
 

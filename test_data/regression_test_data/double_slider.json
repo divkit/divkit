@@ -160,6 +160,7 @@
             },
             {
               "type": "slider",
+              "id": "double_with_ticks",
               "width": {
                 "type": "match_parent"
               },

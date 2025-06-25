@@ -1,10 +1,11 @@
 package com.yandex.div.core.widget
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup.LayoutParams
-import com.yandex.div.core.util.makeFocusable
+import androidx.core.view.isEmpty
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
@@ -26,15 +27,17 @@ internal open class DivViewWrapper @JvmOverloads constructor(
 ): FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports, TransientView by TransientViewMixin() {
 
     val child: View?
-        get() = if (childCount == 0) null else getChildAt(0)
+        get() = if (isEmpty()) null else getChildAt(0)
 
     init {
-        makeFocusable()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            defaultFocusHighlightEnabled = false
+        }
         importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
     }
 
     override fun addView(child: View?, index: Int, params: LayoutParams?) {
-        require(childCount == 0) { "ViewWrapper can host only one child view" }
+        require(isEmpty()) { "ViewWrapper can host only one child view" }
         super.addView(child, 0, params)
     }
 

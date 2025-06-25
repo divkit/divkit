@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.MarginLayoutParams
 import android.view.ViewTreeObserver
-import androidx.core.view.ViewCompat
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
@@ -37,10 +36,11 @@ import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
-import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivInput
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivVisibility
 import javax.inject.Inject
 
@@ -73,7 +73,7 @@ internal class DivBaseBinder @Inject constructor(
         bindId(divView, div, oldDiv)
         bindLayoutParams(div, oldDiv, resolver, subscriber)
         bindLayoutProvider(bindingContext, div, oldDiv)
-        bindAccessibility(divView, div, oldDiv, resolver, subscriber)
+        bindAccessibility(div, oldDiv, resolver, subscriber)
         bindAlpha(div, oldDiv, resolver, subscriber)
 
         bindBackground(bindingContext, div, oldDiv, subscriber)
@@ -87,10 +87,7 @@ internal class DivBaseBinder @Inject constructor(
 
         div.tooltips?.let { tooltipController.mapTooltip(this, it) }
 
-        // DivAccessibilityBinder is responsible for focus setup, so changing isFocusable only if binder is disabled
-        if (!divAccessibilityBinder.enabled) {
-            applyFocusableState(div)
-        }
+        applyFocusableState(div)
     }
 
     //region Id
@@ -379,135 +376,11 @@ internal class DivBaseBinder @Inject constructor(
     //region Accessibility
 
     private fun View.bindAccessibility(
-        divView: Div2View,
         newDiv: DivBase,
         oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
-    ) {
-        if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
-            // Shortcut for empty accessibility binding
-            applyAccessibilityMode(divView, newDiv, mode = null)
-            divAccessibilityBinder.bindType(this, newDiv, DivAccessibility.Type.AUTO, resolver)
-            return
-        }
-
-        bindAccessibilityType(newDiv, oldDiv, resolver)
-        bindAccessibilityDescriptionAndHint(newDiv, oldDiv, resolver, subscriber)
-        bindAccessibilityMode(divView, newDiv, resolver, subscriber)
-        bindAccessibilityStateDescription(newDiv, oldDiv, resolver, subscriber)
-        //TODO: bind 'muteAfterAction' property
-    }
-
-    private fun View.bindAccessibilityType(
-        newDiv: DivBase,
-        oldDiv: DivBase?,
-        resolver: ExpressionResolver,
-    ) {
-        if (oldDiv != null && newDiv.accessibility?.type == oldDiv.accessibility?.type) {
-            return
-        }
-
-        divAccessibilityBinder.bindType(this, newDiv, newDiv.accessibility?.type
-            ?: DivAccessibility.Type.AUTO, resolver)
-    }
-
-    private fun View.bindAccessibilityDescriptionAndHint(
-        newDiv: DivBase,
-        oldDiv: DivBase?,
-        resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber
-    ) {
-        if (newDiv.accessibility?.description.equalsToConstant(oldDiv?.accessibility?.description)
-            && newDiv.accessibility?.hint.equalsToConstant(oldDiv?.accessibility?.hint)) {
-            return
-        }
-
-        applyAccessibilityDescriptionAndHint(
-            newDiv.accessibility?.description?.evaluate(resolver),
-            newDiv.accessibility?.hint?.evaluate(resolver)
-        )
-
-        if (newDiv.accessibility?.description.isConstantOrNull()
-            && newDiv.accessibility?.hint.isConstantOrNull()) {
-            return
-        }
-
-        val callback = { _: Any ->
-            applyAccessibilityDescriptionAndHint(
-                newDiv.accessibility?.description?.evaluate(resolver),
-                newDiv.accessibility?.hint?.evaluate(resolver)
-            )
-        }
-        subscriber.addSubscription(newDiv.accessibility?.description?.observe(resolver, callback))
-        subscriber.addSubscription(newDiv.accessibility?.hint?.observe(resolver, callback))
-    }
-
-    private fun View.applyAccessibilityDescriptionAndHint(contentDescription: String?, hint: String?) {
-        this.contentDescription = when {
-            contentDescription == null -> hint
-            hint == null -> contentDescription
-            else -> "$contentDescription\n$hint"
-        }
-    }
-
-    private fun View.bindAccessibilityMode(
-        divView: Div2View,
-        newDiv: DivBase,
-        resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber
-    ) {
-        // We can't compare accessibility mode with previous one due to actual value depends on parent mode
-        // and should be recalculated.
-
-        applyAccessibilityMode(divView, newDiv, newDiv.accessibility?.mode?.evaluate(resolver))
-
-        if (newDiv.accessibility?.mode.isConstantOrNull()) {
-            return
-        }
-
-        subscriber.addSubscription(
-            newDiv.accessibility?.mode?.observe(resolver) { mode ->
-                applyAccessibilityMode(divView, newDiv, mode)
-
-                val type = newDiv.accessibility?.type ?: DivAccessibility.Type.AUTO
-                if (type == DivAccessibility.Type.AUTO) {
-                    divAccessibilityBinder.bindType(this, newDiv, type, resolver)
-                }
-            }
-        )
-    }
-
-    private fun View.applyAccessibilityMode(divView: Div2View, base: DivBase, mode: DivAccessibility.Mode?) {
-        divAccessibilityBinder.bindAccessibilityMode(this, divView, mode, base)
-    }
-
-    private fun View.bindAccessibilityStateDescription(
-        newDiv: DivBase,
-        oldDiv: DivBase?,
-        resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber
-    ) {
-        if (newDiv.accessibility?.stateDescription.equalsToConstant(oldDiv?.accessibility?.stateDescription)) {
-            return
-        }
-
-        applyAccessibilityStateDescription(newDiv.accessibility?.stateDescription?.evaluate(resolver))
-
-        if (newDiv.accessibility?.stateDescription.isConstantOrNull()) {
-            return
-        }
-
-        subscriber.addSubscription(
-            newDiv.accessibility?.stateDescription?.observe(resolver) { stateDescription ->
-                applyAccessibilityStateDescription(stateDescription)
-            }
-        )
-    }
-
-    private fun View.applyAccessibilityStateDescription(stateDescription: String?) {
-        ViewCompat.setStateDescription(this, stateDescription)
-    }
+    ) = divAccessibilityBinder.bind(this, newDiv, oldDiv, resolver, subscriber)
 
     //endregion
 
@@ -765,6 +638,7 @@ internal class DivBaseBinder @Inject constructor(
     //endregion
 
     private fun View.applyFocusableState(div: DivBase) {
+        if (div is DivInput || div is DivSwitch) return
         isFocusable = div.focus != null
     }
 

@@ -24,7 +24,7 @@ internal abstract class DivCollectionViewHolder(
     protected var oldDiv: Div? = null
     private val childrenPaths = mutableMapOf<String, DivStatePath>()
 
-    protected fun bind(bindingContext: BindingContext, div: Div, index: Int) {
+    open fun bind(bindingContext: BindingContext, div: Div, index: Int) {
         val resolver = bindingContext.expressionResolver
 
         if (viewWrapper.tryRebindRecycleContainerChildren(bindingContext.divView, div)) {

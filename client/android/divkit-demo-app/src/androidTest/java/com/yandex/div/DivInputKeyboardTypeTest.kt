@@ -7,13 +7,15 @@ import com.yandex.divkit.demo.DummyActivity
 import org.junit.Rule
 import org.junit.Test
 
-private const val TEXT_BEFORE_BREAK = "https://Text_with different+symbols(123)@site.ru"
-internal const val TEXT_WITH_DIFFERENT_SYMBOLS = "$TEXT_BEFORE_BREAK\nsecond_line"
-internal const val SEARCH_KEY_TAPPED = "Search key tapped!"
+internal const val TEXT_WITH_DIFFERENT_SYMBOLS =
+        "https://Text_with different\nsymbols+(123)@site.ru"
+
+private const val TEXT_WITHOUT_BREAK = "https://Text_with differentsymbols+(123)@site.ru"
+private const val SEARCH_KEY_TAPPED = "Search key tapped!"
 
 class DivInputKeyboardTypeTest {
 
-    private val activityRule = ActivityTestRule(DummyActivity::class.java)
+    private val activityRule = ActivityTestRule(DummyActivity::class.java, true)
 
     @get:Rule
     val rule = uiTestRule { activityRule }
@@ -30,7 +32,7 @@ class DivInputKeyboardTypeTest {
     fun checkSingleLineText() {
         checkType(
             type = "single_line_text",
-            expectedText = TEXT_BEFORE_BREAK
+            expectedText = TEXT_WITHOUT_BREAK
         )
     }
 
@@ -72,7 +74,7 @@ class DivInputKeyboardTypeTest {
     fun checkEmail() {
         checkType(
             type = "email",
-            expectedText = TEXT_BEFORE_BREAK
+            expectedText = TEXT_WITHOUT_BREAK
         )
     }
 
@@ -80,7 +82,7 @@ class DivInputKeyboardTypeTest {
     fun checkUri() {
         checkType(
             type = "uri",
-            expectedText = TEXT_BEFORE_BREAK
+            expectedText = TEXT_WITHOUT_BREAK
         )
     }
 

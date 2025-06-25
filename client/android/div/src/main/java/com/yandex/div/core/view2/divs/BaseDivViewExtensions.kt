@@ -27,7 +27,6 @@ import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
@@ -59,7 +58,6 @@ import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
-import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -540,7 +538,6 @@ internal fun View.applyDivActions(
     pressStartActions: List<DivAction>?,
     pressEndActions: List<DivAction>?,
     actionAnimation: DivAnimation,
-    accessibility: DivAccessibility?,
     captureFocusOnAction: Expression<Boolean>,
 ) {
     val actionBinder = context.divView.div2Component.actionBinder
@@ -560,7 +557,6 @@ internal fun View.applyDivActions(
         pressStartActions,
         pressEndActions,
         actionAnimation,
-        accessibility,
         captureFocusOnAction,
     )
 }
@@ -915,24 +911,6 @@ internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: Expres
 internal fun View.gainAccessibilityFocus() {
     performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
     sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED)
-}
-
-internal fun sendAccessibilityEventUnchecked(
-    event: Int,
-    view: View?,
-    accessibilityStateProvider: AccessibilityStateProvider
-) {
-    view ?: return
-    if (accessibilityStateProvider.isAccessibilityEnabled(view.context)) {
-        view.sendAccessibilityEventUnchecked(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                AccessibilityEvent(event)
-            } else {
-                @Suppress("DEPRECATION")
-                AccessibilityEvent.obtain(event)
-            }
-        )
-    }
 }
 
 internal fun ViewGroup.bindClipChildren(

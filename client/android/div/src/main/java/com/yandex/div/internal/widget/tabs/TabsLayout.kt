@@ -84,4 +84,6 @@ internal open class TabsLayout @JvmOverloads constructor(
             bottomMargin = resources.getDimensionPixelSize(R.dimen.title_tab_title_margin_vertical)
         }
     }
+
+    override fun getAccessibilityClassName() = "android.widget.TabWidget"
 }

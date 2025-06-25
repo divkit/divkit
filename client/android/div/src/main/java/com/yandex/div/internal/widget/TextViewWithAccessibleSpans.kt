@@ -28,7 +28,7 @@ internal open class TextViewWithAccessibleSpans(
 
     init {
         AccessibilityStateProvider.evaluateTouchModeEnabled(context)
-        if (AccessibilityStateProvider.touchModeEnabled == true) {
+        if (AccessibilityStateProvider.touchExplorationEnabled == true) {
             spanHelper = SpanHelper()
             ViewCompat.setAccessibilityDelegate(this, spanHelper)
             accessibilityLiveRegion = ACCESSIBILITY_LIVE_REGION_POLITE
@@ -38,7 +38,7 @@ internal open class TextViewWithAccessibleSpans(
     }
 
     internal fun addImageSpan(span: ImageSpan) {
-        if (AccessibilityStateProvider.touchModeEnabled == true) {
+        if (AccessibilityStateProvider.touchExplorationEnabled == true) {
             imageSpans.add(span)
             if (span.accessibility?.contentDescription != null || span.accessibility?.onClickAction != null) {
                 accessibleImageSpans.add(span)
@@ -56,7 +56,7 @@ internal open class TextViewWithAccessibleSpans(
     }
 
     private fun evaluateAndSetContentDescription() {
-        if (AccessibilityStateProvider.touchModeEnabled != true) {
+        if (AccessibilityStateProvider.touchExplorationEnabled != true) {
             super.setContentDescription(_contentDescription)
             return
         }

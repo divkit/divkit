@@ -1,26 +1,33 @@
 package com.yandex.div.core.view2
 
+import android.os.Build
 import android.view.View
-import android.widget.CheckBox
-import android.widget.RadioButton
+import android.view.View.OnLayoutChangeListener
+import android.view.ViewGroup
+import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.core.view.children
+import androidx.core.view.isVisible
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.dagger.ExperimentFlag
-import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivInputView
-import com.yandex.div.core.view2.divs.widgets.DivSliderView
+import com.yandex.div.core.view2.divs.widgets.DivCollectionHolder
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
+import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
-import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
@@ -32,176 +39,78 @@ import javax.inject.Inject
 @DivScope
 @Mockable
 internal class DivAccessibilityBinder @Inject constructor(
-    @ExperimentFlag(ACCESSIBILITY_ENABLED) val enabled: Boolean,
     private val accessibilityStateProvider: AccessibilityStateProvider,
 ) {
-    fun bindAccessibilityMode(
+
+    fun bind(
         view: View,
-        divView: Div2View,
-        mode: DivAccessibility.Mode?,
-        divBase: DivBase,
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber,
     ) {
-        if (!enabled) {
-            return
-        }
-        val parentMode = (view.parent as? View)?.let {
-            divView.getPropagatedAccessibilityMode(it)
-        }
+        if (!accessibilityStateProvider.isAccessibilityEnabled(view.context)) return
 
-        if (parentMode != null) {
-            val propagatedMode = getPropagatedMode(parentMode, mode ?: divBase.getDefaultAccessibilityMode)
-            view.applyAccessibilityMode(
-                propagatedMode,
-                divView,
-                isDescendant = parentMode == propagatedMode
-            )
-        } else {
-            view.applyAccessibilityMode(mode ?: divBase.getDefaultAccessibilityMode, divView, isDescendant = false)
-        }
-    }
-
-    fun bindType(view: View, divBase: DivBase, type: DivAccessibility.Type, resolver: ExpressionResolver) {
-        if (!accessibilityStateProvider.isAccessibilityEnabled(view.context)) {
+        if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
+            // Shortcut for empty accessibility binding
+            view.applyMode()
             return
         }
 
-        val originalDelegate = ViewCompat.getAccessibilityDelegate(view)
-        val accessibilityType = type.toAccessibilityType(divBase, resolver)
+        view.bindType(newDiv, oldDiv)
+        view.bindDescriptionAndHint(newDiv, oldDiv, resolver, subscriber)
+        view.bindMode(newDiv, oldDiv, resolver, subscriber)
+        view.bindStateDescription(newDiv, oldDiv, resolver, subscriber)
+        //TODO: bind 'muteAfterAction' property
+    }
 
-        val accessibilityDelegate =
-            if (accessibilityType == AccessibilityType.LIST && view is BackHandlingRecyclerView) {
-                AccessibilityListDelegate(view)
-            } else if (originalDelegate is AccessibilityDelegateWrapper) {
-                originalDelegate.apply {
-                    initializeAccessibilityNodeInfo = { _, info ->
-                        info?.bindType(accessibilityType)
-                    }
+    // region Type
+
+    private fun View.bindType(newDiv: DivBase, oldDiv: DivBase?) {
+        if (oldDiv != null && newDiv.accessibility?.type == oldDiv.accessibility?.type) return
+        applyType(newDiv, newDiv.accessibility?.type)
+    }
+
+    private fun View.applyType(divBase: DivBase, accessibilityType: DivAccessibility.Type? = null) {
+        val type = accessibilityType ?: DivAccessibility.Type.AUTO
+        getAccessibilityDelegate(this, type.toAccessibilityType(divBase))?.let {
+            ViewCompat.setAccessibilityDelegate(this, it)
+        }
+    }
+
+    private fun getAccessibilityDelegate(view: View, type: AccessibilityType): AccessibilityDelegateCompat? {
+        if (type == AccessibilityType.LIST && view is BackHandlingRecyclerView) {
+            return AccessibilityListDelegate(view)
+        }
+
+        val className = type.toClassName
+        val heading = type == AccessibilityType.HEADER
+        val autoClassName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) view.accessibilityClassName else null
+        if ((className.isEmpty() || className == autoClassName) && !heading) return null
+
+        return object : AccessibilityDelegateCompat() {
+            override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+                super.onInitializeAccessibilityNodeInfo(host, info)
+                if (className.isNotEmpty()) {
+                    info.className = className
                 }
-            } else {
-                AccessibilityDelegateWrapper(
-                    originalDelegate,
-                    initializeAccessibilityNodeInfo = { _, info ->
-                        info?.bindType(accessibilityType)
-                    })
+                info.isHeading = heading
             }
-
-        ViewCompat.setAccessibilityDelegate(view, accessibilityDelegate)
-    }
-
-    private val DivBase.getDefaultAccessibilityMode: DivAccessibility.Mode
-        get() = when (this) {
-            is DivImage -> if (accessibility == null && doubletapActions.isNullOrEmpty() &&
-                actions.isNullOrEmpty() && longtapActions.isNullOrEmpty()) {
-                DivAccessibility.Mode.EXCLUDE
-            } else {
-                DivAccessibility.Mode.DEFAULT
-            }
-
-            is DivSeparator -> if (accessibility == null && doubletapActions.isNullOrEmpty() &&
-                actions.isNullOrEmpty() && longtapActions.isNullOrEmpty()) {
-                DivAccessibility.Mode.EXCLUDE
-            } else {
-                DivAccessibility.Mode.DEFAULT
-            }
-
-            else -> DivAccessibility.Mode.DEFAULT
-        }
-
-    /**
-     * Sets [AccessibilityNodeInfoCompat]'s className so that TalkBack could
-     * properly recognize role of View provided by [DivAccessibility.Type].
-     * For example, if [type] is [DivAccessibility.Type.BUTTON], TalkBack announces View as "Button".
-     */
-    private fun AccessibilityNodeInfoCompat.bindType(type: AccessibilityType) {
-        this.className = when (type) {
-            AccessibilityType.NONE -> ""
-            AccessibilityType.BUTTON -> "android.widget.Button"
-            AccessibilityType.EDIT_TEXT -> "android.widget.EditText"
-            AccessibilityType.HEADER -> "android.widget.TextView"
-            AccessibilityType.IMAGE -> "android.widget.ImageView"
-            AccessibilityType.LIST -> ""
-            AccessibilityType.PAGER -> "androidx.viewpager.widget.ViewPager"
-            AccessibilityType.SLIDER -> "android.widget.SeekBar"
-            AccessibilityType.SELECT -> "android.widget.Spinner"
-            AccessibilityType.TAB_WIDGET -> "android.widget.TabWidget"
-            AccessibilityType.TEXT -> "android.widget.TextView"
-            AccessibilityType.CHECK_BOX -> "android.widget.CheckBox"
-            AccessibilityType.RADIO_BUTTON -> "android.widget.RadioButton"
-        }
-
-        if (AccessibilityType.HEADER == type) {
-            this.isHeading = true
         }
     }
 
-    private val DivAccessibility.Mode.priority
-        get() = when (this) {
-            DivAccessibility.Mode.EXCLUDE -> 0
-            DivAccessibility.Mode.MERGE -> 1
-            DivAccessibility.Mode.DEFAULT -> 2
-        }
-
-    private fun getPropagatedMode(
-        parentMode: DivAccessibility.Mode,
-        mode: DivAccessibility.Mode
-    ): DivAccessibility.Mode {
-        return if (parentMode.priority < mode.priority) parentMode else mode
-    }
-
-    private fun View.applyAccessibilityMode(
-        mode: DivAccessibility.Mode,
-        divView: Div2View,
-        isDescendant: Boolean
-    ) {
-        when (mode) {
-            DivAccessibility.Mode.MERGE -> {
-                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                if (!isDescendant) {
-                    isFocusable = this !is DivSliderView
-                } else {
-                    setActionable(false)
-                }
-            }
-            DivAccessibility.Mode.EXCLUDE -> {
-                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-                isFocusable = false
-                if (this is DivInputView) isFocusableInTouchMode = true
-            }
-            DivAccessibility.Mode.DEFAULT -> {
-                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
-                isFocusable = this !is DivSliderView
-            }
-        }
-        divView.setPropagatedAccessibilityMode(this, mode)
-    }
-
-    private fun View.setActionable(actionable: Boolean) {
-        isClickable = actionable
-        isLongClickable = actionable
-        isFocusable = actionable
-    }
-
-    private fun DivImage.isClickable(resolver: ExpressionResolver): Boolean =
-        if (action != null && action?.isEnabled?.evaluate(resolver) == true) {
-            true
-        } else if (actions != null && actions?.any { it.isEnabled.evaluate(resolver) } == true) {
-            true
-        } else longtapActions != null && longtapActions?.any { it.isEnabled.evaluate(resolver) } == true
-
-    private fun DivAccessibility.Type.toAccessibilityType(
-        div: DivBase, resolver: ExpressionResolver
-    ): AccessibilityType = when (this) {
+    private fun DivAccessibility.Type.toAccessibilityType(div: DivBase): AccessibilityType {
+        return when (this) {
             DivAccessibility.Type.AUTO -> when {
-                div.accessibility?.mode?.evaluate(resolver) == DivAccessibility.Mode.EXCLUDE -> AccessibilityType.NONE
                 div is DivInput -> AccessibilityType.EDIT_TEXT
                 div is DivText -> AccessibilityType.TEXT
                 div is DivTabs -> AccessibilityType.TAB_WIDGET
                 div is DivSelect -> AccessibilityType.SELECT
                 div is DivSlider -> AccessibilityType.SLIDER
-                div is DivImage && (div.accessibility != null || div.isClickable(resolver))-> AccessibilityType.IMAGE
+                div is DivImage -> AccessibilityType.IMAGE
+                div is DivGifImage -> AccessibilityType.IMAGE
                 div is DivGallery && div.accessibility?.description != null -> AccessibilityType.PAGER
-                div is RadioButton -> AccessibilityType.RADIO_BUTTON
-                div is CheckBox -> AccessibilityType.CHECK_BOX
+                div is DivContainer -> AccessibilityType.CONTAINER
                 else -> AccessibilityType.NONE
             }
             DivAccessibility.Type.NONE -> AccessibilityType.NONE
@@ -216,6 +125,159 @@ internal class DivAccessibilityBinder @Inject constructor(
             DivAccessibility.Type.RADIO -> AccessibilityType.RADIO_BUTTON
             DivAccessibility.Type.CHECKBOX -> AccessibilityType.CHECK_BOX
         }
+    }
+
+    private val AccessibilityType.toClassName: String get() {
+        return when (this) {
+            AccessibilityType.NONE -> ""
+            AccessibilityType.BUTTON -> "android.widget.Button"
+            AccessibilityType.EDIT_TEXT -> "android.widget.EditText"
+            AccessibilityType.HEADER -> ""
+            AccessibilityType.IMAGE -> "android.widget.ImageView"
+            AccessibilityType.LIST -> ""
+            AccessibilityType.PAGER -> "androidx.viewpager.widget.ViewPager"
+            AccessibilityType.SLIDER -> ""
+            AccessibilityType.SELECT -> "android.widget.Spinner"
+            AccessibilityType.TAB_WIDGET -> "android.widget.TabWidget"
+            AccessibilityType.TEXT -> "android.widget.TextView"
+            AccessibilityType.CHECK_BOX -> "android.widget.CheckBox"
+            AccessibilityType.RADIO_BUTTON -> "android.widget.RadioButton"
+            AccessibilityType.CONTAINER -> "android.view.ViewGroup"
+        }
+    }
+
+    // endregion
+
+    // region Description and  Hint
+
+    private fun View.bindDescriptionAndHint(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        val newDescription = newDiv.accessibility?.description
+        val newHint = newDiv.accessibility?.hint
+        if (newDescription.equalsToConstant(oldDiv?.accessibility?.description) &&
+            newHint.equalsToConstant(oldDiv?.accessibility?.hint)) {
+            return
+        }
+
+        applyDescriptionAndHint(newDescription?.evaluate(resolver), newHint?.evaluate(resolver))
+
+        if (newDescription.isConstantOrNull() && newHint.isConstantOrNull()) return
+
+        val callback = { _: Any ->
+            applyDescriptionAndHint(newDescription?.evaluate(resolver), newHint?.evaluate(resolver))
+        }
+        subscriber.addSubscription(newDescription?.observe(resolver, callback))
+        subscriber.addSubscription(newHint?.observe(resolver, callback))
+    }
+
+    private fun View.applyDescriptionAndHint(description: String?, hint: String?) {
+        contentDescription = when {
+            description == null -> hint
+            hint == null -> description
+            else -> "$description\n$hint"
+        }
+    }
+
+    // endregion
+
+    // region Mode
+
+    private fun View.bindMode(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        val newMode = newDiv.accessibility?.mode
+        if (newMode.equalsToConstant(oldDiv?.accessibility?.mode)) return
+
+        applyMode(newMode?.evaluate(resolver))
+
+        if (newMode.isConstantOrNull()) return
+
+        subscriber.addSubscription(newMode?.observe(resolver) { applyMode(it) })
+    }
+
+    private fun View.applyMode(mode: DivAccessibility.Mode? = null) {
+        if (this !is ViewGroup) {
+            importantForAccessibility = when {
+                mode == DivAccessibility.Mode.EXCLUDE -> View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+                !contentDescription.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                else -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+            }
+            return
+        }
+
+        if (this !is DivCollectionHolder) return
+
+        if (mode == DivAccessibility.Mode.MERGE) {
+            updateContainerMode()
+            if (accessibilityObserver != null) return
+
+            val observer = createContentObserver()
+            expressionSubscriber.addSubscription(observer)
+            accessibilityObserver = observer
+            return
+        }
+
+        accessibilityObserver?.close()
+        accessibilityObserver = null
+
+        ViewCompat.setScreenReaderFocusable(this, false)
+        importantForAccessibility = if (mode == DivAccessibility.Mode.EXCLUDE) {
+            View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+        } else {
+            View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+    }
+
+    private fun ViewGroup.createContentObserver() = object : OnLayoutChangeListener, Disposable {
+
+        init {
+            addOnLayoutChangeListener(this)
+        }
+
+        override fun onLayoutChange(
+            v: View?, left: Int, top: Int, right: Int, bottom: Int,
+            oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
+        ) = updateContainerMode()
+
+        override fun close() = removeOnLayoutChangeListener(this)
+    }
+
+    private fun ViewGroup.updateContainerMode() {
+        val hasContent = children.any { it.isVisible }
+        ViewCompat.setScreenReaderFocusable(this, hasContent)
+        importantForAccessibility =
+            if (hasContent) View.IMPORTANT_FOR_ACCESSIBILITY_YES else View.IMPORTANT_FOR_ACCESSIBILITY_NO
+    }
+
+    // endregion
+
+    // region State description
+
+    private fun View.bindStateDescription(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        val newStateDescription = newDiv.accessibility?.stateDescription
+        if (newStateDescription.equalsToConstant(oldDiv?.accessibility?.stateDescription)) return
+
+        applyStateDescription(newStateDescription?.evaluate(resolver))
+
+        if (newStateDescription.isConstantOrNull()) return
+
+        subscriber.addSubscription(newStateDescription?.observe(resolver) { applyStateDescription(it) })
+    }
+
+    private fun View.applyStateDescription(stateDescription: String?) =
+        ViewCompat.setStateDescription(this, stateDescription)
 
     private enum class AccessibilityType {
         NONE,
@@ -231,5 +293,6 @@ internal class DivAccessibilityBinder @Inject constructor(
         TEXT,
         RADIO_BUTTON,
         CHECK_BOX,
+        CONTAINER,
     }
 }
