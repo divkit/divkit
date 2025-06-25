@@ -42,7 +42,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         rootPath: DivStatePath,
         divView: Div2View,
     ) {
-        val rootRuntime = divView.runtimeStore?.rootRuntime ?: return
+        val rootRuntime = divView.runtimeStore.rootRuntime
         rootRuntime.onAttachedToWindow(divView)
 
         visit(
@@ -60,7 +60,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         expressionResolver: ExpressionResolver,
     ) {
-        val runtime = divView.runtimeStore?.getRuntimeWithOrNull(expressionResolver) ?: return
+        val runtime = divView.runtimeStore.getRuntimeWithOrNull(expressionResolver) ?: return
         visitStates(div, divView, path.fullPath, path.getStatesFlat(), runtime)
     }
 
@@ -70,7 +70,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         expressionResolver: ExpressionResolver,
     ) {
-        val runtime = divView.runtimeStore?.getRuntimeWithOrNull(expressionResolver) ?: return
+        val runtime = divView.runtimeStore.getRuntimeWithOrNull(expressionResolver) ?: return
         visitTabs(div, divView, path.fullPath, path.getStatesFlat(), runtime)
     }
 
@@ -113,7 +113,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: String,
         parentRuntime: ExpressionsRuntime
     ): ExpressionsRuntime {
-        return parentRuntime.runtimeStore.getOrCreateRuntime(path, div, parentRuntime.expressionResolver).also {
+        return divView.runtimeStore.getOrCreateRuntime(path, div, parentRuntime.expressionResolver).also {
             it.onAttachedToWindow(divView)
         }
     }
@@ -147,7 +147,7 @@ internal class DivRuntimeVisitor @Inject constructor(
     ) {
         build(runtime.expressionResolver).forEachIndexed { index, item ->
             val childPath = path.appendChild(item.div, index)
-            val childRuntime = runtime.runtimeStore.resolveRuntimeWith(
+            val childRuntime = divView.runtimeStore.resolveRuntimeWith(
                 divView,
                 childPath,
                 item.div,
@@ -245,9 +245,9 @@ internal class DivRuntimeVisitor @Inject constructor(
             return
         }
 
-        val runtime = parentRuntime.runtimeStore.getOrCreateRuntime(path, div, parentRuntime.expressionResolver)
-        runtime.runtimeStore.tree.invokeRecursively(runtime, path) { node ->
-            node.runtime.clearBinding(divView)
+        val runtime = divView.runtimeStore.getOrCreateRuntime(path, div, parentRuntime.expressionResolver)
+        divView.runtimeStore.traverseFrom(runtime, path) {
+            it.clearBinding(divView)
         }
     }
 

@@ -5,6 +5,7 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.view2.BindingContext
@@ -44,6 +45,9 @@ open class DivBinderTest {
 
     internal val context = RuntimeEnvironment.application
     private val oldExpressionResolver = mock<ExpressionResolver>()
+    private val runtimeStore = mock<RuntimeStore> {
+        on { resolveRuntimeWith(any(), any(), any(), any(), any()) } doReturn mock()
+    }
     internal val divView = mock<Div2View> {
         on { div2Component } doReturn mockComponent
         on { divTag } doReturn DivDataTag("id")
@@ -52,6 +56,7 @@ open class DivBinderTest {
         on { config } doReturn mock()
         on { oldExpressionResolver } doReturn oldExpressionResolver
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
+        on { runtimeStore } doReturn runtimeStore
     }
     internal val bindingContext = BindingContext.createEmpty(divView)
     private val divExtensionController = DivExtensionController(emptyList())

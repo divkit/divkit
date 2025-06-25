@@ -261,8 +261,8 @@ internal class DivContainerBinder @Inject constructor(
         val path = div.value().resolvePath(index, parentPath)
 
         val divView = parentContext.divView
-        val childRuntime = parentContext.runtimeStore
-            ?.resolveRuntimeWith(divView, path.fullPath, div, resolver, parentContext.expressionResolver)
+        val childRuntime = divView.runtimeStore
+            .resolveRuntimeWith(divView, path.fullPath, div, resolver, parentContext.expressionResolver)
 
         divBinder.get().bind(parentContext.getFor(resolver), this, div, path)
 

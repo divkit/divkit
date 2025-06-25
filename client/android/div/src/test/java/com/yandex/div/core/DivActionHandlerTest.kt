@@ -42,17 +42,15 @@ class DivActionHandlerTest {
                 configuration = DivConfiguration.Builder(mock()).build(),
                 lifecycleOwner = null
             )
-        )
+        ).apply {
+            setData(
+                DivData(logId = "id", states = listOf(DivData.State(Div.Container(DivContainer()), 0))),
+                DivDataTag("id")
+            )
+        }
     )
 
     private val underTest = DivActionHandler()
-
-    init {
-        divView.setData(
-            DivData(logId = "id", states = listOf(DivData.State(Div.Container(DivContainer()), 0))),
-            DivDataTag("id")
-        )
-    }
 
     @Test
     fun `uri with numeric state is handled`() {

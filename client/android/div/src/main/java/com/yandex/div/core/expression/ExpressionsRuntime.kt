@@ -9,9 +9,6 @@ internal class ExpressionsRuntime(
 ) {
     private var unsubscribed = true
 
-    val variableController = expressionResolver.variableController
-    val runtimeStore = expressionResolver.runtimeStore
-
     fun clearBinding(view: DivViewFacade) {
         triggersController?.clearBinding(view)
     }
@@ -24,7 +21,6 @@ internal class ExpressionsRuntime(
         if (unsubscribed) {
             unsubscribed = false
             expressionResolver.subscribeOnVariables()
-            variableController.restoreSubscriptions()
         }
     }
 
@@ -32,7 +28,7 @@ internal class ExpressionsRuntime(
         if (!unsubscribed) {
             unsubscribed = true
             triggersController?.clearBinding(divView)
-            variableController.cleanupSubscriptions()
+            expressionResolver.variableController.cleanupSubscriptions()
         }
     }
 }

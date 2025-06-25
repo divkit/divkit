@@ -25,14 +25,15 @@ internal abstract class DivCollectionViewHolder(
     private val childrenPaths = mutableMapOf<String, DivStatePath>()
 
     open fun bind(bindingContext: BindingContext, div: Div, index: Int) {
+        val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
 
-        if (viewWrapper.tryRebindRecycleContainerChildren(bindingContext.divView, div)) {
+        if (viewWrapper.tryRebindRecycleContainerChildren(divView, div)) {
             oldDiv = div
             return
         }
 
-        val divView = viewWrapper.child
+        val childView = viewWrapper.child
             ?.takeIf { oldDiv != null }
             ?.takeIf { child ->
                 (child as? DivHolderView<*>)?.bindingContext?.expressionResolver?.let {
@@ -45,16 +46,16 @@ internal abstract class DivCollectionViewHolder(
         val id = div.value().getChildPathUnit(index)
         val childPath = childrenPaths.getOrPut(id) { path.appendDiv(id) }
 
-        bindingContext.runtimeStore?.resolveRuntimeWith(
-            bindingContext.divView,
+        divView.runtimeStore.resolveRuntimeWith(
+            divView,
             childPath.fullPath,
             div,
             resolver,
             parentContext.expressionResolver,
         )
 
-        divBinder.bind(bindingContext, divView, div, childPath)
-        bindingContext.runtimeStore?.showWarningIfNeeded(div.value())
+        divBinder.bind(bindingContext, childView, div, childPath)
+        divView.runtimeStore.showWarningIfNeeded(div.value())
     }
 
     private fun createChildView(bindingContext: BindingContext, div: Div): View {

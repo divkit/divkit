@@ -5,6 +5,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.variables.declare
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
@@ -39,7 +40,7 @@ internal class RuntimeStoreProvider @Inject constructor(
             return it
         }
 
-        return RuntimeStore(data, runtimeProvider, errorCollectors.getOrCreate(tag, data)).also {
+        return RuntimeStoreImpl(data, runtimeProvider, errorCollectors.getOrCreate(tag, data)).also {
             runtimeStores[tag.id] = it
         }
     }
@@ -56,7 +57,7 @@ internal class RuntimeStoreProvider @Inject constructor(
 
     internal fun cleanupRuntime(view: Div2View) {
         divDataTags[view]?.forEach { tag ->
-            runtimeStores[tag]?.cleanup(view)
+            runtimeStores[tag]?.cleanupRuntimes(view)
         }
         divDataTags.remove(view)
     }

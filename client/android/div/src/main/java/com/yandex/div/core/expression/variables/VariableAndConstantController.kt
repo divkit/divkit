@@ -21,9 +21,7 @@ internal class VariableAndConstantController(
     override fun subscribeToVariablesUndeclared(
         names: List<String>,
         observer: (Variable) -> Unit
-    ): Disposable {
-        return delegate.subscribeToVariablesUndeclared(names, observer)
-    }
+    ) = Disposable.NULL
 
     override fun subscribeToVariableChange(
         name: String,
@@ -41,7 +39,7 @@ internal class VariableAndConstantController(
     override fun setOnAnyVariableChangeCallback(owner: ExpressionResolver, callback: (Variable) -> Unit) =
         delegate.setOnAnyVariableChangeCallback(owner, callback)
 
-    override fun cleanupSubscriptions() = delegate.cleanupSubscriptions()
+    override fun cleanupSubscriptions() = Unit
 
-    override fun restoreSubscriptions() = delegate.restoreSubscriptions()
+    override fun restoreSubscriptions() = Unit
 }

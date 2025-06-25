@@ -1,28 +1,29 @@
 package com.yandex.div.core.view2.errors
 
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.TransactionTooLargeException
 import android.view.ViewGroup
+import android.widget.Toast
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.actions.logError
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.PERMANENT_DEBUG_PANEL_ENABLED
 import com.yandex.div.core.experiments.Experiment.VISUAL_ERRORS_ENABLED
+import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
+import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.internal.Assert
 import com.yandex.div.json.ParsingException
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
-import android.content.ClipData
-import android.content.ClipDescription
-import android.content.ClipboardManager
-import android.content.Context
-import android.os.TransactionTooLargeException
-import android.widget.Toast
-import com.yandex.div.core.view2.divs.dpToPx
-import com.yandex.div.internal.Assert
 
 private const val SHOW_LIMIT = 25
 private const val MIN_SIZE_FOR_DETAILS_DP = 150
@@ -175,19 +176,19 @@ internal class ErrorModel(
     }
 
     fun getAllControllers(): Map<String, VariableController> {
-        val runtimeStore = div2View.runtimeStore ?: return emptyMap()
+        val runtimeStore = div2View.runtimeStore
         val pathToRuntimes = runtimeStore.getUniquePathsAndRuntimes()
 
         val result = mutableMapOf<String, VariableController>()
-        runtimeStore.rootRuntime?.let {
-            result[""] = it.variableController
-        }
+        result[""] = runtimeStore.rootRuntime.variableController
 
         pathToRuntimes.forEach { (path, runtime) ->
             result[path] = runtime.variableController
         }
         return result
     }
+
+    private val ExpressionsRuntime.variableController get() = expressionResolver.variableController
 
     fun getErrorHandler(): (Throwable) -> Unit {
         return div2View::logError

@@ -37,8 +37,8 @@ import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.PersistentDivDataObserver
-import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivVideoActionHandler
@@ -139,12 +139,10 @@ class Div2View private constructor(
         get() = viewComponent.releaseViewVisitor
     internal val mediaReleaseViewVisitor: MediaReleaseViewVisitor
         get() = viewComponent.mediaReleaseViewVisitor
-    internal val expressionsRuntime: ExpressionsRuntime?
-        get() = runtimeStore?.rootRuntime
     private var oldRuntimeStore: RuntimeStore? = null
     internal val oldExpressionResolver: ExpressionResolver
-        get() = oldRuntimeStore?.rootRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
-    internal var runtimeStore: RuntimeStore? = null
+        get() = oldRuntimeStore.resolver
+    internal var runtimeStore: RuntimeStore = RuntimeStore.EMPTY
     internal var inMiddleOfBind = false
 
     internal var bindingContext: BindingContext = BindingContext.createEmpty(this)
@@ -225,7 +223,7 @@ class Div2View private constructor(
         data ?: return
         oldRuntimeStore = runtimeStore
         runtimeStore = div2Component.runtimeStoreProvider.getOrCreate(tag, data, this)
-        runtimeStore?.updateSubscriptions()
+        runtimeStore.updateSubscriptions()
         if (oldRuntimeStore != runtimeStore) {
             oldRuntimeStore?.clearBindings(this)
         }
@@ -359,7 +357,6 @@ class Div2View private constructor(
         div2Component.divBinder.attachIndicators()
 
         sendCreationHistograms()
-        oldRuntimeStore = runtimeStore
         notifyBindEnded()
         return result
     }
@@ -419,7 +416,6 @@ class Div2View private constructor(
         }
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
-        oldRuntimeStore = runtimeStore
         notifyBindEnded()
         return result
     }
@@ -1117,8 +1113,11 @@ class Div2View private constructor(
     override fun getView() = this
 
     override fun getExpressionResolver(): ExpressionResolver {
-        return expressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
+        return runtimeStore.resolver
     }
+
+    private val RuntimeStore?.resolver get() =
+        (this as? RuntimeStoreImpl)?.rootRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
     override fun showTooltip(tooltipId: String) {
         tooltipController.showTooltip(tooltipId, bindingContext)
