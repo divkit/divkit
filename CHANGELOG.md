@@ -1,3 +1,25 @@
+## 32.6.0
+
+# Android Client:
+* Allowed to draw shadows defined by `shadow` within transient div hierarchy.
+* Fixed actions inside containers with accessibility mode `merge`.
+* Fixed content voicing in accessibility mode `merge`.
+* Moved to RenderEffect from RenderScript for API 31+.
+
+# iOS Client:
+* Added actions to `div-state`.
+* Changed the phone number mask to avoid the possibility of entering expressions with a hyphen at the end, such as "+1 (900) 000-".
+* Fix states updating inside block with `transition_out`.
+* Fixed backspace behaviour with regex filter.
+* Hid indicator if there is only one item in the pager.
+* `InputPropertiesExtensionHandler` implemented. It allows you to configure the following properties: `enablesReturnKeyAutomatically`, `spellChecking`.
+
+# Web Client:
+* Expressions with the `getIntegerValue`/`getNumberValue`/`getBooleanValue`/`getStringValue`/`getColorValue`/`getUrlValue` functions are now recalculated when changing the variables used in the first argument.
+* Fixed an issue with calculating the `animation_in`/`animation_out` parameters in the `tooltip`.
+* The logic of `variable_triggers` is unified with the work of all other expressions.
+
+
 ## 32.5.0
 
 # Android Client:

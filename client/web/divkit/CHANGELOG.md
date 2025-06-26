@@ -1,3 +1,10 @@
+## 32.6.0 (June 30, 2025)
+
+* Expressions with the `getIntegerValue`/`getNumberValue`/`getBooleanValue`/`getStringValue`/`getColorValue`/`getUrlValue` functions are now recalculated when changing the variables used in the first argument.
+* Fixed an issue with calculating the `animation_in`/`animation_out` parameters in the `tooltip`.
+* The logic of `variable_triggers` is unified with the work of all other expressions.
+
+
 ## 32.4.0 (June 16, 2025)
 
 * Fixed incorrect logic, due to which the `filters` property of the `input` component did not work with an empty value.
