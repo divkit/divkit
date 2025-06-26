@@ -24,6 +24,7 @@ import com.yandex.div.json.ParsingException
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
+import com.yandex.div.DivDataTag
 
 private const val SHOW_LIMIT = 25
 private const val MIN_SIZE_FOR_DETAILS_DP = 150
@@ -77,7 +78,11 @@ internal class ErrorModel(
     private val div2View: Div2View,
     private val visualErrorsEnabled: Boolean
     ) {
+
+    private var dataTag: DivDataTag? = null
+
     fun bind(binding: Binding) {
+            dataTag = binding.tag
             existingSubscription?.close()
             existingSubscription = errorCollectors
                 .getOrCreate(binding.tag, binding.data)
@@ -87,6 +92,7 @@ internal class ErrorModel(
     private val observers = mutableSetOf<(ErrorViewModel) -> Unit>()
     private val currentErrors = mutableListOf<Throwable>()
     private val currentWarnings = mutableListOf<Throwable>()
+    private val logcatErrorDumper = LogcatErrorDumper()
     private var existingSubscription: Disposable? = null
 
     private val updateOnErrors = { errors: List<Throwable>, warnings: List<Throwable> ->
@@ -101,6 +107,7 @@ internal class ErrorModel(
             }
             state = state.copy(errorCount = currentErrors.size, errorDetails = errorsToDetails(currentErrors),
                 warningCount = currentWarnings.size, warningDetails = warningsToDetails(currentWarnings))
+            logcatErrorDumper.logErrors(currentErrors, currentWarnings, dataTag)
         }
     }
 
@@ -130,7 +137,7 @@ internal class ErrorModel(
         }
     }
 
-    fun showDetails() {
+    private fun showDetails() {
         state = state.copy(showDetails = true)
     }
 
@@ -138,7 +145,7 @@ internal class ErrorModel(
         state = state.copy(showDetails = false)
     }
 
-    fun generateReport(dumpCardContent: Boolean = true): String {
+    private fun generateReport(dumpCardContent: Boolean = true): String {
         val results = JSONObject()
 
         if (currentErrors.size > 0) {
