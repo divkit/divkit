@@ -10,6 +10,8 @@ dependencies {
     implementation project(path: ':div')
     implementation project(path: ':div-core')
     implementation(libs.coil.gif)
+    implementation libs.coil.network
+    implementation libs.coil.network.cachecontrol
 
     api libs.coil
     api libs.coil.svg

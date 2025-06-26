@@ -6,37 +6,67 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.widget.ImageView
-import coil.EventListener
-import coil.ImageLoader
-import coil.decode.DataSource
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.decode.SvgDecoder
-import coil.load
-import coil.request.ErrorResult
-import coil.request.ImageRequest
-import coil.request.SuccessResult
+import coil3.EventListener
+import coil3.ImageLoader
+import coil3.annotation.ExperimentalCoilApi
+import coil3.asDrawable
+import coil3.decode.DataSource
+import coil3.decode.Decoder
+import coil3.gif.AnimatedImageDecoder
+import coil3.gif.GifDecoder
+import coil3.load
+import coil3.network.cachecontrol.CacheControlCacheStrategy
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.request.ErrorResult
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.svg.SvgDecoder
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import okhttp3.OkHttpClient
 
-class CoilDivImageLoader(
-    private val context: Context
+class CoilDivImageLoader private constructor(
+    private val context: Context,
+    private val okHttpClientFactory: () -> OkHttpClient
 ) : DivImageLoader {
 
+    constructor(context: Context) : this(context, ::OkHttpClient)
+
+    constructor(
+        context: Context,
+        okHttpClient: OkHttpClient
+    ) : this(context, { okHttpClient.newBuilder().build() })
+
+    constructor(
+        context: Context,
+        okHttpClientBuilder: OkHttpClient.Builder
+    ) : this(context, { okHttpClientBuilder.build() })
+
+    @OptIn(ExperimentalCoilApi::class)
     private val imageLoader = ImageLoader.Builder(context)
         .components {
+            add(
+                OkHttpNetworkFetcherFactory(
+                    callFactory = okHttpClientFactory,
+                    cacheStrategy = { CacheControlCacheStrategy() }
+                )
+            )
             add(SvgDecoder.Factory())
-
-            if (SDK_INT >= Build.VERSION_CODES.P) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
+            add(gifDecoder())
         }
         .build()
+
+    private fun gifDecoder(): Decoder.Factory {
+        return if (SDK_INT >= Build.VERSION_CODES.P) {
+            AnimatedImageDecoder.Factory()
+        } else {
+            GifDecoder.Factory()
+        }
+    }
 
     override fun hasSvgSupport() = true
 
@@ -56,7 +86,7 @@ class CoilDivImageLoader(
         val request = ImageRequest.Builder(context)
             .data(imageUri)
             .allowHardware(false)
-            .listener(BitmapRequestListener(callback, imageUri))
+            .listener(BitmapRequestListener(context, callback, imageUri))
             .build()
 
         val result = imageLoader.enqueue(request)
@@ -75,7 +105,7 @@ class CoilDivImageLoader(
         val request = ImageRequest.Builder(context)
             .data(imageUri)
             .allowHardware(false)
-            .listener(GifRequestListener(callback, imageUri))
+            .listener(GifRequestListener(context, callback))
             .build()
 
         val result = imageLoader.enqueue(request)
@@ -86,11 +116,19 @@ class CoilDivImageLoader(
     }
 
     private class BitmapRequestListener(
+        private val context: Context,
         private val callback: DivImageDownloadCallback,
         private val imageUri: Uri,
-    ): EventListener {
+    ): EventListener() {
         override fun onSuccess(request: ImageRequest, result: SuccessResult) {
-            callback.onSuccess(CachedBitmap((result.drawable as BitmapDrawable).bitmap, imageUri, result.dataSource.toBitmapSource()))
+            val bitmapDrawable = result.image.asDrawable(context.resources) as BitmapDrawable
+            callback.onSuccess(
+                CachedBitmap(
+                    bitmapDrawable.bitmap,
+                    imageUri,
+                    result.dataSource.toBitmapSource()
+                )
+            )
         }
 
         override fun onError(request: ImageRequest, result: ErrorResult) {
@@ -99,11 +137,11 @@ class CoilDivImageLoader(
     }
 
     private class GifRequestListener(
+        private val context: Context,
         private val callback: DivImageDownloadCallback,
-        private val imageUri: Uri,
-    ): EventListener {
+    ): EventListener() {
         override fun onSuccess(request: ImageRequest, result: SuccessResult) {
-            callback.onSuccess(result.drawable)
+            callback.onSuccess(result.image.asDrawable(context.resources))
         }
 
         override fun onError(request: ImageRequest, result: ErrorResult) {

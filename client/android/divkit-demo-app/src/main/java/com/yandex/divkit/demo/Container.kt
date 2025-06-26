@@ -23,9 +23,7 @@ import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.connectivityManager
-import com.yandex.divkit.regression.di.RegressionComponent
 import com.yandex.divkit.regression.di.`Yatagan$RegressionComponent`
-import com.yandex.yatagan.Yatagan
 import kotlinx.coroutines.MainScope
 import okhttp3.OkHttpClient
 import okhttp3.internal.http2.Header
@@ -88,7 +86,7 @@ internal object Container {
         when (preferences.imageLoader) {
             Preferences.ImageLoaderOption.PICASSO -> PicassoDivImageLoader(context, httpClientBuilder)
             Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context)
-            Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context)
+            Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context, httpClientBuilder)
         }
     }
 
