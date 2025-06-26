@@ -13,7 +13,7 @@
       "$description": "translations.json#/div_action_update_structure_variable_name"
     },
     "path": {
-      "type": "string",
+      "$ref": "common.json#/non_empty_string",
       "$description": "translations.json#/div_action_update_structure_path"
     },
     "value": {

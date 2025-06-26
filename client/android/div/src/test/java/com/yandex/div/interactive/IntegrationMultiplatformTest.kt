@@ -5,6 +5,7 @@ import android.widget.ImageView
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
+import com.yandex.div.core.actions.observeErrors
 import com.yandex.div.core.expression.ExpressionTestCaseUtils
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_ARRAY
 import com.yandex.div.core.expression.ExpressionTestCaseUtils.VALUE_TYPE_DICT
@@ -44,6 +45,13 @@ class IntegrationMultiplatformTest(testCase: TestCaseOrError<IntegrationTestCase
 
         val divView = Div2View(context)
         divView.setData(case.divData, DivDataTag(UUID.randomUUID().toString()))
+        divView.observeErrors { errors, _ ->
+            errors.forEach { error ->
+                if (error is Exception) {
+                    logger.logErrorDirectly(error)
+                }
+            }
+        }
 
         case.actions?.forEach {
             divView.handleAction(it)
