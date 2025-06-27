@@ -29,7 +29,7 @@ extension DivText: DivBlockModeling {
     let expressionResolver = context.expressionResolver
 
     let fontParams = resolveFontParams(expressionResolver)
-    var typo = Typo(font: context.font(fontParams)).allowHeightOverrun
+    var typo = Typo(font: context.font(fontParams))
 
     let alignment = resolveTextAlignmentHorizontal(expressionResolver)
       .makeTextAlignment(uiLayoutDirection: context.layoutDirection)

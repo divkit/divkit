@@ -36,7 +36,7 @@ extension DivInput: DivBlockModeling {
     let expressionResolver = context.expressionResolver
 
     let font = context.font(resolveFontParams(expressionResolver))
-    var typo = Typo(font: font).allowHeightOverrun
+    var typo = Typo(font: font)
 
     let kern = CGFloat(resolveLetterSpacing(expressionResolver))
     if !kern.isApproximatelyEqualTo(0) {
