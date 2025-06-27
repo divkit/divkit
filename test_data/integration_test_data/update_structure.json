@@ -84,7 +84,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -120,7 +122,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -161,7 +165,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -202,7 +208,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -242,7 +250,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -282,7 +292,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -318,7 +330,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -355,7 +369,85 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_2_dict_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict//level_2_dict////int_value",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 10
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_level_1_array_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_array////0",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                10
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -395,12 +487,14 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
         {
-          "log_id": "dict_var_update_failed_malformed_path",
+          "log_id": "dict_var_update_failed_effectively_empty_path",
           "typed": {
             "type": "update_structure",
             "variable_name": "dict_var",
@@ -415,7 +509,7 @@
       "expected": [
         {
           "type": "error",
-          "value": "Malformed path '////': all path segments are empty"
+          "value": "Value '////' for key 'path' is not valid"
         },
         {
           "type": "variable",
@@ -435,7 +529,93 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_path_starts_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "/level_1_dict/level_2_dict/int_value",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '/level_1_dict/level_2_dict/int_value' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "dict_var_update_failed_path_ends_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "dict_var",
+            "path": "level_1_dict/level_2_dict/int_value/",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value 'level_1_dict/level_2_dict/int_value/' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
+            "value": {
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -475,7 +655,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -515,7 +697,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -555,7 +739,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -591,7 +777,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -627,7 +815,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -668,7 +858,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -709,7 +901,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -749,7 +943,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -789,7 +985,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -825,7 +1023,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -862,7 +1062,85 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_2_array_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0//0////0",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  10
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_level_1_dict_item_updated_multiple_slash_reduced",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "1////int_value",
+            "value": {
+              "type": "integer",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 10
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -902,12 +1180,14 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
         {
-          "log_id": "array_var_update_failed_malformed_path",
+          "log_id": "array_var_update_failed_effectively_empty_path",
           "typed": {
             "type": "update_structure",
             "variable_name": "array_var",
@@ -922,7 +1202,7 @@
       "expected": [
         {
           "type": "error",
-          "value": "Malformed path '////': all path segments are empty"
+          "value": "Value '////' for key 'path' is not valid"
         },
         {
           "type": "variable",
@@ -942,7 +1222,93 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_path_starts_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "/0/0/0",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '/0/0/0' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "array_var_update_failed_path_ends_with_slash",
+          "typed": {
+            "type": "update_structure",
+            "variable_name": "array_var",
+            "path": "0/0/0/",
+            "value": {
+              "type": "string",
+              "value": "failed"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Value '0/0/0/' for key 'path' is not valid"
+        },
+        {
+          "type": "variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -982,7 +1348,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -1022,7 +1390,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -1062,7 +1432,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "div_actions": [
@@ -1093,7 +1465,9 @@
           }
         }
       ],
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

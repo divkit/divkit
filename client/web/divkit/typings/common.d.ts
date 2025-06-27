@@ -362,10 +362,18 @@ export interface ActionScrollTo {
     destination: ActionScrollToDestination;
 }
 
+export interface ActionUpdateStructure {
+    type: 'update_structure';
+    variable_name: string;
+    path: string;
+    value: TypedValue;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
-    ActionVideo | ActionStore | ActionSetState | ActionSubmit | ActionScrollBy | ActionScrollTo;
+    ActionVideo | ActionStore | ActionSetState | ActionSubmit | ActionScrollBy | ActionScrollTo |
+    ActionUpdateStructure;
 
 export interface ActionBase {
     log_id: string;

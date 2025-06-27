@@ -96,6 +96,7 @@
     import { createAnimator, type AnimatorInstance } from '../utils/animators';
     import { getStateContext, getTooltipContext } from '../utils/componentUtils';
     import { checkSubmitAction } from '../utils/checkSubmitAction';
+    import { updateStructure } from '../actions/updateStructure';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -1415,6 +1416,10 @@
                 }
                 case 'scroll_by': {
                     callScrollBy(componentContext, actionTyped);
+                    break;
+                }
+                case 'update_structure': {
+                    updateStructure(componentContext, variables, log, actionTyped);
                     break;
                 }
                 default: {

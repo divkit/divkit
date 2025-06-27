@@ -67,7 +67,7 @@ export default defineConfig(({ isSsrBuild, mode }) => {
     return {
         plugins,
         define: {
-            'process.env.DEVTOOL': JSON.stringify(DEVTOOL),
+            'process.env.DEVTOOL': JSON.stringify(DEVTOOL || !isProd),
             'process.env.IS_PROD': JSON.stringify(isProd),
             'process.env.ENABLE_EXPRESSIONS': JSON.stringify(true)
         },

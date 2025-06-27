@@ -122,7 +122,7 @@ function createIntegrationTestCase(testCase, testPath) {
 
                 for (let j = 0; j < expectErrors.length; ++j) {
                     let expected = expectErrors[j];
-                    let str = errors[j].additionalMessage;
+                    let str = errors[j].additionalMessage || errors[j].message;
 
                     if (errors[j].expression) {
                         str += ' Expression: ' + errors[j].expression.replace(/\\/g, '\\\\');
