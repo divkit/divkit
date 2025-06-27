@@ -85,7 +85,7 @@ extension DivSlider: DivBlockModeling {
     let minValue = resolveMinValue(expressionResolver)
     let maxValue = resolveMaxValue(expressionResolver)
 
-    let marksConfiguration = MarksConfiguration(
+    let marksConfiguration = MarksConfigurationModel(
       minValue: CGFloat(minValue),
       maxValue: CGFloat(maxValue),
       activeMark: activeMark ?? .empty,
@@ -210,7 +210,7 @@ private func makeThumbBlock(
 private func makeRoundedRectangle(
   with mark: DivDrawable?,
   resolver: ExpressionResolver
-) -> MarksConfiguration
+) -> MarksConfigurationModel
   .RoundedRectangle? {
   guard let mark,
         let divShapeDrawable = mark.value as? DivShapeDrawable else {
@@ -222,7 +222,7 @@ private func makeRoundedRectangle(
   let borderColor = divShapeDrawable.stroke?.resolveColor(resolver) ?? .clear
   switch divShapeDrawable.shape {
   case let .divRoundedRectangleShape(shape):
-    return MarksConfiguration.RoundedRectangle(
+    return MarksConfigurationModel.RoundedRectangle(
       size: CGSize(
         width: shape.itemWidth.resolveValue(resolver) ?? 0,
         height: shape.itemHeight.resolveValue(resolver) ?? 0
@@ -235,7 +235,7 @@ private func makeRoundedRectangle(
   case let .divCircleShape(shape):
     let cornerRadius = CGFloat(shape.radius.resolveValue(resolver) ?? 0)
     let sideSize = cornerRadius * 2
-    return MarksConfiguration.RoundedRectangle(
+    return MarksConfigurationModel.RoundedRectangle(
       size: CGSize(squareDimension: sideSize),
       cornerRadius: cornerRadius,
       color: color,

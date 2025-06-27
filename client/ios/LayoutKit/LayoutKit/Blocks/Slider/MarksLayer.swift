@@ -4,11 +4,27 @@ final class MarksLayer: CALayer {
   var firstThumbProgress: CGFloat = 0
   var secondThumbProgress: CGFloat = 0
   var configuration = MarksConfiguration.empty
+  
+  private var maxValue: CGFloat {
+    configuration.modelConfiguration.maxValue
+  }
+  
+  private var minValue: CGFloat {
+    configuration.modelConfiguration.minValue
+  }
+  
+  private var activeMark: MarksConfigurationModel.RoundedRectangle {
+    configuration.modelConfiguration.activeMark
+  }
+  
+  private var inactiveMark: MarksConfigurationModel.RoundedRectangle {
+    configuration.modelConfiguration.inactiveMark
+  }
 
   override func draw(in ctx: CGContext) {
     configureMarks(in: ctx)
 
-    if configuration.layoutDirection == .rightToLeft {
+    if configuration.modelConfiguration.layoutDirection == .rightToLeft {
       self.transform = CATransform3DMakeScale(-1, 1, 1)
     } else {
       self.transform = CATransform3DMakeScale(1, 1, 1)
@@ -18,30 +34,30 @@ final class MarksLayer: CALayer {
   private func configureMarks(in ctx: CGContext) {
     let leftThumb = min(firstThumbProgress, secondThumbProgress).ceiled()
     let rightThumb = max(firstThumbProgress, secondThumbProgress).floored()
-    if secondThumbProgress == configuration.minValue {
+    if secondThumbProgress == minValue {
       makeMarks(
         from: 0,
-        to: rightThumb - configuration.minValue,
+        to: rightThumb - minValue,
         style: .active,
         in: ctx
       )
     } else {
       makeMarks(
         from: 0,
-        to: leftThumb - 1 - configuration.minValue,
+        to: leftThumb - 1 - minValue,
         style: .inactive,
         in: ctx
       )
       makeMarks(
-        from: leftThumb - configuration.minValue,
-        to: rightThumb - configuration.minValue,
+        from: leftThumb - minValue,
+        to: rightThumb - minValue,
         style: .active,
         in: ctx
       )
     }
     makeMarks(
-      from: rightThumb + 1 - configuration.minValue,
-      to: configuration.maxValue - configuration.minValue,
+      from: rightThumb + 1 - minValue,
+      to: maxValue - minValue,
       style: .inactive,
       in: ctx
     )
@@ -54,23 +70,21 @@ final class MarksLayer: CALayer {
     in ctx: CGContext
   ) {
     guard startIndex <= endIndex else { return }
-    let spaceWidth = (bounds.width - configuration.horizontalInset) /
-      (configuration.maxValue - configuration.minValue)
-    let markHeight = style == .active ? configuration.activeMark.size.height : configuration
-      .inactiveMark.size.height
+    let spaceWidth = (bounds.width - configuration.horizontalInset) / (maxValue - minValue)
+    let markHeight = style == .active ? activeMark.size.height : inactiveMark.size.height
     let xActiveOrigin = spaceWidth * startIndex
-      .floored() + (configuration.horizontalInset - configuration.activeMark.size.width) / 2
+      .floored() + (configuration.horizontalInset - activeMark.size.width) / 2
     let xInactiveOrigin = spaceWidth * startIndex
-      .floored() + (configuration.horizontalInset - configuration.inactiveMark.size.width) / 2
+      .floored() + (configuration.horizontalInset - inactiveMark.size.width) / 2
     let yOrigin = bounds.midY - markHeight / 2
     var activeOrigin = CGPoint(x: xActiveOrigin, y: yOrigin)
     var inactiveOrigin = CGPoint(x: xInactiveOrigin, y: yOrigin)
-    for _ in Int(startIndex - configuration.minValue)...Int(endIndex - configuration.minValue) {
+    for _ in Int(startIndex - minValue)...Int(endIndex - minValue) {
       switch style {
       case .active:
-        configuration.activeMark.render(in: ctx, with: activeOrigin)
+        activeMark.render(in: ctx, with: activeOrigin)
       case .inactive:
-        configuration.inactiveMark.render(in: ctx, with: inactiveOrigin)
+        inactiveMark.render(in: ctx, with: inactiveOrigin)
       }
       activeOrigin.x += spaceWidth
       inactiveOrigin.x += spaceWidth
@@ -96,7 +110,7 @@ final class MarksLayer: CALayer {
   }
 }
 
-extension MarksConfiguration.RoundedRectangle {
+extension MarksConfigurationModel.RoundedRectangle {
   fileprivate func render(in ctx: CGContext, with origin: CGPoint = CGPoint(x: 0, y: 0)) {
     let rect = CGRect(origin: origin, size: size).insetBy(dx: borderWidth / 4, dy: borderWidth / 4)
     let radius = min(cornerRadius, rect.height / 2, rect.width / 2)

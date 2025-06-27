@@ -95,20 +95,28 @@ public struct SliderModel: Equatable {
 
   public let minValue: Int
   public let maxValue: Int
-  public let marksConfiguration: MarksConfiguration
   public let ranges: [RangeModel]
   public let layoutDirection: UserInterfaceLayoutDirection
   public let path: UIElementPath?
   public let isEnabled: Bool
+    
+  public var marksConfiguration: MarksConfiguration {
+    MarksConfiguration(
+      modelConfiguration: marksModelConfiguration,
+      horizontalInset: horizontalInset
+    )
+  }
 
   public var valueRange: Int {
     maxValue - minValue
   }
+  
+  private let marksModelConfiguration: MarksConfigurationModel
 
   public var sliderHeight: CGFloat {
     max(
-      marksConfiguration.activeMark.size.height,
-      marksConfiguration.inactiveMark.size.height,
+      marksModelConfiguration.activeMark.size.height,
+      marksModelConfiguration.inactiveMark.size.height,
       firstThumb.size.height,
       secondThumb?.size.height ?? 0,
       ranges.map { max(
@@ -120,8 +128,8 @@ public struct SliderModel: Equatable {
 
   public var sliderIntrinsicWidth: CGFloat {
     let maxMarkWidth = max(
-      marksConfiguration.activeMark.size.width,
-      marksConfiguration.inactiveMark.size.width
+      marksModelConfiguration.activeMark.size.width,
+      marksModelConfiguration.inactiveMark.size.width
     )
     let maxThumbWidth = max(firstThumb.size.width, secondThumb?.size.width ?? 0)
     return CGFloat(maxValue - minValue + 1) * maxMarkWidth + max(0, maxThumbWidth - maxMarkWidth)
@@ -137,8 +145,8 @@ public struct SliderModel: Equatable {
 
   public var horizontalInset: CGFloat {
     max(
-      marksConfiguration.activeMark.size.width,
-      marksConfiguration.inactiveMark.size.width,
+      marksModelConfiguration.activeMark.size.width,
+      marksModelConfiguration.inactiveMark.size.width,
       firstThumb.size.width,
       secondThumb?.size.width ?? 0
     )
@@ -149,7 +157,7 @@ public struct SliderModel: Equatable {
     secondThumb: ThumbModel? = nil,
     minValue: Int,
     maxValue: Int,
-    marksConfiguration: MarksConfiguration,
+    marksConfiguration: MarksConfigurationModel,
     ranges: [RangeModel],
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     path: UIElementPath? = nil,
@@ -159,7 +167,7 @@ public struct SliderModel: Equatable {
     self.secondThumb = secondThumb
     self.minValue = minValue
     self.maxValue = maxValue
-    self.marksConfiguration = marksConfiguration
+    self.marksModelConfiguration = marksConfiguration
     self.ranges = ranges
     self.layoutDirection = layoutDirection
     self.path = path

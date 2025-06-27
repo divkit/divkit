@@ -274,7 +274,6 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       thumbModel: sliderModel.secondThumb
     )
 
-    marksView.configuration.horizontalInset = sliderModel.horizontalInset
     configureSliderView(marksView)
 
     configureSliderView(inactiveTrackView, with: sliderModel.horizontalInset)
