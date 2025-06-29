@@ -193,7 +193,15 @@ public final class DivTriggersStorage {
   ) {
     guard active else { return }
     for trigger in triggers {
-      let triggerVariablesNames = trigger.divTrigger.condition.variablesNames
+      let expressionResolver = ExpressionResolver(
+        path: path,
+        variablesStorage: variablesStorage,
+        functionsStorage: functionsStorage,
+        persistentValuesStorage: persistentValuesStorage,
+        reporter: reporter
+      )
+
+      let triggerVariablesNames = trigger.divTrigger.condition.getVariablesNames(expressionResolver)
       if triggerVariablesNames.isEmpty {
         // conditions without variables is considered to be invalid
         continue
@@ -204,13 +212,6 @@ public final class DivTriggersStorage {
       }
 
       let oldCondition = trigger.condition ?? false
-      let expressionResolver = ExpressionResolver(
-        path: path,
-        variablesStorage: variablesStorage,
-        functionsStorage: functionsStorage,
-        persistentValuesStorage: persistentValuesStorage,
-        reporter: reporter
-      )
       let newCondition = trigger.divTrigger.resolveCondition(expressionResolver) ?? false
       trigger.condition = newCondition
       if !newCondition {
@@ -256,12 +257,14 @@ public final class DivTriggersStorage {
 }
 
 extension Expression {
-  fileprivate var variablesNames: Set<DivVariableName> {
+  fileprivate func getVariablesNames(_ resolver: ExpressionResolver) -> Set<DivVariableName> {
     switch self {
     case let .link(link):
-      Set(link.variablesNames.map(DivVariableName.init(rawValue:)))
+      let dynamicNames = Set(resolver.extractDynamicVariables(link).map(DivVariableName.init(rawValue:)))
+      let staticNames = Set(link.variablesNames.map(DivVariableName.init(rawValue:)))
+      return staticNames.union(dynamicNames)
     case .value:
-      []
+      return []
     }
   }
 }

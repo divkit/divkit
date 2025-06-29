@@ -59,6 +59,11 @@ final class FunctionsProvider {
         }
       }
     }
+
+  lazy var dynamicVariablesEvaluator: ((CalcExpression.Symbol) -> Function?) = { symbol in
+    guard getValueFunctions.contains(symbol.name) else { return nil }
+    return DynamicVariablesEvaluator()
+  }
 }
 
 private struct CustomFunctionEvaluator: Function {
@@ -160,6 +165,15 @@ private struct FunctionEvaluator: Function {
   }
 }
 
+private struct DynamicVariablesEvaluator: Function {
+  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
+    guard let arg = args.first else {
+      throw ExpressionError("There is no arguments in getValueFunction")
+    }
+    return arg
+  }
+}
+
 private let staticFunctions: [String: Function] = {
   var functions: [String: Function] = [:]
   MathFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
@@ -200,3 +214,12 @@ extension [String: Function] {
     }
   }
 }
+
+private let getValueFunctions = [
+  "getBooleanValue",
+  "getColorValue",
+  "getIntegerValue",
+  "getNumberValue",
+  "getStringValue",
+  "getUrlValue"
+]

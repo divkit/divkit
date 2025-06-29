@@ -50,6 +50,10 @@ struct CalcExpression {
       return nil
     }
   }
+  
+  func extractDynamicVariableNames(_ context: ExpressionContext) throws -> [String] {
+    try root.extractDynamicVariableNames(context)
+  }
 
   func evaluate(_ context: ExpressionContext) throws -> Any {
     try root.evaluate(context)
@@ -96,6 +100,25 @@ enum Subexpression {
         symbols.formUnion(subexpression.symbols)
       }
       return symbols
+    }
+  }
+
+  func extractDynamicVariableNames(_ context: ExpressionContext) throws -> [String] {
+    switch self {
+    case .literal:
+      return []
+    case let .symbol(symbol, subexpressions):
+      var dynamicVariables = [String]()
+      if let variableName = try? context.dynamicVariablesEvaluator(symbol)?.invoke(
+        args: subexpressions,
+        context: context
+      ) as? String {
+        dynamicVariables.append(variableName)
+      }
+      for subexpression in subexpressions {
+        dynamicVariables.append(contentsOf: try subexpression.extractDynamicVariableNames(context))
+      }
+      return dynamicVariables
     }
   }
 }

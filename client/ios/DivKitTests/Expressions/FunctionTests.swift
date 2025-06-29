@@ -6,6 +6,7 @@ final class FunctionTests: XCTestCase {
     evaluators: { _ in nil },
     variableValueProvider: { _ in nil },
     customFunctionsStorageProvider: { _ in nil },
+    dynamicVariablesEvaluator: { _ in nil },
     errorTracker: { _ in }
   )
 

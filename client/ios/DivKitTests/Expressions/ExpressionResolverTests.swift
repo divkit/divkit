@@ -18,6 +18,7 @@ final class ExpressionResolverTests: XCTestCase {
     "number_var": .number(12.9),
     "string_var": .string("string value"),
     "url_var": .url(url("https://some.url")),
+    "string_var_name": .string("string_var"),
   ]
 
   private lazy var expressionResolver = ExpressionResolver(
@@ -453,6 +454,105 @@ final class ExpressionResolverTests: XCTestCase {
     XCTAssertEqual(
       error,
       "Failed to validate value: true. Expression: @{'@{string_var}' == string_var}"
+    )
+  }
+
+  func test_extractDynamicVariables_WithGetStringValue() {
+    let expression = "@{getStringValue('var_' + string_var, '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["var_string value"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithGetIntegerValue() {
+    let expression = "@{getIntegerValue('var_' + string_var, '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["var_string value"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithGetNumberValue() {
+    let expression = "@{getNumberValue('var_' + string_var, '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["var_string value"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithGetBooleanValue() {
+    let expression = "@{getBooleanValue('var_' + string_var, '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["var_string value"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithGetColorValue() {
+    let expression = "@{getColorValue('var_' + string_var, '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["var_string value"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithGetUrlValue() {
+    let expression = "@{getUrlValue('var_' + string_var, '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["var_string value"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithNestedGetValueFunctions() {
+    let expression = "@{getStringValue('outer_var_' + getStringValue(string_var_name, ''), '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["outer_var_string value", "string_var"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithNestedGetValueFunctionsAndUnknownVars() {
+    let expression = "@{getStringValue('outer_var_' + getStringValue('inner_var_' + string_var, ''), '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["outer_var_", "inner_var_string value"]
+    )
+  }
+
+  func test_extractDynamicVariables_WithGetValueFunctionsWithFallbackValue() {
+    let expression = "@{getStringValue('outer_var_' + getStringValue('inner_var_' + string_var, 'value'), '')}"
+
+    XCTAssertEqual(
+      expressionResolver.extractDynamicVariables(
+        ExpressionLink<String>(rawValue: expression)!
+      ),
+      ["outer_var_value", "inner_var_string value"]
     )
   }
 }

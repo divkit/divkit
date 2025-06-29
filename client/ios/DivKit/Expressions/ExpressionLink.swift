@@ -84,6 +84,21 @@ public struct ExpressionLink<T: Sendable>: Sendable {
     self.rawValue = rawValue
     self.validator = validator
   }
+  
+  func extractDynamicVariableNames(_ context: ExpressionContext) -> [String] {
+    items.flatMap { item in
+      switch item {
+      case let .calcExpression(expression):
+        if let variables = try? expression.extractDynamicVariableNames(context) {
+          return variables
+        }
+        return []
+      case let .nestedExpression(nestedLink):
+        return nestedLink.extractDynamicVariableNames(context)
+      case .string: return []
+      }
+    }
+  }
 }
 
 private let expressionPrefix = "@{"

@@ -14,6 +14,7 @@ public final class ExpressionResolver {
     evaluators: functionsProvider.evaluators,
     variableValueProvider: variableValueProvider,
     customFunctionsStorageProvider: customFunctionsStorageProvider,
+    dynamicVariablesEvaluator: functionsProvider.dynamicVariablesEvaluator,
     errorTracker: errorTracker
   )
 
@@ -131,6 +132,10 @@ public final class ExpressionResolver {
 
   func resolveDict(_ expression: Expression<[String: Any]>?) -> [String: Any]? {
     resolveNumeric(expression)
+  }
+
+  func extractDynamicVariables<T>(_ link: ExpressionLink<T>) -> [String] {
+    link.extractDynamicVariableNames(context)
   }
 
   private func resolveAnyLink(_ link: ExpressionLink<Any>) -> Any? {

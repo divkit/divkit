@@ -8,15 +8,10 @@ final class IntegrationTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
     makeSuite(input: makeTestCases()) { data in
       let expectation = XCTestExpectation(description: "Async operation completed")
-      let reporter = MockReporter()
-      let divkitComponents = DivKitComponents(reporter: reporter)
 
-      Task {
-        await createDivView(data.divData, components: divkitComponents)
-        Task { @MainActor in
-          runTest(data, divkitComponents: divkitComponents, reporter: reporter)
-          expectation.fulfill()
-        }
+      Task { @MainActor in
+        await runTest(data)
+        expectation.fulfill()
       }
       XCTWaiter().wait(for: [expectation])
     }
@@ -35,30 +30,12 @@ private func makeTestCases() -> [(String, IntegrationTestData)] {
   }
 }
 
-private func createDivView(_ divData: DivData, components: DivKitComponents) async {
-  let divView = await DivView(divKitComponents: components)
-  await divView.setSource(DivViewSource(kind: .divData(divData), cardId: cardId))
-}
-
-private func runTest(
-  _ testData: IntegrationTestData,
-  divkitComponents: DivKitComponents,
-  reporter: MockReporter
-) {
-  testData.cases.filter { $0.platforms.contains(.ios) }.forEach { testCase in
-    testCase.expected.forEach {
-      switch $0 {
-      case let .variable(variableName, variable):
-        if let variable = variable.divVariableValue {
-          divkitComponents.variablesStorage.createDefaultVariable(
-            path: cardId.path,
-            name: DivVariableName(rawValue: variableName),
-            value: variable
-          )
-        }
-      case .error: break
-      }
-    }
+@MainActor
+private func runTest(_ testData: IntegrationTestData) async {
+  for testCase in testData.cases.filter({ $0.platforms.contains(.ios) }) {
+    let reporter = MockReporter()
+    let divkitComponents = createDivKitComponents(testCase: testCase, reporter: reporter)
+    await setSource(testData.divData, components: divkitComponents)
 
     testCase.divActions?.forEach {
       divkitComponents.actionHandler.handle(
@@ -89,6 +66,27 @@ private func runTest(
     }
     XCTAssertEqual(expectedErrors, reporter.errorMessages)
   }
+}
+
+private func createDivKitComponents(
+  testCase: IntegrationTestCase,
+  reporter: DivReporter
+) -> DivKitComponents {
+  let globalStorage = DivVariableStorage()
+  globalStorage.put(
+    testCase.expected.makeDefaultVariables(),
+    notifyObservers: false
+  )
+  return DivKitComponents(
+    reporter: reporter,
+    variablesStorage: DivVariablesStorage(outerStorage: globalStorage)
+  )
+}
+
+@MainActor
+private func setSource(_ divData: DivData, components: DivKitComponents) async {
+  let divView = DivView(divKitComponents: components)
+  await divView.setSource(DivViewSource(kind: .divData(divData), cardId: cardId))
 }
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
@@ -168,58 +166,6 @@ private enum Expected: Decodable {
   }
 }
 
-extension ExpectedValue {
-  fileprivate var divVariableValue: DivVariableValue? {
-    switch self {
-    case let .string(value):
-      return .string(value)
-    case let .double(value):
-      return .number(value)
-    case let .integer(value):
-      return .integer(value)
-    case let .bool(value):
-      return .bool(value)
-    case let .color(value):
-      return .color(value)
-    case let .datetime(value):
-      return .string(value.formatString)
-    case let .array(value):
-      return .array(value)
-    case let .dict(value):
-      return .dict(value)
-    case .error: return nil
-    }
-  }
-}
-
-extension DivVariablesStorage {
-  fileprivate func createDefaultVariable(
-    path: UIElementPath,
-    name: DivVariableName,
-    value: DivVariableValue
-  ) {
-    let defaultValue: DivVariableValue = switch value {
-    case .string:
-      .string("")
-    case .integer:
-      .integer(0)
-    case .number:
-      .number(0.0)
-    case .bool:
-      .bool(false)
-    case .color:
-      .color(.black)
-    case .url:
-      .url(url("empty://"))
-    case .array:
-      .array([])
-    case .dict:
-      .dict([:])
-    }
-    append(variables: [name: defaultValue], for: path.cardId, replaceExisting: false)
-  }
-}
-
 extension DivAction: Swift.Decodable {
   public convenience init(from decoder: Decoder) throws {
     let action = try DivTemplates(dictionary: [:]).parseValue(
@@ -258,6 +204,69 @@ extension DivData: Swift.Decodable {
       variableTriggers: divData.variableTriggers,
       variables: divData.variables
     )
+  }
+}
+
+extension ExpectedValue {
+  fileprivate var divVariableValue: DivVariableValue? {
+    switch self {
+    case let .string(value):
+      return .string(value)
+    case let .double(value):
+      return .number(value)
+    case let .integer(value):
+      return .integer(value)
+    case let .bool(value):
+      return .bool(value)
+    case let .color(value):
+      return .color(value)
+    case let .url(value):
+      return .url(value)
+    case let .datetime(value):
+      return .string(value.formatString)
+    case let .array(value):
+      return .array(value)
+    case let .dict(value):
+      return .dict(value)
+    case .error: return nil
+    }
+  }
+}
+
+extension [Expected] {
+  fileprivate func makeDefaultVariables() -> DivVariables {
+    reduce(into: DivVariables()) {
+      switch $1 {
+      case let .variable(name, value):
+        if let defaultValue = makeDefault(value) {
+          $0[DivVariableName(rawValue: name)] = defaultValue
+        }
+      case .error: break
+      }
+    }
+  }
+}
+
+private func makeDefault(_ value: ExpectedValue) -> DivVariableValue? {
+  switch value {
+  case .string, .datetime:
+    .string("")
+  case .integer:
+    .integer(0)
+  case .double:
+    .number(0.0)
+  case .bool:
+    .bool(false)
+  case .color:
+    .color(.black)
+  case .url:
+      .url(URL(string: "empty://")!)
+  case .array:
+    .array([])
+  case .dict:
+    .dict([:])
+  case .error:
+    nil
   }
 }
 

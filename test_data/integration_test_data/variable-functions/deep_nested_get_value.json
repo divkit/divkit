@@ -117,6 +117,7 @@
       ],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     }

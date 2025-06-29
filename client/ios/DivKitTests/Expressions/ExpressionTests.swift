@@ -41,6 +41,8 @@ private func runTest(_ testCase: ExpressionTestCase) {
     XCTAssertEqual(testCase.resolveColor(), expectedValue)
   case let .datetime(expectedValue):
     XCTAssertEqual(testCase.resolveNumeric(), expectedValue)
+  case let .url(expectedValue):
+    XCTAssertEqual(testCase.resolveUrl(), expectedValue)
   case let .array(expectedValue):
     XCTAssertEqual(testCase.resolveArray(), expectedValue)
   case let .dict(expectedValue):
@@ -123,6 +125,10 @@ private struct ExpressionTestCase: Decodable {
     makeExpressionResolver().resolveNumeric(link(expression))
   }
 
+  func resolveUrl() -> URL? {
+    makeExpressionResolver().resolveUrl(link(expression))
+  }
+
   func resolveColor() -> Color? {
     makeExpressionResolver().resolveColor(link(expression))
   }
@@ -166,6 +172,7 @@ enum ExpectedValue: Decodable {
   case bool(Bool)
   case color(Color)
   case datetime(Date)
+  case url(URL)
   case array(DivArray)
   case dict(DivDictionary)
   case error(String)
@@ -190,8 +197,8 @@ enum ExpectedValue: Decodable {
       let value = try container.decode(String.self, forKey: .value)
       self = .color(Color.color(withHexString: value)!)
     case "url":
-      let value = try container.decode(String.self, forKey: .value)
-      self = .string(value)
+      let value = try container.decode(URL.self, forKey: .value)
+      self = .url(value)
     case "datetime":
       let value = try container.decode(String.self, forKey: .value)
       self = .datetime(value.toDate()!)
@@ -236,6 +243,8 @@ enum ExpectedValue: Decodable {
     case let .color(value):
       formatArgForError(value)
     case let .datetime(value):
+      formatArgForError(value)
+    case let .url(value):
       formatArgForError(value)
     case let .array(value):
       formatArgForError(value)

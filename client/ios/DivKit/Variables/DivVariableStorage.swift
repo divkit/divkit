@@ -69,7 +69,7 @@ public final class DivVariableStorage {
     let variable = lock.withLock {
       _values[name]
     }
-    return variable ?? outerStorage?.getValue(name)
+    return variable ?? outerStorage?.getVariableValue(name)
   }
 
   /// Gets variable value.
