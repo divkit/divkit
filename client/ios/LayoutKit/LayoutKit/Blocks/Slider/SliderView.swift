@@ -209,6 +209,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
         to: currentValue.rounded(.toNearestOrAwayFromZero),
         from: currentValue
       )
+      updateProgress(currentValue.rounded(.toNearestOrAwayFromZero))
       layoutIfNeeded()
     @unknown default: break
     }
