@@ -14,6 +14,7 @@ import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
 import com.yandex.div.core.actions.DivActionTypedShowTooltipHandler
 import com.yandex.div.core.actions.DivActionTypedSubmitHandler
 import com.yandex.div.core.actions.DivActionTypedTimerHandler
+import com.yandex.div.core.actions.DivActionTypedUpdateStructureHandler
 import com.yandex.div.core.actions.DivActionTypedVideoHandler
 import com.yandex.div.core.actions.DivAnimatorTypedActionHandler
 import com.yandex.yatagan.Binds
@@ -112,5 +113,11 @@ internal interface DivActionTypedModule {
     @IntoSet
     fun provideVideoActionHandler(
         impl: DivActionTypedVideoHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideUpdateStructureHandler(
+        impl: DivActionTypedUpdateStructureHandler
     ): DivActionTypedHandler
 }
