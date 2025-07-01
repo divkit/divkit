@@ -4,6 +4,7 @@ import type { EvalValue } from './eval';
 import { parseColor } from '../utils/correctColor';
 import { bigIntZero, toBigInt } from './bigint';
 import { checkUrl } from './utils';
+import { BOOLEAN } from './const';
 
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 export type VariableValue = string | number | bigint | boolean | null | undefined | object | unknown[];
@@ -362,8 +363,15 @@ export function defaultValueByType(type: keyof typeof TYPE_TO_CLASS): VariableVa
 }
 
 export function variableToValue(variable: Variable): EvalValue {
+    const type = variable.getType();
+    let value = variable.getValue();
+
+    if (type === BOOLEAN) {
+        value = value ? 1 : 0;
+    }
+
     return {
-        type: variable.getType(),
-        value: variable.getValue()
+        type,
+        value
     };
 }

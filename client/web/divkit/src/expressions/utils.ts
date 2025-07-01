@@ -5,7 +5,7 @@ import { walk } from './walk';
 import { parseColor, type ParsedColor } from '../utils/correctColor';
 import { padLeft } from '../utils/padLeft';
 import { MAX_INT, MIN_INT, toBigInt } from './bigint';
-import { NUMBER } from './const';
+import { BOOLEAN, NUMBER } from './const';
 
 export function valToInternal(val: EvalValue): EvalValue {
     if (val.type === 'url' || val.type === 'color') {
@@ -212,6 +212,9 @@ export function convertJsValueToDivKit(ctx: EvalContext, val: unknown, evalType:
     }
     if (jsType === 'string' && evalType === 'url') {
         checkUrl(val);
+    }
+    if (jsType === 'boolean' && evalType === BOOLEAN) {
+        val = val ? 1 : 0;
     }
 
     return {

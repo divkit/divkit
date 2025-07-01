@@ -103,6 +103,48 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "expression": "@{d.getBoolean('b') == false}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "value": {
+            "b": false
+          },
+          "name": "d"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
+    },
+    {
+      "expression": "@{(1 >= 2) == a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": false,
+          "name": "a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web",
+        "flutter"
+      ]
     }
   ]
 }
