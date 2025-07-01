@@ -13,5 +13,16 @@
                 "version_added": "31.10.0"
             }
         }
+    }, {
+        "id": "state_based_on_actionable",
+        "name": "Actions suppot for <code>State</code> (<code>state</code> based on <code>actionable</code>)",
+        "compat": {
+            "web": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "32.6.0"
+            }
+        }
     }]
 }

@@ -103,6 +103,9 @@
             },
             "android": {
                 "version_added": "32.5.0"
+            },
+            "web": {
+                "version_added": "32.6.0"
             }
         }
     }]
