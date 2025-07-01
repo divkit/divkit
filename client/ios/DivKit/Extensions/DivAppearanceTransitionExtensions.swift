@@ -5,6 +5,7 @@ import VGSL
 extension DivAppearanceTransition {
   func resolveAnimations(
     _ expressionResolver: ExpressionResolver,
+    currentBlockAlpha: Double,
     type: TransitioningAnimationType
   ) -> [TransitioningAnimation] {
     let kind: TransitioningAnimation.Kind
@@ -14,12 +15,12 @@ extension DivAppearanceTransition {
     switch self {
     case let .divAppearanceSetTransition(item):
       return item.items.flatMap {
-        $0.resolveAnimations(expressionResolver, type: type)
+        $0.resolveAnimations(expressionResolver, currentBlockAlpha: currentBlockAlpha, type: type)
       }
     case let .divFadeTransition(item):
       kind = .fade
       value1 = item.resolveAlpha(expressionResolver)
-      value2 = 1
+      value2 = currentBlockAlpha
       transition = item
     case let .divScaleTransition(item):
       kind = .scaleXY
