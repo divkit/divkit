@@ -40,7 +40,6 @@ object ExpressionTestCaseUtils {
     private const val VALUE_TYPE_VARIABLE = "variable"
 
     private const val CASES_FIELD = "cases"
-    private const val NAME_FIELD = "name"
     private const val CASE_VARIABLES_FIELD = "variables"
     private const val CASE_VARIABLE_NAME_FIELD = "variable_name"
     private const val CASE_EXPECTED_VALUE_FIELD = "expected"
@@ -56,11 +55,9 @@ object ExpressionTestCaseUtils {
     }
 
     private fun parseTestCase(json: JSONObject, fileName: String): TestCaseOrError<ExpressionTestCase> {
-        val name = json.optString(NAME_FIELD)
         try {
             val testCase = ExpressionTestCase(
                 fileName,
-                name,
                 json.getString(CASE_EXPRESSION_VALUE_FIELD),
                 json.optJSONArray(CASE_VARIABLES_FIELD).toListOfJSONObject(),
                 parsePlatform(json),
@@ -71,7 +68,7 @@ object ExpressionTestCaseUtils {
 
             return TestCaseOrError(testCase)
         } catch (e: JSONException) {
-            return TestCaseOrError(TestCaseParsingError(name, fileName, json, e))
+            return TestCaseOrError(TestCaseParsingError(fileName, json, e))
         }
     }
 
@@ -112,7 +109,7 @@ object ExpressionTestCaseUtils {
 
     val JSONObject.type: String get() = getString(TYPE_FIELD)
 
-    fun JSONObject.toVariable() = type.let { createVariable(it, getString(NAME_FIELD), getVariableValue(it)) }
+    fun JSONObject.toVariable() = type.let { createVariable(it, getString("name"), getVariableValue(it)) }
 
     fun JSONObject.getVariableValue(type: String): Any {
         return when (type) {
@@ -158,14 +155,14 @@ object ExpressionTestCaseUtils {
             }
             DivData(env, divDataObj.getJSONObject("card"))
         } catch (e: JSONException) {
-            return listOf(TestCaseOrError(TestCaseParsingError(fileName, fileName, json, e)))
+            return listOf(TestCaseOrError(TestCaseParsingError(fileName, json, e)))
         }
 
         return json.getJSONArray(CASES_FIELD).toListOfJSONObject().mapIndexedNotNull { index, jsonObject ->
             try {
                 jsonObject.parseStep(fileName, data, env, logger, index)?.let { TestCaseOrError(it) }
             } catch (e: JSONException) {
-                TestCaseOrError(TestCaseParsingError(fileName, fileName, json, e))
+                TestCaseOrError(TestCaseParsingError(fileName, json, e))
             }
         }
     }

@@ -22,7 +22,7 @@ object MultiplatformTestUtils {
                     JSONObject(file.readText(Charsets.UTF_8))
                 } catch (e: Exception) {
                     errors.add(
-                        TestCaseParsingError(name = null, fileName = file.name, json = null, error = e)
+                        TestCaseParsingError(fileName = file.name, json = null, error = e)
                     )
                     return@forEach
                 }
@@ -31,7 +31,7 @@ object MultiplatformTestUtils {
                     parseAction(file, json)
                 } catch (e: JSONException) {
                     errors.add(
-                        TestCaseParsingError(name = null, fileName = file.name, json = null, error = e)
+                        TestCaseParsingError(fileName = file.name, json = null, error = e)
                     )
                 }
             }

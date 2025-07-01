@@ -91,7 +91,7 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
             val resultType = try {
                 EvaluableType.valueOf(json.getString(SIGNATURE_RESULT_TYPE_FIELD).uppercase())
             } catch (e: JSONException) {
-                return TestCaseOrError(TestCaseParsingError(functionName, file.name, json, e))
+                return TestCaseOrError(TestCaseParsingError(file.name, json, e))
             }
             val isMethod = json.optBoolean(SIGNATURE_IS_METHOD_FIELD)
             return TestCaseOrError(SignatureTestCase(

@@ -5,7 +5,6 @@ import org.json.JSONObject
 
 data class ExpressionTestCase(
     val fileName: String,
-    val name: String,
     val expression: String,
     val variables: List<JSONObject>,
     val platform: List<String>,
@@ -29,7 +28,12 @@ data class ExpressionTestCase(
                 is Exception -> "error"
                 else -> expectedValue.toString()
             }
-            return name.ifEmpty { "$formattedExpression -> $result" }
+            val description = "$formattedExpression -> $result"
+            return if (variables.isEmpty()) {
+                description
+            } else {
+                "$description (variables hash ${variables.hashCode()})"
+            }
         }
 
     override fun toString(): String {
