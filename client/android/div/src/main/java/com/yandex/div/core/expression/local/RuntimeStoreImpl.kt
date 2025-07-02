@@ -130,6 +130,10 @@ internal class RuntimeStoreImpl(
 
     override fun clearBindings(divView: DivViewFacade) = allRuntimes.forEach { it.clearBinding(divView) }
 
+    override fun onDetachedFromWindow(divView: DivViewFacade) = allRuntimes.forEach {
+        it.onDetachedFromWindow(divView)
+    }
+
     override fun traverseFrom(runtime: ExpressionsRuntime, path: String, callback: (ExpressionsRuntime) -> Unit) {
         tree.invokeRecursively(runtime, path) { node ->
             callback(node.runtime)

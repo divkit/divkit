@@ -154,7 +154,6 @@ class Div2View private constructor(
 
     private val monitor = Any()
 
-    private var setActiveBindingRunnable: SingleTimeOnAttachCallback? = null
     @VisibleForTesting
     internal var bindOnAttachRunnable: SingleTimeOnAttachCallback? = null
     private var reportBindingResumedRunnable: SingleTimeOnAttachCallback? = null
@@ -230,20 +229,15 @@ class Div2View private constructor(
         bindingContext = bindingContext.getFor(expressionResolver)
     }
 
-    private fun attachVariableTriggers(data: DivData) {
-        val state = data.state() ?: return
-        val attachTriggers = {
-            viewComponent.runtimeVisitor.createAndAttachRuntimes(
-                state.div, DivStatePath.fromState(state), this
-            )
+    private fun tryAttachVariableTriggers(data: DivData?) {
+        if (bindOnAttachEnabled && !view.isAttachedToWindow) {
+            return
         }
-        if (bindOnAttachEnabled) {
-            setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
-                attachTriggers.invoke()
-            }
-        } else {
-            attachTriggers.invoke()
-        }
+
+        val state = data?.state() ?: return
+        viewComponent.runtimeVisitor.createAndAttachRuntimes(
+            state.div, DivStatePath.fromState(state), this
+        )
     }
 
     private fun updateTimers() {
@@ -441,7 +435,7 @@ class Div2View private constructor(
         if (newDivData != null && tryApplyPatch(patch, oldData, newDivData, reporter)) {
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
-            attachVariableTriggers(newDivData)
+            tryAttachVariableTriggers(newDivData)
             div2Component.divBinder.attachIndicators()
             reporter.onPatchSuccess()
             div2Component.actionBinder
@@ -519,7 +513,7 @@ class Div2View private constructor(
 
         val result = switchToDivData(oldData, data, reporter)
 
-        attachVariableTriggers(data)
+        tryAttachVariableTriggers(data)
 
         if (oldData != null) {
             histogramReporter.onRebindingFinished()
@@ -641,7 +635,7 @@ class Div2View private constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         reportBindingResumedRunnable?.onAttach()
-        setActiveBindingRunnable?.onAttach()
+        tryAttachVariableTriggers(divData)
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
         divTimerEventDispatcher?.onAttach(this)
@@ -652,6 +646,7 @@ class Div2View private constructor(
         discardVisibilityTracking()
         divTimerEventDispatcher?.onDetach(this)
         viewComponent.animatorController.onDetachedFromWindow()
+        runtimeStore.onDetachedFromWindow(this)
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
@@ -1207,7 +1202,7 @@ class Div2View private constructor(
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
             }
-            attachVariableTriggers(newData)
+            tryAttachVariableTriggers(newData)
             histogramReporter.onRebindingFinished()
 
             reporter.onSimpleRebindSuccess()

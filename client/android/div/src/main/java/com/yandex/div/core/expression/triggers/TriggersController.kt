@@ -91,6 +91,13 @@ internal class TriggersController(
             executors[it]?.forEach { executor -> executor.onAttach(view) }
         }
     }
+
+    fun onDetachedFromWindow(view: DivViewFacade) {
+        if (currentView == view) {
+            currentView = null
+        }
+        executors.forEach { (_, value) -> value.forEach { it.onDetach(view) } }
+    }
 }
 
 private class TriggerExecutor(

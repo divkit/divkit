@@ -17,6 +17,10 @@ internal class ExpressionsRuntime(
         triggersController?.onAttachedToWindow(view)
     }
 
+    fun onDetachedFromWindow(view: DivViewFacade) {
+        triggersController?.onDetachedFromWindow(view)
+    }
+
     fun updateSubscriptions() {
         if (unsubscribed) {
             unsubscribed = false

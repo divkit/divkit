@@ -38,6 +38,8 @@ internal interface RuntimeStore {
 
     fun clearBindings(divView: DivViewFacade)
 
+    fun onDetachedFromWindow(divView: DivViewFacade)
+
     fun traverseFrom(runtime: ExpressionsRuntime, path: String, callback: (ExpressionsRuntime) -> Unit)
 
     fun getUniquePathsAndRuntimes(): Map<String, ExpressionsRuntime>
@@ -74,6 +76,8 @@ internal interface RuntimeStore {
             override fun updateSubscriptions() = Unit
 
             override fun clearBindings(divView: DivViewFacade) = Unit
+
+            override fun onDetachedFromWindow(divView: DivViewFacade) = Unit
 
             override fun traverseFrom(
                 runtime: ExpressionsRuntime,
