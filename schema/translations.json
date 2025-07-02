@@ -76,8 +76,8 @@
     "ru": "Устанавливает значение в массиве по индексу."
   },
   "div_action_base_download_callbacks": {
-    "en": "Callbacks that are called after data loading.",
-    "ru": "Колбэки, которые вызываются после дозагрузки данных."
+    "en": "Callbacks that are called after [data loading](../../interaction#loading-data).",
+    "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction#loading-data)."
   },
   "div_action_base_is_enabled": {
     "en": "The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).",
@@ -100,8 +100,8 @@
     "ru": "Идентификатор элемента, в области видимости которого будет выполняться данное действие."
   },
   "div_action_base_url": {
-    "en": "URL. Possible values: `url` or `div-action://`.",
-    "ru": "Ссылка. Возможные значения: `url` или `div-action://`."
+    "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).",
+    "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction)."
   },
   "div_action_clear_focus": {
     "en": "Removes focus from an element.",
@@ -312,8 +312,8 @@
     "ru": "Устанавливает значение в переменной типа массив или словарь с разной вложенностью."
   },
   "div_action_update_structure_path": {
-    "en": "Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li><li>The path cannot be empty, start or end with the '/' character.</li>Example path: `key/0/inner_key/1`.",
-    "ru": "Путь внутри массива/словаря, куда необходимо установить значение. Формат пути: <li>Каждый элемент пути отделяется символом `/`.</li><li>Элементы пути могут быть двух типов: индекс элемента в массиве, начиная с 0 или ключи словаря в виде произвольных строк</li><li>Путь читается слева направо, каждый элемент определяет переход к следующему уровню вложенности.</li><li>Путь не может быть пустым, начинаться или заканчиваться с символа `/`.</li> Пример пути: `key/0/inner_key/1`."
+    "en": "Path within an array/dictionary where a value needs to be set. Path format: <li>Each path element is separated by a '/' symbol.</li><li>Path elements can be of two types: an index of an element in an array, starting from 0 or dictionary keys in the form of arbitrary strings.</li><li>The path is read from left to right, each element determines the transition to the next level of nesting.</li>Example path: `key/0/inner_key/1`.",
+    "ru": "Путь внутри массива/словаря, куда необходимо установить значение. Формат пути: <li>Каждый элемент пути отделяется символом `/`.</li><li>Элементы пути могут быть двух типов: индекс элемента в массиве, начиная с 0 или ключи словаря в виде произвольных строк</li><li>Путь читается слева направо, каждый элемент определяет переход к следующему уровню вложенности.</li> Пример пути: `key/0/inner_key/1`."
   },
   "div_action_update_structure_value": {
     "en": "Value set into dictionary/array.",
@@ -1360,8 +1360,8 @@
     "ru": "Множитель размера для минимального индикатора. Используется, когда на экране не помещается нужное количество индикаторов."
   },
   "div_indicator_pager_id": {
-    "en": "ID of the pager that is a data source for an indicator. If not specified, the indicator will automatically find the nearest pager.",
-    "ru": "Идентификатор пейджера-источника данных для индикатора. Если не указан, индикатор автоматически найдет ближайший пейджер."
+    "en": "ID of the pager that is a data source for an indicator.",
+    "ru": "Идентификатор пейджера-источника данных для индикатора."
   },
   "div_indicator_shape": {
     "en": "Indicator shape.",
@@ -1392,8 +1392,8 @@
     "ru": "Тип автоматической капитализации текста. <li>По умолчанию: `auto` - дефолтное поведение платформы;</li><li>`none` - автоматическая капитализация не применяется;</li><li>`words` - капитализация каждого слова;</li><li>`sentences` - капитализация в начале предложения;</li><li>`all_characters` - капитализация каждого символа.</li>"
   },
   "div_input_enter_key_actions": {
-    "en": "Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.",
-    "ru": "Действия при нажатии кнопки клавиатуры `Enter`. При наличии действий поведение по умолчанию будет переопределено. В многострочных полях нажатие Enter вызовет действия вместо добавления новой строки."
+    "en": "Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.",
+    "ru": "Действия при нажатии кнопки клавиатуры `Enter`. При наличии действий поведение по умолчанию будет переопределено."
   },
   "div_input_enter_key_type": {
     "en": "'Enter' key type.",
@@ -1564,8 +1564,8 @@
     "ru": "Ввод данных с клавиатуры."
   },
   "div_layout_provider": {
-    "en": "Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.",
-    "ru": "Предоставляет данные о реальном размере элемента. Размер вычисляется без учета отступов (margins) самого элемента."
+    "en": "Provides data on the actual size of the element.",
+    "ru": "Предоставляет данные о реальном размере элемента."
   },
   "div_layout_provider_height_variable_name": {
     "en": "Name of the variable that stores the element’s height.",
@@ -1641,7 +1641,7 @@
   },
   "div_pager_infinite_scroll": {
     "en": "Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.",
-    "ru": "Включает бесконечный скролл карточек. После последней карточки скролл начинается сначала, т.е. скролл зацикливается."
+    "ru": "Включает бесконечный скролл карточек. После последней карточки прокрутка начинается сначала, т.е. скролл зацикливается."
   },
   "div_pager_item_spacing": {
     "en": "Spacing between elements.",
