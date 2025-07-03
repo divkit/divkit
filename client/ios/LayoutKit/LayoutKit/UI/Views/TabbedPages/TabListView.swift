@@ -7,6 +7,7 @@ final class TabListView: UIView {
   private let collectionViewLayout = TabsCollectionViewFlowLayout()
 
   private var selectedItemBackground: UIView!
+  private var setInitialModel = false
   var isMovingToSelectedItem = false
 
   private var dataSource: TabListViewDataSource! {
@@ -45,6 +46,7 @@ final class TabListView: UIView {
     contentSize: CGSize,
     selection: CGFloat
   )?
+  
   private var animationInfo: AnimationInfo? {
     didSet {
       setNeedsLayout()
@@ -64,7 +66,7 @@ final class TabListView: UIView {
   init() {
     collectionView = makeCollectionView(layout: collectionViewLayout)
     delegate = TabListViewDelegate(collectionView: collectionView)
-
+    
     super.init(frame: .zero)
     clipsToBounds = true
 
@@ -173,6 +175,12 @@ final class TabListView: UIView {
 
   func endScrollingAnimation() {
     animationInfo = nil
+  }
+  
+  func setInitialModel(_ model: TabTitlesViewModel) {
+    guard !setInitialModel else { return }
+    self.model = model
+    setInitialModel = true
   }
 }
 

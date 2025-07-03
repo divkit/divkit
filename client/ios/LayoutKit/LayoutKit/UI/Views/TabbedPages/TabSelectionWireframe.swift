@@ -47,7 +47,7 @@ extension TabSelectionWireframe: TabListViewDelegateTabSelection {
     } else {
       action = UserInterfaceAction(url: tabChangedUrl, path: path)
       tabListView.prepareForScrollingAnimation(to: selection)
-      contentsView.selectPageAtIndex(selection)
+      contentsView.updateSelectedPageIndexIfNeeded(selection)
     }
     action.perform(sendingFrom: tabListView)
   }

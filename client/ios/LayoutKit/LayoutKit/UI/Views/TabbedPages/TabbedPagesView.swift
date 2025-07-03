@@ -26,7 +26,7 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
 
   public var effectiveBackgroundColor: UIColor? { tabContentsView.effectiveBackgroundColor }
   public var layoutReporter: LayoutReporter?
-
+  
   public func configure(
     model: TabViewModel,
     state: TabViewState,
@@ -43,7 +43,9 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
     )
 
     tabListView.overscrollDelegate = overscrollDelegate
-    tabListView.model = tabDataSource.modelForItemSelection(state.selectedPageIndex)
+    tabListView.setInitialModel(
+      tabDataSource.modelForItemSelection(state.selectedPageIndex)
+    )
 
     selectionWireframe = wireframe
     tabContentsView.configure(

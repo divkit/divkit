@@ -43,7 +43,11 @@ final class TabContentsView: BlockView {
     }
   }
 
-  private(set) var selectedPageIndex: CGFloat = 0
+  private(set) var selectedPageIndex: CGFloat = 0 {
+    didSet {
+      updateContentOffset()
+    }
+  }
 
   private var selectedPagePath: UIElementPath {
     let index = clamp(
@@ -136,7 +140,7 @@ final class TabContentsView: BlockView {
     collectionView.isScrollEnabled = model.scrollingEnabled
 
     if oldModel != model || layout == nil || state.selectedPageIndex != selectedPageIndex {
-      selectedPageIndex = state.selectedPageIndex
+      updateSelectedPageIndexIfNeeded(state.selectedPageIndex)
       setNeedsLayout()
     }
   }
@@ -172,17 +176,20 @@ final class TabContentsView: BlockView {
 
   func updateRelativeOffset(_ offset: CGFloat) {
     relativeContentOffset = offset
-    selectedPageIndex = relativeContentOffset
+    updateSelectedPageIndexIfNeeded(relativeContentOffset)
   }
-
-  func selectPageAtIndex(_ idx: CGFloat) {
-    guard idx.isApproximatelyNotEqualTo(selectedPageIndex) else {
-      assertionFailure("Could not scroll to same index")
+  
+  func updateSelectedPageIndexIfNeeded(_ idx: CGFloat) {
+    guard selectedPageIndex.isApproximatelyNotEqualTo(idx) else {
       delegate?.tabContentsViewDidEndAnimation()
       return
     }
+    
     selectedPageIndex = idx
-    collectionView.setContentOffset(selectedPageContentOffset, animated: true)
+  }
+  
+  private func updateContentOffset(animated: Bool = true) {
+    collectionView.setContentOffset(selectedPageContentOffset, animated: animated)
   }
 
   private var selectedPageContentOffset: CGPoint {
@@ -192,9 +199,11 @@ final class TabContentsView: BlockView {
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    collectionView.frame = bounds
-    collectionView.contentOffset = selectedPageContentOffset
-
+    if collectionView.frame != bounds {
+      collectionView.frame = bounds
+      updateContentOffset(animated: false)
+    }
+    
     let newLayout = TabContentsViewLayout(
       pages: model.pages.map(\.block),
       footer: model.footer,
@@ -212,26 +221,19 @@ final class TabContentsView: BlockView {
     backgroundView?.frame = bounds
   }
 
-  private func updateSelectedPageIndexFromRelativeContentOffset(isIntermediate: Bool) {
-    notifyDelegateAboutSelectedPageIndexChange(
-      selectedPageIndex: relativeContentOffset,
-      countOfPages: model.pages.count,
-      isIntermediate: isIntermediate
-    )
-  }
-
-  private func notifyDelegateAboutSelectedPageIndexChange(
-    selectedPageIndex: CGFloat,
-    countOfPages: Int,
+  private func updateSelectedPageIndexFromRelativeContentOffset(
     isIntermediate: Bool
   ) {
+    let selectedPageIndex = relativeContentOffset
+    let countOfPages = model.pages.count
     let roundedIndex = selectedPageIndex.rounded(.toNearestOrAwayFromZero)
     if isIntermediate,
        selectedPageIndex.isApproximatelyEqualTo(roundedIndex, withAccuracy: 0.005) {
       return
     }
     let index = isIntermediate ? selectedPageIndex : roundedIndex
-    self.selectedPageIndex = index
+    
+    updateSelectedPageIndexIfNeeded(index)
     updatesDelegate?.onSelectedPageIndexChanged(index, inModel: model)
     let state = TabViewState(selectedPageIndex: index, countOfPages: countOfPages)
     observer?.elementStateChanged(state, forPath: model.path)
