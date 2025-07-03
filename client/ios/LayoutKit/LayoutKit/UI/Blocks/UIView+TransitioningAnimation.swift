@@ -37,9 +37,14 @@ extension UIView {
   }
 
   func setInitialParamsAndAnimate(
-    animations: [TransitioningAnimation],
+    animations: [TransitioningAnimation]?,
     completion: Action? = nil
   ) {
+    guard let animations else {
+      completion?()
+      return
+    }
+
     for kind in TransitioningAnimation.Kind.allCases {
       if let firstOfKind = animations.first(where: { $0.kind == kind }) {
         setValue(firstOfKind.start, for: kind)

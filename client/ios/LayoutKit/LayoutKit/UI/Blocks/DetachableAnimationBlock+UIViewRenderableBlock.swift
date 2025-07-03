@@ -168,9 +168,17 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     childView.frame = convertFrame(to: container)
     self.childView = nil
     container.addSubview(childView)
-    childView.perform(animationOut, animated: true, completion: {
-      childView.removeFromSuperview()
-    })
+    childView.setInitialParamsAndAnimate(
+      animations: animationOut?.map { animation in
+        if animation.kind == .fade {
+          return animation.modifying(start: alpha)
+        }
+        return animation
+      },
+      completion: {
+        childView.removeFromSuperview()
+      }
+    )
   }
 
   public func addWithAnimation() {
@@ -213,5 +221,18 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 extension DetachableAnimationBlockView: VisibleBoundsTrackingContainer {
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     (childView ?? animatedView).asArray()
+  }
+}
+
+extension TransitioningAnimation {
+  fileprivate func modifying(start: Double?) -> TransitioningAnimation {
+    TransitioningAnimation(
+      kind: self.kind,
+      start: start ?? self.start,
+      end: self.end,
+      duration: self.duration,
+      delay: self.delay,
+      timingFunction: self.timingFunction
+    )
   }
 }
