@@ -11,13 +11,6 @@ final class DivBaseBlockBuilder {
       if case .visible = self { return true }
       return false
     }
-
-    var alpha: CGFloat {
-      switch self {
-      case let .visible(_, alpha): alpha
-      case .invisible, .gone: 0
-      }
-    }
   }
 
   private let context: DivBlockModelingContext
@@ -293,7 +286,6 @@ final class DivBaseBlockBuilder {
 
     let initialAnimationIn = div.transitionIn?.resolveAnimations(
       expressionResolver,
-      currentBlockAlpha: visibility.alpha,
       type: .appearing
     )
 
@@ -303,11 +295,7 @@ final class DivBaseBlockBuilder {
       nil
     }
 
-    let animationOut = div.transitionOut?.resolveAnimations(
-      expressionResolver,
-      currentBlockAlpha: visibility.alpha,
-      type: .disappearing
-    )
+    let animationOut = div.transitionOut?.resolveAnimations(expressionResolver, type: .disappearing)
 
     let animationChange = div.transitionChange?.resolveTransition(expressionResolver)
 
