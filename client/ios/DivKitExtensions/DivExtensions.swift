@@ -7,7 +7,7 @@ extension Div {
     var urls: [URL] = value.background?.compactMap {
       $0.resolveImageURL(expressionResolver)
     } ?? []
-    if let url = LottieExtensionHandler.getPreloadURL(div: value) {
+    if let url = LottieExtensionHandler.getPreloadURL(div: value, expressionResolver: expressionResolver) {
       urls.append(url)
     }
     switch self {

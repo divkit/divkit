@@ -28,9 +28,10 @@ public final class LottieExtensionHandler: DivExtensionHandler {
   ) -> Block {
     let extensionData = div.extensions?.first { $0.id == id }
     guard let paramsDict = extensionData?.params,
-          let params = LottieExtensionParams(params: paramsDict) else {
-      return block
-    }
+          let params = LottieExtensionParams(
+            paramsDictionary: paramsDict,
+            expressionResolver: context.expressionResolver
+          ) else { return block }
     var scale: DivImageScale = .fit
     if let divGifImage = div as? DivGifImage {
       scale = divGifImage.resolveScale(context.expressionResolver)
@@ -61,14 +62,19 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     )
   }
 
-  public func getPreloadURLs(div: DivBase, expressionResolver _: ExpressionResolver) -> [URL] {
-    [Self.getPreloadURL(div: div)].compactMap { $0 }
+  public func getPreloadURLs(div: DivBase, expressionResolver: ExpressionResolver) -> [URL] {
+    [Self.getPreloadURL(div: div, expressionResolver: expressionResolver)].compactMap { $0 }
   }
 
-  static func getPreloadURL(div: DivBase) -> URL? {
+  static func getPreloadURL(div: DivBase, expressionResolver: ExpressionResolver) -> URL? {
     let extensionData = div.extensions?.first { $0.id == "lottie" }
     guard let paramsDict = extensionData?.params,
-          let params = LottieExtensionParams(params: paramsDict) else { return nil }
+          let params = LottieExtensionParams(
+            paramsDictionary: paramsDict,
+            expressionResolver: expressionResolver
+          ) else {
+      return nil
+    }
     return params.source.url
   }
 }
@@ -102,64 +108,5 @@ private class JSONAnimationHolder: AnimationHolder {
       return ""
     }
     return "JSON Animation holder with json \(json)"
-  }
-}
-
-private struct LottieExtensionParams {
-  enum Source {
-    case json([String: Any])
-    case url(URL)
-  }
-
-  var source: Source
-  var repeatCount: Float
-  var repeatMode: AnimationRepeatMode
-
-  init?(params: [String: Any]) {
-    if let json = params["lottie_json"] as? [String: Any] {
-      source = .json(json)
-    } else if let urlString = params["lottie_url"] as? String,
-              let url = URL(string: urlString) {
-      source = .url(url)
-    } else {
-      DivKitLogger.error("Not valid lottie_json or lottie_url")
-      return nil
-    }
-
-    if let repeatCount = params["repeat_count"] {
-      if let repeatCountFloat = repeatCount as? Float {
-        self.repeatCount = repeatCountFloat
-      } else if let repeatCountInt = repeatCount as? Int {
-        self.repeatCount = Float(repeatCountInt)
-      } else {
-        DivKitLogger.error("Not valid repeat_count")
-        return nil
-      }
-    } else {
-      self.repeatCount = 0
-    }
-
-    if let repeatMode = params["repeat_mode"] {
-      switch repeatMode as? String {
-      case "reverse":
-        self.repeatMode = .reverse
-      case "restart":
-        self.repeatMode = .restart
-      default:
-        DivKitLogger.error("Not valid repeat_mode")
-        return nil
-      }
-    } else {
-      self.repeatMode = .restart
-    }
-  }
-}
-
-extension LottieExtensionParams.Source {
-  fileprivate var url: URL? {
-    switch self {
-    case let .url(url): url
-    case .json: nil
-    }
   }
 }

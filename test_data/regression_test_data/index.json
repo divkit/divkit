@@ -2136,7 +2136,8 @@
     {
       "title": "Lottie gallery with expressions",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "lottie"
