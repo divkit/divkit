@@ -39,13 +39,14 @@ end
 
 Use `DivKitPlayground` scheme to build and run playground application.
 
-Use `UnitTests` sheme to run all unit tests.
+Use `UnitTests` scheme to run all unit tests.
 
 Use `SnapshotTests` scheme to run snapshot tests.
 
-## Sample Project
+## Sample Projects
 
-`Sample/DivKitSample.xcodeproj` – sample project with simple DivKit integration using Swift Package Manager.
+`Samples/UIKitIntegration/DivKitSample.xcodeproj` – sample project with simple DivKit integration using Swift Package Manager and UIKit.
+`Samples/SwiftUIIntegration/DivKitSample.xcodeproj` – sample project with simple DivKit integration using Swift Package Manager and SwiftUI.
 
 ---
 
