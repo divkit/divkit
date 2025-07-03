@@ -1,3 +1,21 @@
+## 32.7.0
+
+# Android Client:
+* Dump error monitor report to logcat.
+* Remove view from TriggerExecutor's attachedViews when view is detached from window to prevent memory leaks.
+* Supported `update_structure` actions.
+* Updated Coil to 3.0.4.
+
+# iOS Client:
+* Fixed a bug with the slider where the marks would change randomly when moving the slider.
+* Fixed bug with updating slider value.
+* Supported complex variables observing in get[Type]Value functions in `div-trigger`.
+
+# Web Client:
+* Added the `update_structure` action support.
+* Fixed the calculation of expressions using `boolean` variables and obtaining boolean values from arrays and dicts.
+
+
 ## 32.6.0
 
 # Android Client:

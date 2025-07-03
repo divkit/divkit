@@ -1,3 +1,9 @@
+## 32.7.0 (July 7, 2025)
+
+* Added the `update_structure` action support.
+* Fixed the calculation of expressions using `boolean` variables and obtaining boolean values from arrays and dicts.
+
+
 ## 32.6.0 (June 30, 2025)
 
 * Expressions with the `getIntegerValue`/`getNumberValue`/`getBooleanValue`/`getStringValue`/`getColorValue`/`getUrlValue` functions are now recalculated when changing the variables used in the first argument.
