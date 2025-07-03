@@ -130,7 +130,6 @@
       ]
     },
     {
-      "name": "color with format #ARGB to string => string",
       "expression": "@{toString(argb_color_var)}",
       "expected": {
         "type": "string",

@@ -104,11 +104,11 @@ private struct ExpressionTestCase: Decodable {
     } else {
       expression
     }
-    return "\(formattedExpression) -> \(expected.description)"
+    return "\(formattedExpression) -> \(expected.description): \(hashValue)"
   }
 
   private enum CodingKeys: String, CodingKey {
-    case name, expression, variables, expected, platforms
+    case expression, variables, expected, platforms
   }
 
   func resolveValue(
@@ -162,6 +162,20 @@ private struct ExpressionTestCase: Decodable {
         errorTracker: { XCTFail($0.description) }
       )!
     )
+  }
+}
+
+extension ExpressionTestCase: Hashable {
+  static func == (lhs: ExpressionTestCase, rhs: ExpressionTestCase) -> Bool {
+    return lhs.expression == rhs.expression &&
+    lhs.variables == rhs.variables &&
+    lhs.expected.description == rhs.expected.description
+  }
+  
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(expression)
+    hasher.combine(variables)
+    hasher.combine(expected.description)
   }
 }
 
