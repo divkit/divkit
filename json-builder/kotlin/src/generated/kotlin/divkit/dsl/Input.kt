@@ -142,7 +142,7 @@ data class Input internal constructor(
          */
         val disappearActions: Property<List<DisappearAction>>?,
         /**
-         * Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+         * Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
          */
         val enterKeyActions: Property<List<Action>>?,
         /**
@@ -226,7 +226,7 @@ data class Input internal constructor(
          */
         val keyboardType: Property<KeyboardType>?,
         /**
-         * Provides data on the actual size of the element.
+         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -492,7 +492,7 @@ data class Input internal constructor(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -511,7 +511,7 @@ data class Input internal constructor(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -679,7 +679,7 @@ fun DivScope.input(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -698,7 +698,7 @@ fun DivScope.input(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -864,7 +864,7 @@ fun DivScope.inputProps(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -883,7 +883,7 @@ fun DivScope.inputProps(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1049,7 +1049,7 @@ fun TemplateScope.inputRefs(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1068,7 +1068,7 @@ fun TemplateScope.inputRefs(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1236,7 +1236,7 @@ fun Input.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1255,7 +1255,7 @@ fun Input.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1423,7 +1423,7 @@ fun Input.defer(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1442,7 +1442,7 @@ fun Input.defer(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1733,7 +1733,7 @@ fun Input.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1752,7 +1752,7 @@ fun Input.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1921,7 +1921,7 @@ fun Component<Input>.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -1940,7 +1940,7 @@ fun Component<Input>.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -2233,7 +2233,7 @@ fun Component<Input>.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
- * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior.
+ * @param enterKeyActions Actions when pressing the 'Enter' key. Actions (if any) override the default behavior. In multiline inputs, pressing Enter will trigger the actions instead of adding a new line.
  * @param enterKeyType 'Enter' key type.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
@@ -2252,7 +2252,7 @@ fun Component<Input>.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.

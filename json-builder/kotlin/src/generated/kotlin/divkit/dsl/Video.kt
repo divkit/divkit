@@ -171,7 +171,7 @@ data class Video internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Provides data on the actual size of the element.
+         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -358,7 +358,7 @@ data class Video internal constructor(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -508,7 +508,7 @@ fun DivScope.video(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -656,7 +656,7 @@ fun DivScope.videoProps(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -804,7 +804,7 @@ fun TemplateScope.videoRefs(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -954,7 +954,7 @@ fun Video.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1104,7 +1104,7 @@ fun Video.defer(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1337,7 +1337,7 @@ fun Video.evaluate(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1488,7 +1488,7 @@ fun Component<Video>.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1723,7 +1723,7 @@ fun Component<Video>.evaluate(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.

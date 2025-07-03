@@ -55,7 +55,7 @@ data class DisappearAction internal constructor(
          */
         val disappearDuration: Property<Int>?,
         /**
-         * Callbacks that are called after [data loading](../../interaction#loading-data).
+         * Callbacks that are called after data loading.
          */
         val downloadCallbacks: Property<DownloadCallbacks>?,
         /**
@@ -86,7 +86,7 @@ data class DisappearAction internal constructor(
         val scopeId: Property<String>?,
         val typed: Property<ActionTyped>?,
         /**
-         * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+         * URL. Possible values: `url` or `div-action://`.
          */
         val url: Property<Url>?,
         /**
@@ -116,14 +116,14 @@ data class DisappearAction internal constructor(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
@@ -158,14 +158,14 @@ fun DivScope.disappearAction(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
@@ -198,14 +198,14 @@ fun DivScope.disappearActionProps(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
@@ -238,14 +238,14 @@ fun TemplateScope.disappearActionRefs(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
@@ -280,14 +280,14 @@ fun DisappearAction.override(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
@@ -322,14 +322,14 @@ fun DisappearAction.defer(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
@@ -368,7 +368,7 @@ fun DisappearAction.modify(
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated

@@ -146,7 +146,7 @@ data class Custom internal constructor(
          */
         val items: Property<List<Div>>?,
         /**
-         * Provides data on the actual size of the element.
+         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -281,7 +281,7 @@ data class Custom internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -396,7 +396,7 @@ fun DivScope.custom(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -509,7 +509,7 @@ fun DivScope.customProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -622,7 +622,7 @@ fun TemplateScope.customRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -737,7 +737,7 @@ fun Custom.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -852,7 +852,7 @@ fun Custom.defer(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1026,7 +1026,7 @@ fun Custom.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1142,7 +1142,7 @@ fun Component<Custom>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1318,7 +1318,7 @@ fun Component<Custom>.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).

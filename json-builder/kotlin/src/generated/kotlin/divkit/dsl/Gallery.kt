@@ -173,7 +173,7 @@ data class Gallery internal constructor(
          */
         val items: Property<List<Div>>?,
         /**
-         * Provides data on the actual size of the element.
+         * Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -372,7 +372,7 @@ data class Gallery internal constructor(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -511,7 +511,7 @@ fun DivScope.gallery(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -648,7 +648,7 @@ fun DivScope.galleryProps(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -785,7 +785,7 @@ fun TemplateScope.galleryRefs(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -924,7 +924,7 @@ fun Gallery.override(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -1063,7 +1063,7 @@ fun Gallery.defer(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -1287,7 +1287,7 @@ fun Gallery.evaluate(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -1427,7 +1427,7 @@ fun Component<Gallery>.override(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
@@ -1653,7 +1653,7 @@ fun Component<Gallery>.evaluate(
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides data on the actual size of the element.
+ * @param layoutProvider Provides data on the actual size of the element. The size is calculated without taking into account the margins of the element itself.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.

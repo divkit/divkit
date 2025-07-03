@@ -50,7 +50,7 @@ data class Action internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Callbacks that are called after [data loading](../../interaction#loading-data).
+         * Callbacks that are called after data loading.
          */
         val downloadCallbacks: Property<DownloadCallbacks>?,
         /**
@@ -88,7 +88,7 @@ data class Action internal constructor(
         val target: Property<Target>?,
         val typed: Property<ActionTyped>?,
         /**
-         * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+         * URL. Possible values: `url` or `div-action://`.
          */
         val url: Property<Url>?,
     ) {
@@ -167,7 +167,7 @@ data class Action internal constructor(
 }
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
@@ -176,7 +176,7 @@ data class Action internal constructor(
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  */
 @Generated
 fun DivScope.action(
@@ -209,7 +209,7 @@ fun DivScope.action(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
@@ -218,7 +218,7 @@ fun DivScope.action(
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  */
 @Generated
 fun DivScope.actionProps(
@@ -249,7 +249,7 @@ fun DivScope.actionProps(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
@@ -258,7 +258,7 @@ fun DivScope.actionProps(
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  */
 @Generated
 fun TemplateScope.actionRefs(
@@ -289,7 +289,7 @@ fun TemplateScope.actionRefs(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
@@ -298,7 +298,7 @@ fun TemplateScope.actionRefs(
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  */
 @Generated
 fun Action.override(
@@ -331,7 +331,7 @@ fun Action.override(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
@@ -340,7 +340,7 @@ fun Action.override(
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  */
 @Generated
 fun Action.defer(
@@ -373,7 +373,7 @@ fun Action.defer(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
+ * @param downloadCallbacks Callbacks that are called after data loading.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
@@ -382,7 +382,7 @@ fun Action.defer(
  * @param referer Referer URL for logging.
  * @param scopeId The ID of the element within which the specified action will be performed.
  * @param target The tab in which the URL must be opened.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  */
 @Generated
 fun Action.modify(
@@ -420,7 +420,7 @@ fun Action.modify(
  * @param logUrl URL for logging.
  * @param referer Referer URL for logging.
  * @param target The tab in which the URL must be opened.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
+ * @param url URL. Possible values: `url` or `div-action://`.
  */
 @Generated
 fun Action.evaluate(
