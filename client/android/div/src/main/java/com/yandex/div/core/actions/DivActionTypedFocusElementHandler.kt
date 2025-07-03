@@ -2,6 +2,7 @@ package com.yandex.div.core.actions
 
 import android.view.View
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.gainAccessibilityFocus
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionFocusElement
@@ -35,6 +36,7 @@ internal class DivActionTypedFocusElementHandler @Inject constructor() : DivActi
             ?: return
 
         requestedView.requestFocus()
+        requestedView.gainAccessibilityFocus()
         when (requestedView) {
             is DivInputView -> requestedView.openKeyboard()
         }

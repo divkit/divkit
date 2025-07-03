@@ -61,7 +61,6 @@
               "items": [
                 {
                   "type": "slider",
-                  "id": "min_0_max_10",
                   "accessibility": {
                     "description": "Min - 0, max - 10"
                   },

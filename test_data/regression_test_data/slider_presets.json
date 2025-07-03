@@ -453,7 +453,7 @@
             },
             {
               "type": "slider_preset",
-              "id": "default_slider",
+              "id": "slider_default",
               "thumb_value_variable": "first_thumb_value",
               "accessibility": {
                 "description": "Default slider"
@@ -465,7 +465,7 @@
             },
             {
               "type": "slider_preset",
-              "id": "min_0_max_10",
+              "id": "slider_default",
               "min_value": 0,
               "max_value": 10,
               "thumb_value_variable": "second_thumb_value",
@@ -525,7 +525,7 @@
             },
             {
               "type": "slider_preset",
-              "id": "min_0_max_3",
+              "id": "slider_default",
               "min_value": 0,
               "max_value": 3,
               "thumb_value_variable": "third_thumb_value",
@@ -585,7 +585,7 @@
             },
             {
               "type": "slider_preset",
-              "id": "double_with_ticks",
+              "id": "slider_default",
               "min_value": 0,
               "max_value": 10,
               "thumb_value_variable": "fourth_thumb_value",
@@ -665,7 +665,7 @@
             },
             {
               "type": "slider_preset",
-              "id": "double_without_ticks",
+              "id": "slider_default",
               "thumb_value_variable": "fifth_thumb_value",
               "thumb_secondary_value_variable": "fifth_thumb_secondary_value",
               "accessibility": {

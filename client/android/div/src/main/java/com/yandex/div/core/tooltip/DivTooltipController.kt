@@ -9,7 +9,6 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
 import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
@@ -31,6 +30,7 @@ import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.divs.sendAccessibilityEventUnchecked
 import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -431,20 +431,4 @@ private fun Div2View.getWindowFrame(): Rect {
     val windowFrame = Rect()
     getWindowVisibleDisplayFrame(windowFrame)
     return windowFrame
-}
-
-private fun sendAccessibilityEventUnchecked(
-    event: Int,
-    view: View?,
-    accessibilityStateProvider: AccessibilityStateProvider
-) {
-    view ?: return
-    if (!accessibilityStateProvider.isAccessibilityEnabled(view.context)) return
-    val accessibilityEvent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        AccessibilityEvent(event)
-    } else {
-        @Suppress("DEPRECATION")
-        AccessibilityEvent.obtain(event)
-    }
-    view.sendAccessibilityEventUnchecked(accessibilityEvent)
 }

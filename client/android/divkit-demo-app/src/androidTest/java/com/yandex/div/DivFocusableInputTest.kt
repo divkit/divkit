@@ -10,7 +10,7 @@ import org.junit.Test
 
 class DivFocusableInputTest {
 
-    private val activityTestRule = ActivityTestRule(DummyActivity::class.java, true)
+    private val activityTestRule = ActivityTestRule(DummyActivity::class.java)
 
     @get:Rule
     val rule = uiTestRule { activityTestRule }

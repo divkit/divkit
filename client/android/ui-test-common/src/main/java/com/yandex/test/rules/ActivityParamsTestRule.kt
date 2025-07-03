@@ -11,7 +11,7 @@ open class ActivityParamsTestRule<A : Activity>(
     launchActivity: Boolean = true,
     private val action: String? = null,
     private val params: Bundle? = null
-) : IntentsTestRule<A>(activityClass, true, launchActivity) {
+) : IntentsTestRule<A>(activityClass, false, launchActivity) {
 
     constructor(activityClass: Class<A>, vararg params: Pair<String, Any?>) : this(
         activityClass = activityClass,

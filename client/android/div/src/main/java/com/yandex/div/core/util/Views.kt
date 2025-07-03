@@ -1,5 +1,6 @@
 package com.yandex.div.core.util
 
+import android.os.Build
 import android.view.View
 import android.view.View.OnAttachStateChangeListener
 import androidx.core.view.ViewCompat
@@ -35,6 +36,14 @@ inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
         doOnNextLayout {
             action(it)
         }
+    }
+}
+
+internal fun View.makeFocusable() {
+    isFocusable = true
+    isFocusableInTouchMode = true
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        defaultFocusHighlightEnabled = false
     }
 }
 

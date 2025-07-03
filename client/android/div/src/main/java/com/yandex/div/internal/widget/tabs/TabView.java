@@ -12,6 +12,9 @@ import android.text.TextUtils;
 import android.text.method.TransformationMethod;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -143,6 +146,10 @@ public final class TabView extends SuperLineHeightTextView {
         if (mBoldTextOnSelection && changed) {
             setupTypeface();
         }
+
+        if (changed && selected) {
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
+        }
     }
 
     private void setupTypeface() {
@@ -171,9 +178,19 @@ public final class TabView extends SuperLineHeightTextView {
     }
 
     @Override
-    public CharSequence getAccessibilityClassName() {
+    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+        super.onInitializeAccessibilityEvent(event);
+        // This view masquerades as an action bar tab.
         //noinspection deprecation
-        return ActionBar.Tab.class.getName();
+        event.setClassName(ActionBar.Tab.class.getName());
+    }
+
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        // This view masquerades as an action bar tab.
+        //noinspection deprecation
+        info.setClassName(ActionBar.Tab.class.getName());
     }
 
     /**

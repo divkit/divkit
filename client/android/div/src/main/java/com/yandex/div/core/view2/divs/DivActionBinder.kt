@@ -5,10 +5,12 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.StringDef
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.size
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
@@ -17,8 +19,10 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
+import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.experiments.Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED
 import com.yandex.div.core.experiments.Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED
+import com.yandex.div.core.view2.AccessibilityDelegateWrapper
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivGestureListener
@@ -40,6 +44,7 @@ import com.yandex.div.internal.util.allIsNullOrEmpty
 import com.yandex.div.internal.widget.menu.OverflowMenuWrapper
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
 import java.util.UUID
@@ -53,6 +58,7 @@ internal class DivActionBinder @Inject constructor(
     private val divActionBeaconSender: DivActionBeaconSender,
     @ExperimentFlag(LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED) private val longtapActionsPassToChild: Boolean,
     @ExperimentFlag(IGNORE_ACTION_MENU_ITEMS_ENABLED) private val shouldIgnoreActionMenuItems: Boolean,
+    @ExperimentFlag(ACCESSIBILITY_ENABLED) private val accessibilityEnabled: Boolean
 ) {
     private val passToParentLongClickListener: (View) -> Boolean = { view ->
         var isLongClickHandled = false
@@ -77,6 +83,7 @@ internal class DivActionBinder @Inject constructor(
         pressStartActions: List<DivAction>?,
         pressEndActions: List<DivAction>?,
         actionAnimation: DivAnimation,
+        accessibility: DivAccessibility?,
         captureFocusOnAction: Expression<Boolean>,
     ) {
         val resolver = context.expressionResolver
@@ -92,6 +99,7 @@ internal class DivActionBinder @Inject constructor(
                 pressStartActions = pressStartActions.onlyEnabled(resolver),
                 pressEndActions = pressEndActions.onlyEnabled(resolver),
                 actionAnimation = actionAnimation,
+                accessibility = accessibility,
                 captureFocusOnAction = captureFocusOnAction,
             )
         }
@@ -115,8 +123,12 @@ internal class DivActionBinder @Inject constructor(
         pressStartActions: List<DivAction>,
         pressEndActions: List<DivAction>,
         actionAnimation: DivAnimation,
+        accessibility: DivAccessibility?,
         captureFocusOnAction: Expression<Boolean>,
     ) {
+        val clickableState = target.isClickable
+        val longClickableState = target.isLongClickable
+
         val divGestureListener = DivGestureListener(
             awaitLongClick = longTapActions.isNotEmpty() || target.parentIsLongClickable()
         )
@@ -143,6 +155,54 @@ internal class DivActionBinder @Inject constructor(
         bindHoverActions(context, target, hoverStartActions, hoverEndActions)
 
         target.attachTouchListeners(animatedTouchListener, pressTouchListener)
+
+        if (accessibilityEnabled) {
+            if (DivAccessibility.Mode.MERGE == context.divView.getPropagatedAccessibilityMode(target) &&
+                context.divView.isDescendantAccessibilityMode(target)) {
+                target.isClickable = clickableState
+                target.isLongClickable = longClickableState
+            }
+
+            bindAccessibilityDelegate(target, actions, longTapActions, accessibility)
+        }
+    }
+
+    private fun bindAccessibilityDelegate(
+        target: View,
+        actions: List<DivAction>,
+        longTapActions: List<DivAction>,
+        accessibility: DivAccessibility?,
+    ) {
+        val originalDelegate = ViewCompat.getAccessibilityDelegate(target)
+
+        val action = { _: View?, info: AccessibilityNodeInfoCompat? ->
+            if (actions.isNotEmpty()) {
+                info?.addAction(AccessibilityNodeInfoCompat
+                    .AccessibilityActionCompat.ACTION_CLICK)
+            }
+            if (longTapActions.isNotEmpty()) {
+                info?.addAction(AccessibilityNodeInfoCompat
+                    .AccessibilityActionCompat.ACTION_LONG_CLICK)
+            }
+            if (target is ImageView && (accessibility?.type == DivAccessibility.Type.AUTO || accessibility == null)) {
+                if (longTapActions.isNotEmpty() || actions.isNotEmpty() || accessibility?.description != null) {
+                    info?.className = "android.widget.ImageView"
+                } else {
+                    info?.className = ""
+                }
+            }
+        }
+
+        val accessibilityWrapper = if (originalDelegate is AccessibilityDelegateWrapper) {
+            originalDelegate.actionsAccessibilityNodeInfo = action
+            originalDelegate
+        } else {
+            AccessibilityDelegateWrapper(
+                originalDelegate,
+                actionsAccessibilityNodeInfo = action)
+        }
+
+        ViewCompat.setAccessibilityDelegate(target, accessibilityWrapper)
     }
 
     private fun bindTapActions(
@@ -542,7 +602,7 @@ internal class DivActionBinder @Inject constructor(
             val expressionResolver = context.expressionResolver
             val menu = popupMenu.menu
             for (itemData in items) {
-                val itemPosition = menu.size
+                val itemPosition = menu.size()
                 val menuItem = menu.add(itemData.text.evaluate(expressionResolver))
                 menuItem.setOnMenuItemClickListener {
                     var actionsHandled = false
