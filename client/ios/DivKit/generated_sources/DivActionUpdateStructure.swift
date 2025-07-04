@@ -6,7 +6,7 @@ import VGSL
 
 public final class DivActionUpdateStructure: Sendable {
   public static let type: String = "update_structure"
-  public let path: Expression<String>
+  public let path: Expression<String> // regex: ^(?!/)(.+)(?<!/)$
   public let value: DivTypedValue
   public let variableName: Expression<String>
 
@@ -17,6 +17,9 @@ public final class DivActionUpdateStructure: Sendable {
   public func resolveVariableName(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(variableName)
   }
+
+  static let pathValidator: AnyValueValidator<String> =
+    makeStringValidator(regex: "^(?!/)(.+)(?<!/)$")
 
   init(
     path: Expression<String>,

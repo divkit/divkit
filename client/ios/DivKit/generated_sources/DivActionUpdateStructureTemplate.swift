@@ -7,7 +7,7 @@ import VGSL
 public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
   public static let type: String = "update_structure"
   public let parent: String?
-  public let path: Field<Expression<String>>?
+  public let path: Field<Expression<String>>? // regex: ^(?!/)(.+)(?<!/)$
   public let value: Field<DivTypedValueTemplate>?
   public let variableName: Field<Expression<String>>?
 
@@ -33,7 +33,7 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionUpdateStructureTemplate?) -> DeserializationResult<DivActionUpdateStructure> {
-    let pathValue = { parent?.path?.resolveValue(context: context) ?? .noValue }()
+    let pathValue = { parent?.path?.resolveValue(context: context, validator: ResolvedValue.pathValidator) ?? .noValue }()
     let valueValue = { parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let variableNameValue = { parent?.variableName?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
@@ -79,7 +79,7 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
       for (key, __dictValue) in context.templateData {
         _ = {
           if key == "path" {
-           pathValue = deserialize(__dictValue).merged(with: pathValue)
+           pathValue = deserialize(__dictValue, validator: ResolvedValue.pathValidator).merged(with: pathValue)
           }
         }()
         _ = {
@@ -94,7 +94,7 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
         }()
         _ = {
          if key == parent?.path?.link {
-           pathValue = pathValue.merged(with: { deserialize(__dictValue) })
+           pathValue = pathValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pathValidator) })
           }
         }()
         _ = {

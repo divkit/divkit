@@ -41,6 +41,7 @@ public final class DivActionHandler {
   private let submitActionHandler: SubmitActionHandler
   private let timerActionHandler: TimerActionHandler
   private let tooltipActionHandler: TooltipActionHandler
+  private let updateStructureActionHandler = UpdateStructureActionHandler()
   private let videoActionHandler = VideoActionHandler()
 
   /// Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
@@ -245,8 +246,8 @@ public final class DivActionHandler {
       submitActionHandler.handle(action, context: context)
     case let .divActionTimer(action):
       timerActionHandler.handle(action, context: context)
-    case .divActionUpdateStructure(_):
-      break
+    case let .divActionUpdateStructure(action):
+      updateStructureActionHandler.handle(action, context: context)
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
     case .none:

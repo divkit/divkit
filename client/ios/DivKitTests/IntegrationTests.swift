@@ -35,6 +35,8 @@ private func runTest(_ testData: IntegrationTestData) async {
   for testCase in testData.cases.filter({ $0.platforms.contains(.ios) }) {
     let reporter = MockReporter()
     let divkitComponents = createDivKitComponents(testCase: testCase, reporter: reporter)
+    DivKitLogger.isEnabled = true
+    DivKitLogger.setLogger { reporter.insertErrorMessage($0) }
     await setSource(testData.divData, components: divkitComponents)
 
     testCase.divActions?.forEach {
@@ -47,24 +49,22 @@ private func runTest(_ testData: IntegrationTestData) async {
     }
 
     testCase.expected.forEach {
-      if case let .variable(variableName, variable) = $0 {
+      switch $0 {
+      case let .variable(name, value):
         XCTAssertEqual(
-          variable.divVariableValue,
+          value.divVariableValue,
           divkitComponents.variablesStorage.getVariableValue(
             cardId: cardId,
-            name: DivVariableName(rawValue: variableName)
+            name: DivVariableName(rawValue: name)
           )
+        )
+      case let .error(message):
+        XCTAssert(
+          reporter.errorMessages.contains(message),
+          "Error: [\(message)] is not found in errors: \(reporter.errorMessages)"
         )
       }
     }
-
-    let expectedErrors = testCase.expected.compactMap {
-      if case let .error(message) = $0 {
-        return message
-      }
-      return nil
-    }
-    XCTAssertEqual(expectedErrors, reporter.errorMessages)
   }
 }
 
@@ -90,10 +90,14 @@ private func setSource(_ divData: DivData, components: DivKitComponents) async {
 }
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
-  private(set) var errorMessages = [String]()
+  private(set) var errorMessages = Set<String>()
 
   func reportError(cardId _: DivCardID, error: DivError) {
-    errorMessages.append(error.message)
+    errorMessages.insert(error.message)
+  }
+
+  func insertErrorMessage(_ message: String) {
+    errorMessages.insert(message)
   }
 }
 

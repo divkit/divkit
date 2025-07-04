@@ -22,7 +22,11 @@
       "$description": "translations.json#/div_action_update_structure_value"
     }
   },
-  "platforms": [],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type",
     "variable_name",
