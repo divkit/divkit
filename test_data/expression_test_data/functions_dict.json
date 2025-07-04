@@ -1463,6 +1463,63 @@
         "web",
         "flutter"
       ]
+    },
+    {
+      "expression": "@{len(dict)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{len(dict)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "number_prop": 1
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{len(dict)}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "style": 3,
+            "title": "New card",
+            "image_url": "https://yastatic.net"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

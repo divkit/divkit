@@ -1,7 +1,6 @@
 {
   "signatures": [
     {
-      "name": "len(string) integer",
       "function_name": "len",
       "doc": "Gets the length of string argument. Returns integer value.",
       "arguments": [
@@ -19,7 +18,6 @@
       ]
     },
     {
-      "name": "contains(string, string) boolean",
       "function_name": "contains",
       "doc": "Gets if second string argument contains in first string argument. Returns boolean value.",
       "arguments": [
@@ -41,7 +39,6 @@
       ]
     },
     {
-      "name": "substring(string, integer, integer) string",
       "function_name": "substring",
       "doc": "Gets substring of first argument in range of last arguments. Returns string value.",
       "arguments": [
@@ -67,7 +64,6 @@
       ]
     },
     {
-      "name": "replaceAll(string, string, string) string",
       "function_name": "replaceAll",
       "doc": "Replaces all occurrences of the second argument in the first argument with the third argument. Returns string value of replaced string.",
       "arguments": [
@@ -93,7 +89,6 @@
       ]
     },
     {
-      "name": "index(string, string) integer",
       "function_name": "index",
       "doc": "Gets first index of second argument in first argument. Returns integer value, index of occurrence or -1 if substring is not found.",
       "arguments": [
@@ -115,7 +110,6 @@
       ]
     },
     {
-      "name": "lastIndex(string, string) integer",
       "function_name": "lastIndex",
       "doc": "Gets last index of second argument in first argument. Returns integer value, index of occurrence or -1 if substring is not found.",
       "arguments": [
@@ -137,7 +131,6 @@
       ]
     },
     {
-      "name": "encodeUri(string) string",
       "function_name": "encodeUri",
       "doc": "Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. Returns string value, encoded string.",
       "arguments": [
@@ -155,7 +148,6 @@
       ]
     },
     {
-      "name": "decodeUri(string) string",
       "function_name": "decodeUri",
       "doc": "Decodes a application/x-www-form-urlencoded string using a specific encoding scheme. Returns string value, decoded string.",
       "arguments": [
@@ -173,7 +165,6 @@
       ]
     },
     {
-      "name": "trim(string) string",
       "function_name": "trim",
       "doc": "Returns a string having leading and trailing whitespace removed.",
       "arguments": [
@@ -191,7 +182,6 @@
       ]
     },
     {
-      "name": "trimLeft(string) string",
       "function_name": "trimLeft",
       "doc": "Returns a string having leading whitespace removed.",
       "arguments": [
@@ -209,7 +199,6 @@
       ]
     },
     {
-      "name": "trimRight(string) string",
       "function_name": "trimRight",
       "doc": "Returns a string having trailing whitespace removed.",
       "arguments": [
@@ -227,7 +216,6 @@
       ]
     },
     {
-      "name": "toUpperCase(string) string",
       "function_name": "toUpperCase",
       "doc": "Returns converted to upper case string.",
       "arguments": [
@@ -245,7 +233,6 @@
       ]
     },
     {
-      "name": "toLowerCase(string) string",
       "function_name": "toLowerCase",
       "doc": "Returns converted to lower case string.",
       "arguments": [
@@ -263,7 +250,6 @@
       ]
     },
     {
-      "name": "padStart(val: string, len: integer, pad_str: string) string",
       "function_name": "padStart",
       "doc": "Pads a string to a given string length, inserting at start",
       "arguments": [
@@ -289,7 +275,6 @@
       ]
     },
     {
-      "name": "padStart(val: integer, len: integer, pad_str: string) string",
       "function_name": "padStart",
       "doc": "Converts given integer to a string and pads it to a given string length, inserting at start",
       "arguments": [
@@ -315,7 +300,6 @@
       ]
     },
     {
-      "name": "padEnd(val: string, len: integer, pad_str: string) string",
       "function_name": "padEnd",
       "doc": "Pads a string to a given string length, inserting at end",
       "arguments": [
@@ -341,7 +325,6 @@
       ]
     },
     {
-      "name": "padEnd(val: integer, len: integer, pad_str: string) string",
       "function_name": "padEnd",
       "doc": "Converts given integer to a string and pads it to a given string length, inserting at end",
       "arguments": [
@@ -367,7 +350,6 @@
       ]
     },
     {
-      "name": "testRegex(str: string, regex: string) boolean",
       "function_name": "testRegex",
       "doc": "Checks whether the string matches the regular expression.",
       "arguments": [
@@ -389,7 +371,6 @@
       ]
     },
     {
-      "name": "encodeRegex(str: string) string",
       "function_name": "encodeRegex",
       "doc": "Encodes a string for safe use in regular expressions.",
       "arguments": [

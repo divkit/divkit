@@ -1,7 +1,6 @@
 {
   "signatures": [
     {
-      "name": "parseUnixTime(integer) datetime",
       "function_name": "parseUnixTime",
       "doc": "Creates datetime from integer value of unix time. Returns datetime value.",
       "arguments": [
@@ -19,7 +18,6 @@
       ]
     },
     {
-      "name": "parseUnixTimeAsLocal(integer) datetime",
       "function_name": "parseUnixTimeAsLocal",
       "doc": "Creates datetime in local timezone from integer value of unix time. Returns datetime value.",
       "arguments": [
@@ -37,7 +35,6 @@
       ]
     },
     {
-      "name": "nowLocal() datetime",
       "function_name": "nowLocal",
       "doc": "Creates datetime from time of now. Returns datetime value.",
       "arguments": [],
@@ -50,7 +47,6 @@
       ]
     },
     {
-      "name": "addMillis(datetime, milliseconds: integer) datetime",
       "function_name": "addMillis",
       "doc": "Adds milliseconds to original date. Returns datetime with added time in milliseconds.",
       "arguments": [
@@ -72,7 +68,6 @@
       ]
     },
     {
-      "name": "setYear(datetime, year: integer) datetime",
       "function_name": "setYear",
       "doc": "Sets year number to original date. Returns datetime with year set.",
       "arguments": [
@@ -94,7 +89,6 @@
       ]
     },
     {
-      "name": "setMonth(datetime, month: integer) datetime",
       "function_name": "setMonth",
       "doc": "Sets month number to original date. Returns datetime with month set.",
       "arguments": [
@@ -116,7 +110,6 @@
       ]
     },
     {
-      "name": "setDay(datetime, monthDay: integer) datetime",
       "function_name": "setDay",
       "doc": "Sets day of month number to original date. Returns datetime with day of month set.",
       "arguments": [
@@ -138,7 +131,6 @@
       ]
     },
     {
-      "name": "setHours(datetime, hours: integer) datetime",
       "function_name": "setHours",
       "doc": "Sets hours number to original date. Returns datetime with hours set.",
       "arguments": [
@@ -160,7 +152,6 @@
       ]
     },
     {
-      "name": "setMinutes(datetime, minutes: integer) datetime",
       "function_name": "setMinutes",
       "doc": "Sets minutes number to original date. Returns datetime with minutes set.",
       "arguments": [
@@ -182,7 +173,6 @@
       ]
     },
     {
-      "name": "setSeconds(datetime, seconds: integer) datetime",
       "function_name": "setSeconds",
       "doc": "Sets seconds number to original date. Returns datetime with seconds set.",
       "arguments": [
@@ -204,7 +194,6 @@
       ]
     },
     {
-      "name": "setMillis(datetime, milliseconds: integer) datetime",
       "function_name": "setMillis",
       "doc": "Sets milliseconds number to original date. Returns datetime with milliseconds set.",
       "arguments": [
@@ -226,7 +215,6 @@
       ]
     },
     {
-      "name": "getYear(datetime) integer",
       "function_name": "getYear",
       "doc": "Returns year number of original date.",
       "arguments": [
@@ -244,7 +232,6 @@
       ]
     },
     {
-      "name": "getMonth(datetime) integer",
       "function_name": "getMonth",
       "doc": "Returns month number of original date.",
       "arguments": [
@@ -262,7 +249,6 @@
       ]
     },
     {
-      "name": "getDay(datetime) integer",
       "function_name": "getDay",
       "doc": "Returns day of month of original date.",
       "arguments": [
@@ -280,7 +266,6 @@
       ]
     },
     {
-      "name": "getDayOfWeek(datetime) integer",
       "function_name": "getDayOfWeek",
       "doc": "Returns day of week of original date, where Sunday is 7.",
       "arguments": [
@@ -298,7 +283,6 @@
       ]
     },
     {
-      "name": "getHours(datetime) integer",
       "function_name": "getHours",
       "doc": "Returns hours number of original date.",
       "arguments": [
@@ -316,7 +300,6 @@
       ]
     },
     {
-      "name": "getMinutes(datetime) integer",
       "function_name": "getMinutes",
       "doc": "Returns minutes number of original date.",
       "arguments": [
@@ -334,7 +317,6 @@
       ]
     },
     {
-      "name": "getSeconds(datetime) integer",
       "function_name": "getSeconds",
       "doc": "Returns seconds number of original date.",
       "arguments": [
@@ -352,7 +334,6 @@
       ]
     },
     {
-      "name": "getMillis(datetime) integer",
       "function_name": "getMillis",
       "doc": "Returns milliseconds number of original date.",
       "arguments": [
@@ -370,7 +351,6 @@
       ]
     },
     {
-      "name": "formatDateAsLocal(datetime, pattern) string",
       "function_name": "formatDateAsLocal",
       "doc": "Formatting dates in a local timezone in users locale. Used default locale. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
       "arguments": [
@@ -392,7 +372,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(datetime, pattern) string",
       "function_name": "formatDateAsUTC",
       "doc": "Formatting dates in a UTC timezone in users locale. Used default locale. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
       "arguments": [
@@ -414,7 +393,6 @@
       ]
     },
     {
-      "name": "formatDateAsLocalWithLocale(datetime, pattern, locale) string",
       "function_name": "formatDateAsLocalWithLocale",
       "doc": "Formatting dates in a local timezone with localization. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
       "arguments": [
@@ -440,7 +418,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(datetime, pattern, locale) string",
       "function_name": "formatDateAsUTCWithLocale",
       "doc": "Formatting dates in a UTC timezone with localization. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
       "arguments": [

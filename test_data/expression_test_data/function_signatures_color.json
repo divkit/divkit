@@ -1,7 +1,6 @@
 {
   "signatures": [
     {
-      "name": "getColorAlpha(string) number",
       "function_name": "getColorAlpha",
       "doc": "Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.",
       "arguments": [
@@ -19,7 +18,6 @@
       ]
     },
     {
-      "name": "getColorAlpha(color) number",
       "function_name": "getColorAlpha",
       "doc": "Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.",
       "arguments": [
@@ -37,7 +35,6 @@
       ]
     },
     {
-      "name": "getColorRed(string) number",
       "function_name": "getColorRed",
       "doc": "Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.",
       "arguments": [
@@ -55,7 +52,6 @@
       ]
     },
     {
-      "name": "getColorRed(color) number",
       "function_name": "getColorRed",
       "doc": "Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.",
       "arguments": [
@@ -73,7 +69,6 @@
       ]
     },
     {
-      "name": "getColorGreen(string) number",
       "function_name": "getColorGreen",
       "doc": "Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.",
       "arguments": [
@@ -91,7 +86,6 @@
       ]
     },
     {
-      "name": "getColorGreen(color) number",
       "function_name": "getColorGreen",
       "doc": "Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.",
       "arguments": [
@@ -109,7 +103,6 @@
       ]
     },
     {
-      "name": "getColorBlue(string) number",
       "function_name": "getColorBlue",
       "doc": "Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.",
       "arguments": [
@@ -127,7 +120,6 @@
       ]
     },
     {
-      "name": "getColorBlue(color) number",
       "function_name": "getColorBlue",
       "doc": "Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.",
       "arguments": [
@@ -145,7 +137,6 @@
       ]
     },
     {
-      "name": "setColorAlpha(string, number) color",
       "function_name": "setColorAlpha",
       "doc": "Sets alpha value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -166,7 +157,6 @@
       ]
     },
     {
-      "name": "setColorAlpha(color, number) color",
       "function_name": "setColorAlpha",
       "doc": "Sets alpha value of argument color. Returns color.",
       "arguments": [
@@ -188,7 +178,6 @@
       ]
     },
     {
-      "name": "setColorRed(string, number) color",
       "function_name": "setColorRed",
       "doc": "Sets red value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -209,7 +198,6 @@
       ]
     },
     {
-      "name": "setColorRed(color, number) color",
       "function_name": "setColorRed",
       "doc": "Sets red value of argument color. Returns color.",
       "arguments": [
@@ -231,7 +219,6 @@
       ]
     },
     {
-      "name": "setColorGreen(string, number) color",
       "function_name": "setColorGreen",
       "doc": "Sets green value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -252,7 +239,6 @@
       ]
     },
     {
-      "name": "setColorGreen(color, number) color",
       "function_name": "setColorGreen",
       "doc": "Sets green value of argument color. Returns Color.",
       "arguments": [
@@ -274,7 +260,6 @@
       ]
     },
     {
-      "name": "setColorBlue(string, number) color",
       "function_name": "setColorBlue",
       "doc": "Sets blue value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -295,7 +280,6 @@
       ]
     },
     {
-      "name": "setColorBlue(color, number) color",
       "function_name": "setColorBlue",
       "doc": "Sets blue value of argument color. Returns Color.",
       "arguments": [
@@ -317,7 +301,6 @@
       ]
     },
     {
-      "name": "argb(number, number, number, number) color",
       "function_name": "argb",
       "doc": "Creates color from values of alpha, red, green, blue values. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -346,7 +329,6 @@
       ]
     },
     {
-      "name": "rgb(number, number, number) color",
       "function_name": "rgb",
       "doc": "Creates color from values of red, green, blue values. Sets alpha value as 1.0. Returns color value of color in hex format '#FFAABBCC'.",
       "arguments": [

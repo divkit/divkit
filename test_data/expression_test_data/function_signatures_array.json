@@ -1,7 +1,6 @@
 {
   "signatures": [
     {
-      "name": "getArrayString(array, integer) string",
       "function_name": "getArrayString",
       "doc": "Returns a string value from array.",
       "arguments": [
@@ -23,7 +22,6 @@
       ]
     },
     {
-      "name": "getArrayNumber(array, integer) number",
       "function_name": "getArrayNumber",
       "doc": "Returns a number value from array.",
       "arguments": [
@@ -45,7 +43,6 @@
       ]
     },
     {
-      "name": "getArrayInteger(array, integer) integer",
       "function_name": "getArrayInteger",
       "doc": "Returns an integer value from array.",
       "arguments": [
@@ -67,7 +64,6 @@
       ]
     },
     {
-      "name": "getArrayBoolean(array, integer) boolean",
       "function_name": "getArrayBoolean",
       "doc": "Returns a boolean property from array.",
       "arguments": [
@@ -89,7 +85,6 @@
       ]
     },
     {
-      "name": "getArrayColor(array, integer) color",
       "function_name": "getArrayColor",
       "doc": "Returns a color property from array.",
       "arguments": [
@@ -111,7 +106,6 @@
       ]
     },
     {
-      "name": "getArrayOptString(array, integer, string) string",
       "function_name": "getArrayOptString",
       "doc": "Returns an optional string property from array.",
       "arguments": [
@@ -137,7 +131,6 @@
       ]
     },
     {
-      "name": "getArrayOptNumber(array, integer, number) number",
       "function_name": "getArrayOptNumber",
       "doc": "Returns an optional number property from array.",
       "arguments": [
@@ -163,7 +156,6 @@
       ]
     },
     {
-      "name": "getArrayOptInteger(array, integer, integer) integer",
       "function_name": "getArrayOptInteger",
       "doc": "Returns an optional integer property from array.",
       "arguments": [
@@ -189,7 +181,6 @@
       ]
     },
     {
-      "name": "getArrayOptBoolean(array, integer, boolean) boolean",
       "function_name": "getArrayOptBoolean",
       "doc": "Returns an optional boolean value from array.",
       "arguments": [
@@ -215,7 +206,6 @@
       ]
     },
     {
-      "name": "getArrayOptColor(array, integer, color) color",
       "function_name": "getArrayOptColor",
       "doc": "Returns an optional color value from array.",
       "arguments": [
@@ -241,7 +231,6 @@
       ]
     },
     {
-      "name": "getArrayOptColor(array, integer, string) color",
       "function_name": "getArrayOptColor",
       "doc": "Returns an optional color value from array.",
       "arguments": [
@@ -267,7 +256,6 @@
       ]
     },
     {
-      "name": "getArrayUrl(array, integer) url",
       "function_name": "getArrayUrl",
       "doc": "Returns an url value from array.",
       "arguments": [
@@ -289,7 +277,6 @@
       ]
     },
     {
-      "name": "getArrayOptUrl(array, integer, url) url",
       "function_name": "getArrayOptUrl",
       "doc": "Returns an optional url value from array.",
       "arguments": [
@@ -315,7 +302,6 @@
       ]
     },
     {
-      "name": "getArrayOptUrl(array, integer, string) url",
       "function_name": "getArrayOptUrl",
       "doc": "Returns an optional url value from array.",
       "arguments": [
@@ -341,7 +327,6 @@
       ]
     },
     {
-      "name": "getStringFromArray(array, integer) string",
       "function_name": "getStringFromArray",
       "doc": "Returns a string value from array.",
       "arguments": [
@@ -363,7 +348,6 @@
       ]
     },
     {
-      "name": "getNumberFromArray(array, integer) number",
       "function_name": "getNumberFromArray",
       "doc": "Returns a number value from array.",
       "arguments": [
@@ -385,7 +369,6 @@
       ]
     },
     {
-      "name": "getIntegerFromArray(array, integer) integer",
       "function_name": "getIntegerFromArray",
       "doc": "Returns an integer value from array.",
       "arguments": [
@@ -407,7 +390,6 @@
       ]
     },
     {
-      "name": "getBooleanFromArray(array, integer) boolean",
       "function_name": "getBooleanFromArray",
       "doc": "Returns a boolean property from array.",
       "arguments": [
@@ -429,7 +411,6 @@
       ]
     },
     {
-      "name": "getColorFromArray(array, integer) color",
       "function_name": "getColorFromArray",
       "doc": "Returns a color property from array.",
       "arguments": [
@@ -451,7 +432,6 @@
       ]
     },
     {
-      "name": "getOptStringFromArray(array, integer, string) string",
       "function_name": "getOptStringFromArray",
       "doc": "Returns an optional string property from array.",
       "arguments": [
@@ -477,7 +457,6 @@
       ]
     },
     {
-      "name": "getOptNumberFromArray(array, integer, number) number",
       "function_name": "getOptNumberFromArray",
       "doc": "Returns an optional number property from array.",
       "arguments": [
@@ -503,7 +482,6 @@
       ]
     },
     {
-      "name": "getOptIntegerFromArray(array, integer, integer) integer",
       "function_name": "getOptIntegerFromArray",
       "doc": "Returns an optional integer property from array.",
       "arguments": [
@@ -529,7 +507,6 @@
       ]
     },
     {
-      "name": "getOptBooleanFromArray(array, integer, boolean) boolean",
       "function_name": "getOptBooleanFromArray",
       "doc": "Returns an optional boolean value from array.",
       "arguments": [
@@ -555,7 +532,6 @@
       ]
     },
     {
-      "name": "getOptColorFromArray(array, integer, color) color",
       "function_name": "getOptColorFromArray",
       "doc": "Returns an optional color value from array.",
       "arguments": [
@@ -581,7 +557,6 @@
       ]
     },
     {
-      "name": "getOptColorFromArray(array, integer, string) color",
       "function_name": "getOptColorFromArray",
       "doc": "Returns an optional color value from array.",
       "arguments": [
@@ -607,7 +582,6 @@
       ]
     },
     {
-      "name": "getUrlFromArray(array, integer) url",
       "function_name": "getUrlFromArray",
       "doc": "Returns an url value from array.",
       "arguments": [
@@ -629,7 +603,6 @@
       ]
     },
     {
-      "name": "getOptUrlFromArray(array, integer, url) url",
       "function_name": "getOptUrlFromArray",
       "doc": "Returns an optional url value from array.",
       "arguments": [
@@ -655,7 +628,6 @@
       ]
     },
     {
-      "name": "getOptUrlFromArray(array, integer, string) url",
       "function_name": "getOptUrlFromArray",
       "doc": "Returns an optional url value from array.",
       "arguments": [
@@ -681,7 +653,6 @@
       ]
     },
     {
-      "name": "getArrayFromArray(array, integer) array",
       "function_name": "getArrayFromArray",
       "doc": "Returns an array value from array",
       "arguments": [
@@ -703,7 +674,6 @@
       ]
     },
     {
-      "name": "getOptArrayFromArray(array, integer) array",
       "function_name": "getOptArrayFromArray",
       "doc": "Returns an array value from array if exist or empty array otherwise",
       "arguments": [
@@ -725,7 +695,6 @@
       ]
     },
     {
-      "name": "getDictFromArray(array, integer) dict",
       "function_name": "getDictFromArray",
       "doc": "Returns an dict value from array",
       "arguments": [
@@ -747,7 +716,6 @@
       ]
     },
     {
-      "name": "getOptDictFromArray(array, integer) dict",
       "function_name": "getOptDictFromArray",
       "doc": "Returns an dict value from array if exist or empty dict otherwise",
       "arguments": [
@@ -769,7 +737,6 @@
       ]
     },
     {
-      "name": "len(array) integer",
       "function_name": "len",
       "doc": "Gets the length of array. Returns integer value.",
       "arguments": [

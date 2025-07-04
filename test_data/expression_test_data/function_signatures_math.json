@@ -1,7 +1,6 @@
 {
   "signatures": [
     {
-      "name": "div(integer, integer) integer",
       "function_name": "div",
       "doc": "Calculates division between the first number and the second. Returns integer quotient of division.",
       "arguments": [
@@ -23,7 +22,6 @@
       ]
     },
     {
-      "name": "div(number, number) number",
       "function_name": "div",
       "doc": "Calculates division between the first number and the second. Returns number quotient of division.",
       "arguments": [
@@ -45,7 +43,6 @@
       ]
     },
     {
-      "name": "mod(integer, integer) integer",
       "function_name": "mod",
       "doc": "Calculates remainder of division the first number and the second. Returns integer remainder of division.",
       "arguments": [
@@ -67,7 +64,6 @@
       ]
     },
     {
-      "name": "mod(number, number) number",
       "function_name": "mod",
       "doc": "Calculates remainder of division the first number and the second. Returns number remainder of division.",
       "arguments": [
@@ -89,7 +85,6 @@
       ]
     },
     {
-      "name": "mul(vararg integer) integer",
       "function_name": "mul",
       "doc": "Calculates multiplication between argument values. Returns integer result of multiplication.",
       "arguments": [
@@ -108,7 +103,6 @@
       ]
     },
     {
-      "name": "mul(vararg number) number",
       "function_name": "mul",
       "doc": "Calculates multiplication between argument values. Returns number result of multiplication.",
       "arguments": [
@@ -127,7 +121,6 @@
       ]
     },
     {
-      "name": "sub(vararg integer) integer",
       "function_name": "sub",
       "doc": "Calculates subtraction between argument values. Returns integer result of subtraction.",
       "arguments": [
@@ -146,7 +139,6 @@
       ]
     },
     {
-      "name": "sub(vararg number) number",
       "function_name": "sub",
       "doc": "Calculates subtraction between argument values. Returns number result of subtraction.",
       "arguments": [
@@ -165,7 +157,6 @@
       ]
     },
     {
-      "name": "sum(vararg integer) integer",
       "function_name": "sum",
       "doc": "Calculates sum between argument values. Returns integer result of sum.",
       "arguments": [
@@ -184,7 +175,6 @@
       ]
     },
     {
-      "name": "sum(vararg number) number",
       "function_name": "sum",
       "doc": "Calculates sum between argument values. Returns number result of sum.",
       "arguments": [
@@ -203,7 +193,6 @@
       ]
     },
     {
-      "name": "maxInteger() integer",
       "function_name": "maxInteger",
       "doc": "Gets max value of integer type. Returns max integer value.",
       "result_type": "integer",
@@ -215,7 +204,6 @@
       ]
     },
     {
-      "name": "maxNumber() number",
       "function_name": "maxNumber",
       "doc": "Gets max value of number type. Returns max number value.",
       "result_type": "number",
@@ -227,7 +215,6 @@
       ]
     },
     {
-      "name": "minInteger() integer",
       "function_name": "minInteger",
       "doc": "Gets min value of integer type. Returns min integer value.",
       "result_type": "integer",
@@ -239,7 +226,6 @@
       ]
     },
     {
-      "name": "minNumber() number",
       "function_name": "minNumber",
       "doc": "Gets min value of number type. Returns min number value.",
       "result_type": "number",
@@ -251,7 +237,6 @@
       ]
     },
     {
-      "name": "max(vararg integer) integer",
       "function_name": "max",
       "doc": "Gets max value of argument values. Returns max integer value.",
       "arguments": [
@@ -270,7 +255,6 @@
       ]
     },
     {
-      "name": "max(vararg number) number",
       "function_name": "max",
       "doc": "Gets max value of argument values. Returns max number value.",
       "arguments": [
@@ -289,7 +273,6 @@
       ]
     },
     {
-      "name": "min(vararg integer) integer",
       "function_name": "min",
       "doc": "Gets min value of argument values. Returns min integer value.",
       "arguments": [
@@ -308,7 +291,6 @@
       ]
     },
     {
-      "name": "min(vararg number) number",
       "function_name": "min",
       "doc": "Gets min value of argument values. Returns min number value.",
       "arguments": [
@@ -327,7 +309,6 @@
       ]
     },
     {
-      "name": "abs(integer) integer",
       "function_name": "abs",
       "doc": "Gets absolute value of argument. Returns integer value.",
       "arguments": [
@@ -345,7 +326,6 @@
       ]
     },
     {
-      "name": "abs(number) number",
       "function_name": "abs",
       "doc": "Gets absolute value of argument. Returns number value.",
       "arguments": [
@@ -363,7 +343,6 @@
       ]
     },
     {
-      "name": "signum(integer) integer",
       "function_name": "signum",
       "doc": "Gets sign value from argument. Returns -1 if value is negative, 0 if value is equal to 0, 1 if value is positive.",
       "arguments": [
@@ -381,7 +360,6 @@
       ]
     },
     {
-      "name": "signum(number) number",
       "function_name": "signum",
       "doc": "Gets sign value from argument. Returns -1.0 if value is negative, 0.0 if value is equal to 0, 1.0 if value is positive.",
       "arguments": [
@@ -399,7 +377,6 @@
       ]
     },
     {
-      "name": "round(number) number",
       "function_name": "round",
       "doc": "Rounds argument value to the closest integer value. 1.49 -> 1.0, 1.5 -> 2.0. Returns number value.",
       "arguments": [
@@ -417,7 +394,6 @@
       ]
     },
     {
-      "name": "floor(number) number",
       "function_name": "floor",
       "doc": "Rounds argument value down. 1.49 -> 1.0, 1.5 -> 1.0. Returns number value.",
       "arguments": [
@@ -435,7 +411,6 @@
       ]
     },
     {
-      "name": "ceil(number) number",
       "function_name": "ceil",
       "doc": "Rounds argument value up. 1.49 -> 2.0, 1.5 -> 2.0. Returns number value.",
       "arguments": [
@@ -453,7 +428,6 @@
       ]
     },
     {
-      "name": "copySign(integer, integer) integer",
       "function_name": "copySign",
       "doc": "Gets value of first argument with sign of the second argument. Returns integer value.",
       "arguments": [
@@ -475,7 +449,6 @@
       ]
     },
     {
-      "name": "copySign(number, number) number",
       "function_name": "copySign",
       "doc": "Gets value of first argument with sign of the second argument. Returns number value.",
       "arguments": [

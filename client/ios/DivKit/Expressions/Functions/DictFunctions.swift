@@ -26,6 +26,8 @@ extension [String: Function] {
 
     addFunctions("Url", _getUrl)
     addFunctions("OptUrl", _getOptUrl)
+    
+    addFunction("len", FunctionUnary<DivDictionary, Int> { $0.count })
   }
 
   mutating func addDictMethods() {
